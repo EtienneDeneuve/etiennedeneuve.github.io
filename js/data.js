@@ -3,21 +3,14 @@
   "date" : "Feb 24, 2020",
   
   
-  "url": "/posts/2020-02-25-terraform-azurerm-2/",
-  "tags" : "Azure,PowerShell,Azure Devops,Cloud,Tests"
-},{
-  "title": "Testing your infra my easy way 2",
-  "date" : "Feb 16, 2020",
-  "summary" : "Testing your infra shouldn&#39;t be hard. Try my easy way.",
-  
-  "url": "/posts/2020-02-17-infra-testing-easy-path-2/",
+  "url": "/2020/02/25/terraform-azurerm-2/",
   "tags" : "Azure,PowerShell,Azure Devops,Cloud,Tests"
 },{
   "title": "IaC &amp; Tests",
   "date" : "Feb 06, 2020",
   "summary" : "I was looking for the easiest way to test Azure infrastructure. I wanted to find something easier (or lazier).",
   
-  "url": "/posts/2020-02-07-infra-testing-easy-path/",
+  "url": "/2020/02/07/infra-testing-easy-path/",
   "tags" : "Azure,PowerShell,Azure Devops,Cloud,Tests"
 },{
   "title": "Lancement de Powershell du Zéro",

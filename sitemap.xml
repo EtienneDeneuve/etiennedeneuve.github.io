@@ -182,17 +182,12 @@
   </url>
   
   <url>
-    <loc>/posts/2020-02-07-infra-testing-easy-path/</loc>
+    <loc>/2020/02/07/infra-testing-easy-path/</loc>
     <lastmod>2020-02-07</lastmod>
   </url>
   
   <url>
-    <loc>/posts/2020-02-17-infra-testing-easy-path-2/</loc>
-    <lastmod>2020-02-17</lastmod>
-  </url>
-  
-  <url>
-    <loc>/posts/2020-02-25-terraform-azurerm-2/</loc>
+    <loc>/2020/02/25/terraform-azurerm-2/</loc>
     <lastmod>2020-02-25</lastmod>
   </url>
   
