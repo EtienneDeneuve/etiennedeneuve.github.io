@@ -8,7 +8,7 @@
 },{
   "title": "IaC &amp; Tests",
   "date" : "Feb 06, 2020",
-  "summary" : "I was looking for the easiest way to test Azure infrastructure. I wanted to find something easier (or lazier).",
+  "summary" : "I was looking for the easiest way to test Azure infrastructure.",
   
   "url": "/2020/02/07/infra-testing-easy-path/",
   "tags" : "Azure,PowerShell,Azure Devops,Cloud,Tests"
