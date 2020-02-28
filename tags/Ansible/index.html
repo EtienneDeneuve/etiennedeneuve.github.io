@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <meta name="msvalidate.01" content="DE6C71A9BE4E011D01CC38799992B4A6" />
     
     <link rel="stylesheet" href="/css/style.css" type="text/css">
     
@@ -23,7 +23,7 @@
     <script src="/js/script.js"></script>
     </head>
   <body class="position-relative" data-spy="scroll" data-target=".site-nav" data-offset="55">
-    <nav class="site-nav family-sans navbar navbar-expand-md navbar-dark  sidebar sticky-top  py-0">
+    <nav class="site-nav family-sans navbar navbar-expand-md navbar-dark  fixed-top  py-0">
   <div class="container-fluid">
     <button type="button" class="navbar-toggler my-2 my-md-0" data-toggle="collapse" data-target="#myTogglerNav" aria-controls="myTogglerNav" aria-label="Toggle Navigation">
       <span class="navbar-toggler-icon"></span>
@@ -88,53 +88,41 @@
   </div>
 </nav>
 
-      
+    
 
  
-  <div class="post post-sidebar container-fluid">
-    <div class="row justify-content-xl-center">
-      <main class="main col">
-      <p>I publish my way to install side loaded application to Windows 8 and above. I looked on Internet and found nothing to install theses apps  on  computers in a company which doesn't have SCCM. I've written a powershell script which will do the work but I want to share the way I built it, instead of sharing it without any kind of explanation. This blog post is the first one of the series for passing to a long and non interesting tasks to a near complete automated one. You will need makeappx and signtool on the computer to run the script or make the process manually. It's preferable to make the process one time before launching the script. It's easier to debug something you know (yes ! ;)).</p>
-<h1>Applications for Windows Modern UI.</h1>
-Let's start this post by a little explanation about Windows Sideloading Mechanics. When you build application with tools like Adobe DPS, you will get a "appxbundle". For side loading you need sign the appxbundle and the appx in the bundle. So, you need to "unbundle" the bundle, and then unpack the appx. Unfortunately you need to modify the AppManifest.xml and the BlockMap.xml (a file where all the hash are stored), and theses two files exist for both AppxBundle and Appx.
-<p>The tree of an AppxBundle look like :</p>
-<ul>
-	<li>/ (root of the AppxBundle)</li>
-	<li>/AppManifest</li>
-	<li>/AppManifest/AppxManifest.xml</li>
-	<li>/BlockMaps.xml</li>
-	<li>/ARM.appx</li>
-	<li>/x86.appx</li>
-	<li>/x64.appx</li>
-	<li>(all the architectures are in the bundle, I removed the non essential files)</li>
-</ul>
-For Sideloading and changing the certificate to a good one here are the steps we need :
-<ol>
-	<li>Unbundle appxbundle</li>
-	<li>Unpack all the appx</li>
-	<li>Modify the AppManifest.xml, for all of them. We need to change the "Publisher" attributes in the XML.</li>
-	<li>Modify the BlockMaps.xml, for all of them. We need to remove the Hash and size of the modified AppManifest.xml.</li>
-	<li>Pack the appx and sign it</li>
-	<li>Create the bundle and sign it</li>
-	<li>Create a powershell script to install the dependencies and the bundle.</li>
-	<li>Find a way to launch the Powershell Script on all our client</li>
-</ol>
-The part 2 is coming, soon...
-<p>Other Parts  :</p>
-<ul>
-	<li><a href="http://etienne.deneuve.xyz/2016/01/11/side-loading-application-without-sccm-part-2/" target="_blank">Part 2</a></li>
-	<li><a href="http://etienne.deneuve.xyz/2016/01/11/side-loading-application-without-sccm-part-3/" target="_blank">Part 3</a></li>
-	<li>The full script is on my (New) Git : <a href="https://github.com/EtienneDeneuve/Powershell">Go to Git !</a></li>
-</ul>
-      </main>
-      <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2" >
-        <nav class="sticky-top">
-        
-        </nav>
-      </aside>
+<article id="main-content" class="site-main container mt-3 mb-5"
+style="padding-top: 80px"
+>
+<p>See <a href="/tags/">all tags</a>.</p>
+<h2 class="text-secondary mb-5">Tagged <small>“Ansible”</small></h2>
+  
+
+  
+
+  <div class="row justify-content-center px-3 px-sm-0 my-5  mb-3 ">
+    
+
+    <div class=" col-m ">
+      <a href="/2017/01/26/visual-studio-code-pour-ansible-terraform/" class="item-title h2 d-block" >[Updated 20/03/2017] Visual Studio Code pour Ansible, Terraform
+      
+      </a>
+      <p class="item-summary lead mb-1 text-body"></p>
+      
+  
+
+      <div class="tagslist d-none d-lg-block mt-2">
+  
+    <a href="/tags/Infra as Code/" class="badge badge-special">Infra as Code</a>
+    <a href="/tags/Visual Studio Code/" class="badge badge-special">Visual Studio Code</a>
+    <a href="/tags/Ansible/" class="badge badge-special">Ansible</a>
+    <a href="/tags/Terraform/" class="badge badge-special">Terraform</a>
+    <a href="/tags/macOs/" class="badge badge-special">macOs</a>
+    <a href="/tags/Windows/" class="badge badge-special">Windows</a>
+</div>
     </div>
   </div>
-</div>
+</article>
 
     <footer class="site-footer bg-transparent pb-3 pb-md-5">
       <div class="layout-social container d-flex justify-content-center">

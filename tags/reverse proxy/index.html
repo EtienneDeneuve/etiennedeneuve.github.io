@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <meta name="msvalidate.01" content="DE6C71A9BE4E011D01CC38799992B4A6" />
     
     <link rel="stylesheet" href="/css/style.css" type="text/css">
     
@@ -23,7 +23,7 @@
     <script src="/js/script.js"></script>
     </head>
   <body class="position-relative" data-spy="scroll" data-target=".site-nav" data-offset="55">
-    <nav class="site-nav family-sans navbar navbar-expand-md navbar-dark  sidebar sticky-top  py-0">
+    <nav class="site-nav family-sans navbar navbar-expand-md navbar-dark  fixed-top  py-0">
   <div class="container-fluid">
     <button type="button" class="navbar-toggler my-2 my-md-0" data-toggle="collapse" data-target="#myTogglerNav" aria-controls="myTogglerNav" aria-label="Toggle Navigation">
       <span class="navbar-toggler-icon"></span>
@@ -88,47 +88,39 @@
   </div>
 </nav>
 
-      
+    
 
  
-  <div class="post post-sidebar container-fluid">
-    <div class="row justify-content-xl-center">
-      <main class="main col">
-      <p>So you have read the first article of these little series ( part 1 here : <a href="http://etienne.deneuve.xyz/2016/01/11/side-loading-application-without-sccm-part-1/">http://etienne.deneuve.xyz/2016/01/11/side-loading-application-without-sccm-part-1/</a>)</p>
-<h1>Powershell</h1>
-With powershell we can automate tasks and manage our servers. Some one asks me to publish an AppxBundle with a need certificate (a good one, sign by a 3rd party provider, not a crappy self signed) for a customer, for side loading the appx and doesn't have to renew the certificate every year. It's not very funny to rebuild a package each year for a certificate, and it's not possible to publish the apps to the market as no one will care about it and there's no use for others. Before making a script for it, I've made the process one time manually and found it too much longer and not very interesting. So I started my scripts by a function to make the XML modifications. Powershell handles XML files better, than me, so I just need to do [xml]$variable = Get-Content $myappxfile. But I realizes my files a differents and need multiples modifications, so created a Switch (hint : Use the Powershell ISE and hit Crtl + J to get Intellisense doing the work for you) and addsome parameters to the function and the ability to choose between multiple values, with the "ValidateSet", useful for autocompletion. (I don't publish the true function right now):
-<p>[code language=&quot;powershell&quot;]<br>
-Function Update-AppxXML{<br>
-param(<br>
-[ValidateSet(&quot;Option1&quot;,&quot;Option2&quot;,&quot;Option3&quot;)]<br>
-$param1,<br>
-$param2,<br>
-)<br>
-switch($param1){<br>
-&quot;Option1&quot; { do that }<br>
-&quot;Option2&quot; { do that }<br>
-&quot;Option3&quot; { do that }<br>
-}<br>
-}<br>
-[/code]<br>
-When I wrote my script, I splitted in multiple functions. It's pretty cool to have a script almost ready, where you don't have to write it again completely from scratch. You can also have a &quot;Main&quot; function for calling all the functions instead of making an intensive use of the magic pipe.</p>
-<p>In the part 3, I'll go deeper in the scripts. Stay tuned...</p>
-<p>Other Parts  :</p>
-<ul>
-	<li><a href="http://etienne.deneuve.xyz/2016/01/11/side-loading-application-without-sccm-part-1/"><u><span style="color: #0066cc;">Part 1</span></u></a></li>
-	<li><a href="http://etienne.deneuve.xyz/2016/01/11/side-loading-application-without-sccm-part-2/" target="_blank"><u><span style="color: #0066cc;">Part 2</span></u></a><u><span style="color: #0066cc;"> (you are here)</span></u></li>
-	<li><a href="http://etienne.deneuve.xyz/2016/01/11/side-loading-application-without-sccm-part-3/" target="_blank"><u><span style="color: #0066cc;">Part 3 </span></u></a></li>
-	<li>The full script is on my (New) Git : <a href="https://github.com/EtienneDeneuve/Powershell">Go to Git !</a></li>
-</ul>
-      </main>
-      <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2" >
-        <nav class="sticky-top">
-        
-        </nav>
-      </aside>
+<article id="main-content" class="site-main container mt-3 mb-5"
+style="padding-top: 80px"
+>
+<p>See <a href="/tags/">all tags</a>.</p>
+<h2 class="text-secondary mb-5">Tagged <small>“reverse proxy”</small></h2>
+  
+
+  
+
+  <div class="row justify-content-center px-3 px-sm-0 my-5  mb-3 ">
+    
+
+    <div class=" col-m ">
+      <a href="/2017/02/02/installation-de-nginx-en-reverse-proxy-avec-reecriture-du-html/" class="item-title h2 d-block" >Installation de Nginx en reverse proxy avec réecriture du HTML
+
+      
+      </a>
+      <p class="item-summary lead mb-1 text-body"></p>
+      
+  
+
+      <div class="tagslist d-none d-lg-block mt-2">
+  
+    <a href="/tags/Linux/" class="badge badge-special">Linux</a>
+    <a href="/tags/nginx/" class="badge badge-special">nginx</a>
+    <a href="/tags/reverse proxy/" class="badge badge-special">reverse proxy</a>
+</div>
     </div>
   </div>
-</div>
+</article>
 
     <footer class="site-footer bg-transparent pb-3 pb-md-5">
       <div class="layout-social container d-flex justify-content-center">

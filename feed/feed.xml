@@ -2768,164 +2768,56 @@ With the server is running, open http://toto:1337 in your browser to see the Vor
 		<link href="/2017/02/02/installation-de-nginx-en-reverse-proxy-avec-reecriture-du-html/"/>
 		<updated>2017-02-02T23:30:06+01:00</updated>
 		<id>/2017/02/02/installation-de-nginx-en-reverse-proxy-avec-reecriture-du-html/</id>
-		<content type="html">&lt;h3&gt;Nginx&lt;/h3&gt;
-Nginx est un serveur Web modulaire qui fonctionne très bien en reverse proxy et possède de nombreuses possibilités. De plus il est très léger, je vous invite à consulter leur site : &lt;a href=&quot;http://nginx.org/&quot;&gt;www.nginx.org&lt;/a&gt;
-&lt;h3&gt;La problématique&lt;/h3&gt;
-Un client avait un site internet assez mal écrit avec beaucoup d&#39;url en dur dans le code et qui aurait nécessité beaucoup trop de temps pour le remettre en conformité.
-l&#39;idée est de ré-écrire les urls dans les pages transmises par le serveur Web, en l&#39;occurrence un serveur Apache (pas à jour !).
-Nous aurions pu utiliser un vrai reverse proxy (Kemp, F5..) afin de faire la même chose mais le client n&#39;en dispose pas et l&#39;investissement pour une seule machine virtuelle était un peu surdimensionné. Si la  machine était dans &lt;a href=&quot;https://azure.microsoft.com/fr-fr/&quot;&gt;Azure&lt;/a&gt;, nous aurions pu utiliser les nombreuses briques présentes dans la solution de Cloud Microsoft. l&#39;idée est donc de ré-écrire les pages à la volées lors de la transmission avec le client.
-&lt;h3&gt;Solution mise en place&lt;/h3&gt;
-Nous avons choisi d&#39;installer un serveur Nginx sur une machine virtuelle Centos 7, cette installation est donc reproductible chez vous sur un système Centos, Red Hat ou Fedora
-&lt;h4&gt;Installation de Nginx&lt;/h4&gt;
-Nginx est présent dans les dépots Centos mais la version proposée ne dispose pas du module de substitution dont nous avons besoin. Il faut donc passer par la compilation, et donc installer les outils nécessaires comme ci-dessous :
-&lt;pre&gt;yum install gcc-c++ \
-                  pcre-devel \
-                  zlib-devel \
-                  make \
-                  wget \
-                  openssl-devel \
-                  libxml2-devel \
-                  libxslt-devel \
-                  gd-devel \
-                  perl-ExtUtils-Embed \
-                  GeoIP-devel \
-                  gperftools-devel \
-                  git
-&lt;/pre&gt;
-Ensuite on récupère les sources de Nginx depuis le site de Nginx :
-&lt;pre&gt;cd /tmp
-wget http://nginx.org/download/nginx-1.10.1.tar.gz
-tar -xvf nginx-1.10.1.tar.gz
-&lt;/pre&gt;
-Comme l&#39;extension &quot;http subsitution filter&quot; module n&#39;est pas un module &quot;officiel&quot;, il faut le récupérer sur le GitHub de yaoweibin :
-&lt;pre&gt;git clone git://github.com/yaoweibin/ngx_http_substitutions_filter_module.git  
-&lt;/pre&gt;
-Ensuite on configure le make :
-&lt;pre&gt;  cd nginx-1.10.1
-  ./configure \
-        --user=nginx                          \
-        --group=nginx                         \
-        --prefix=/etc/nginx                   \
-        --sbin-path=/usr/sbin/nginx           \
-        --conf-path=/etc/nginx/nginx.conf     \
-        --pid-path=/var/run/nginx.pid         \
-        --lock-path=/var/run/nginx.lock       \
-        --error-log-path=/var/log/nginx/error.log \
-        --http-log-path=/var/log/nginx/access.log \
-        --with-http_gzip_static_module        \
-        --with-http_stub_status_module        \
-        --with-http_ssl_module                \
-        --with-pcre                           \
-        --with-file-aio                       \
-        --with-http_realip_module             \
-        --without-http_scgi_module            \
-        --without-http_uwsgi_module           \
-        --without-http_fastcgi_module \
-        --add-module=/tmp/ngx_http_substitutions_filter_module      
-&lt;/pre&gt;
-On lance le make
-&lt;pre&gt;make
-make install
-&lt;/pre&gt;
-&lt;h4&gt;Configuration de Nginx&lt;/h4&gt;
-Il faut créer un compte dédié a Nginx, faire tourner un serveur Web en root étant largement déconseillé (oui oui, il parait) :
-&lt;pre&gt;useradd -r nginx&lt;/pre&gt;
-Comme notre Nginx est une version compilée, nous devons créer un fichier de service conforme à systemd :
-&lt;pre&gt;echo &quot;[Unit]
-Description=The NGINX HTTP and reverse proxy server
-After=syslog.target network.target remote-fs.target nss-lookup.target
-&lt;p&gt;[Service]&lt;br&gt;
-Type=forking&lt;br&gt;
-PIDFile=/var/run/nginx.pid&lt;br&gt;
-ExecStartPre=/usr/sbin/nginx -t&lt;br&gt;
-ExecStart=/usr/sbin/nginx&lt;br&gt;
-ExecReload=/bin/kill -s HUP $MAINPID&lt;br&gt;
-ExecStop=/bin/kill -s QUIT $MAINPID&lt;br&gt;
-PrivateTmp=true&lt;/p&gt;
-&lt;p&gt;[Install]&lt;br&gt;
-WantedBy=multi-user.target&amp;quot; &amp;gt; /lib/systemd/system/nginx.service&lt;br&gt;
-&lt;/p&gt;&lt;/pre&gt;&lt;br&gt;
-Comme on est pas des gros bourrins, on configure firewalld via firewall-cmd :&lt;p&gt;&lt;/p&gt;
-&lt;pre&gt;firewall-cmd --zone=public --add-port=80/tcp --permanent
-firewall-cmd --reload
-&lt;/pre&gt;
+		<content type="html">&lt;h1 id=&quot;nginx&quot;&gt;Nginx &lt;a class=&quot;direct-link&quot; href=&quot;#nginx&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;Nginx est un serveur Web modulaire qui fonctionne très bien en reverse proxy et possède de nombreuses possibilités. De plus il est très léger, je vous invite à consulter leur site : &lt;a href=&quot;http://nginx.org/&quot;&gt;www.nginx.org&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;la-probl%C3%A9matique&quot;&gt;La problématique &lt;a class=&quot;direct-link&quot; href=&quot;#la-probl%C3%A9matique&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Un client avait un site internet assez mal écrit avec beaucoup d&#39;url en dur dans le code et qui aurait nécessité beaucoup trop de temps pour le remettre en conformité.&lt;br&gt;
+l&#39;idée est de ré-écrire les urls dans les pages transmises par le serveur Web, en l&#39;occurrence un serveur Apache (pas à jour !).&lt;br&gt;
+Nous aurions pu utiliser un vrai reverse proxy (Kemp, F5..) afin de faire la même chose mais le client n&#39;en dispose pas et l&#39;investissement pour une seule machine virtuelle était un peu surdimensionné. Si la machine était dans &lt;a href=&quot;https://azure.microsoft.com/fr-fr/&quot;&gt;Azure&lt;/a&gt;, nous aurions pu utiliser les nombreuses briques présentes dans la solution de Cloud Microsoft. l&#39;idée est donc de ré-écrire les pages à la volées lors de la transmission avec le client.&lt;/p&gt;
+&lt;h2 id=&quot;solution-mise-en-place&quot;&gt;Solution mise en place &lt;a class=&quot;direct-link&quot; href=&quot;#solution-mise-en-place&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Nous avons choisi d&#39;installer un serveur Nginx sur une machine virtuelle Centos 7, cette installation est donc reproductible chez vous sur un système Centos, Red Hat ou Fedora&lt;/p&gt;
+&lt;h3 id=&quot;installation-de-nginx&quot;&gt;Installation de Nginx &lt;a class=&quot;direct-link&quot; href=&quot;#installation-de-nginx&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Nginx est présent dans les dépots Centos mais la version proposée ne dispose pas du module de substitution dont nous avons besoin. Il faut donc passer par la compilation, et donc installer les outils nécessaires comme ci-dessous :&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;yum &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; gcc-c++ &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;                  pcre-devel &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;                  zlib-devel &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;                  &lt;span class=&quot;token function&quot;&gt;make&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;                  &lt;span class=&quot;token function&quot;&gt;wget&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;                  openssl-devel &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;                  libxml2-devel &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;                  libxslt-devel &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;                  gd-devel &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;                  perl-ExtUtils-Embed &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;                  GeoIP-devel &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;                  gperftools-devel &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;                  &lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Ensuite on récupère les sources de Nginx depuis le site de Nginx :&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; /tmp&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;wget&lt;/span&gt; http://nginx.org/download/nginx-1.10.1.tar.gz&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;tar&lt;/span&gt; -xvf nginx-1.10.1.tar.gz&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Comme l&#39;extension &amp;quot;http subsitution filter&amp;quot; module n&#39;est pas un module &amp;quot;officiel&amp;quot;, il faut le récupérer sur le GitHub de yaoweibin :&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; clone git://github.com/yaoweibin/ngx_http_substitutions_filter_module.git  &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Ensuite on configure le make :&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; nginx-1.10.1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  ./configure &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        --user&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;nginx                          &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        --group&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;nginx                         &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        --prefix&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;/etc/nginx                   &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        --sbin-path&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;/usr/sbin/nginx           &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        --conf-path&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;/etc/nginx/nginx.conf     &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        --pid-path&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;/var/run/nginx.pid         &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        --lock-path&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;/var/run/nginx.lock       &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        --error-log-path&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;/var/log/nginx/error.log &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        --http-log-path&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;/var/log/nginx/access.log &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        --with-http_gzip_static_module        &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        --with-http_stub_status_module        &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        --with-http_ssl_module                &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        --with-pcre                           &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        --with-file-aio                       &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        --with-http_realip_module             &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        --without-http_scgi_module            &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        --without-http_uwsgi_module           &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        --without-http_fastcgi_module &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        --add-module&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;/tmp/ngx_http_substitutions_filter_module&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;On lance le make&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;make&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;make&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;configuration-de-nginx&quot;&gt;Configuration de Nginx &lt;a class=&quot;direct-link&quot; href=&quot;#configuration-de-nginx&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Il faut créer un compte dédié a Nginx, faire tourner un serveur Web en root étant largement déconseillé (oui oui, il parait) :&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;useradd&lt;/span&gt; -r nginx&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Comme notre Nginx est une version compilée, nous devons créer un fichier de service conforme à systemd :&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;[Unit]&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Description=The NGINX HTTP and reverse proxy server&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;After=syslog.target network.target remote-fs.target nss-lookup.target&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;[Service]&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Type=forking&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;PIDFile=/var/run/nginx.pid&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;ExecStartPre=/usr/sbin/nginx -t&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;ExecStart=/usr/sbin/nginx&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;ExecReload=/bin/kill -s HUP &lt;span class=&quot;token variable&quot;&gt;$MAINPID&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;ExecStop=/bin/kill -s QUIT &lt;span class=&quot;token variable&quot;&gt;$MAINPID&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;PrivateTmp=true&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;[Install]&lt;/span&gt;&lt;br&gt;WantedBy=multi-user.target&quot;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&lt;/span&gt;gt&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; /lib/systemd/system/nginx.service&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Comme on est pas des gros bourrins, on configure firewalld via firewall-cmd :&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;firewall-cmd --zone&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;public --add-port&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;80&lt;/span&gt;/tcp --permanent&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;firewall-cmd --reload&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Et bien sur on vérifie que les règles sont appliquées :&lt;/p&gt;
-&lt;pre&gt;iptables-save | grep 80&lt;/pre&gt;
-&lt;h4&gt;Création de la règles de réécriture :&lt;/h4&gt;
-Par défaut, le fichier de configuration Nginx est situé dans le dossier que nous avons mentionné dans la partie &quot;--prefix=/etc/nginx&quot;,  nginx.conf
-Remplacez la partie &quot;server {...}&quot; par celle ci :
-&lt;pre&gt;    server {
-        listen       80;
-        server_name     localhost
-                        old.domainquonveut.com;
-&lt;pre&gt;&lt;code&gt;    access_log  /var/log/nginx/oldsite.access.log  main;
-    error_log /var/log/nginx/oldsite.error.log  main;
-    location / {
-            proxy_pass      http://ancienserveur:80; #ipduserveur
-            proxy_set_header Host www.vhostduapache.com;
-            proxy_set_header Accept-Encoding &amp;quot;&amp;quot;;
-            subs_filter www.domaineendurdanslecodequinousplaitpas.com old.domainquonveut.com gi;
-            subs_filter www.domaineendurdanslecodequinousplaitpas.fr old.domainquonveut.fr gi;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/pre&gt;
-&lt;ol&gt;
- 	&lt;li&gt;proxy_pass : c&#39;est l&#39;option qui permet de forwarder le traffic entrant vers le serveur Apache&lt;/li&gt;
- 	&lt;li&gt;proxy_set_header : c&#39;est l&#39;option qui permet de modifier le header envoyé au serveur Web
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;iptables-save &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;80&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;cr%C3%A9ation-de-la-r%C3%A8gles-de-r%C3%A9%C3%A9criture&quot;&gt;Création de la règles de réécriture &lt;a class=&quot;direct-link&quot; href=&quot;#cr%C3%A9ation-de-la-r%C3%A8gles-de-r%C3%A9%C3%A9criture&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Par défaut, le fichier de configuration Nginx est situé dans le dossier que nous avons mentionné dans la partie &lt;code&gt;--prefix=/etc/nginx&lt;/code&gt;, soit &lt;code&gt;/etc/nginx/nginx.conf&lt;/code&gt;&lt;br&gt;
+Remplacez la partie &lt;code&gt;server {...}&lt;/code&gt; par celle ci :&lt;/p&gt;
+&lt;pre class=&quot;language-nginx&quot;&gt;&lt;code class=&quot;language-nginx&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;server&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        &lt;span class=&quot;token keyword&quot;&gt;listen&lt;/span&gt;       &lt;span class=&quot;token number&quot;&gt;80&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        &lt;span class=&quot;token keyword&quot;&gt;server_name&lt;/span&gt;     localhost&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;                        old&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;domainquonveut&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;com&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        &lt;span class=&quot;token keyword&quot;&gt;access_log&lt;/span&gt;  &lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;var&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;log&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;nginx&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;oldsite&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;access&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;log  main&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        &lt;span class=&quot;token keyword&quot;&gt;error_log&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;var&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;log&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;nginx&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;oldsite&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;error&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;log  main&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        &lt;span class=&quot;token keyword&quot;&gt;location&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;                &lt;span class=&quot;token keyword&quot;&gt;proxy_pass&lt;/span&gt;      &lt;span class=&quot;token keyword&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;ancienserveur&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;80&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;#ipduserveur&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;                &lt;span class=&quot;token keyword&quot;&gt;proxy_set_header&lt;/span&gt; Host www&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;vhostduapache&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;com&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;                &lt;span class=&quot;token keyword&quot;&gt;proxy_set_header&lt;/span&gt; Accept&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Encoding &lt;span class=&quot;token string&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;                subs_filter www&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;domaineendurdanslecodequinousplaitpas&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;com old&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;domainquonveut&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;com gi&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;                subs_filter www&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;domaineendurdanslecodequinousplaitpas&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;fr old&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;domainquonveut&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;fr gi&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;proxy_pass : c&#39;est l&#39;option qui permet de forwarder le traffic entrant vers le serveur Apache&lt;br&gt;
+proxy_set_header : c&#39;est l&#39;option qui permet de modifier le header envoyé au serveur Web&lt;br&gt;
+Host : dans notre cas on veut changer le Host présent dans le header afin de corrigé celui appelé par l&#39;utilisateur.&lt;br&gt;
+Accept-Encoding : On utilise également &amp;quot;Accept-Encoding &amp;quot;&amp;quot;;&amp;quot; afin de forcer le serveur Apache a ne pas utiliser la compression gzip des pages, car sinon, le module ne pourra pas ré-récrire les objets.&lt;br&gt;
+subs_filter : la syntaxe est très simple &amp;quot;stringquidoitdisparaitre&amp;quot; &amp;quot;stringquidoitapparaitre&amp;quot; gi&lt;br&gt;
+le paramètre gi sert à indiquer que nous souhaitons ré-écrire tout (toute les occurrences), le i pour case insensitive, afin de le récupérer sans tenir compte de la casse.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Dans la partie &amp;quot;Accept-Encoding&amp;quot;, je mentionne qu&#39;il faut désactiver la compression gzip, pour deux raisons :&lt;/p&gt;
 &lt;ul&gt;
- 	&lt;li&gt;Host : dans notre cas on veut changer le Host présent dans le header afin de corrigé celui appelé par l&#39;utilisateur.&lt;/li&gt;
- 	&lt;li&gt;Accept-Encoding : On utilise également &quot;Accept-Encoding &quot;&quot;;&quot; afin de forcer le serveur Apache a ne pas utiliser la compression gzip des pages, car sinon, le module ne pourra pas ré-récrire les objets.&lt;/li&gt;
+&lt;li&gt;Niveau ressources, ca sert à rien de compresser deux fois la même donnée, ca sera pas plus petit (bah ouais...)&lt;/li&gt;
+&lt;li&gt;Le module de substitution ne gère pas la décompression à la volée, puisqu&#39;il analyse les fichiers plats et remplace les occurences des strings qu&#39;on souhaite dégager.&lt;/li&gt;
+&lt;li&gt;Lorsqu&#39;on mets en place un reverse proxy, on peut vouloir mettre en cache certains éléments pour décharger les serveurs web, afin de pas leurs demander 10 fois à la seconde la même image (le logo de la boite par exemple), dès lors si les serveurs web envoient du flux compressé, il ne pourra pas le faire correctement.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
- 	&lt;li&gt;subs_filter : la syntaxe est très simple &quot;stringquidoitdisparaitre&quot; &quot;stringquidoitapparaitre&quot; gi
-le paramètre gi sert à indiquer que nous souhaitons ré-écrire tout (toute les occurrences), le i pour case insensitive, afin de le récupérer sans tenir compte de la casse.&lt;/li&gt;
-&lt;/ol&gt;
-Dans la partie &quot;Accept-Encoding&quot;, je mentionne qu&#39;il faut désactiver la compression gzip, pour deux raisons :
-&lt;ol&gt;
- 	&lt;li&gt;Niveau ressources, ca sert à rien de compresser deux fois la même donnée, ca sera pas plus petit (bah ouais...)&lt;/li&gt;
- 	&lt;li&gt;Le module de substitution ne gère pas la décompression à la volée, puisqu&#39;il analyse les fichiers plats et remplace les occurences des strings qu&#39;on souhaite dégager.&lt;/li&gt;
- 	&lt;li&gt;Lorsqu&#39;on mets en place un reverse proxy, on peut vouloir mettre en cache certains éléments pour décharger les serveurs web, afin de pas leurs demander 10 fois à la seconde la même image (le logo de la boite par exemple), dès lors si les serveurs web envoient du flux compressé, il ne pourra pas le faire correctement.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3&gt;Les cas d&#39;usage&lt;/h3&gt;
-Utiliser ce type de module peut être interressant, par exemple, sur un Wordpress de test. En effet, Wordpress stocke dans la base l&#39;url d&#39;accès, et l&#39;envoie dans quelques pages, rien de bien méchant! Du coup, avec cette petite manipulation, vous pouvez avoir un Wordpress de test qui serait une copie 100% identique à votre prod&#39;, juste avec un petit copier coller de la VM ou une autre technique :)
+&lt;h2 id=&quot;les-cas-d&#39;usage&quot;&gt;Les cas d&#39;usage &lt;a class=&quot;direct-link&quot; href=&quot;#les-cas-d&#39;usage&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Utiliser ce type de module peut être interressant, par exemple, sur un Wordpress de test. En effet, Wordpress stocke dans la base l&#39;url d&#39;accès, et l&#39;envoie dans quelques pages, rien de bien méchant! Du coup, avec cette petite manipulation, vous pouvez avoir un Wordpress de test qui serait une copie 100% identique à votre prod&#39;, juste avec un petit copier coller de la VM ou une autre technique :)&lt;/p&gt;
 &lt;p&gt;Dans le cas de mon blog, si je souhaite mettre en place une copie de mon site avec par exemple comme url &amp;quot;test.deneuve.xyz&amp;quot; sans rien toucher (en dehors d&#39;une petite copie) je devrai faire un nginx.conf tel que :&lt;/p&gt;
-&lt;pre&gt;server {
-        listen       80;
-        server_name     localhost
-                        test.deneuve.xyz;
-
-        access_log  /var/log/nginx/test.access.log  main;
-        error_log /var/log/nginx/test.error.log  main;
-        location / {
-                proxy_pass      http://192.168.1.150:80; #ipduserveurbidon
-                proxy_set_header Host etienne.deneuve.xyz;
-                proxy_set_header Accept-Encoding &quot;&quot;;
-                subs_filter etienne.deneuve.xyz test.deneuve.xyz gi;
-                
-        }
-    }&lt;/pre&gt;
-&lt;p&gt; &lt;/p&gt;
-</content>
-	</entry>
-	
-	<entry>
-		<title>Agent Oms sur Linux dans Azure</title>
-		<link href="/2017/02/02/agent-oms-sur-linux-dans-azure/"/>
-		<updated>2017-02-02T20:29:38+01:00</updated>
-		<id>/2017/02/02/agent-oms-sur-linux-dans-azure/</id>
-		<content type="html">&lt;p&gt;Si vous utilisez déjà OMS vous avec des linux dans Azure, vous avez peut être eu le même soucis que moi et Pascal Saulière. A savoir le log de l&#39;agent OMS qui grossit et prends toute la place dispo (le cochon!)&lt;/p&gt;
-&lt;p&gt;Pour éviter que cela ne se reproduise, j&#39;ai ajouté dans ma configuration de logrotate, présent par défaut sur bon nombre de distributions, a savoir /etc/logrotate.conf&lt;/p&gt;
-&lt;pre&gt;/var/opt/microsoft/omsagent/log {
-        missingok
-        size 1G
-        rotate 4
-}
-&lt;/pre&gt;
-&lt;p&gt;L&#39;idée étant de l&#39;empêcher de grossir de plus de 1G (size 1G) x 4 (rotate 4).&lt;/p&gt;
-&lt;p&gt;Update sur github, le problème serait résolu :&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://github.com/Microsoft/OMS-Agent-for-Linux/issues/366#issuecomment-278435829&quot;&gt;https://github.com/Microsoft/OMS-Agent-for-Linux/issues/366#issuecomment-278435829&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt; &lt;/p&gt;
+&lt;pre class=&quot;language-nginx&quot;&gt;&lt;code class=&quot;language-nginx&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;server&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        &lt;span class=&quot;token keyword&quot;&gt;listen&lt;/span&gt;       &lt;span class=&quot;token number&quot;&gt;80&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        &lt;span class=&quot;token keyword&quot;&gt;server_name&lt;/span&gt;     localhost&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;                        test&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;deneuve&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;xyz&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        &lt;span class=&quot;token keyword&quot;&gt;access_log&lt;/span&gt;  &lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;var&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;log&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;nginx&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;test&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;access&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;log  main&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        &lt;span class=&quot;token keyword&quot;&gt;error_log&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;var&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;log&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;nginx&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;test&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;error&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;log  main&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        &lt;span class=&quot;token keyword&quot;&gt;location&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;                &lt;span class=&quot;token keyword&quot;&gt;proxy_pass&lt;/span&gt;      &lt;span class=&quot;token keyword&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;192.168&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;.1&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;.150&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;80&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;#ipduserveurbidon&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;                &lt;span class=&quot;token keyword&quot;&gt;proxy_set_header&lt;/span&gt; Host etienne&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;deneuve&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;xyz&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;                &lt;span class=&quot;token keyword&quot;&gt;proxy_set_header&lt;/span&gt; Accept&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Encoding &lt;span class=&quot;token string&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;                subs_filter etienne&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;deneuve&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;xyz test&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;deneuve&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;xyz gi&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 </content>
 	</entry>
 	
@@ -2934,7 +2826,8 @@ Utiliser ce type de module peut être interressant, par exemple, sur un Wordpres
 		<link href="/2017/01/26/visual-studio-code-pour-ansible-terraform/"/>
 		<updated>2017-01-26T23:42:55+01:00</updated>
 		<id>/2017/01/26/visual-studio-code-pour-ansible-terraform/</id>
-		<content type="html">&lt;p&gt;L&#39;Infrastructure as Code, c&#39;est des méthodes et des outils pour faire des infrastructures reproductibles à l&#39;infini.&lt;/p&gt;
+		<content type="html">&lt;h1 id=&quot;visual-studio-code&quot;&gt;Visual Studio Code &lt;a class=&quot;direct-link&quot; href=&quot;#visual-studio-code&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;L&#39;Infrastructure as Code, c&#39;est des méthodes et des outils pour faire des infrastructures reproductibles à l&#39;infini.&lt;/p&gt;
 &lt;p&gt;J&#39;utilise quelques outils sur mes deux postes de travail principaux : un pc sous Windows 10 et un mac sous macOs Sierra. J&#39;ai donc besoin d&#39;outils qui peuvent fonctionner sur les deux plateformes sans &amp;quot;galère&amp;quot; et efficace sur les deux plateformes.&lt;/p&gt;
 &lt;p&gt;J&#39;utilise &lt;a href=&quot;https://code.visualstudio.com/&quot;&gt;Visual Studio Code&lt;/a&gt; qui est gratuit, dispo sur Windows, Linux et macOs.&lt;/p&gt;
 &lt;p&gt;Voici quelques plugins que j&#39;ai installé :&lt;/p&gt;
@@ -2977,112 +2870,6 @@ Il s&#39;agit tout simplement de mon fichier de settings de vscode, je le mets a
 	</entry>
 	
 	<entry>
-		<title>Utiliser Ansible et Azure, oui c&amp;#8217;est possible !</title>
-		<link href="/2017/01/26/utiliser-ansible-et-azure-oui-cest-possible/"/>
-		<updated>2017-01-26T19:54:27+01:00</updated>
-		<id>/2017/01/26/utiliser-ansible-et-azure-oui-cest-possible/</id>
-		<content type="html">&lt;h2&gt;Avant Propos&lt;/h2&gt;
-&lt;a href=&quot;https://www.ansible.com/&quot;&gt;&lt;u&gt;Ansible&lt;/u&gt;&lt;/a&gt; est un outil d’orchestration et déploiment proposé par &lt;a href=&quot;https://www.redhat.com/fr&quot;&gt;&lt;u&gt;Red Hat&lt;/u&gt;&lt;/a&gt;. Il est utilisé par de nombreuses entreprises dans le domaine de l’Open Source. Pendant la préparation des démos pour le &lt;a href=&quot;https://mscloudsummit.fr/fr/accueil/&quot;&gt;&lt;u&gt;MS Cloud Summit&lt;/u&gt;&lt;/a&gt;, &lt;a href=&quot;https://stanislas.io/&quot;&gt;&lt;u&gt;Stanislas Quastana&lt;/u&gt;&lt;/a&gt; et moi-même avons donc décidé de présenter les outils Open Source Terraform et Ansible afin de déployer des services dans Azure. Vous pouvez retrouver tous les détails de notre session “Infrastructures dans Azure : C’est comme du lego” : &lt;a href=&quot;http://aka.ms/cloudsummitlego&quot;&gt;&lt;u&gt;ici&lt;/u&gt;&lt;/a&gt;
-&lt;h2&gt;Ansible&lt;/h2&gt;
-Ansible est donc un outil de gestion des configurations, je ne vais pas vous refaire un tutorial d’installation vu le nombre déjà disponible avec votre ami &lt;a href=&quot;https://www.bing.com/search?q=tutorial+installation+ansible&amp;amp;go=Envoyer&amp;amp;qs=n&amp;amp;form=QBLH&amp;amp;sp=-1&amp;amp;pq=tutorial+installation+ansible&amp;amp;sc=3-24&amp;amp;sk=&amp;amp;cvid=12AEAA43E790440088D942223E35173A&quot;&gt;&lt;u&gt;Bing&lt;/u&gt;&lt;/a&gt; ou &lt;a href=&quot;https://www.google.fr/#q=tutorial+install+ansible&quot;&gt;&lt;u&gt;Google&lt;/u&gt;&lt;/a&gt;.
-&lt;p&gt;En revanche l’installation des éléments nécessaires pour Azure peuvent être un peu complexe à installer et les documentations peu présentes. J’ai décidé d’installer Ansible sur une machine dans Azure que j’ai déployé avec Terraform, vous pouvez trouver un fichier d’exemple dans mon repo Azure sur &lt;a href=&quot;https://github.com/EtienneDeneuve/Azure/tree/master/Terraform/01%20-%20IaaS&quot;&gt;&lt;u&gt;GitHub&lt;/u&gt;&lt;/a&gt; afin de créer une machine virtuelle prête à l’emploi. Mon exemple déploie une machine Ubuntu 16.04-LTS et mon installation fonctionnera sur d’autres machines du même type.&lt;/p&gt;
-&lt;h3&gt;Installation de dépendances&lt;/h3&gt;
-Première chose à faire sur une nouvelle machine c’est bien entendu les mises à jour :
-&lt;pre&gt;sudo apt-get update&lt;/pre&gt;
-Ensuite il faut installer les dépendances nécessaires a Ansible à savoir Phython :
-&lt;pre&gt;sudo apt-get install software-properties-common&lt;/pre&gt;
-Il faut également installer des librairies de convention et ssl :
-&lt;pre&gt;sudo apt-get install libffi-dev libssl-dev&lt;/pre&gt;
-&lt;h3&gt;Installation de Ansible&lt;/h3&gt;
-Sur Ubuntu le repository PPA propose une version de Ansible il faut donc simplement l’ajouter et faire une petite mise à jour du cache apt-get:
-&lt;pre&gt;sudo apt-add-repository ppa:ansible/ansible
- sudo apt-get update&lt;/pre&gt;
-Lorsqu’on utilise Ansible ou d’autres outils de configuration management il est intéressant d’utiliser git ainsi que sshpass on installera donc les trois paquets :
-&lt;pre&gt;sudo apt-get install ansible sshpass git&lt;/pre&gt;
-&lt;h3&gt;Installation des prérequis pour Azure&lt;/h3&gt;
-Pour installer les éléments nécessaires, pip est assez pratique :
-&lt;pre&gt;sudo apt-get install python-pip
- sudo pip install --upgrade pip 
-&lt;/pre&gt;
-Le paquet urllib3 fourni dans les repository d’Ubuntu n’est pas installé de la bonne manière pour les dépendances Azure et donc il faut le mettre à jour par pip :
-&lt;pre&gt;sudo pip install urllib3 --upgrade&lt;/pre&gt;
-Ensuite on installe MS rest …
-&lt;pre&gt;sudo pip install msrest==0.4.4&lt;/pre&gt;
-et MS Rest Azure …
-&lt;pre&gt;sudo pip install msrestazure==0.4.4&lt;/pre&gt;
-Puis le SDK Python pour Azure :
-&lt;pre&gt;sudo pip install azure==2.0.0rc5&lt;/pre&gt;
-&lt;h3&gt;Configuration de Ansible (a minima)&lt;/h3&gt;
-Première chose à faire comme toujours lorsqu’on modifie des fichiers sur un serveur c’est le backup du fichier de configuration :
-&lt;pre&gt;mv /etc/ansible/ansible.cfg /etc/ansible/ansible.cfg.backup
-&lt;/pre&gt;
-J’ai glané sur le web quelques modifications à faire dans le fichier de configuration et on ajoute la machine locale dans le fichier hosts de Ansible :
-&lt;pre&gt;printf &quot;[defaults]\nhost_key_checking = False\n\n&quot; \ 
-        &amp;gt;&amp;gt; /etc/ansible/ansible.cfg 
- echo &#39;[ssh_connection]\ncontrol_path = ~/.ssh/ansible-%%h-%%r&#39; \
-        &amp;gt;&amp;gt; /etc/ansible/ansible.cfg
- echo &quot;\nscp_if_ssh=True&quot; &amp;gt;&amp;gt; /etc/ansible/ansible.cfg
- echo &quot;localhost&quot; &amp;gt; etc/ansible/hosts&lt;/pre&gt;
-&lt;h3&gt;Azure !&lt;/h3&gt;
-Pour tester que notre configuration fonctionne correctement on va utiliser un module disponible sur le GitHub de Ansible, azure_rm.py et son fichier de configuration azure_rm.ini. Mais avant, préparons quelques dossiers pour ranger les Playbook Ansible et les scripts d’inventaire.
-&lt;pre&gt;mkdir -p /opt/azure/playbook 
-mkdir -p /opt/azure/inventory
-mkdir -p ~/azure&lt;/pre&gt;
-Il faut télécharger le module :
-&lt;pre&gt;cd /opt/azure/inventory
-wget https://raw.githubusercontent.com/ansible/ansible/devel/contrib/inventory/azure_rm.py
-wget https://raw.githubusercontent.com/ansible/ansible/devel/contrib/inventory/azure_rm.ini
-chmod +x /opt/azure/inventory/azure_rm.py&lt;/pre&gt;
-Ansible a besoin tout comme Terraform d’un Service Principal sur votre tenant Azure afin de d’accéder à vos ressources, je ne vais détailler la méthode ici, rendez-vous sur le blog de &lt;a href=&quot;https://stanislas.io/2017/01/02/modeliser-deployer-et-gerer-des-ressources-azure-avec-terraform-de-hashicorp/&quot;&gt;&lt;u&gt;Stanislas&lt;/u&gt;&lt;/a&gt; afin d’avoir la méthode qui est exactement la même. Une fois ces informations collectées, créer un fichier « .credentials » dans votre $Home/azure :
-&lt;pre&gt;cd ~ /azure/
-touch .credentials&lt;/pre&gt;
-et renseigner le contenu tel que ci dessous :
-&lt;pre&gt;[default]
-subscription_id=YOUR-SUBID
- client_id=YOUR-ClientID
- secret=SECRET
- tenant=TENANTID&lt;/pre&gt;
-Attention : vous devez indiquer les renseignements sans placer de quote au quels cas Azure vous refusera l’authentification. Pensez également à ne jamais diffuser vos clés, elles permettent d’avoir accès à votre tenant de manière similaire a un administrateur !
-&lt;h3&gt;Le test !&lt;/h3&gt;
-Pour vérifier que tout est bien configuré, nous allons créer un playbook basé sur les informations de l’inventaire que nous avons téléchargé. Avant de faire votre premier playbook il est peut-être nécessaire de faire un petit rappel sur les fichier YML ou YAML.
-&lt;p&gt;Les fichiers YML (Yet Another Language Markup) est un langage simple mais qui comporte quelques subtilités qui peuvent se révéler frustrantes au départ. En effet les tabulations doivent être de 2 espaces. J’utilise &lt;a href=&quot;https://code.visualstudio.com/&quot;&gt;&lt;u&gt;Visual Studio Code&lt;/u&gt;&lt;/a&gt; qui comporte la possibilité d’être configuré afin de ne pas être ennuyé, de plus si vous travaillez sur un Pc sous Windows, les fichiers doivent être en retour de ligne LF et non CRLF! Je détaillerai très prochainement ma configuration et mes plugins que j’utilise sur VS Code.&lt;br&gt;
-Le playbook :&lt;/p&gt;
-&lt;pre&gt; - name: Test the inventory script
-  hosts: azure
-  connection: local
-  gather_facts: no
-  tasks:
-    - debug: msg=&quot; has powerstate &quot;
-
-&lt;/pre&gt;
-&lt;p&gt;On l’enregistre dans /opt/azure/playbook/test.yml puis on le lance avec la commande :&lt;/p&gt;
-&lt;p&gt;[code language=bash]&lt;/p&gt;
-&lt;p&gt;ansible-playbook -i &lt;span class=&quot;pl-smi&quot;&gt;/opt/azure/inventory/azure_rm.py &lt;span class=&quot;pl-smi&quot;&gt;/opt/azure/playbook/test.yml&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;[/code]&lt;/p&gt;
-&lt;p&gt;Vous obtiendrez normalement un retour de ce type :&lt;/p&gt;
-&lt;pre&gt;PLAY [Test the inventory script] ***********************************************
- 
-TASK [debug] *******************************************************************
-ok: [ansiblevm01] =&amp;gt; {     
-    &quot;msg&quot;: &quot;ansiblevm01 has powerstate running&quot;
-}
-ok: [RG-Terraform-Ansible-vm] =&amp;gt; {      
-    &quot;msg&quot;: &quot;RG-Terraform-Ansible-vm has powerstate running&quot;
-}
-ok: [Blog] =&amp;gt; {       
-    &quot;msg&quot;: &quot;Blog has powerstate running&quot;
-}
- 
-PLAY RECAP *********************************************************************
-Blog                    : ok=1 changed=0 unreachable=0 failed=0
-RG-Terraform-Ansible-vm : ok=1 changed=0 unreachable=0 failed=0
-ansiblevm01             : ok=1 changed=0 unreachable=0 failed=0&lt;/pre&gt;
-&lt;p&gt;Vous devez retrouver vos ressources groupes déjà présents dans votre tenant Azure !!&lt;/p&gt;
-&lt;p&gt;Tout est donc prêt pour pouvoir déployer des ressources dans Azure et les configurer.&lt;/p&gt;
-</content>
-	</entry>
-	
-	<entry>
 		<title>Get ink level from HP printers in Powershell
 </title>
 		<link href="/2016/01/15/get-ink-level-from-hp-printers-in-powershell/"/>
@@ -3094,183 +2881,6 @@ ansiblevm01             : ok=1 changed=0 unreachable=0 failed=0&lt;/pre&gt
 [xml]$stringprinter = $Web.DownloadString(&quot;http://printerhp/DevMgmt/ConsumableConfigDyn.xml&quot;)
 $stringprinter.ConsumableConfigDyn.ConsumableInfo | Select ConsumableLabelCode,ConsumablePercentageLevelRemaining 
 &lt;/pre&gt;</content>
-	</entry>
-	
-	<entry>
-		<title>Side loading application without SCCM &amp;#8211; Part 3</title>
-		<link href="/2016/01/11/side-loading-application-without-sccm-part-3/"/>
-		<updated>2016-01-11T20:57:23+01:00</updated>
-		<id>/2016/01/11/side-loading-application-without-sccm-part-3/</id>
-		<content type="html">&lt;p&gt;So I assume you have read the part 1 and the part 2 of this little series.&lt;/p&gt;
-&lt;h1&gt;The first Function&lt;/h1&gt;
-Here is my Function called &quot;Set-Manifest&quot; because I create it for changing the XML and the Block Map :
-&lt;p&gt;[code lang=&amp;quot;powershell&amp;quot;]&lt;/p&gt;
-&lt;p&gt;Function Set-Manifest {&lt;br&gt;
-param(&lt;br&gt;
-[String]&lt;br&gt;
-[ValidateSet(&amp;quot;Bundle&amp;quot;,&amp;quot;Block&amp;quot;,&amp;quot;Manifest&amp;quot;,&amp;quot;BlockAppx&amp;quot;)]&lt;br&gt;
-$Mode,&lt;br&gt;
-[XML]&lt;br&gt;
-$xmlfile,&lt;br&gt;
-[String]&lt;br&gt;
-$CertificateSAN,&lt;br&gt;
-[String]&lt;br&gt;
-$filename,&lt;br&gt;
-[String]&lt;br&gt;
-$BlockMap&lt;br&gt;
-)&lt;/p&gt;
-&lt;p&gt;switch ($Mode)&lt;br&gt;
-{&lt;br&gt;
-&#39;Bundle&#39;&lt;br&gt;
-{&lt;br&gt;
-$xmlfile.Bundle.Identity.Publisher = $CertificateSAN&lt;br&gt;
-$xmlfile.Save($filename)&lt;br&gt;
-}&lt;br&gt;
-&#39;Block&#39;&lt;br&gt;
-{&lt;br&gt;
-$xmlfile.BlockMap.File.RemoveAttribute(&amp;quot;Size&amp;quot;)&lt;br&gt;
-$xmlfile.BlockMap.File.RemoveAttribute(&amp;quot;LfhSize&amp;quot;)&lt;br&gt;
-$xmlfile.BlockMap.File.RemoveChild($xmlfile.BlockMap.File.Block)&lt;br&gt;
-$xmlfile.Save($filename)&lt;br&gt;
-}&lt;br&gt;
-&#39;Manifest&#39;&lt;br&gt;
-{&lt;br&gt;
-$xmlfile.Package.Identity.Publisher = $CertificateSAN&lt;br&gt;
-$xmlfile.Save($filename)&lt;br&gt;
-}&lt;br&gt;
-&#39;BlockAppx&#39;&lt;br&gt;
-{&lt;br&gt;
-$xmltemp = $xmlfile.BlockMap.File |? { $_.Name -eq &amp;quot;AppxManifest.xml&amp;quot;}&lt;br&gt;
-$xmlfile.BlockMap.RemoveChild($xmltemp)&lt;br&gt;
-$xmltemp.RemoveChild($xmltemp.Block)&lt;br&gt;
-$xmltemp.RemoveAttribute(&amp;quot;Size&amp;quot;)&lt;br&gt;
-$xmltemp.RemoveAttribute(&amp;quot;LfhSize&amp;quot;)&lt;br&gt;
-$xmlfile.BlockMap.AppendChild($xmltemp)&lt;br&gt;
-$xmlfile.Save($filename)&lt;br&gt;
-}&lt;br&gt;
-}&lt;br&gt;
-}&lt;/p&gt;
-&lt;p&gt;[/code]&lt;/p&gt;
-&lt;p&gt;I used this function like that in my &amp;quot;main&amp;quot; script:&lt;/p&gt;
-&lt;p&gt;[code lang=&amp;quot;powershell&amp;quot;]&lt;/p&gt;
-&lt;p&gt;#region manifest&lt;br&gt;
-Write-Host &amp;quot;Getting the manifest in :&lt;code&gt;t $(&amp;quot;$($destinationroot)\expanded\&amp;quot;) !&amp;quot; -ForegroundColor Green $ManifestBundle = Get-ChildItem -Filter AppxBundleManifest.xml -Path &amp;quot;$($destinationroot)\expanded\bundle&amp;quot; -Recurse $ManifestAppxs = Get-ChildItem -Filter AppxManifest.xml -Path &amp;quot;$($destinationroot)\expanded\Appx\&amp;quot; -Recurse #region bundle manifest Write-Host &amp;quot;Settings the Bundle manifest in :&lt;/code&gt;t $(&amp;quot;$($destinationroot)\expanded&amp;quot;) !&amp;quot; -ForegroundColor Green&lt;br&gt;
-if($($ManifestBundle.count)){&lt;br&gt;
-foreach($Manifest in $ManifestBundle){&lt;br&gt;
-[xml]$manifestxml = Get-Content $Manifest.FullName&lt;br&gt;
-Set-Manifest -Mode Bundle -certificate $certificateSAN -filename $($Manifest.fullname)  -xmlfile $manifestxml | Out-Null&lt;br&gt;
-}&lt;br&gt;
-}else{&lt;br&gt;
-[xml]$ManifestXML = Get-Content $ManifestBundle.FullName&lt;br&gt;
-Set-Manifest -Mode Bundle -certificate $certificateSAN -filename $($ManifestBundle.fullname)  -xmlfile $ManifestXML | Out-Null&lt;br&gt;
-}&lt;br&gt;
-#endregion&lt;br&gt;
-#region Appxs Manifests&lt;br&gt;
-Write-Host &amp;quot;Settings the Appx manifest in :&lt;code&gt;t $(&amp;quot;$($destinationroot)\expanded\&amp;quot;) !&amp;quot; -ForegroundColor Green if($($ManifestAppxs.count)){ foreach($ManifestAppx in $ManifestAppxs){ [xml]$ManifestXML = Get-Content $ManifestAppx.FullName Set-Manifest -Mode Manifest -certificate $certificateSAN -filename $($ManifestAppx.fullname)  -xmlfile $ManifestXML | Out-Null } }else{ [xml]$manifestxml = Get-Content $ManifestAppx.FullName Set-Manifest -Mode Manifest -certificate $certificateSAN -filename $($ManifestAppx.fullname)  -xmlfile $ManifestXML | Out-Null } #endregion #endregion #region bundle BlockMaps $ManifestBundleBlockMaps = Get-ChildItem -Filter AppxBlockMap.xml -Path &amp;quot;$($destinationroot)\expanded\bundle&amp;quot; -Recurse $ManifestAppxBlockMaps = Get-ChildItem -Filter AppxBlockMap.xml -Path &amp;quot;$($destinationroot)\expanded\Appx\&amp;quot; -Recurse Write-Host &amp;quot;Settings the Bundle Block Maps in :&lt;/code&gt;t $(&amp;quot;$($destinationroot)\expanded&amp;quot;) !&amp;quot; -ForegroundColor Green&lt;br&gt;
-if($($ManifestBundleBlockMaps.count)){&lt;br&gt;
-foreach($BlockMaps in $ManifestBundleBlockMaps){&lt;br&gt;
-[xml]$BlockMapsXml = Get-Content $BlockMaps.FullName&lt;br&gt;
-Set-Manifest -Mode Block -certificate $certificateSAN -filename $($BlockMaps.fullname)  -xmlfile $BlockMapsXml | Out-Null&lt;br&gt;
-}&lt;br&gt;
-}else{&lt;br&gt;
-[xml]$BlockMapsXML = Get-Content $BlockMaps.FullName&lt;br&gt;
-Set-Manifest -Mode Block -certificate $certificateSAN -filename $($BlockMaps.fullname)  -xmlfile $BlockMapsXML | Out-Null&lt;br&gt;
-}&lt;br&gt;
-#endregion&lt;br&gt;
-#region Appxs BlockMaps&lt;br&gt;
-Write-Host &amp;quot;Settings the Appx Block Maps in :`t $(&amp;quot;$($destinationroot)\expanded&amp;quot;) !&amp;quot; -ForegroundColor Green&lt;br&gt;
-if($($ManifestAppxBlockMaps.count)){&lt;br&gt;
-foreach($BlockMaps in $ManifestAppxBlockMaps){&lt;br&gt;
-[xml]$BlockMapsXml = Get-Content $BlockMaps.FullName&lt;br&gt;
-Set-Manifest -Mode BlockAppx -certificate $certificateSAN -filename $($BlockMaps.fullname)  -xmlfile $BlockMapsXML | Out-Null&lt;br&gt;
-}&lt;br&gt;
-}else{&lt;br&gt;
-[xml]$BlockMapsXml = Get-Content $ManifestAppxBlockMaps.FullName&lt;br&gt;
-Set-Manifest -Mode BlockAppx -certificate $certificateSAN -filename $($ManifestAppxBlockMaps.fullname)  -xmlfile $BlockMapsXml | Out-Null&lt;br&gt;
-}&lt;br&gt;
-#endregion&lt;br&gt;
-#endregion&lt;/p&gt;
-&lt;p&gt;[/code]&lt;/p&gt;
-&lt;p&gt;Part 4 is coming soon :)&lt;/p&gt;
-&lt;p&gt;Other Parts  :&lt;/p&gt;
-&lt;ul&gt;
-	&lt;li&gt;&lt;a href=&quot;http://etienne.deneuve.xyz/2016/01/11/side-loading-application-without-sccm-part-1/&quot;&gt;&lt;u&gt;&lt;span style=&quot;color: #0066cc;&quot;&gt;Part 1&lt;/span&gt;&lt;/u&gt;&lt;/a&gt;&lt;/li&gt;
-	&lt;li&gt;&lt;a href=&quot;http://etienne.deneuve.xyz/2016/01/11/side-loading-application-without-sccm-part-2/&quot; target=&quot;_blank&quot;&gt;&lt;u&gt;&lt;span style=&quot;color: #0066cc;&quot;&gt;Part 2&lt;/span&gt;&lt;/u&gt;&lt;/a&gt;&lt;/li&gt;
-	&lt;li&gt;&lt;a href=&quot;http://etienne.deneuve.xyz/2016/01/11/side-loading-application-without-sccm-part-3/&quot; target=&quot;_blank&quot;&gt;&lt;u&gt;&lt;span style=&quot;color: #0066cc;&quot;&gt;Part 3 (you are here)&lt;/span&gt;&lt;/u&gt;&lt;/a&gt;&lt;/li&gt;
-	&lt;li&gt;The full script is on my (New) Git : &lt;a href=&quot;https://github.com/EtienneDeneuve/Powershell&quot;&gt;Go to Git !&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content>
-	</entry>
-	
-	<entry>
-		<title>Side loading application without SCCM &amp;#8211; Part 2</title>
-		<link href="/2016/01/11/side-loading-application-without-sccm-part-2/"/>
-		<updated>2016-01-11T19:25:02+01:00</updated>
-		<id>/2016/01/11/side-loading-application-without-sccm-part-2/</id>
-		<content type="html">&lt;p&gt;So you have read the first article of these little series ( part 1 here : &lt;a href=&quot;http://etienne.deneuve.xyz/2016/01/11/side-loading-application-without-sccm-part-1/&quot;&gt;http://etienne.deneuve.xyz/2016/01/11/side-loading-application-without-sccm-part-1/&lt;/a&gt;)&lt;/p&gt;
-&lt;h1&gt;Powershell&lt;/h1&gt;
-With powershell we can automate tasks and manage our servers. Some one asks me to publish an AppxBundle with a need certificate (a good one, sign by a 3rd party provider, not a crappy self signed) for a customer, for side loading the appx and doesn&#39;t have to renew the certificate every year. It&#39;s not very funny to rebuild a package each year for a certificate, and it&#39;s not possible to publish the apps to the market as no one will care about it and there&#39;s no use for others. Before making a script for it, I&#39;ve made the process one time manually and found it too much longer and not very interesting. So I started my scripts by a function to make the XML modifications. Powershell handles XML files better, than me, so I just need to do [xml]$variable = Get-Content $myappxfile. But I realizes my files a differents and need multiples modifications, so created a Switch (hint : Use the Powershell ISE and hit Crtl + J to get Intellisense doing the work for you) and addsome parameters to the function and the ability to choose between multiple values, with the &quot;ValidateSet&quot;, useful for autocompletion. (I don&#39;t publish the true function right now):
-&lt;p&gt;[code language=&amp;quot;powershell&amp;quot;]&lt;br&gt;
-Function Update-AppxXML{&lt;br&gt;
-param(&lt;br&gt;
-[ValidateSet(&amp;quot;Option1&amp;quot;,&amp;quot;Option2&amp;quot;,&amp;quot;Option3&amp;quot;)]&lt;br&gt;
-$param1,&lt;br&gt;
-$param2,&lt;br&gt;
-)&lt;br&gt;
-switch($param1){&lt;br&gt;
-&amp;quot;Option1&amp;quot; { do that }&lt;br&gt;
-&amp;quot;Option2&amp;quot; { do that }&lt;br&gt;
-&amp;quot;Option3&amp;quot; { do that }&lt;br&gt;
-}&lt;br&gt;
-}&lt;br&gt;
-[/code]&lt;br&gt;
-When I wrote my script, I splitted in multiple functions. It&#39;s pretty cool to have a script almost ready, where you don&#39;t have to write it again completely from scratch. You can also have a &amp;quot;Main&amp;quot; function for calling all the functions instead of making an intensive use of the magic pipe.&lt;/p&gt;
-&lt;p&gt;In the part 3, I&#39;ll go deeper in the scripts. Stay tuned...&lt;/p&gt;
-&lt;p&gt;Other Parts  :&lt;/p&gt;
-&lt;ul&gt;
-	&lt;li&gt;&lt;a href=&quot;http://etienne.deneuve.xyz/2016/01/11/side-loading-application-without-sccm-part-1/&quot;&gt;&lt;u&gt;&lt;span style=&quot;color: #0066cc;&quot;&gt;Part 1&lt;/span&gt;&lt;/u&gt;&lt;/a&gt;&lt;/li&gt;
-	&lt;li&gt;&lt;a href=&quot;http://etienne.deneuve.xyz/2016/01/11/side-loading-application-without-sccm-part-2/&quot; target=&quot;_blank&quot;&gt;&lt;u&gt;&lt;span style=&quot;color: #0066cc;&quot;&gt;Part 2&lt;/span&gt;&lt;/u&gt;&lt;/a&gt;&lt;u&gt;&lt;span style=&quot;color: #0066cc;&quot;&gt; (you are here)&lt;/span&gt;&lt;/u&gt;&lt;/li&gt;
-	&lt;li&gt;&lt;a href=&quot;http://etienne.deneuve.xyz/2016/01/11/side-loading-application-without-sccm-part-3/&quot; target=&quot;_blank&quot;&gt;&lt;u&gt;&lt;span style=&quot;color: #0066cc;&quot;&gt;Part 3 &lt;/span&gt;&lt;/u&gt;&lt;/a&gt;&lt;/li&gt;
-	&lt;li&gt;The full script is on my (New) Git : &lt;a href=&quot;https://github.com/EtienneDeneuve/Powershell&quot;&gt;Go to Git !&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content>
-	</entry>
-	
-	<entry>
-		<title>Side loading application without SCCM &amp;#8211; Part 1</title>
-		<link href="/2016/01/11/side-loading-application-without-sccm-part-1/"/>
-		<updated>2016-01-11T18:20:38+01:00</updated>
-		<id>/2016/01/11/side-loading-application-without-sccm-part-1/</id>
-		<content type="html">&lt;p&gt;I publish my way to install side loaded application to Windows 8 and above. I looked on Internet and found nothing to install theses apps  on  computers in a company which doesn&#39;t have SCCM. I&#39;ve written a powershell script which will do the work but I want to share the way I built it, instead of sharing it without any kind of explanation. This blog post is the first one of the series for passing to a long and non interesting tasks to a near complete automated one. You will need makeappx and signtool on the computer to run the script or make the process manually. It&#39;s preferable to make the process one time before launching the script. It&#39;s easier to debug something you know (yes ! ;)).&lt;/p&gt;
-&lt;h1&gt;Applications for Windows Modern UI.&lt;/h1&gt;
-Let&#39;s start this post by a little explanation about Windows Sideloading Mechanics. When you build application with tools like Adobe DPS, you will get a &quot;appxbundle&quot;. For side loading you need sign the appxbundle and the appx in the bundle. So, you need to &quot;unbundle&quot; the bundle, and then unpack the appx. Unfortunately you need to modify the AppManifest.xml and the BlockMap.xml (a file where all the hash are stored), and theses two files exist for both AppxBundle and Appx.
-&lt;p&gt;The tree of an AppxBundle look like :&lt;/p&gt;
-&lt;ul&gt;
-	&lt;li&gt;/ (root of the AppxBundle)&lt;/li&gt;
-	&lt;li&gt;/AppManifest&lt;/li&gt;
-	&lt;li&gt;/AppManifest/AppxManifest.xml&lt;/li&gt;
-	&lt;li&gt;/BlockMaps.xml&lt;/li&gt;
-	&lt;li&gt;/ARM.appx&lt;/li&gt;
-	&lt;li&gt;/x86.appx&lt;/li&gt;
-	&lt;li&gt;/x64.appx&lt;/li&gt;
-	&lt;li&gt;(all the architectures are in the bundle, I removed the non essential files)&lt;/li&gt;
-&lt;/ul&gt;
-For Sideloading and changing the certificate to a good one here are the steps we need :
-&lt;ol&gt;
-	&lt;li&gt;Unbundle appxbundle&lt;/li&gt;
-	&lt;li&gt;Unpack all the appx&lt;/li&gt;
-	&lt;li&gt;Modify the AppManifest.xml, for all of them. We need to change the &quot;Publisher&quot; attributes in the XML.&lt;/li&gt;
-	&lt;li&gt;Modify the BlockMaps.xml, for all of them. We need to remove the Hash and size of the modified AppManifest.xml.&lt;/li&gt;
-	&lt;li&gt;Pack the appx and sign it&lt;/li&gt;
-	&lt;li&gt;Create the bundle and sign it&lt;/li&gt;
-	&lt;li&gt;Create a powershell script to install the dependencies and the bundle.&lt;/li&gt;
-	&lt;li&gt;Find a way to launch the Powershell Script on all our client&lt;/li&gt;
-&lt;/ol&gt;
-The part 2 is coming, soon...
-&lt;p&gt;Other Parts  :&lt;/p&gt;
-&lt;ul&gt;
-	&lt;li&gt;&lt;a href=&quot;http://etienne.deneuve.xyz/2016/01/11/side-loading-application-without-sccm-part-2/&quot; target=&quot;_blank&quot;&gt;Part 2&lt;/a&gt;&lt;/li&gt;
-	&lt;li&gt;&lt;a href=&quot;http://etienne.deneuve.xyz/2016/01/11/side-loading-application-without-sccm-part-3/&quot; target=&quot;_blank&quot;&gt;Part 3&lt;/a&gt;&lt;/li&gt;
-	&lt;li&gt;The full script is on my (New) Git : &lt;a href=&quot;https://github.com/EtienneDeneuve/Powershell&quot;&gt;Go to Git !&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content>
 	</entry>
 	
 	<entry>

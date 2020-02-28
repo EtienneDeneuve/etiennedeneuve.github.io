@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <meta name="msvalidate.01" content="DE6C71A9BE4E011D01CC38799992B4A6" />
     
     <link rel="stylesheet" href="/css/style.css" type="text/css">
     
@@ -94,149 +94,85 @@
   <div class="post post-sidebar container-fluid">
     <div class="row justify-content-xl-center">
       <main class="main col">
-      <h3>Nginx</h3>
-Nginx est un serveur Web modulaire qui fonctionne très bien en reverse proxy et possède de nombreuses possibilités. De plus il est très léger, je vous invite à consulter leur site : <a href="http://nginx.org/">www.nginx.org</a>
-<h3>La problématique</h3>
-Un client avait un site internet assez mal écrit avec beaucoup d'url en dur dans le code et qui aurait nécessité beaucoup trop de temps pour le remettre en conformité.
-l'idée est de ré-écrire les urls dans les pages transmises par le serveur Web, en l'occurrence un serveur Apache (pas à jour !).
-Nous aurions pu utiliser un vrai reverse proxy (Kemp, F5..) afin de faire la même chose mais le client n'en dispose pas et l'investissement pour une seule machine virtuelle était un peu surdimensionné. Si la  machine était dans <a href="https://azure.microsoft.com/fr-fr/">Azure</a>, nous aurions pu utiliser les nombreuses briques présentes dans la solution de Cloud Microsoft. l'idée est donc de ré-écrire les pages à la volées lors de la transmission avec le client.
-<h3>Solution mise en place</h3>
-Nous avons choisi d'installer un serveur Nginx sur une machine virtuelle Centos 7, cette installation est donc reproductible chez vous sur un système Centos, Red Hat ou Fedora
-<h4>Installation de Nginx</h4>
-Nginx est présent dans les dépots Centos mais la version proposée ne dispose pas du module de substitution dont nous avons besoin. Il faut donc passer par la compilation, et donc installer les outils nécessaires comme ci-dessous :
-<pre>yum install gcc-c++ \
-                  pcre-devel \
-                  zlib-devel \
-                  make \
-                  wget \
-                  openssl-devel \
-                  libxml2-devel \
-                  libxslt-devel \
-                  gd-devel \
-                  perl-ExtUtils-Embed \
-                  GeoIP-devel \
-                  gperftools-devel \
-                  git
-</pre>
-Ensuite on récupère les sources de Nginx depuis le site de Nginx :
-<pre>cd /tmp
-wget http://nginx.org/download/nginx-1.10.1.tar.gz
-tar -xvf nginx-1.10.1.tar.gz
-</pre>
-Comme l'extension "http subsitution filter" module n'est pas un module "officiel", il faut le récupérer sur le GitHub de yaoweibin :
-<pre>git clone git://github.com/yaoweibin/ngx_http_substitutions_filter_module.git  
-</pre>
-Ensuite on configure le make :
-<pre>  cd nginx-1.10.1
-  ./configure \
-        --user=nginx                          \
-        --group=nginx                         \
-        --prefix=/etc/nginx                   \
-        --sbin-path=/usr/sbin/nginx           \
-        --conf-path=/etc/nginx/nginx.conf     \
-        --pid-path=/var/run/nginx.pid         \
-        --lock-path=/var/run/nginx.lock       \
-        --error-log-path=/var/log/nginx/error.log \
-        --http-log-path=/var/log/nginx/access.log \
-        --with-http_gzip_static_module        \
-        --with-http_stub_status_module        \
-        --with-http_ssl_module                \
-        --with-pcre                           \
-        --with-file-aio                       \
-        --with-http_realip_module             \
-        --without-http_scgi_module            \
-        --without-http_uwsgi_module           \
-        --without-http_fastcgi_module \
-        --add-module=/tmp/ngx_http_substitutions_filter_module      
-</pre>
-On lance le make
-<pre>make
-make install
-</pre>
-<h4>Configuration de Nginx</h4>
-Il faut créer un compte dédié a Nginx, faire tourner un serveur Web en root étant largement déconseillé (oui oui, il parait) :
-<pre>useradd -r nginx</pre>
-Comme notre Nginx est une version compilée, nous devons créer un fichier de service conforme à systemd :
-<pre>echo "[Unit]
-Description=The NGINX HTTP and reverse proxy server
-After=syslog.target network.target remote-fs.target nss-lookup.target
-<p>[Service]<br>
-Type=forking<br>
-PIDFile=/var/run/nginx.pid<br>
-ExecStartPre=/usr/sbin/nginx -t<br>
-ExecStart=/usr/sbin/nginx<br>
-ExecReload=/bin/kill -s HUP $MAINPID<br>
-ExecStop=/bin/kill -s QUIT $MAINPID<br>
-PrivateTmp=true</p>
-<p>[Install]<br>
-WantedBy=multi-user.target&quot; &gt; /lib/systemd/system/nginx.service<br>
-</pre><br>
-Comme on est pas des gros bourrins, on configure firewalld via firewall-cmd :</p>
-<pre>firewall-cmd --zone=public --add-port=80/tcp --permanent
-firewall-cmd --reload
-</pre>
+      <h1 id="nginx">Nginx <a class="direct-link" href="#nginx"> </a></h1>
+<p>Nginx est un serveur Web modulaire qui fonctionne très bien en reverse proxy et possède de nombreuses possibilités. De plus il est très léger, je vous invite à consulter leur site : <a href="http://nginx.org/">www.nginx.org</a></p>
+<h2 id="la-probl%C3%A9matique">La problématique <a class="direct-link" href="#la-probl%C3%A9matique"> </a></h2>
+<p>Un client avait un site internet assez mal écrit avec beaucoup d'url en dur dans le code et qui aurait nécessité beaucoup trop de temps pour le remettre en conformité.<br>
+l'idée est de ré-écrire les urls dans les pages transmises par le serveur Web, en l'occurrence un serveur Apache (pas à jour !).<br>
+Nous aurions pu utiliser un vrai reverse proxy (Kemp, F5..) afin de faire la même chose mais le client n'en dispose pas et l'investissement pour une seule machine virtuelle était un peu surdimensionné. Si la machine était dans <a href="https://azure.microsoft.com/fr-fr/">Azure</a>, nous aurions pu utiliser les nombreuses briques présentes dans la solution de Cloud Microsoft. l'idée est donc de ré-écrire les pages à la volées lors de la transmission avec le client.</p>
+<h2 id="solution-mise-en-place">Solution mise en place <a class="direct-link" href="#solution-mise-en-place"> </a></h2>
+<p>Nous avons choisi d'installer un serveur Nginx sur une machine virtuelle Centos 7, cette installation est donc reproductible chez vous sur un système Centos, Red Hat ou Fedora</p>
+<h3 id="installation-de-nginx">Installation de Nginx <a class="direct-link" href="#installation-de-nginx"> </a></h3>
+<p>Nginx est présent dans les dépots Centos mais la version proposée ne dispose pas du module de substitution dont nous avons besoin. Il faut donc passer par la compilation, et donc installer les outils nécessaires comme ci-dessous :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line">yum <span class="token function">install</span> gcc-c++ <span class="token punctuation">\</span></span><br><span class="highlight-line">                  pcre-devel <span class="token punctuation">\</span></span><br><span class="highlight-line">                  zlib-devel <span class="token punctuation">\</span></span><br><span class="highlight-line">                  <span class="token function">make</span> <span class="token punctuation">\</span></span><br><span class="highlight-line">                  <span class="token function">wget</span> <span class="token punctuation">\</span></span><br><span class="highlight-line">                  openssl-devel <span class="token punctuation">\</span></span><br><span class="highlight-line">                  libxml2-devel <span class="token punctuation">\</span></span><br><span class="highlight-line">                  libxslt-devel <span class="token punctuation">\</span></span><br><span class="highlight-line">                  gd-devel <span class="token punctuation">\</span></span><br><span class="highlight-line">                  perl-ExtUtils-Embed <span class="token punctuation">\</span></span><br><span class="highlight-line">                  GeoIP-devel <span class="token punctuation">\</span></span><br><span class="highlight-line">                  gperftools-devel <span class="token punctuation">\</span></span><br><span class="highlight-line">                  <span class="token function">git</span></span></code></pre>
+<p>Ensuite on récupère les sources de Nginx depuis le site de Nginx :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token builtin class-name">cd</span> /tmp</span><br><span class="highlight-line"><span class="token function">wget</span> http://nginx.org/download/nginx-1.10.1.tar.gz</span><br><span class="highlight-line"><span class="token function">tar</span> -xvf nginx-1.10.1.tar.gz</span></code></pre>
+<p>Comme l'extension &quot;http subsitution filter&quot; module n'est pas un module &quot;officiel&quot;, il faut le récupérer sur le GitHub de yaoweibin :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">git</span> clone git://github.com/yaoweibin/ngx_http_substitutions_filter_module.git  </span></code></pre>
+<p>Ensuite on configure le make :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line">  <span class="token builtin class-name">cd</span> nginx-1.10.1</span><br><span class="highlight-line">  ./configure <span class="token punctuation">\</span></span><br><span class="highlight-line">        --user<span class="token operator">=</span>nginx                          <span class="token punctuation">\</span></span><br><span class="highlight-line">        --group<span class="token operator">=</span>nginx                         <span class="token punctuation">\</span></span><br><span class="highlight-line">        --prefix<span class="token operator">=</span>/etc/nginx                   <span class="token punctuation">\</span></span><br><span class="highlight-line">        --sbin-path<span class="token operator">=</span>/usr/sbin/nginx           <span class="token punctuation">\</span></span><br><span class="highlight-line">        --conf-path<span class="token operator">=</span>/etc/nginx/nginx.conf     <span class="token punctuation">\</span></span><br><span class="highlight-line">        --pid-path<span class="token operator">=</span>/var/run/nginx.pid         <span class="token punctuation">\</span></span><br><span class="highlight-line">        --lock-path<span class="token operator">=</span>/var/run/nginx.lock       <span class="token punctuation">\</span></span><br><span class="highlight-line">        --error-log-path<span class="token operator">=</span>/var/log/nginx/error.log <span class="token punctuation">\</span></span><br><span class="highlight-line">        --http-log-path<span class="token operator">=</span>/var/log/nginx/access.log <span class="token punctuation">\</span></span><br><span class="highlight-line">        --with-http_gzip_static_module        <span class="token punctuation">\</span></span><br><span class="highlight-line">        --with-http_stub_status_module        <span class="token punctuation">\</span></span><br><span class="highlight-line">        --with-http_ssl_module                <span class="token punctuation">\</span></span><br><span class="highlight-line">        --with-pcre                           <span class="token punctuation">\</span></span><br><span class="highlight-line">        --with-file-aio                       <span class="token punctuation">\</span></span><br><span class="highlight-line">        --with-http_realip_module             <span class="token punctuation">\</span></span><br><span class="highlight-line">        --without-http_scgi_module            <span class="token punctuation">\</span></span><br><span class="highlight-line">        --without-http_uwsgi_module           <span class="token punctuation">\</span></span><br><span class="highlight-line">        --without-http_fastcgi_module <span class="token punctuation">\</span></span><br><span class="highlight-line">        --add-module<span class="token operator">=</span>/tmp/ngx_http_substitutions_filter_module</span></code></pre>
+<p>On lance le make</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">make</span></span><br><span class="highlight-line"><span class="token function">make</span> <span class="token function">install</span></span></code></pre>
+<h3 id="configuration-de-nginx">Configuration de Nginx <a class="direct-link" href="#configuration-de-nginx"> </a></h3>
+<p>Il faut créer un compte dédié a Nginx, faire tourner un serveur Web en root étant largement déconseillé (oui oui, il parait) :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">useradd</span> -r nginx</span></code></pre>
+<p>Comme notre Nginx est une version compilée, nous devons créer un fichier de service conforme à systemd :</p>
+<pre class="language-shell"><code class="language-shell"><span class="token builtin class-name">echo</span> <span class="token string">"[Unit]<br><span class="highlight-line">Description=The NGINX HTTP and reverse proxy server</span><br><span class="highlight-line">After=syslog.target network.target remote-fs.target nss-lookup.target</span><br><span class="highlight-line"></span><br><span class="highlight-line">[Service]</span><br><span class="highlight-line">Type=forking</span><br><span class="highlight-line">PIDFile=/var/run/nginx.pid</span><br><span class="highlight-line">ExecStartPre=/usr/sbin/nginx -t</span><br><span class="highlight-line">ExecStart=/usr/sbin/nginx</span><br><span class="highlight-line">ExecReload=/bin/kill -s HUP <span class="token variable">$MAINPID</span></span><br><span class="highlight-line">ExecStop=/bin/kill -s QUIT <span class="token variable">$MAINPID</span></span><br><span class="highlight-line">PrivateTmp=true</span><br><span class="highlight-line"></span><br><span class="highlight-line">[Install]</span><br>WantedBy=multi-user.target"</span> <span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> /lib/systemd/system/nginx.service</code></pre>
+<p>Comme on est pas des gros bourrins, on configure firewalld via firewall-cmd :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line">firewall-cmd --zone<span class="token operator">=</span>public --add-port<span class="token operator">=</span><span class="token number">80</span>/tcp --permanent</span><br><span class="highlight-line">firewall-cmd --reload</span></code></pre>
 <p>Et bien sur on vérifie que les règles sont appliquées :</p>
-<pre>iptables-save | grep 80</pre>
-<h4>Création de la règles de réécriture :</h4>
-Par défaut, le fichier de configuration Nginx est situé dans le dossier que nous avons mentionné dans la partie "--prefix=/etc/nginx",  nginx.conf
-Remplacez la partie "server {...}" par celle ci :
-<pre>    server {
-        listen       80;
-        server_name     localhost
-                        old.domainquonveut.com;
-<pre><code>    access_log  /var/log/nginx/oldsite.access.log  main;
-    error_log /var/log/nginx/oldsite.error.log  main;
-    location / {
-            proxy_pass      http://ancienserveur:80; #ipduserveur
-            proxy_set_header Host www.vhostduapache.com;
-            proxy_set_header Accept-Encoding &quot;&quot;;
-            subs_filter www.domaineendurdanslecodequinousplaitpas.com old.domainquonveut.com gi;
-            subs_filter www.domaineendurdanslecodequinousplaitpas.fr old.domainquonveut.fr gi;
-    }
-}
-</code></pre>
-</pre>
-<ol>
- 	<li>proxy_pass : c'est l'option qui permet de forwarder le traffic entrant vers le serveur Apache</li>
- 	<li>proxy_set_header : c'est l'option qui permet de modifier le header envoyé au serveur Web
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line">iptables-save <span class="token operator">|</span> <span class="token function">grep</span> <span class="token number">80</span></span></code></pre>
+<h3 id="cr%C3%A9ation-de-la-r%C3%A8gles-de-r%C3%A9%C3%A9criture">Création de la règles de réécriture <a class="direct-link" href="#cr%C3%A9ation-de-la-r%C3%A8gles-de-r%C3%A9%C3%A9criture"> </a></h3>
+<p>Par défaut, le fichier de configuration Nginx est situé dans le dossier que nous avons mentionné dans la partie <code>--prefix=/etc/nginx</code>, soit <code>/etc/nginx/nginx.conf</code><br>
+Remplacez la partie <code>server {...}</code> par celle ci :</p>
+<pre class="language-nginx"><code class="language-nginx"><span class="highlight-line"><span class="token keyword">server</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">        <span class="token keyword">listen</span>       <span class="token number">80</span><span class="token punctuation">;</span></span><br><span class="highlight-line">        <span class="token keyword">server_name</span>     localhost</span><br><span class="highlight-line">                        old<span class="token punctuation">.</span>domainquonveut<span class="token punctuation">.</span>com<span class="token punctuation">;</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">        <span class="token keyword">access_log</span>  <span class="token operator">/</span>var<span class="token operator">/</span>log<span class="token operator">/</span>nginx<span class="token operator">/</span>oldsite<span class="token punctuation">.</span>access<span class="token punctuation">.</span>log  main<span class="token punctuation">;</span></span><br><span class="highlight-line">        <span class="token keyword">error_log</span> <span class="token operator">/</span>var<span class="token operator">/</span>log<span class="token operator">/</span>nginx<span class="token operator">/</span>oldsite<span class="token punctuation">.</span>error<span class="token punctuation">.</span>log  main<span class="token punctuation">;</span></span><br><span class="highlight-line">        <span class="token keyword">location</span> <span class="token operator">/</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">                <span class="token keyword">proxy_pass</span>      <span class="token keyword">http</span><span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>ancienserveur<span class="token punctuation">:</span><span class="token number">80</span><span class="token punctuation">;</span> <span class="token comment">#ipduserveur</span></span><br><span class="highlight-line">                <span class="token keyword">proxy_set_header</span> Host www<span class="token punctuation">.</span>vhostduapache<span class="token punctuation">.</span>com<span class="token punctuation">;</span></span><br><span class="highlight-line">                <span class="token keyword">proxy_set_header</span> Accept<span class="token operator">-</span>Encoding <span class="token string">""</span><span class="token punctuation">;</span></span><br><span class="highlight-line">                subs_filter www<span class="token punctuation">.</span>domaineendurdanslecodequinousplaitpas<span class="token punctuation">.</span>com old<span class="token punctuation">.</span>domainquonveut<span class="token punctuation">.</span>com gi<span class="token punctuation">;</span></span><br><span class="highlight-line">                subs_filter www<span class="token punctuation">.</span>domaineendurdanslecodequinousplaitpas<span class="token punctuation">.</span>fr old<span class="token punctuation">.</span>domainquonveut<span class="token punctuation">.</span>fr gi<span class="token punctuation">;</span></span><br><span class="highlight-line">        <span class="token punctuation">}</span></span><br><span class="highlight-line">    <span class="token punctuation">}</span></span></code></pre>
+<blockquote>
+<p>proxy_pass : c'est l'option qui permet de forwarder le traffic entrant vers le serveur Apache<br>
+proxy_set_header : c'est l'option qui permet de modifier le header envoyé au serveur Web<br>
+Host : dans notre cas on veut changer le Host présent dans le header afin de corrigé celui appelé par l'utilisateur.<br>
+Accept-Encoding : On utilise également &quot;Accept-Encoding &quot;&quot;;&quot; afin de forcer le serveur Apache a ne pas utiliser la compression gzip des pages, car sinon, le module ne pourra pas ré-récrire les objets.<br>
+subs_filter : la syntaxe est très simple &quot;stringquidoitdisparaitre&quot; &quot;stringquidoitapparaitre&quot; gi<br>
+le paramètre gi sert à indiquer que nous souhaitons ré-écrire tout (toute les occurrences), le i pour case insensitive, afin de le récupérer sans tenir compte de la casse.</p>
+</blockquote>
+<p>Dans la partie &quot;Accept-Encoding&quot;, je mentionne qu'il faut désactiver la compression gzip, pour deux raisons :</p>
 <ul>
- 	<li>Host : dans notre cas on veut changer le Host présent dans le header afin de corrigé celui appelé par l'utilisateur.</li>
- 	<li>Accept-Encoding : On utilise également "Accept-Encoding "";" afin de forcer le serveur Apache a ne pas utiliser la compression gzip des pages, car sinon, le module ne pourra pas ré-récrire les objets.</li>
+<li>Niveau ressources, ca sert à rien de compresser deux fois la même donnée, ca sera pas plus petit (bah ouais...)</li>
+<li>Le module de substitution ne gère pas la décompression à la volée, puisqu'il analyse les fichiers plats et remplace les occurences des strings qu'on souhaite dégager.</li>
+<li>Lorsqu'on mets en place un reverse proxy, on peut vouloir mettre en cache certains éléments pour décharger les serveurs web, afin de pas leurs demander 10 fois à la seconde la même image (le logo de la boite par exemple), dès lors si les serveurs web envoient du flux compressé, il ne pourra pas le faire correctement.</li>
 </ul>
-</li>
- 	<li>subs_filter : la syntaxe est très simple "stringquidoitdisparaitre" "stringquidoitapparaitre" gi
-le paramètre gi sert à indiquer que nous souhaitons ré-écrire tout (toute les occurrences), le i pour case insensitive, afin de le récupérer sans tenir compte de la casse.</li>
-</ol>
-Dans la partie "Accept-Encoding", je mentionne qu'il faut désactiver la compression gzip, pour deux raisons :
-<ol>
- 	<li>Niveau ressources, ca sert à rien de compresser deux fois la même donnée, ca sera pas plus petit (bah ouais...)</li>
- 	<li>Le module de substitution ne gère pas la décompression à la volée, puisqu'il analyse les fichiers plats et remplace les occurences des strings qu'on souhaite dégager.</li>
- 	<li>Lorsqu'on mets en place un reverse proxy, on peut vouloir mettre en cache certains éléments pour décharger les serveurs web, afin de pas leurs demander 10 fois à la seconde la même image (le logo de la boite par exemple), dès lors si les serveurs web envoient du flux compressé, il ne pourra pas le faire correctement.</li>
-</ol>
-<h3>Les cas d'usage</h3>
-Utiliser ce type de module peut être interressant, par exemple, sur un Wordpress de test. En effet, Wordpress stocke dans la base l'url d'accès, et l'envoie dans quelques pages, rien de bien méchant! Du coup, avec cette petite manipulation, vous pouvez avoir un Wordpress de test qui serait une copie 100% identique à votre prod', juste avec un petit copier coller de la VM ou une autre technique :)
+<h2 id="les-cas-d'usage">Les cas d'usage <a class="direct-link" href="#les-cas-d'usage"> </a></h2>
+<p>Utiliser ce type de module peut être interressant, par exemple, sur un Wordpress de test. En effet, Wordpress stocke dans la base l'url d'accès, et l'envoie dans quelques pages, rien de bien méchant! Du coup, avec cette petite manipulation, vous pouvez avoir un Wordpress de test qui serait une copie 100% identique à votre prod', juste avec un petit copier coller de la VM ou une autre technique :)</p>
 <p>Dans le cas de mon blog, si je souhaite mettre en place une copie de mon site avec par exemple comme url &quot;test.deneuve.xyz&quot; sans rien toucher (en dehors d'une petite copie) je devrai faire un nginx.conf tel que :</p>
-<pre>server {
-        listen       80;
-        server_name     localhost
-                        test.deneuve.xyz;
-
-        access_log  /var/log/nginx/test.access.log  main;
-        error_log /var/log/nginx/test.error.log  main;
-        location / {
-                proxy_pass      http://192.168.1.150:80; #ipduserveurbidon
-                proxy_set_header Host etienne.deneuve.xyz;
-                proxy_set_header Accept-Encoding "";
-                subs_filter etienne.deneuve.xyz test.deneuve.xyz gi;
-                
-        }
-    }</pre>
-<p> </p>
+<pre class="language-nginx"><code class="language-nginx"><span class="highlight-line"><span class="token keyword">server</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">        <span class="token keyword">listen</span>       <span class="token number">80</span><span class="token punctuation">;</span></span><br><span class="highlight-line">        <span class="token keyword">server_name</span>     localhost</span><br><span class="highlight-line">                        test<span class="token punctuation">.</span>deneuve<span class="token punctuation">.</span>xyz<span class="token punctuation">;</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">        <span class="token keyword">access_log</span>  <span class="token operator">/</span>var<span class="token operator">/</span>log<span class="token operator">/</span>nginx<span class="token operator">/</span>test<span class="token punctuation">.</span>access<span class="token punctuation">.</span>log  main<span class="token punctuation">;</span></span><br><span class="highlight-line">        <span class="token keyword">error_log</span> <span class="token operator">/</span>var<span class="token operator">/</span>log<span class="token operator">/</span>nginx<span class="token operator">/</span>test<span class="token punctuation">.</span>error<span class="token punctuation">.</span>log  main<span class="token punctuation">;</span></span><br><span class="highlight-line">        <span class="token keyword">location</span> <span class="token operator">/</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">                <span class="token keyword">proxy_pass</span>      <span class="token keyword">http</span><span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="token number">192.168</span><span class="token number">.1</span><span class="token number">.150</span><span class="token punctuation">:</span><span class="token number">80</span><span class="token punctuation">;</span> <span class="token comment">#ipduserveurbidon</span></span><br><span class="highlight-line">                <span class="token keyword">proxy_set_header</span> Host etienne<span class="token punctuation">.</span>deneuve<span class="token punctuation">.</span>xyz<span class="token punctuation">;</span></span><br><span class="highlight-line">                <span class="token keyword">proxy_set_header</span> Accept<span class="token operator">-</span>Encoding <span class="token string">""</span><span class="token punctuation">;</span></span><br><span class="highlight-line">                subs_filter etienne<span class="token punctuation">.</span>deneuve<span class="token punctuation">.</span>xyz test<span class="token punctuation">.</span>deneuve<span class="token punctuation">.</span>xyz gi<span class="token punctuation">;</span></span><br><span class="highlight-line">        <span class="token punctuation">}</span></span><br><span class="highlight-line">    <span class="token punctuation">}</span></span></code></pre>
 
       </main>
       <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2" >
         <nav class="sticky-top">
-        
+        <div class="">
+                <ol>
+                    
+                    <li><a href="#la-probl%C3%A9matique">La problématique  </a>
+            		</li>
+
+                    <li><a href="#solution-mise-en-place">Solution mise en place  </a>
+            
+                <ol>
+                    
+                    <li><a href="#installation-de-nginx">Installation de Nginx  </a>
+            		</li>
+
+                    <li><a href="#configuration-de-nginx">Configuration de Nginx  </a>
+            		</li>
+
+                    <li><a href="#cr%C3%A9ation-de-la-r%C3%A8gles-de-r%C3%A9%C3%A9criture">Création de la règles de réécriture  </a>
+            		</li>
+                </ol>
+            		</li>
+
+                    <li><a href="#les-cas-d'usage">Les cas d'usage  </a>
+            		</li>
+                </ol>
+            </div>
         </nav>
       </aside>
     </div>

@@ -209,28 +209,14 @@
   
   
   "url": "/2017/02/02/installation-de-nginx-en-reverse-proxy-avec-reecriture-du-html/",
-  "tags" : ""
-},{
-  "title": "Agent Oms sur Linux dans Azure",
-  "date" : "Feb 02, 2017",
-  
-  
-  "url": "/2017/02/02/agent-oms-sur-linux-dans-azure/",
-  "tags" : ""
+  "tags" : "Linux,nginx,reverse proxy"
 },{
   "title": "[Updated 20/03/2017] Visual Studio Code pour Ansible, Terraform",
   "date" : "Jan 26, 2017",
   
   
   "url": "/2017/01/26/visual-studio-code-pour-ansible-terraform/",
-  "tags" : ""
-},{
-  "title": "Utiliser Ansible et Azure, oui c&amp;#8217;est possible !",
-  "date" : "Jan 26, 2017",
-  
-  
-  "url": "/2017/01/26/utiliser-ansible-et-azure-oui-cest-possible/",
-  "tags" : ""
+  "tags" : "Infra as Code,Visual Studio Code,Ansible,Terraform,macOs,Windows"
 },{
   "title": "Get ink level from HP printers in Powershell
 ",
@@ -238,33 +224,12 @@
   
   
   "url": "/2016/01/15/get-ink-level-from-hp-printers-in-powershell/",
-  "tags" : ""
-},{
-  "title": "Side loading application without SCCM &amp;#8211; Part 3",
-  "date" : "Jan 11, 2016",
-  
-  
-  "url": "/2016/01/11/side-loading-application-without-sccm-part-3/",
-  "tags" : ""
-},{
-  "title": "Side loading application without SCCM &amp;#8211; Part 2",
-  "date" : "Jan 11, 2016",
-  
-  
-  "url": "/2016/01/11/side-loading-application-without-sccm-part-2/",
-  "tags" : ""
-},{
-  "title": "Side loading application without SCCM &amp;#8211; Part 1",
-  "date" : "Jan 11, 2016",
-  
-  
-  "url": "/2016/01/11/side-loading-application-without-sccm-part-1/",
-  "tags" : ""
+  "tags" : "Fun,PowerShell"
 },{
   "title": "Get-NextTrain !",
   "date" : "Dec 16, 2015",
   
   
   "url": "/2015/12/16/get-nexttrain/",
-  "tags" : ""
+  "tags" : "Fun,PowerShell"
 }]

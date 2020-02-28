@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <meta name="msvalidate.01" content="DE6C71A9BE4E011D01CC38799992B4A6" />
     
     <link rel="stylesheet" href="/css/style.css" type="text/css">
     
@@ -23,7 +23,7 @@
     <script src="/js/script.js"></script>
     </head>
   <body class="position-relative" data-spy="scroll" data-target=".site-nav" data-offset="55">
-    <nav class="site-nav family-sans navbar navbar-expand-md navbar-dark  sidebar sticky-top  py-0">
+    <nav class="site-nav family-sans navbar navbar-expand-md navbar-dark  fixed-top  py-0">
   <div class="container-fluid">
     <button type="button" class="navbar-toggler my-2 my-md-0" data-toggle="collapse" data-target="#myTogglerNav" aria-controls="myTogglerNav" aria-label="Toggle Navigation">
       <span class="navbar-toggler-icon"></span>
@@ -88,34 +88,41 @@
   </div>
 </nav>
 
-      
+    
 
  
-  <div class="post post-sidebar container-fluid">
-    <div class="row justify-content-xl-center">
-      <main class="main col">
-      <p>Si vous utilisez déjà OMS vous avec des linux dans Azure, vous avez peut être eu le même soucis que moi et Pascal Saulière. A savoir le log de l'agent OMS qui grossit et prends toute la place dispo (le cochon!)</p>
-<p>Pour éviter que cela ne se reproduise, j'ai ajouté dans ma configuration de logrotate, présent par défaut sur bon nombre de distributions, a savoir /etc/logrotate.conf</p>
-<pre>/var/opt/microsoft/omsagent/log {
-        missingok
-        size 1G
-        rotate 4
-}
-</pre>
-<p>L'idée étant de l'empêcher de grossir de plus de 1G (size 1G) x 4 (rotate 4).</p>
-<p>Update sur github, le problème serait résolu :</p>
-<p><a href="https://github.com/Microsoft/OMS-Agent-for-Linux/issues/366#issuecomment-278435829">https://github.com/Microsoft/OMS-Agent-for-Linux/issues/366#issuecomment-278435829</a></p>
-<p> </p>
+<article id="main-content" class="site-main container mt-3 mb-5"
+style="padding-top: 80px"
+>
+<p>See <a href="/tags/">all tags</a>.</p>
+<h2 class="text-secondary mb-5">Tagged <small>“Terraform”</small></h2>
+  
 
-      </main>
-      <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2" >
-        <nav class="sticky-top">
-        
-        </nav>
-      </aside>
+  
+
+  <div class="row justify-content-center px-3 px-sm-0 my-5  mb-3 ">
+    
+
+    <div class=" col-m ">
+      <a href="/2017/01/26/visual-studio-code-pour-ansible-terraform/" class="item-title h2 d-block" >[Updated 20/03/2017] Visual Studio Code pour Ansible, Terraform
+      
+      </a>
+      <p class="item-summary lead mb-1 text-body"></p>
+      
+  
+
+      <div class="tagslist d-none d-lg-block mt-2">
+  
+    <a href="/tags/Infra as Code/" class="badge badge-special">Infra as Code</a>
+    <a href="/tags/Visual Studio Code/" class="badge badge-special">Visual Studio Code</a>
+    <a href="/tags/Ansible/" class="badge badge-special">Ansible</a>
+    <a href="/tags/Terraform/" class="badge badge-special">Terraform</a>
+    <a href="/tags/macOs/" class="badge badge-special">macOs</a>
+    <a href="/tags/Windows/" class="badge badge-special">Windows</a>
+</div>
     </div>
   </div>
-</div>
+</article>
 
     <footer class="site-footer bg-transparent pb-3 pb-md-5">
       <div class="layout-social container d-flex justify-content-center">

@@ -2,28 +2,8 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>/courses/2011-11-19-adaptive-websites-for-multiple-screens/</loc>
-    <lastmod>2011-11-19</lastmod>
-  </url>
-  
-  <url>
     <loc>/2015/12/16/get-nexttrain/</loc>
     <lastmod>2015-12-16</lastmod>
-  </url>
-  
-  <url>
-    <loc>/2016/01/11/side-loading-application-without-sccm-part-1/</loc>
-    <lastmod>2016-01-11</lastmod>
-  </url>
-  
-  <url>
-    <loc>/2016/01/11/side-loading-application-without-sccm-part-2/</loc>
-    <lastmod>2016-01-11</lastmod>
-  </url>
-  
-  <url>
-    <loc>/2016/01/11/side-loading-application-without-sccm-part-3/</loc>
-    <lastmod>2016-01-11</lastmod>
   </url>
   
   <url>
@@ -32,18 +12,8 @@
   </url>
   
   <url>
-    <loc>/2017/01/26/utiliser-ansible-et-azure-oui-cest-possible/</loc>
-    <lastmod>2017-01-26</lastmod>
-  </url>
-  
-  <url>
     <loc>/2017/01/26/visual-studio-code-pour-ansible-terraform/</loc>
     <lastmod>2017-01-26</lastmod>
-  </url>
-  
-  <url>
-    <loc>/2017/02/02/agent-oms-sur-linux-dans-azure/</loc>
-    <lastmod>2017-02-02</lastmod>
   </url>
   
   <url>
@@ -212,17 +182,12 @@
   </url>
   
   <url>
-    <loc>/projects/</loc>
-    <lastmod>2020-02-27</lastmod>
-  </url>
-  
-  <url>
     <loc>/tags/</loc>
     <lastmod>2020-02-27</lastmod>
   </url>
   
   <url>
-    <loc>/tags/courses/</loc>
+    <loc>/tags/Linux/</loc>
     <lastmod>2020-02-27</lastmod>
   </url>
 </urlset>
