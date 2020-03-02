@@ -44,7 +44,7 @@
 	<entry>
 		<title>IaC &amp; Tests</title>
 		<link href="/2020/02/07/infra-testing-easy-path/"/>
-		<updated>2020-02-07T00:00:00+01:00</updated>
+		<updated>2020-02-07T13:35:17+01:00</updated>
 		<id>/2020/02/07/infra-testing-easy-path/</id>
 		<content type="html">&lt;h1 id=&quot;iac-%26-tests&quot;&gt;IaC &amp;amp; Tests &lt;a class=&quot;direct-link&quot; href=&quot;#iac-%26-tests&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
 &lt;h2 id=&quot;overview&quot;&gt;Overview &lt;a class=&quot;direct-link&quot; href=&quot;#overview&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
@@ -78,24 +78,16 @@ using the Gherkin syntax and I&#39;ll show you, how you can do that.&lt;/p&gt;
 &lt;h5 id=&quot;package-manager&quot;&gt;Package Manager &lt;a class=&quot;direct-link&quot; href=&quot;#package-manager&quot;&gt; &lt;/a&gt;&lt;/h5&gt;
 &lt;h6 id=&quot;macos&quot;&gt;macOS &lt;a class=&quot;direct-link&quot; href=&quot;#macos&quot;&gt; &lt;/a&gt;&lt;/h6&gt;
 &lt;p&gt;If you use macOs, &lt;a href=&quot;https://brew.sh/&quot;&gt;brew&lt;/a&gt; can manage it  for you:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;brew install powershell
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;brew &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; powershell&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;h6 id=&quot;ubuntu&quot;&gt;Ubuntu &lt;a class=&quot;direct-link&quot; href=&quot;#ubuntu&quot;&gt; &lt;/a&gt;&lt;/h6&gt;
 &lt;p&gt;On Ubuntu, snap can do the job also :&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;sudo snap install powershell --classic
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; snap &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; powershell --classic&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;h6 id=&quot;windows&quot;&gt;Windows &lt;a class=&quot;direct-link&quot; href=&quot;#windows&quot;&gt; &lt;/a&gt;&lt;/h6&gt;
 &lt;p&gt;On Windows, Chocolatey is working well:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;choco install pwsh
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-powershell&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;choco install pwsh&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;h4 id=&quot;modules&quot;&gt;Modules &lt;a class=&quot;direct-link&quot; href=&quot;#modules&quot;&gt; &lt;/a&gt;&lt;/h4&gt;
 &lt;p&gt;Installing module in PowerShell is quite easy. You only need to type the following :&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;Install-PackageProvider Nuget -ForceBootstrap -Force
-Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-Update-Module
-Install-Module -Name Pester -Force -SkipPublisherCheck
-Install-Module -Name Az -force
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-powershell&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;Install&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;PackageProvider Nuget &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;ForceBootstrap &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Force&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;Set&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;PSRepository &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Name PSGallery &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;InstallationPolicy Trusted&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Update&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Module&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Install&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Module &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Name Pester &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Force &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;SkipPublisherCheck&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Install&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Module &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Name Az &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;force&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Some command may not be useful on your setup, but this way ensure that you have the latest version of each module&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -104,27 +96,13 @@ Install-Module -Name Az -force
 &lt;h4 id=&quot;extensions-installation&quot;&gt;Extensions installation &lt;a class=&quot;direct-link&quot; href=&quot;#extensions-installation&quot;&gt; &lt;/a&gt;&lt;/h4&gt;
 &lt;p&gt;To install the extension, you can use the GUI of Vs Code or the cmdline. For Gui, take a look at the doc &lt;a href=&quot;https://code.visualstudio.com/docs/editor/extension-gallery&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;For the cmdline :&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;code --install-extension alexkrechik.cucumberautocomplete
-code --install-extension ms-vscode.powershell
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;code --install-extension alexkrechik.cucumberautocomplete&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;code --install-extension ms-vscode.powershell&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;blockquote&gt;
 &lt;p&gt;on Linux and macOs, you&#39;ll need to add the following in your profile, adapt the path to Vs Code to yours :&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;bash&lt;/strong&gt;:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;cat &amp;lt;&amp;lt; EOF &amp;gt;&amp;gt; ~/.bash_profile
-# Add Visual Studio Code (code)
-export PATH=&amp;quot;\$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin&amp;quot;
-EOF
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;cat&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; EOF &lt;span class=&quot;token operator&quot;&gt;&gt;&gt;&lt;/span&gt; ~/.bash_profile&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Add Visual Studio Code (code)&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;token assign-left variable&quot;&gt;&lt;span class=&quot;token environment constant&quot;&gt;PATH&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;\&lt;span class=&quot;token environment constant&quot;&gt;$PATH&lt;/span&gt;:/Applications/Visual Studio Code.app/Contents/Resources/app/bin&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;EOF&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;strong&gt;zsh&lt;/strong&gt;:&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;pre&gt;&lt;code&gt;cat &amp;lt;&amp;lt; EOF &amp;gt;&amp;gt; ~/.zsh_profile
-# Add Visual Studio Code (code)
-export PATH=&amp;quot;\$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin&amp;quot;
-EOF
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;cat&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; EOF &lt;span class=&quot;token operator&quot;&gt;&gt;&gt;&lt;/span&gt; ~/.zsh_profile&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Add Visual Studio Code (code)&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;token assign-left variable&quot;&gt;&lt;span class=&quot;token environment constant&quot;&gt;PATH&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;\&lt;span class=&quot;token environment constant&quot;&gt;$PATH&lt;/span&gt;:/Applications/Visual Studio Code.app/Contents/Resources/app/bin&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;EOF&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/blockquote&gt;
 &lt;h2 id=&quot;create-the-first-tests&quot;&gt;Create the first tests &lt;a class=&quot;direct-link&quot; href=&quot;#create-the-first-tests&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
 &lt;h3 id=&quot;pester%2C-gherkin-and-testing&quot;&gt;Pester, Gherkin and testing &lt;a class=&quot;direct-link&quot; href=&quot;#pester%2C-gherkin-and-testing&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
@@ -134,45 +112,17 @@ EOF
 &lt;p&gt;Fortunately, Pester support the Gherkin syntax using the &lt;code&gt;Invoke-Gherkin&lt;/code&gt; cmdlet and do a bit of magic for us.&lt;/p&gt;
 &lt;h3 id=&quot;let&#39;s-play&quot;&gt;Let&#39;s play &lt;a class=&quot;direct-link&quot; href=&quot;#let&#39;s-play&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;We need to create our workspace, so do it like that (Using PowerShell&#39;s Shell):&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;Set-Location ~
-New-Item ./Documents/GherkinTests -type Directory
-code ./Documents/GherkinTests
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-powershell&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;Set-Location&lt;/span&gt; ~&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;New-Item&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;Documents&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;GherkinTests &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;type&lt;/span&gt; Directory&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;code &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;Documents&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;GherkinTests&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Create few file :&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;etienne_exo.feature &amp;lt;-- This is the Gherkin File&lt;/li&gt;
 &lt;li&gt;etienne_exo.steps.ps1 &amp;lt;-- This is our magic&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;In the Feature File write the following :&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;# GherkinTests/etienne_exo.feature
-Feature: Validate Azure Deployment
-
-  Scenario: We should have some subscriptions to work
-    Given we list the subscriptions using powershell
-    Then we should be able to have at least one
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;# GherkinTests/etienne_exo.steps.ps1
-Given &amp;quot;we list the subscriptions using powershell&amp;quot;{
-  Get-AzSubscription | Should -not -throw
-}
-
-Then &amp;quot;we should be able to have at least one&amp;quot; {
-  (Get-AzSubscription).Count | Should -Not -BeNullOrEmpty
-}
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-gherkin&quot;&gt;&lt;code class=&quot;language-gherkin&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# GherkinTests/etienne_exo.feature&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;token feature&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;Feature:&lt;/span&gt;&lt;span class=&quot;token important&quot;&gt; Validate Azure Deployment&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;/span&gt;  &lt;span class=&quot;token scenario&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;Scenario:&lt;/span&gt;&lt;span class=&quot;token important&quot;&gt; We should have some subscriptions to work&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token atrule&quot;&gt;Given&lt;/span&gt; we list the subscriptions using powershell&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token atrule&quot;&gt;Then&lt;/span&gt; we should be able to have at least one&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-powershell&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# GherkinTests/etienne_exo.steps.ps1&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Given &lt;span class=&quot;token string&quot;&gt;&quot;we list the subscriptions using powershell&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  Get&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;AzSubscription &lt;span class=&quot;token punctuation&quot;&gt;|&lt;/span&gt; Should &lt;span class=&quot;token operator&quot;&gt;-not&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;throw&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Then &lt;span class=&quot;token string&quot;&gt;&quot;we should be able to have at least one&quot;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;Get&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;AzSubscription&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Count &lt;span class=&quot;token punctuation&quot;&gt;|&lt;/span&gt; Should &lt;span class=&quot;token operator&quot;&gt;-Not&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;BeNullOrEmpty&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Now, let&#39;s run that to check if the test are working or not :&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;❯ Invoke-Gherkin
-Pester v4.10.0
-Executing all tests in &#39;/home/etienne/Documents/GherkinTests&#39;
-
-Feature: Validate Azure Deployment
-
-  Scenario: We should have some subscriptions to work
-    [+] Given we list the subscriptions using powershell 6.17s
-    [+] Then we should be able to have at least one 5.01s
-Tests completed in 11.39s
-Tests Passed: 2, Failed: 0, Skipped: 0, Pending: 0, Inconclusive: 0
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-powershell&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;❯ Invoke&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Gherkin&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Pester v4&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;10&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;0&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Executing all tests in &lt;span class=&quot;token string&quot;&gt;&#39;/home/etienne/Documents/GherkinTests&#39;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Feature: Validate Azure Deployment&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  Scenario: We should have some subscriptions to work&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Given we list the subscriptions &lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; powershell 6&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;17s&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Then we should be able to have at least one 5&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;01s&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Tests completed in 11&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;39s&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Tests Passed: 2&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; Failed: 0&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; Skipped: 0&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; Pending: 0&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; Inconclusive: 0&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Ok, tests are working, and we have something to show to customers/managment.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Wait, can&#39;t we do nothing better ? Are we lazy enough ?&lt;br&gt;
@@ -181,165 +131,29 @@ Of course, not, let&#39;s wait for the next blog part.&lt;/p&gt;
 &lt;h2 id=&quot;azure-devops&quot;&gt;Azure Devops &lt;a class=&quot;direct-link&quot; href=&quot;#azure-devops&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
 &lt;h3 id=&quot;azure-devops-cli&quot;&gt;Azure Devops CLI &lt;a class=&quot;direct-link&quot; href=&quot;#azure-devops-cli&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;Get a Personal Access Token here : &lt;code&gt;https://dev.azure.com/&amp;lt;YourOrganisation&amp;gt;/_usersSettings/tokens&lt;/code&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;az extension add --name azure-devops
-az devops login 
-# paste your PAT
-az login
-# with the sam
-az account set -s &amp;lt;YOUR SUB&amp;gt;
-az devops configure --defaults &#39;organization=https://dev.azure.com/etiennedeneuve&#39;
-az devops project create --name GherkinTest
-# Store the repo git url to configure the repo locally, you will need a SSH Key for that.
-$repo=$(az repos list --project GherkinTest --query [].sshUrl -o tsv)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;az extension &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; --name azure-devops&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;az devops login&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# paste your PAT&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;az login&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# with the sam&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;az account &lt;span class=&quot;token builtin class-name&quot;&gt;set&lt;/span&gt; -s &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;YOUR SUB&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;az devops configure --defaults &lt;span class=&quot;token string&quot;&gt;&#39;organization=https://dev.azure.com/etiennedeneuve&#39;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;az devops project create --name GherkinTest&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Store the repo git url to configure the repo locally, you will need a SSH Key for that.&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$repo&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$(&lt;/span&gt;az repos list --project GherkinTest --query &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;.sshUrl -o tsv&lt;span class=&quot;token variable&quot;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;h3 id=&quot;configure-the-repo-locally&quot;&gt;Configure the repo locally &lt;a class=&quot;direct-link&quot; href=&quot;#configure-the-repo-locally&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;cd ~/GherkinTest
-git init
-git remote add origin $repo
-git add .
-git commit -m &#39;inital commit&#39;
-git push origin master
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; ~/GherkinTest&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; init&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; remote &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; origin &lt;span class=&quot;token variable&quot;&gt;$repo&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; &lt;span class=&quot;token builtin class-name&quot;&gt;.&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; commit -m &lt;span class=&quot;token string&quot;&gt;&#39;inital commit&#39;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; push origin master&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;h3 id=&quot;create-the-pipeline&quot;&gt;Create the pipeline &lt;a class=&quot;direct-link&quot; href=&quot;#create-the-pipeline&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;az pipelines create --name &amp;quot;GherkinTest&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;az pipelines create --name &lt;span class=&quot;token string&quot;&gt;&quot;GherkinTest&quot;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Answer the questions like :&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;This command is in preview. It may be changed/removed in a future release.
-Which template do you want to use for this pipeline?
- [1] Starter pipeline
- [2] Android
- [3] Ant
- [4] ASP.NET
- [5] ASP.NET Core
- [6] .NET Core Function App to Windows on Azure
- [7] ASP.NET Core (.NET Framework)
-Please enter a choice [Default choice(1)]: Starter pipeline
-
-Do you want to view/edit the template yaml before proceeding?
-Please enter a choice [Default choice(1)]: Continue with generated yaml
-
-Files to be added to your repository (1)
-1) azure-pipelines.yml
-
-How do you want to commit the files to the repository?
-Please enter a choice [Default choice(1)]: Create a new branch for this commit and start a pull request.
-
-Enter new branch name to create: features/cicd
-Checking in file azure-pipelines.yml in the Azure repo c279436a-e2f4-4e01-8f41-a30f660f7515
-Created a Pull Request - https://dev.azure.com/etiennedeneuve/6874897d-6d09-412e-b73b-4b2966c04b64/_apis/git/repositories/c279436a-e2f4-4e01-8f41-a30f660f7515/pullRequests/1
-Successfully created a pipeline with Name: GherkinTest, Id: 25.
-{
-  &amp;quot;agentSpecification&amp;quot;: null,
-  &amp;quot;buildNumber&amp;quot;: &amp;quot;20200214.1&amp;quot;,
-  &amp;quot;buildNumberRevision&amp;quot;: 1,
-  &amp;quot;controller&amp;quot;: null
-}
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;This &lt;span class=&quot;token builtin class-name&quot;&gt;command&lt;/span&gt; is &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt; preview. It may be changed/removed &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt; a future release.&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Which template &lt;span class=&quot;token keyword&quot;&gt;do&lt;/span&gt; you want to use &lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; this pipeline?&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Starter pipeline&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Android&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Ant&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; ASP.NET&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; ASP.NET Core&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; .NET Core Function App to Windows on Azure&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; ASP.NET Core &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;.NET Framework&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Please enter a choice &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;Default choice&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;: Starter pipeline&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Do you want to view/edit the template yaml before proceeding?&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Please enter a choice &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;Default choice&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;: Continue with generated yaml&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Files to be added to your repository &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; azure-pipelines.yml&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;How &lt;span class=&quot;token keyword&quot;&gt;do&lt;/span&gt; you want to commit the files to the repository?&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Please enter a choice &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;Default choice&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;: Create a new branch &lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; this commit and start a pull request.&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Enter new branch name to create: features/cicd&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Checking &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;file&lt;/span&gt; azure-pipelines.yml &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt; the Azure repo c279436a-e2f4-4e01-8f41-a30f660f7515&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Created a Pull Request - https://dev.azure.com/etiennedeneuve/6874897d-6d09-412e-b73b-4b2966c04b64/_apis/git/repositories/c279436a-e2f4-4e01-8f41-a30f660f7515/pullRequests/1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Successfully created a pipeline with Name: GherkinTest, Id: &lt;span class=&quot;token number&quot;&gt;25&lt;/span&gt;.&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token string&quot;&gt;&quot;agentSpecification&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; null,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token string&quot;&gt;&quot;buildNumber&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;20200214.1&quot;&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token string&quot;&gt;&quot;buildNumberRevision&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token string&quot;&gt;&quot;controller&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; null&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;h3 id=&quot;create-the-service-endpoint-for-azure-rm-subscription&quot;&gt;Create the Service Endpoint for Azure RM Subscription &lt;a class=&quot;direct-link&quot; href=&quot;#create-the-service-endpoint-for-azure-rm-subscription&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;First we need to create a SPN in Azure AD :&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;az ad sp create-for-rbac --name AzureDevops
-Changing &amp;quot;AzureDevops&amp;quot; to a valid URI of &amp;quot;http://AzureDevops&amp;quot;, which is the required format used for service principal names
-Creating a role assignment under the scope of &amp;quot;/subscriptions/1417c648-XXXX&amp;quot;
- 
-{
-  &amp;quot;appId&amp;quot;: &amp;quot;41176fe8-XXXXX&amp;quot;,
-  &amp;quot;displayName&amp;quot;: &amp;quot;AzureDevops&amp;quot;,
-  &amp;quot;name&amp;quot;: &amp;quot;http://AzureDevops&amp;quot;,
-  &amp;quot;password&amp;quot;: &amp;quot;7eaeb380-XXXXX&amp;quot;,
-  &amp;quot;tenant&amp;quot;: &amp;quot;06329ce4-XXXX&amp;quot;
-}
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;az ad sp create-for-rbac --name AzureDevops&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Changing &lt;span class=&quot;token string&quot;&gt;&quot;AzureDevops&quot;&lt;/span&gt; to a valid URI of &lt;span class=&quot;token string&quot;&gt;&quot;http://AzureDevops&quot;&lt;/span&gt;, &lt;span class=&quot;token function&quot;&gt;which&lt;/span&gt; is the required &lt;span class=&quot;token function&quot;&gt;format&lt;/span&gt; used &lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;service&lt;/span&gt; principal names&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Creating a role assignment under the scope of &lt;span class=&quot;token string&quot;&gt;&quot;/subscriptions/1417c648-XXXX&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token string&quot;&gt;&quot;appId&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;41176fe8-XXXXX&quot;&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token string&quot;&gt;&quot;displayName&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;AzureDevops&quot;&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token string&quot;&gt;&quot;name&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;http://AzureDevops&quot;&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token string&quot;&gt;&quot;password&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;7eaeb380-XXXXX&quot;&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token string&quot;&gt;&quot;tenant&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;06329ce4-XXXX&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Take note of the appId, Name, Password and Tenant.&lt;/p&gt;
 &lt;p&gt;Now, list your subscriptions :&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;az account show
-{
-  &amp;quot;environmentName&amp;quot;: &amp;quot;AzureCloud&amp;quot;,
-  &amp;quot;id&amp;quot;: &amp;quot;1417c648-XXXXX&amp;quot;,
-  &amp;quot;isDefault&amp;quot;: true,
-  &amp;quot;name&amp;quot;: &amp;quot;Microsoft XXXX&amp;quot;,
-  &amp;quot;state&amp;quot;: &amp;quot;Enabled&amp;quot;,
-  &amp;quot;tenantId&amp;quot;: &amp;quot;06329ce4-XXXX&amp;quot;,
-  &amp;quot;user&amp;quot;: {
-    &amp;quot;name&amp;quot;: &amp;quot;etienne@deneuve.xyz&amp;quot;,
-    &amp;quot;type&amp;quot;: &amp;quot;user&amp;quot;
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;az account show&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token string&quot;&gt;&quot;environmentName&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;AzureCloud&quot;&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token string&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;1417c648-XXXXX&quot;&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token string&quot;&gt;&quot;isDefault&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; true,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token string&quot;&gt;&quot;name&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Microsoft XXXX&quot;&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token string&quot;&gt;&quot;state&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Enabled&quot;&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token string&quot;&gt;&quot;tenantId&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;06329ce4-XXXX&quot;&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token string&quot;&gt;&quot;user&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token string&quot;&gt;&quot;name&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;etienne@deneuve.xyz&quot;&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token string&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;user&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Take note of the Id, Name, and Tenant.&lt;/p&gt;
 &lt;p&gt;And then create the service endpoint in Azure DevOps :&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt; az devops service-endpoint azurerm create --name &#39;Azure MVP&#39; `
-&amp;gt;&amp;gt; --azure-rm-tenant-id &amp;quot;YourTenantId&amp;quot; `
-&amp;gt;&amp;gt;     --azure-rm-service-principal-id &amp;quot;AppID&amp;quot; `
-&amp;gt;&amp;gt;     --azure-rm-subscription-id &amp;quot;SubID&amp;quot; `
-&amp;gt;&amp;gt;     --azure-rm-subscription-name &amp;quot;Name of the Sub&amp;quot;
-Azure RM service principal key: &amp;quot;Password&amp;quot;
-Confirm Azure RM service principal key: &amp;quot;Password&amp;quot;
-{
-  &amp;quot;administratorsGroup&amp;quot;: null,
-   &amp;lt; shortened &amp;gt;
-  &amp;quot;type&amp;quot;: &amp;quot;azurerm&amp;quot;,
-  &amp;quot;url&amp;quot;: &amp;quot;https://management.azure.com/&amp;quot;
-}
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt; az devops service-endpoint azurerm create --name &lt;span class=&quot;token string&quot;&gt;&#39;Azure MVP&#39;&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;`&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&gt;&lt;/span&gt; --azure-rm-tenant-id &lt;span class=&quot;token string&quot;&gt;&quot;YourTenantId&quot;&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;`&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&gt;&lt;/span&gt;     --azure-rm-service-principal-id &lt;span class=&quot;token string&quot;&gt;&quot;AppID&quot;&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;`&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&gt;&lt;/span&gt;     --azure-rm-subscription-id &lt;span class=&quot;token string&quot;&gt;&quot;SubID&quot;&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;`&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&gt;&lt;/span&gt;     --azure-rm-subscription-name &lt;span class=&quot;token string&quot;&gt;&quot;Name of the Sub&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Azure RM &lt;span class=&quot;token function&quot;&gt;service&lt;/span&gt; principal key: &lt;span class=&quot;token string&quot;&gt;&quot;Password&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Confirm Azure RM &lt;span class=&quot;token function&quot;&gt;service&lt;/span&gt; principal key: &lt;span class=&quot;token string&quot;&gt;&quot;Password&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token string&quot;&gt;&quot;administratorsGroup&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; null,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;   &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt; shortened &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token string&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;azurerm&quot;&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token string&quot;&gt;&quot;url&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;https://management.azure.com/&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;h3 id=&quot;configure-the-pipeline&quot;&gt;Configure the pipeline &lt;a class=&quot;direct-link&quot; href=&quot;#configure-the-pipeline&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;Now, checkout to the newly created branch :&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;# change branch
-git checkout features/cicd
-# get latests info from remote
-git pull
-# open code in the current folder
-code .
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# change branch&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; checkout features/cicd&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# get latests info from remote&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; pull&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# open code in the current folder&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;code &lt;span class=&quot;token builtin class-name&quot;&gt;.&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Add the following snippet into &lt;code&gt;azure-pipelines.yml&lt;/code&gt; :&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;# ./azure-pipelines.yml
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
-trigger:
-- master
-
-pool:
-  vmImage: &#39;windows-latest&#39;
-
-steps:
-- task: AzurePowerShell@5
-  inputs:
-    azurePowerShellVersion: LatestVersion
-    azureSubscription: &#39;Azure MVP&#39;
-    Inline: |
-      Install-Module -Name Pester -Force
-    ScriptType: InlineScript
-    pwsh: true
-    workingDirectory: $(Build.Repository.LocalPath)
-  displayName: &#39;Install Pester&#39;
-
-- task: AzurePowerShell@5
-  inputs:
-    azurePowerShellVersion: LatestVersion
-    azureSubscription: &#39;Azure MVP&#39;
-    Inline: |
-      Invoke-Gherkin -OutputFile result.xml -OutputFormat NUnitXml
-    ScriptType: InlineScript
-    pwsh: true
-    workingDirectory: $(Build.Repository.LocalPath)
-  displayName: &#39;Launch Test&#39;
-
-- task: PublishTestResults@2
-  inputs:
-    buildConfiguration: Azure
-    buildPlatform: Azure
-    publishRunAttachments: true
-    testResultsFiles: result.xml
-    testResultsFormat: NUnit
-    testRunTitle: ValidateAzure
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-yaml&quot;&gt;&lt;code class=&quot;language-yaml&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# ./azure-pipelines.yml&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Starter pipeline&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Start with a minimal pipeline that you can customize to build and deploy your code.&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Add steps that build, run tests, deploy, and more:&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# https://aka.ms/yaml&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token key atrule&quot;&gt;trigger&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; master&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token key atrule&quot;&gt;pool&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token key atrule&quot;&gt;vmImage&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&#39;windows-latest&#39;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token key atrule&quot;&gt;steps&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token key atrule&quot;&gt;task&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; AzurePowerShell@5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token key atrule&quot;&gt;inputs&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token key atrule&quot;&gt;azurePowerShellVersion&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; LatestVersion&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token key atrule&quot;&gt;azureSubscription&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&#39;Azure MVP&#39;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;    &lt;span class=&quot;token key atrule&quot;&gt;Inline&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;token scalar string&quot;&gt;&lt;br&gt;      Install-Module -Name Pester -Force&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token key atrule&quot;&gt;ScriptType&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; InlineScript&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token key atrule&quot;&gt;pwsh&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token boolean important&quot;&gt;true&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token key atrule&quot;&gt;workingDirectory&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; $(Build.Repository.LocalPath)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token key atrule&quot;&gt;displayName&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&#39;Install Pester&#39;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token key atrule&quot;&gt;task&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; AzurePowerShell@5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token key atrule&quot;&gt;inputs&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token key atrule&quot;&gt;azurePowerShellVersion&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; LatestVersion&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token key atrule&quot;&gt;azureSubscription&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&#39;Azure MVP&#39;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;    &lt;span class=&quot;token key atrule&quot;&gt;Inline&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;token scalar string&quot;&gt;&lt;br&gt;      Invoke-Gherkin -OutputFile result.xml -OutputFormat NUnitXml&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token key atrule&quot;&gt;ScriptType&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; InlineScript&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token key atrule&quot;&gt;pwsh&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token boolean important&quot;&gt;true&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token key atrule&quot;&gt;workingDirectory&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; $(Build.Repository.LocalPath)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token key atrule&quot;&gt;displayName&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&#39;Launch Test&#39;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token key atrule&quot;&gt;task&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; PublishTestResults@2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token key atrule&quot;&gt;inputs&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token key atrule&quot;&gt;buildConfiguration&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; Azure&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token key atrule&quot;&gt;buildPlatform&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; Azure&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token key atrule&quot;&gt;publishRunAttachments&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token boolean important&quot;&gt;true&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token key atrule&quot;&gt;testResultsFiles&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; result.xml&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token key atrule&quot;&gt;testResultsFormat&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; NUnit&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token key atrule&quot;&gt;testRunTitle&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; ValidateAzure&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Commit the file :&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;git add azure-pipelines.yaml
-git commit -m &#39;feat: add cicd for tests&#39;
-git push origin features/cicd
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; azure-pipelines.yaml&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; commit -m &lt;span class=&quot;token string&quot;&gt;&#39;feat: add cicd for tests&#39;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; push origin features/cicd&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Go in your Azure Devops project, select your new pipeline, and go in Tests, you should have something like my public repo :&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://dev.azure.com/etiennedeneuve/gherkintest/_build/results?buildId=357&amp;amp;view=ms.vss-test-web.build-test-results-tab&quot;&gt;Azure Devops&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;Et Voila!&lt;/em&gt;&lt;/p&gt;
@@ -358,65 +172,9 @@ git push origin features/cicd
 &lt;li&gt;Optionally: 1 Public IP&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;With our list, we can now write the test we want, in the feature file:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;# GherkinTests/etienne_exo.feature
-Feature: Validate Azure Deployment
-
-  Scenario: Someone start a new vm deployment
-    Given someone start a new vm deployment in the subscription
-    When the deployment is completed we should have 1 resource group
-    Then we should have 1 Virtual Network
-    And 1 Subnet
-    And 1 Network interface
-    And 1 Disk
-    And 1 VM
-    And 1 Public IP
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-gherkin&quot;&gt;&lt;code class=&quot;language-gherkin&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# GherkinTests/etienne_exo.feature&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;token feature&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;Feature:&lt;/span&gt;&lt;span class=&quot;token important&quot;&gt; Validate Azure Deployment&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;/span&gt;  &lt;span class=&quot;token scenario&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;Scenario:&lt;/span&gt;&lt;span class=&quot;token important&quot;&gt; Someone start a new vm deployment&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token atrule&quot;&gt;Given&lt;/span&gt; someone start a new vm deployment in the subscription&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token atrule&quot;&gt;When&lt;/span&gt; the deployment is completed we should have 1 resource group&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token atrule&quot;&gt;Then&lt;/span&gt; we should have 1 Virtual Network&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token atrule&quot;&gt;And&lt;/span&gt; 1 Subnet&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token atrule&quot;&gt;And&lt;/span&gt; 1 Network interface&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token atrule&quot;&gt;And&lt;/span&gt; 1 Disk&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token atrule&quot;&gt;And&lt;/span&gt; 1 VM&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token atrule&quot;&gt;And&lt;/span&gt; 1 Public IP&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Now, in our steps.ps1 file we will update it:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;# GherkinTests/etienne_exo.steps.ps1
-Given &amp;quot;someone start a new vm deployment in the subscription&amp;quot;{
-  Get-AzSubscription | Should -not -throw
-}
-
-When &amp;quot;the deployment is completed we should have 1 resource group&amp;quot; {
-  Get-AzResourceGroup -name RG-GherkinTests | Should -exists
-}
-
-Then &amp;quot;We should have 1 Virtual Network&amp;quot;{
-
-}
-And &amp;quot;1 Subnet&amp;quot;{
-
-}
-And &amp;quot;1 Network interface&amp;quot;{
-
-}
-And &amp;quot;1 Disk&amp;quot;{
-
-}
-And &amp;quot;1 VM&amp;quot;{
-
-}
-And &amp;quot;1 Public IP&amp;quot;{
-
-}
-&lt;/code&gt;&lt;/pre&gt;
-</content>
-	</entry>
-	
-	<entry>
-		<title>Lancement de Powershell du Zéro</title>
-		<link href="/2019/01/22/lancement-de-powershell-du-zero/"/>
-		<updated>2019-01-22T11:45:35+01:00</updated>
-		<id>/2019/01/22/lancement-de-powershell-du-zero/</id>
-		<content type="html">&lt;p&gt;Bonjour à tous,&lt;/p&gt;
-&lt;p&gt; &lt;/p&gt;
-&lt;p&gt;Je vous invite à participer à notre meetup en ligne au sujet de Powershell, nous reprenons tout depuis le début!&lt;/p&gt;
-&lt;p&gt; &lt;/p&gt;
-&lt;p&gt;Pour plus d&#39;info :&lt;a href=&quot;https://powershell-du-zero.fr/2019/01/21/meetup.html&quot;&gt; https://powershell-du-zero.fr/2019/01/21/meetup.html&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt; &lt;/p&gt;
-&lt;p&gt;Vous pouvez également nous suivre sur Twitter : &lt;a href=&quot;https://twitter.com/PowershellZ&quot;&gt;https://twitter.com/PowershellZ&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt; &lt;/p&gt;
-&lt;p&gt;Bonne journée!!&lt;/p&gt;
+&lt;pre class=&quot;language-powershell&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# GherkinTests/etienne_exo.steps.ps1&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Given &lt;span class=&quot;token string&quot;&gt;&quot;someone start a new vm deployment in the subscription&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  Get&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;AzSubscription &lt;span class=&quot;token punctuation&quot;&gt;|&lt;/span&gt; Should &lt;span class=&quot;token operator&quot;&gt;-not&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;throw&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;When &lt;span class=&quot;token string&quot;&gt;&quot;the deployment is completed we should have 1 resource group&quot;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  Get&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;AzResourceGroup &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;name RG&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;GherkinTests &lt;span class=&quot;token punctuation&quot;&gt;|&lt;/span&gt; Should &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;exists&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Then &lt;span class=&quot;token string&quot;&gt;&quot;We should have 1 Virtual Network&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;And &lt;span class=&quot;token string&quot;&gt;&quot;1 Subnet&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;And &lt;span class=&quot;token string&quot;&gt;&quot;1 Network interface&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;And &lt;span class=&quot;token string&quot;&gt;&quot;1 Disk&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;And &lt;span class=&quot;token string&quot;&gt;&quot;1 VM&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;And &lt;span class=&quot;token string&quot;&gt;&quot;1 Public IP&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 </content>
 	</entry>
 	
@@ -487,26 +245,15 @@ And &amp;quot;1 Public IP&amp;quot;{
 &lt;li&gt;A Windows Server 2016 Eval Iso &lt;a href=&quot;https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2016&quot;&gt;lien&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Azure Stack Development Kit &lt;a href=&quot;https://azure.microsoft.com/fr-fr/overview/azure-stack/development-kit/?v=try&quot;&gt;lien&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&quot;installation&quot;&gt;Installation &lt;a class=&quot;direct-link&quot; href=&quot;#installation&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
-&lt;h4 id=&quot;phase-1&quot;&gt;Phase 1 &lt;a class=&quot;direct-link&quot; href=&quot;#phase-1&quot;&gt; &lt;/a&gt;&lt;/h4&gt;
+&lt;h2 id=&quot;installation&quot;&gt;Installation &lt;a class=&quot;direct-link&quot; href=&quot;#installation&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;h3 id=&quot;phase-1&quot;&gt;Phase 1 &lt;a class=&quot;direct-link&quot; href=&quot;#phase-1&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
 &lt;ol&gt;
 &lt;li&gt;Extract the ADSK using AzureStackDevelopmentKit.exe&lt;/li&gt;
 &lt;li&gt;Copy &amp;quot;CloudBuilder.vhdx&amp;quot; on the root of you root (c:)&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h4 id=&quot;phase-2&quot;&gt;Phase 2 &lt;a class=&quot;direct-link&quot; href=&quot;#phase-2&quot;&gt; &lt;/a&gt;&lt;/h4&gt;
+&lt;h3 id=&quot;phase-2&quot;&gt;Phase 2 &lt;a class=&quot;direct-link&quot; href=&quot;#phase-2&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;In a Shell Powershell as Administrator :&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;# Variables
-$Uri = &amp;amp;#039;https://raw.githubusercontent.com/Azure/AzureStack-Tools/master/Deployment/asdk-installer.ps1&amp;amp;#039;
-$LocalPath = &amp;amp;#039;C:AzureStack_Installer&amp;amp;#039;
-# Create folder
-New-Item $LocalPath -Type directory
-# Enforce usage of TLSv1.2 to download from GitHub
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-# Download file
-Invoke-WebRequest $uri -OutFile ($LocalPath + &amp;amp;#039;&amp;amp;#039; + &amp;amp;#039;asdk-installer.ps1&amp;amp;#039;)
-cd $LocalPath
-.asdk-installer.ps1
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-powershell&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Variables&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$Uri&lt;/span&gt; = &amp;amp;&lt;span class=&quot;token comment&quot;&gt;#039;https://raw.githubusercontent.com/Azure/AzureStack-Tools/master/Deployment/asdk-installer.ps1&amp;amp;#039;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$LocalPath&lt;/span&gt; = &amp;amp;&lt;span class=&quot;token comment&quot;&gt;#039;C:AzureStack_Installer&amp;amp;#039;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Create folder&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;New-Item&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;$LocalPath&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Type&lt;/span&gt; directory&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Enforce usage of TLSv1.2 to download from GitHub&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token namespace&quot;&gt;[Net.ServicePointManager]&lt;/span&gt;::SecurityProtocol = &lt;span class=&quot;token namespace&quot;&gt;[Net.SecurityProtocolType]&lt;/span&gt;::Tls12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Download file&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;Invoke-WebRequest&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;$uri&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;OutFile &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;$LocalPath&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; &amp;amp;&lt;span class=&quot;token comment&quot;&gt;#039;&amp;amp;#039; + &amp;amp;#039;asdk-installer.ps1&amp;amp;#039;)&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;cd &lt;span class=&quot;token variable&quot;&gt;$LocalPath&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;asdk&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;installer&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ps1&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Follow &amp;quot;Prepare Environnement&amp;quot;&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Browse to your &amp;quot;cloudbuilder.vhdx&amp;quot; from phase 1 (c:CloudBuilder.vhdx), without ticking the Add Drivers (if your hardware is fully supported as a Dell ASDK Ready Node for example)&lt;/li&gt;
@@ -515,46 +262,25 @@ cd $LocalPath
 &lt;li&gt;If you have a Dhcp, you don&#39;t need to add a Static Configuration, otherwise, add a static configuration instead (with DNS and Gateway)&lt;/li&gt;
 &lt;li&gt;Reboot&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h4 id=&quot;phase-3&quot;&gt;Phase 3 &lt;a class=&quot;direct-link&quot; href=&quot;#phase-3&quot;&gt; &lt;/a&gt;&lt;/h4&gt;
+&lt;h3 id=&quot;phase-3&quot;&gt;Phase 3 &lt;a class=&quot;direct-link&quot; href=&quot;#phase-3&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;While the host is rebooting, if the Windows bootmanager ask to choose between Azure Stack and Windows Server 2016, choose Azure Stack.&lt;/p&gt;
 &lt;p&gt;Login in the Azure Stack, take care of the keyboard layout, by default it&#39;s a QWERTY.&lt;/p&gt;
 &lt;p&gt;In a PowerShell Shell, as Administrator launch the ASDK deployment. (Not in a Powershell ISE)&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;cd C:CloudDeploymentSetup     
-$adminpass = Get-Credential Administrator  -Message &amp;quot;Please provide the password for Local Administrator&amp;quot;
-$aadcred = Get-Credential &amp;quot;svc_azure_stack_installer@yourazuread.onmicrosoft.com&amp;quot; -Message &amp;quot;Please provide the password for Azure AD&amp;quot;
-.InstallAzureStackPOC.ps1 -AdminPassword $adminpass.Password `
-    -InfraAzureDirectoryTenantName &amp;quot;yourazuread.onmicrosoft.com&amp;quot; `
-    -TimeServer &amp;quot;13.79.239.69&amp;quot;`
-    -InfraAzureDirectoryTenantAdminCredential $aadcred`
-    -DNSForwarder &amp;quot;8.8.8.8&amp;quot; `
-    -NatIPv4Address &amp;quot;10.0.0.9&amp;quot; `
-    -NatIPv4DefaultGateway &amp;quot;10.0.0.14&amp;quot; `
-    -NatIPv4Subnet &amp;quot;10.0.0.0/28&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-powershell&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;cd C:\CloudDeployment\Setup&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$adminpass&lt;/span&gt; = Get&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Credential Administrator  &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Message &lt;span class=&quot;token string&quot;&gt;&quot;Please provide the password for Local Administrator&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$aadcred&lt;/span&gt; = Get&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Credential &lt;span class=&quot;token string&quot;&gt;&quot;svc_azure_stack_installer@yourazuread.onmicrosoft.com&quot;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Message &lt;span class=&quot;token string&quot;&gt;&quot;Please provide the password for Azure AD&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;InstallAzureStackPOC&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ps1 &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;AdminPassword &lt;span class=&quot;token variable&quot;&gt;$adminpass&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Password `&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;InfraAzureDirectoryTenantName &lt;span class=&quot;token string&quot;&gt;&quot;yourazuread.onmicrosoft.com&quot;&lt;/span&gt; `&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;TimeServer &lt;span class=&quot;token string&quot;&gt;&quot;13.79.239.69&quot;&lt;/span&gt;`&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;InfraAzureDirectoryTenantAdminCredential &lt;span class=&quot;token variable&quot;&gt;$aadcred&lt;/span&gt;`&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;DNSForwarder &lt;span class=&quot;token string&quot;&gt;&quot;8.8.8.8&quot;&lt;/span&gt; `&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;NatIPv4Address &lt;span class=&quot;token string&quot;&gt;&quot;10.0.0.9&quot;&lt;/span&gt; `&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;NatIPv4DefaultGateway &lt;span class=&quot;token string&quot;&gt;&quot;10.0.0.14&quot;&lt;/span&gt; `&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;NatIPv4Subnet &lt;span class=&quot;token string&quot;&gt;&quot;10.0.0.0/28&quot;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Warning: This process take few hours (between 10 and 15)&lt;/p&gt;
-&lt;p&gt;&amp;gt; You can change parameter in the script, but double check they are correct. If you have trouble, you may need to restart the whole process.&lt;br&gt;
-&amp;gt; The nat parameters must be changed to reflect your network.&lt;/p&gt;
-&lt;h4 id=&quot;phase-4&quot;&gt;Phase 4 &lt;a class=&quot;direct-link&quot; href=&quot;#phase-4&quot;&gt; &lt;/a&gt;&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;p&gt;You can change parameter in the script, but double check they are correct. If you have trouble, you may need to restart the whole process.&lt;br&gt;
+The nat parameters must be changed to reflect your network.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;phase-4&quot;&gt;Phase 4 &lt;a class=&quot;direct-link&quot; href=&quot;#phase-4&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;After the process is complete, you have now a cool ASDK, with nothing in it. You need to deploy services as a Cloud Operator&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Login with azurestackazurestackadmin on the ASDK host&lt;/li&gt;
-&lt;li&gt;Get the path of your Windows Server 2016, mine is &#39;D:ISO&#39;&lt;/li&gt;
+&lt;li&gt;Get the path of your Windows Server 2016, mine is &lt;code&gt;D:\ISO&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;Open a new Powershell as Administator :&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;# Create directory on the root drive.
-New-Item -ItemType Directory -Force -Path &amp;quot;C:ConfigASDK&amp;quot;
-Set-Location &amp;quot;C:ConfigASDK&amp;quot;
-
-# Download the ConfigASDK Script.
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-Invoke-Webrequest http://bit.ly/configasdk -UseBasicParsing -OutFile ConfigASDK.ps1
-
-.ConfigASDK.ps1 -azureDirectoryTenantName &amp;quot;yourazuread.onmicrosoft.com&amp;quot; -authenticationType AzureAD `
-    -downloadPath &amp;quot;D:ASDKfiles&amp;quot; -ISOPath &amp;quot;D:ISOWS2016EVAL.iso&amp;quot; -azureStackAdminPwd &#39;Azure Stack Administrator password&#39; `
-    -VMpwd &#39;a new password&#39; -azureAdUsername &amp;quot;svc_azure_stack_installer@yourazuread.onmicrosoft.com&amp;quot; -azureAdPwd &#39;Azure Ad password&#39; `
-    -registerASDK -useAzureCredsForRegistration -azureRegSubId &amp;quot;Id de la subscription Azure&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h4 id=&quot;phase-5&quot;&gt;Phase 5 &lt;a class=&quot;direct-link&quot; href=&quot;#phase-5&quot;&gt; &lt;/a&gt;&lt;/h4&gt;
+&lt;pre class=&quot;language-powershell&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Create directory on the root drive.&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;New-Item&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;ItemType Directory &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Force &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Path &lt;span class=&quot;token string&quot;&gt;&quot;C:ConfigASDK&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;Set-Location&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;C:ConfigASDK&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Download the ConfigASDK Script.&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token namespace&quot;&gt;[Net.ServicePointManager]&lt;/span&gt;::SecurityProtocol = &lt;span class=&quot;token namespace&quot;&gt;[Net.SecurityProtocolType]&lt;/span&gt;::Tls12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;Invoke-Webrequest&lt;/span&gt; http:&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;bit&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ly&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;configasdk &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;UseBasicParsing &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;OutFile ConfigASDK&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ps1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ConfigASDK&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ps1 &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;azureDirectoryTenantName &lt;span class=&quot;token string&quot;&gt;&quot;yourazuread.onmicrosoft.com&quot;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;authenticationType AzureAD `&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;downloadPath &lt;span class=&quot;token string&quot;&gt;&quot;D:ASDKfiles&quot;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;ISOPath &lt;span class=&quot;token string&quot;&gt;&quot;D:ISOWS2016EVAL.iso&quot;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;azureStackAdminPwd &lt;span class=&quot;token string&quot;&gt;&#39;Azure Stack Administrator password&#39;&lt;/span&gt; `&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;VMpwd &lt;span class=&quot;token string&quot;&gt;&#39;a new password&#39;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;azureAdUsername &lt;span class=&quot;token string&quot;&gt;&quot;svc_azure_stack_installer@yourazuread.onmicrosoft.com&quot;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;azureAdPwd &lt;span class=&quot;token string&quot;&gt;&#39;Azure Ad password&#39;&lt;/span&gt; `&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;registerASDK &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;useAzureCredsForRegistration &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;azureRegSubId &lt;span class=&quot;token string&quot;&gt;&quot;Id de la subscription Azure&quot;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;phase-5&quot;&gt;Phase 5 &lt;a class=&quot;direct-link&quot; href=&quot;#phase-5&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;Open a Browser on your ASDK Host and go to &lt;code&gt;https://adminportal.local.azurestack.external&lt;/code&gt; or the &amp;quot;public&amp;quot; endpoint &lt;code&gt;https://portal.local.azurestack.external&lt;/code&gt; and enjoy.&lt;/p&gt;
 </content>
 	</entry>
@@ -566,9 +292,8 @@ Invoke-Webrequest http://bit.ly/configasdk -UseBasicParsing -OutFile ConfigASDK.
 		<updated>2018-07-02T14:35:17+02:00</updated>
 		<id>/2018/07/02/az-cli-20-tricks/</id>
 		<content type="html">&lt;h1 id=&quot;az-cli-2.0&quot;&gt;Az CLI 2.0 &lt;a class=&quot;direct-link&quot; href=&quot;#az-cli-2.0&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
-&lt;h2 id=&quot;how-to-delete-multiple-managed-disk-at-once-%3F&quot;&gt;How to delete multiple managed disk at once ? &lt;a class=&quot;direct-link&quot; href=&quot;#how-to-delete-multiple-managed-disk-at-once-%3F&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
-&lt;pre&gt;&lt;code&gt;az disk list -g YourRG --query [].name --output tsv | xargs -n 1 az disk delete -g YourRG --yes -n
-&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;how-to-delete-multiple-managed-disk-at-once&quot;&gt;How to delete multiple managed disk at once &lt;a class=&quot;direct-link&quot; href=&quot;#how-to-delete-multiple-managed-disk-at-once&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;az disk list -g YourRG --query &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;.name --output tsv &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;xargs&lt;/span&gt; -n &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt; az disk delete -g YourRG --yes -n&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 </content>
 	</entry>
 	

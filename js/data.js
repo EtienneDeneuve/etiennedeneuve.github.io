@@ -1,40 +1,33 @@
 [{
   "title": "Terraform AzureRM 2.0 Provider",
   "date" : "Feb 24, 2020",
-  
+  "summary" : "Tips &amp; tricks arround Terraform Azure RM 2.0",
   
   "url": "/2020/02/25/terraform-azurerm-2/",
   "tags" : "Azure,PowerShell,Azure Devops,Cloud,Tests"
 },{
   "title": "IaC &amp; Tests",
-  "date" : "Feb 06, 2020",
+  "date" : "Feb 07, 2020",
   "summary" : "I was looking for the easiest way to test Azure infrastructure.",
   
   "url": "/2020/02/07/infra-testing-easy-path/",
   "tags" : "Azure,PowerShell,Azure Devops,Cloud,Tests"
 },{
-  "title": "Lancement de Powershell du Zéro",
-  "date" : "Jan 22, 2019",
-  
-  
-  "url": "/2019/01/22/lancement-de-powershell-du-zero/",
-  "tags" : ""
-},{
   "title": "How to install Azure Stack Dev kit in a breeze
 ",
   "date" : "Dec 05, 2018",
-  
+  "summary" : "Quick install guide for Azure Stack Development kit",
   
   "url": "/2018/12/05/adsk-in-a-breeze/",
-  "tags" : ""
+  "tags" : "Azure Stack,PowerShell,Cloud"
 },{
   "title": "Some Az Cli 2.0 bulk commands
 ",
   "date" : "Jul 02, 2018",
-  
+  "summary" : "Everything is in the title :)",
   
   "url": "/2018/07/02/az-cli-20-tricks/",
-  "tags" : ""
+  "tags" : "Azure,Tips & Tricks,Cloud"
 },{
   "title": "Dynamic update of Bind9 server in Azure with Terraform !
 ",
