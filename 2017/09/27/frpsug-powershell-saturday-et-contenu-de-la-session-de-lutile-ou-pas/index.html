@@ -94,78 +94,78 @@
   <div class="post post-sidebar container-fluid">
     <div class="row justify-content-xl-center">
       <main class="main col">
-      <p>Suite au premier French PowerShell Saturday du <a href="https://frpsug.github.io">FRPSUG</a> à Paris Le Samedi 16 septembre, dans les locaux de <a href="http://www.cellenza.com/fr/">Cellenza.</a> (la où je bosse, pour ceux qui ne le savent pas!)</p>
+      <h1 id="frpsug-powershell-saturday-et-contenu-de-la-session-(de-l%E2%80%99utile%2C-ou-pas)">FRPSUG Powershell Saturday et contenu de la session (de l’utile, ou pas) <a class="direct-link" href="#frpsug-powershell-saturday-et-contenu-de-la-session-(de-l%E2%80%99utile%2C-ou-pas)"> </a></h1>
+<p>Suite au premier French PowerShell Saturday du <a href="https://frpsug.github.io">FRPSUG</a> à Paris Le Samedi 16 septembre, dans les locaux de <a href="http://www.cellenza.com/fr/">Cellenza</a>. (la où je bosse, pour ceux qui ne le savent pas!)</p>
 <p>Si vous ne connaissez pas encore FRPSUG (Quoi???)</p>
-<blockquote>Utiliser le channel #french sur <a href="https://powershell.slack.com/Slack">PowerShell.slack.com</a> (<a href="http://slack.poshcode.org/">S’inscrire</a>)
-<p>Allez sur le GitHub : <a href="https://github.com/FrPSUG">https://github.com/FrPSUG</a></blockquote></p>
-<h1 id="ma-session-%3A">Ma session : <a class="direct-link" href="#ma-session-%3A"> </a></h1>
+<blockquote>
+<p>Utiliser le channel #french sur <a href="https://powershell.slack.com/Slack">PowerShell.slack.com</a> <a href="http://slack.poshcode.org/">S’inscrire</a></p>
+<p>Allez sur le GitHub : <a href="https://github.com/FrPSUG">https://github.com/FrPSUG</a>](<a href="https://github.com/FrPSUG">https://github.com/FrPSUG</a>)</p>
+</blockquote>
+<h2 id="ma-session">Ma session <a class="direct-link" href="#ma-session"> </a></h2>
 <p>Avec <a href="https://twitter.com/LopesMick">Mickael Lopes</a> on avait décidé de faire une session &quot;à la cool&quot; où on a montré quelques petits scripts inutiles (ou pas...)</p>
 <p>Nous considérons que on peut tout aussi bien apprendre en s'amusant, l'event était un samedi, donc il fallait bien s'amuser un peu !</p>
-<p>Je vous joins nos slides ! <a href="https://etienne.deneuve.xyz/wp-content/uploads/2017/09/FRPSUG.pptx">FRPSUG</a> (OpenSource MIT!)</p>
-<h1 id="premi%C3%A8re-d%C3%A9mo">Première démo <a class="direct-link" href="#premi%C3%A8re-d%C3%A9mo"> </a></h1>
+<p>Je vous joins nos slides <img src="https://etienne.deneuve.xyz/wp-content/uploads/2017/09/FRPSUG.pptx" alt="FRPSUG"> (OpenSource MIT!)</p>
+<h3 id="premi%C3%A8re-d%C3%A9mo">Première démo <a class="direct-link" href="#premi%C3%A8re-d%C3%A9mo"> </a></h3>
 <p>Devant la foule en délire (ou pas... on s'est rendu compte que sur les pc type Surface, ça ne marche pas!) :</p>
-<pre><code>&amp;lt;div&amp;gt;start-job {&amp;lt;/div&amp;gt;
-&amp;lt;div&amp;gt;[console]::beep(440,500)&amp;lt;/div&amp;gt;
-&amp;lt;div&amp;gt;[console]::beep(440,500)&amp;lt;/div&amp;gt;
-&amp;lt;div&amp;gt;[console]::beep(440,500)&amp;lt;/div&amp;gt;
-&amp;lt;div&amp;gt;[console]::beep(349,350)&amp;lt;/div&amp;gt;
-&amp;lt;div&amp;gt;[console]::beep(523,150)&amp;lt;/div&amp;gt;
-&amp;lt;div&amp;gt;[console]::beep(440,500)&amp;lt;/div&amp;gt;
-&amp;lt;div&amp;gt;[console]::beep(349,350)&amp;lt;/div&amp;gt;
-&amp;lt;div&amp;gt;[console]::beep(523,150)&amp;lt;/div&amp;gt;
-&amp;lt;div&amp;gt;[console]::beep(440,1000)&amp;lt;/div&amp;gt;
-&amp;lt;div&amp;gt;[console]::beep(659,500)&amp;lt;/div&amp;gt;
-&amp;lt;div&amp;gt;[console]::beep(659,500)&amp;lt;/div&amp;gt;
-&amp;lt;div&amp;gt;[console]::beep(659,500)&amp;lt;/div&amp;gt;
-&amp;lt;div&amp;gt;[console]::beep(698,350)&amp;lt;/div&amp;gt;
-&amp;lt;div&amp;gt;[console]::beep(523,150)&amp;lt;/div&amp;gt;
-&amp;lt;div&amp;gt;[console]::beep(415,500)&amp;lt;/div&amp;gt;
-&amp;lt;div&amp;gt;[console]::beep(349,350)&amp;lt;/div&amp;gt;
-&amp;lt;div&amp;gt;[console]::beep(523,150)&amp;lt;/div&amp;gt;
-&amp;lt;div&amp;gt;[console]::beep(440,1000)&amp;lt;/div&amp;gt;
-&amp;lt;div&amp;gt;}&amp;lt;/div&amp;gt;
-&amp;lt;div&amp;gt;```&lt;/div&gt;
-&lt;div&gt;Ok bon, pour ceux qui ne peuvent reconnaître, c'est la marche impériale.&lt;/div&gt;
-&lt;div&gt;&lt;/div&gt;
-&lt;div&gt;# Deuxième Démo :&lt;/div&gt;
-&lt;div&gt;Comment on attaque les API de la SNCF en Powershell :&lt;/div&gt;
-&lt;div&gt;&lt;a href=&quot;https://etienne.deneuve.xyz/2015/12/16/get-nexttrain/&quot;&gt;https://etienne.deneuve.xyz/2015/12/16/get-nexttrain/&lt;/a&gt;&lt;/div&gt;
-&lt;div&gt;&lt;/div&gt;
-&lt;div&gt;# Troisième Démo:&lt;/div&gt;
-&lt;div&gt;Comment on récupère le statut de l'encre sur un printer HP :&lt;/div&gt;
-&lt;div&gt;&lt;a href=&quot;https://etienne.deneuve.xyz/2016/01/15/get-ink-level-from-hp-printers-in-powershell/&quot;&gt;https://etienne.deneuve.xyz/2016/01/15/get-ink-level-from-hp-printers-in-powershell/&lt;/a&gt;&lt;/div&gt;
-&lt;div&gt;&lt;/div&gt;
-&lt;div&gt;# Quatrième Démo :&lt;/div&gt;
-&lt;div&gt;Comment on se connecte à des PaloAlto en PowerShell !&lt;/div&gt;
-&lt;div&gt;&lt;a href=&quot;https://github.com/EtienneDeneuve/Powershell/blob/master/PaloAlto/Get-PaloAlto.ps1&quot;&gt;https://github.com/EtienneDeneuve/Powershell/blob/master/PaloAlto/Get-PaloAlto.ps1&lt;/a&gt;&lt;/div&gt;
-&lt;div&gt;&lt;/div&gt;
-&lt;div&gt;# Cinquième Démo :&lt;/div&gt;
-&lt;div&gt;Manipulation de OneDrive via les API, en Powershell :&lt;/div&gt;
-&lt;div&gt;&lt;a href=&quot;https://github.com/EtienneDeneuve/Powershell/blob/master/OneDriveAPI/Remove-AllOneDriveSharedLink.ps1&quot;&gt;https://github.com/EtienneDeneuve/Powershell/blob/master/OneDriveAPI/Remove-AllOneDriveSharedLink.ps1&lt;/a&gt;&lt;/div&gt;
-&lt;div&gt;&lt;/div&gt;
-&lt;div&gt;# Sixième Démo :&lt;/div&gt;
-&lt;div&gt;Un script que j'ai fait pour un client (merci !), pour mettre en place IpSec en mode transports sur les 5 ou 6 domaines :&lt;/div&gt;
-&lt;div&gt;&lt;a href=&quot;https://github.com/EtienneDeneuve/Powershell/blob/master/IpSec/Invoke-IPSec.ps1&quot;&gt;https://github.com/EtienneDeneuve/Powershell/blob/master/IpSec/Invoke-IPSec.ps1&lt;/a&gt;&lt;/div&gt;
-&lt;div&gt;&lt;/div&gt;
-&lt;div&gt;Vous pouvez bien sûr les utiliser, les modifier et m'en proposer d'autres !&lt;/div&gt;
-&lt;div&gt;&lt;/div&gt;
-&lt;div&gt;Un grand merci à :&lt;/div&gt;
-&lt;ul&gt;
- 	&lt;li&gt;l'équipe de Cellenza pour les locaux&lt;/li&gt;
- 	&lt;li&gt;Metsys pour la bouffe&lt;/li&gt;
- 	&lt;li&gt;FRPSUG pour être venu&lt;/li&gt;
- 	&lt;li&gt;à tous ceux qui sont venus&lt;/li&gt;
- 	&lt;li&gt;et également à ceux qui ne sont pas venus, la nourriture prévue pour eux est partie nourrir des personnes dans le besoin (Merci &lt;a href=&quot;https://fr.linkedin.com/in/guillaume-mathieu-785431119&quot;&gt;Guillaume Matthieu&lt;/a&gt; !)&lt;/li&gt;
-&lt;/ul&gt;
-&amp;nbsp;
-
-Si vous étiez là, ça vous a plu ?
-&lt;div&gt;&lt;/div&gt;</code></pre>
+<pre class="language-powershell"><code class="language-powershell"><span class="highlight-line"><span class="token function">start-job</span> <span class="token punctuation">{</span></span><br><span class="highlight-line"><span class="token namespace">[console]</span>::beep<span class="token punctuation">(</span>440<span class="token punctuation">,</span>500<span class="token punctuation">)</span></span><br><span class="highlight-line"><span class="token namespace">[console]</span>::beep<span class="token punctuation">(</span>440<span class="token punctuation">,</span>500<span class="token punctuation">)</span></span><br><span class="highlight-line"><span class="token namespace">[console]</span>::beep<span class="token punctuation">(</span>440<span class="token punctuation">,</span>500<span class="token punctuation">)</span></span><br><span class="highlight-line"><span class="token namespace">[console]</span>::beep<span class="token punctuation">(</span>349<span class="token punctuation">,</span>350<span class="token punctuation">)</span></span><br><span class="highlight-line"><span class="token namespace">[console]</span>::beep<span class="token punctuation">(</span>523<span class="token punctuation">,</span>150<span class="token punctuation">)</span></span><br><span class="highlight-line"><span class="token namespace">[console]</span>::beep<span class="token punctuation">(</span>440<span class="token punctuation">,</span>500<span class="token punctuation">)</span></span><br><span class="highlight-line"><span class="token namespace">[console]</span>::beep<span class="token punctuation">(</span>349<span class="token punctuation">,</span>350<span class="token punctuation">)</span></span><br><span class="highlight-line"><span class="token namespace">[console]</span>::beep<span class="token punctuation">(</span>523<span class="token punctuation">,</span>150<span class="token punctuation">)</span></span><br><span class="highlight-line"><span class="token namespace">[console]</span>::beep<span class="token punctuation">(</span>440<span class="token punctuation">,</span>1000<span class="token punctuation">)</span></span><br><span class="highlight-line"><span class="token namespace">[console]</span>::beep<span class="token punctuation">(</span>659<span class="token punctuation">,</span>500<span class="token punctuation">)</span></span><br><span class="highlight-line"><span class="token namespace">[console]</span>::beep<span class="token punctuation">(</span>659<span class="token punctuation">,</span>500<span class="token punctuation">)</span></span><br><span class="highlight-line"><span class="token namespace">[console]</span>::beep<span class="token punctuation">(</span>659<span class="token punctuation">,</span>500<span class="token punctuation">)</span></span><br><span class="highlight-line"><span class="token namespace">[console]</span>::beep<span class="token punctuation">(</span>698<span class="token punctuation">,</span>350<span class="token punctuation">)</span></span><br><span class="highlight-line"><span class="token namespace">[console]</span>::beep<span class="token punctuation">(</span>523<span class="token punctuation">,</span>150<span class="token punctuation">)</span></span><br><span class="highlight-line"><span class="token namespace">[console]</span>::beep<span class="token punctuation">(</span>415<span class="token punctuation">,</span>500<span class="token punctuation">)</span></span><br><span class="highlight-line"><span class="token namespace">[console]</span>::beep<span class="token punctuation">(</span>349<span class="token punctuation">,</span>350<span class="token punctuation">)</span></span><br><span class="highlight-line"><span class="token namespace">[console]</span>::beep<span class="token punctuation">(</span>523<span class="token punctuation">,</span>150<span class="token punctuation">)</span></span><br><span class="highlight-line"><span class="token namespace">[console]</span>::beep<span class="token punctuation">(</span>440<span class="token punctuation">,</span>1000<span class="token punctuation">)</span></span><br><span class="highlight-line"><span class="token punctuation">}</span></span></code></pre>
+<p>Ok bon, pour ceux qui ne peuvent reconnaître, c'est la marche impériale.</p>
+<h3 id="deuxi%C3%A8me-d%C3%A9mo">Deuxième Démo <a class="direct-link" href="#deuxi%C3%A8me-d%C3%A9mo"> </a></h3>
+<p>Comment on attaque les API de la SNCF en Powershell :<br>
+<a href="https://etienne.deneuve.xyz/2015/12/16/get-nexttrain/">https://etienne.deneuve.xyz/2015/12/16/get-nexttrain/</a></p>
+<h3 id="troisi%C3%A8me-d%C3%A9mo">Troisième Démo <a class="direct-link" href="#troisi%C3%A8me-d%C3%A9mo"> </a></h3>
+<p>Comment on récupère le statut de l'encre sur un printer HP :<br>
+<a href="https://etienne.deneuve.xyz/2016/01/15/get-ink-level-from-hp-printers-in-powershell/">https://etienne.deneuve.xyz/2016/01/15/get-ink-level-from-hp-printers-in-powershell</a></p>
+<h3 id="quatri%C3%A8me-d%C3%A9mo">Quatrième Démo <a class="direct-link" href="#quatri%C3%A8me-d%C3%A9mo"> </a></h3>
+<p>Comment on se connecte à des PaloAlto en PowerShell !<br>
+<a href="https://github.com/EtienneDeneuve/Powershell/blob/master/PaloAlto/Get-PaloAlto.ps1">https://github.com/EtienneDeneuve/Powershell/blob/master/PaloAlto/Get-PaloAlto.ps1</a></p>
+<h3 id="cinqui%C3%A8me-d%C3%A9mo">Cinquième Démo <a class="direct-link" href="#cinqui%C3%A8me-d%C3%A9mo"> </a></h3>
+<p>Manipulation de OneDrive via les API, en Powershell :<br>
+<a href="https://github.com/EtienneDeneuve/Powershell/blob/master/OneDriveAPI/Remove-AllOneDriveSharedLink.ps1">https://github.com/EtienneDeneuve/Powershell/blob/master/OneDriveAPI/Remove-AllOneDriveSharedLink.ps1</a></p>
+<h3 id="sixi%C3%A8me-d%C3%A9mo">Sixième Démo <a class="direct-link" href="#sixi%C3%A8me-d%C3%A9mo"> </a></h3>
+<p>Un script que j'ai fait pour un client (merci !), pour mettre en place IpSec en mode transports sur les 5 ou 6 domaines :<br>
+<a href="https://github.com/EtienneDeneuve/Powershell/blob/master/IpSec/Invoke-IPSec.ps1">IPSec Powershell on GitHub</a></p>
+<p>Vous pouvez bien sûr les utiliser, les modifier et m'en proposer d'autres !</p>
+<p>Un grand merci à :</p>
+<ul>
+<li>l'équipe de Cellenza pour les locaux</li>
+<li>Metsys pour la bouffe</li>
+<li>FRPSUG pour être venu</li>
+<li>à tous ceux qui sont venu !</li>
+<li>et également à ceux qui ne sont pas venus, la nourriture prévue pour eux est partie nourrir des personnes dans le besoin (Merci <a href="https://fr.linkedin.com/in/guillaume-mathieu-785431119">Guillaume Matthieu</a> !)</li>
+</ul>
+<p>Si vous étiez là, ça vous a plu ?</p>
 
       </main>
       <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2" >
         <nav class="sticky-top">
-        
+        <div class="">
+                <ol>
+                    
+                    <li><a href="#ma-session">Ma session  </a>
+            
+                <ol>
+                    
+                    <li><a href="#premi%C3%A8re-d%C3%A9mo">Première démo  </a>
+            		</li>
+
+                    <li><a href="#deuxi%C3%A8me-d%C3%A9mo">Deuxième Démo  </a>
+            		</li>
+
+                    <li><a href="#troisi%C3%A8me-d%C3%A9mo">Troisième Démo  </a>
+            		</li>
+
+                    <li><a href="#quatri%C3%A8me-d%C3%A9mo">Quatrième Démo  </a>
+            		</li>
+
+                    <li><a href="#cinqui%C3%A8me-d%C3%A9mo">Cinquième Démo  </a>
+            		</li>
+
+                    <li><a href="#sixi%C3%A8me-d%C3%A9mo">Sixième Démo  </a>
+            		</li>
+                </ol>
+            		</li>
+                </ol>
+            </div>
         </nav>
       </aside>
     </div>

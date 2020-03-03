@@ -137,7 +137,7 @@
   
   
   "url": "/2017/09/27/frpsug-powershell-saturday-et-contenu-de-la-session-de-lutile-ou-pas/",
-  "tags" : ""
+  "tags" : "PowerShell,Fun"
 },{
   "title": "Azure Powershell &amp;#8211; Comment on fait quand ca n&amp;#8217;existe pas ?",
   "date" : "Sep 26, 2017",
