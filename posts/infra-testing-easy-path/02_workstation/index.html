@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="msvalidate.01" content="DE6C71A9BE4E011D01CC38799992B4A6" />
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    
+
+    <title>XYZ Blog</title>
+    <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js" integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    
+      <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script>
+    
+
+    <script src="/js/script.js"></script>
+    </head>
+  <body class="position-relative" data-spy="scroll" data-target=".site-nav" data-offset="55">
+    <nav class="site-nav family-sans navbar navbar-expand-md navbar-dark  sidebar sticky-top  py-0">
+  <div class="container-fluid">
+    <button type="button" class="navbar-toggler my-2 my-md-0" data-toggle="collapse" data-target="#myTogglerNav" aria-controls="myTogglerNav" aria-label="Toggle Navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="navbar-brand text-uppercase">
+      <a class="text-light" href="/"><i class="fas fa-cube mr-2"></i>XYZ Blog</a> 
+    </div>
+
+    <div class="collapse navbar-collapse text-center mt-0" id="myTogglerNav">
+      <div class="navbar-nav ml-auto font-weight-regular text-uppercase">
+        
+        <a class="d-none nav-item nav-link" href="#page-hero">hero target</a>
+        <a class="d-none nav-item nav-link" href="#main-content">nav target</a>
+        
+        <a class="nav-item nav-link font-weight-bold  text-light" href="/"><i class="fas fa-home"></i></a>
+        
+          <a class="nav-item nav-link" href="/posts/0/">posts</a>
+          
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-user"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+            <a class="dropdown-item text-capitalize" href="/about">About Me</a>
+            <div class="dropdown-divider"></div><a class="dropdown-item text-capitalize" target="_blank" href="https://github.com/etiennedeneuve">
+            <i class="fab fa-github text-secondary mr-2"></i>github
+          </a><a class="dropdown-item text-capitalize" target="_blank" href="https://linkedin.com/in/etiennedeneuve">
+            <i class="fab fa-linkedin text-secondary mr-2"></i>linkedin
+          </a><a class="dropdown-item text-capitalize" target="_blank" href="https://twitter.com/etiennedinfo">
+            <i class="fab fa-twitter text-secondary mr-2"></i>twitter
+          </a></div>
+        </div>
+      </div>
+      <div class="searchbox pl-2 py-2">
+    <input
+      type="text"
+      v-model="query"
+      class="form-control text-white border m-auto"
+      :class="[isActive ? 'wide' : 'short']"
+      @focus="isActive=true"
+      @blur.prevent="handleBlur"
+      ref="searchinput"
+      style="background: transparent;"
+      aria-describedby="searchinput"
+      autocomplete="on"
+    >
+    <div v-if="query && isActive" class="position-absolute justify-content-center" style="top: 47px;">
+      <div class="card bg-secondary">
+        <ul class="list-group list-group-flush px-0" v-for="(item, index) in queried" :key="index">
+          <li class="list-group-item">
+            <a :href="item.url" class="d-flex text-secondary">
+              <span class="pr-2" v-html="item.icon"></span>
+              <span class="text-body text-left" v-html="item.title"></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+</div>
+    </div>
+  </div>
+</nav>
+
+    
+
+
+
+<div class="post post-sidebar container-fluid">
+  <div class="row justify-content-xl-center">
+    
+
+    
+    <main class="main col">
+      
+
+      <h2 id="workstation-preparation">Workstation preparation <a class="direct-link" href="#workstation-preparation"> </a></h2>
+<p>I work on 3 kind of platform : macOs, Ubuntu and Windows 10, and my tests are working on all of them.</p>
+<p>You will need to install :</p>
+<ol>
+<li>PowerShell (6.2.3 at least)
+<ol>
+<li>Powershell Az module</li>
+<li>Pester (at least 4.9)</li>
+</ol>
+</li>
+<li>VS Code
+<ol>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=alexkrechik.cucumberautocomplete">Gherkin plugin</a></li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell">PowerShell</a></li>
+</ol>
+</li>
+</ol>
+<h3 id="install-powershell-and-modules">Install Powershell and modules <a class="direct-link" href="#install-powershell-and-modules"> </a></h3>
+<h4 id="powershell-6">Powershell 6 <a class="direct-link" href="#powershell-6"> </a></h4>
+<h5 id="manual-installation">Manual installation <a class="direct-link" href="#manual-installation"> </a></h5>
+<p>First, download the suitable version of powershell for your system on GitHub. Yes, if you miss it, that is now fully open source.<br>
+<a href="https://github.com/PowerShell/PowerShell/releases">https://github.com/PowerShell/PowerShell/releases</a></p>
+<h5 id="package-manager">Package Manager <a class="direct-link" href="#package-manager"> </a></h5>
+<h6 id="macos">macOS <a class="direct-link" href="#macos"> </a></h6>
+<p>If you use macOs, <a href="https://brew.sh/">brew</a> can manage it  for you:</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line">brew <span class="token function">install</span> powershell</span></code></pre>
+<h6 id="ubuntu">Ubuntu <a class="direct-link" href="#ubuntu"> </a></h6>
+<p>On Ubuntu, snap can do the job also :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">sudo</span> snap <span class="token function">install</span> powershell --classic</span></code></pre>
+<h6 id="windows">Windows <a class="direct-link" href="#windows"> </a></h6>
+<p>On Windows, Chocolatey is working well:</p>
+<pre class="language-powershell"><code class="language-powershell"><span class="highlight-line">choco install pwsh</span></code></pre>
+<h4 id="modules">Modules <a class="direct-link" href="#modules"> </a></h4>
+<p>Installing module in PowerShell is quite easy. You only need to type the following :</p>
+<pre class="language-powershell"><code class="language-powershell"><span class="highlight-line">Install<span class="token operator">-</span>PackageProvider Nuget <span class="token operator">-</span>ForceBootstrap <span class="token operator">-</span>Force</span><br><span class="highlight-line"><span class="token function">Set</span><span class="token operator">-</span>PSRepository <span class="token operator">-</span>Name PSGallery <span class="token operator">-</span>InstallationPolicy Trusted</span><br><span class="highlight-line">Update<span class="token operator">-</span>Module</span><br><span class="highlight-line">Install<span class="token operator">-</span>Module <span class="token operator">-</span>Name Pester <span class="token operator">-</span>Force <span class="token operator">-</span>SkipPublisherCheck</span><br><span class="highlight-line">Install<span class="token operator">-</span>Module <span class="token operator">-</span>Name Az <span class="token operator">-</span>force</span></code></pre>
+<blockquote>
+<p>Some command may not be useful on your setup, but this way ensure that you have the latest version of each module</p>
+</blockquote>
+<h3 id="visual-studio-code">Visual Studio Code <a class="direct-link" href="#visual-studio-code"> </a></h3>
+<p>You can install Vs Code manually or by using a Package Manager using choco, snap or brew. I'll not detail this part.</p>
+<h4 id="extensions-installation">Extensions installation <a class="direct-link" href="#extensions-installation"> </a></h4>
+<p>To install the extension, you can use the GUI of Vs Code or the cmdline. For Gui, take a look at the doc <a href="https://code.visualstudio.com/docs/editor/extension-gallery">here</a>.</p>
+<p>For the cmdline :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line">code --install-extension alexkrechik.cucumberautocomplete</span><br><span class="highlight-line">code --install-extension ms-vscode.powershell</span></code></pre>
+<blockquote>
+<p>on Linux and macOs, you'll need to add the following in your profile, adapt the path to Vs Code to yours :</p>
+<p><strong>bash</strong>:</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">cat</span> <span class="token operator">&lt;&lt;</span> EOF <span class="token operator">>></span> ~/.bash_profile</span><br><span class="highlight-line"><span class="token comment"># Add Visual Studio Code (code)</span></span><br><span class="highlight-line"><span class="token builtin class-name">export</span> <span class="token assign-left variable"><span class="token environment constant">PATH</span></span><span class="token operator">=</span><span class="token string">"\<span class="token environment constant">$PATH</span>:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"</span></span><br><span class="highlight-line">EOF</span></code></pre>
+<p><strong>zsh</strong>:</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">cat</span> <span class="token operator">&lt;&lt;</span> EOF <span class="token operator">>></span> ~/.zsh_profile</span><br><span class="highlight-line"><span class="token comment"># Add Visual Studio Code (code)</span></span><br><span class="highlight-line"><span class="token builtin class-name">export</span> <span class="token assign-left variable"><span class="token environment constant">PATH</span></span><span class="token operator">=</span><span class="token string">"\<span class="token environment constant">$PATH</span>:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"</span></span><br><span class="highlight-line">EOF</span></code></pre>
+</blockquote>
+
+    </main>
+    <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2">
+      <nav class="sticky-top">
+        <div class="">
+                <ol>
+                    
+                    <li><a href="#workstation-preparation">Workstation preparation  </a>
+            
+                <ol>
+                    
+                    <li><a href="#install-powershell-and-modules">Install Powershell and modules  </a>
+            		</li>
+
+                    <li><a href="#visual-studio-code">Visual Studio Code  </a>
+            		</li>
+                </ol>
+            		</li>
+                </ol>
+            </div>
+      </nav>
+    </aside>
+  </div>
+</div>
+</div>
+    <footer class="site-footer bg-transparent pb-3 pb-md-5">
+      <div class="layout-social container d-flex justify-content-center">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</div>
+    </footer>
+  </body>
+
+</html>

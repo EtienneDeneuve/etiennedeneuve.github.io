@@ -88,12 +88,18 @@
   </div>
 </nav>
 
+    
+
+
+
+<div class="post post-sidebar container-fluid">
+  <div class="row justify-content-xl-center">
+    
+
+    
+    <main class="main col">
       
 
- 
-  <div class="post post-sidebar container-fluid">
-    <div class="row justify-content-xl-center">
-      <main class="main col">
       <h1 id="nginx">Nginx <a class="direct-link" href="#nginx"> </a></h1>
 <p>Nginx est un serveur Web modulaire qui fonctionne très bien en reverse proxy et possède de nombreuses possibilités. De plus il est très léger, je vous invite à consulter leur site : <a href="http://nginx.org/">www.nginx.org</a></p>
 <h2 id="la-probl%C3%A9matique">La problématique <a class="direct-link" href="#la-probl%C3%A9matique"> </a></h2>
@@ -145,9 +151,9 @@ le paramètre gi sert à indiquer que nous souhaitons ré-écrire tout (toute le
 <p>Dans le cas de mon blog, si je souhaite mettre en place une copie de mon site avec par exemple comme url &quot;test.deneuve.xyz&quot; sans rien toucher (en dehors d'une petite copie) je devrai faire un nginx.conf tel que :</p>
 <pre class="language-nginx"><code class="language-nginx"><span class="highlight-line"><span class="token keyword">server</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">        <span class="token keyword">listen</span>       <span class="token number">80</span><span class="token punctuation">;</span></span><br><span class="highlight-line">        <span class="token keyword">server_name</span>     localhost</span><br><span class="highlight-line">                        test<span class="token punctuation">.</span>deneuve<span class="token punctuation">.</span>xyz<span class="token punctuation">;</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">        <span class="token keyword">access_log</span>  <span class="token operator">/</span>var<span class="token operator">/</span>log<span class="token operator">/</span>nginx<span class="token operator">/</span>test<span class="token punctuation">.</span>access<span class="token punctuation">.</span>log  main<span class="token punctuation">;</span></span><br><span class="highlight-line">        <span class="token keyword">error_log</span> <span class="token operator">/</span>var<span class="token operator">/</span>log<span class="token operator">/</span>nginx<span class="token operator">/</span>test<span class="token punctuation">.</span>error<span class="token punctuation">.</span>log  main<span class="token punctuation">;</span></span><br><span class="highlight-line">        <span class="token keyword">location</span> <span class="token operator">/</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">                <span class="token keyword">proxy_pass</span>      <span class="token keyword">http</span><span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="token number">192.168</span><span class="token number">.1</span><span class="token number">.150</span><span class="token punctuation">:</span><span class="token number">80</span><span class="token punctuation">;</span> <span class="token comment">#ipduserveurbidon</span></span><br><span class="highlight-line">                <span class="token keyword">proxy_set_header</span> Host etienne<span class="token punctuation">.</span>deneuve<span class="token punctuation">.</span>xyz<span class="token punctuation">;</span></span><br><span class="highlight-line">                <span class="token keyword">proxy_set_header</span> Accept<span class="token operator">-</span>Encoding <span class="token string">""</span><span class="token punctuation">;</span></span><br><span class="highlight-line">                subs_filter etienne<span class="token punctuation">.</span>deneuve<span class="token punctuation">.</span>xyz test<span class="token punctuation">.</span>deneuve<span class="token punctuation">.</span>xyz gi<span class="token punctuation">;</span></span><br><span class="highlight-line">        <span class="token punctuation">}</span></span><br><span class="highlight-line">    <span class="token punctuation">}</span></span></code></pre>
 
-      </main>
-      <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2" >
-        <nav class="sticky-top">
+    </main>
+    <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2">
+      <nav class="sticky-top">
         <div class="">
                 <ol>
                     
@@ -173,12 +179,11 @@ le paramètre gi sert à indiquer que nous souhaitons ré-écrire tout (toute le
             		</li>
                 </ol>
             </div>
-        </nav>
-      </aside>
-    </div>
+      </nav>
+    </aside>
   </div>
 </div>
-
+</div>
     <footer class="site-footer bg-transparent pb-3 pb-md-5">
       <div class="layout-social container d-flex justify-content-center">
 

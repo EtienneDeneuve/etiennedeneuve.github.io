@@ -112,6 +112,11 @@
   </url>
   
   <url>
+    <loc>/privacy/</loc>
+    <lastmod>2018-06-23</lastmod>
+  </url>
+  
+  <url>
     <loc>/2018/06/23/git-pour-ops-par-un-ops/</loc>
     <lastmod>2018-06-23</lastmod>
   </url>
@@ -147,7 +152,27 @@
   </url>
   
   <url>
-    <loc>/2020/02/07/infra-testing-easy-path/</loc>
+    <loc>/posts/infra-testing-easy-path/02_workstation/</loc>
+    <lastmod>2020-02-07</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/infra-testing-easy-path/03_firsts_tests/</loc>
+    <lastmod>2020-02-07</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/infra-testing-easy-path/04_azure_devops/</loc>
+    <lastmod>2020-02-07</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/infra-testing-easy-path/05_working_with_tests/</loc>
+    <lastmod>2020-02-07</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/infra-testing-easy-path/</loc>
     <lastmod>2020-02-07</lastmod>
   </url>
   

@@ -88,19 +88,25 @@
   </div>
 </nav>
 
+    
+
+
+
+<div class="post post-sidebar container-fluid">
+  <div class="row justify-content-xl-center">
+    
+
+    
+    <main class="main col">
       
 
- 
-  <div class="post post-sidebar container-fluid">
-    <div class="row justify-content-xl-center">
-      <main class="main col">
       <h1 id="az-cli-2.0">Az CLI 2.0 <a class="direct-link" href="#az-cli-2.0"> </a></h1>
 <h2 id="how-to-delete-multiple-managed-disk-at-once">How to delete multiple managed disk at once <a class="direct-link" href="#how-to-delete-multiple-managed-disk-at-once"> </a></h2>
 <pre class="language-shell"><code class="language-shell"><span class="highlight-line">az disk list -g YourRG --query <span class="token punctuation">[</span><span class="token punctuation">]</span>.name --output tsv <span class="token operator">|</span> <span class="token function">xargs</span> -n <span class="token number">1</span> az disk delete -g YourRG --yes -n</span></code></pre>
 
-      </main>
-      <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2" >
-        <nav class="sticky-top">
+    </main>
+    <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2">
+      <nav class="sticky-top">
         <div class="">
                 <ol>
                     
@@ -108,12 +114,11 @@
             		</li>
                 </ol>
             </div>
-        </nav>
-      </aside>
-    </div>
+      </nav>
+    </aside>
   </div>
 </div>
-
+</div>
     <footer class="site-footer bg-transparent pb-3 pb-md-5">
       <div class="layout-social container d-flex justify-content-center">
 

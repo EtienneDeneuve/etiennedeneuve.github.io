@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="msvalidate.01" content="DE6C71A9BE4E011D01CC38799992B4A6" />
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    
+
+    <title>XYZ Blog</title>
+    <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js" integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    
+      <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script>
+    
+
+    <script src="/js/script.js"></script>
+    </head>
+  <body class="position-relative" data-spy="scroll" data-target=".site-nav" data-offset="55">
+    <nav class="site-nav family-sans navbar navbar-expand-md navbar-dark  sidebar sticky-top  py-0">
+  <div class="container-fluid">
+    <button type="button" class="navbar-toggler my-2 my-md-0" data-toggle="collapse" data-target="#myTogglerNav" aria-controls="myTogglerNav" aria-label="Toggle Navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="navbar-brand text-uppercase">
+      <a class="text-light" href="/"><i class="fas fa-cube mr-2"></i>XYZ Blog</a> 
+    </div>
+
+    <div class="collapse navbar-collapse text-center mt-0" id="myTogglerNav">
+      <div class="navbar-nav ml-auto font-weight-regular text-uppercase">
+        
+        <a class="d-none nav-item nav-link" href="#page-hero">hero target</a>
+        <a class="d-none nav-item nav-link" href="#main-content">nav target</a>
+        
+        <a class="nav-item nav-link font-weight-bold  text-light" href="/"><i class="fas fa-home"></i></a>
+        
+          <a class="nav-item nav-link" href="/posts/0/">posts</a>
+          
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-user"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+            <a class="dropdown-item text-capitalize" href="/about">About Me</a>
+            <div class="dropdown-divider"></div><a class="dropdown-item text-capitalize" target="_blank" href="https://github.com/etiennedeneuve">
+            <i class="fab fa-github text-secondary mr-2"></i>github
+          </a><a class="dropdown-item text-capitalize" target="_blank" href="https://linkedin.com/in/etiennedeneuve">
+            <i class="fab fa-linkedin text-secondary mr-2"></i>linkedin
+          </a><a class="dropdown-item text-capitalize" target="_blank" href="https://twitter.com/etiennedinfo">
+            <i class="fab fa-twitter text-secondary mr-2"></i>twitter
+          </a></div>
+        </div>
+      </div>
+      <div class="searchbox pl-2 py-2">
+    <input
+      type="text"
+      v-model="query"
+      class="form-control text-white border m-auto"
+      :class="[isActive ? 'wide' : 'short']"
+      @focus="isActive=true"
+      @blur.prevent="handleBlur"
+      ref="searchinput"
+      style="background: transparent;"
+      aria-describedby="searchinput"
+      autocomplete="on"
+    >
+    <div v-if="query && isActive" class="position-absolute justify-content-center" style="top: 47px;">
+      <div class="card bg-secondary">
+        <ul class="list-group list-group-flush px-0" v-for="(item, index) in queried" :key="index">
+          <li class="list-group-item">
+            <a :href="item.url" class="d-flex text-secondary">
+              <span class="pr-2" v-html="item.icon"></span>
+              <span class="text-body text-left" v-html="item.title"></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+</div>
+    </div>
+  </div>
+</nav>
+
+    
+
+
+
+<div class="post post-sidebar container-fluid">
+  <div class="row justify-content-xl-center">
+    
+
+    
+    <main class="main col">
+      
+
+      <h2 id="who-we-are">Who we are <a class="direct-link" href="#who-we-are"> </a></h2>
+<p>Our website address is: <a href="https://etienne.deneuve.xyz.">https://etienne.deneuve.xyz.</a></p>
+<h2 id="what-personal-data-we-collect-and-why-we-collect-it">What personal data we collect and why we collect it <a class="direct-link" href="#what-personal-data-we-collect-and-why-we-collect-it"> </a></h2>
+<h3 id="comments">Comments <a class="direct-link" href="#comments"> </a></h3>
+<p>When visitors leave comments on the site we collect the data shown in the comments form, and also the visitor’s IP address and browser user agent string to help spam detection.</p>
+<p>An anonymized string created from your email address (also called a hash) may be provided to the Gravatar service to see if you are using it. The Gravatar service privacy policy is available here: <a href="https://automattic.com/privacy/.">https://automattic.com/privacy/.</a> After approval of your comment, your profile picture is visible to the public in the context of your comment.</p>
+<h3 id="media">Media <a class="direct-link" href="#media"> </a></h3>
+<p>If you upload images to the website, you should avoid uploading images with embedded location data (EXIF GPS) included. Visitors to the website can download and extract any location data from images on the website.</p>
+<h3 id="contact-forms">Contact forms <a class="direct-link" href="#contact-forms"> </a></h3>
+<h3 id="cookies">Cookies <a class="direct-link" href="#cookies"> </a></h3>
+<p>If you leave a comment on our site you may opt-in to saving your name, email address and website in cookies. These are for your convenience so that you do not have to fill in your details again when you leave another comment. These cookies will last for one year.</p>
+<p>If you have an account and you log in to this site, we will set a temporary cookie to determine if your browser accepts cookies. This cookie contains no personal data and is discarded when you close your browser.</p>
+<p>When you log in, we will also set up several cookies to save your login information and your screen display choices. Login cookies last for two days, and screen options cookies last for a year. If you select &quot;Remember Me&quot;, your login will persist for two weeks. If you log out of your account, the login cookies will be removed.</p>
+<p>If you edit or publish an article, an additional cookie will be saved in your browser. This cookie includes no personal data and simply indicates the post ID of the article you just edited. It expires after 1 day.</p>
+<h3 id="embedded-content-from-other-websites">Embedded content from other websites <a class="direct-link" href="#embedded-content-from-other-websites"> </a></h3>
+<p>Articles on this site may include embedded content (e.g. videos, images, articles, etc.). Embedded content from other websites behaves in the exact same way as if the visitor has visited the other website.</p>
+<p>These websites may collect data about you, use cookies, embed additional third-party tracking, and monitor your interaction with that embedded content, including tracing your interaction with the embedded content if you have an account and are logged in to that website.</p>
+<h3 id="analytics">Analytics <a class="direct-link" href="#analytics"> </a></h3>
+<h2 id="who-we-share-your-data-with">Who we share your data with <a class="direct-link" href="#who-we-share-your-data-with"> </a></h2>
+<h2 id="how-long-we-retain-your-data">How long we retain your data <a class="direct-link" href="#how-long-we-retain-your-data"> </a></h2>
+<p>If you leave a comment, the comment and its metadata are retained indefinitely. This is so we can recognize and approve any follow-up comments automatically instead of holding them in a moderation queue.</p>
+<p>For users that register on our website (if any), we also store the personal information they provide in their user profile. All users can see, edit, or delete their personal information at any time (except they cannot change their username). Website administrators can also see and edit that information.</p>
+<h2 id="what-rights-you-have-over-your-data">What rights you have over your data <a class="direct-link" href="#what-rights-you-have-over-your-data"> </a></h2>
+<p>If you have an account on this site, or have left comments, you can request to receive an exported file of the personal data we hold about you, including any data you have provided to us. You can also request that we erase any personal data we hold about you. This does not include any data we are obliged to keep for administrative, legal, or security purposes.</p>
+<h2 id="where-we-send-your-data">Where we send your data <a class="direct-link" href="#where-we-send-your-data"> </a></h2>
+<p>Visitor comments may be checked through an automated spam detection service.</p>
+
+    </main>
+    <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2">
+      <nav class="sticky-top">
+        <div class="">
+                <ol>
+                    
+                    <li><a href="#who-we-are">Who we are  </a>
+            		</li>
+
+                    <li><a href="#what-personal-data-we-collect-and-why-we-collect-it">What personal data we collect and why we collect it  </a>
+            
+                <ol>
+                    
+                    <li><a href="#comments">Comments  </a>
+            		</li>
+
+                    <li><a href="#media">Media  </a>
+            		</li>
+
+                    <li><a href="#contact-forms">Contact forms  </a>
+            		</li>
+
+                    <li><a href="#cookies">Cookies  </a>
+            		</li>
+
+                    <li><a href="#embedded-content-from-other-websites">Embedded content from other websites  </a>
+            		</li>
+
+                    <li><a href="#analytics">Analytics  </a>
+            		</li>
+                </ol>
+            		</li>
+
+                    <li><a href="#who-we-share-your-data-with">Who we share your data with  </a>
+            		</li>
+
+                    <li><a href="#how-long-we-retain-your-data">How long we retain your data  </a>
+            		</li>
+
+                    <li><a href="#what-rights-you-have-over-your-data">What rights you have over your data  </a>
+            		</li>
+
+                    <li><a href="#where-we-send-your-data">Where we send your data  </a>
+            		</li>
+                </ol>
+            </div>
+      </nav>
+    </aside>
+  </div>
+</div>
+</div>
+    <footer class="site-footer bg-transparent pb-3 pb-md-5">
+      <div class="layout-social container d-flex justify-content-center">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</div>
+    </footer>
+  </body>
+
+</html>

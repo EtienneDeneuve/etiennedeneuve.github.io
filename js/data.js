@@ -6,13 +6,6 @@
   "url": "/2020/02/25/terraform-azurerm-2/",
   "tags" : "Azure,PowerShell,Azure Devops,Cloud,Tests"
 },{
-  "title": "IaC &amp; Tests",
-  "date" : "Feb 07, 2020",
-  "summary" : "I was looking for the easiest way to test Azure infrastructure.",
-  
-  "url": "/2020/02/07/infra-testing-easy-path/",
-  "tags" : "Azure,PowerShell,Azure Devops,Cloud,Tests"
-},{
   "title": "How to install Azure Stack Dev kit in a breeze",
   "date" : "Dec 05, 2018",
   "summary" : "Quick install guide for Azure Stack Development kit",

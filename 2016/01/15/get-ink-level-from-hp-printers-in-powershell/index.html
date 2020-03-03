@@ -88,28 +88,33 @@
   </div>
 </nav>
 
+    
+
+
+
+<div class="post post-sidebar container-fluid">
+  <div class="row justify-content-xl-center">
+    
+
+    
+    <main class="main col">
       
 
- 
-  <div class="post post-sidebar container-fluid">
-    <div class="row justify-content-xl-center">
-      <main class="main col">
       <p>I've find a way to get details about cardrige on low end hp printer !</p>
 <p>Get it on my Git ! <a href="https://github.com/EtienneDeneuve/Powershell/blob/master/HpPrinter/Snippet" target="_blank" rel="noopener">HP Snippet </a></p>
 <pre>$Web = New-object System.Net.WebClient
 [xml]$stringprinter = $Web.DownloadString("http://printerhp/DevMgmt/ConsumableConfigDyn.xml")
 $stringprinter.ConsumableConfigDyn.ConsumableInfo | Select ConsumableLabelCode,ConsumablePercentageLevelRemaining 
 </pre>
-      </main>
-      <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2" >
-        <nav class="sticky-top">
+    </main>
+    <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2">
+      <nav class="sticky-top">
         
-        </nav>
-      </aside>
-    </div>
+      </nav>
+    </aside>
   </div>
 </div>
-
+</div>
     <footer class="site-footer bg-transparent pb-3 pb-md-5">
       <div class="layout-social container d-flex justify-content-center">
 

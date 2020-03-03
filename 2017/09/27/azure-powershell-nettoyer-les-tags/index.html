@@ -88,12 +88,18 @@
   </div>
 </nav>
 
+    
+
+
+
+<div class="post post-sidebar container-fluid">
+  <div class="row justify-content-xl-center">
+    
+
+    
+    <main class="main col">
       
 
- 
-  <div class="post post-sidebar container-fluid">
-    <div class="row justify-content-xl-center">
-      <main class="main col">
       <p>Quand on fait de l'Azure, il peut arriver qu'on souhaite nettoyer les Tags, pour de multiples raisons.</p>
 <p>Voici un peu  de Powershell pour :</p>
 <ol>
@@ -121,16 +127,15 @@ Get-AzureRMTag |  Out-GridView -PassThru | Remove-AzureRMTag
 }
 </code></pre>
 <code class="PowerShell hljs">Out-GridView -PassThru</code> Vous permet de choisir ceux que vous souhaitez supprimer :)
-      </main>
-      <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2" >
-        <nav class="sticky-top">
+    </main>
+    <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2">
+      <nav class="sticky-top">
         
-        </nav>
-      </aside>
-    </div>
+      </nav>
+    </aside>
   </div>
 </div>
-
+</div>
     <footer class="site-footer bg-transparent pb-3 pb-md-5">
       <div class="layout-social container d-flex justify-content-center">
 
