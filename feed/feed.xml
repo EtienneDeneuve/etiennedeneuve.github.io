@@ -798,9 +798,8 @@ git commit -m &amp;amp;quot;oui, c&amp;amp;#039;est bon on y va !&amp;amp;quot;
 		<link href="/2018/06/26/documentation-as-code/"/>
 		<updated>2018-06-26T15:43:44+02:00</updated>
 		<id>/2018/06/26/documentation-as-code/</id>
-		<content type="html">&lt;h2&gt;Le constat&lt;/h2&gt;
-Bien souvent, dans l&#39;Infra as Code, la documentation est assez sommaire, trop manuelle et donc par conséquents obsolète, une heure après l&#39;avoir terminée ( et puis globalement, c&#39;est ch*** non ?).
-&lt;!--more--&gt;
+		<content type="html">&lt;h2 id=&quot;le-constat&quot;&gt;Le constat &lt;a class=&quot;direct-link&quot; href=&quot;#le-constat&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Bien souvent, dans l&#39;Infra as Code, la documentation est assez sommaire, trop manuelle et donc par conséquents obsolète, une heure après l&#39;avoir terminée ( et puis globalement, c&#39;est ch*** non ?).&lt;/p&gt;
 &lt;p&gt;Si vous n&#39;avez pas encore lu les articles suivants :&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://etienne.deneuve.xyz/2018/06/23/git-pour-ops-par-un-ops/&quot;&gt;&lt;a href=&quot;&quot;&gt;Git for ops&lt;/a&gt;&lt;/a&gt;&lt;/li&gt;
@@ -988,7 +987,7 @@ Afin de transformer ces scripts en &quot;hooks&quot; il suffit de les placer dan
 		<updated>2018-06-26T15:03:40+02:00</updated>
 		<id>/2018/06/26/setup-vs-code-bash-git/</id>
 		<content type="html">&lt;p&gt;Dans cet article, je vous expose mon setup pour Terraform et Ansible, avec git depuis un poste Windows 10.&lt;/p&gt;
-&lt;!--more--&gt;Si vous ne connaissez pas encore Git, je vous invite à lire mes articles à ce sujet :
+&lt;p&gt;Si vous ne connaissez pas encore Git, je vous invite à lire mes articles à ce sujet :&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://etienne.deneuve.xyz/2018/06/23/git-pour-ops-par-un-ops/&quot;&gt;Git for ops&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://etienne.deneuve.xyz/2018/06/28/git-pour-les-ops-par-un-ops-le-retour/&quot;&gt;Git for ops, le retour&lt;/a&gt;&lt;br&gt;
@@ -1314,8 +1313,8 @@ git checkout -b v0-azure
 		<id>/2018/04/06/terraform-providers-datasource/</id>
 		<content type="html">&lt;h1 id=&quot;terraform&quot;&gt;Terraform &lt;a class=&quot;direct-link&quot; href=&quot;#terraform&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
 &lt;h2 id=&quot;avant-de-%22coder%22&quot;&gt;Avant de &amp;quot;coder&amp;quot; &lt;a class=&quot;direct-link&quot; href=&quot;#avant-de-%22coder%22&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;Je ne vous présente pas à nouveau Terraform, je l&#39;ai déjà fait &lt;a href=&quot;https://etienne.deneuve.xyz/2017/10/01/microsoft-experience-17-infrastructure-code-modelisez-et-provisionnez-vos-services-azure-avec-terraform-et-packer/&quot;&gt;ici&lt;/a&gt;, &lt;a href=&quot;https://stanislas.io/2017/01/24/infrastructure-dans-azure-c-est-comme-du-lego-slides-et-ressources-utiles/&quot;&gt;ici&lt;/a&gt; ou sinon sur mon &lt;a href=&quot;https://github.com/etiennedeneuve/Azure/tree/master/Terraform&quot;&gt;github&lt;/a&gt;. Je vous invite également à regarder la &lt;a href=&quot;https://stanislas.io/2017/09/18/video-infrastructure-as-code-dans-azure-avec-terraform/&quot;&gt;vidéo&lt;/a&gt; de Stanislas Quastana.&lt;br&gt;
-Si vous êtes des partenaires Microsoft, vous pouvez (devez) suivre les webinars &lt;a href=&quot;http://aka.ms/azure-lab&quot;&gt;Azure Lab Experiences&lt;/a&gt; de &lt;a href=&quot;https://www.linkedin.com/in/oseborn/&quot;&gt;Mickael Debois&lt;/a&gt; et de &lt;a href=&quot;https://www.linkedin.com/in/florent-chambon/&quot;&gt;Florent Chambon&lt;/a&gt;.&lt;br&gt;
+&lt;p&gt;Je ne vous présente pas à nouveau Terraform, je l&#39;ai déjà fait &lt;a href=&quot;https://etienne.deneuve.xyz/2017/10/01/microsoft-experience-17-infrastructure-code-modelisez-et-provisionnez-vos-services-azure-avec-terraform-et-packer/&quot;&gt;ici&lt;/a&gt;, &lt;a href=&quot;https://stanislas.io/2017/01/24/infrastructure-dans-azure-c-est-comme-du-lego-slides-et-ressources-utiles/&quot;&gt;ici&lt;/a&gt; ou sinon sur mon &lt;a href=&quot;https://github.com/etiennedeneuve/Azure/tree/master/Terraform&quot;&gt;github&lt;/a&gt;. Je vous invite également à regarder la &lt;a href=&quot;https://stanislas.io/2017/09/18/video-infrastructure-as-code-dans-azure-avec-terraform/&quot;&gt;vidéo&lt;/a&gt; de Stanislas Quastana.&lt;/p&gt;
+&lt;p&gt;Si vous êtes des partenaires Microsoft, vous pouvez (devez) suivre les webinars &lt;a href=&quot;http://aka.ms/azure-lab&quot;&gt;Azure Lab Experiences&lt;/a&gt; de &lt;a href=&quot;https://www.linkedin.com/in/oseborn/&quot;&gt;Mickael Debois&lt;/a&gt; et de &lt;a href=&quot;https://www.linkedin.com/in/florent-chambon/&quot;&gt;Florent Chambon&lt;/a&gt;.&lt;br&gt;
 L&#39;objet de cet article est de vous montrer quelques points intéressants qu&#39;il est bon de connaître !&lt;/p&gt;
 &lt;h2 id=&quot;providers&quot;&gt;Providers &lt;a class=&quot;direct-link&quot; href=&quot;#providers&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Terraform repose sur des providers que nous pouvons déclarer tel que :&lt;/p&gt;
@@ -1533,8 +1532,8 @@ value = &amp;quot;${data.azurerm_virtual_network.test.id}&amp;quot;
 		<link href="/2017/10/25/vsts-for-ops-part-3/"/>
 		<updated>2017-10-25T12:11:10+02:00</updated>
 		<id>/2017/10/25/vsts-for-ops-part-3/</id>
-		<content type="html">&lt;p&gt;Dans cet article, je vous détaille la partie (cachée) de ma démo lors de ma session au Microsoft Expérience 17 avec Stanislas Quastana. Le but de cet article est de créer notre première build ! Les prochains arriveront rapidement, avec dans l’idée, de vous aider à mieux appréhender le CI/CD en tant qu’OPS, pour des sujets qui nous concernent, l’infra as code.&lt;br&gt;
-Voici le chemin que nous allons suivre :&lt;/p&gt;
+		<content type="html">&lt;p&gt;Dans cet article, je vous détaille la partie (cachée) de ma démo lors de ma session au Microsoft Expérience 17 avec Stanislas Quastana. Le but de cet article est de créer notre première build ! Les prochains arriveront rapidement, avec dans l’idée, de vous aider à mieux appréhender le CI/CD en tant qu’OPS, pour des sujets qui nous concernent, l’infra as code.&lt;/p&gt;
+&lt;p&gt;Voici le chemin que nous allons suivre :&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Préparation de l’environnement&lt;/li&gt;
 &lt;li&gt;Préparation d’une image de base Linux&lt;/li&gt;
@@ -1614,8 +1613,8 @@ mv ./packer /usr/local/bin/
 		<link href="/2017/10/13/vsts-for-ops-2/"/>
 		<updated>2017-10-13T14:15:42+02:00</updated>
 		<id>/2017/10/13/vsts-for-ops-2/</id>
-		<content type="html">&lt;p&gt;Dans cet article, je vous détaille la partie (cachée) de ma démo lors de ma session au Microsoft Expérience 17 avec Stanislas Quastana. Le but de cet article est de préparer les éléments nécessaire a notre usine à images systèmes. Les prochains arriverons rapidement, avec dans l&#39;idée, de vous aider à mieux appréhendez le CI/CD en tant qu&#39;OPS, pour des sujets qui nous concernent, l&#39;infra as code.&lt;br&gt;
-Voici le chemin que nous allons suivre :&lt;/p&gt;
+		<content type="html">&lt;p&gt;Dans cet article, je vous détaille la partie (cachée) de ma démo lors de ma session au Microsoft Expérience 17 avec Stanislas Quastana. Le but de cet article est de préparer les éléments nécessaire a notre usine à images systèmes. Les prochains arriverons rapidement, avec dans l&#39;idée, de vous aider à mieux appréhendez le CI/CD en tant qu&#39;OPS, pour des sujets qui nous concernent, l&#39;infra as code.&lt;/p&gt;
+&lt;p&gt;Voici le chemin que nous allons suivre :&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Préparation de l&#39;environnement [nous sommes ici, toujours]&lt;/li&gt;
 &lt;li&gt;Préparation d&#39;une image de base Linux&lt;/li&gt;
@@ -1681,8 +1680,8 @@ Pour créer les dossiers, soit vous le faite en &quot;graphique&quot; :
 		<link href="/2017/10/09/vsts-for-ops-1/"/>
 		<updated>2017-10-09T20:30:55+02:00</updated>
 		<id>/2017/10/09/vsts-for-ops-1/</id>
-		<content type="html">&lt;p&gt;Dans cet article, je vous détaille la partie (cachée) de ma démo lors de ma session au Microsoft Expérience 17 avec Stanislas Quastana. Le but de cet article est de préparer le terrain pour les articles suivants. Les prochains arriverons rapidement, avec dans l&#39;idée, de vous aider à mieux appréhendez le CI/CD en tant qu&#39;OPS, pour des sujets qui nous concernent, l&#39;infra as code.&lt;br&gt;
-Voici le chemin que nous allons suivre :&lt;/p&gt;
+		<content type="html">&lt;p&gt;Dans cet article, je vous détaille la partie (cachée) de ma démo lors de ma session au Microsoft Expérience 17 avec Stanislas Quastana. Le but de cet article est de préparer le terrain pour les articles suivants. Les prochains arriverons rapidement, avec dans l&#39;idée, de vous aider à mieux appréhendez le CI/CD en tant qu&#39;OPS, pour des sujets qui nous concernent, l&#39;infra as code.&lt;/p&gt;
+&lt;p&gt;Voici le chemin que nous allons suivre :&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Préparation de l&#39;environnement [nous sommes ici]&lt;/li&gt;
 &lt;li&gt;Préparation d&#39;une image de base Linux&lt;/li&gt;
@@ -1732,54 +1731,6 @@ sudo ./svc.sh start&lt;/p&gt;
 Si vous accédez à l&#39;url https://{votrenomavous}.visualstudio.com/_admin/_AgentPool vous devriez voir que votre agent est en vert !
 &amp;lt;img class=&amp;quot;alignnone size-full wp-image-321&amp;quot; src=&amp;quot;https://etienne.deneuve.xyz/wp-content/uploads/2017/10/Capture-Agent-Pool.png&amp;quot; alt=&amp;quot;&amp;quot; width=&amp;quot;565&amp;quot; height=&amp;quot;145&amp;quot; /&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
-</content>
-	</entry>
-	
-	<entry>
-		<title>Microsoft Experience 17 : Infrastructure as Code : modélisez et provisionnez vos services Azure avec Terraform et Packer</title>
-		<link href="/2017/10/01/microsoft-experience-17-infrastructure-code-modelisez-et-provisionnez-vos-services-azure-avec-terraform-et-packer/"/>
-		<updated>2017-10-01T22:14:55+02:00</updated>
-		<id>/2017/10/01/microsoft-experience-17-infrastructure-code-modelisez-et-provisionnez-vos-services-azure-avec-terraform-et-packer/</id>
-		<content type="html">&lt;p&gt;Bonsoir,&lt;/p&gt;
-&lt;p&gt;Retrouvez moi Mercredi 4 pour Microsoft Expérience 17 !&lt;/p&gt;
-&lt;p&gt;Voici ma fiche pour retrouver mes infos :&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://experiences17.microsoft.fr/attendee/5d302924-bb93-e711-80c2-000d3a2103ab&quot;&gt;https://experiences17.microsoft.fr/attendee/5d302924-bb93-e711-80c2-000d3a2103ab5002826&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Je serais en session avec &lt;a href=&quot;https://stanislas.io&quot;&gt;Stanislas Quastana &lt;/a&gt;pour la session &lt;span class=&quot;fieldval&quot;&gt;&lt;span class=&quot;fieldtext&quot;&gt;&lt;a href=&quot;https://experiences17.microsoft.fr/session/051cd784-895a-e711-80c2-000d3a21081a&quot;&gt;Infrastructure as Code : modélisez et provisionnez vos services Azure avec Terraform et Packer &lt;/a&gt;de 13h30 à 14h15.&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt; &lt;/p&gt;
-</content>
-	</entry>
-	
-	<entry>
-		<title>MVP !</title>
-		<link href="/2017/10/01/mvp/"/>
-		<updated>2017-10-01T18:51:55+02:00</updated>
-		<id>/2017/10/01/mvp/</id>
-		<content type="html">&lt;p&gt;C&#39;est avec un certain plaisir que je vous l&#39;annonce, je suis désormais MVP Cloud and Datacenter Management !&lt;/p&gt;
-&lt;p&gt;Alors du coup merci à tous !&lt;/p&gt;
-&lt;img class=&quot;alignnone size-full wp-image-310&quot; src=&quot;https://etienne.deneuve.xyz/wp-content/uploads/2017/10/MVP.png&quot; alt=&quot;&quot; width=&quot;719&quot; height=&quot;554&quot;&gt;</content>
-	</entry>
-	
-	<entry>
-		<title>Mon premier it.cast avec Maxime et Pascal (et les autres) !</title>
-		<link href="/2017/09/29/mon-premier-itcast/"/>
-		<updated>2017-09-29T18:32:41+02:00</updated>
-		<id>/2017/09/29/mon-premier-itcast/</id>
-		<content type="html">&lt;p&gt;Bonjour !&lt;/p&gt;
-&lt;p&gt;Voici mon premier IT Cast de &lt;a href=&quot;https://twitter.com/MaximeRastello&quot;&gt;Maxime&lt;/a&gt; et &lt;a href=&quot;https://twitter.com/psauliere&quot;&gt;Pascal&lt;/a&gt; avec &lt;a href=&quot;https://twitter.com/Tseyf34&quot;&gt;Seyfallah Tagrerout&lt;/a&gt;, &lt;a href=&quot;https://twitter.com/LopesMick&quot;&gt;Mickaël Lopes&lt;/a&gt; et, en envoyé spécial a Orlando pour Microsoft Ignite, &lt;a href=&quot;https://twitter.com/jfberenguer_pro&quot;&gt;Jean-François Bérenguer!&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt; &lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://itcast.io/podcast/episode-48-de-honolulu-a-orlando/&quot;&gt;http://itcast.io/podcast/episode-48-de-honolulu-a-orlando/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;J&#39;espere que ça vous plaira !&lt;/p&gt;
-</content>
-	</entry>
-	
-	<entry>
-		<title>Cell&amp;#8217;insights &amp;#8211; &amp;#8220;ISV, Journey to the Cloud&amp;#8221; dans les bacs!</title>
-		<link href="/2017/09/27/cellinsights-isv-journey-cloud-dans-les-bacs/"/>
-		<updated>2017-09-27T12:53:44+02:00</updated>
-		<id>/2017/09/27/cellinsights-isv-journey-cloud-dans-les-bacs/</id>
-		<content type="html">&lt;p&gt;Mes collègues de Cellenza viennent de sortir un nouveau Cell&#39;Insights !&lt;/p&gt;
-&lt;p&gt;Pour le téléchargez (Gratos !): &lt;a href=&quot;http://www.cellenza.com/fr/cellinsights-8-isv-journey-to-the-cloud/&quot;&gt;http://www.cellenza.com/fr/cellinsights-8-isv-journey-to-the-cloud/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Bravo à Laurent, Manon et Michel !&lt;/p&gt;
 </content>
 	</entry>
 	
@@ -2324,8 +2275,8 @@ az group deployment create \
 		<link href="/2017/03/14/azure-et-le-backup-dun-mac/"/>
 		<updated>2017-03-14T23:29:37+01:00</updated>
 		<id>/2017/03/14/azure-et-le-backup-dun-mac/</id>
-		<content type="html">&lt;p&gt;Un petit article &amp;quot;Quick &amp;amp; very very dirty&amp;quot; qui est soyons honnêtes complètement inutile.&lt;/p&gt;
-&lt;p&gt;Mais quand c&#39;est inutile, c&#39;est possible que ce soit fun !&lt;/p&gt;
+		<content type="html">&lt;p&gt;Un petit article &amp;quot;Quick &amp;amp; very very dirty&amp;quot; qui est soyons honnêtes complètement inutile.&lt;br&gt;
+Mais quand c&#39;est inutile, c&#39;est possible que ce soit fun !&lt;/p&gt;
 &lt;p&gt;/!\ Disclaimer : Je suis pas responsable de vos données perdues ! /!\&lt;/p&gt;
 &lt;iframe class=&quot;giphy-embed&quot; src=&quot;//giphy.com/embed/ULsH97rqqbf68?html5=true&quot; width=&quot;480&quot; height=&quot;269&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;allowfullscreen&quot;&gt;&lt;/iframe&gt;
 &lt;p&gt;&lt;a href=&quot;http://giphy.com/gifs/nuke-atomic-bomb-a-ULsH97rqqbf68&quot;&gt;via GIPHY&lt;/a&gt;&lt;/p&gt;
@@ -2516,7 +2467,7 @@ le paramètre gi sert à indiquer que nous souhaitons ré-écrire tout (toute le
 		<updated>2017-01-26T23:42:55+01:00</updated>
 		<id>/2017/01/26/visual-studio-code-pour-ansible-terraform/</id>
 		<content type="html">&lt;h1 id=&quot;visual-studio-code&quot;&gt;Visual Studio Code &lt;a class=&quot;direct-link&quot; href=&quot;#visual-studio-code&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
-&lt;p&gt;L&#39;Infrastructure as Code, c&#39;est des méthodes et des outils pour faire des infrastructures reproductibles à l&#39;infini.&lt;/p&gt;
+&lt;p&gt;L&#39;Infrastructure as Code, c&#39;est des méthodes et des outils pour faire des infrastructures reproductibles à l&#39;infini.&lt;/p&gt;
 &lt;p&gt;J&#39;utilise quelques outils sur mes deux postes de travail principaux : un pc sous Windows 10 et un mac sous macOs Sierra. J&#39;ai donc besoin d&#39;outils qui peuvent fonctionner sur les deux plateformes sans &amp;quot;galère&amp;quot; et efficace sur les deux plateformes.&lt;/p&gt;
 &lt;p&gt;J&#39;utilise &lt;a href=&quot;https://code.visualstudio.com/&quot;&gt;Visual Studio Code&lt;/a&gt; qui est gratuit, dispo sur Windows, Linux et macOs.&lt;/p&gt;
 &lt;p&gt;Voici quelques plugins que j&#39;ai installé :&lt;/p&gt;
@@ -2563,12 +2514,11 @@ Il s&#39;agit tout simplement de mon fichier de settings de vscode, je le mets a
 		<link href="/2016/01/15/get-ink-level-from-hp-printers-in-powershell/"/>
 		<updated>2016-01-15T10:58:06+01:00</updated>
 		<id>/2016/01/15/get-ink-level-from-hp-printers-in-powershell/</id>
-		<content type="html">&lt;p&gt;I&#39;ve find a way to get details about cardrige on low end hp printer !&lt;/p&gt;
-&lt;p&gt;Get it on my Git ! &lt;a href=&quot;https://github.com/EtienneDeneuve/Powershell/blob/master/HpPrinter/Snippet&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;HP Snippet &lt;/a&gt;&lt;/p&gt;
-&lt;pre&gt;$Web = New-object System.Net.WebClient
-[xml]$stringprinter = $Web.DownloadString(&quot;http://printerhp/DevMgmt/ConsumableConfigDyn.xml&quot;)
-$stringprinter.ConsumableConfigDyn.ConsumableInfo | Select ConsumableLabelCode,ConsumablePercentageLevelRemaining 
-&lt;/pre&gt;</content>
+		<content type="html">&lt;h1 id=&quot;get-ink-level-from-hp-printers-in-powershell&quot;&gt;Get ink level from HP printers in Powershell &lt;a class=&quot;direct-link&quot; href=&quot;#get-ink-level-from-hp-printers-in-powershell&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;I&#39;ve find a way to get details about cardrige on low end hp printer !&lt;br&gt;
+Get it on my Git ! &lt;a href=&quot;https://github.com/EtienneDeneuve/Powershell/blob/master/HpPrinter/Snippet&quot;&gt;HP Snippet&lt;/a&gt;&lt;/p&gt;
+&lt;pre class=&quot;language-powershell&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$Web&lt;/span&gt; = &lt;span class=&quot;token function&quot;&gt;New-object&lt;/span&gt; System&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Net&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;WebClient&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token namespace&quot;&gt;[xml]&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;$stringprinter&lt;/span&gt; = &lt;span class=&quot;token variable&quot;&gt;$Web&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;DownloadString&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;http://printerhp/DevMgmt/ConsumableConfigDyn.xml&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$stringprinter&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ConsumableConfigDyn&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ConsumableInfo &lt;span class=&quot;token punctuation&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Select&lt;/span&gt; ConsumableLabelCode&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;ConsumablePercentageLevelRemaining &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+</content>
 	</entry>
 	
 	<entry>
@@ -2577,8 +2527,8 @@ $stringprinter.ConsumableConfigDyn.ConsumableInfo | Select ConsumableLabelCode,C
 		<updated>2015-12-16T14:44:50+01:00</updated>
 		<id>/2015/12/16/get-nexttrain/</id>
 		<content type="html">&lt;h1 id=&quot;let&#39;s-play-with-sncf-api-and-powershell-!&quot;&gt;Let&#39;s play with SNCF Api and Powershell ! &lt;a class=&quot;direct-link&quot; href=&quot;#let&#39;s-play-with-sncf-api-and-powershell-!&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
-&lt;p&gt;My goal was to get a list of the next train in the train station near my home, from powershell...&lt;/p&gt;
-&lt;p&gt;My functions are below, feel free to leave a comment, copy it, it&#39;s free ! (Now on Github ! &lt;a href=&quot;https://github.com/EtienneDeneuve/Powershell/blob/master/GetNextTrain/TheScript.ps1&quot;&gt;git it !&lt;/a&gt;)&lt;/p&gt;
+&lt;p&gt;My goal was to get a list of the next train in the train station near my home, from powershell...&lt;br&gt;
+My functions are below, feel free to leave a comment, copy it, it&#39;s free ! (Now on Github ! &lt;a href=&quot;https://github.com/EtienneDeneuve/Powershell/blob/master/GetNextTrain/TheScript.ps1&quot;&gt;git it !&lt;/a&gt;)&lt;/p&gt;
 &lt;p&gt;Of course, it&#39;s not a serious post, but more is coming ;)&lt;/p&gt;
 &lt;p&gt;You can try this :&lt;/p&gt;
 &lt;pre class=&quot;language-powershell&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;Get&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;gare &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;gare &lt;span class=&quot;token string&quot;&gt;&quot;clamart&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;idgare &lt;span class=&quot;token punctuation&quot;&gt;|&lt;/span&gt; Get&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;TrainDirection &lt;span class=&quot;token punctuation&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; Get&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;NextTrain &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;idgare &lt;span class=&quot;token variable&quot;&gt;$_&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;idgare &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;traindirection &lt;span class=&quot;token variable&quot;&gt;$_&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;direction &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;FT&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;ETADeparture Direction ETAArrival ETAinMin &lt;span class=&quot;token keyword&quot;&gt;From&lt;/span&gt; GareName&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token operator&quot;&gt;--&lt;/span&gt;-&lt;span class=&quot;token operator&quot;&gt;--&lt;/span&gt;-&lt;span class=&quot;token operator&quot;&gt;--&lt;/span&gt;-&lt;span class=&quot;token operator&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;--&lt;/span&gt;-&lt;span class=&quot;token operator&quot;&gt;--&lt;/span&gt;-&lt;span class=&quot;token operator&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;--&lt;/span&gt;-&lt;span class=&quot;token operator&quot;&gt;--&lt;/span&gt;-&lt;span class=&quot;token operator&quot;&gt;--&lt;/span&gt;-&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;--&lt;/span&gt;-&lt;span class=&quot;token operator&quot;&gt;--&lt;/span&gt;-&lt;span class=&quot;token operator&quot;&gt;--&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;--&lt;/span&gt;-&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;--&lt;/span&gt;-&lt;span class=&quot;token operator&quot;&gt;--&lt;/span&gt;-&lt;span class=&quot;token operator&quot;&gt;--&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;16&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;12&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;2015 13:49:00 Paris&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Montparnasse 1&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;2 &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;Paris&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; 16&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;12&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;2015 13:49:00 0:1:18 Rambouillet vers Paris&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Montparnasse 1&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;2 gare de Clamart&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;16&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;12&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;2015 14:04:00 Paris&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Montparnasse 1&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;2 &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;Paris&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; 16&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;12&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;2015 14:04:00 0:16:18 Mantes&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;la&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Jolie vers Paris&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Montparnasse 1&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;2 gare de Clamart&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;16&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;12&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;2015 14:19:00 Paris&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Montparnasse 1&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;2 &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;Paris&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; 16&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;12&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;2015 14:19:00 0:31:18 Rambouillet vers Paris&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Montparnasse 1&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;2 gare de Clamart&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;16&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;12&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;2015 14:34:00 Paris&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Montparnasse 1&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;2 &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;Paris&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; 16&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;12&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;2015 14:34:00 0:46:18 Plaisir&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Grignon vers Paris&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Montparnasse 1&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;2 gare de Clamart&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;16&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;12&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;2015 14:49:00 Paris&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Montparnasse 1&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;2 &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;Paris&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; 16&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;12&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;2015 14:49:00 1:1:18 Rambouillet vers Paris&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Montparnasse 1&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;2 gare de Clamart&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;16&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;12&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;2015 13:57:00 Mantes&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;la&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Jolie &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;Mantes&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;la&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Jolie&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; 16&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;12&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;2015 13:57:00 0:9:18 Paris&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Montparnasse 1&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;2 vers Mantes&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;la&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Jolie gare de Clamart&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;16&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;12&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;2015 14:57:00 Mantes&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;la&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Jolie &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;Mantes&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;la&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Jolie&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; 16&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;12&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;2015 14:57:00 1:9:18 Paris&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Montparnasse 1&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;2 vers Mantes&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;la&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Jolie gare de Clamart&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;16&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;12&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;2015 14:12:00 Rambouillet &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;Rambouillet&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; 16&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;12&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;2015 14:12:00 0:24:17 Paris&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Montparnasse 1&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;2 vers Rambouillet gare de Clamart&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;16&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;12&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;2015 14:42:00 Rambouillet &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;Rambouillet&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; 16&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;12&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;2015 14:42:00 0:54:17 Paris&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Montparnasse 1&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;2 vers Rambouillet gare de Clamart&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;16&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;12&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;2015 14:27:00 Plaisir&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Grignon &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;Plaisir&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; 16&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;12&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;2015 14:27:00 0:39:18 Paris&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Montparnasse 1&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;2 vers Plaisir&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Grignon gare de Clamart&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;

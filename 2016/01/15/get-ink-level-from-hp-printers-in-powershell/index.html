@@ -100,12 +100,11 @@
     <main class="main col">
       
 
-      <p>I've find a way to get details about cardrige on low end hp printer !</p>
-<p>Get it on my Git ! <a href="https://github.com/EtienneDeneuve/Powershell/blob/master/HpPrinter/Snippet" target="_blank" rel="noopener">HP Snippet </a></p>
-<pre>$Web = New-object System.Net.WebClient
-[xml]$stringprinter = $Web.DownloadString("http://printerhp/DevMgmt/ConsumableConfigDyn.xml")
-$stringprinter.ConsumableConfigDyn.ConsumableInfo | Select ConsumableLabelCode,ConsumablePercentageLevelRemaining 
-</pre>
+      <h1 id="get-ink-level-from-hp-printers-in-powershell">Get ink level from HP printers in Powershell <a class="direct-link" href="#get-ink-level-from-hp-printers-in-powershell"> </a></h1>
+<p>I've find a way to get details about cardrige on low end hp printer !<br>
+Get it on my Git ! <a href="https://github.com/EtienneDeneuve/Powershell/blob/master/HpPrinter/Snippet">HP Snippet</a></p>
+<pre class="language-powershell"><code class="language-powershell"><span class="highlight-line"><span class="token variable">$Web</span> = <span class="token function">New-object</span> System<span class="token punctuation">.</span>Net<span class="token punctuation">.</span>WebClient</span><br><span class="highlight-line"><span class="token namespace">[xml]</span><span class="token variable">$stringprinter</span> = <span class="token variable">$Web</span><span class="token punctuation">.</span>DownloadString<span class="token punctuation">(</span><span class="token string">"http://printerhp/DevMgmt/ConsumableConfigDyn.xml"</span><span class="token punctuation">)</span></span><br><span class="highlight-line"><span class="token variable">$stringprinter</span><span class="token punctuation">.</span>ConsumableConfigDyn<span class="token punctuation">.</span>ConsumableInfo <span class="token punctuation">|</span> <span class="token function">Select</span> ConsumableLabelCode<span class="token punctuation">,</span>ConsumablePercentageLevelRemaining </span></code></pre>
+
     </main>
     <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2">
       <span class="meta__stats">About 1 min reading time</span>
