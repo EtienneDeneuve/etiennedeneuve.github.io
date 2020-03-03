@@ -1827,7 +1827,7 @@ Get-AzureRMTag |  Out-GridView -PassThru | Remove-AzureRMTag
 &lt;p&gt;Si vous ne connaissez pas encore FRPSUG (Quoi???)&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Utiliser le channel #french sur &lt;a href=&quot;https://powershell.slack.com/Slack&quot;&gt;PowerShell.slack.com&lt;/a&gt; &lt;a href=&quot;http://slack.poshcode.org/&quot;&gt;S’inscrire&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Allez sur le GitHub : &lt;a href=&quot;https://github.com/FrPSUG&quot;&gt;https://github.com/FrPSUG&lt;/a&gt;](&lt;a href=&quot;https://github.com/FrPSUG&quot;&gt;https://github.com/FrPSUG&lt;/a&gt;)&lt;/p&gt;
+&lt;p&gt;Allez sur le GitHub : &lt;a href=&quot;https://github.com/FrPSUG&quot;&gt;https://github.com/FrPSUG&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id=&quot;ma-session&quot;&gt;Ma session &lt;a class=&quot;direct-link&quot; href=&quot;#ma-session&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Avec &lt;a href=&quot;https://twitter.com/LopesMick&quot;&gt;Mickael Lopes&lt;/a&gt; on avait décidé de faire une session &amp;quot;à la cool&amp;quot; où on a montré quelques petits scripts inutiles (ou pas...)&lt;/p&gt;
