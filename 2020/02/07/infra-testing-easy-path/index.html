@@ -100,7 +100,89 @@
     <main class="main col">
       
 
-      <h2 id="azure-devops">Azure Devops <a class="direct-link" href="#azure-devops"> </a></h2>
+      <h1 id="iac-%26-tests">IaC &amp; Tests <a class="direct-link" href="#iac-%26-tests"> </a></h1>
+<h2 id="overview">Overview <a class="direct-link" href="#overview"> </a></h2>
+<p>I was looking for the easiest way to test Azure infrastructure.<br>
+I take a look into great project like Molecule, Terratest and so on.<br>
+Even if they are very cool and powerful, I wanted to find something easier (or lazier).</p>
+<p>I already use pester for testing purpose, so I manage to use pester for testing Azure infrastructure,<br>
+using the Gherkin syntax and I'll show you, how you can do that.</p>
+<h2 id="workstation-preparation">Workstation preparation <a class="direct-link" href="#workstation-preparation"> </a></h2>
+<p>I work on 3 kind of platform : macOs, Ubuntu and Windows 10, and my tests are working on all of them.</p>
+<p>You will need to install :</p>
+<ol>
+<li>PowerShell (6.2.3 at least)
+<ol>
+<li>Powershell Az module</li>
+<li>Pester (at least 4.9)</li>
+</ol>
+</li>
+<li>VS Code
+<ol>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=alexkrechik.cucumberautocomplete">Gherkin plugin</a></li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell">PowerShell</a></li>
+</ol>
+</li>
+</ol>
+<h3 id="install-powershell-and-modules">Install Powershell and modules <a class="direct-link" href="#install-powershell-and-modules"> </a></h3>
+<h4 id="powershell-6">Powershell 6 <a class="direct-link" href="#powershell-6"> </a></h4>
+<h5 id="manual-installation">Manual installation <a class="direct-link" href="#manual-installation"> </a></h5>
+<p>First, download the suitable version of powershell for your system on GitHub. Yes, if you miss it, that is now fully open source.<br>
+<a href="https://github.com/PowerShell/PowerShell/releases">https://github.com/PowerShell/PowerShell/releases</a></p>
+<h5 id="package-manager">Package Manager <a class="direct-link" href="#package-manager"> </a></h5>
+<h6 id="macos">macOS <a class="direct-link" href="#macos"> </a></h6>
+<p>If you use macOs, <a href="https://brew.sh/">brew</a> can manage it  for you:</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line">brew <span class="token function">install</span> powershell</span></code></pre>
+<h6 id="ubuntu">Ubuntu <a class="direct-link" href="#ubuntu"> </a></h6>
+<p>On Ubuntu, snap can do the job also :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">sudo</span> snap <span class="token function">install</span> powershell --classic</span></code></pre>
+<h6 id="windows">Windows <a class="direct-link" href="#windows"> </a></h6>
+<p>On Windows, Chocolatey is working well:</p>
+<pre class="language-powershell"><code class="language-powershell"><span class="highlight-line">choco install pwsh</span></code></pre>
+<h4 id="modules">Modules <a class="direct-link" href="#modules"> </a></h4>
+<p>Installing module in PowerShell is quite easy. You only need to type the following :</p>
+<pre class="language-powershell"><code class="language-powershell"><span class="highlight-line">Install<span class="token operator">-</span>PackageProvider Nuget <span class="token operator">-</span>ForceBootstrap <span class="token operator">-</span>Force</span><br><span class="highlight-line"><span class="token function">Set</span><span class="token operator">-</span>PSRepository <span class="token operator">-</span>Name PSGallery <span class="token operator">-</span>InstallationPolicy Trusted</span><br><span class="highlight-line">Update<span class="token operator">-</span>Module</span><br><span class="highlight-line">Install<span class="token operator">-</span>Module <span class="token operator">-</span>Name Pester <span class="token operator">-</span>Force <span class="token operator">-</span>SkipPublisherCheck</span><br><span class="highlight-line">Install<span class="token operator">-</span>Module <span class="token operator">-</span>Name Az <span class="token operator">-</span>force</span></code></pre>
+<blockquote>
+<p>Some command may not be useful on your setup, but this way ensure that you have the latest version of each module</p>
+</blockquote>
+<h3 id="visual-studio-code">Visual Studio Code <a class="direct-link" href="#visual-studio-code"> </a></h3>
+<p>You can install Vs Code manually or by using a Package Manager using choco, snap or brew. I'll not detail this part.</p>
+<h4 id="extensions-installation">Extensions installation <a class="direct-link" href="#extensions-installation"> </a></h4>
+<p>To install the extension, you can use the GUI of Vs Code or the cmdline. For Gui, take a look at the doc <a href="https://code.visualstudio.com/docs/editor/extension-gallery">here</a>.</p>
+<p>For the cmdline :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line">code --install-extension alexkrechik.cucumberautocomplete</span><br><span class="highlight-line">code --install-extension ms-vscode.powershell</span></code></pre>
+<blockquote>
+<p>on Linux and macOs, you'll need to add the following in your profile, adapt the path to Vs Code to yours :</p>
+<p><strong>bash</strong>:</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">cat</span> <span class="token operator">&lt;&lt;</span> EOF <span class="token operator">>></span> ~/.bash_profile</span><br><span class="highlight-line"><span class="token comment"># Add Visual Studio Code (code)</span></span><br><span class="highlight-line"><span class="token builtin class-name">export</span> <span class="token assign-left variable"><span class="token environment constant">PATH</span></span><span class="token operator">=</span><span class="token string">"\<span class="token environment constant">$PATH</span>:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"</span></span><br><span class="highlight-line">EOF</span></code></pre>
+<p><strong>zsh</strong>:</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">cat</span> <span class="token operator">&lt;&lt;</span> EOF <span class="token operator">>></span> ~/.zsh_profile</span><br><span class="highlight-line"><span class="token comment"># Add Visual Studio Code (code)</span></span><br><span class="highlight-line"><span class="token builtin class-name">export</span> <span class="token assign-left variable"><span class="token environment constant">PATH</span></span><span class="token operator">=</span><span class="token string">"\<span class="token environment constant">$PATH</span>:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"</span></span><br><span class="highlight-line">EOF</span></code></pre>
+</blockquote>
+<h2 id="create-the-first-tests">Create the first tests <a class="direct-link" href="#create-the-first-tests"> </a></h2>
+<h3 id="pester%2C-gherkin-and-testing">Pester, Gherkin and testing <a class="direct-link" href="#pester%2C-gherkin-and-testing"> </a></h3>
+<p>First of all, you will need some detail on Pester, Gherkin and testing like I think they can be useful and easy as possible.</p>
+<p><a href="https://github.com/pester/Pester">Pester</a>, is a world community framework for testing in Powershell. So, if you know a bit in PowerShell, you won't be lost at all. This module add some new function to do the magic of testing.</p>
+<p><a href="https://cucumber.io/docs/gherkin/reference/">Gherkin</a>, is a syntax for BDD (Behavior-Driven Development) testing. To explain a bit, for me, in our infrastructure testing purpose, is to have some human readable scenario to show to management/customers.</p>
+<p>Fortunately, Pester support the Gherkin syntax using the <code>Invoke-Gherkin</code> cmdlet and do a bit of magic for us.</p>
+<h3 id="let's-play">Let's play <a class="direct-link" href="#let's-play"> </a></h3>
+<p>We need to create our workspace, so do it like that (Using PowerShell's Shell):</p>
+<pre class="language-powershell"><code class="language-powershell"><span class="highlight-line"><span class="token function">Set-Location</span> ~</span><br><span class="highlight-line"><span class="token function">New-Item</span> <span class="token punctuation">.</span><span class="token operator">/</span>Documents<span class="token operator">/</span>GherkinTests <span class="token operator">-</span><span class="token function">type</span> Directory</span><br><span class="highlight-line">code <span class="token punctuation">.</span><span class="token operator">/</span>Documents<span class="token operator">/</span>GherkinTests</span></code></pre>
+<p>Create few file :</p>
+<ul>
+<li>etienne_exo.feature &lt;-- This is the Gherkin File</li>
+<li>etienne_exo.steps.ps1 &lt;-- This is our magic</li>
+</ul>
+<p>In the Feature File write the following :</p>
+<pre class="language-gherkin"><code class="language-gherkin"><span class="highlight-line"><span class="token comment"># GherkinTests/etienne_exo.feature</span></span><br><span class="token feature"><span class="token keyword">Feature:</span><span class="token important"> Validate Azure Deployment</span><br><span class="highlight-line"></span><br></span>  <span class="token scenario"><span class="token keyword">Scenario:</span><span class="token important"> We should have some subscriptions to work</span></span><br><span class="highlight-line">    <span class="token atrule">Given</span> we list the subscriptions using powershell</span><br><span class="highlight-line">    <span class="token atrule">Then</span> we should be able to have at least one</span></code></pre>
+<pre class="language-powershell"><code class="language-powershell"><span class="highlight-line"><span class="token comment"># GherkinTests/etienne_exo.steps.ps1</span></span><br><span class="highlight-line">Given <span class="token string">"we list the subscriptions using powershell"</span><span class="token punctuation">{</span></span><br><span class="highlight-line">  Get<span class="token operator">-</span>AzSubscription <span class="token punctuation">|</span> Should <span class="token operator">-not</span> <span class="token operator">-</span><span class="token keyword">throw</span></span><br><span class="highlight-line"><span class="token punctuation">}</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">Then <span class="token string">"we should be able to have at least one"</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">  <span class="token punctuation">(</span>Get<span class="token operator">-</span>AzSubscription<span class="token punctuation">)</span><span class="token punctuation">.</span>Count <span class="token punctuation">|</span> Should <span class="token operator">-Not</span> <span class="token operator">-</span>BeNullOrEmpty</span><br><span class="highlight-line"><span class="token punctuation">}</span></span></code></pre>
+<p>Now, let's run that to check if the test are working or not :</p>
+<pre class="language-powershell"><code class="language-powershell"><span class="highlight-line">❯ Invoke<span class="token operator">-</span>Gherkin</span><br><span class="highlight-line">Pester v4<span class="token punctuation">.</span>10<span class="token punctuation">.</span>0</span><br><span class="highlight-line">Executing all tests in <span class="token string">'/home/etienne/Documents/GherkinTests'</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">Feature: Validate Azure Deployment</span><br><span class="highlight-line"></span><br><span class="highlight-line">  Scenario: We should have some subscriptions to work</span><br><span class="highlight-line">    <span class="token punctuation">[</span><span class="token operator">+</span><span class="token punctuation">]</span> Given we list the subscriptions <span class="token keyword">using</span> powershell 6<span class="token punctuation">.</span>17s</span><br><span class="highlight-line">    <span class="token punctuation">[</span><span class="token operator">+</span><span class="token punctuation">]</span> Then we should be able to have at least one 5<span class="token punctuation">.</span>01s</span><br><span class="highlight-line">Tests completed in 11<span class="token punctuation">.</span>39s</span><br><span class="highlight-line">Tests Passed: 2<span class="token punctuation">,</span> Failed: 0<span class="token punctuation">,</span> Skipped: 0<span class="token punctuation">,</span> Pending: 0<span class="token punctuation">,</span> Inconclusive: 0</span></code></pre>
+<p>Ok, tests are working, and we have something to show to customers/managment.</p>
+<blockquote>
+<p>Wait, can't we do nothing better ? Are we lazy enough ?<br>
+Of course, not, let's wait for the next blog part.</p>
+</blockquote>
+<h2 id="azure-devops">Azure Devops <a class="direct-link" href="#azure-devops"> </a></h2>
 <h3 id="azure-devops-cli">Azure Devops CLI <a class="direct-link" href="#azure-devops-cli"> </a></h3>
 <p>Get a Personal Access Token here : <code>https://dev.azure.com/&lt;YourOrganisation&gt;/_usersSettings/tokens</code></p>
 <pre class="language-shell"><code class="language-shell"><span class="highlight-line">az extension <span class="token function">add</span> --name azure-devops</span><br><span class="highlight-line">az devops login</span><br><span class="highlight-line"><span class="token comment"># paste your PAT</span></span><br><span class="highlight-line">az login</span><br><span class="highlight-line"><span class="token comment"># with the sam</span></span><br><span class="highlight-line">az account <span class="token builtin class-name">set</span> -s <span class="token operator">&lt;</span>YOUR SUB<span class="token operator">></span></span><br><span class="highlight-line">az devops configure --defaults <span class="token string">'organization=https://dev.azure.com/etiennedeneuve'</span></span><br><span class="highlight-line">az devops project create --name GherkinTest</span><br><span class="highlight-line"><span class="token comment"># Store the repo git url to configure the repo locally, you will need a SSH Key for that.</span></span><br><span class="highlight-line"><span class="token variable">$repo</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span>az repos list --project GherkinTest --query <span class="token punctuation">[</span><span class="token punctuation">]</span>.sshUrl -o tsv<span class="token variable">)</span></span></span></code></pre>
@@ -129,6 +211,24 @@
 <p>Go in your Azure Devops project, select your new pipeline, and go in Tests, you should have something like my public repo :</p>
 <p><a href="https://dev.azure.com/etiennedeneuve/gherkintest/_build/results?buildId=357&amp;view=ms.vss-test-web.build-test-results-tab">Azure Devops</a></p>
 <p><em>Et Voila!</em></p>
+<h2 id="working-with-the-tests">Working with the tests <a class="direct-link" href="#working-with-the-tests"> </a></h2>
+<p>Now, if we want to deploy something in our new infra, we will need to write the tests before deploying the resources themselves.</p>
+<h3 id="adding-some-tests">Adding some tests <a class="direct-link" href="#adding-some-tests"> </a></h3>
+<p>In this scenario, we want to deploy a VM, in our subscription. Let's do a quick list of what we should have after a successful deployment :</p>
+<ul>
+<li>1 Subscription</li>
+<li>1 Resource Group</li>
+<li>1 Virtual Network</li>
+<li>1 Subnet</li>
+<li>1 Network Interface</li>
+<li>1 Disk</li>
+<li>1 VM</li>
+<li>Optionally: 1 Public IP</li>
+</ul>
+<p>With our list, we can now write the test we want, in the feature file:</p>
+<pre class="language-gherkin"><code class="language-gherkin"><span class="highlight-line"><span class="token comment"># GherkinTests/etienne_exo.feature</span></span><br><span class="token feature"><span class="token keyword">Feature:</span><span class="token important"> Validate Azure Deployment</span><br><span class="highlight-line"></span><br></span>  <span class="token scenario"><span class="token keyword">Scenario:</span><span class="token important"> Someone start a new vm deployment</span></span><br><span class="highlight-line">    <span class="token atrule">Given</span> someone start a new vm deployment in the subscription</span><br><span class="highlight-line">    <span class="token atrule">When</span> the deployment is completed we should have 1 resource group</span><br><span class="highlight-line">    <span class="token atrule">Then</span> we should have 1 Virtual Network</span><br><span class="highlight-line">    <span class="token atrule">And</span> 1 Subnet</span><br><span class="highlight-line">    <span class="token atrule">And</span> 1 Network interface</span><br><span class="highlight-line">    <span class="token atrule">And</span> 1 Disk</span><br><span class="highlight-line">    <span class="token atrule">And</span> 1 VM</span><br><span class="highlight-line">    <span class="token atrule">And</span> 1 Public IP</span></code></pre>
+<p>Now, in our steps.ps1 file we will update it:</p>
+<pre class="language-powershell"><code class="language-powershell"><span class="highlight-line"><span class="token comment"># GherkinTests/etienne_exo.steps.ps1</span></span><br><span class="highlight-line">Given <span class="token string">"someone start a new vm deployment in the subscription"</span><span class="token punctuation">{</span></span><br><span class="highlight-line">  Get<span class="token operator">-</span>AzSubscription <span class="token punctuation">|</span> Should <span class="token operator">-not</span> <span class="token operator">-</span><span class="token keyword">throw</span></span><br><span class="highlight-line"><span class="token punctuation">}</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">When <span class="token string">"the deployment is completed we should have 1 resource group"</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">  Get<span class="token operator">-</span>AzResourceGroup <span class="token operator">-</span>name RG<span class="token operator">-</span>GherkinTests <span class="token punctuation">|</span> Should <span class="token operator">-</span>exists</span><br><span class="highlight-line"><span class="token punctuation">}</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">Then <span class="token string">"We should have 1 Virtual Network"</span><span class="token punctuation">{</span></span><br><span class="highlight-line"></span><br><span class="highlight-line"><span class="token punctuation">}</span></span><br><span class="highlight-line">And <span class="token string">"1 Subnet"</span><span class="token punctuation">{</span></span><br><span class="highlight-line"></span><br><span class="highlight-line"><span class="token punctuation">}</span></span><br><span class="highlight-line">And <span class="token string">"1 Network interface"</span><span class="token punctuation">{</span></span><br><span class="highlight-line"></span><br><span class="highlight-line"><span class="token punctuation">}</span></span><br><span class="highlight-line">And <span class="token string">"1 Disk"</span><span class="token punctuation">{</span></span><br><span class="highlight-line"></span><br><span class="highlight-line"><span class="token punctuation">}</span></span><br><span class="highlight-line">And <span class="token string">"1 VM"</span><span class="token punctuation">{</span></span><br><span class="highlight-line"></span><br><span class="highlight-line"><span class="token punctuation">}</span></span><br><span class="highlight-line">And <span class="token string">"1 Public IP"</span><span class="token punctuation">{</span></span><br><span class="highlight-line"></span><br><span class="highlight-line"><span class="token punctuation">}</span></span></code></pre>
 
     </main>
     <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2">
@@ -136,6 +236,33 @@
         <div class="">
                 <ol>
                     
+                    <li><a href="#overview">Overview  </a>
+            		</li>
+
+                    <li><a href="#workstation-preparation">Workstation preparation  </a>
+            
+                <ol>
+                    
+                    <li><a href="#install-powershell-and-modules">Install Powershell and modules  </a>
+            		</li>
+
+                    <li><a href="#visual-studio-code">Visual Studio Code  </a>
+            		</li>
+                </ol>
+            		</li>
+
+                    <li><a href="#create-the-first-tests">Create the first tests  </a>
+            
+                <ol>
+                    
+                    <li><a href="#pester%2C-gherkin-and-testing">Pester, Gherkin and testing  </a>
+            		</li>
+
+                    <li><a href="#let's-play">Let's play  </a>
+            		</li>
+                </ol>
+            		</li>
+
                     <li><a href="#azure-devops">Azure Devops  </a>
             
                 <ol>
@@ -153,6 +280,15 @@
             		</li>
 
                     <li><a href="#configure-the-pipeline">Configure the pipeline  </a>
+            		</li>
+                </ol>
+            		</li>
+
+                    <li><a href="#working-with-the-tests">Working with the tests  </a>
+            
+                <ol>
+                    
+                    <li><a href="#adding-some-tests">Adding some tests  </a>
             		</li>
                 </ol>
             		</li>
@@ -197,7 +333,7 @@
               "border": "#e62576"
             }
           },
-          "position": "top",
+          "position": "bottom-right",
           "static": true,
           "content": {
             "href": "etienne.deneuve.xyz/privacy"
