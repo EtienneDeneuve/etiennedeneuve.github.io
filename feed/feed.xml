@@ -179,8 +179,7 @@ Of course, not, let&#39;s wait for the next blog part.&lt;/p&gt;
 	</entry>
 	
 	<entry>
-		<title>How to install Azure Stack Dev kit in a breeze
-</title>
+		<title>How to install Azure Stack Dev kit in a breeze</title>
 		<link href="/2018/12/05/adsk-in-a-breeze/"/>
 		<updated>2018-12-05T13:35:17+01:00</updated>
 		<id>/2018/12/05/adsk-in-a-breeze/</id>
@@ -286,8 +285,7 @@ The nat parameters must be changed to reflect your network.&lt;/p&gt;
 	</entry>
 	
 	<entry>
-		<title>Some Az Cli 2.0 bulk commands
-</title>
+		<title>Some Az Cli 2.0 bulk commands</title>
 		<link href="/2018/07/02/az-cli-20-tricks/"/>
 		<updated>2018-07-02T14:35:17+02:00</updated>
 		<id>/2018/07/02/az-cli-20-tricks/</id>
@@ -298,8 +296,7 @@ The nat parameters must be changed to reflect your network.&lt;/p&gt;
 	</entry>
 	
 	<entry>
-		<title>Dynamic update of Bind9 server in Azure with Terraform !
-</title>
+		<title>Dynamic update of Bind9 server in Azure with Terraform !</title>
 		<link href="/2018/07/02/how-to-manage-dns-terraform/"/>
 		<updated>2018-07-02T14:35:17+02:00</updated>
 		<id>/2018/07/02/how-to-manage-dns-terraform/</id>
@@ -986,8 +983,7 @@ Afin de transformer ces scripts en &quot;hooks&quot; il suffit de les placer dan
 	</entry>
 	
 	<entry>
-		<title>Open Source + Windows = Vs Code + Bash + Git
-</title>
+		<title>Open Source + Windows = Vs Code + Bash + Git</title>
 		<link href="/2018/06/26/setup-vs-code-bash-git/"/>
 		<updated>2018-06-26T15:03:40+02:00</updated>
 		<id>/2018/06/26/setup-vs-code-bash-git/</id>
@@ -1520,8 +1516,7 @@ value = &amp;quot;${data.azurerm_virtual_network.test.id}&amp;quot;
 	</entry>
 	
 	<entry>
-		<title>Os Factory Azure et Aws en Open Source avec Microsoft et Société Générale !
-</title>
+		<title>Os Factory Azure et Aws en Open Source avec Microsoft et Société Générale !</title>
 		<link href="/2018/03/28/os-factory-azure-et-aws/"/>
 		<updated>2018-03-28T14:25:01+02:00</updated>
 		<id>/2018/03/28/os-factory-azure-et-aws/</id>
@@ -1534,8 +1529,7 @@ value = &amp;quot;${data.azurerm_virtual_network.test.id}&amp;quot;
 	</entry>
 	
 	<entry>
-		<title>Microsoft Expérience 17 – VSTS For OPS part 3 !
-</title>
+		<title>Microsoft Expérience 17 – VSTS For OPS part 3 !</title>
 		<link href="/2017/10/25/vsts-for-ops-part-3/"/>
 		<updated>2017-10-25T12:11:10+02:00</updated>
 		<id>/2017/10/25/vsts-for-ops-part-3/</id>
@@ -1616,8 +1610,7 @@ mv ./packer /usr/local/bin/
 	</entry>
 	
 	<entry>
-		<title>Microsoft Expérience 17 – VSTS For OPS part 2 !
-</title>
+		<title>Microsoft Expérience 17 – VSTS For OPS part 2 !</title>
 		<link href="/2017/10/13/vsts-for-ops-2/"/>
 		<updated>2017-10-13T14:15:42+02:00</updated>
 		<id>/2017/10/13/vsts-for-ops-2/</id>
@@ -1767,8 +1760,7 @@ Si vous accédez à l&#39;url https://{votrenomavous}.visualstudio.com/_admin/_A
 	</entry>
 	
 	<entry>
-		<title>Mon premier it.cast avec Maxime et Pascal (et les autres) !
-</title>
+		<title>Mon premier it.cast avec Maxime et Pascal (et les autres) !</title>
 		<link href="/2017/09/29/mon-premier-itcast/"/>
 		<updated>2017-09-29T18:32:41+02:00</updated>
 		<id>/2017/09/29/mon-premier-itcast/</id>
@@ -2488,8 +2480,7 @@ With the server is running, open http://toto:1337 in your browser to see the Vor
 	</entry>
 	
 	<entry>
-		<title>Installation de Nginx en reverse proxy avec réecriture du HTML
-</title>
+		<title>Installation de Nginx en reverse proxy avec réecriture du HTML</title>
 		<link href="/2017/02/02/installation-de-nginx-en-reverse-proxy-avec-reecriture-du-html/"/>
 		<updated>2017-02-02T23:30:06+01:00</updated>
 		<id>/2017/02/02/installation-de-nginx-en-reverse-proxy-avec-reecriture-du-html/</id>
@@ -2595,8 +2586,7 @@ Il s&#39;agit tout simplement de mon fichier de settings de vscode, je le mets a
 	</entry>
 	
 	<entry>
-		<title>Get ink level from HP printers in Powershell
-</title>
+		<title>Get ink level from HP printers in Powershell</title>
 		<link href="/2016/01/15/get-ink-level-from-hp-printers-in-powershell/"/>
 		<updated>2016-01-15T10:58:06+01:00</updated>
 		<id>/2016/01/15/get-ink-level-from-hp-printers-in-powershell/</id>
