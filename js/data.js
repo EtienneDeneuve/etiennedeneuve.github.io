@@ -200,7 +200,7 @@ Au cas ou vous auriez raté l&#39;annonce concernant le projet Honolulu qui vise
 ",
   
   "url": "/2017/04/25/azure-networking-tp-part-1/",
-  "tags" : "Azure Cli,PowerShell,Azure,Netorking"
+  "tags" : "Azure Cli,PowerShell,Azure,Networking"
 },{
   "title": "Azure et le backup ? (d&amp;#8217;un Mac)",
   "date" : "Mar 14, 2017",
