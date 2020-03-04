@@ -1950,193 +1950,42 @@ Get-cAzureRMVMOsType |?{ $_.OsType -eq &amp;amp;quot;Windows&amp;amp;quot; }
 		<link href="/2017/09/24/project-honolulu-public-preview-mon-retour/"/>
 		<updated>2017-09-24T21:12:41+02:00</updated>
 		<id>/2017/09/24/project-honolulu-public-preview-mon-retour/</id>
-		<content type="html">&lt;h1&gt;Intro&lt;/h1&gt;
-Au cas ou vous auriez raté l&#39;annonce concernant le projet Honolulu qui vise à remplacer les MMC de nos servers Windows, je vous invite à regarder les quelques liens ci-dessous pour en savoir plus :
+		<content type="html">&lt;h1 id=&quot;intro&quot;&gt;Intro &lt;a class=&quot;direct-link&quot; href=&quot;#intro&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;Au cas ou vous auriez raté l&#39;annonce concernant le projet Honolulu qui vise à remplacer les MMC de nos servers Windows, je vous invite à regarder les quelques liens ci-dessous pour en savoir plus :&lt;/p&gt;
 &lt;ul&gt;
- 	&lt;li&gt;https://seyfallah-it.blogspot.fr/2017/09/honolulu-project.html&lt;/li&gt;
- 	&lt;li&gt;aka.ms/honoluludownload&lt;/li&gt;
- 	&lt;li&gt;https://blogs.technet.microsoft.com/askpfeplat/2017/09/20/project-honolulu-a-new-windows-server-management-experience-for-the-software-defined-datacenter-part-1/&lt;/li&gt;
- 	&lt;li&gt;https://gotoguy.blog/2017/09/24/secure-access-to-project-honolulu-with-azure-ad-app-proxy-and-conditional-access/&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://seyfallah-it.blogspot.fr/2017/09/honolulu-project.html&quot;&gt;https://seyfallah-it.blogspot.fr/2017/09/honolulu-project.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://aka.ms/honoluludownload&quot;&gt;aka.ms/honoluludownload&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://blogs.technet.microsoft.com/askpfeplat/2017/09/20/project-honolulu-a-new-windows-server-management-experience-for-the-software-defined-datacenter-part-1/&quot;&gt;https://blogs.technet.microsoft.com/askpfeplat/2017/09/20/project-honolulu-a-new-windows-server-management-experience-for-the-software-defined-datacenter-part-1/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://gotoguy.blog/2017/09/24/secure-access-to-project-honolulu-with-azure-ad-app-proxy-and-conditional-access/&quot;&gt;https://gotoguy.blog/2017/09/24/secure-access-to-project-honolulu-with-azure-ad-app-proxy-and-conditional-access/&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-Pour ma part, voici mon retour sur cette nouveauté, d&#39;un prime abord, c&#39;est excellent, un simple MSI à installer et on peut commencer à ajouter ses serveurs dans l&#39;interface. Génial ça fonctionne depuis mon téléphone, depuis mon Mac... Bref, c&#39;est génial!
-&lt;h1&gt;Quelques trucs cools :&lt;/h1&gt;
+&lt;p&gt;Pour ma part, voici mon retour sur cette nouveauté, d&#39;un prime abord, c&#39;est excellent, un simple MSI à installer et on peut commencer à ajouter ses serveurs dans l&#39;interface. Génial ça fonctionne depuis mon téléphone, depuis mon Mac... Bref, c&#39;est génial!&lt;/p&gt;
+&lt;h1 id=&quot;quelques-trucs-cools&quot;&gt;Quelques trucs cools &lt;a class=&quot;direct-link&quot; href=&quot;#quelques-trucs-cools&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
 &lt;ul&gt;
- 	&lt;li&gt;l&#39;affichage des VMs :&lt;/li&gt;
+&lt;li&gt;l&#39;affichage des VMs :&lt;/li&gt;
 &lt;/ul&gt;
-&lt;img class=&quot;alignnone wp-image-226&quot; src=&quot;https://etienne.deneuve.xyz/wp-content/uploads/2017/09/vm.png&quot; alt=&quot;&quot; width=&quot;1541&quot; height=&quot;249&quot;&gt;
+&lt;p&gt;&lt;img src=&quot;https://etienne.deneuve.xyz/wp-content/uploads/2017/09/vm.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;ul&gt;
- 	&lt;li&gt;ASR (Azure Site Recovery) Automatisé :&lt;/li&gt;
+&lt;li&gt;ASR (Azure Site Recovery) Automatisé :&lt;/li&gt;
 &lt;/ul&gt;
-&lt;img class=&quot;alignnone wp-image-227&quot; src=&quot;https://etienne.deneuve.xyz/wp-content/uploads/2017/09/Honolu.png&quot; alt=&quot;&quot; width=&quot;1710&quot; height=&quot;922&quot;&gt;
-&lt;p&gt;(Bon, y en a pleins d&#39;autres, je vous laisse des surprises #nospoil)&lt;/p&gt;
-&lt;h1&gt;Les trucs que j&#39;aurais aimés :&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&quot;https://etienne.deneuve.xyz/wp-content/uploads/2017/09/Honolu.png&quot; alt=&quot;&quot;&gt; (Bon, y en a pleins d&#39;autres, je vous laisse des surprises #nospoil)&lt;/p&gt;
+&lt;h1 id=&quot;les-trucs-que-j&#39;aurais-aim%C3%A9s&quot;&gt;Les trucs que j&#39;aurais aimés &lt;a class=&quot;direct-link&quot; href=&quot;#les-trucs-que-j&#39;aurais-aim%C3%A9s&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
 &lt;ul&gt;
- 	&lt;li&gt;Dans l&#39;installer proposer directement un certificat let&#39;s encrypt plutôt qu&#39;un auto-signé (2017!)&lt;/li&gt;
- 	&lt;li&gt;Au niveau de l&#39;import :&lt;/li&gt;
- 	&lt;li&gt;
+&lt;li&gt;Dans l&#39;installer proposer directement un certificat let&#39;s encrypt plutôt qu&#39;un auto-signé (2017!)&lt;/li&gt;
+&lt;li&gt;Au niveau de l&#39;import :
 &lt;ul&gt;
- 	&lt;li&gt;L&#39;import des servers depuis l&#39;AD et le DNS (à la 2012)&lt;/li&gt;
- 	&lt;li&gt;L&#39;import des VM (Windows) existantes dans Azure&lt;/li&gt;
- 	&lt;li&gt;Ajout des machines virtuelles lors de l&#39;ajout de serveurs avec installé Hyper V&lt;/li&gt;
+&lt;li&gt;L&#39;import des servers depuis l&#39;AD et le DNS (à la 2012)&lt;/li&gt;
+&lt;li&gt;L&#39;import des VM (Windows) existantes dans Azure&lt;/li&gt;
+&lt;li&gt;Ajout des machines virtuelles lors de l&#39;ajout de serveurs avec installé Hyper V&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
- 	&lt;li&gt;La création d&#39;une vault pour stocker ses &quot;Credentials&quot; (à la cmdkey /add), pour sélectionner ensuite le compte que l&#39;on souhaite.&lt;/li&gt;
- 	&lt;li&gt;L&#39;absence de centralisation (à la 2012), il aurait été cool d&#39;avoir une overview complète comme celle-ci.&lt;/li&gt;
- 	&lt;li&gt;L&#39;absence de Powershell Launcher, ça aurait été cool de pouvoir lancer des commandes Powershell depuis cette interface.&lt;/li&gt;
- 	&lt;li&gt;Pas de containers, j&#39;aime bien les containers moi, j&#39;aurais aimé trouver une petite interface comme Cockpit sur Fedora : &lt;img src=&quot;https://bobcares.com/wp-content/uploads/2015/08/docker-management-ui.png&quot;&gt;&lt;/li&gt;
+&lt;li&gt;La création d&#39;une vault pour stocker ses &amp;quot;Credentials&amp;quot; (à la cmdkey /add), pour sélectionner ensuite le compte que l&#39;on souhaite.&lt;/li&gt;
+&lt;li&gt;L&#39;absence de centralisation (à la 2012), il aurait été cool d&#39;avoir une overview complète comme celle-ci.&lt;/li&gt;
+&lt;li&gt;L&#39;absence de Powershell Launcher, ça aurait été cool de pouvoir lancer des commandes Powershell depuis cette interface.&lt;/li&gt;
+&lt;li&gt;Pas de containers, j&#39;aime bien les containers moi, j&#39;aurais aimé trouver une petite interface comme Cockpit sur Fedora : &lt;img src=&quot;https://bobcares.com/wp-content/uploads/2015/08/docker-management-ui.png&quot; alt=&quot;&quot;&gt;&lt;/li&gt;
 &lt;/ul&gt;
-Voici les éléments pour les quels j&#39;ai voté sur le User Voice Honolulu : https://windowsserver.uservoice.com/users/674735389-etienne-deneuve
-&lt;h1&gt;Ma petite conclusion:&lt;/h1&gt;
-Et vous ? Vous l&#39;avez essayé déjà ? Qu&#39;en pensez-vous ? La direction est bonne, un moteur d&#39;extensions (https://github.com/hongtao-chen/hello-honolulu) est déjà prévu, et presque en place... On va pouvoir arrêter de mettre des GUI sur tous les serveurs ?</content>
-	</entry>
-	
-	<entry>
-		<title>Azure Networking – TP – Part 2 &amp;#8211; vNet Peering</title>
-		<link href="/2017/04/27/azure-networking-tp-part-2/"/>
-		<updated>2017-04-27T14:00:06+02:00</updated>
-		<id>/2017/04/27/azure-networking-tp-part-2/</id>
-		<content type="html">&lt;p&gt;&lt;a href=&quot;https://www.linkedin.com/in/lopesmickael&quot;&gt;Mickael Lopes&lt;/a&gt; et moi avons animé une session au Global Azure Bootcamp intitulée : &amp;quot;Le réseau dans Azure : Cas d&#39;usage et Retour d&#39;expériences&amp;quot;.&lt;br&gt;
-Les slides de  notre session sont dispo sur slideshare ici : &lt;a href=&quot;https://www.slideshare.net/MickaelLOPES91/gab-le-rseau-dans-azure&quot;&gt;Slideshare de Mickael&lt;/a&gt;&lt;br&gt;
-Comme prévu, voici des TP pour aller avec notre présentation, a faire vous même :)&lt;br&gt;
-Ce post est la suite de la partie 1, qui part du principe que vous avez déjà la partie 1 de faite sur votre tenant, dans toutes les versions (Powershell, Azure Cli 2.0 et ARM Template).&lt;/p&gt;
-&lt;h1&gt;vNet Peering&lt;/h1&gt;
-L&#39;objectif est de connecter nos 3 Vnets, avec nos 3 outils :
-&lt;ul&gt;
- 	&lt;li&gt;vnet-test-ps&lt;/li&gt;
- 	&lt;li&gt;vnet-test-az&lt;/li&gt;
- 	&lt;li&gt;vnet-test-json&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;Powershell&lt;/h2&gt;
-Nous allons créer le lien entre vnet-test-ps et vnet-test-az :
-&lt;pre&gt;&lt;code class=&quot;lang-powershell&quot;&gt;&lt;span class=&quot;hljs-variable&quot;&gt;$vnetPS&lt;/span&gt; = &lt;span class=&quot;hljs-pscommand&quot;&gt;Get-AzureRmVirtualNetwork&lt;/span&gt;&lt;span class=&quot;hljs-parameter&quot;&gt; -ResourceGroupName RG-Vnet-Exo-PS&lt;span class=&quot;hljs-parameter&quot;&gt; -Name &lt;/span&gt;vnet-test-ps&lt;/span&gt;
-&lt;span class=&quot;hljs-variable&quot;&gt;$vnetAZ&lt;/span&gt; = &lt;span class=&quot;hljs-pscommand&quot;&gt;Get-AzureRmVirtualNetwork&lt;/span&gt;&lt;span class=&quot;hljs-parameter&quot;&gt; -ResourceGroupName RG-Vnet-Exo-AZ -Name &lt;/span&gt;vnet-test-az&lt;/code&gt;&lt;/pre&gt;
-Puis nous créons le lien PS2AZ :
-&lt;pre&gt;&lt;code class=&quot;lang-powershell&quot;&gt;&lt;span class=&quot;hljs-pscommand&quot;&gt;Add-AzureRmVirtualNetworkPeering&lt;/span&gt;&lt;span class=&quot;hljs-parameter&quot;&gt; -Name &lt;/span&gt;PS2AZ&lt;span class=&quot;hljs-parameter&quot;&gt; -VirtualNetwork &lt;/span&gt;&lt;span class=&quot;hljs-variable&quot;&gt;$vnetPS&lt;/span&gt;&lt;span class=&quot;hljs-parameter&quot;&gt; -RemoteVirtualNetworkId &lt;/span&gt;&lt;span class=&quot;hljs-variable&quot;&gt;$vnetAZ&lt;/span&gt;.Id
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-powershell&quot;&gt;&lt;span class=&quot;hljs-pscommand&quot;&gt;Add-AzureRmVirtualNetworkPeering&lt;/span&gt;&lt;span class=&quot;hljs-parameter&quot;&gt; -Name &lt;/span&gt;AZ2PS&lt;span class=&quot;hljs-parameter&quot;&gt; -VirtualNetwork &lt;/span&gt;&lt;span class=&quot;hljs-variable&quot;&gt;$vnetAZ&lt;/span&gt;&lt;span class=&quot;hljs-parameter&quot;&gt; -RemoteVirtualNetworkId &lt;/span&gt;&lt;span class=&quot;hljs-variable&quot;&gt;$vnetPS&lt;/span&gt;.Id&lt;/code&gt;&lt;/pre&gt;
-nous pouvons vérifié si le peering est fonctionnel via la commande Powershell :
-&lt;pre&gt;&lt;code class=&quot;lang-powershell&quot;&gt; &lt;span class=&quot;hljs-pscommand&quot;&gt;Get-AzureRmVirtualNetworkPeering&lt;/span&gt;&lt;span class=&quot;hljs-parameter&quot;&gt; -VirtualNetworkName &lt;/span&gt;vnetPS&lt;span class=&quot;hljs-parameter&quot;&gt; -ResourceGroupName &lt;/span&gt;vnetPS&lt;span class=&quot;hljs-parameter&quot;&gt; -Name &lt;/span&gt;PS2AZ&lt;/code&gt;&lt;/pre&gt;
-en l&#39;état, notre peering est configuré mais certaines options ne sont pas activées :
-&lt;ul&gt;
- 	&lt;li&gt;Forwarded Traffic&lt;/li&gt;
- 	&lt;li&gt;Gateway Transit&lt;/li&gt;
- 	&lt;li&gt;Remote Gateways&lt;/li&gt;
-&lt;/ul&gt;
-Dans notre cas, nous avons besoin d&#39;activer le transfert du trafic.
-&lt;pre&gt;&lt;code class=&quot;lang-powershell&quot;&gt;$ps2az = &lt;span class=&quot;hljs-pscommand&quot;&gt;Get-AzureRmVirtualNetworkPeering&lt;/span&gt;&lt;span class=&quot;hljs-parameter&quot;&gt; -VirtualNetworkName &lt;/span&gt;vnetPS&lt;span class=&quot;hljs-parameter&quot;&gt; -ResourceGroupName &lt;/span&gt;vnetPS&lt;span class=&quot;hljs-parameter&quot;&gt; -Name &lt;/span&gt;PS2AZ
-&lt;span class=&quot;hljs-variable&quot;&gt;$&lt;/span&gt;ps2az.AllowForwardedTraffic = &lt;span class=&quot;hljs-literal&quot;&gt;$true
-&lt;/span&gt;&lt;span class=&quot;hljs-pscommand&quot;&gt;Set-AzureRmVirtualNetworkPeering&lt;/span&gt;&lt;span class=&quot;hljs-parameter&quot;&gt; -VirtualNetworkPeering &lt;/span&gt;&lt;span class=&quot;hljs-variable&quot;&gt;$&lt;/span&gt;ps2az&lt;/code&gt;&lt;/pre&gt;
-&lt;h2&gt;Azure CLI 2.0&lt;/h2&gt;
-Avec Azure CLI, il faudra recupéré l&#39;id du réseau distant pour le peering avec la commande :
-&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;az network vnet list -g RG-Vnet-Exo-JSON&lt;/code&gt;&lt;/pre&gt;
-et vous recuperez un objets json, cherchez votre id qui sera du type :
-[code]/subscriptions/VOTREIDDESOUSCRPTION/resourceGroups/RG-Vnet-Exo-JSON/providers/Microsoft.Network/virtualNetworks/vnet-test-json[/code]
-&lt;p&gt;Si vous utilisez le bash (Ubuntu on Windows par exemple) créer une variable comme ceci :&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;JSON_VNET_ID=&quot;/subscriptions/VOTREIDDESOUSCRPTION/resourceGroups/RG-Vnet-Exo-JSON/providers/Microsoft.Network/virtualNetworks/vnet-test-json&quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Ce sera beaucoup plus simple pour l&#39;appeler dans la commande suivante :&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt; az network vnet peering create --name AZ2JSON \
-   --remote-vnet-id ${$JSON_VNET_ID} \
-   --resource-group RG-Vnet-Exo-AZ \
-   --vnet-name vnet-test-az \ 
-   --allow-forwarded-traffic \
-   --allow-vnet-access \
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Théoriquement, nous pourrions executer la commande pour effectuer le peering dans l&#39;autre sens, mais nous allons la faire avec notre template de la partie 1.&lt;/p&gt;
-&lt;h2&gt;ARM Template&lt;/h2&gt;
-Pour déclarer un vnet peering dans un template ARM, à l&#39;heure actuelle, via le portail ou la ligne de commande (Powershell ou Azure CLI 2.0) il n&#39;est pas possible dans le &quot;contexte&quot; de manipuler deux Resource Group. Du coup, il faut le faire d&#39;un coté puis de l&#39;autre, ou utiliser des templates &quot;nested&quot; c&#39;est à dire un template &quot;parent&quot; puis deux &quot;enfants&quot;. Nous n&#39;allons (pas encore ;)) aborder ce type de template. (Stay Tuned !)
-&lt;p&gt;Donc, reprenons notre template et ajoutons un nouveau type de resource Azure &amp;quot;Microsoft.Network/virtualNetworks/virtualNetworkPeerings&amp;quot;&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-json&quot;&gt;{
-&quot;$schema&quot;: &quot;https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#&quot;,
-&quot;contentVersion&quot;: &quot;1.0.0.0&quot;,
-&quot;parameters&quot;: {
-&quot;vnetname&quot;: {
-&quot;type&quot;: &quot;string&quot;,
-&quot;metadata&quot;: {
-&quot;description&quot;: &quot;Nom du Vnet&quot;
-},
-&quot;defaultValue&quot;: &quot;vnet-test-json&quot;
-},
-&quot;vNetRemote&quot;: {
-&quot;type&quot;: &quot;string&quot;,
-&quot;metadata&quot;: {
-&quot;description&quot;: &quot;Nom du Vnet distant&quot;
-},
-&quot;defaultValue&quot;: &quot;vnet-test-az&quot;
-},
-&quot;RGvNetRemote&quot;: {
-&quot;type&quot;: &quot;string&quot;,
-&quot;metadata&quot;: {
-&quot;description&quot;: &quot;Nom du Resource Group&quot;
-},
-&quot;defaultValue&quot;: &quot;RG-Vnet-Exo-AZ&quot;
-},
-&quot;addressSpacePrefix&quot;: {
-&quot;type&quot;: &quot;string&quot;,
-&quot;metadata&quot;: {
-&quot;description&quot;: &quot;IP v4 (RFC1918)&quot;
-},
-&quot;defaultValue&quot;: &quot;10.0.2.0/24&quot;
-},
-&quot;subnetName&quot;: {
-&quot;type&quot;: &quot;string&quot;,
-&quot;metadata&quot;: {
-&quot;description&quot;: &quot;Nom du Subnet&quot;
-},
-&quot;defaultValue&quot;: &quot;jsonfrontend&quot;
-},
-&quot;subnetPrefix&quot;: {
-&quot;type&quot;: &quot;string&quot;,
-&quot;metadata&quot;: {
-&quot;description&quot;: &quot;IP v4 du Subnet&quot;
-},
-&quot;defaultValue&quot;: &quot;10.0.2.0/26&quot;
-}
-},
-&quot;variables&quot;: {},
-&quot;resources&quot;: [
-{
-&quot;apiVersion&quot;: &quot;2015-06-15&quot;,
-&quot;type&quot;: &quot;Microsoft.Network/virtualNetworks&quot;,
-&quot;name&quot;: &quot;[parameters(&#39;VnetName&#39;)]&quot;,
-&quot;location&quot;: &quot;[resourceGroup().location]&quot;,
-&quot;tags&quot;: {
-&quot;displayName&quot;: &quot;JSON-VNET&quot;
-},
-&quot;properties&quot;: {
-&quot;addressSpace&quot;: {
-&quot;addressPrefixes&quot;: [
-&quot;[parameters(&#39;addressSpacePrefix&#39;)]&quot;
-]
-},
-&quot;subnets&quot;: [
-{
-&quot;name&quot;: &quot;[parameters(&#39;subnetName&#39;)]&quot;,
-&quot;properties&quot;: {
-&quot;addressPrefix&quot;: &quot;[parameters(&#39;subnetPrefix&#39;)]&quot;
-}
-}
-]
-}
-},
-{
-&quot;apiVersion&quot;: &quot;2017-03-01&quot;,
-&quot;type&quot;: &quot;Microsoft.Network/virtualNetworks/virtualNetworkPeerings&quot;,
-&quot;name&quot;: &quot;[concact( parameters(&#39;VnetName&#39;) , &#39;/JSON2AZ&#39;)]&quot;,
-&quot;location&quot;: &quot;[resourceGroup().location]&quot;,
-&quot;properties&quot;: {
-&quot;allowVirtualNetworkAccess&quot;: true,
-&quot;allowForwardedTraffic&quot;: true,
-&quot;allowGatewayTransit&quot;: false,
-&quot;useRemoteGateways&quot;: false,
-&quot;remoteVirtualNetwork&quot;: {
-&quot;id&quot;: &quot;[resourceId( subscription().subscriptionid, parameters(&#39;RGvNetRemote&#39;) , &#39;Microsoft.Network/virtualNetworks&#39;, parameters(&#39;vNetRemote&#39;))]&quot;
-}
-}
-}
-],
-&quot;outputs&quot;: {}
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;La méthode de déploiement reste la même que dans la partie 1.&lt;/p&gt;
+&lt;p&gt;Voici les éléments pour les quels j&#39;ai voté sur le User Voice Honolulu : &lt;a href=&quot;https://windowsserver.uservoice.com/users/674735389-etienne-deneuve&quot;&gt;https://windowsserver.uservoice.com/users/674735389-etienne-deneuve&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&quot;ma-petite-conclusion&quot;&gt;Ma petite conclusion &lt;a class=&quot;direct-link&quot; href=&quot;#ma-petite-conclusion&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;Et vous ? Vous l&#39;avez essayé déjà ? Qu&#39;en pensez-vous ? La direction est bonne, un moteur d&#39;extensions (&lt;a href=&quot;https://github.com/hongtao-chen/hello-honolulu)&quot;&gt;https://github.com/hongtao-chen/hello-honolulu)&lt;/a&gt; est déjà prévu, et presque en place... On va pouvoir arrêter de mettre des GUI sur tous les serveurs ?&lt;/p&gt;
 </content>
 	</entry>
 	

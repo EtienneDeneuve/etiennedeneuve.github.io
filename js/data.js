@@ -178,19 +178,9 @@ Si vous utilisez Azure, il y a de grandes chances que vous ayez aperçu Cloud Sh
 },{
   "title": "[update] Project Honolulu Public Preview &amp;#8211; Mon retour",
   "date" : "Sep 24, 2017",
-  "summary" : "&lt;h1&gt;Intro&lt;/h1&gt;
-Au cas ou vous auriez raté l&#39;annonce concernant le projet Honolulu qui vise à remplacer les MMC de nos servers Windows, je vous invite à regarder les quelques liens ci-dessous pour en savoir plus :
-",
+  
   
   "url": "/2017/09/24/project-honolulu-public-preview-mon-retour/",
-  "tags" : ""
-},{
-  "title": "Azure Networking – TP – Part 2 &amp;#8211; vNet Peering",
-  "date" : "Apr 27, 2017",
-  "summary" : "&lt;a href=&quot;https://www.linkedin.com/in/lopesmickael&quot;&gt;Mickael Lopes&lt;/a&gt; et moi avons animé une session au Global Azure Bootcamp intitulée : &quot;Le réseau dans Azure : Cas d&#39;usage et Retour d&#39;expériences&quot;.
-",
-  
-  "url": "/2017/04/27/azure-networking-tp-part-2/",
   "tags" : ""
 },{
   "title": "Azure Networking",
@@ -219,7 +209,7 @@ Nginx est un serveur Web modulaire qui fonctionne très bien en reverse proxy et
 ",
   
   "url": "/2017/02/02/installation-de-nginx-en-reverse-proxy-avec-reecriture-du-html/",
-  "tags" : "Linux,nginx,reverse proxy"
+  "tags" : "Linux,Nginx,Reverse Proxy"
 },{
   "title": "Visual Studio Code for Ansible, Terraform",
   "date" : "Jan 26, 2017",

@@ -32,11 +32,6 @@
   </url>
   
   <url>
-    <loc>/2017/04/27/azure-networking-tp-part-2/</loc>
-    <lastmod>2017-04-27</lastmod>
-  </url>
-  
-  <url>
     <loc>/2017/09/24/project-honolulu-public-preview-mon-retour/</loc>
     <lastmod>2017-09-24</lastmod>
   </url>
@@ -162,7 +157,7 @@
   </url>
   
   <url>
-    <loc>/tags/Linux/</loc>
+    <loc>/tags/Azure Cli/</loc>
     <lastmod>2020-02-28</lastmod>
   </url>
 </urlset>
