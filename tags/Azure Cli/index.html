@@ -5,6 +5,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="msvalidate.01" content="DE6C71A9BE4E011D01CC38799992B4A6"/>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-71551100-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'UA-71551100-1');
+    </script>
+
     
       <link rel="stylesheet" href="/css/style.css" type="text/css">
     
@@ -23,7 +35,7 @@
     <script src="/js/script.js"></script>
   </head>
   <body class="position-relative" data-spy="scroll" data-target=".site-nav" data-offset="55">
-    <nav class="site-nav family-sans navbar navbar-expand-md navbar-dark  sidebar sticky-top  py-0">
+    <nav class="site-nav family-sans navbar navbar-expand-md navbar-dark  fixed-top  py-0">
   <div class="container-fluid">
     <button type="button" class="navbar-toggler my-2 my-md-0" data-toggle="collapse" data-target="#myTogglerNav" aria-controls="myTogglerNav" aria-label="Toggle Navigation">
       <span class="navbar-toggler-icon"></span>
@@ -90,65 +102,49 @@
 
     
 
+ 
+<article id="main-content" class="site-main container mt-3 mb-5"
+style="padding-top: 80px"
+>
+<p>See <a href="/tags/">all tags</a>.</p>
+<h2 class="text-secondary mb-5">Tagged <small>“Azure Cli”</small></h2>
+  
 
+  
 
-<div class="post post-sidebar container-fluid">
-  <div class="row justify-content-xl-center">
+  <div class="row justify-content px-3 px-sm-0 my-5  mb-3 ">
     
 
-    
-    <main class="main col">
+    <div class=" col-md-12  ">
+      <a href="/2017/04/25/azure-networking-tp-part-1/" class="d-flex justify-content-between item-title h2 " >
       
+      Azure Networking
+      
+      
+      </a>
+      <div class="d-flex justify-content-between">
+      <time class="item-date small text-body " datetime="Apr 25, 2017">Published on:    Apr 25, 2017</time>
+      
+      </div>
+      <p class="item-summary lead mb-1 text-body">
+      [Mickael Lopes](https://www.linkedin.com/in/lopesmickael) et moi avons animé une session au Global Azure Bootcamp intitulée : "Le réseau dans Azure : Cas d'usage et Retour d'expériences".
 
-      <p>J'ai un copain dev' (pas qu'un) mais celui ma demandé il y a quelques jours:</p>
-<ul>
- 	<li>Lui : "Tu sais, tu m'a parlé de Vorlon.js, c'est cool mais comment on change le binding, localhost m'en tape un peu"</li>
- 	<li>Moi : "Bouge pas, je te donne ca"</li>
- 	<li>Lui : "Y disent qu'il faut Nginx etc, (bref un gentil dev web en panique)"</li>
- 	<li>Moi : "Mais non mais non"</li>
-</ul>
-Bon déjà Vorlon.js c'est quoi ? C'est un outil plutot orienté Dev, pas que web, fait par une bande de dev chez Microsoft, dont David Catuhe, Etienne Magraff, Julien Corioland, David Rousset et pleins d'autres que vous pouvez trouver (je vous mets pas tout ici, ca ferait trop de noms !) <a href="https://github.com/MicrosoftDX/Vorlonjs/graphs/contributors">ici</a> sur le github de Microsoft DX. Cet outil est une promesse :
-<blockquote>A new, open source, extensible, platform-agnostic tool for remotely debugging and testing your JavaScript. Powered by node.js and socket.io.
-<p>Understand all about Vorlon.js in 20 minutes watching this video : <a href="https://channel9.msdn.com/Shows/codechat/046"><u><span style="color: #0066cc;">https://channel9.msdn.com/Shows/codechat/046</span></u></a></blockquote><br>
-Deja, ca vient de Microsoft, moi j'aime bien (&lt;3 Linux aussi, pas de jaloux), le logo c'est un soucoupe mode retro gaming, ca peut que être fun, le site il est ici : <a href="http://vorlonjs.com/">http://vorlonjs.com/</a> . Bref, je l'installe sur mon mac pour dépanner le copain.</p>
-<p>la doc me dit &quot;nodejs&quot;, ok ben on commence par installer nodejs, depuis leur site : <a href="https://nodejs.org/en/download/">https://nodejs.org/en/download/</a></p>
-<p>ca s'installe en mode IT Guys (le mauvais, pas le bon) &quot;Click Next, Click Next, Click Finish&quot;</p>
-<pre><span class="pl-s1">sudo npm i -g vorlon
-sudo vorlon
-<span class="pl-mo">With the server is running, open http://localhost:1337 in your browser to see the Vorlon.JS dashboard.
-</span></span></pre>
-<p>Tiens comme la doc dis donc (et le copain dev du début)!<br>
-Je suis pas forcément un grand habitué de npm et de node en général mais je sais comment la commande find fonctionne donc je lance une petite recherche de vorlon qui se trouve dans /usr/local/lib/node_modules/vorlon et dedans je retrouve le dossier Server (que j'avais repéré dans le git avec un fichier de config en json qui s'appelle config.json. (limpide !)</p>
-<p>Sachant qu'on cherche comment changer le binding de &quot;localhost&quot;, je me dis &quot;comment ont ils pu appeler le host&quot;, c'est host tout simplement, donc je change par mon fichier par  :</p>
-<pre>{
-    "baseURL": "",
-    "useSSLAzure": false,
-    "useSSL": false,
-    "SSLkey": "cert/server.key",
-    "SSLcert": "cert/server.crt",
-    "activateAuth": false,
-    "username": "",
-    "password": "",
-    "host": "toto",
-    "port": 1337,
-    "enableWebproxy": true,
-[...] }</pre>
-<p>je teste (oui c'est bien aussi les tests!)</p>
-<pre>sudo vorlon
-With the server is running, open http://toto:1337 in your browser to see the Vorlon.JS dashboard.
-</pre>
-<p>Bref, tout ça pour dire, franchement les gars, votre Vorlon.js c'est vachement cool !</p>
+</p>
+      
+      
+  
 
-    </main>
-    <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2">
-      <span class="meta__stats">About 2 min reading time</span>
-      <nav class="sticky-top">
-        
-      </nav>
-    </aside>
+      <div class="tagslist d-none d-lg-block mt-2">
+  
+    <a href="/tags/Azure Cli/" class="badge badge-special">Azure Cli</a>
+    <a href="/tags/PowerShell/" class="badge badge-special">PowerShell</a>
+    <a href="/tags/Azure/" class="badge badge-special">Azure</a>
+    <a href="/tags/Netorking/" class="badge badge-special">Netorking</a>
+</div>
+    </div>
   </div>
-</div>
-</div>
+</article>
+
     <footer class="site-footer bg-transparent pb-3 pb-md-5">
       <div class="layout-social container d-flex justify-content-center">
 

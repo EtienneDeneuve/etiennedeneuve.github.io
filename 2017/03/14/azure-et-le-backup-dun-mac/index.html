@@ -5,6 +5,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="msvalidate.01" content="DE6C71A9BE4E011D01CC38799992B4A6"/>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-71551100-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'UA-71551100-1');
+    </script>
+
     
       <link rel="stylesheet" href="/css/style.css" type="text/css">
     
@@ -102,81 +114,48 @@
 
       <p>Un petit article &quot;Quick &amp; very very dirty&quot; qui est soyons honnêtes complètement inutile.<br>
 Mais quand c'est inutile, c'est possible que ce soit fun !</p>
-<p>/!\ Disclaimer : Je suis pas responsable de vos données perdues ! /!\</p>
-<iframe class="giphy-embed" src="//giphy.com/embed/ULsH97rqqbf68?html5=true" width="480" height="269" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-<p><a href="http://giphy.com/gifs/nuke-atomic-bomb-a-ULsH97rqqbf68">via GIPHY</a></p>
-<h3>Pré-requis</h3>
-Du crédit Azure, un Mac avec Sierra.
+<blockquote>
+<p>Disclaimer : Je suis pas responsable de vos données perdues !</p>
+</blockquote>
+<p><img src="http://giphy.com/gifs/nuke-atomic-bomb-a-ULsH97rqqbf68" alt="boom"></p>
+<h2 id="pr%C3%A9-requis">Pré-requis <a class="direct-link" href="#pr%C3%A9-requis"> </a></h2>
+<p>Du crédit Azure, un Mac avec Sierra.</p>
 <!--more-->
-<h3>Azure Side</h3>
-<h4>Préparation sur un Mac :</h4>
-Comme on est sur macOs, on va commencer par utiliser le CLI azure, dispo ici : <a href="http://aka.ms/mac-azure-cli">Programme d’installation Mac OS X</a> (aka.ms/mac-azure-cli). Je vous passe la bête installation Next Next Finish...
+<h2 id="azure-side">Azure Side <a class="direct-link" href="#azure-side"> </a></h2>
+<h3 id="pr%C3%A9paration-sur-un-mac">Préparation sur un Mac <a class="direct-link" href="#pr%C3%A9paration-sur-un-mac"> </a></h3>
+<p>Comme on est sur macOs, on va commencer par utiliser le CLI azure, dispo ici : <a href="http://aka.ms/mac-azure-cli">aka.ms/mac-azure-cli</a>(<a href="http://aka.ms/mac-azure-cli">aka.ms/mac-azure-cli</a>). Je vous passe la bête installation Next Next Finish...</p>
 <p>Une fois bien installé sur le macOs, ouvrez le terminal lancez les commandes suivantes :</p>
-<p>[code]azure login[/code]</p>
-<p>suivez le liens <a href="https://aka.ms/devicelogin">https://aka.ms/devicelogin</a> avec le code généré dans le terminal</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line">azure login</span></code></pre>
+<p>suivez le lien <a href="https://aka.ms/devicelogin">aka.ms/devicelogin</a> avec le code généré dans le terminal</p>
 <p>puis vérifiez vos informations de facturation avec :</p>
-<p>[code]azure account show[/code]</p>
-<h4>Création de l'environnement Azure :</h4>
-On crée un petit resource group qui va bien (c'est du Poc Quick &amp; very Dirty, mais on est pas des sauvages !)
-<p>[code]azure group create RG_Backup NorthEurope[/code]</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line">azure account show</span></code></pre>
+<h3 id="cr%C3%A9ation-de-l'environnement-azure">Création de l'environnement Azure <a class="direct-link" href="#cr%C3%A9ation-de-l'environnement-azure"> </a></h3>
+<p>On crée un petit resource group qui va bien (c'est du Poc Quick &amp; very Dirty, mais on est pas des sauvages !)</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line">azure group create RG_Backup NorthEurope</span></code></pre>
 <p>et si tout se passe bien :</p>
-<pre>info:    Executing command group create
-+ Getting resource group RG_Backup
-+ Creating resource group RG_Backup
-info:    Created resource group RG_Backup
-data:    Id:                  /subscriptions/XXXXXXXXXXXX/resourceGroups/RG_Backup
-data:    Name:                RG_Backup
-data:    Location:            northeurope
-data:    Provisioning State:  Succeeded
-data:    Tags: null
-data:
-info:    group create command OK
-</pre>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line">info:    Executing <span class="token builtin class-name">command</span> group create</span><br><span class="highlight-line">+ Getting resource group RG_Backup</span><br><span class="highlight-line">+ Creating resource group RG_Backup</span><br><span class="highlight-line">info:    Created resource group RG_Backup</span><br><span class="highlight-line">data:    Id:                  /subscriptions/XXXXXXXXXXXX/resourceGroups/RG_Backup</span><br><span class="highlight-line">data:    Name:                RG_Backup</span><br><span class="highlight-line">data:    Location:            northeurope</span><br><span class="highlight-line">data:    Provisioning State:  Succeeded</span><br><span class="highlight-line">data:    Tags: null</span><br><span class="highlight-line">data:</span><br><span class="highlight-line">info:    group create <span class="token builtin class-name">command</span> OK</span></code></pre>
 <p>On va créer maintenant un compte de stockage :</p>
-<pre>azure storage account create stobackupmac \
---kind Storage \
---sku-name LRS \
---resource-group RG_BACKUP \
---location NorthEurope
-</pre>
-<p>Normalement, si tout va bien on a un petit message &quot;info: storage account create command OK&quot;, continuons, nous avons besoin d'une clé sur ce compte de stockage :<br>
-[code]azure storage account keys list stobackupmac -g RG_Backup[/code]<br>
-on récupère des clefs d'accès ici :</p>
-<pre>info:    Executing command storage account keys list
-+ Getting storage account keys                                                 
-data:    Name  Key                                                                                       Permissions
-data:    ----  ----------------------------------------------------------------------------------------  -----------
-data:    key1  ONsztQjA44F+S+ffVXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXTNROw1yPOQdcHVynXOOt3g==  Full       
-data:    key2  dppNGuvyIn1li/ffVXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXTNROw1yPOQdcHVynXOOt3g==  Full       
-info:    storage account keys list command OK
-</pre>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line">azure storage account create stobackupmac <span class="token punctuation">\</span></span><br><span class="highlight-line">--kind Storage <span class="token punctuation">\</span></span><br><span class="highlight-line">--sku-name LRS <span class="token punctuation">\</span></span><br><span class="highlight-line">--resource-group RG_BACKUP <span class="token punctuation">\</span></span><br><span class="highlight-line">--location NorthEurope</span></code></pre>
+<p>Normalement, si tout va bien on a un petit message &quot;info: storage account create command OK&quot;, continuons, nous avons besoin d'une clé sur ce compte de stockage :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line">azure storage account keys list stobackupmac -g RG_Backup</span></code></pre>
+<p>on récupère des clefs d'accès ici :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line">info:    Executing <span class="token builtin class-name">command</span> storage account keys list</span><br><span class="highlight-line">+ Getting storage account keys</span><br><span class="highlight-line">data:    Name  Key                                                                                       Permissions</span><br><span class="highlight-line">data:    ----  ----------------------------------------------------------------------------------------  -----------</span><br><span class="highlight-line">data:    key1  ONsztQjA44F+S+ffVXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXTNROw1yPOQdcHVynXOOt3g<span class="token operator">==</span>  Full</span><br><span class="highlight-line">data:    key2  dppNGuvyIn1li/ffVXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXTNROw1yPOQdcHVynXOOt3g<span class="token operator">==</span>  Full</span><br><span class="highlight-line">info:    storage account keys list <span class="token builtin class-name">command</span> OK</span></code></pre>
 <p>Maintenant, on crée un partage Azure :<br>
 Le plus simple, c'est de créer des variables d'environnement pour se simplifier l'exécution des commandes qui vont suivre :</p>
-<pre>export AZURE_STORAGE_ACCOUNT=stobackupmac
-export AZURE_STORAGE_ACCESS_KEY=dppNGuvyIn1li/ffVXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXTNROw1yPOQdcHVynXOOt3g==</pre>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token builtin class-name">export</span> <span class="token assign-left variable">AZURE_STORAGE_ACCOUNT</span><span class="token operator">=</span>stobackupmac</span><br><span class="highlight-line"><span class="token builtin class-name">export</span> <span class="token assign-left variable">AZURE_STORAGE_ACCESS_KEY</span><span class="token operator">=</span>dppNGuvyIn1li/ffVXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXTNROw1yPOQdcHVynXOOt3g<span class="token operator">==</span></span></code></pre>
 <p>Ainsi on peut maintenant taper la commande suivante :</p>
-<p>[code]azure storage share create --share sharebkp --quota 100[/code]</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line">azure storage share create --share sharebkp --quota <span class="token number">100</span></span></code></pre>
 <p>Ce qui nous donnera &quot;info:    storage share create command OK&quot; et donc, c'est prêt !</p>
-<h3>Mac Side</h3>
-Connectons le mac avec le Share dans Azure. Je suppose que le port TCP 445 est ouvert en sortie de chez vous.
+<h2 id="mac-side">Mac Side <a class="direct-link" href="#mac-side"> </a></h2>
+<p>Connectons le mac avec le Share dans Azure. Je suppose que le port TCP 445 est ouvert en sortie de chez vous.</p>
 <p>Ouvrez le Finder puis Menu &quot;Aller&quot;, &quot;Se connecter au serveur...&quot; (ou Command + K)</p>
-<p>Indiquez : smb://sharebkp@stobackupmac.file.core.windows.net/sharebkp (si vous avez tout suivi)</p>
-<p>au prompt du mot de passe, indiquez &quot;sharebkp&quot; et une des clés comme celle exportée dans &quot;AZURE_STORAGE_ACCESS_KEY&quot;. Normalement, vous devriez le voir dans le Finder correctement.</p>
+<p>Indiquez : <code>smb://sharebkp@stobackupmac.file.core.windows.net/sharebkp</code> (si vous avez tout suivi)</p>
+<p>au prompt du mot de passe, indiquez &quot;sharebkp&quot; et une des clés comme celle exportée dans &quot;<code>AZURE_STORAGE_ACCESS_KEY</code>&quot;. Normalement, vous devriez le voir dans le Finder correctement.</p>
 <p>On arrête la partie graphique du mac et on retourne dans un terminal :</p>
-<pre>cd /Volumes/sharebkp
-#création du SparseBundle
-hdiutil create \
--library NONE \
--fs HFS+ \
--volname "Azure Time Machine" \
--encryption AES-128 \ #Attention, oubliez pas le mot de passe !
--size 99g \
-MacBookPro-Etienne.sparsebundle
-</pre>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token builtin class-name">cd</span> /Volumes/sharebkp</span><br><span class="highlight-line"><span class="token comment">#création du SparseBundle</span></span><br><span class="highlight-line">hdiutil create <span class="token punctuation">\</span></span><br><span class="highlight-line">-library NONE <span class="token punctuation">\</span></span><br><span class="highlight-line">-fs HFS+ <span class="token punctuation">\</span></span><br><span class="highlight-line">-volname <span class="token string">"Azure Time Machine"</span> <span class="token punctuation">\</span></span><br><span class="highlight-line">-encryption AES-128 <span class="token punctuation">\</span> <span class="token comment">#Attention, oubliez pas le mot de passe !</span></span><br><span class="highlight-line">-size 99g <span class="token punctuation">\</span></span><br><span class="highlight-line">MacBookPro-Etienne.sparsebundle</span></code></pre>
 <p>Maintenant, allez allumer la cafetière, lancer un détartrage, nettoyez la, faites un café, ca devrait être prêt...<br>
 Si tout est bien prêt, avec le Finder, double cliquer sur l'image SparseBundle, vous devriez la retrouver dans &quot;/Volumes/Azure\ Time\ Machine/&quot;, retournons dans le terminal :</p>
-<pre>sudo tmutil setdestination /Volumes/Azure\ Time\ Machine/
-</pre>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">sudo</span> tmutil setdestination /Volumes/Azure<span class="token punctuation">\</span> Time<span class="token punctuation">\</span> Machine/</span></code></pre>
 <p>Et Hop, Time Machine sur Azure !<br>
 (oui, je sais ;))</p>
 
@@ -184,7 +163,28 @@ Si tout est bien prêt, avec le Finder, double cliquer sur l'image SparseBundle,
     <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2">
       <span class="meta__stats">About 2 min reading time</span>
       <nav class="sticky-top">
-        
+        <div class="">
+                <ol>
+                    
+                    <li><a href="#pr%C3%A9-requis">Pré-requis  </a>
+            		</li>
+
+                    <li><a href="#azure-side">Azure Side  </a>
+            
+                <ol>
+                    
+                    <li><a href="#pr%C3%A9paration-sur-un-mac">Préparation sur un Mac  </a>
+            		</li>
+
+                    <li><a href="#cr%C3%A9ation-de-l'environnement-azure">Création de l'environnement Azure  </a>
+            		</li>
+                </ol>
+            		</li>
+
+                    <li><a href="#mac-side">Mac Side  </a>
+            		</li>
+                </ol>
+            </div>
       </nav>
     </aside>
   </div>

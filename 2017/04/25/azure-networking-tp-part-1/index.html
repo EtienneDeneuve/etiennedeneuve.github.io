@@ -5,6 +5,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="msvalidate.01" content="DE6C71A9BE4E011D01CC38799992B4A6"/>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-71551100-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'UA-71551100-1');
+    </script>
+
     
       <link rel="stylesheet" href="/css/style.css" type="text/css">
     
@@ -101,133 +113,106 @@
       
 
       <p><a href="https://www.linkedin.com/in/lopesmickael">Mickael Lopes</a> et moi avons animé une session au Global Azure Bootcamp intitulée : &quot;Le réseau dans Azure : Cas d'usage et Retour d'expériences&quot;.</p>
-<p>Les slides de  notre session sont dispo sur slideshare ici : <a href="https://www.slideshare.net/MickaelLOPES91/gab-le-rseau-dans-azure">Slideshare de Mickael</a></p>
+<p>Les slides de  notre session sont dispo sur slideshare ici : <a href="https://www.slideshare.net/MickaelLOPES91/gab-le-rseau-dans-azure">Slideshare de Mickael</a></p>
 <p>Comme prévu, voici des TP pour aller avec notre présentation, a faire vous même :)</p>
-<h1>Les vNets et Subnets</h1>
-Avant d'attaquer des éléments plus complexe, nous allons apprendre a créer un VNet avec un subnet avec les trois moyens disponibles sur Azure.
-<h2>Powershell</h2>
-Avant de se lancer, commencez par installer votre station de travail convenablement avec la doc Microsoft qui va bien : <a href="https://docs.microsoft.com/fr-fr/powershell/azureps-cmdlets-docs">Powershell for Azure</a>
+<h1 id="les-vnets-et-subnets">Les vNets et Subnets <a class="direct-link" href="#les-vnets-et-subnets"> </a></h1>
+<p>Avant d'attaquer des éléments plus complexe, nous allons apprendre a créer un VNet avec un subnet avec les trois moyens disponibles sur Azure.</p>
+<h2 id="powershell">Powershell <a class="direct-link" href="#powershell"> </a></h2>
+<p>Avant de se lancer, commencez par installer votre station de travail convenablement avec la doc Microsoft qui va bien : <a href="https://docs.microsoft.com/fr-fr/powershell/azureps-cmdlets-docs">Powershell for Azure</a></p>
 <p>Dans Azure, on commence toujours par créer un Resource Group donc :</p>
-<pre>New-AzureRmResourceGroup `
--Name RG-Vnet-Exo-PS `
--Location northeurope</pre>
+<pre class="language-powershell"><code class="language-powershell"><span class="highlight-line">New<span class="token operator">-</span>AzureRmResourceGroup `</span><br><span class="highlight-line"><span class="token operator">-</span>Name RG<span class="token operator">-</span>Vnet<span class="token operator">-</span>Exo<span class="token operator">-</span><span class="token function">PS</span> `</span><br><span class="highlight-line"><span class="token operator">-</span>Location northeurope</span></code></pre>
 <p>Ensuite nous allons créer un vNet :</p>
-<pre><code class="lang-powershell">$vnetexo = New-AzureRmVirtualNetwork -ResourceGroupName RG-Vnet-Exo-PS `
--Name vnet-test-ps `
--AddressPrefix 10.0.0.0/24 `
--Location northeurope</code></pre>
+<pre class="language-powershell"><code class="language-powershell"><span class="highlight-line"><span class="token variable">$vnetexo</span> = New<span class="token operator">-</span>AzureRmVirtualNetwork <span class="token operator">-</span>ResourceGroupName RG<span class="token operator">-</span>Vnet<span class="token operator">-</span>Exo<span class="token operator">-</span><span class="token function">PS</span> `</span><br><span class="highlight-line"><span class="token operator">-</span>Name vnet<span class="token operator">-</span>test<span class="token operator">-</span><span class="token function">ps</span> `</span><br><span class="highlight-line"><span class="token operator">-</span>AddressPrefix 10<span class="token punctuation">.</span>0<span class="token punctuation">.</span>0<span class="token punctuation">.</span>0<span class="token operator">/</span>24 `</span><br><span class="highlight-line"><span class="token operator">-</span>Location northeurope</span></code></pre>
 <p>puis afin d'ajouter un subnet :</p>
-<pre><code class="lang-powershell">Add-AzureRmVirtualNetworkSubnetConfig -Name psfrontend `
--VirtualNetwork $vnetexo `
--AddressPrefix 10.0.0.0/26
-Set-AzureRmVirtualNetwork -VirtualNetwork $vnetexo</code></pre>
-<h2>Azure CLI 2.0</h2>
-Comme pour la partie Powershell, suivez la doc d'installation de Azure CLI 2.0 ici : <a href="https://docs.microsoft.com/en-us/cli/azure/install-azure-cli">Azure CLI 2.0</a>
-Comme dans l'exemple précédent nous allons créer un Resource Group :
-<pre><code class="lang-bash">az group create \
---name RG-Vnet-Exo-AZ \
---location northeurope
-</code></pre>
-Ensuite nous allons créer un vNet et le subnet :
-<pre><code class="lang-bash">az network vnet create \
---name vnet-test-az \
---resource-group RG-Vnet-Exo-AZ \
---location northeurope \
---address-prefixes 10.0.1.0/24 \
---subnet-name azfrontend \
---subnet-prefixes 10.0.1.0/26
-</code></pre>
-<h2>ARM Template</h2>
-Pour commencer, utilisez un éditeur de texte un peu évoluer, le JSON sans outil, ca pique un peu... Je vous recommande Visual Studio Code, avec ce petit article : <a href="https://etienne.deneuve.xyz/2017/01/26/visual-studio-code-pour-ansible-terraform/" target="_blank" rel="noopener noreferrer">sur mon blog</a>
-Un Template Json simple contient plusieurs parties : "variables", "parameters", "resources" et "outputs". Sans réexpliquer l'ensemble, voici à quoi notre Template va ressembler :
-<pre><code class="lang-json">{
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "vnetname": {
-      "type": "string",
-      "metadata": {
-        "description": "Nom du Vnet"
-      },
-      "defaultValue": "vnet-test-json"
-    },
-    "vnetname": {
-      "type": "string",
-      "metadata": {
-        "description": "Nom du Vnet"
-      },
-      "defaultValue": "vnet-test-json"
-    },
-    "addressSpacePrefix": {
-      "type": "string",
-      "metadata": {
-        "description": "IP v4 (RFC1918)"
-      },
-      "defaultValue": "10.0.2.0/24"
-    },
-    "subnetName": {
-      "type": "string",
-      "metadata": {
-        "description": "Nom du Subnet"
-      },
-      "defaultValue": "jsonfrontend"
-    },
-    "subnetPrefix": {
-      "type": "string",
-      "metadata": {
-        "description": "IP v4 du Subnet"
-      },
-      "defaultValue": "10.0.2.0/26"
-    }
-  },
-  "variables": {},
-  "resources": [
-    {
-      "apiVersion": "2015-06-15",
-      "type": "Microsoft.Network/virtualNetworks",
-      "name": "[parameters('VnetName')]",
-      "location": "[resourceGroup().location]",
-      "tags": {
-        "displayName": "JSON-VNET"
-      },
-      "properties": {
-        "addressSpace": {
-          "addressPrefixes": [
-            "[parameters('addressSpacePrefix')]"
-          ]
-        },
-        "subnets": [
-          {
-            "name": "[parameters('subnetName')]",
-            "properties": {
-              "addressPrefix": "[parameters('subnetPrefix')]"
-            }
-          }
-        ]
-      }
-    }
-  ],
-  "outputs": {}
-}</code></pre>
-Ensuite pour déployer ce fichier soit via le portail avec la doc ici : <a href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-portal">Azure Template &amp; Portal</a>
-ou alors via Powershell et Azure CLI 2.0 :
-<h5>Powershell :</h5>
-<pre>New-AzureRmResourceGroup -Name RG-Vnet-Exo-JSON `
-   -Location " North Europe"
-New-AzureRmResourceGroupDeployment -Name RG-Vnet-Exo-JSON `
-   -ResourceGroupName ExampleResourceGroup `
-   -TemplateFile c:\MyTemplates\vnet-simple.json</pre>
-<h5>Azure CLI 2.0:</h5>
-<pre>az group create --name RG-XXX --location "North Europe“
-az group deployment create \
---name ExampleDeployment \
---resource-group ExampleGroup \
---template-file vnet-simple.json</pre>
+<pre class="language-powershell"><code class="language-powershell"><span class="highlight-line">Add<span class="token operator">-</span>AzureRmVirtualNetworkSubnetConfig <span class="token operator">-</span>Name psfrontend `</span><br><span class="highlight-line"><span class="token operator">-</span>VirtualNetwork <span class="token variable">$vnetexo</span> `</span><br><span class="highlight-line"><span class="token operator">-</span>AddressPrefix 10<span class="token punctuation">.</span>0<span class="token punctuation">.</span>0<span class="token punctuation">.</span>0<span class="token operator">/</span>26</span><br><span class="highlight-line"><span class="token function">Set</span><span class="token operator">-</span>AzureRmVirtualNetwork <span class="token operator">-</span>VirtualNetwork <span class="token variable">$vnetexo</span></span></code></pre>
+<h2 id="azure-cli-2.0">Azure CLI 2.0 <a class="direct-link" href="#azure-cli-2.0"> </a></h2>
+<p>Comme pour la partie Powershell, suivez la doc d'installation de Azure CLI 2.0 ici : <a href="https://docs.microsoft.com/en-us/cli/azure/install-azure-cli">Azure CLI 2.0</a><br>
+Comme dans l'exemple précédent nous allons créer un Resource Group :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line">az group create <span class="token punctuation">\</span></span><br><span class="highlight-line">--name RG-Vnet-Exo-AZ <span class="token punctuation">\</span></span><br><span class="highlight-line">--location northeurope</span></code></pre>
+<p>Ensuite nous allons créer un vNet et le subnet :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line">az network vnet create <span class="token punctuation">\</span></span><br><span class="highlight-line">--name vnet-test-az <span class="token punctuation">\</span></span><br><span class="highlight-line">--resource-group RG-Vnet-Exo-AZ <span class="token punctuation">\</span></span><br><span class="highlight-line">--location northeurope <span class="token punctuation">\</span></span><br><span class="highlight-line">--address-prefixes <span class="token number">10.0</span>.1.0/24 <span class="token punctuation">\</span></span><br><span class="highlight-line">--subnet-name azfrontend <span class="token punctuation">\</span></span><br><span class="highlight-line">--subnet-prefixes <span class="token number">10.0</span>.1.0/26</span></code></pre>
+<h2 id="arm-template">ARM Template <a class="direct-link" href="#arm-template"> </a></h2>
+<p>Pour commencer, utilisez un éditeur de texte un peu évolue, le JSON sans outil, ca pique un peu...<br>
+Je vous recommande Visual Studio Code, avec ce petit article : <a href="https://etienne.deneuve.xyz/2017/01/26/visual-studio-code-pour-ansible-terraform/">sur mon blog</a><br>
+Un Template Json simple contient plusieurs parties : &quot;variables&quot;, &quot;parameters&quot;, &quot;resources&quot; et &quot;outputs&quot;. Sans réexpliquer l'ensemble, voici à quoi notre Template va ressembler :</p>
+<pre class="language-json"><code class="language-json"><span class="highlight-line"><span class="token punctuation">{</span></span><br><span class="highlight-line">  <span class="token property">"$schema"</span><span class="token operator">:</span> <span class="token string">"&lt;https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#> "</span><span class="token punctuation">,</span></span><br><span class="highlight-line">  <span class="token property">"contentVersion"</span><span class="token operator">:</span> <span class="token string">"1.0.0.0"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">  <span class="token property">"parameters"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">    <span class="token property">"vnetname"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"string"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">      <span class="token property">"metadata"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">        <span class="token property">"description"</span><span class="token operator">:</span> <span class="token string">"Nom du Vnet"</span></span><br><span class="highlight-line">      <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">      <span class="token property">"defaultValue"</span><span class="token operator">:</span> <span class="token string">"vnet-test-json"</span></span><br><span class="highlight-line">    <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">    <span class="token property">"vnetname"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"string"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">      <span class="token property">"metadata"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">        <span class="token property">"description"</span><span class="token operator">:</span> <span class="token string">"Nom du Vnet"</span></span><br><span class="highlight-line">      <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">      <span class="token property">"defaultValue"</span><span class="token operator">:</span> <span class="token string">"vnet-test-json"</span></span><br><span class="highlight-line">    <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">    <span class="token property">"addressSpacePrefix"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"string"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">      <span class="token property">"metadata"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">        <span class="token property">"description"</span><span class="token operator">:</span> <span class="token string">"IP v4 (RFC1918)"</span></span><br><span class="highlight-line">      <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">      <span class="token property">"defaultValue"</span><span class="token operator">:</span> <span class="token string">"10.0.2.0/24"</span></span><br><span class="highlight-line">    <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">    <span class="token property">"subnetName"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"string"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">      <span class="token property">"metadata"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">        <span class="token property">"description"</span><span class="token operator">:</span> <span class="token string">"Nom du Subnet"</span></span><br><span class="highlight-line">      <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">      <span class="token property">"defaultValue"</span><span class="token operator">:</span> <span class="token string">"jsonfrontend"</span></span><br><span class="highlight-line">    <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">    <span class="token property">"subnetPrefix"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"string"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">      <span class="token property">"metadata"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">        <span class="token property">"description"</span><span class="token operator">:</span> <span class="token string">"IP v4 du Subnet"</span></span><br><span class="highlight-line">      <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">      <span class="token property">"defaultValue"</span><span class="token operator">:</span> <span class="token string">"10.0.2.0/26"</span></span><br><span class="highlight-line">    <span class="token punctuation">}</span></span><br><span class="highlight-line">  <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">  <span class="token property">"variables"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">  <span class="token property">"resources"</span><span class="token operator">:</span> <span class="token punctuation">[</span></span><br><span class="highlight-line">    <span class="token punctuation">{</span></span><br><span class="highlight-line">      <span class="token property">"apiVersion"</span><span class="token operator">:</span> <span class="token string">"2015-06-15"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"Microsoft.Network/virtualNetworks"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">      <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"[parameters('VnetName')]"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">      <span class="token property">"location"</span><span class="token operator">:</span> <span class="token string">"[resourceGroup().location]"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">      <span class="token property">"tags"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">        <span class="token property">"displayName"</span><span class="token operator">:</span> <span class="token string">"JSON-VNET"</span></span><br><span class="highlight-line">      <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">      <span class="token property">"properties"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">        <span class="token property">"addressSpace"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">          <span class="token property">"addressPrefixes"</span><span class="token operator">:</span> <span class="token punctuation">[</span></span><br><span class="highlight-line">            <span class="token string">"[parameters('addressSpacePrefix')]"</span></span><br><span class="highlight-line">          <span class="token punctuation">]</span></span><br><span class="highlight-line">        <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">        <span class="token property">"subnets"</span><span class="token operator">:</span> <span class="token punctuation">[</span></span><br><span class="highlight-line">          <span class="token punctuation">{</span></span><br><span class="highlight-line">            <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"[parameters('subnetName')]"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">            <span class="token property">"properties"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">              <span class="token property">"addressPrefix"</span><span class="token operator">:</span> <span class="token string">"[parameters('subnetPrefix')]"</span></span><br><span class="highlight-line">            <span class="token punctuation">}</span></span><br><span class="highlight-line">          <span class="token punctuation">}</span></span><br><span class="highlight-line">        <span class="token punctuation">]</span></span><br><span class="highlight-line">      <span class="token punctuation">}</span></span><br><span class="highlight-line">    <span class="token punctuation">}</span></span><br><span class="highlight-line">  <span class="token punctuation">]</span><span class="token punctuation">,</span></span><br><span class="highlight-line">  <span class="token property">"outputs"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span></span><br><span class="highlight-line"><span class="token punctuation">}</span></span></code></pre>
+<p>Ensuite pour déployer ce fichier soit via le portail avec<br>
+<a href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-portal">la doc ici</a><br>
+ou alors via Powershell et Azure CLI 2.0 :</p>
+<h3 id="deploy-arm-using-powershell">Deploy ARM using Powershell <a class="direct-link" href="#deploy-arm-using-powershell"> </a></h3>
+<pre class="language-powershell"><code class="language-powershell"><span class="highlight-line">New<span class="token operator">-</span>AzureRmResourceGroup <span class="token operator">-</span>Name RG<span class="token operator">-</span>Vnet<span class="token operator">-</span>Exo<span class="token operator">-</span>JSON `</span><br><span class="highlight-line">   <span class="token operator">-</span>Location <span class="token string">" North Europe"</span></span><br><span class="highlight-line">New<span class="token operator">-</span>AzureRmResourceGroupDeployment <span class="token operator">-</span>Name RG<span class="token operator">-</span>Vnet<span class="token operator">-</span>Exo<span class="token operator">-</span>JSON `</span><br><span class="highlight-line">   <span class="token operator">-</span>ResourceGroupName ExampleResourceGroup `</span><br><span class="highlight-line">   <span class="token operator">-</span>TemplateFile c:\MyTemplates\vnet<span class="token operator">-</span>simple<span class="token punctuation">.</span>json</span></code></pre>
+<h3 id="deploy-arm-using-azure-cli-2.0">Deploy ARM using Azure CLI 2.0 <a class="direct-link" href="#deploy-arm-using-azure-cli-2.0"> </a></h3>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line">az group create --name RG-XXX --location "North Europe“</span><br><span class="highlight-line">az group deployment create <span class="token punctuation">\</span></span><br><span class="highlight-line">--name ExampleDeployment <span class="token punctuation">\</span></span><br><span class="highlight-line">--resource-group ExampleGroup <span class="token punctuation">\</span></span><br><span class="highlight-line">--template-file vnet-simple.json</span></code></pre>
+<h1 id="vnet-peering">vNet Peering <a class="direct-link" href="#vnet-peering"> </a></h1>
+<p>L'objectif est de connecter nos 3 Vnets, avec nos 3 outils :</p>
+<ul>
+<li>vnet-test-ps</li>
+<li>vnet-test-az</li>
+<li>vnet-test-json</li>
+</ul>
+<h2 id="powershell-2">Powershell <a class="direct-link" href="#powershell-2"> </a></h2>
+<p>Nous allons créer le lien entre vnet-test-ps et vnet-test-az :</p>
+<pre class="language-powershell"><code class="language-powershell"><span class="highlight-line">    <span class="token variable">$vnetPS</span> = Get<span class="token operator">-</span>AzureRmVirtualNetwork <span class="token operator">-</span>ResourceGroupName RG<span class="token operator">-</span>Vnet<span class="token operator">-</span>Exo<span class="token operator">-</span><span class="token function">PS</span> <span class="token operator">-</span>Name vnet<span class="token operator">-</span>test<span class="token operator">-</span><span class="token function">ps</span></span><br><span class="highlight-line">    <span class="token variable">$vnetAZ</span> = Get<span class="token operator">-</span>AzureRmVirtualNetwork <span class="token operator">-</span>ResourceGroupName RG<span class="token operator">-</span>Vnet<span class="token operator">-</span>Exo<span class="token operator">-</span>AZ <span class="token operator">-</span>Name vnet<span class="token operator">-</span>test<span class="token operator">-</span>az</span></code></pre>
+<p>Puis nous créons le lien PS2AZ :</p>
+<pre class="language-powershell"><code class="language-powershell"><span class="highlight-line">    Add<span class="token operator">-</span>AzureRmVirtualNetworkPeering <span class="token operator">-</span>Name PS2AZ <span class="token operator">-</span>VirtualNetwork <span class="token variable">$vnetPS</span> <span class="token operator">-</span>RemoteVirtualNetworkId <span class="token variable">$vnetAZ</span><span class="token punctuation">.</span>Id</span><br><span class="highlight-line"></span><br><span class="highlight-line">    Add<span class="token operator">-</span>AzureRmVirtualNetworkPeering <span class="token operator">-</span>Name AZ2PS <span class="token operator">-</span>VirtualNetwork <span class="token variable">$vnetAZ</span> <span class="token operator">-</span>RemoteVirtualNetworkId <span class="token variable">$vnetPS</span><span class="token punctuation">.</span>Id</span></code></pre>
+<p>nous pouvons vérifié si le peering est fonctionnel via la commande Powershell :</p>
+<pre class="language-powershell"><code class="language-powershell"><span class="highlight-line">     Get<span class="token operator">-</span>AzureRmVirtualNetworkPeering <span class="token operator">-</span>VirtualNetworkName vnetPS <span class="token operator">-</span>ResourceGroupName vnetPS <span class="token operator">-</span>Name PS2AZ</span></code></pre>
+<p>en l'état, notre peering est configuré mais certaines options ne sont pas activées :</p>
+<ul>
+<li>Forwarded Traffic</li>
+<li>Gateway Transit</li>
+<li>Remote Gateways</li>
+</ul>
+<p>Dans notre cas, nous avons besoin d'activer le transfert du trafic.</p>
+<pre class="language-powershell"><code class="language-powershell"><span class="highlight-line">    <span class="token variable">$ps2az</span> = Get<span class="token operator">-</span>AzureRmVirtualNetworkPeering <span class="token operator">-</span>VirtualNetworkName vnetPS <span class="token operator">-</span>ResourceGroupName vnetPS <span class="token operator">-</span>Name PS2AZ</span><br><span class="highlight-line">    <span class="token variable">$ps2az</span><span class="token punctuation">.</span>AllowForwardedTraffic = <span class="token boolean">$true</span></span><br><span class="highlight-line">    <span class="token function">Set</span><span class="token operator">-</span>AzureRmVirtualNetworkPeering <span class="token operator">-</span>VirtualNetworkPeering <span class="token variable">$ps2az</span></span></code></pre>
+<h2 id="azure-cli-2.0-2">Azure CLI 2.0 <a class="direct-link" href="#azure-cli-2.0-2"> </a></h2>
+<p>Avec Azure CLI, il faudra recupéré l'id du réseau distant pour le peering avec la commande :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line">    az network vnet list -g RG-Vnet-Exo-JSON</span></code></pre>
+<p>et vous recuperez un objets json, cherchez votre id qui sera du type : <code>/subscriptions/VOTREIDDESOUSCRPTION/resourceGroups/RG-Vnet-Exo-JSON/providers/Microsoft.Network/virtualNetworks/vnet-test-json</code> Si vous utilisez le bash (Ubuntu on Windows par exemple) créer une variable comme ceci :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line">    <span class="token assign-left variable">JSON_VNET_ID</span><span class="token operator">=</span><span class="token string">"/subscriptions/VOTREIDDESOUSCRPTION/resourceGroups/RG-Vnet-Exo-JSON/providers/Microsoft.Network/virtualNetworks/vnet-test-json"</span></span></code></pre>
+<p>Ce sera beaucoup plus simple pour l'appeler dans la commande suivante :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line">az network vnet peering create --name AZ2JSON <span class="token punctuation">\</span></span><br><span class="highlight-line">  --remote-vnet-id <span class="token variable">${$JSON_VNET_ID}</span> <span class="token punctuation">\</span></span><br><span class="highlight-line">  --resource-group RG-Vnet-Exo-AZ <span class="token punctuation">\</span></span><br><span class="highlight-line">  --vnet-name vnet-test-az <span class="token punctuation">\</span></span><br><span class="highlight-line">  --allow-forwarded-traffic <span class="token punctuation">\</span></span><br><span class="highlight-line">  --allow-vnet-access <span class="token punctuation">\</span></span></code></pre>
+<p>Théoriquement, nous pourrions executer la commande pour effectuer le peering dans l'autre sens, mais nous allons la faire avec notre template de la partie 1.</p>
+<h2 id="arm-template-2">ARM Template <a class="direct-link" href="#arm-template-2"> </a></h2>
+<p>Pour déclarer un vnet peering dans un template ARM, à l'heure actuelle, via le portail ou la ligne de commande (Powershell ou Azure CLI 2.0) il n'est pas possible dans le &quot;contexte&quot; de manipuler deux Resource Group. Du coup, il faut le faire d'un coté puis de l'autre, ou utiliser des templates &quot;nested&quot; c'est à dire un template &quot;parent&quot; puis deux &quot;enfants&quot;. Nous n'allons (pas encore ;)) aborder ce type de template. (Stay Tuned !) Donc, reprenons notre template et ajoutons un nouveau type de resource Azure <code>&quot;Microsoft.Network/virtualNetworks/virtualNetworkPeerings&quot;</code></p>
+<pre class="language-json"><code class="language-json"><span class="highlight-line">    <span class="token punctuation">{</span></span><br><span class="highlight-line">    <span class="token property">"$schema"</span><span class="token operator">:</span> <span class="token string">"https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">    <span class="token property">"contentVersion"</span><span class="token operator">:</span> <span class="token string">"1.0.0.0"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">    <span class="token property">"parameters"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">        <span class="token property">"vnetname"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"string"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">            <span class="token property">"metadata"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">                <span class="token property">"description"</span><span class="token operator">:</span> <span class="token string">"Nom du Vnet"</span></span><br><span class="highlight-line">            <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">            <span class="token property">"defaultValue"</span><span class="token operator">:</span> <span class="token string">"vnet-test-json"</span></span><br><span class="highlight-line">        <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">        <span class="token property">"vNetRemote"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"string"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">            <span class="token property">"metadata"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">                <span class="token property">"description"</span><span class="token operator">:</span> <span class="token string">"Nom du Vnet distant"</span></span><br><span class="highlight-line">            <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">            <span class="token property">"defaultValue"</span><span class="token operator">:</span> <span class="token string">"vnet-test-az"</span></span><br><span class="highlight-line">        <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">        <span class="token property">"RGvNetRemote"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"string"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">            <span class="token property">"metadata"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">                <span class="token property">"description"</span><span class="token operator">:</span> <span class="token string">"Nom du Resource Group"</span></span><br><span class="highlight-line">            <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">            <span class="token property">"defaultValue"</span><span class="token operator">:</span> <span class="token string">"RG-Vnet-Exo-AZ"</span></span><br><span class="highlight-line">        <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">        <span class="token property">"addressSpacePrefix"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"string"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">            <span class="token property">"metadata"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">                <span class="token property">"description"</span><span class="token operator">:</span> <span class="token string">"IP v4 (RFC1918)"</span></span><br><span class="highlight-line">            <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">            <span class="token property">"defaultValue"</span><span class="token operator">:</span> <span class="token string">"10.0.2.0/24"</span></span><br><span class="highlight-line">        <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">        <span class="token property">"subnetName"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"string"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">            <span class="token property">"metadata"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">                <span class="token property">"description"</span><span class="token operator">:</span> <span class="token string">"Nom du Subnet"</span></span><br><span class="highlight-line">            <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">            <span class="token property">"defaultValue"</span><span class="token operator">:</span> <span class="token string">"jsonfrontend"</span></span><br><span class="highlight-line">        <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">        <span class="token property">"subnetPrefix"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"string"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">            <span class="token property">"metadata"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">                <span class="token property">"description"</span><span class="token operator">:</span> <span class="token string">"IP v4 du Subnet"</span></span><br><span class="highlight-line">            <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">            <span class="token property">"defaultValue"</span><span class="token operator">:</span> <span class="token string">"10.0.2.0/26"</span></span><br><span class="highlight-line">        <span class="token punctuation">}</span></span><br><span class="highlight-line">    <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">    <span class="token property">"variables"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">    <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">    <span class="token property">"resources"</span><span class="token operator">:</span> <span class="token punctuation">[</span></span><br><span class="highlight-line">        <span class="token punctuation">{</span></span><br><span class="highlight-line">            <span class="token property">"apiVersion"</span><span class="token operator">:</span> <span class="token string">"2015-06-15"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"Microsoft.Network/virtualNetworks"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">            <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"[parameters('VnetName')]"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">            <span class="token property">"location"</span><span class="token operator">:</span> <span class="token string">"[resourceGroup().location]"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">            <span class="token property">"tags"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">                <span class="token property">"displayName"</span><span class="token operator">:</span> <span class="token string">"JSON-VNET"</span></span><br><span class="highlight-line">            <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">            <span class="token property">"properties"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">                <span class="token property">"addressSpace"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">                    <span class="token property">"addressPrefixes"</span><span class="token operator">:</span> <span class="token punctuation">[</span></span><br><span class="highlight-line">                        <span class="token string">"[parameters('addressSpacePrefix')]"</span></span><br><span class="highlight-line">                    <span class="token punctuation">]</span></span><br><span class="highlight-line">                <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">                <span class="token property">"subnets"</span><span class="token operator">:</span> <span class="token punctuation">[</span></span><br><span class="highlight-line">                    <span class="token punctuation">{</span></span><br><span class="highlight-line">                        <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"[parameters('subnetName')]"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">                        <span class="token property">"properties"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">                            <span class="token property">"addressPrefix"</span><span class="token operator">:</span> <span class="token string">"[parameters('subnetPrefix')]"</span></span><br><span class="highlight-line">                        <span class="token punctuation">}</span></span><br><span class="highlight-line">                    <span class="token punctuation">}</span></span><br><span class="highlight-line">                <span class="token punctuation">]</span></span><br><span class="highlight-line">            <span class="token punctuation">}</span></span><br><span class="highlight-line">        <span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">        <span class="token punctuation">{</span></span><br><span class="highlight-line">            <span class="token property">"apiVersion"</span><span class="token operator">:</span> <span class="token string">"2017-03-01"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"Microsoft.Network/virtualNetworks/virtualNetworkPeerings"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">            <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"[concact( parameters('VnetName') , '/JSON2AZ')]"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">            <span class="token property">"location"</span><span class="token operator">:</span> <span class="token string">"[resourceGroup().location]"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">            <span class="token property">"properties"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">                <span class="token property">"allowVirtualNetworkAccess"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span></span><br><span class="highlight-line">                <span class="token property">"allowForwardedTraffic"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span></span><br><span class="highlight-line">                <span class="token property">"allowGatewayTransit"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span></span><br><span class="highlight-line">                <span class="token property">"useRemoteGateways"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span></span><br><span class="highlight-line">                <span class="token property">"remoteVirtualNetwork"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">                    <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"[resourceId( subscription().subscriptionid, parameters('RGvNetRemote') , 'Microsoft.Network/virtualNetworks', parameters('vNetRemote'))]"</span></span><br><span class="highlight-line">                <span class="token punctuation">}</span></span><br><span class="highlight-line">            <span class="token punctuation">}</span></span><br><span class="highlight-line">        <span class="token punctuation">}</span></span><br><span class="highlight-line">    <span class="token punctuation">]</span><span class="token punctuation">,</span></span><br><span class="highlight-line">    <span class="token property">"outputs"</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">    <span class="token punctuation">}</span></span><br><span class="highlight-line"><span class="token punctuation">}</span></span></code></pre>
+<p>La méthode de déploiement reste la même que dans la partie 1.</p>
+
     </main>
     <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2">
-      <span class="meta__stats">About 2 min reading time</span>
+      <span class="meta__stats">About 4 min reading time</span>
       <nav class="sticky-top">
-        
+        <div class="">
+                <ol>
+                    
+                    <li><a href="#powershell">Powershell  </a>
+            		</li>
+
+                    <li><a href="#azure-cli-2.0">Azure CLI 2.0  </a>
+            		</li>
+
+                    <li><a href="#arm-template">ARM Template  </a>
+            
+                <ol>
+                    
+                    <li><a href="#deploy-arm-using-powershell">Deploy ARM using Powershell  </a>
+            		</li>
+
+                    <li><a href="#deploy-arm-using-azure-cli-2.0">Deploy ARM using Azure CLI 2.0  </a>
+            		</li>
+                </ol>
+            		</li>
+
+                    <li><a href="#powershell-2">Powershell  </a>
+            		</li>
+
+                    <li><a href="#azure-cli-2.0-2">Azure CLI 2.0  </a>
+            		</li>
+
+                    <li><a href="#arm-template-2">ARM Template  </a>
+            		</li>
+                </ol>
+            </div>
       </nav>
     </aside>
   </div>

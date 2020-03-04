@@ -193,13 +193,14 @@ Au cas ou vous auriez raté l&#39;annonce concernant le projet Honolulu qui vise
   "url": "/2017/04/27/azure-networking-tp-part-2/",
   "tags" : ""
 },{
-  "title": "Azure Networking &amp;#8211; TP &amp;#8211; Part 1 &amp;#8211; vNets &amp;#038; Subnets",
+  "title": "Azure Networking",
   "date" : "Apr 25, 2017",
-  "summary" : "&lt;a href=&quot;https://www.linkedin.com/in/lopesmickael&quot;&gt;Mickael Lopes&lt;/a&gt; et moi avons animé une session au Global Azure Bootcamp intitulée : &quot;Le réseau dans Azure : Cas d&#39;usage et Retour d&#39;expériences&quot;.
+  "summary" : "[Mickael Lopes](https://www.linkedin.com/in/lopesmickael) et moi avons animé une session au Global Azure Bootcamp intitulée : &quot;Le réseau dans Azure : Cas d&#39;usage et Retour d&#39;expériences&quot;.
+
 ",
   
   "url": "/2017/04/25/azure-networking-tp-part-1/",
-  "tags" : ""
+  "tags" : "Azure Cli,PowerShell,Azure,Netorking"
 },{
   "title": "Azure et le backup ? (d&amp;#8217;un Mac)",
   "date" : "Mar 14, 2017",
@@ -207,21 +208,7 @@ Au cas ou vous auriez raté l&#39;annonce concernant le projet Honolulu qui vise
 ",
   
   "url": "/2017/03/14/azure-et-le-backup-dun-mac/",
-  "tags" : ""
-},{
-  "title": "Vorlon.js : Un petit billet pour un gentil copain dev !",
-  "date" : "Feb 02, 2017",
-  "summary" : "J&#39;ai un copain dev&#39; (pas qu&#39;un) mais celui ma demandé il y a quelques jours:
-&lt;ul&gt;
- 	&lt;li&gt;Lui : &quot;Tu sais, tu m&#39;a parlé de Vorlon.js, c&#39;est cool mais comment on change le binding, localhost m&#39;en tape un peu&quot;&lt;/li&gt;
- 	&lt;li&gt;Moi : &quot;Bouge pas, je te donne ca&quot;&lt;/li&gt;
- 	&lt;li&gt;Lui : &quot;Y disent qu&#39;il faut Nginx etc, (bref un gentil dev web en panique)&quot;&lt;/li&gt;
- 	&lt;li&gt;Moi : &quot;Mais non mais non&quot;&lt;/li&gt;
-&lt;/ul&gt;
-",
-  
-  "url": "/2017/02/03/vorlon-js-un-petit-billet-pour-un-gentil-copain-dev/",
-  "tags" : ""
+  "tags" : "Fun,macOs,Azure"
 },{
   "title": "Installation de Nginx en reverse proxy avec réecriture du HTML",
   "date" : "Feb 02, 2017",
@@ -234,12 +221,12 @@ Nginx est un serveur Web modulaire qui fonctionne très bien en reverse proxy et
   "url": "/2017/02/02/installation-de-nginx-en-reverse-proxy-avec-reecriture-du-html/",
   "tags" : "Linux,nginx,reverse proxy"
 },{
-  "title": "[Updated 20/03/2017] Visual Studio Code pour Ansible, Terraform",
+  "title": "Visual Studio Code for Ansible, Terraform",
   "date" : "Jan 26, 2017",
   "summary" : "
 # Visual Studio Code
 
-L&#39;Infrastructure as Code, c&#39;est des méthodes et des outils pour faire des infrastructures reproductibles à l&#39;infini.
+Infrastructure as Code, that&#39;s methods and tooling to allow you to create reproductible infrastructure.
 
 ",
   

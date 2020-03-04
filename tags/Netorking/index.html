@@ -35,7 +35,7 @@
     <script src="/js/script.js"></script>
   </head>
   <body class="position-relative" data-spy="scroll" data-target=".site-nav" data-offset="55">
-    <nav class="site-nav family-sans navbar navbar-expand-md navbar-dark  sidebar sticky-top  py-0">
+    <nav class="site-nav family-sans navbar navbar-expand-md navbar-dark  fixed-top  py-0">
   <div class="container-fluid">
     <button type="button" class="navbar-toggler my-2 my-md-0" data-toggle="collapse" data-target="#myTogglerNav" aria-controls="myTogglerNav" aria-label="Toggle Navigation">
       <span class="navbar-toggler-icon"></span>
@@ -102,53 +102,49 @@
 
     
 
+ 
+<article id="main-content" class="site-main container mt-3 mb-5"
+style="padding-top: 80px"
+>
+<p>See <a href="/tags/">all tags</a>.</p>
+<h2 class="text-secondary mb-5">Tagged <small>“Netorking”</small></h2>
+  
 
+  
 
-<div class="post post-sidebar container-fluid">
-  <div class="row justify-content-xl-center">
+  <div class="row justify-content px-3 px-sm-0 my-5  mb-3 ">
     
 
-    
-    <main class="main col">
+    <div class=" col-md-12  ">
+      <a href="/2017/04/25/azure-networking-tp-part-1/" class="d-flex justify-content-between item-title h2 " >
       
+      Azure Networking
+      
+      
+      </a>
+      <div class="d-flex justify-content-between">
+      <time class="item-date small text-body " datetime="Apr 25, 2017">Published on:    Apr 25, 2017</time>
+      
+      </div>
+      <p class="item-summary lead mb-1 text-body">
+      [Mickael Lopes](https://www.linkedin.com/in/lopesmickael) et moi avons animé une session au Global Azure Bootcamp intitulée : "Le réseau dans Azure : Cas d'usage et Retour d'expériences".
 
-      <p>Quand on fait de l'Azure, il peut arriver qu'on souhaite nettoyer les Tags, pour de multiples raisons.</p>
-<p>Voici un peu  de Powershell pour :</p>
-<ol>
- 	<li>Enlever les Tags des Ressources Groupes</li>
- 	<li>Enlever les Tags des Ressources</li>
- 	<li>et enfin Supprimer les Tags</li>
-</ol>
-Comme hier, dans notre script, il faut être connecter sur Azure donc on utilise la <a href="https://etienne.deneuve.xyz/2017/09/26/azurepscmdnotfound/">fonction d'hier</a> (pratique :)):
-<pre><code class="PowerShell hljs"><span class="hljs-keyword">function</span> Check-AzureRMSession () {
-<span class="hljs-variable">$Error</span>.Clear()
-<span class="hljs-comment">#if context already exist</span>
-<span class="hljs-keyword">try</span> {
-Get-AzureRmVM -ErrorAction Stop | <span class="hljs-built_in">Out-Null</span>
-}
-<span class="hljs-keyword">catch</span> [System.Management.Automation.PSInvalidOperationException] {
-Login-AzureRmAccount
-}
-<span class="hljs-variable">$Error</span>.Clear();
-}</code></pre>
-Ensuite la fonction :
-<pre><code class="PowerShell hljs">function Remove-AzureRMAllTags () {
-Get-AzureRmResourceGroup | Out-GridView -PassThru | Set-AzureRmResourceGroup -Tag @{}
-Get-AzureRmResource | Select Name,ResourceType,Tags,ResourceGroupName |  Out-GridView -PassThru | Set-AzureRmResource -Tag @{} -Force
-Get-AzureRMTag |  Out-GridView -PassThru | Remove-AzureRMTag 
-}
-</code></pre>
-<code class="PowerShell hljs">Out-GridView -PassThru</code> Vous permet de choisir ceux que vous souhaitez supprimer :)
-    </main>
-    <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2">
-      <span class="meta__stats">About 1 min reading time</span>
-      <nav class="sticky-top">
-        
-      </nav>
-    </aside>
+</p>
+      
+      
+  
+
+      <div class="tagslist d-none d-lg-block mt-2">
+  
+    <a href="/tags/Azure Cli/" class="badge badge-special">Azure Cli</a>
+    <a href="/tags/PowerShell/" class="badge badge-special">PowerShell</a>
+    <a href="/tags/Azure/" class="badge badge-special">Azure</a>
+    <a href="/tags/Netorking/" class="badge badge-special">Netorking</a>
+</div>
+    </div>
   </div>
-</div>
-</div>
+</article>
+
     <footer class="site-footer bg-transparent pb-3 pb-md-5">
       <div class="layout-social container d-flex justify-content-center">
 
