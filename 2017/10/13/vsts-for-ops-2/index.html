@@ -110,53 +110,56 @@ Nous utiliserons des technologies Microsoft (VSTS, Azure, Windows Server...) mai
 </ol>
 <h1 id="introduction">Introduction <a class="direct-link" href="#introduction"> </a></h1>
 <p>Avant de foncer dans le code de notre infra, nous allons devoir réflechir à l'organisation de nos dossier de "Code".</p>
-<img class="alignnone size-medium wp-image-336 lazyload" src="/images/2017/10/mirror-frame-2407289_960_720-195x300.png" alt="" width="195" height="300" loading="lazy" data-src="/images/2017/10/mirror-frame-2407289_960_720-195x300.png">
+<p><img src="/images/2017/10/mirror-frame-2407289_960_720-195x300.png" alt="" loading="lazy" data-src="/images/2017/10/mirror-frame-2407289_960_720-195x300.png" class="lazyload"></p>
 <p>Ok, maintenant qu'on à réflechi, on y va !</p>
 <p>Nous allons générer deux images de base Ubuntu et Windows Server, utiliser des scripts "commun" et des scripts spécifiques, puis spécialiser nos images.</p>
-<h1 id="let's-git-!">Let's Git ! <a class="direct-link" href="#let's-git-!"> </a></h1>
-<h2 id="dolly%2C-ou-clone%2C-comme-vous-voulez.">Dolly, ou Clone, comme vous voulez. <a class="direct-link" href="#dolly%2C-ou-clone%2C-comme-vous-voulez."> </a></h2>
-<p>Ouvrez donc Visual Studio Code (<a href="https://etienne.deneuve.xyz/2017/01/26/visual-studio-code-pour-ansible-terraform/">Quoi ? Il est pas déjà installé? </a>) et ajoutez votre repository Git VSTS dans VS Code (Vous devez installer <a href="http://lmgtfy.com/?q=install+git">Git</a> sur votre poste avant).</p>
+<h1 id="let's-git">Let's Git <a class="direct-link" href="#let's-git"> </a></h1>
+<h2 id="dolly%2C-ou-clone%2C-comme-vous-voulez">Dolly, ou Clone, comme vous voulez <a class="direct-link" href="#dolly%2C-ou-clone%2C-comme-vous-voulez"> </a></h2>
+<p>Ouvrez donc Visual Studio Code (<a href="https://etienne.deneuve.xyz/2017/01/26/visual-studio-code-pour-ansible-terraform/">Quoi ? Il est pas déjà installé?</a>) et ajoutez votre repository Git VSTS dans VS Code (Vous devez installer <a href="http://lmgtfy.com/?q=install+git">Git</a> sur votre poste avant).</p>
 <p>C'est assez simple, cliquez sur "Clone Git Repository":</p>
-<img class="alignnone size-medium wp-image-337 lazyload" src="/images/2017/10/Git-Clone-300x217.png" alt="" width="300" height="217" loading="lazy" data-src="/images/2017/10/Git-Clone-300x217.png">
+<p><img src="/images/2017/10/Git-Clone-300x217.png" alt="" loading="lazy" data-src="/images/2017/10/Git-Clone-300x217.png" class="lazyload"></p>
 <p>Récupérez l'url de votre repository dans VSTS :</p>
-<img class="alignnone wp-image-339 size-full lazyload" src="/images/2017/10/Git-Clone-2-1.png" alt="" width="1055" height="513" loading="lazy" data-src="/images/2017/10/Git-Clone-2-1.png">
-<p>Puis collez le dans la barre de VS code :</p>
-<img class="alignnone size-full wp-image-340 lazyload" src="/images/2017/10/Git-Clone-3.png" alt="" width="835" height="161" loading="lazy" data-src="/images/2017/10/Git-Clone-3.png">
+<p><img src="/images/2017/10/Git-Clone-2-1.png" alt="" loading="lazy" data-src="/images/2017/10/Git-Clone-2-1.png" class="lazyload"></p>
+<p>Puis collez le dans la barre de VS code :<br>
+<img src="/images/2017/10/Git-Clone-3.png" alt="" loading="lazy" data-src="/images/2017/10/Git-Clone-3.png" class="lazyload"></p>
 <p>Entrez votre destination, par exemple c:\Users\vous\Documents\git (la racine, le dossier sera créer automatiquement) , puis indiquez vos credentials VSTS, et enfin lorsque le clone est terminé, cliquez sur "Open This repository":</p>
-<img class="alignnone size-full wp-image-341 lazyload" src="/images/2017/10/Git-Clone-4.png" alt="" width="1178" height="52" loading="lazy" data-src="/images/2017/10/Git-Clone-4.png">
+<p><img src="/images/2017/10/Git-Clone-4.png" alt="" loading="lazy" data-src="/images/2017/10/Git-Clone-4.png" class="lazyload"></p>
 <p>Félicitations, vous avez réussi a cloner votre git vsts sur votre poste!</p>
-<blockquote>Ouais, mais moi j'y comprends rien à Git, j'vais jamais m'en sortir !</blockquote>
-<h2>Git, comment ça marche</h2>
-Bon, on va faire simple, Git en usage basique comme on va le faire, ce n'est que quelques opérations :
+<blockquote>
+<p>Ouais, mais moi j'y comprends rien à Git, j'vais jamais m'en sortir !</p>
+</blockquote>
+<h2 id="git%2C-comment-%C3%A7a-marche">Git, comment ça marche <a class="direct-link" href="#git%2C-comment-%C3%A7a-marche"> </a></h2>
+<p>Bon, on va faire simple, Git en usage basique comme on va le faire, ce n'est que quelques opérations :</p>
 <ol>
- 	<li>Git clone -&gt; On récupère un git distant sur notre poste de travail</li>
- 	<li>Git Add -&gt; on ajoute les fichiers dans le git "local"</li>
- 	<li>Git Commit -&gt; on valide nos modification (en local)</li>
- 	<li>Git pull -&gt; on va chercher les modifications coté remote</li>
- 	<li>Git push -&gt; on pousse nos modifciation vers remote</li>
+<li>Git clone -&gt; On récupère un git distant sur notre poste de travail</li>
+<li>Git Add -&gt; on ajoute les fichiers dans le git "local"</li>
+<li>Git Commit -&gt; on valide nos modification (en local)</li>
+<li>Git pull -&gt; on va chercher les modifications coté remote</li>
+<li>Git push -&gt; on pousse nos modifciation vers remote</li>
 </ol>
-Vous inquiétez pas, VS Code va faire beaucoup à notre place !
-<h2>Création des dossiers</h2>
-<blockquote>Il faut quand même savoir une petite chose de plus, Git ne gère pas les dossiers vide, il faut donc créer un petit fichier readme.md pour les synchroniser correctement.</blockquote>
-Pour créer les dossiers, soit vous le faite en "graphique" :
-<img class="alignnone size-full wp-image-344 lazyload" src="/images/2017/10/addfolder-1.png" alt="" width="532" height="193" loading="lazy" data-src="/images/2017/10/addfolder-1.png">
+<p>Vous inquiétez pas, VS Code va faire beaucoup à notre place !</p>
+<h2 id="cr%C3%A9ation-des-dossiers">Création des dossiers <a class="direct-link" href="#cr%C3%A9ation-des-dossiers"> </a></h2>
+<blockquote>
+<p>Il faut quand même savoir une petite chose de plus, Git ne gère pas les dossiers vide, il faut donc créer un petit fichier <a href="http://readme.md">readme.md</a> pour les synchroniser correctement.<br>
+Pour créer les dossiers, soit vous le faite en "graphique" :</p>
+</blockquote>
+<p><img src="/images/2017/10/addfolder-1.png" alt="" loading="lazy" data-src="/images/2017/10/addfolder-1.png" class="lazyload"></p>
 <p>Soit via le terminal intégrer avec vos commandes préférées (View -&gt; Integrated Terminal).</p>
 <p>Personnellement j'ai créer 4 dossiers à la racine&nbsp; : scripts, windows, ubuntu et specialized, puis dans les dossiers Windows et Ubuntu un sous-dossier scripts. dans chacun de ces dossiers ajouter donc un fichier vide <a href="http://readme.md">readme.md</a> (et sauvegardez-les). Vous verrez plus tard le "pourquoi" cette arborescence :).</p>
-<h2 id="commit-!">Commit ! <a class="direct-link" href="#commit-!"> </a></h2>
+<h2 id="commit">Commit <a class="direct-link" href="#commit"> </a></h2>
 <p>Maintenant on va "commit" nos modifications en cliquant sur les boutons (et en écrivant le pourquoi du commit :)) :</p>
-<img class="alignnone size-full wp-image-346 lazyload" src="/images/2017/10/Git-Commit.png" alt="" width="549" height="396" loading="lazy" data-src="/images/2017/10/Git-Commit.png">
+<p><img src="/images/2017/10/Git-Commit.png" alt="" loading="lazy" data-src="/images/2017/10/Git-Commit.png" class="lazyload"></p>
 <p>Youpi! votre premier commit ! (c’était dur?)</p>
 <h2 id="push">Push <a class="direct-link" href="#push"> </a></h2>
 <p>Avec notre premier commit, en bas de notre fenêtre VS Code, nous avons désormais un commit à envoyer :</p>
-<p><img class="alignnone size-full wp-image-347 lazyload" src="/images/2017/10/Push.png" alt="" width="290" height="522" loading="lazy" data-src="/images/2017/10/Push.png"> Le chiffre de gauche correspond aux modifications distante (vos collègues), celui de droite, les locales (les votre quoi :))</p>
+<p><img src="/images/2017/10/Push.png" alt="" loading="lazy" data-src="/images/2017/10/Push.png" class="lazyload"><br>
+Le chiffre de gauche correspond aux modifications distante (vos collègues), celui de droite, les locales (les votre quoi :))</p>
 <p>Pour savoir ce qui se passe, ouvre la console "Output" (View, Output, puis sélectionnez Git dans le menu déroulant à gauche)</p>
-<img class="alignnone size-full wp-image-348 lazyload" src="/images/2017/10/Git-Push.png" alt="" width="1010" height="522" loading="lazy" data-src="/images/2017/10/Git-Push.png">
+<p><img src="/images/2017/10/Git-Push.png" alt="" loading="lazy" data-src="/images/2017/10/Git-Push.png" class="lazyload"></p>
 <p>Allez dans VSTS sur votre navigateur, vous avez tous vos fichiers qui se trouvent désormais sur le Server.</p>
-<p>&nbsp;</p>
 <h1 id="conclusion">Conclusion <a class="direct-link" href="#conclusion"> </a></h1>
 <p>Désormais, vous avez un beau Projet VSTS, cloner en local, et vous savez envoyer vos fichiers dans le repository git distant. Nous allons pouvoir passer a la suite !</p>
 <p>N'hésitez pas à commenter ou à me contacter en cas de soucis avec ces deux premières parties !</p>
-<p>&nbsp;</p>
 
     </main>
     <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2">
@@ -165,10 +168,16 @@ Pour créer les dossiers, soit vous le faite en "graphique" :
         <div class="">
                 <ol>
                     
-                    <li><a href="#dolly%2C-ou-clone%2C-comme-vous-voulez.">Dolly, ou Clone, comme vous voulez.  </a>
+                    <li><a href="#dolly%2C-ou-clone%2C-comme-vous-voulez">Dolly, ou Clone, comme vous voulez  </a>
             		</li>
 
-                    <li><a href="#commit-!">Commit !  </a>
+                    <li><a href="#git%2C-comment-%C3%A7a-marche">Git, comment ça marche  </a>
+            		</li>
+
+                    <li><a href="#cr%C3%A9ation-des-dossiers">Création des dossiers  </a>
+            		</li>
+
+                    <li><a href="#commit">Commit  </a>
             		</li>
 
                     <li><a href="#push">Push  </a>

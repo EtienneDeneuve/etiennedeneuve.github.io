@@ -114,45 +114,130 @@ Nous utiliserons des technologies Microsoft (VSTS, Azure, Windows Server...) mai
 <h2 id="cr%C3%A9ation-du-projet">Création du Projet <a class="direct-link" href="#cr%C3%A9ation-du-projet"> </a></h2>
 <p><a href="https://%7Bvotrenomavous%7D.visualstudio.com/_projects?_a=new">https://{votrenomavous}.visualstudio.com/_projects?_a=new</a><br>
 Indiquez le nom que vous souhaitez et sélectionnez Git comme "Version Control" :</p>
-<img class="alignnone wp-image-322 size-full lazyload" src="/images/2017/10/vsts-1-1.png" alt="" width="1680" height="793" loading="lazy" data-src="/images/2017/10/vsts-1-1.png">
+<p><img src="/images/2017/10/vsts-1-1.png" alt="" loading="lazy" data-src="/images/2017/10/vsts-1-1.png" class="lazyload"></p>
 <h2 id="initialisation-du-repository">Initialisation du repository <a class="direct-link" href="#initialisation-du-repository"> </a></h2>
-<img class="alignnone size-full wp-image-323 lazyload" src="/images/2017/10/vsts-2-1.png" alt="" width="1675" height="697" loading="lazy" data-src="/images/2017/10/vsts-2-1.png">
-## C'est prêt !
-<img class="alignnone size-full wp-image-324 lazyload" src="/images/2017/10/vsts-3-1.png" alt="" width="1239" height="326" loading="lazy" data-src="/images/2017/10/vsts-3-1.png">
-<p>Voila, 3 étapes, notre premier projet est "prêt".</p>
+<p><img src="/images/2017/10/vsts-2-1.png" alt="" loading="lazy" data-src="/images/2017/10/vsts-2-1.png" class="lazyload"></p>
+<h2 id="c'est-pr%C3%AAt">C'est prêt <a class="direct-link" href="#c'est-pr%C3%AAt"> </a></h2>
+<p><img src="/images/2017/10/vsts-3-1.png" alt="" loading="lazy" data-src="/images/2017/10/vsts-3-1.png" class="lazyload"><br>
+Voila, 3 étapes, notre premier projet est "prêt".</p>
 <h1 id="pr%C3%A9paration-de-l'agent-pour-vsts">Préparation de l'Agent pour VSTS <a class="direct-link" href="#pr%C3%A9paration-de-l'agent-pour-vsts"> </a></h1>
 <h2 id="pr%C3%A9paration-de-la-vm">Préparation de la VM <a class="direct-link" href="#pr%C3%A9paration-de-la-vm"> </a></h2>
 <p>Dans Azure, avec le <a href="https://github.com/Azure/azure-quickstart-templates/tree/master/101-vm-simple-linux">template suivant</a>, déployez une vm Ubuntu basique.<br>
 Installez les prérequis de l'agent VSTS via les commandes suivantes :</p>
-<pre><code>sudo apt-get install -y libunwind8 libcurl3
-sudo apt-add-repository ppa:git-core/ppa
-sudo apt-get update
-sudo apt-get install git
-apt-get install libcurl4-openssl-dev
-</code></pre>
-<h2>Installation de l'agent</h2>
-<h3>Préparation dans VSTS</h3>
-Accédez à la partie sécurité https://{votrenomavous}.visualstudio.com/_details/security/tokens et créer un PAT (Personnal Access Tokens).
-<blockquote>Attention, c'est comme un mot de passe, il ne faut pas le diffuser. (Keepass, LastPass et autres peuvent les stocker correctement!).</blockquote>
-Dans notre cas, l'agent devra avoir les droits Agent Pools et Deployment Group, car nous n'utiliserons qu'un seul agent. En prod, séparez-les !
-<h3>Installation de l'agent</h3>
-```
-wget https://github.com/Microsoft/vsts-agent/releases/download/v2.123.0/vsts-agent-ubuntu.16.04-x64-2.123.0.tar.gz -O vsts-agent-ubuntu.16.04-x64-2.123.0.tar.gz
-mkdir agent &amp;&amp; cd agent
-tar -xvf ../vsts-agent-ubuntu.16.04-x64-2.123.0.tar.gz
-./config.sh
-<h1 id="r%C3%A9pondez-aux-questions">Répondez aux questions <a class="direct-link" href="#r%C3%A9pondez-aux-questions"> </a></h1>
-<p>sudo ./svc.sh install<br>
-sudo ./svc.sh start</p>
-<pre><code>Pour plus d'info sur l'[agent VSTS](https://docs.microsoft.com/fr-fr/vsts/build-release/actions/agents/v2-linux)
-&lt;h3&gt;Vérification dans VSTS&lt;/h3&gt;
-Si vous accédez à l'url https://{votrenomavous}.visualstudio.com/_admin/_AgentPool vous devriez voir que votre agent est en vert !
-&lt;img class="alignnone size-full wp-image-321" src="/images/2017/10/Capture-Agent-Pool.png" alt="" width="565" height="145" /&gt;
-</code></pre>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> -y libunwind8 libcurl3</span><br><span class="highlight-line"><span class="token function">sudo</span> apt-add-repository ppa:git-core/ppa</span><br><span class="highlight-line"><span class="token function">sudo</span> <span class="token function">apt-get</span> update</span><br><span class="highlight-line"><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> <span class="token function">git</span></span><br><span class="highlight-line"><span class="token function">apt-get</span> <span class="token function">install</span> libcurl4-openssl-dev</span></code></pre>
+<h2 id="installation-de-l'agent">Installation de l'agent <a class="direct-link" href="#installation-de-l'agent"> </a></h2>
+<h3 id="pr%C3%A9paration-dans-vsts">Préparation dans VSTS <a class="direct-link" href="#pr%C3%A9paration-dans-vsts"> </a></h3>
+<p>Accédez à la partie sécurité <a href="https://%7Bvotrenomavous%7D.visualstudio.com/_details/security/tokens">https://{votrenomavous}.visualstudio.com/_details/security/tokens</a> et créer un PAT (Personnal Access Tokens).</p>
+<blockquote>
+<p>Attention, c'est comme un mot de passe, il ne faut pas le diffuser. (Keepass, LastPass et autres peuvent les stocker correctement!).</p>
+</blockquote>
+<p>Dans notre cas, l'agent devra avoir les droits Agent Pools et Deployment Group, car nous n'utiliserons qu'un seul agent. En prod, séparez-les !</p>
+<h3 id="installation-de-l'agent-2">Installation de l'agent <a class="direct-link" href="#installation-de-l'agent-2"> </a></h3>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">wget</span> https://github.com/Microsoft/vsts-agent/releases/download/v2.123.0/vsts-agent-ubuntu.16.04-x64-2.123.0.tar.gz -O vsts-agent-ubuntu.16.04-x64-2.123.0.tar.gz</span><br><span class="highlight-line"><span class="token function">mkdir</span> agent <span class="token operator">&amp;</span>amp<span class="token punctuation">;</span><span class="token operator">&amp;</span>amp<span class="token punctuation">;</span> <span class="token builtin class-name">cd</span> agent</span><br><span class="highlight-line"><span class="token function">tar</span> -xvf <span class="token punctuation">..</span>/vsts-agent-ubuntu.16.04-x64-2.123.0.tar.gz</span><br><span class="highlight-line">./config.sh</span><br><span class="highlight-line"></span><br><span class="highlight-line"><span class="token comment"># Répondez aux questions</span></span><br><span class="highlight-line"></span><br><span class="highlight-line"><span class="token function">sudo</span> ./svc.sh <span class="token function">install</span></span><br><span class="highlight-line"><span class="token function">sudo</span> ./svc.sh start</span><br><span class="highlight-line"></span></code></pre>
+<p>Pour plus d'info sur l'<a href="https://docs.microsoft.com/fr-fr/vsts/build-release/actions/agents/v2-linux">agent VSTS</a></p>
+<h3 id="v%C3%A9rification-dans-vsts">Vérification dans VSTS <a class="direct-link" href="#v%C3%A9rification-dans-vsts"> </a></h3>
+<p>Si vous accédez à l'url <a href="https://%7Bvotrenomavous%7D.visualstudio.com/_admin/_AgentPool">https://{votrenomavous}.visualstudio.com/_admin/_AgentPool</a> vous devriez voir que votre agent est en vert !<br>
+<img src="/images/2017/10/Capture-Agent-Pool.png" alt="" loading="lazy" data-src="/images/2017/10/Capture-Agent-Pool.png" class="lazyload"></p>
+<h1 id="introduction">Introduction <a class="direct-link" href="#introduction"> </a></h1>
+<p>Avant de foncer dans le code de notre infra, nous allons devoir réflechir à l'organisation de nos dossier de "Code".</p>
+<p><img src="/images/2017/10/mirror-frame-2407289_960_720-195x300.png" alt="" loading="lazy" data-src="/images/2017/10/mirror-frame-2407289_960_720-195x300.png" class="lazyload"></p>
+<p>Ok, maintenant qu'on à réflechi, on y va !</p>
+<p>Nous allons générer deux images de base Ubuntu et Windows Server, utiliser des scripts "commun" et des scripts spécifiques, puis spécialiser nos images.</p>
+<h1 id="let's-git">Let's Git <a class="direct-link" href="#let's-git"> </a></h1>
+<h2 id="dolly%2C-ou-clone%2C-comme-vous-voulez">Dolly, ou Clone, comme vous voulez <a class="direct-link" href="#dolly%2C-ou-clone%2C-comme-vous-voulez"> </a></h2>
+<p>Ouvrez donc Visual Studio Code (<a href="https://etienne.deneuve.xyz/2017/01/26/visual-studio-code-pour-ansible-terraform/">Quoi ? Il est pas déjà installé?</a>) et ajoutez votre repository Git VSTS dans VS Code (Vous devez installer <a href="http://lmgtfy.com/?q=install+git">Git</a> sur votre poste avant).</p>
+<p>C'est assez simple, cliquez sur "Clone Git Repository":</p>
+<p><img src="/images/2017/10/Git-Clone-300x217.png" alt="" loading="lazy" data-src="/images/2017/10/Git-Clone-300x217.png" class="lazyload"></p>
+<p>Récupérez l'url de votre repository dans VSTS :</p>
+<p><img src="/images/2017/10/Git-Clone-2-1.png" alt="" loading="lazy" data-src="/images/2017/10/Git-Clone-2-1.png" class="lazyload"></p>
+<p>Puis collez le dans la barre de VS code :<br>
+<img src="/images/2017/10/Git-Clone-3.png" alt="" loading="lazy" data-src="/images/2017/10/Git-Clone-3.png" class="lazyload"></p>
+<p>Entrez votre destination, par exemple c:\Users\vous\Documents\git (la racine, le dossier sera créer automatiquement) , puis indiquez vos credentials VSTS, et enfin lorsque le clone est terminé, cliquez sur "Open This repository":</p>
+<p><img src="/images/2017/10/Git-Clone-4.png" alt="" loading="lazy" data-src="/images/2017/10/Git-Clone-4.png" class="lazyload"></p>
+<p>Félicitations, vous avez réussi a cloner votre git vsts sur votre poste!</p>
+<blockquote>
+<p>Ouais, mais moi j'y comprends rien à Git, j'vais jamais m'en sortir !</p>
+</blockquote>
+<h2 id="git%2C-comment-%C3%A7a-marche">Git, comment ça marche <a class="direct-link" href="#git%2C-comment-%C3%A7a-marche"> </a></h2>
+<p>Bon, on va faire simple, Git en usage basique comme on va le faire, ce n'est que quelques opérations :</p>
+<ol>
+<li>Git clone -&gt; On récupère un git distant sur notre poste de travail</li>
+<li>Git Add -&gt; on ajoute les fichiers dans le git "local"</li>
+<li>Git Commit -&gt; on valide nos modification (en local)</li>
+<li>Git pull -&gt; on va chercher les modifications coté remote</li>
+<li>Git push -&gt; on pousse nos modifciation vers remote</li>
+</ol>
+<p>Vous inquiétez pas, VS Code va faire beaucoup à notre place !</p>
+<h2 id="cr%C3%A9ation-des-dossiers">Création des dossiers <a class="direct-link" href="#cr%C3%A9ation-des-dossiers"> </a></h2>
+<blockquote>
+<p>Il faut quand même savoir une petite chose de plus, Git ne gère pas les dossiers vide, il faut donc créer un petit fichier <a href="http://readme.md">readme.md</a> pour les synchroniser correctement.<br>
+Pour créer les dossiers, soit vous le faite en "graphique" :</p>
+</blockquote>
+<p><img src="/images/2017/10/addfolder-1.png" alt="" loading="lazy" data-src="/images/2017/10/addfolder-1.png" class="lazyload"></p>
+<p>Soit via le terminal intégrer avec vos commandes préférées (View -&gt; Integrated Terminal).</p>
+<p>Personnellement j'ai créer 4 dossiers à la racine&nbsp; : scripts, windows, ubuntu et specialized, puis dans les dossiers Windows et Ubuntu un sous-dossier scripts. dans chacun de ces dossiers ajouter donc un fichier vide <a href="http://readme.md">readme.md</a> (et sauvegardez-les). Vous verrez plus tard le "pourquoi" cette arborescence :).</p>
+<h2 id="commit">Commit <a class="direct-link" href="#commit"> </a></h2>
+<p>Maintenant on va "commit" nos modifications en cliquant sur les boutons (et en écrivant le pourquoi du commit :)) :</p>
+<p><img src="/images/2017/10/Git-Commit.png" alt="" loading="lazy" data-src="/images/2017/10/Git-Commit.png" class="lazyload"></p>
+<p>Youpi! votre premier commit ! (c’était dur?)</p>
+<h2 id="push">Push <a class="direct-link" href="#push"> </a></h2>
+<p>Avec notre premier commit, en bas de notre fenêtre VS Code, nous avons désormais un commit à envoyer :</p>
+<p><img src="/images/2017/10/Push.png" alt="" loading="lazy" data-src="/images/2017/10/Push.png" class="lazyload"><br>
+Le chiffre de gauche correspond aux modifications distante (vos collègues), celui de droite, les locales (les votre quoi :))</p>
+<p>Pour savoir ce qui se passe, ouvre la console "Output" (View, Output, puis sélectionnez Git dans le menu déroulant à gauche)</p>
+<p><img src="/images/2017/10/Git-Push.png" alt="" loading="lazy" data-src="/images/2017/10/Git-Push.png" class="lazyload"></p>
+<p>Allez dans VSTS sur votre navigateur, vous avez tous vos fichiers qui se trouvent désormais sur le Server.</p>
+<h1 id="introduction-2">Introduction <a class="direct-link" href="#introduction-2"> </a></h1>
+<p>Voici un petit récapitulatif ce qu'on aimerait :</p>
+<p><img src="/images/2017/10/Packer.png" alt="" loading="lazy" data-src="/images/2017/10/Packer.png" class="lazyload"></p>
+<p>Vous devez créer deux comptes de stockage dans Azure vous même, un de "Production" et un "Eval" vous pouvez le faire avec Azure Cloud Shell depuis le portail Azure :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token comment">#create resource group</span></span><br><span class="highlight-line">az group create -l westeurope -n vstsforops</span><br><span class="highlight-line"><span class="token comment">#create storage account</span></span><br><span class="highlight-line">az storage account create -n sto0eval -g vstsforops -l westeurope --sku Standard_LRS</span><br><span class="highlight-line">az storage account create -n sto0prod -g vstsforops -lwesteurope --sku Standard_LRS</span></code></pre>
+<p>Du coup je vous ai déjà préparer les éléments histoire de ne pas perdre de temps sur la construction des templates packer.&nbsp;Récupérez l'archive ici :&nbsp;<a href="https://github.com/EtienneDeneuve/vsts-for-ops/archive/master.zip">Download ZIP</a>, puis copiez les fichiers dans votre répertoire que vous avez cloné la fois dernière. J'ai fais quelques modifications sur la hiérarchie des dossiers afin que ça soit plus évolutif dans le temps, nous y reviendrons plus tard.</p>
+<p>Le fichier packer qui nous intéresse est dans le dossier /storage/windows/base/windows_base_packer.json, il est tout a fait standard, comme ceux que Stanislas détaille <a href="https://github.com/squasta/PackerAzureRM">ici</a></p>
+<p>Vous noterez peut être que j'ai ajouté un provisionner "windows-update" :</p>
+<pre class="language-json"><code class="language-json"><span class="highlight-line"><span class="token property">"provisioners"</span><span class="token operator">:</span> <span class="token punctuation">[</span></span><br><span class="highlight-line"><span class="token punctuation">{</span></span><br><span class="highlight-line"><span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"windows-update"</span></span><br><span class="highlight-line"><span class="token punctuation">}</span><span class="token punctuation">,</span></span></code></pre>
+<p>Celui n'est pas standard, vous devez le mettre dans le même répertoire que votre exécutable packer, il est téléchargeable à <a href="https://github.com/rgl/packer-provisioner-windows-update/releases">l'adresse suivante</a> mais je l'ai aussi inclus dans mon repository git au passage nous allons également mettre la dernière version de Packer. Ces actions sont à faire sur la machine "Agent" de <a href="https://etienne.deneuve.xyz/2017/10/09/vsts-for-ops-1/">vsts-for-ops-1</a> :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">apt</span> <span class="token function">install</span> <span class="token function">unzip</span></span><br><span class="highlight-line"><span class="token function">wget</span> https://github.com/rgl/packer-provisioner-windows-update/releases/download/v0.4.0/packer-provisioner-windows-update-linux.tgz</span><br><span class="highlight-line"><span class="token function">wget</span> https://releases.hashicorp.com/packer/1.1.0/packer_1.1.0_linux_amd64.zip</span><br><span class="highlight-line"><span class="token function">tar</span> -xvf ./packer-provisioner-windows-update-linux.tgz</span><br><span class="highlight-line"><span class="token function">unzip</span> packer_1.1.0_linux_amd64.zip</span><br><span class="highlight-line"><span class="token function">mv</span> ./packer-provisioner-windows-update-windows /usr/local/bin/</span><br><span class="highlight-line"><span class="token function">mv</span> ./packer /usr/local/bin/</span></code></pre>
+<p>Si vous n'avez pas installé azure cli et l'agent, vous pouvez aussi utiliser ce script sur votre vm agent:</p>
+<p><a href="https://raw.githubusercontent.com/EtienneDeneuve/vsts-for-ops/master/scripts/platform/agent/prepare_vm.sh">Script</a></p>
+<h1 id="bon-et-la-build">Bon et La build <a class="direct-link" href="#bon-et-la-build"> </a></h1>
+<p>Ouvrez VSTS :</p>
+<p>puis cliquez sur "build &amp; release" :</p>
+<p><img src="/images/2017/10/Sans-titre.png" alt="" loading="lazy" data-src="/images/2017/10/Sans-titre.png" class="lazyload"><br>
+Puis sur "+ New"</p>
+<p><img src="/images/2017/10/vsts-create-1.png" alt="" loading="lazy" data-src="/images/2017/10/vsts-create-1.png" class="lazyload"><br>
+Puis sur "Empty process"</p>
+<p><img src="/images/2017/10/vsts-create-2.png" alt="" loading="lazy" data-src="/images/2017/10/vsts-create-2.png" class="lazyload"></p>
+<p>Puis complétez le champs "Name" avec par exemple "Packer-Base-Windows 2012 R2"</p>
+<p><img src="/images/2017/10/vsts-create-3.png" alt="" loading="lazy" data-src="/images/2017/10/vsts-create-3.png" class="lazyload"></p>
+<p>Dans la Phase 1 nous allons ajouter deux étape "build immutable image" et "azure cli" :</p>
+<p><img src="/images/2017/10/vsts-create-4.png" alt="" loading="lazy" data-src="/images/2017/10/vsts-create-4.png" class="lazyload"></p>
+<p>Renseignez les variables telles que ci dessous :</p>
+<p>Packer Template : "User Provided"</p>
+<p>Packer template location, naviguer vers "storage/Windows/base/windows_base_packer.json"</p>
+<p>Dans le template parameters (je suis sympa, copiez collez ca :):</p>
+<pre class="language-json"><code class="language-json"><span class="highlight-line"></span><br><span class="highlight-line"><span class="token punctuation">{</span></span><br><span class="highlight-line"><span class="token property">"client_id"</span><span class="token operator">:</span><span class="token string">"$(ARM_CLIENT_ID)"</span><span class="token punctuation">,</span></span><br><span class="highlight-line"><span class="token property">"client_secret"</span><span class="token operator">:</span><span class="token string">"$(ARM_CLIENT_SECRET)"</span><span class="token punctuation">,</span></span><br><span class="highlight-line"><span class="token property">"resource_group_name"</span><span class="token operator">:</span><span class="token string">"$(ARM_RESOURCE_GROUP_NAME)"</span><span class="token punctuation">,</span></span><br><span class="highlight-line"><span class="token property">"storage_account"</span><span class="token operator">:</span><span class="token string">"$(ARM_STORAGE_ACCOUNT)"</span><span class="token punctuation">,</span></span><br><span class="highlight-line"><span class="token property">"subscription_id"</span><span class="token operator">:</span><span class="token string">"$(ARM_SUBSCRIPTION_ID)"</span><span class="token punctuation">,</span></span><br><span class="highlight-line"><span class="token property">"object_id"</span><span class="token operator">:</span><span class="token string">"$(ARM_OBJECT_ID)"</span><span class="token punctuation">,</span></span><br><span class="highlight-line"><span class="token property">"tenant_id"</span><span class="token operator">:</span><span class="token string">"$(ARM_TENANT_ID)"</span><span class="token punctuation">,</span></span><br><span class="highlight-line"><span class="token property">"windows_sku"</span><span class="token operator">:</span><span class="token string">"$(WINDOWS_SKU)"</span><span class="token punctuation">,</span></span><br><span class="highlight-line"><span class="token property">"build_resquestfor"</span><span class="token operator">:</span><span class="token string">"$(BUILD_REQUESTEDFOR)"</span><span class="token punctuation">,</span></span><br><span class="highlight-line"><span class="token property">"location"</span><span class="token operator">:</span><span class="token string">"$(ARM_LOCATION)"</span><span class="token punctuation">,</span></span><br><span class="highlight-line"><span class="token property">"vm_size"</span><span class="token operator">:</span><span class="token string">"$(ARM_VM_SIZE)"</span><span class="token punctuation">,</span></span><br><span class="highlight-line"><span class="token property">"capture_name"</span><span class="token operator">:</span><span class="token string">"$(CAPTURE_NAME)"</span></span><br><span class="highlight-line"><span class="token punctuation">}</span></span><br><span class="highlight-line"></span></code></pre>
+<p>Puis, dans "Output", renseigner IMAGEURI :</p>
+<p><img src="/images/2017/10/vsts-create-5.png" alt="" loading="lazy" data-src="/images/2017/10/vsts-create-5.png" class="lazyload"><br>
+Ajoutez maintenant une tâche "Azure CLI" :</p>
+<p><img src="/images/2017/10/vsts-create-6.png" alt="" loading="lazy" data-src="/images/2017/10/vsts-create-6.png" class="lazyload"><br>
+Sélectionnez votre souscription azure (si elle n'est pas dans la liste, cliquez sur manage et ajoutez la) et indiquez le chemin vers le script bash "script/platform/tasks/az-move-vhd.vhd" et ajoutez les arguments "-d "$(DESTACCOUNTKEY)" -s "$(SOURCEACCOUNTKEY)""</p>
+<p><img src="/images/2017/10/vsts-create-7.png" alt="" loading="lazy" data-src="/images/2017/10/vsts-create-7.png" class="lazyload"><br>
+Une fois que ces deux tâches sont complétées, nous allons déclarer nos variables (si vous ne savez pas comment les récupérées, suivez le guide sur le dépôt git de Stanislas plus haut) :</p>
+<p><img src="/images/2017/10/vsts-create-8.png" alt="" loading="lazy" data-src="/images/2017/10/vsts-create-8.png" class="lazyload"><br>
+Vous remarquerez que certaines sont masquées, rien de bien compliqué, cliquez sur le cadenas et elle sera "protégée" :</p>
+<p><img src="/images/2017/10/vsts-create-9.png" alt="" loading="lazy" data-src="/images/2017/10/vsts-create-9.png" class="lazyload"><br>
+Dans l’idéal, les variables a protégées seraient : ARM_CLIENT_SECRET, ARM_SUBSCRIPTION_ID, ARM_TENANT_ID, DESTACCOUNTKEY, SOURCEACCOUNTKEY mais pour des questions de simplifications dans cet exercices, nous ne protégerons que les clés du compte de stockage, nous corrigerons par la suite.</p>
+<p>Pour récupérer les clés des comptes de stockage sélectionnez votre compte de stockage dans le resource group que vous avez créer et allez dans "Access Keys" :</p>
+<p><img src="/images/2017/10/storage-account-key.png" alt="" loading="lazy" data-src="/images/2017/10/storage-account-key.png" class="lazyload"><br>
+Ensuite, comme nous allons construire des images Packer Windows, il y a des chances pour que la build dure plus d'une heure (Mise à jour etc) donc dans les options de la build nous allons passer le time out de la build a 240 minutes :</p>
+<p><img src="/images/2017/10/timeout-e1508918816983.png" alt="" loading="lazy" data-src="/images/2017/10/timeout-e1508918816983.png" class="lazyload"></p>
+<p>Cliquez maintenant sur "Save &amp; Queue".</p>
+<p>Votre build est maintenant lancé.</p>
 
     </main>
     <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2">
-      <span class="meta__stats">About 2 min reading time</span>
+      <span class="meta__stats">About 5 min reading time</span>
       <nav class="sticky-top">
         <div class="">
                 <ol>
@@ -163,7 +248,40 @@ Si vous accédez à l'url https://{votrenomavous}.visualstudio.com/_admin/_Agent
                     <li><a href="#initialisation-du-repository">Initialisation du repository  </a>
             		</li>
 
+                    <li><a href="#c'est-pr%C3%AAt">C'est prêt  </a>
+            		</li>
+
                     <li><a href="#pr%C3%A9paration-de-la-vm">Préparation de la VM  </a>
+            		</li>
+
+                    <li><a href="#installation-de-l'agent">Installation de l'agent  </a>
+            
+                <ol>
+                    
+                    <li><a href="#pr%C3%A9paration-dans-vsts">Préparation dans VSTS  </a>
+            		</li>
+
+                    <li><a href="#installation-de-l'agent-2">Installation de l'agent  </a>
+            		</li>
+
+                    <li><a href="#v%C3%A9rification-dans-vsts">Vérification dans VSTS  </a>
+            		</li>
+                </ol>
+            		</li>
+
+                    <li><a href="#dolly%2C-ou-clone%2C-comme-vous-voulez">Dolly, ou Clone, comme vous voulez  </a>
+            		</li>
+
+                    <li><a href="#git%2C-comment-%C3%A7a-marche">Git, comment ça marche  </a>
+            		</li>
+
+                    <li><a href="#cr%C3%A9ation-des-dossiers">Création des dossiers  </a>
+            		</li>
+
+                    <li><a href="#commit">Commit  </a>
+            		</li>
+
+                    <li><a href="#push">Push  </a>
             		</li>
                 </ol>
             </div>

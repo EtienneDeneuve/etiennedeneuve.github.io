@@ -1544,67 +1544,51 @@ Nous utiliserons des technologies Microsoft (VSTS, Azure, Windows Server…) mai
 &lt;/ol&gt;
 &lt;h1 id=&quot;introduction&quot;&gt;Introduction &lt;a class=&quot;direct-link&quot; href=&quot;#introduction&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;Voici un petit récapitulatif ce qu&#39;on aimerait :&lt;/p&gt;
-&lt;img class=&quot;alignnone size-full wp-image-365&quot; src=&quot;/images/2017/10/Packer.png&quot; alt=&quot;&quot; width=&quot;1035&quot; height=&quot;472&quot;&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Packer.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Vous devez créer deux comptes de stockage dans Azure vous même, un de &amp;quot;Production&amp;quot; et un &amp;quot;Eval&amp;quot; vous pouvez le faire avec Azure Cloud Shell depuis le portail Azure :&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;#create resource group
-az group create -l westeurope -n vstsforops
-#create storage account
-az storage account create -n sto0eval -g vstsforops -l westeurope --sku Standard_LRS
-az storage account create -n sto0prod -g vstsforops -lwesteurope --sku Standard_LRS
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Du coup je vous ai déjà préparer les éléments histoire de ne pas perdre de temps sur la construction des templates packer. Récupérez l&#39;archive ici : &lt;a href=&quot;https://github.com/EtienneDeneuve/vsts-for-ops/archive/master.zip&quot;&gt;   Download ZIP&lt;/a&gt;, puis copiez les fichiers dans votre répertoire que vous avez cloné la fois dernière. J&#39;ai fais quelques modifications sur la hiérarchie des dossiers afin que ça soit plus évolutif dans le temps, nous y reviendrons plus tard.&lt;/p&gt;
-&lt;p&gt;Le fichier packer qui nous intéresse est dans le dossier /storage/windows/base/windows_base_packer.json, il est tout a fait standard, comme ceux que Stanislas détaille ici : &lt;a href=&quot;https://github.com/squasta/PackerAzureRM&quot;&gt;https://github.com/squasta/PackerAzureRM&lt;/a&gt;&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;#create resource group&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;az group create -l westeurope -n vstsforops&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;#create storage account&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;az storage account create -n sto0eval -g vstsforops -l westeurope --sku Standard_LRS&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;az storage account create -n sto0prod -g vstsforops -lwesteurope --sku Standard_LRS&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Du coup je vous ai déjà préparer les éléments histoire de ne pas perdre de temps sur la construction des templates packer. Récupérez l&#39;archive ici : &lt;a href=&quot;https://github.com/EtienneDeneuve/vsts-for-ops/archive/master.zip&quot;&gt;Download ZIP&lt;/a&gt;, puis copiez les fichiers dans votre répertoire que vous avez cloné la fois dernière. J&#39;ai fais quelques modifications sur la hiérarchie des dossiers afin que ça soit plus évolutif dans le temps, nous y reviendrons plus tard.&lt;/p&gt;
+&lt;p&gt;Le fichier packer qui nous intéresse est dans le dossier /storage/windows/base/windows_base_packer.json, il est tout a fait standard, comme ceux que Stanislas détaille &lt;a href=&quot;https://github.com/squasta/PackerAzureRM&quot;&gt;ici&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Vous noterez peut être que j&#39;ai ajouté un provisionner &amp;quot;windows-update&amp;quot; :&lt;/p&gt;
-&lt;pre class=&quot;language-json&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&amp;amp;quot;provisioners&amp;amp;quot;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&amp;amp;quot;type&amp;amp;quot;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &amp;amp;quot;windows-update&amp;amp;quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Celui n&#39;est pas standard, vous devez le mettre dans le même répertoire que votre exécutable packer, il est téléchargeable à l&#39;adresse suivante : &lt;a href=&quot;https://github.com/rgl/packer-provisioner-windows-update/releases&quot;&gt;https://github.com/rgl/packer-provisioner-windows-update/releases&lt;/a&gt; mais je l&#39;ai aussi inclus dans mon repository git au passage nous allons également mettre la dernière version de Packer. Ces actions sont à faire sur la machine &amp;quot;Agent&amp;quot; de &lt;a href=&quot;https://etienne.deneuve.xyz/2017/10/09/vsts-for-ops-1/&quot;&gt;vsts-for-ops-1&lt;/a&gt; :&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;apt install unzip
-wget https://github.com/rgl/packer-provisioner-windows-update/releases/download/v0.4.0/packer-provisioner-windows-update-linux.tgz
-wget https://releases.hashicorp.com/packer/1.1.0/packer_1.1.0_linux_amd64.zip
-tar -xvf ./packer-provisioner-windows-update-linux.tgz
-unzip packer_1.1.0_linux_amd64.zip
-mv ./packer-provisioner-windows-update-windows /usr/local/bin/
-mv ./packer /usr/local/bin/
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-json&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;provisioners&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;windows-update&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Celui n&#39;est pas standard, vous devez le mettre dans le même répertoire que votre exécutable packer, il est téléchargeable à &lt;a href=&quot;https://github.com/rgl/packer-provisioner-windows-update/releases&quot;&gt;l&#39;adresse suivante&lt;/a&gt; mais je l&#39;ai aussi inclus dans mon repository git au passage nous allons également mettre la dernière version de Packer. Ces actions sont à faire sur la machine &amp;quot;Agent&amp;quot; de &lt;a href=&quot;https://etienne.deneuve.xyz/2017/10/09/vsts-for-ops-1/&quot;&gt;vsts-for-ops-1&lt;/a&gt; :&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;apt&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;unzip&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;wget&lt;/span&gt; https://github.com/rgl/packer-provisioner-windows-update/releases/download/v0.4.0/packer-provisioner-windows-update-linux.tgz&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;wget&lt;/span&gt; https://releases.hashicorp.com/packer/1.1.0/packer_1.1.0_linux_amd64.zip&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;tar&lt;/span&gt; -xvf ./packer-provisioner-windows-update-linux.tgz&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;unzip&lt;/span&gt; packer_1.1.0_linux_amd64.zip&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;mv&lt;/span&gt; ./packer-provisioner-windows-update-windows /usr/local/bin/&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;mv&lt;/span&gt; ./packer /usr/local/bin/&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Si vous n&#39;avez pas installé azure cli et l&#39;agent, vous pouvez aussi utiliser ce script sur votre vm agent:&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://raw.githubusercontent.com/EtienneDeneuve/vsts-for-ops/master/scripts/platform/agent/prepare_vm.sh&quot;&gt;https://raw.githubusercontent.com/EtienneDeneuve/vsts-for-ops/master/scripts/platform/agent/prepare_vm.sh&lt;/a&gt;&lt;/p&gt;
-&lt;h1 id=&quot;bon-et-la-build-%3F&quot;&gt;Bon et La build ? &lt;a class=&quot;direct-link&quot; href=&quot;#bon-et-la-build-%3F&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://raw.githubusercontent.com/EtienneDeneuve/vsts-for-ops/master/scripts/platform/agent/prepare_vm.sh&quot;&gt;Script&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&quot;bon-et-la-build&quot;&gt;Bon et La build &lt;a class=&quot;direct-link&quot; href=&quot;#bon-et-la-build&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;Ouvrez VSTS :&lt;/p&gt;
 &lt;p&gt;puis cliquez sur &amp;quot;build &amp;amp; release&amp;quot; :&lt;/p&gt;
-&lt;img class=&quot;alignnone size-full wp-image-372&quot; src=&quot;/images/2017/10/Sans-titre.png&quot; alt=&quot;&quot; width=&quot;592&quot; height=&quot;164&quot;&gt;
-&lt;p&gt;Puis sur &amp;quot;+ New&amp;quot;&lt;/p&gt;
-&lt;img class=&quot;alignnone size-full wp-image-361&quot; src=&quot;/images/2017/10/vsts-create-1.png&quot; alt=&quot;&quot; width=&quot;1027&quot; height=&quot;158&quot;&gt;
-&lt;p&gt;Puis sur &amp;quot;Empty process&amp;quot;&lt;/p&gt;
-&lt;img class=&quot;alignnone size-full wp-image-362&quot; src=&quot;/images/2017/10/vsts-create-2.png&quot; alt=&quot;&quot; width=&quot;1035&quot; height=&quot;185&quot;&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Sans-titre.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Puis sur &amp;quot;+ New&amp;quot;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-1.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Puis sur &amp;quot;Empty process&amp;quot;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-2.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Puis complétez le champs &amp;quot;Name&amp;quot; avec par exemple &amp;quot;Packer-Base-Windows 2012 R2&amp;quot;&lt;/p&gt;
-&lt;img class=&quot;alignnone size-full wp-image-363&quot; src=&quot;/images/2017/10/vsts-create-3.png&quot; alt=&quot;&quot; width=&quot;1035&quot; height=&quot;475&quot;&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-3.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Dans la Phase 1 nous allons ajouter deux étape &amp;quot;build immutable image&amp;quot; et &amp;quot;azure cli&amp;quot; :&lt;/p&gt;
-&lt;img class=&quot;alignnone size-full wp-image-353&quot; src=&quot;/images/2017/10/vsts-create-4.png&quot; alt=&quot;&quot; width=&quot;1035&quot; height=&quot;504&quot;&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-4.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Renseignez les variables telles que ci dessous :&lt;/p&gt;
 &lt;p&gt;Packer Template : &amp;quot;User Provided&amp;quot;&lt;/p&gt;
 &lt;p&gt;Packer template location, naviguer vers &amp;quot;storage/Windows/base/windows_base_packer.json&amp;quot;&lt;/p&gt;
 &lt;p&gt;Dans le template parameters (je suis sympa, copiez collez ca :):&lt;/p&gt;
-&lt;pre class=&quot;language-json&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&amp;amp;quot;client_id&amp;amp;quot;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&amp;amp;quot;$(ARM_CLIENT_ID)&amp;amp;quot;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&amp;amp;quot;client_secret&amp;amp;quot;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&amp;amp;quot;$(ARM_CLIENT_SECRET)&amp;amp;quot;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&amp;amp;quot;resource_group_name&amp;amp;quot;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&amp;amp;quot;$(ARM_RESOURCE_GROUP_NAME)&amp;amp;quot;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&amp;amp;quot;storage_account&amp;amp;quot;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&amp;amp;quot;$(ARM_STORAGE_ACCOUNT)&amp;amp;quot;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&amp;amp;quot;subscription_id&amp;amp;quot;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&amp;amp;quot;$(ARM_SUBSCRIPTION_ID)&amp;amp;quot;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&amp;amp;quot;object_id&amp;amp;quot;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&amp;amp;quot;$(ARM_OBJECT_ID)&amp;amp;quot;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&amp;amp;quot;tenant_id&amp;amp;quot;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&amp;amp;quot;$(ARM_TENANT_ID)&amp;amp;quot;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&amp;amp;quot;windows_sku&amp;amp;quot;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&amp;amp;quot;$(WINDOWS_SKU)&amp;amp;quot;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&amp;amp;quot;build_resquestfor&amp;amp;quot;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&amp;amp;quot;$(BUILD_REQUESTEDFOR)&amp;amp;quot;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&amp;amp;quot;location&amp;amp;quot;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&amp;amp;quot;$(ARM_LOCATION)&amp;amp;quot;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&amp;amp;quot;vm_size&amp;amp;quot;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&amp;amp;quot;$(ARM_VM_SIZE)&amp;amp;quot;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&amp;amp;quot;capture_name&amp;amp;quot;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&amp;amp;quot;$(CAPTURE_NAME)&amp;amp;quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-json&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;client_id&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_CLIENT_ID)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;client_secret&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_CLIENT_SECRET)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;resource_group_name&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_RESOURCE_GROUP_NAME)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;storage_account&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_STORAGE_ACCOUNT)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;subscription_id&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_SUBSCRIPTION_ID)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;object_id&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_OBJECT_ID)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;tenant_id&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_TENANT_ID)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;windows_sku&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(WINDOWS_SKU)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;build_resquestfor&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(BUILD_REQUESTEDFOR)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;location&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_LOCATION)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;vm_size&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_VM_SIZE)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;capture_name&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(CAPTURE_NAME)&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Puis, dans &amp;quot;Output&amp;quot;, renseigner IMAGEURI :&lt;/p&gt;
-&lt;img class=&quot;alignnone size-full wp-image-354&quot; src=&quot;/images/2017/10/vsts-create-5.png&quot; alt=&quot;&quot; width=&quot;1108&quot; height=&quot;727&quot;&gt;
-&lt;p&gt;Ajoutez maintenant une tâche &amp;quot;Azure CLI&amp;quot; :&lt;/p&gt;
-&lt;img class=&quot;alignnone size-full wp-image-355&quot; src=&quot;/images/2017/10/vsts-create-6.png&quot; alt=&quot;&quot; width=&quot;1035&quot; height=&quot;560&quot;&gt;
-&lt;p&gt;Sélectionnez votre souscription azure (si elle n&#39;est pas dans la liste, cliquez sur manage et ajoutez la) et indiquez le chemin vers le script bash &amp;quot;script/platform/tasks/az-move-vhd.vhd&amp;quot; et ajoutez les arguments &amp;quot;-d &amp;quot;$(DESTACCOUNTKEY)&amp;quot; -s &amp;quot;$(SOURCEACCOUNTKEY)&amp;quot;&amp;quot;&lt;/p&gt;
-&lt;img class=&quot;alignnone size-full wp-image-356&quot; src=&quot;/images/2017/10/vsts-create-7.png&quot; alt=&quot;&quot; width=&quot;1109&quot; height=&quot;648&quot;&gt;
-&lt;p&gt;Une fois que ces deux tâches sont complétées, nous allons déclarer nos variables (si vous ne savez pas comment les récupérées, suivez le guide sur le dépôt git de Stanislas plus haut) :&lt;/p&gt;
-&lt;img class=&quot;alignnone size-full wp-image-357&quot; src=&quot;/images/2017/10/vsts-create-8.png&quot; alt=&quot;&quot; width=&quot;1112&quot; height=&quot;893&quot;&gt;
-&lt;p&gt;Vous remarquerez que certaines sont masquées, rien de bien compliqué, cliquez sur le cadenas et elle sera &amp;quot;protégée&amp;quot; :&lt;/p&gt;
-&lt;img class=&quot;alignnone size-full wp-image-358&quot; src=&quot;/images/2017/10/vsts-create-9.png&quot; alt=&quot;&quot; width=&quot;990&quot; height=&quot;108&quot;&gt;
-&lt;p&gt;Dans l’idéal, les variables a protégées seraient : ARM_CLIENT_SECRET, ARM_SUBSCRIPTION_ID, ARM_TENANT_ID, DESTACCOUNTKEY, SOURCEACCOUNTKEY mais pour des questions de simplifications dans cet exercices, nous ne protégerons que les clés du compte de stockage, nous corrigerons par la suite.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-5.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Ajoutez maintenant une tâche &amp;quot;Azure CLI&amp;quot; :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-6.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Sélectionnez votre souscription azure (si elle n&#39;est pas dans la liste, cliquez sur manage et ajoutez la) et indiquez le chemin vers le script bash &amp;quot;script/platform/tasks/az-move-vhd.vhd&amp;quot; et ajoutez les arguments &amp;quot;-d &amp;quot;$(DESTACCOUNTKEY)&amp;quot; -s &amp;quot;$(SOURCEACCOUNTKEY)&amp;quot;&amp;quot;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-7.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Une fois que ces deux tâches sont complétées, nous allons déclarer nos variables (si vous ne savez pas comment les récupérées, suivez le guide sur le dépôt git de Stanislas plus haut) :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-8.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Vous remarquerez que certaines sont masquées, rien de bien compliqué, cliquez sur le cadenas et elle sera &amp;quot;protégée&amp;quot; :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-9.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Dans l’idéal, les variables a protégées seraient : ARM_CLIENT_SECRET, ARM_SUBSCRIPTION_ID, ARM_TENANT_ID, DESTACCOUNTKEY, SOURCEACCOUNTKEY mais pour des questions de simplifications dans cet exercices, nous ne protégerons que les clés du compte de stockage, nous corrigerons par la suite.&lt;/p&gt;
 &lt;p&gt;Pour récupérer les clés des comptes de stockage sélectionnez votre compte de stockage dans le resource group que vous avez créer et allez dans &amp;quot;Access Keys&amp;quot; :&lt;/p&gt;
-&lt;img class=&quot;alignnone size-full wp-image-360&quot; src=&quot;/images/2017/10/storage-account-key.png&quot; alt=&quot;&quot; width=&quot;1108&quot; height=&quot;557&quot;&gt;
-&lt;p&gt;Ensuite, comme nous allons construire des images Packer Windows, il y a des chances pour que la build dure plus d&#39;une heure (Mise à jour etc) donc dans les options de la build nous allons passer le time out de la build a 240 minutes :&lt;/p&gt;
-&lt;img class=&quot;alignnone wp-image-378 size-full&quot; src=&quot;/images/2017/10/timeout-e1508918816983.png&quot; alt=&quot;&quot; width=&quot;1225&quot; height=&quot;545&quot;&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/storage-account-key.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Ensuite, comme nous allons construire des images Packer Windows, il y a des chances pour que la build dure plus d&#39;une heure (Mise à jour etc) donc dans les options de la build nous allons passer le time out de la build a 240 minutes :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/timeout-e1508918816983.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Cliquez maintenant sur &amp;quot;Save &amp;amp; Queue&amp;quot;.&lt;/p&gt;
-&lt;p&gt; &lt;/p&gt;
 &lt;p&gt;Votre build est maintenant lancé.&lt;/p&gt;
-&lt;p&gt;Dans le prochain article nous verrons en détail cette partie de &amp;quot;build&amp;quot; et surtout comprendre comment ça fonctionne (ou pas :))&lt;/p&gt;
-&lt;p&gt; &lt;/p&gt;
-&lt;p&gt; &lt;/p&gt;
 </content>
 	</entry>
 	
@@ -1625,53 +1609,56 @@ Nous utiliserons des technologies Microsoft (VSTS, Azure, Windows Server...) mai
 &lt;/ol&gt;
 &lt;h1 id=&quot;introduction&quot;&gt;Introduction &lt;a class=&quot;direct-link&quot; href=&quot;#introduction&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;Avant de foncer dans le code de notre infra, nous allons devoir réflechir à l&#39;organisation de nos dossier de &amp;quot;Code&amp;quot;.&lt;/p&gt;
-&lt;img class=&quot;alignnone size-medium wp-image-336&quot; src=&quot;/images/2017/10/mirror-frame-2407289_960_720-195x300.png&quot; alt=&quot;&quot; width=&quot;195&quot; height=&quot;300&quot;&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/mirror-frame-2407289_960_720-195x300.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Ok, maintenant qu&#39;on à réflechi, on y va !&lt;/p&gt;
 &lt;p&gt;Nous allons générer deux images de base Ubuntu et Windows Server, utiliser des scripts &amp;quot;commun&amp;quot; et des scripts spécifiques, puis spécialiser nos images.&lt;/p&gt;
-&lt;h1 id=&quot;let&#39;s-git-!&quot;&gt;Let&#39;s Git ! &lt;a class=&quot;direct-link&quot; href=&quot;#let&#39;s-git-!&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
-&lt;h2 id=&quot;dolly%2C-ou-clone%2C-comme-vous-voulez.&quot;&gt;Dolly, ou Clone, comme vous voulez. &lt;a class=&quot;direct-link&quot; href=&quot;#dolly%2C-ou-clone%2C-comme-vous-voulez.&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;Ouvrez donc Visual Studio Code (&lt;a href=&quot;https://etienne.deneuve.xyz/2017/01/26/visual-studio-code-pour-ansible-terraform/&quot;&gt;Quoi ? Il est pas déjà installé? &lt;/a&gt;) et ajoutez votre repository Git VSTS dans VS Code (Vous devez installer &lt;a href=&quot;http://lmgtfy.com/?q=install+git&quot;&gt;Git&lt;/a&gt; sur votre poste avant).&lt;/p&gt;
+&lt;h1 id=&quot;let&#39;s-git&quot;&gt;Let&#39;s Git &lt;a class=&quot;direct-link&quot; href=&quot;#let&#39;s-git&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
+&lt;h2 id=&quot;dolly%2C-ou-clone%2C-comme-vous-voulez&quot;&gt;Dolly, ou Clone, comme vous voulez &lt;a class=&quot;direct-link&quot; href=&quot;#dolly%2C-ou-clone%2C-comme-vous-voulez&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Ouvrez donc Visual Studio Code (&lt;a href=&quot;https://etienne.deneuve.xyz/2017/01/26/visual-studio-code-pour-ansible-terraform/&quot;&gt;Quoi ? Il est pas déjà installé?&lt;/a&gt;) et ajoutez votre repository Git VSTS dans VS Code (Vous devez installer &lt;a href=&quot;http://lmgtfy.com/?q=install+git&quot;&gt;Git&lt;/a&gt; sur votre poste avant).&lt;/p&gt;
 &lt;p&gt;C&#39;est assez simple, cliquez sur &amp;quot;Clone Git Repository&amp;quot;:&lt;/p&gt;
-&lt;img class=&quot;alignnone size-medium wp-image-337&quot; src=&quot;/images/2017/10/Git-Clone-300x217.png&quot; alt=&quot;&quot; width=&quot;300&quot; height=&quot;217&quot;&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Git-Clone-300x217.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Récupérez l&#39;url de votre repository dans VSTS :&lt;/p&gt;
-&lt;img class=&quot;alignnone wp-image-339 size-full&quot; src=&quot;/images/2017/10/Git-Clone-2-1.png&quot; alt=&quot;&quot; width=&quot;1055&quot; height=&quot;513&quot;&gt;
-&lt;p&gt;Puis collez le dans la barre de VS code :&lt;/p&gt;
-&lt;img class=&quot;alignnone size-full wp-image-340&quot; src=&quot;/images/2017/10/Git-Clone-3.png&quot; alt=&quot;&quot; width=&quot;835&quot; height=&quot;161&quot;&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Git-Clone-2-1.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Puis collez le dans la barre de VS code :&lt;br&gt;
+&lt;img src=&quot;/images/2017/10/Git-Clone-3.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Entrez votre destination, par exemple c:\Users\vous\Documents\git (la racine, le dossier sera créer automatiquement) , puis indiquez vos credentials VSTS, et enfin lorsque le clone est terminé, cliquez sur &amp;quot;Open This repository&amp;quot;:&lt;/p&gt;
-&lt;img class=&quot;alignnone size-full wp-image-341&quot; src=&quot;/images/2017/10/Git-Clone-4.png&quot; alt=&quot;&quot; width=&quot;1178&quot; height=&quot;52&quot;&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Git-Clone-4.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Félicitations, vous avez réussi a cloner votre git vsts sur votre poste!&lt;/p&gt;
-&lt;blockquote&gt;Ouais, mais moi j&#39;y comprends rien à Git, j&#39;vais jamais m&#39;en sortir !&lt;/blockquote&gt;
-&lt;h2&gt;Git, comment ça marche&lt;/h2&gt;
-Bon, on va faire simple, Git en usage basique comme on va le faire, ce n&#39;est que quelques opérations :
+&lt;blockquote&gt;
+&lt;p&gt;Ouais, mais moi j&#39;y comprends rien à Git, j&#39;vais jamais m&#39;en sortir !&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;git%2C-comment-%C3%A7a-marche&quot;&gt;Git, comment ça marche &lt;a class=&quot;direct-link&quot; href=&quot;#git%2C-comment-%C3%A7a-marche&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Bon, on va faire simple, Git en usage basique comme on va le faire, ce n&#39;est que quelques opérations :&lt;/p&gt;
 &lt;ol&gt;
- 	&lt;li&gt;Git clone -&amp;gt; On récupère un git distant sur notre poste de travail&lt;/li&gt;
- 	&lt;li&gt;Git Add -&amp;gt; on ajoute les fichiers dans le git &quot;local&quot;&lt;/li&gt;
- 	&lt;li&gt;Git Commit -&amp;gt; on valide nos modification (en local)&lt;/li&gt;
- 	&lt;li&gt;Git pull -&amp;gt; on va chercher les modifications coté remote&lt;/li&gt;
- 	&lt;li&gt;Git push -&amp;gt; on pousse nos modifciation vers remote&lt;/li&gt;
+&lt;li&gt;Git clone -&amp;gt; On récupère un git distant sur notre poste de travail&lt;/li&gt;
+&lt;li&gt;Git Add -&amp;gt; on ajoute les fichiers dans le git &amp;quot;local&amp;quot;&lt;/li&gt;
+&lt;li&gt;Git Commit -&amp;gt; on valide nos modification (en local)&lt;/li&gt;
+&lt;li&gt;Git pull -&amp;gt; on va chercher les modifications coté remote&lt;/li&gt;
+&lt;li&gt;Git push -&amp;gt; on pousse nos modifciation vers remote&lt;/li&gt;
 &lt;/ol&gt;
-Vous inquiétez pas, VS Code va faire beaucoup à notre place !
-&lt;h2&gt;Création des dossiers&lt;/h2&gt;
-&lt;blockquote&gt;Il faut quand même savoir une petite chose de plus, Git ne gère pas les dossiers vide, il faut donc créer un petit fichier readme.md pour les synchroniser correctement.&lt;/blockquote&gt;
-Pour créer les dossiers, soit vous le faite en &quot;graphique&quot; :
-&lt;img class=&quot;alignnone size-full wp-image-344&quot; src=&quot;/images/2017/10/addfolder-1.png&quot; alt=&quot;&quot; width=&quot;532&quot; height=&quot;193&quot;&gt;
+&lt;p&gt;Vous inquiétez pas, VS Code va faire beaucoup à notre place !&lt;/p&gt;
+&lt;h2 id=&quot;cr%C3%A9ation-des-dossiers&quot;&gt;Création des dossiers &lt;a class=&quot;direct-link&quot; href=&quot;#cr%C3%A9ation-des-dossiers&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Il faut quand même savoir une petite chose de plus, Git ne gère pas les dossiers vide, il faut donc créer un petit fichier &lt;a href=&quot;http://readme.md&quot;&gt;readme.md&lt;/a&gt; pour les synchroniser correctement.&lt;br&gt;
+Pour créer les dossiers, soit vous le faite en &amp;quot;graphique&amp;quot; :&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/addfolder-1.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Soit via le terminal intégrer avec vos commandes préférées (View -&amp;gt; Integrated Terminal).&lt;/p&gt;
 &lt;p&gt;Personnellement j&#39;ai créer 4 dossiers à la racine  : scripts, windows, ubuntu et specialized, puis dans les dossiers Windows et Ubuntu un sous-dossier scripts. dans chacun de ces dossiers ajouter donc un fichier vide &lt;a href=&quot;http://readme.md&quot;&gt;readme.md&lt;/a&gt; (et sauvegardez-les). Vous verrez plus tard le &amp;quot;pourquoi&amp;quot; cette arborescence :).&lt;/p&gt;
-&lt;h2 id=&quot;commit-!&quot;&gt;Commit ! &lt;a class=&quot;direct-link&quot; href=&quot;#commit-!&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;commit&quot;&gt;Commit &lt;a class=&quot;direct-link&quot; href=&quot;#commit&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Maintenant on va &amp;quot;commit&amp;quot; nos modifications en cliquant sur les boutons (et en écrivant le pourquoi du commit :)) :&lt;/p&gt;
-&lt;img class=&quot;alignnone size-full wp-image-346&quot; src=&quot;/images/2017/10/Git-Commit.png&quot; alt=&quot;&quot; width=&quot;549&quot; height=&quot;396&quot;&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Git-Commit.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Youpi! votre premier commit ! (c’était dur?)&lt;/p&gt;
 &lt;h2 id=&quot;push&quot;&gt;Push &lt;a class=&quot;direct-link&quot; href=&quot;#push&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Avec notre premier commit, en bas de notre fenêtre VS Code, nous avons désormais un commit à envoyer :&lt;/p&gt;
-&lt;p&gt;&lt;img class=&quot;alignnone size-full wp-image-347&quot; src=&quot;/images/2017/10/Push.png&quot; alt=&quot;&quot; width=&quot;290&quot; height=&quot;522&quot;&gt; Le chiffre de gauche correspond aux modifications distante (vos collègues), celui de droite, les locales (les votre quoi :))&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Push.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Le chiffre de gauche correspond aux modifications distante (vos collègues), celui de droite, les locales (les votre quoi :))&lt;/p&gt;
 &lt;p&gt;Pour savoir ce qui se passe, ouvre la console &amp;quot;Output&amp;quot; (View, Output, puis sélectionnez Git dans le menu déroulant à gauche)&lt;/p&gt;
-&lt;img class=&quot;alignnone size-full wp-image-348&quot; src=&quot;/images/2017/10/Git-Push.png&quot; alt=&quot;&quot; width=&quot;1010&quot; height=&quot;522&quot;&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Git-Push.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Allez dans VSTS sur votre navigateur, vous avez tous vos fichiers qui se trouvent désormais sur le Server.&lt;/p&gt;
-&lt;p&gt; &lt;/p&gt;
 &lt;h1 id=&quot;conclusion&quot;&gt;Conclusion &lt;a class=&quot;direct-link&quot; href=&quot;#conclusion&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;Désormais, vous avez un beau Projet VSTS, cloner en local, et vous savez envoyer vos fichiers dans le repository git distant. Nous allons pouvoir passer a la suite !&lt;/p&gt;
 &lt;p&gt;N&#39;hésitez pas à commenter ou à me contacter en cas de soucis avec ces deux premières parties !&lt;/p&gt;
-&lt;p&gt; &lt;/p&gt;
 </content>
 	</entry>
 	
@@ -1696,41 +1683,126 @@ Nous utiliserons des technologies Microsoft (VSTS, Azure, Windows Server...) mai
 &lt;h2 id=&quot;cr%C3%A9ation-du-projet&quot;&gt;Création du Projet &lt;a class=&quot;direct-link&quot; href=&quot;#cr%C3%A9ation-du-projet&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&quot;https://%7Bvotrenomavous%7D.visualstudio.com/_projects?_a=new&quot;&gt;https://{votrenomavous}.visualstudio.com/_projects?_a=new&lt;/a&gt;&lt;br&gt;
 Indiquez le nom que vous souhaitez et sélectionnez Git comme &amp;quot;Version Control&amp;quot; :&lt;/p&gt;
-&lt;img class=&quot;alignnone wp-image-322 size-full&quot; src=&quot;/images/2017/10/vsts-1-1.png&quot; alt=&quot;&quot; width=&quot;1680&quot; height=&quot;793&quot;&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-1-1.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;h2 id=&quot;initialisation-du-repository&quot;&gt;Initialisation du repository &lt;a class=&quot;direct-link&quot; href=&quot;#initialisation-du-repository&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
-&lt;img class=&quot;alignnone size-full wp-image-323&quot; src=&quot;/images/2017/10/vsts-2-1.png&quot; alt=&quot;&quot; width=&quot;1675&quot; height=&quot;697&quot;&gt;
-## C&#39;est prêt !
-&lt;img class=&quot;alignnone size-full wp-image-324&quot; src=&quot;/images/2017/10/vsts-3-1.png&quot; alt=&quot;&quot; width=&quot;1239&quot; height=&quot;326&quot;&gt;
-&lt;p&gt;Voila, 3 étapes, notre premier projet est &amp;quot;prêt&amp;quot;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-2-1.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;c&#39;est-pr%C3%AAt&quot;&gt;C&#39;est prêt &lt;a class=&quot;direct-link&quot; href=&quot;#c&#39;est-pr%C3%AAt&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-3-1.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Voila, 3 étapes, notre premier projet est &amp;quot;prêt&amp;quot;.&lt;/p&gt;
 &lt;h1 id=&quot;pr%C3%A9paration-de-l&#39;agent-pour-vsts&quot;&gt;Préparation de l&#39;Agent pour VSTS &lt;a class=&quot;direct-link&quot; href=&quot;#pr%C3%A9paration-de-l&#39;agent-pour-vsts&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
 &lt;h2 id=&quot;pr%C3%A9paration-de-la-vm&quot;&gt;Préparation de la VM &lt;a class=&quot;direct-link&quot; href=&quot;#pr%C3%A9paration-de-la-vm&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Dans Azure, avec le &lt;a href=&quot;https://github.com/Azure/azure-quickstart-templates/tree/master/101-vm-simple-linux&quot;&gt;template suivant&lt;/a&gt;, déployez une vm Ubuntu basique.&lt;br&gt;
 Installez les prérequis de l&#39;agent VSTS via les commandes suivantes :&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;sudo apt-get install -y libunwind8 libcurl3
-sudo apt-add-repository ppa:git-core/ppa
-sudo apt-get update
-sudo apt-get install git
-apt-get install libcurl4-openssl-dev
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2&gt;Installation de l&#39;agent&lt;/h2&gt;
-&lt;h3&gt;Préparation dans VSTS&lt;/h3&gt;
-Accédez à la partie sécurité https://{votrenomavous}.visualstudio.com/_details/security/tokens et créer un PAT (Personnal Access Tokens).
-&lt;blockquote&gt;Attention, c&#39;est comme un mot de passe, il ne faut pas le diffuser. (Keepass, LastPass et autres peuvent les stocker correctement!).&lt;/blockquote&gt;
-Dans notre cas, l&#39;agent devra avoir les droits Agent Pools et Deployment Group, car nous n&#39;utiliserons qu&#39;un seul agent. En prod, séparez-les !
-&lt;h3&gt;Installation de l&#39;agent&lt;/h3&gt;
-```
-wget https://github.com/Microsoft/vsts-agent/releases/download/v2.123.0/vsts-agent-ubuntu.16.04-x64-2.123.0.tar.gz -O vsts-agent-ubuntu.16.04-x64-2.123.0.tar.gz
-mkdir agent &amp;amp;&amp;amp; cd agent
-tar -xvf ../vsts-agent-ubuntu.16.04-x64-2.123.0.tar.gz
-./config.sh
-&lt;h1 id=&quot;r%C3%A9pondez-aux-questions&quot;&gt;Répondez aux questions &lt;a class=&quot;direct-link&quot; href=&quot;#r%C3%A9pondez-aux-questions&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
-&lt;p&gt;sudo ./svc.sh install&lt;br&gt;
-sudo ./svc.sh start&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;Pour plus d&#39;info sur l&#39;[agent VSTS](https://docs.microsoft.com/fr-fr/vsts/build-release/actions/agents/v2-linux)
-&amp;lt;h3&amp;gt;Vérification dans VSTS&amp;lt;/h3&amp;gt;
-Si vous accédez à l&#39;url https://{votrenomavous}.visualstudio.com/_admin/_AgentPool vous devriez voir que votre agent est en vert !
-&amp;lt;img class=&amp;quot;alignnone size-full wp-image-321&amp;quot; src=&amp;quot;/images/2017/10/Capture-Agent-Pool.png&amp;quot; alt=&amp;quot;&amp;quot; width=&amp;quot;565&amp;quot; height=&amp;quot;145&amp;quot; /&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;apt-get&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; -y libunwind8 libcurl3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; apt-add-repository ppa:git-core/ppa&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;apt-get&lt;/span&gt; update&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;apt-get&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;apt-get&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; libcurl4-openssl-dev&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;installation-de-l&#39;agent&quot;&gt;Installation de l&#39;agent &lt;a class=&quot;direct-link&quot; href=&quot;#installation-de-l&#39;agent&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;h3 id=&quot;pr%C3%A9paration-dans-vsts&quot;&gt;Préparation dans VSTS &lt;a class=&quot;direct-link&quot; href=&quot;#pr%C3%A9paration-dans-vsts&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Accédez à la partie sécurité &lt;a href=&quot;https://%7Bvotrenomavous%7D.visualstudio.com/_details/security/tokens&quot;&gt;https://{votrenomavous}.visualstudio.com/_details/security/tokens&lt;/a&gt; et créer un PAT (Personnal Access Tokens).&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Attention, c&#39;est comme un mot de passe, il ne faut pas le diffuser. (Keepass, LastPass et autres peuvent les stocker correctement!).&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Dans notre cas, l&#39;agent devra avoir les droits Agent Pools et Deployment Group, car nous n&#39;utiliserons qu&#39;un seul agent. En prod, séparez-les !&lt;/p&gt;
+&lt;h3 id=&quot;installation-de-l&#39;agent-2&quot;&gt;Installation de l&#39;agent &lt;a class=&quot;direct-link&quot; href=&quot;#installation-de-l&#39;agent-2&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;wget&lt;/span&gt; https://github.com/Microsoft/vsts-agent/releases/download/v2.123.0/vsts-agent-ubuntu.16.04-x64-2.123.0.tar.gz -O vsts-agent-ubuntu.16.04-x64-2.123.0.tar.gz&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;mkdir&lt;/span&gt; agent &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&lt;/span&gt;amp&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&amp;amp;&lt;/span&gt;amp&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; agent&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;tar&lt;/span&gt; -xvf &lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;/vsts-agent-ubuntu.16.04-x64-2.123.0.tar.gz&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;./config.sh&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Répondez aux questions&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; ./svc.sh &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; ./svc.sh start&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Pour plus d&#39;info sur l&#39;&lt;a href=&quot;https://docs.microsoft.com/fr-fr/vsts/build-release/actions/agents/v2-linux&quot;&gt;agent VSTS&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;v%C3%A9rification-dans-vsts&quot;&gt;Vérification dans VSTS &lt;a class=&quot;direct-link&quot; href=&quot;#v%C3%A9rification-dans-vsts&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Si vous accédez à l&#39;url &lt;a href=&quot;https://%7Bvotrenomavous%7D.visualstudio.com/_admin/_AgentPool&quot;&gt;https://{votrenomavous}.visualstudio.com/_admin/_AgentPool&lt;/a&gt; vous devriez voir que votre agent est en vert !&lt;br&gt;
+&lt;img src=&quot;/images/2017/10/Capture-Agent-Pool.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;h1 id=&quot;introduction&quot;&gt;Introduction &lt;a class=&quot;direct-link&quot; href=&quot;#introduction&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;Avant de foncer dans le code de notre infra, nous allons devoir réflechir à l&#39;organisation de nos dossier de &amp;quot;Code&amp;quot;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/mirror-frame-2407289_960_720-195x300.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Ok, maintenant qu&#39;on à réflechi, on y va !&lt;/p&gt;
+&lt;p&gt;Nous allons générer deux images de base Ubuntu et Windows Server, utiliser des scripts &amp;quot;commun&amp;quot; et des scripts spécifiques, puis spécialiser nos images.&lt;/p&gt;
+&lt;h1 id=&quot;let&#39;s-git&quot;&gt;Let&#39;s Git &lt;a class=&quot;direct-link&quot; href=&quot;#let&#39;s-git&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
+&lt;h2 id=&quot;dolly%2C-ou-clone%2C-comme-vous-voulez&quot;&gt;Dolly, ou Clone, comme vous voulez &lt;a class=&quot;direct-link&quot; href=&quot;#dolly%2C-ou-clone%2C-comme-vous-voulez&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Ouvrez donc Visual Studio Code (&lt;a href=&quot;https://etienne.deneuve.xyz/2017/01/26/visual-studio-code-pour-ansible-terraform/&quot;&gt;Quoi ? Il est pas déjà installé?&lt;/a&gt;) et ajoutez votre repository Git VSTS dans VS Code (Vous devez installer &lt;a href=&quot;http://lmgtfy.com/?q=install+git&quot;&gt;Git&lt;/a&gt; sur votre poste avant).&lt;/p&gt;
+&lt;p&gt;C&#39;est assez simple, cliquez sur &amp;quot;Clone Git Repository&amp;quot;:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Git-Clone-300x217.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Récupérez l&#39;url de votre repository dans VSTS :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Git-Clone-2-1.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Puis collez le dans la barre de VS code :&lt;br&gt;
+&lt;img src=&quot;/images/2017/10/Git-Clone-3.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Entrez votre destination, par exemple c:\Users\vous\Documents\git (la racine, le dossier sera créer automatiquement) , puis indiquez vos credentials VSTS, et enfin lorsque le clone est terminé, cliquez sur &amp;quot;Open This repository&amp;quot;:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Git-Clone-4.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Félicitations, vous avez réussi a cloner votre git vsts sur votre poste!&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Ouais, mais moi j&#39;y comprends rien à Git, j&#39;vais jamais m&#39;en sortir !&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;git%2C-comment-%C3%A7a-marche&quot;&gt;Git, comment ça marche &lt;a class=&quot;direct-link&quot; href=&quot;#git%2C-comment-%C3%A7a-marche&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Bon, on va faire simple, Git en usage basique comme on va le faire, ce n&#39;est que quelques opérations :&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Git clone -&amp;gt; On récupère un git distant sur notre poste de travail&lt;/li&gt;
+&lt;li&gt;Git Add -&amp;gt; on ajoute les fichiers dans le git &amp;quot;local&amp;quot;&lt;/li&gt;
+&lt;li&gt;Git Commit -&amp;gt; on valide nos modification (en local)&lt;/li&gt;
+&lt;li&gt;Git pull -&amp;gt; on va chercher les modifications coté remote&lt;/li&gt;
+&lt;li&gt;Git push -&amp;gt; on pousse nos modifciation vers remote&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Vous inquiétez pas, VS Code va faire beaucoup à notre place !&lt;/p&gt;
+&lt;h2 id=&quot;cr%C3%A9ation-des-dossiers&quot;&gt;Création des dossiers &lt;a class=&quot;direct-link&quot; href=&quot;#cr%C3%A9ation-des-dossiers&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Il faut quand même savoir une petite chose de plus, Git ne gère pas les dossiers vide, il faut donc créer un petit fichier &lt;a href=&quot;http://readme.md&quot;&gt;readme.md&lt;/a&gt; pour les synchroniser correctement.&lt;br&gt;
+Pour créer les dossiers, soit vous le faite en &amp;quot;graphique&amp;quot; :&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/addfolder-1.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Soit via le terminal intégrer avec vos commandes préférées (View -&amp;gt; Integrated Terminal).&lt;/p&gt;
+&lt;p&gt;Personnellement j&#39;ai créer 4 dossiers à la racine  : scripts, windows, ubuntu et specialized, puis dans les dossiers Windows et Ubuntu un sous-dossier scripts. dans chacun de ces dossiers ajouter donc un fichier vide &lt;a href=&quot;http://readme.md&quot;&gt;readme.md&lt;/a&gt; (et sauvegardez-les). Vous verrez plus tard le &amp;quot;pourquoi&amp;quot; cette arborescence :).&lt;/p&gt;
+&lt;h2 id=&quot;commit&quot;&gt;Commit &lt;a class=&quot;direct-link&quot; href=&quot;#commit&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maintenant on va &amp;quot;commit&amp;quot; nos modifications en cliquant sur les boutons (et en écrivant le pourquoi du commit :)) :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Git-Commit.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Youpi! votre premier commit ! (c’était dur?)&lt;/p&gt;
+&lt;h2 id=&quot;push&quot;&gt;Push &lt;a class=&quot;direct-link&quot; href=&quot;#push&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Avec notre premier commit, en bas de notre fenêtre VS Code, nous avons désormais un commit à envoyer :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Push.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Le chiffre de gauche correspond aux modifications distante (vos collègues), celui de droite, les locales (les votre quoi :))&lt;/p&gt;
+&lt;p&gt;Pour savoir ce qui se passe, ouvre la console &amp;quot;Output&amp;quot; (View, Output, puis sélectionnez Git dans le menu déroulant à gauche)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Git-Push.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Allez dans VSTS sur votre navigateur, vous avez tous vos fichiers qui se trouvent désormais sur le Server.&lt;/p&gt;
+&lt;h1 id=&quot;introduction-2&quot;&gt;Introduction &lt;a class=&quot;direct-link&quot; href=&quot;#introduction-2&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;Voici un petit récapitulatif ce qu&#39;on aimerait :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Packer.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Vous devez créer deux comptes de stockage dans Azure vous même, un de &amp;quot;Production&amp;quot; et un &amp;quot;Eval&amp;quot; vous pouvez le faire avec Azure Cloud Shell depuis le portail Azure :&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;#create resource group&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;az group create -l westeurope -n vstsforops&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;#create storage account&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;az storage account create -n sto0eval -g vstsforops -l westeurope --sku Standard_LRS&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;az storage account create -n sto0prod -g vstsforops -lwesteurope --sku Standard_LRS&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Du coup je vous ai déjà préparer les éléments histoire de ne pas perdre de temps sur la construction des templates packer. Récupérez l&#39;archive ici : &lt;a href=&quot;https://github.com/EtienneDeneuve/vsts-for-ops/archive/master.zip&quot;&gt;Download ZIP&lt;/a&gt;, puis copiez les fichiers dans votre répertoire que vous avez cloné la fois dernière. J&#39;ai fais quelques modifications sur la hiérarchie des dossiers afin que ça soit plus évolutif dans le temps, nous y reviendrons plus tard.&lt;/p&gt;
+&lt;p&gt;Le fichier packer qui nous intéresse est dans le dossier /storage/windows/base/windows_base_packer.json, il est tout a fait standard, comme ceux que Stanislas détaille &lt;a href=&quot;https://github.com/squasta/PackerAzureRM&quot;&gt;ici&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Vous noterez peut être que j&#39;ai ajouté un provisionner &amp;quot;windows-update&amp;quot; :&lt;/p&gt;
+&lt;pre class=&quot;language-json&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;provisioners&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;windows-update&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Celui n&#39;est pas standard, vous devez le mettre dans le même répertoire que votre exécutable packer, il est téléchargeable à &lt;a href=&quot;https://github.com/rgl/packer-provisioner-windows-update/releases&quot;&gt;l&#39;adresse suivante&lt;/a&gt; mais je l&#39;ai aussi inclus dans mon repository git au passage nous allons également mettre la dernière version de Packer. Ces actions sont à faire sur la machine &amp;quot;Agent&amp;quot; de &lt;a href=&quot;https://etienne.deneuve.xyz/2017/10/09/vsts-for-ops-1/&quot;&gt;vsts-for-ops-1&lt;/a&gt; :&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;apt&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;unzip&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;wget&lt;/span&gt; https://github.com/rgl/packer-provisioner-windows-update/releases/download/v0.4.0/packer-provisioner-windows-update-linux.tgz&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;wget&lt;/span&gt; https://releases.hashicorp.com/packer/1.1.0/packer_1.1.0_linux_amd64.zip&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;tar&lt;/span&gt; -xvf ./packer-provisioner-windows-update-linux.tgz&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;unzip&lt;/span&gt; packer_1.1.0_linux_amd64.zip&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;mv&lt;/span&gt; ./packer-provisioner-windows-update-windows /usr/local/bin/&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;mv&lt;/span&gt; ./packer /usr/local/bin/&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Si vous n&#39;avez pas installé azure cli et l&#39;agent, vous pouvez aussi utiliser ce script sur votre vm agent:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://raw.githubusercontent.com/EtienneDeneuve/vsts-for-ops/master/scripts/platform/agent/prepare_vm.sh&quot;&gt;Script&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&quot;bon-et-la-build&quot;&gt;Bon et La build &lt;a class=&quot;direct-link&quot; href=&quot;#bon-et-la-build&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;Ouvrez VSTS :&lt;/p&gt;
+&lt;p&gt;puis cliquez sur &amp;quot;build &amp;amp; release&amp;quot; :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Sans-titre.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Puis sur &amp;quot;+ New&amp;quot;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-1.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Puis sur &amp;quot;Empty process&amp;quot;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-2.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Puis complétez le champs &amp;quot;Name&amp;quot; avec par exemple &amp;quot;Packer-Base-Windows 2012 R2&amp;quot;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-3.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Dans la Phase 1 nous allons ajouter deux étape &amp;quot;build immutable image&amp;quot; et &amp;quot;azure cli&amp;quot; :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-4.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Renseignez les variables telles que ci dessous :&lt;/p&gt;
+&lt;p&gt;Packer Template : &amp;quot;User Provided&amp;quot;&lt;/p&gt;
+&lt;p&gt;Packer template location, naviguer vers &amp;quot;storage/Windows/base/windows_base_packer.json&amp;quot;&lt;/p&gt;
+&lt;p&gt;Dans le template parameters (je suis sympa, copiez collez ca :):&lt;/p&gt;
+&lt;pre class=&quot;language-json&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;client_id&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_CLIENT_ID)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;client_secret&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_CLIENT_SECRET)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;resource_group_name&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_RESOURCE_GROUP_NAME)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;storage_account&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_STORAGE_ACCOUNT)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;subscription_id&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_SUBSCRIPTION_ID)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;object_id&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_OBJECT_ID)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;tenant_id&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_TENANT_ID)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;windows_sku&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(WINDOWS_SKU)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;build_resquestfor&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(BUILD_REQUESTEDFOR)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;location&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_LOCATION)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;vm_size&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_VM_SIZE)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;capture_name&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(CAPTURE_NAME)&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Puis, dans &amp;quot;Output&amp;quot;, renseigner IMAGEURI :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-5.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Ajoutez maintenant une tâche &amp;quot;Azure CLI&amp;quot; :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-6.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Sélectionnez votre souscription azure (si elle n&#39;est pas dans la liste, cliquez sur manage et ajoutez la) et indiquez le chemin vers le script bash &amp;quot;script/platform/tasks/az-move-vhd.vhd&amp;quot; et ajoutez les arguments &amp;quot;-d &amp;quot;$(DESTACCOUNTKEY)&amp;quot; -s &amp;quot;$(SOURCEACCOUNTKEY)&amp;quot;&amp;quot;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-7.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Une fois que ces deux tâches sont complétées, nous allons déclarer nos variables (si vous ne savez pas comment les récupérées, suivez le guide sur le dépôt git de Stanislas plus haut) :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-8.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Vous remarquerez que certaines sont masquées, rien de bien compliqué, cliquez sur le cadenas et elle sera &amp;quot;protégée&amp;quot; :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-9.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Dans l’idéal, les variables a protégées seraient : ARM_CLIENT_SECRET, ARM_SUBSCRIPTION_ID, ARM_TENANT_ID, DESTACCOUNTKEY, SOURCEACCOUNTKEY mais pour des questions de simplifications dans cet exercices, nous ne protégerons que les clés du compte de stockage, nous corrigerons par la suite.&lt;/p&gt;
+&lt;p&gt;Pour récupérer les clés des comptes de stockage sélectionnez votre compte de stockage dans le resource group que vous avez créer et allez dans &amp;quot;Access Keys&amp;quot; :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/storage-account-key.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Ensuite, comme nous allons construire des images Packer Windows, il y a des chances pour que la build dure plus d&#39;une heure (Mise à jour etc) donc dans les options de la build nous allons passer le time out de la build a 240 minutes :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/timeout-e1508918816983.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Cliquez maintenant sur &amp;quot;Save &amp;amp; Queue&amp;quot;.&lt;/p&gt;
+&lt;p&gt;Votre build est maintenant lancé.&lt;/p&gt;
 </content>
 	</entry>
 	
