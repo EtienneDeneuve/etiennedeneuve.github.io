@@ -124,7 +124,7 @@ Nous utiliserons des technologies Microsoft (VSTS, Azure, Windows Server…) mai
 </ol>
 <h1 id="introduction">Introduction <a class="direct-link" href="#introduction"> </a></h1>
 <p>Voici un petit récapitulatif ce qu'on aimerait :</p>
-<img class="alignnone size-full wp-image-365" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/10/Packer.png" alt="" width="1035" height="472" />
+<img class="alignnone size-full wp-image-365" src="/images/2017/10/Packer.png" alt="" width="1035" height="472" />
 <p>Vous devez créer deux comptes de stockage dans Azure vous même, un de &quot;Production&quot; et un &quot;Eval&quot; vous pouvez le faire avec Azure Cloud Shell depuis le portail Azure :</p>
 <pre><code>#create resource group
 az group create -l westeurope -n vstsforops
@@ -150,35 +150,35 @@ mv ./packer /usr/local/bin/
 <h1 id="bon-et-la-build-%3F">Bon et La build ? <a class="direct-link" href="#bon-et-la-build-%3F"> </a></h1>
 <p>Ouvrez VSTS :</p>
 <p>puis cliquez sur &quot;build &amp; release&quot; :</p>
-<img class="alignnone size-full wp-image-372" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/10/Sans-titre.png" alt="" width="592" height="164" />
+<img class="alignnone size-full wp-image-372" src="/images/2017/10/Sans-titre.png" alt="" width="592" height="164" />
 <p>Puis sur &quot;+ New&quot;</p>
-<img class="alignnone size-full wp-image-361" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/10/vsts-create-1.png" alt="" width="1027" height="158" />
+<img class="alignnone size-full wp-image-361" src="/images/2017/10/vsts-create-1.png" alt="" width="1027" height="158" />
 <p>Puis sur &quot;Empty process&quot;</p>
-<img class="alignnone size-full wp-image-362" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/10/vsts-create-2.png" alt="" width="1035" height="185" />
+<img class="alignnone size-full wp-image-362" src="/images/2017/10/vsts-create-2.png" alt="" width="1035" height="185" />
 <p>Puis complétez le champs &quot;Name&quot; avec par exemple &quot;Packer-Base-Windows 2012 R2&quot;</p>
-<img class="alignnone size-full wp-image-363" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/10/vsts-create-3.png" alt="" width="1035" height="475" />
+<img class="alignnone size-full wp-image-363" src="/images/2017/10/vsts-create-3.png" alt="" width="1035" height="475" />
 <p>Dans la Phase 1 nous allons ajouter deux étape &quot;build immutable image&quot; et &quot;azure cli&quot; :</p>
-<img class="alignnone size-full wp-image-353" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/10/vsts-create-4.png" alt="" width="1035" height="504" />
+<img class="alignnone size-full wp-image-353" src="/images/2017/10/vsts-create-4.png" alt="" width="1035" height="504" />
 <p>Renseignez les variables telles que ci dessous :</p>
 <p>Packer Template : &quot;User Provided&quot;</p>
 <p>Packer template location, naviguer vers &quot;storage/Windows/base/windows_base_packer.json&quot;</p>
 <p>Dans le template parameters (je suis sympa, copiez collez ca :):</p>
 <pre class="language-json"><code class="language-json"><span class="highlight-line"></span><br><span class="highlight-line"><span class="token punctuation">{</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">&amp;quot;client_id&amp;quot;<span class="token operator">:</span>&amp;quot;$(ARM_CLIENT_ID)&amp;quot;<span class="token punctuation">,</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">&amp;quot;client_secret&amp;quot;<span class="token operator">:</span>&amp;quot;$(ARM_CLIENT_SECRET)&amp;quot;<span class="token punctuation">,</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">&amp;quot;resource_group_name&amp;quot;<span class="token operator">:</span>&amp;quot;$(ARM_RESOURCE_GROUP_NAME)&amp;quot;<span class="token punctuation">,</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">&amp;quot;storage_account&amp;quot;<span class="token operator">:</span>&amp;quot;$(ARM_STORAGE_ACCOUNT)&amp;quot;<span class="token punctuation">,</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">&amp;quot;subscription_id&amp;quot;<span class="token operator">:</span>&amp;quot;$(ARM_SUBSCRIPTION_ID)&amp;quot;<span class="token punctuation">,</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">&amp;quot;object_id&amp;quot;<span class="token operator">:</span>&amp;quot;$(ARM_OBJECT_ID)&amp;quot;<span class="token punctuation">,</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">&amp;quot;tenant_id&amp;quot;<span class="token operator">:</span>&amp;quot;$(ARM_TENANT_ID)&amp;quot;<span class="token punctuation">,</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">&amp;quot;windows_sku&amp;quot;<span class="token operator">:</span>&amp;quot;$(WINDOWS_SKU)&amp;quot;<span class="token punctuation">,</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">&amp;quot;build_resquestfor&amp;quot;<span class="token operator">:</span>&amp;quot;$(BUILD_REQUESTEDFOR)&amp;quot;<span class="token punctuation">,</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">&amp;quot;location&amp;quot;<span class="token operator">:</span>&amp;quot;$(ARM_LOCATION)&amp;quot;<span class="token punctuation">,</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">&amp;quot;vm_size&amp;quot;<span class="token operator">:</span>&amp;quot;$(ARM_VM_SIZE)&amp;quot;<span class="token punctuation">,</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">&amp;quot;capture_name&amp;quot;<span class="token operator">:</span>&amp;quot;$(CAPTURE_NAME)&amp;quot;</span><br><span class="highlight-line"></span><br><span class="highlight-line"><span class="token punctuation">}</span></span><br><span class="highlight-line"></span></code></pre>
 <p>Puis, dans &quot;Output&quot;, renseigner IMAGEURI :</p>
-<img class="alignnone size-full wp-image-354" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/10/vsts-create-5.png" alt="" width="1108" height="727" />
+<img class="alignnone size-full wp-image-354" src="/images/2017/10/vsts-create-5.png" alt="" width="1108" height="727" />
 <p>Ajoutez maintenant une tâche &quot;Azure CLI&quot; :</p>
-<img class="alignnone size-full wp-image-355" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/10/vsts-create-6.png" alt="" width="1035" height="560" />
+<img class="alignnone size-full wp-image-355" src="/images/2017/10/vsts-create-6.png" alt="" width="1035" height="560" />
 <p>Sélectionnez votre souscription azure (si elle n'est pas dans la liste, cliquez sur manage et ajoutez la) et indiquez le chemin vers le script bash &quot;script/platform/tasks/az-move-vhd.vhd&quot; et ajoutez les arguments &quot;-d &quot;$(DESTACCOUNTKEY)&quot; -s &quot;$(SOURCEACCOUNTKEY)&quot;&quot;</p>
-<img class="alignnone size-full wp-image-356" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/10/vsts-create-7.png" alt="" width="1109" height="648" />
+<img class="alignnone size-full wp-image-356" src="/images/2017/10/vsts-create-7.png" alt="" width="1109" height="648" />
 <p>Une fois que ces deux tâches sont complétées, nous allons déclarer nos variables (si vous ne savez pas comment les récupérées, suivez le guide sur le dépôt git de Stanislas plus haut) :</p>
-<img class="alignnone size-full wp-image-357" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/10/vsts-create-8.png" alt="" width="1112" height="893" />
+<img class="alignnone size-full wp-image-357" src="/images/2017/10/vsts-create-8.png" alt="" width="1112" height="893" />
 <p>Vous remarquerez que certaines sont masquées, rien de bien compliqué, cliquez sur le cadenas et elle sera &quot;protégée&quot; :</p>
-<img class="alignnone size-full wp-image-358" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/10/vsts-create-9.png" alt="" width="990" height="108" />
+<img class="alignnone size-full wp-image-358" src="/images/2017/10/vsts-create-9.png" alt="" width="990" height="108" />
 <p>Dans l’idéal, les variables a protégées seraient : ARM_CLIENT_SECRET, ARM_SUBSCRIPTION_ID, ARM_TENANT_ID, DESTACCOUNTKEY, SOURCEACCOUNTKEY mais pour des questions de simplifications dans cet exercices, nous ne protégerons que les clés du compte de stockage, nous corrigerons par la suite.</p>
 <p>Pour récupérer les clés des comptes de stockage sélectionnez votre compte de stockage dans le resource group que vous avez créer et allez dans &quot;Access Keys&quot; :</p>
-<img class="alignnone size-full wp-image-360" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/10/storage-account-key.png" alt="" width="1108" height="557" />
+<img class="alignnone size-full wp-image-360" src="/images/2017/10/storage-account-key.png" alt="" width="1108" height="557" />
 <p>Ensuite, comme nous allons construire des images Packer Windows, il y a des chances pour que la build dure plus d'une heure (Mise à jour etc) donc dans les options de la build nous allons passer le time out de la build a 240 minutes :</p>
-<img class="alignnone wp-image-378 size-full" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/10/timeout-e1508918816983.png" alt="" width="1225" height="545" />
+<img class="alignnone wp-image-378 size-full" src="/images/2017/10/timeout-e1508918816983.png" alt="" width="1225" height="545" />
 <p>Cliquez maintenant sur &quot;Save &amp; Queue&quot;.</p>
 <p> </p>
 <p>Votre build est maintenant lancé.</p>

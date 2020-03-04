@@ -124,20 +124,20 @@ Nous utiliserons des technologies Microsoft (VSTS, Azure, Windows Server...) mai
 </ol>
 <h1 id="introduction">Introduction <a class="direct-link" href="#introduction"> </a></h1>
 <p>Avant de foncer dans le code de notre infra, nous allons devoir réflechir à l'organisation de nos dossier de &quot;Code&quot;.</p>
-<img class="alignnone size-medium wp-image-336" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/10/mirror-frame-2407289_960_720-195x300.png" alt="" width="195" height="300" />
+<img class="alignnone size-medium wp-image-336" src="/images/2017/10/mirror-frame-2407289_960_720-195x300.png" alt="" width="195" height="300" />
 <p>Ok, maintenant qu'on à réflechi, on y va !</p>
 <p>Nous allons générer deux images de base Ubuntu et Windows Server, utiliser des scripts &quot;commun&quot; et des scripts spécifiques, puis spécialiser nos images.</p>
 <h1 id="let's-git-!">Let's Git ! <a class="direct-link" href="#let's-git-!"> </a></h1>
 <h2 id="dolly%2C-ou-clone%2C-comme-vous-voulez.">Dolly, ou Clone, comme vous voulez. <a class="direct-link" href="#dolly%2C-ou-clone%2C-comme-vous-voulez."> </a></h2>
 <p>Ouvrez donc Visual Studio Code (<a href="https://etienne.deneuve.xyz/2017/01/26/visual-studio-code-pour-ansible-terraform/">Quoi ? Il est pas déjà installé? </a>) et ajoutez votre repository Git VSTS dans VS Code (Vous devez installer <a href="http://lmgtfy.com/?q=install+git">Git</a> sur votre poste avant).</p>
 <p>C'est assez simple, cliquez sur &quot;Clone Git Repository&quot;:</p>
-<img class="alignnone size-medium wp-image-337" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/10/Git-Clone-300x217.png" alt="" width="300" height="217" />
+<img class="alignnone size-medium wp-image-337" src="/images/2017/10/Git-Clone-300x217.png" alt="" width="300" height="217" />
 <p>Récupérez l'url de votre repository dans VSTS :</p>
-<img class="alignnone wp-image-339 size-full" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/10/Git-Clone-2-1.png" alt="" width="1055" height="513" />
+<img class="alignnone wp-image-339 size-full" src="/images/2017/10/Git-Clone-2-1.png" alt="" width="1055" height="513" />
 <p>Puis collez le dans la barre de VS code :</p>
-<img class="alignnone size-full wp-image-340" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/10/Git-Clone-3.png" alt="" width="835" height="161" />
+<img class="alignnone size-full wp-image-340" src="/images/2017/10/Git-Clone-3.png" alt="" width="835" height="161" />
 <p>Entrez votre destination, par exemple c:\Users\vous\Documents\git (la racine, le dossier sera créer automatiquement) , puis indiquez vos credentials VSTS, et enfin lorsque le clone est terminé, cliquez sur &quot;Open This repository&quot;:</p>
-<img class="alignnone size-full wp-image-341" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/10/Git-Clone-4.png" alt="" width="1178" height="52" />
+<img class="alignnone size-full wp-image-341" src="/images/2017/10/Git-Clone-4.png" alt="" width="1178" height="52" />
 <p>Félicitations, vous avez réussi a cloner votre git vsts sur votre poste!</p>
 <blockquote>Ouais, mais moi j'y comprends rien à Git, j'vais jamais m'en sortir !</blockquote>
 <h2>Git, comment ça marche</h2>
@@ -153,18 +153,18 @@ Vous inquiétez pas, VS Code va faire beaucoup à notre place !
 <h2>Création des dossiers</h2>
 <blockquote>Il faut quand même savoir une petite chose de plus, Git ne gère pas les dossiers vide, il faut donc créer un petit fichier readme.md pour les synchroniser correctement.</blockquote>
 Pour créer les dossiers, soit vous le faite en "graphique" :
-<img class="alignnone size-full wp-image-344" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/10/addfolder-1.png" alt="" width="532" height="193" />
+<img class="alignnone size-full wp-image-344" src="/images/2017/10/addfolder-1.png" alt="" width="532" height="193" />
 <p>Soit via le terminal intégrer avec vos commandes préférées (View -&gt; Integrated Terminal).</p>
 <p>Personnellement j'ai créer 4 dossiers à la racine  : scripts, windows, ubuntu et specialized, puis dans les dossiers Windows et Ubuntu un sous-dossier scripts. dans chacun de ces dossiers ajouter donc un fichier vide <a href="http://readme.md">readme.md</a> (et sauvegardez-les). Vous verrez plus tard le &quot;pourquoi&quot; cette arborescence :).</p>
 <h2 id="commit-!">Commit ! <a class="direct-link" href="#commit-!"> </a></h2>
 <p>Maintenant on va &quot;commit&quot; nos modifications en cliquant sur les boutons (et en écrivant le pourquoi du commit :)) :</p>
-<img class="alignnone size-full wp-image-346" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/10/Git-Commit.png" alt="" width="549" height="396" />
+<img class="alignnone size-full wp-image-346" src="/images/2017/10/Git-Commit.png" alt="" width="549" height="396" />
 <p>Youpi! votre premier commit ! (c’était dur?)</p>
 <h2 id="push">Push <a class="direct-link" href="#push"> </a></h2>
 <p>Avec notre premier commit, en bas de notre fenêtre VS Code, nous avons désormais un commit à envoyer :</p>
-<p><img class="alignnone size-full wp-image-347" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/10/Push.png" alt="" width="290" height="522" /> Le chiffre de gauche correspond aux modifications distante (vos collègues), celui de droite, les locales (les votre quoi :))</p>
+<p><img class="alignnone size-full wp-image-347" src="/images/2017/10/Push.png" alt="" width="290" height="522" /> Le chiffre de gauche correspond aux modifications distante (vos collègues), celui de droite, les locales (les votre quoi :))</p>
 <p>Pour savoir ce qui se passe, ouvre la console &quot;Output&quot; (View, Output, puis sélectionnez Git dans le menu déroulant à gauche)</p>
-<img class="alignnone size-full wp-image-348" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/10/Git-Push.png" alt="" width="1010" height="522" />
+<img class="alignnone size-full wp-image-348" src="/images/2017/10/Git-Push.png" alt="" width="1010" height="522" />
 <p>Allez dans VSTS sur votre navigateur, vous avez tous vos fichiers qui se trouvent désormais sur le Server.</p>
 <p> </p>
 <h1 id="conclusion">Conclusion <a class="direct-link" href="#conclusion"> </a></h1>

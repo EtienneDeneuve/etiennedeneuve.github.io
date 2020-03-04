@@ -160,28 +160,28 @@ Bon, admettons, vous avez besoin de filter vos VM avec le type d&#39;OS déploy�
 
 Avec Powershell, on se dit &quot;ouais, c&#39;est facile&quot;. Un petit coup de Get-AzureRMVM et hop...
 
-&lt;img class=&quot;alignnone size-full wp-image-275&quot; src=&quot;https://etienne.deneuve.xyz/wp-content/uploads/2017/09/get-cazurevmos-1-gvm.png&quot; alt=&quot;&quot; width=&quot;737&quot; height=&quot;104&quot; /&gt;
+![](/images/2017/09/get-cazurevmos-1-gvm.png)
 ",
   
   "url": "/2017/09/26/azurepscmdnotfound/",
-  "tags" : ""
+  "tags" : "Azure,Powershell"
 },{
   "title": "[Update] Azure Cloud Shell &amp;#8211; Pleins de nouveautés ! (Et du gros) &amp;#8211; Powershell is Coming !",
   "date" : "Sep 25, 2017",
   "summary" : "Bonjour à tous,
 
-Si vous utilisez Azure, il y a de grandes chances que vous ayez aperçu Cloud Shell. Ce qui est moins sur c&#39;est que vous ayez vu que pas mal de petits outils on été récemment intégrés !&lt;img class=&quot;alignnone size-full wp-image-248&quot; src=&quot;https://etienne.deneuve.xyz/wp-content/uploads/2017/09/cloudshell-containers.png&quot; alt=&quot;&quot; width=&quot;1658&quot; height=&quot;193&quot; /&gt;
+Si vous utilisez Azure, il y a de grandes chances que vous ayez aperçu Cloud Shell. Ce qui est moins sur c&#39;est que vous ayez vu que pas mal de petits outils on été récemment intégrés !![](/images/2017/09/cloudshell-containers.png)
 ",
   
   "url": "/2017/09/25/azure-cloud-shell-pleins-de-nouveautes-et-du-gros/",
-  "tags" : ""
+  "tags" : "Azure,French"
 },{
   "title": "[update] Project Honolulu Public Preview &amp;#8211; Mon retour",
   "date" : "Sep 24, 2017",
   
   
   "url": "/2017/09/24/project-honolulu-public-preview-mon-retour/",
-  "tags" : ""
+  "tags" : "Windows,French"
 },{
   "title": "Azure Networking",
   "date" : "Apr 25, 2017",
@@ -190,7 +190,7 @@ Si vous utilisez Azure, il y a de grandes chances que vous ayez aperçu Cloud Sh
 ",
   
   "url": "/2017/04/25/azure-networking-tp-part-1/",
-  "tags" : "Azure Cli,PowerShell,Azure,Networking"
+  "tags" : "Azure Cli,PowerShell,Azure,Networking,French"
 },{
   "title": "Azure et le backup ? (d&amp;#8217;un Mac)",
   "date" : "Mar 14, 2017",
@@ -198,7 +198,7 @@ Si vous utilisez Azure, il y a de grandes chances que vous ayez aperçu Cloud Sh
 ",
   
   "url": "/2017/03/14/azure-et-le-backup-dun-mac/",
-  "tags" : "Fun,macOs,Azure"
+  "tags" : "Fun,macOs,Azure,French"
 },{
   "title": "Installation de Nginx en reverse proxy avec réecriture du HTML",
   "date" : "Feb 02, 2017",
@@ -209,7 +209,7 @@ Nginx est un serveur Web modulaire qui fonctionne très bien en reverse proxy et
 ",
   
   "url": "/2017/02/02/installation-de-nginx-en-reverse-proxy-avec-reecriture-du-html/",
-  "tags" : "Linux,Nginx,Reverse Proxy"
+  "tags" : "Linux,Nginx,Reverse Proxy,French"
 },{
   "title": "Visual Studio Code for Ansible, Terraform",
   "date" : "Jan 26, 2017",
@@ -221,7 +221,7 @@ Infrastructure as Code, that&#39;s methods and tooling to allow you to create re
 ",
   
   "url": "/2017/01/26/visual-studio-code-pour-ansible-terraform/",
-  "tags" : "Infra as Code,Visual Studio Code,Ansible,Terraform,macOs,Windows"
+  "tags" : "Infra as Code,Visual Studio Code,Ansible,Terraform,macOs,Windows,French"
 },{
   "title": "Get ink level from HP printers in Powershell",
   "date" : "Jan 15, 2016",
@@ -232,7 +232,7 @@ I&#39;ve find a way to get details about cardrige on low end hp printer !
 ",
   
   "url": "/2016/01/15/get-ink-level-from-hp-printers-in-powershell/",
-  "tags" : "Fun,PowerShell"
+  "tags" : "Fun,PowerShell,French"
 },{
   "title": "Get-NextTrain !",
   "date" : "Dec 16, 2015",
@@ -243,5 +243,5 @@ My goal was to get a list of the next train in the train station near my home, f
 ",
   
   "url": "/2015/12/16/get-nexttrain/",
-  "tags" : "Fun,PowerShell"
+  "tags" : "Fun,PowerShell,English"
 }]

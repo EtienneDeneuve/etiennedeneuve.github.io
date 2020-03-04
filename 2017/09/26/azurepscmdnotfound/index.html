@@ -115,106 +115,52 @@
       <h1 id="la-vie-dans-azure">La vie dans Azure <a class="direct-link" href="#la-vie-dans-azure"> </a></h1>
 <p>Bon, admettons, vous avez besoin de filter vos VM avec le type d'OS déployé dessus afin de savoir si vous avez plus de Linux ou de Windows dans Azure.</p>
 <p>Avec Powershell, on se dit &quot;ouais, c'est facile&quot;. Un petit coup de Get-AzureRMVM et hop...</p>
-<img class="alignnone size-full wp-image-275" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/09/get-cazurevmos-1-gvm.png" alt="" width="737" height="104" />
+<p><img src="/images/2017/09/get-cazurevmos-1-gvm.png" alt=""></p>
 <p>Cool, &quot;OsType&quot;, pile ce qu'on cherche, aller hop, on filtre avec | Select-Object</p>
-<img class="alignnone size-full wp-image-276" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/09/get-cazurevmos-2-so.png" alt="" width="705" height="84" />
+<p><img src="/images/2017/09/get-cazurevmos-2-so.png" alt=""></p>
 <p>et ouais, c'est tout vide ! Et l'aide elle dit quoi ? Pas grand chose de plus :</p>
-<img class="alignnone size-full wp-image-277" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/09/get-cazurevmos-3-help.png" alt="" width="976" height="310" />
+<p><img src="/images/2017/09/get-cazurevmos-3-help.png" alt=""></p>
 <p>On a plus le choix, on y va!</p>
 <p>&gt; On va dedans !</p>
 <h2 id="v%C3%A9rification-des-membres">Vérification des membres <a class="direct-link" href="#v%C3%A9rification-des-membres"> </a></h2>
 <p>Avec un petit Get-Member on liste les membres de la commande Get-AzureRMVM</p>
-<img class="alignnone size-full wp-image-278" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/09/get-cazurevmos-4-gm.png" alt="" width="1188" height="486" />
+<p><img src="/images/2017/09/get-cazurevmos-4-gm.png" alt=""></p>
 <p>On voit que &quot;OsType&quot; n'existe pas, c'est donc une commande qui utilise une propriété calculée.<br>
 En revanche un élément , OsProfile, parait correspondre au besoin.</p>
-<img class="alignnone size-full wp-image-279" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/09/get-cazurevmos-5-osp.png" alt="" width="796" height="24" />
+<p><img src="/images/2017/09/get-cazurevmos-5-osp.png" alt=""></p>
 <p>On tente le Select-Object ?</p>
-<img class="alignnone size-full wp-image-280" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/09/get-cazurevmos-6-os.png" alt="" width="582" height="83" />
+<p><img src="/images/2017/09/get-cazurevmos-6-os.png" alt=""></p>
 <p>Raté, ce coquin est un autre objet ! Etendons le !</p>
-<img class="alignnone size-full wp-image-281" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/09/get-cazurevmos-7-exp.png" alt="" width="737" height="161" />
+<p><img src="/images/2017/09/get-cazurevmos-7-exp.png" alt=""></p>
 <p>Super! On a trouvé un truc!</p>
-<h2 id="on-script-%3F">On script ? <a class="direct-link" href="#on-script-%3F"> </a></h2>
-<p>Déjà, on sait de base que le Script, on va s'en servir au moins une fois ;) donc pour le construire, il faut se poser quelques bonnes questions.</p>
+<h2 id="on-script">On script <a class="direct-link" href="#on-script"> </a></h2>
+<p>Déjà, on sait de base que le Script, on va s'en servir au moins une fois ;) donc pour le construire, il faut se poser quelques bonnes questions.</p>
 <ol>
 <li>Connexion a Azure ?</li>
 <li>Son nom (qui claque !)</li>
 </ol>
-<h3 id="le-nom-j'ai-d%C3%A9j%C3%A0-choisi-(apr%C3%A8s-tout...)-%3A">Le nom j'ai déjà choisi (après tout...) : <a class="direct-link" href="#le-nom-j'ai-d%C3%A9j%C3%A0-choisi-(apr%C3%A8s-tout...)-%3A"> </a></h3>
-<pre><code>Get-cAzureRMVMOs
-</code></pre>
-<p>&gt;Personnellement, j'essaye de mettre un indicateur &quot;c&quot; pour &quot;custom&quot; sur mes functions pour les différencier des autres.</p>
+<h3 id="le-nom-j'ai-d%C3%A9j%C3%A0-choisi-(apr%C3%A8s-tout...)">Le nom j'ai déjà choisi (après tout...) <a class="direct-link" href="#le-nom-j'ai-d%C3%A9j%C3%A0-choisi-(apr%C3%A8s-tout...)"> </a></h3>
+<pre class="language-powershell"><code class="language-powershell"><span class="highlight-line">Get<span class="token operator">-</span>cAzureRMVMOs</span></code></pre>
+<blockquote>
+<p>Personnellement, j'essaye de mettre un indicateur &quot;c&quot; pour &quot;custom&quot; sur mes functions pour les différencier des autres.</p>
+</blockquote>
 <h3 id="la-connexion-%C3%A0-azure">La connexion à Azure <a class="direct-link" href="#la-connexion-%C3%A0-azure"> </a></h3>
 <p>J'utilise un petit bout de script que j'ai récupéré (je ne sais plus où, si l'auteur se manifeste !)</p>
-<pre><code>function Check-AzureRMSession () {
-$Error.Clear()
-#if context already exist
-try {
-Get-AzureRmVM -ErrorAction Stop | Out-Null
-}
-catch [System.Management.Automation.PSInvalidOperationException] {
-Login-AzureRmAccount
-}
-$Error.Clear();
-}
-</code></pre>
+<pre class="language-powershell"><code class="language-powershell"><span class="highlight-line"><span class="token keyword">function</span> Check<span class="token operator">-</span>AzureRMSession <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">    <span class="token variable">$Error</span><span class="token punctuation">.</span>Clear<span class="token punctuation">(</span><span class="token punctuation">)</span></span><br><span class="highlight-line">    <span class="token comment">#if context already exist</span></span><br><span class="highlight-line">    <span class="token keyword">try</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">        Get<span class="token operator">-</span>AzureRmVM <span class="token operator">-</span>ErrorAction Stop <span class="token punctuation">|</span> <span class="token function">Out-Null</span></span><br><span class="highlight-line">    <span class="token punctuation">}</span></span><br><span class="highlight-line">    <span class="token keyword">catch</span> <span class="token namespace">[System.Management.Automation.PSInvalidOperationException]</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">        Login<span class="token operator">-</span>AzureRmAccount</span><br><span class="highlight-line">    <span class="token punctuation">}</span></span><br><span class="highlight-line">    <span class="token variable">$Error</span><span class="token punctuation">.</span>Clear<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><br><span class="highlight-line"><span class="token punctuation">}</span></span></code></pre>
 <p>En gros, c'est simple, si on est connecté, il se passe rien, sinon on nous demande notre login. Simple, Efficace...</p>
 <h3 id="le-script-en-lui-m%C3%AAme">Le script en lui même <a class="direct-link" href="#le-script-en-lui-m%C3%AAme"> </a></h3>
-<pre><code>Function Get-cAzureRMVMOs {
-[CmdletBinding()]
-param(
-
-)
-Check-AzureRMSession
-$vms = get-azurermvm
-foreach ($vm in $vms) {
-$osprofile = $($vm.OSProfile)
-if ($($osprofile.LinuxConfiguration) -eq $null) {
-$OsType = &amp;quot;Windows&amp;quot;
-}
-elseif ($($osprofile.WindowsConfiguration) -eq $null) {
-$OsType = &amp;quot;Linux&amp;quot;
-}
-else {
-$OsType = $osprofile
-}
-[PSCustomObject]@{
-AvailabilitySetReference = $vm.AvailabilitySetReference
-DiagnosticsProfile = $vm.DiagnosticsProfile
-DisplayHint = $vm.DisplayHint
-Extensions = $vm.Extensions
-HardwareProfile = $vm.HardwareProfile
-Id = $vm.Id
-Identity = $vm.Identity
-InstanceView = $vm.InstanceView
-LicenseType = $vm.LicenseType
-Location = $vm.Location
-Name = $vm.Name
-NetworkProfile = $vm.NetworkProfile
-OSType = $OsType
-Plan = $vm.Plan
-ProvisioningState = $vm.ProvisioningState
-RequestId = $vm.RequestId
-ResourceGroupName = $vm.ResourceGroupName
-StatusCode = $vm.StatusCode
-StorageProfile = $vm.StorageProfile
-Tags = $vm.Tags
-Type = $vm.Type
-VmId = $vm.VmId
-}
-}
-}
-</code></pre>
-<h3>Résultat ?</h3>
-<img class="alignnone size-full wp-image-282" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/09/get-cazurevmos-8-Cool.png" alt="" width="1168" height="487" />
+<pre class="language-powershell"><code class="language-powershell"><span class="highlight-line"><span class="token keyword">Function</span> Get<span class="token operator">-</span>cAzureRMVMOs <span class="token punctuation">{</span></span><br><span class="highlight-line">    <span class="token namespace">[CmdletBinding()]</span></span><br><span class="highlight-line">    <span class="token keyword">param</span><span class="token punctuation">(</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">    <span class="token punctuation">)</span></span><br><span class="highlight-line">    Check<span class="token operator">-</span>AzureRMSession</span><br><span class="highlight-line">    <span class="token variable">$vms</span> = get<span class="token operator">-</span>azurermvm</span><br><span class="highlight-line">    <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token variable">$vm</span> in <span class="token variable">$vms</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">        <span class="token variable">$osprofile</span> = $<span class="token punctuation">(</span><span class="token variable">$vm</span><span class="token punctuation">.</span>OSProfile<span class="token punctuation">)</span></span><br><span class="highlight-line">        <span class="token keyword">if</span> <span class="token punctuation">(</span>$<span class="token punctuation">(</span><span class="token variable">$osprofile</span><span class="token punctuation">.</span>LinuxConfiguration<span class="token punctuation">)</span> <span class="token operator">-eq</span> <span class="token variable">$null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">            <span class="token variable">$OsType</span> = <span class="token string">"Windows"</span></span><br><span class="highlight-line">        <span class="token punctuation">}</span></span><br><span class="highlight-line">        <span class="token keyword">elseif</span> <span class="token punctuation">(</span>$<span class="token punctuation">(</span><span class="token variable">$osprofile</span><span class="token punctuation">.</span>WindowsConfiguration<span class="token punctuation">)</span> <span class="token operator">-eq</span> <span class="token variable">$null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">            <span class="token variable">$OsType</span> = <span class="token string">"Linux"</span></span><br><span class="highlight-line">        <span class="token punctuation">}</span></span><br><span class="highlight-line">        <span class="token keyword">else</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">            <span class="token variable">$OsType</span> = <span class="token variable">$osprofile</span></span><br><span class="highlight-line">        <span class="token punctuation">}</span></span><br><span class="highlight-line">        <span class="token namespace">[PSCustomObject]</span>@<span class="token punctuation">{</span></span><br><span class="highlight-line">            AvailabilitySetReference = <span class="token variable">$vm</span><span class="token punctuation">.</span>AvailabilitySetReference</span><br><span class="highlight-line">            DiagnosticsProfile       = <span class="token variable">$vm</span><span class="token punctuation">.</span>DiagnosticsProfile</span><br><span class="highlight-line">            DisplayHint              = <span class="token variable">$vm</span><span class="token punctuation">.</span>DisplayHint</span><br><span class="highlight-line">            Extensions               = <span class="token variable">$vm</span><span class="token punctuation">.</span>Extensions</span><br><span class="highlight-line">            HardwareProfile          = <span class="token variable">$vm</span><span class="token punctuation">.</span>HardwareProfile</span><br><span class="highlight-line">            Id                       = <span class="token variable">$vm</span><span class="token punctuation">.</span>Id</span><br><span class="highlight-line">            Identity                 = <span class="token variable">$vm</span><span class="token punctuation">.</span>Identity</span><br><span class="highlight-line">            InstanceView             = <span class="token variable">$vm</span><span class="token punctuation">.</span>InstanceView</span><br><span class="highlight-line">            LicenseType              = <span class="token variable">$vm</span><span class="token punctuation">.</span>LicenseType</span><br><span class="highlight-line">            Location                 = <span class="token variable">$vm</span><span class="token punctuation">.</span>Location</span><br><span class="highlight-line">            Name                     = <span class="token variable">$vm</span><span class="token punctuation">.</span>Name</span><br><span class="highlight-line">            NetworkProfile           = <span class="token variable">$vm</span><span class="token punctuation">.</span>NetworkProfile</span><br><span class="highlight-line">            OSType                   = <span class="token variable">$OsType</span></span><br><span class="highlight-line">            Plan                     = <span class="token variable">$vm</span><span class="token punctuation">.</span>Plan</span><br><span class="highlight-line">            ProvisioningState        = <span class="token variable">$vm</span><span class="token punctuation">.</span>ProvisioningState</span><br><span class="highlight-line">            RequestId                = <span class="token variable">$vm</span><span class="token punctuation">.</span>RequestId</span><br><span class="highlight-line">            ResourceGroupName        = <span class="token variable">$vm</span><span class="token punctuation">.</span>ResourceGroupName</span><br><span class="highlight-line">            StatusCode               = <span class="token variable">$vm</span><span class="token punctuation">.</span>StatusCode</span><br><span class="highlight-line">            StorageProfile           = <span class="token variable">$vm</span><span class="token punctuation">.</span>StorageProfile</span><br><span class="highlight-line">            Tags                     = <span class="token variable">$vm</span><span class="token punctuation">.</span>Tags</span><br><span class="highlight-line">            <span class="token function">Type</span>                     = <span class="token variable">$vm</span><span class="token punctuation">.</span><span class="token function">Type</span></span><br><span class="highlight-line">            VmId                     = <span class="token variable">$vm</span><span class="token punctuation">.</span>VmId</span><br><span class="highlight-line">        <span class="token punctuation">}</span></span><br><span class="highlight-line">    <span class="token punctuation">}</span></span><br><span class="highlight-line"><span class="token punctuation">}</span></span></code></pre>
+<h3 id="r%C3%A9sultat">Résultat <a class="direct-link" href="#r%C3%A9sultat"> </a></h3>
+<p><img src="/images/2017/09/get-cazurevmos-8-Cool.png" alt="get-cazurevmos-8-Cool"></p>
 <p>Ca fonctionne ! et le filtre ?</p>
-<img class="alignnone size-full wp-image-283" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/09/get-cazurevmos-9-youpi.png" alt="" width="1167" height="436" />
+<p><img src="/images/2017/09/get-cazurevmos-9-youpi.png" alt="get-cazurevmos-9-youpi"></p>
 <p>Du coup, avec notre super fonction, on peut filtrer comme on voulait :)</p>
-<pre><code>
-Get-cAzureRMVMOsType |?{ $_.OsType -eq &amp;quot;Windows&amp;quot; }
+<p><code>Get-cAzureRMVMOsType |?{ $_.OsType -eq &quot;Windows&quot; }</code></p>
+<blockquote>
+<p>PS: Ce sript fonctionne très bien avec AzureRM.NetCore sur macOs :<br>
+<img src="/images/2017/09/get-cazurevmos-10-youpi.png" alt="get-cazurevmos-10-youpi-mac"></p>
+</blockquote>
 
-</code></pre>
-<p> </p>
-<blockquote>PS: Ce sript fonctionne très bien avec AzureRM.NetCore sur macOs :<img class="alignnone size-full wp-image-285" style="font-size: 18px;" src="https://etienne.deneuve.xyz/wp-content/uploads/2017/09/get-cazurevmos-10-youpi.png" alt="" width="1058" height="196" /><span style="font-size: 18px;">  </span></blockquote>
     </main>
     <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2">
       <span class="meta__stats">About 2 min reading time</span>
@@ -225,17 +171,20 @@ Get-cAzureRMVMOsType |?{ $_.OsType -eq &amp;quot;Windows&amp;quot; }
                     <li><a href="#v%C3%A9rification-des-membres">Vérification des membres  </a>
             		</li>
 
-                    <li><a href="#on-script-%3F">On script ?  </a>
+                    <li><a href="#on-script">On script  </a>
             
                 <ol>
                     
-                    <li><a href="#le-nom-j'ai-d%C3%A9j%C3%A0-choisi-(apr%C3%A8s-tout...)-%3A">Le nom j'ai déjà choisi (après tout...) :  </a>
+                    <li><a href="#le-nom-j'ai-d%C3%A9j%C3%A0-choisi-(apr%C3%A8s-tout...)">Le nom j'ai déjà choisi (après tout...)  </a>
             		</li>
 
                     <li><a href="#la-connexion-%C3%A0-azure">La connexion à Azure  </a>
             		</li>
 
                     <li><a href="#le-script-en-lui-m%C3%AAme">Le script en lui même  </a>
+            		</li>
+
+                    <li><a href="#r%C3%A9sultat">Résultat  </a>
             		</li>
                 </ol>
             		</li>
