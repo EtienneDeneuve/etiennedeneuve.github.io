@@ -1,10 +1,7 @@
-<!doctype html>
-<html lang="en">
-
-  <head>
+<!DOCTYPE html><html lang="en"><head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="msvalidate.01" content="DE6C71A9BE4E011D01CC38799992B4A6"/>
+    <meta name="msvalidate.01" content="DE6C71A9BE4E011D01CC38799992B4A6">
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-71551100-1"></script>
     <script>
@@ -23,7 +20,7 @@
 
     <title>XYZ Blog</title>
     <script defer="defer" src="https://use.fontawesome.com/releases/v5.7.2/js/all.js" integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
@@ -71,19 +68,8 @@
         </div>
       </div>
       <div class="searchbox pl-2 py-2">
-    <input
-      type="text"
-      v-model="query"
-      class="form-control text-white border m-auto"
-      :class="[isActive ? 'wide' : 'short']"
-      @focus="isActive=true"
-      @blur.prevent="handleBlur"
-      ref="searchinput"
-      style="background: transparent;"
-      aria-describedby="searchinput"
-      autocomplete="on"
-    >
-    <div v-if="query && isActive" class="position-absolute justify-content-center" style="top: 47px;">
+    <input type="text" v-model="query" class="form-control text-white border m-auto" :class="[isActive ? 'wide' : 'short']" @focus="isActive=true" @blur.prevent="handleBlur" ref="searchinput" style="background: transparent;" aria-describedby="searchinput" autocomplete="on">
+    <div v-if="query &amp;&amp; isActive" class="position-absolute justify-content-center" style="top: 47px;">
       <div class="card bg-secondary">
         <ul class="list-group list-group-flush px-0" v-for="(item, index) in queried" :key="index">
           <li class="list-group-item">
@@ -114,24 +100,24 @@
 
       <h1 id="la-vie-dans-azure">La vie dans Azure <a class="direct-link" href="#la-vie-dans-azure"> </a></h1>
 <p>Bon, admettons, vous avez besoin de filter vos VM avec le type d'OS déployé dessus afin de savoir si vous avez plus de Linux ou de Windows dans Azure.</p>
-<p>Avec Powershell, on se dit &quot;ouais, c'est facile&quot;. Un petit coup de Get-AzureRMVM et hop...</p>
-<p><img src="/images/2017/09/get-cazurevmos-1-gvm.png" alt=""></p>
-<p>Cool, &quot;OsType&quot;, pile ce qu'on cherche, aller hop, on filtre avec | Select-Object</p>
-<p><img src="/images/2017/09/get-cazurevmos-2-so.png" alt=""></p>
+<p>Avec Powershell, on se dit "ouais, c'est facile". Un petit coup de Get-AzureRMVM et hop...</p>
+<p><img src="/images/2017/09/get-cazurevmos-1-gvm.png" alt="" loading="lazy" data-src="/images/2017/09/get-cazurevmos-1-gvm.png" class="lazyload"></p>
+<p>Cool, "OsType", pile ce qu'on cherche, aller hop, on filtre avec | Select-Object</p>
+<p><img src="/images/2017/09/get-cazurevmos-2-so.png" alt="" loading="lazy" data-src="/images/2017/09/get-cazurevmos-2-so.png" class="lazyload"></p>
 <p>et ouais, c'est tout vide ! Et l'aide elle dit quoi ? Pas grand chose de plus :</p>
-<p><img src="/images/2017/09/get-cazurevmos-3-help.png" alt=""></p>
+<p><img src="/images/2017/09/get-cazurevmos-3-help.png" alt="" loading="lazy" data-src="/images/2017/09/get-cazurevmos-3-help.png" class="lazyload"></p>
 <p>On a plus le choix, on y va!</p>
 <p>&gt; On va dedans !</p>
 <h2 id="v%C3%A9rification-des-membres">Vérification des membres <a class="direct-link" href="#v%C3%A9rification-des-membres"> </a></h2>
 <p>Avec un petit Get-Member on liste les membres de la commande Get-AzureRMVM</p>
-<p><img src="/images/2017/09/get-cazurevmos-4-gm.png" alt=""></p>
-<p>On voit que &quot;OsType&quot; n'existe pas, c'est donc une commande qui utilise une propriété calculée.<br>
+<p><img src="/images/2017/09/get-cazurevmos-4-gm.png" alt="" loading="lazy" data-src="/images/2017/09/get-cazurevmos-4-gm.png" class="lazyload"></p>
+<p>On voit que "OsType" n'existe pas, c'est donc une commande qui utilise une propriété calculée.<br>
 En revanche un élément , OsProfile, parait correspondre au besoin.</p>
-<p><img src="/images/2017/09/get-cazurevmos-5-osp.png" alt=""></p>
+<p><img src="/images/2017/09/get-cazurevmos-5-osp.png" alt="" loading="lazy" data-src="/images/2017/09/get-cazurevmos-5-osp.png" class="lazyload"></p>
 <p>On tente le Select-Object ?</p>
-<p><img src="/images/2017/09/get-cazurevmos-6-os.png" alt=""></p>
+<p><img src="/images/2017/09/get-cazurevmos-6-os.png" alt="" loading="lazy" data-src="/images/2017/09/get-cazurevmos-6-os.png" class="lazyload"></p>
 <p>Raté, ce coquin est un autre objet ! Etendons le !</p>
-<p><img src="/images/2017/09/get-cazurevmos-7-exp.png" alt=""></p>
+<p><img src="/images/2017/09/get-cazurevmos-7-exp.png" alt="" loading="lazy" data-src="/images/2017/09/get-cazurevmos-7-exp.png" class="lazyload"></p>
 <p>Super! On a trouvé un truc!</p>
 <h2 id="on-script">On script <a class="direct-link" href="#on-script"> </a></h2>
 <p>Déjà, on sait de base que le Script, on va s'en servir au moins une fois ;) donc pour le construire, il faut se poser quelques bonnes questions.</p>
@@ -142,7 +128,7 @@ En revanche un élément , OsProfile, parait correspondre au besoin.</p>
 <h3 id="le-nom-j'ai-d%C3%A9j%C3%A0-choisi-(apr%C3%A8s-tout...)">Le nom j'ai déjà choisi (après tout...) <a class="direct-link" href="#le-nom-j'ai-d%C3%A9j%C3%A0-choisi-(apr%C3%A8s-tout...)"> </a></h3>
 <pre class="language-powershell"><code class="language-powershell"><span class="highlight-line">Get<span class="token operator">-</span>cAzureRMVMOs</span></code></pre>
 <blockquote>
-<p>Personnellement, j'essaye de mettre un indicateur &quot;c&quot; pour &quot;custom&quot; sur mes functions pour les différencier des autres.</p>
+<p>Personnellement, j'essaye de mettre un indicateur "c" pour "custom" sur mes functions pour les différencier des autres.</p>
 </blockquote>
 <h3 id="la-connexion-%C3%A0-azure">La connexion à Azure <a class="direct-link" href="#la-connexion-%C3%A0-azure"> </a></h3>
 <p>J'utilise un petit bout de script que j'ai récupéré (je ne sais plus où, si l'auteur se manifeste !)</p>
@@ -151,14 +137,14 @@ En revanche un élément , OsProfile, parait correspondre au besoin.</p>
 <h3 id="le-script-en-lui-m%C3%AAme">Le script en lui même <a class="direct-link" href="#le-script-en-lui-m%C3%AAme"> </a></h3>
 <pre class="language-powershell"><code class="language-powershell"><span class="highlight-line"><span class="token keyword">Function</span> Get<span class="token operator">-</span>cAzureRMVMOs <span class="token punctuation">{</span></span><br><span class="highlight-line">    <span class="token namespace">[CmdletBinding()]</span></span><br><span class="highlight-line">    <span class="token keyword">param</span><span class="token punctuation">(</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">    <span class="token punctuation">)</span></span><br><span class="highlight-line">    Check<span class="token operator">-</span>AzureRMSession</span><br><span class="highlight-line">    <span class="token variable">$vms</span> = get<span class="token operator">-</span>azurermvm</span><br><span class="highlight-line">    <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token variable">$vm</span> in <span class="token variable">$vms</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">        <span class="token variable">$osprofile</span> = $<span class="token punctuation">(</span><span class="token variable">$vm</span><span class="token punctuation">.</span>OSProfile<span class="token punctuation">)</span></span><br><span class="highlight-line">        <span class="token keyword">if</span> <span class="token punctuation">(</span>$<span class="token punctuation">(</span><span class="token variable">$osprofile</span><span class="token punctuation">.</span>LinuxConfiguration<span class="token punctuation">)</span> <span class="token operator">-eq</span> <span class="token variable">$null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">            <span class="token variable">$OsType</span> = <span class="token string">"Windows"</span></span><br><span class="highlight-line">        <span class="token punctuation">}</span></span><br><span class="highlight-line">        <span class="token keyword">elseif</span> <span class="token punctuation">(</span>$<span class="token punctuation">(</span><span class="token variable">$osprofile</span><span class="token punctuation">.</span>WindowsConfiguration<span class="token punctuation">)</span> <span class="token operator">-eq</span> <span class="token variable">$null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">            <span class="token variable">$OsType</span> = <span class="token string">"Linux"</span></span><br><span class="highlight-line">        <span class="token punctuation">}</span></span><br><span class="highlight-line">        <span class="token keyword">else</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">            <span class="token variable">$OsType</span> = <span class="token variable">$osprofile</span></span><br><span class="highlight-line">        <span class="token punctuation">}</span></span><br><span class="highlight-line">        <span class="token namespace">[PSCustomObject]</span>@<span class="token punctuation">{</span></span><br><span class="highlight-line">            AvailabilitySetReference = <span class="token variable">$vm</span><span class="token punctuation">.</span>AvailabilitySetReference</span><br><span class="highlight-line">            DiagnosticsProfile       = <span class="token variable">$vm</span><span class="token punctuation">.</span>DiagnosticsProfile</span><br><span class="highlight-line">            DisplayHint              = <span class="token variable">$vm</span><span class="token punctuation">.</span>DisplayHint</span><br><span class="highlight-line">            Extensions               = <span class="token variable">$vm</span><span class="token punctuation">.</span>Extensions</span><br><span class="highlight-line">            HardwareProfile          = <span class="token variable">$vm</span><span class="token punctuation">.</span>HardwareProfile</span><br><span class="highlight-line">            Id                       = <span class="token variable">$vm</span><span class="token punctuation">.</span>Id</span><br><span class="highlight-line">            Identity                 = <span class="token variable">$vm</span><span class="token punctuation">.</span>Identity</span><br><span class="highlight-line">            InstanceView             = <span class="token variable">$vm</span><span class="token punctuation">.</span>InstanceView</span><br><span class="highlight-line">            LicenseType              = <span class="token variable">$vm</span><span class="token punctuation">.</span>LicenseType</span><br><span class="highlight-line">            Location                 = <span class="token variable">$vm</span><span class="token punctuation">.</span>Location</span><br><span class="highlight-line">            Name                     = <span class="token variable">$vm</span><span class="token punctuation">.</span>Name</span><br><span class="highlight-line">            NetworkProfile           = <span class="token variable">$vm</span><span class="token punctuation">.</span>NetworkProfile</span><br><span class="highlight-line">            OSType                   = <span class="token variable">$OsType</span></span><br><span class="highlight-line">            Plan                     = <span class="token variable">$vm</span><span class="token punctuation">.</span>Plan</span><br><span class="highlight-line">            ProvisioningState        = <span class="token variable">$vm</span><span class="token punctuation">.</span>ProvisioningState</span><br><span class="highlight-line">            RequestId                = <span class="token variable">$vm</span><span class="token punctuation">.</span>RequestId</span><br><span class="highlight-line">            ResourceGroupName        = <span class="token variable">$vm</span><span class="token punctuation">.</span>ResourceGroupName</span><br><span class="highlight-line">            StatusCode               = <span class="token variable">$vm</span><span class="token punctuation">.</span>StatusCode</span><br><span class="highlight-line">            StorageProfile           = <span class="token variable">$vm</span><span class="token punctuation">.</span>StorageProfile</span><br><span class="highlight-line">            Tags                     = <span class="token variable">$vm</span><span class="token punctuation">.</span>Tags</span><br><span class="highlight-line">            <span class="token function">Type</span>                     = <span class="token variable">$vm</span><span class="token punctuation">.</span><span class="token function">Type</span></span><br><span class="highlight-line">            VmId                     = <span class="token variable">$vm</span><span class="token punctuation">.</span>VmId</span><br><span class="highlight-line">        <span class="token punctuation">}</span></span><br><span class="highlight-line">    <span class="token punctuation">}</span></span><br><span class="highlight-line"><span class="token punctuation">}</span></span></code></pre>
 <h3 id="r%C3%A9sultat">Résultat <a class="direct-link" href="#r%C3%A9sultat"> </a></h3>
-<p><img src="/images/2017/09/get-cazurevmos-8-Cool.png" alt="get-cazurevmos-8-Cool"></p>
+<p><img src="/images/2017/09/get-cazurevmos-8-Cool.png" alt="get-cazurevmos-8-Cool" loading="lazy" data-src="/images/2017/09/get-cazurevmos-8-Cool.png" class="lazyload"></p>
 <p>Ca fonctionne ! et le filtre ?</p>
-<p><img src="/images/2017/09/get-cazurevmos-9-youpi.png" alt="get-cazurevmos-9-youpi"></p>
+<p><img src="/images/2017/09/get-cazurevmos-9-youpi.png" alt="get-cazurevmos-9-youpi" loading="lazy" data-src="/images/2017/09/get-cazurevmos-9-youpi.png" class="lazyload"></p>
 <p>Du coup, avec notre super fonction, on peut filtrer comme on voulait :)</p>
-<p><code>Get-cAzureRMVMOsType |?{ $_.OsType -eq &quot;Windows&quot; }</code></p>
+<p><code>Get-cAzureRMVMOsType |?{ $_.OsType -eq "Windows" }</code></p>
 <blockquote>
 <p>PS: Ce sript fonctionne très bien avec AzureRM.NetCore sur macOs :<br>
-<img src="/images/2017/09/get-cazurevmos-10-youpi.png" alt="get-cazurevmos-10-youpi-mac"></p>
+<img src="/images/2017/09/get-cazurevmos-10-youpi.png" alt="get-cazurevmos-10-youpi-mac" loading="lazy" data-src="/images/2017/09/get-cazurevmos-10-youpi.png" class="lazyload"></p>
 </blockquote>
 
     </main>
@@ -194,7 +180,7 @@ En revanche un élément , OsProfile, parait correspondre au besoin.</p>
     </aside>
   </div>
 </div>
-</div>
+
     <footer class="site-footer bg-transparent pb-3 pb-md-5">
       <div class="layout-social container d-flex justify-content-center">
 
@@ -235,6 +221,29 @@ En revanche un élément , OsProfile, parait correspondre au besoin.</p>
           }
         });
     </script>
-  </body>
+  
 
-</html>
+<script>
+            (function(selector, src) {
+  if ('loading' in HTMLImageElement.prototype) {
+    var images = document.querySelectorAll(selector);
+    var numImages = images.length;
+
+    if (numImages > 0) {
+      for (var i = 0; i < numImages; i++) {
+        images[i].src = images[i].dataset.src;
+      }
+    }
+
+    return;
+  }
+
+  var script = document.createElement('script');
+  script.async = true;
+  script.src = src;
+  document.body.appendChild(script);
+})(
+              'img',
+              'https://cdn.jsdelivr.net/npm/lazysizes@5/lazysizes.min.js'
+            );
+          </script></body></html>

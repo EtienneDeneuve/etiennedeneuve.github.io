@@ -1,10 +1,7 @@
-<!doctype html>
-<html lang="en">
-
-  <head>
+<!DOCTYPE html><html lang="en"><head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="msvalidate.01" content="DE6C71A9BE4E011D01CC38799992B4A6"/>
+    <meta name="msvalidate.01" content="DE6C71A9BE4E011D01CC38799992B4A6">
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-71551100-1"></script>
     <script>
@@ -23,7 +20,7 @@
 
     <title>XYZ Blog</title>
     <script defer="defer" src="https://use.fontawesome.com/releases/v5.7.2/js/all.js" integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
@@ -71,19 +68,8 @@
         </div>
       </div>
       <div class="searchbox pl-2 py-2">
-    <input
-      type="text"
-      v-model="query"
-      class="form-control text-white border m-auto"
-      :class="[isActive ? 'wide' : 'short']"
-      @focus="isActive=true"
-      @blur.prevent="handleBlur"
-      ref="searchinput"
-      style="background: transparent;"
-      aria-describedby="searchinput"
-      autocomplete="on"
-    >
-    <div v-if="query && isActive" class="position-absolute justify-content-center" style="top: 47px;">
+    <input type="text" v-model="query" class="form-control text-white border m-auto" :class="[isActive ? 'wide' : 'short']" @focus="isActive=true" @blur.prevent="handleBlur" ref="searchinput" style="background: transparent;" aria-describedby="searchinput" autocomplete="on">
+    <div v-if="query &amp;&amp; isActive" class="position-absolute justify-content-center" style="top: 47px;">
       <div class="card bg-secondary">
         <ul class="list-group list-group-flush px-0" v-for="(item, index) in queried" :key="index">
           <li class="list-group-item">
@@ -125,11 +111,11 @@
 <ul>
 <li>l'affichage des VMs :</li>
 </ul>
-<p><img src="/images/2017/09/vm.png" alt=""></p>
+<p><img src="/images/2017/09/vm.png" alt="" loading="lazy" data-src="/images/2017/09/vm.png" class="lazyload"></p>
 <ul>
 <li>ASR (Azure Site Recovery) Automatisé :</li>
 </ul>
-<p><img src="/images/2017/09/Honolu.png" alt=""> (Bon, y en a pleins d'autres, je vous laisse des surprises #nospoil)</p>
+<p><img src="/images/2017/09/Honolu.png" alt="" loading="lazy" data-src="/images/2017/09/Honolu.png" class="lazyload"> (Bon, y en a pleins d'autres, je vous laisse des surprises #nospoil)</p>
 <h1 id="les-trucs-que-j'aurais-aim%C3%A9s">Les trucs que j'aurais aimés <a class="direct-link" href="#les-trucs-que-j'aurais-aim%C3%A9s"> </a></h1>
 <ul>
 <li>Dans l'installer proposer directement un certificat let's encrypt plutôt qu'un auto-signé (2017!)</li>
@@ -140,10 +126,10 @@
 <li>Ajout des machines virtuelles lors de l'ajout de serveurs avec installé Hyper V</li>
 </ul>
 </li>
-<li>La création d'une vault pour stocker ses &quot;Credentials&quot; (à la cmdkey /add), pour sélectionner ensuite le compte que l'on souhaite.</li>
+<li>La création d'une vault pour stocker ses "Credentials" (à la cmdkey /add), pour sélectionner ensuite le compte que l'on souhaite.</li>
 <li>L'absence de centralisation (à la 2012), il aurait été cool d'avoir une overview complète comme celle-ci.</li>
 <li>L'absence de Powershell Launcher, ça aurait été cool de pouvoir lancer des commandes Powershell depuis cette interface.</li>
-<li>Pas de containers, j'aime bien les containers moi, j'aurais aimé trouver une petite interface comme Cockpit sur Fedora : <img src="https://bobcares.com/wp-content/uploads/2015/08/docker-management-ui.png" alt=""></li>
+<li>Pas de containers, j'aime bien les containers moi, j'aurais aimé trouver une petite interface comme Cockpit sur Fedora :&nbsp;<img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAA0JCgsKCA0LCgsODg0PEyAVExISEyccHhcgLikxMC4pLSwzOko+MzZGNywtQFdBRkxOUlNSMj5aYVpQYEpRUk8BDg4OExETJhUVJk81LTVPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT//AABEIAAQADAMBEQACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+gEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4+Tl5ufo6ery8/T19vf4+fr/2gAMAwEAAhEDEQA/AO8l0+xUY+xW55A5iGeoqlqRJ2RMNL0/A/0K3/79ipKsf//Z" alt="" loading="lazy" data-src="https://bobcares.com/wp-content/uploads/2015/08/docker-management-ui.png" class="lazyload" width="1428" height="501"></li>
 </ul>
 <p>Voici les éléments pour les quels j'ai voté sur le User Voice Honolulu : <a href="https://windowsserver.uservoice.com/users/674735389-etienne-deneuve">https://windowsserver.uservoice.com/users/674735389-etienne-deneuve</a></p>
 <h1 id="ma-petite-conclusion">Ma petite conclusion <a class="direct-link" href="#ma-petite-conclusion"> </a></h1>
@@ -158,7 +144,7 @@
     </aside>
   </div>
 </div>
-</div>
+
     <footer class="site-footer bg-transparent pb-3 pb-md-5">
       <div class="layout-social container d-flex justify-content-center">
 
@@ -199,6 +185,29 @@
           }
         });
     </script>
-  </body>
+  
 
-</html>
+<script>
+            (function(selector, src) {
+  if ('loading' in HTMLImageElement.prototype) {
+    var images = document.querySelectorAll(selector);
+    var numImages = images.length;
+
+    if (numImages > 0) {
+      for (var i = 0; i < numImages; i++) {
+        images[i].src = images[i].dataset.src;
+      }
+    }
+
+    return;
+  }
+
+  var script = document.createElement('script');
+  script.async = true;
+  script.src = src;
+  document.body.appendChild(script);
+})(
+              'img',
+              'https://cdn.jsdelivr.net/npm/lazysizes@5/lazysizes.min.js'
+            );
+          </script></body></html>

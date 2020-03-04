@@ -1,10 +1,7 @@
-<!doctype html>
-<html lang="en">
-
-  <head>
+<!DOCTYPE html><html lang="en"><head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="msvalidate.01" content="DE6C71A9BE4E011D01CC38799992B4A6"/>
+    <meta name="msvalidate.01" content="DE6C71A9BE4E011D01CC38799992B4A6">
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-71551100-1"></script>
     <script>
@@ -23,7 +20,7 @@
 
     <title>XYZ Blog</title>
     <script defer="defer" src="https://use.fontawesome.com/releases/v5.7.2/js/all.js" integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
@@ -71,19 +68,8 @@
         </div>
       </div>
       <div class="searchbox pl-2 py-2">
-    <input
-      type="text"
-      v-model="query"
-      class="form-control text-white border m-auto"
-      :class="[isActive ? 'wide' : 'short']"
-      @focus="isActive=true"
-      @blur.prevent="handleBlur"
-      ref="searchinput"
-      style="background: transparent;"
-      aria-describedby="searchinput"
-      autocomplete="on"
-    >
-    <div v-if="query && isActive" class="position-absolute justify-content-center" style="top: 47px;">
+    <input type="text" v-model="query" class="form-control text-white border m-auto" :class="[isActive ? 'wide' : 'short']" @focus="isActive=true" @blur.prevent="handleBlur" ref="searchinput" style="background: transparent;" aria-describedby="searchinput" autocomplete="on">
+    <div v-if="query &amp;&amp; isActive" class="position-absolute justify-content-center" style="top: 47px;">
       <div class="card bg-secondary">
         <ul class="list-group list-group-flush px-0" v-for="(item, index) in queried" :key="index">
           <li class="list-group-item">
@@ -113,14 +99,14 @@
       
 
       <p>Bonjour à tous,</p>
-<p>Si vous utilisez Azure, il y a de grandes chances que vous ayez aperçu Cloud Shell. Ce qui est moins sur c'est que vous ayez vu que pas mal de petits outils on été récemment intégrés !<img src="/images/2017/09/cloudshell-containers.png" alt=""></p>
+<p>Si vous utilisez Azure, il y a de grandes chances que vous ayez aperçu Cloud Shell. Ce qui est moins sur c'est que vous ayez vu que pas mal de petits outils on été récemment intégrés !<img src="/images/2017/09/cloudshell-containers.png" alt="" loading="lazy" data-src="/images/2017/09/cloudshell-containers.png" class="lazyload"></p>
 <p>Au menu : Docker, Kubectl, Git, Terraform .. et pleins d'autres !</p>
 <p>Pour avoir une liste complète exécuter, faites un petit tour dans votre PATH...</p>
 <p>Pour ma part j'ai trouvé pas mal de choses interressantes notemment, un client SSH, Powershell version 6 beta 7,</p>
-<p><img src="/images/2017/09/cloudshell-ps.png" alt=""><br>
+<p><img src="/images/2017/09/cloudshell-ps.png" alt="" loading="lazy" data-src="/images/2017/09/cloudshell-ps.png" class="lazyload"><br>
 Et voila :</p>
-<p><img src="/images/2017/09/Cloud-Shell.png" alt=""><br>
-<img src="/images/2017/09/download.png" alt=""></p>
+<p><img src="/images/2017/09/Cloud-Shell.png" alt="" loading="lazy" data-src="/images/2017/09/Cloud-Shell.png" class="lazyload"><br>
+<img src="/images/2017/09/download.png" alt="" loading="lazy" data-src="/images/2017/09/download.png" class="lazyload"></p>
 <p>[update] Powershell est la ! <a href="https://azure.microsoft.com/en-us/blog/powershell-comes-to-azure-cloud-shell/">Powershell</a></p>
 
     </main>
@@ -132,7 +118,7 @@ Et voila :</p>
     </aside>
   </div>
 </div>
-</div>
+
     <footer class="site-footer bg-transparent pb-3 pb-md-5">
       <div class="layout-social container d-flex justify-content-center">
 
@@ -173,6 +159,29 @@ Et voila :</p>
           }
         });
     </script>
-  </body>
+  
 
-</html>
+<script>
+            (function(selector, src) {
+  if ('loading' in HTMLImageElement.prototype) {
+    var images = document.querySelectorAll(selector);
+    var numImages = images.length;
+
+    if (numImages > 0) {
+      for (var i = 0; i < numImages; i++) {
+        images[i].src = images[i].dataset.src;
+      }
+    }
+
+    return;
+  }
+
+  var script = document.createElement('script');
+  script.async = true;
+  script.src = src;
+  document.body.appendChild(script);
+})(
+              'img',
+              'https://cdn.jsdelivr.net/npm/lazysizes@5/lazysizes.min.js'
+            );
+          </script></body></html>

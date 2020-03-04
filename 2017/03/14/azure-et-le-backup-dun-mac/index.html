@@ -1,10 +1,7 @@
-<!doctype html>
-<html lang="en">
-
-  <head>
+<!DOCTYPE html><html lang="en"><head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="msvalidate.01" content="DE6C71A9BE4E011D01CC38799992B4A6"/>
+    <meta name="msvalidate.01" content="DE6C71A9BE4E011D01CC38799992B4A6">
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-71551100-1"></script>
     <script>
@@ -23,7 +20,7 @@
 
     <title>XYZ Blog</title>
     <script defer="defer" src="https://use.fontawesome.com/releases/v5.7.2/js/all.js" integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
@@ -71,19 +68,8 @@
         </div>
       </div>
       <div class="searchbox pl-2 py-2">
-    <input
-      type="text"
-      v-model="query"
-      class="form-control text-white border m-auto"
-      :class="[isActive ? 'wide' : 'short']"
-      @focus="isActive=true"
-      @blur.prevent="handleBlur"
-      ref="searchinput"
-      style="background: transparent;"
-      aria-describedby="searchinput"
-      autocomplete="on"
-    >
-    <div v-if="query && isActive" class="position-absolute justify-content-center" style="top: 47px;">
+    <input type="text" v-model="query" class="form-control text-white border m-auto" :class="[isActive ? 'wide' : 'short']" @focus="isActive=true" @blur.prevent="handleBlur" ref="searchinput" style="background: transparent;" aria-describedby="searchinput" autocomplete="on">
+    <div v-if="query &amp;&amp; isActive" class="position-absolute justify-content-center" style="top: 47px;">
       <div class="card bg-secondary">
         <ul class="list-group list-group-flush px-0" v-for="(item, index) in queried" :key="index">
           <li class="list-group-item">
@@ -112,18 +98,18 @@
     <main class="main col">
       
 
-      <p>Un petit article &quot;Quick &amp; very very dirty&quot; qui est soyons honnêtes complètement inutile.<br>
+      <p>Un petit article "Quick &amp; very very dirty" qui est soyons honnêtes complètement inutile.<br>
 Mais quand c'est inutile, c'est possible que ce soit fun !</p>
 <blockquote>
 <p>Disclaimer : Je suis pas responsable de vos données perdues !</p>
 </blockquote>
-<p><img src="http://giphy.com/gifs/nuke-atomic-bomb-a-ULsH97rqqbf68" alt="boom"></p>
+<p><img src="http://giphy.com/gifs/nuke-atomic-bomb-a-ULsH97rqqbf68" alt="boom" loading="lazy" data-src="http://giphy.com/gifs/nuke-atomic-bomb-a-ULsH97rqqbf68" class="lazyload"></p>
 <h2 id="pr%C3%A9-requis">Pré-requis <a class="direct-link" href="#pr%C3%A9-requis"> </a></h2>
 <p>Du crédit Azure, un Mac avec Sierra.</p>
 <!--more-->
 <h2 id="azure-side">Azure Side <a class="direct-link" href="#azure-side"> </a></h2>
 <h3 id="pr%C3%A9paration-sur-un-mac">Préparation sur un Mac <a class="direct-link" href="#pr%C3%A9paration-sur-un-mac"> </a></h3>
-<p>Comme on est sur macOs, on va commencer par utiliser le CLI azure, dispo ici : <a href="http://aka.ms/mac-azure-cli">aka.ms/mac-azure-cli</a>(<a href="http://aka.ms/mac-azure-cli">aka.ms/mac-azure-cli</a>). Je vous passe la bête installation Next Next Finish...</p>
+<p>Comme on est sur macOs, on va commencer par utiliser le CLI azure, dispo ici :&nbsp;<a href="http://aka.ms/mac-azure-cli">aka.ms/mac-azure-cli</a>(<a href="http://aka.ms/mac-azure-cli">aka.ms/mac-azure-cli</a>). Je vous passe la bête installation Next Next Finish...</p>
 <p>Une fois bien installé sur le macOs, ouvrez le terminal lancez les commandes suivantes :</p>
 <pre class="language-shell"><code class="language-shell"><span class="highlight-line">azure login</span></code></pre>
 <p>suivez le lien <a href="https://aka.ms/devicelogin">aka.ms/devicelogin</a> avec le code généré dans le terminal</p>
@@ -136,7 +122,7 @@ Mais quand c'est inutile, c'est possible que ce soit fun !</p>
 <pre class="language-shell"><code class="language-shell"><span class="highlight-line">info:    Executing <span class="token builtin class-name">command</span> group create</span><br><span class="highlight-line">+ Getting resource group RG_Backup</span><br><span class="highlight-line">+ Creating resource group RG_Backup</span><br><span class="highlight-line">info:    Created resource group RG_Backup</span><br><span class="highlight-line">data:    Id:                  /subscriptions/XXXXXXXXXXXX/resourceGroups/RG_Backup</span><br><span class="highlight-line">data:    Name:                RG_Backup</span><br><span class="highlight-line">data:    Location:            northeurope</span><br><span class="highlight-line">data:    Provisioning State:  Succeeded</span><br><span class="highlight-line">data:    Tags: null</span><br><span class="highlight-line">data:</span><br><span class="highlight-line">info:    group create <span class="token builtin class-name">command</span> OK</span></code></pre>
 <p>On va créer maintenant un compte de stockage :</p>
 <pre class="language-shell"><code class="language-shell"><span class="highlight-line">azure storage account create stobackupmac <span class="token punctuation">\</span></span><br><span class="highlight-line">--kind Storage <span class="token punctuation">\</span></span><br><span class="highlight-line">--sku-name LRS <span class="token punctuation">\</span></span><br><span class="highlight-line">--resource-group RG_BACKUP <span class="token punctuation">\</span></span><br><span class="highlight-line">--location NorthEurope</span></code></pre>
-<p>Normalement, si tout va bien on a un petit message &quot;info: storage account create command OK&quot;, continuons, nous avons besoin d'une clé sur ce compte de stockage :</p>
+<p>Normalement, si tout va bien on a un petit message "info: storage account create command OK", continuons, nous avons besoin d'une clé sur ce compte de stockage :</p>
 <pre class="language-shell"><code class="language-shell"><span class="highlight-line">azure storage account keys list stobackupmac -g RG_Backup</span></code></pre>
 <p>on récupère des clefs d'accès ici :</p>
 <pre class="language-shell"><code class="language-shell"><span class="highlight-line">info:    Executing <span class="token builtin class-name">command</span> storage account keys list</span><br><span class="highlight-line">+ Getting storage account keys</span><br><span class="highlight-line">data:    Name  Key                                                                                       Permissions</span><br><span class="highlight-line">data:    ----  ----------------------------------------------------------------------------------------  -----------</span><br><span class="highlight-line">data:    key1  ONsztQjA44F+S+ffVXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXTNROw1yPOQdcHVynXOOt3g<span class="token operator">==</span>  Full</span><br><span class="highlight-line">data:    key2  dppNGuvyIn1li/ffVXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXTNROw1yPOQdcHVynXOOt3g<span class="token operator">==</span>  Full</span><br><span class="highlight-line">info:    storage account keys list <span class="token builtin class-name">command</span> OK</span></code></pre>
@@ -145,16 +131,16 @@ Le plus simple, c'est de créer des variables d'environnement pour se simplifier
 <pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token builtin class-name">export</span> <span class="token assign-left variable">AZURE_STORAGE_ACCOUNT</span><span class="token operator">=</span>stobackupmac</span><br><span class="highlight-line"><span class="token builtin class-name">export</span> <span class="token assign-left variable">AZURE_STORAGE_ACCESS_KEY</span><span class="token operator">=</span>dppNGuvyIn1li/ffVXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXTNROw1yPOQdcHVynXOOt3g<span class="token operator">==</span></span></code></pre>
 <p>Ainsi on peut maintenant taper la commande suivante :</p>
 <pre class="language-shell"><code class="language-shell"><span class="highlight-line">azure storage share create --share sharebkp --quota <span class="token number">100</span></span></code></pre>
-<p>Ce qui nous donnera &quot;info:    storage share create command OK&quot; et donc, c'est prêt !</p>
+<p>Ce qui nous donnera "info:&nbsp; &nbsp; storage share create command OK" et donc, c'est prêt !</p>
 <h2 id="mac-side">Mac Side <a class="direct-link" href="#mac-side"> </a></h2>
 <p>Connectons le mac avec le Share dans Azure. Je suppose que le port TCP 445 est ouvert en sortie de chez vous.</p>
-<p>Ouvrez le Finder puis Menu &quot;Aller&quot;, &quot;Se connecter au serveur...&quot; (ou Command + K)</p>
+<p>Ouvrez le Finder puis Menu "Aller", "Se connecter au serveur..." (ou Command + K)</p>
 <p>Indiquez : <code>smb://sharebkp@stobackupmac.file.core.windows.net/sharebkp</code> (si vous avez tout suivi)</p>
-<p>au prompt du mot de passe, indiquez &quot;sharebkp&quot; et une des clés comme celle exportée dans &quot;<code>AZURE_STORAGE_ACCESS_KEY</code>&quot;. Normalement, vous devriez le voir dans le Finder correctement.</p>
+<p>au prompt du mot de passe, indiquez "sharebkp" et une des clés comme celle exportée dans "<code>AZURE_STORAGE_ACCESS_KEY</code>". Normalement, vous devriez le voir dans le Finder correctement.</p>
 <p>On arrête la partie graphique du mac et on retourne dans un terminal :</p>
 <pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token builtin class-name">cd</span> /Volumes/sharebkp</span><br><span class="highlight-line"><span class="token comment">#création du SparseBundle</span></span><br><span class="highlight-line">hdiutil create <span class="token punctuation">\</span></span><br><span class="highlight-line">-library NONE <span class="token punctuation">\</span></span><br><span class="highlight-line">-fs HFS+ <span class="token punctuation">\</span></span><br><span class="highlight-line">-volname <span class="token string">"Azure Time Machine"</span> <span class="token punctuation">\</span></span><br><span class="highlight-line">-encryption AES-128 <span class="token punctuation">\</span> <span class="token comment">#Attention, oubliez pas le mot de passe !</span></span><br><span class="highlight-line">-size 99g <span class="token punctuation">\</span></span><br><span class="highlight-line">MacBookPro-Etienne.sparsebundle</span></code></pre>
 <p>Maintenant, allez allumer la cafetière, lancer un détartrage, nettoyez la, faites un café, ca devrait être prêt...<br>
-Si tout est bien prêt, avec le Finder, double cliquer sur l'image SparseBundle, vous devriez la retrouver dans &quot;/Volumes/Azure\ Time\ Machine/&quot;, retournons dans le terminal :</p>
+Si tout est bien prêt, avec le Finder, double cliquer sur l'image SparseBundle, vous devriez la retrouver dans "/Volumes/Azure\ Time\ Machine/", retournons dans le terminal :</p>
 <pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">sudo</span> tmutil setdestination /Volumes/Azure<span class="token punctuation">\</span> Time<span class="token punctuation">\</span> Machine/</span></code></pre>
 <p>Et Hop, Time Machine sur Azure !<br>
 (oui, je sais ;))</p>
@@ -189,7 +175,7 @@ Si tout est bien prêt, avec le Finder, double cliquer sur l'image SparseBundle,
     </aside>
   </div>
 </div>
-</div>
+
     <footer class="site-footer bg-transparent pb-3 pb-md-5">
       <div class="layout-social container d-flex justify-content-center">
 
@@ -230,6 +216,29 @@ Si tout est bien prêt, avec le Finder, double cliquer sur l'image SparseBundle,
           }
         });
     </script>
-  </body>
+  
 
-</html>
+<script>
+            (function(selector, src) {
+  if ('loading' in HTMLImageElement.prototype) {
+    var images = document.querySelectorAll(selector);
+    var numImages = images.length;
+
+    if (numImages > 0) {
+      for (var i = 0; i < numImages; i++) {
+        images[i].src = images[i].dataset.src;
+      }
+    }
+
+    return;
+  }
+
+  var script = document.createElement('script');
+  script.async = true;
+  script.src = src;
+  document.body.appendChild(script);
+})(
+              'img',
+              'https://cdn.jsdelivr.net/npm/lazysizes@5/lazysizes.min.js'
+            );
+          </script></body></html>

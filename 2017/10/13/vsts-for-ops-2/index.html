@@ -1,10 +1,7 @@
-<!doctype html>
-<html lang="en">
-
-  <head>
+<!DOCTYPE html><html lang="en"><head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="msvalidate.01" content="DE6C71A9BE4E011D01CC38799992B4A6"/>
+    <meta name="msvalidate.01" content="DE6C71A9BE4E011D01CC38799992B4A6">
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-71551100-1"></script>
     <script>
@@ -23,7 +20,7 @@
 
     <title>XYZ Blog</title>
     <script defer="defer" src="https://use.fontawesome.com/releases/v5.7.2/js/all.js" integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
@@ -71,19 +68,8 @@
         </div>
       </div>
       <div class="searchbox pl-2 py-2">
-    <input
-      type="text"
-      v-model="query"
-      class="form-control text-white border m-auto"
-      :class="[isActive ? 'wide' : 'short']"
-      @focus="isActive=true"
-      @blur.prevent="handleBlur"
-      ref="searchinput"
-      style="background: transparent;"
-      aria-describedby="searchinput"
-      autocomplete="on"
-    >
-    <div v-if="query && isActive" class="position-absolute justify-content-center" style="top: 47px;">
+    <input type="text" v-model="query" class="form-control text-white border m-auto" :class="[isActive ? 'wide' : 'short']" @focus="isActive=true" @blur.prevent="handleBlur" ref="searchinput" style="background: transparent;" aria-describedby="searchinput" autocomplete="on">
+    <div v-if="query &amp;&amp; isActive" class="position-absolute justify-content-center" style="top: 47px;">
       <div class="card bg-secondary">
         <ul class="list-group list-group-flush px-0" v-for="(item, index) in queried" :key="index">
           <li class="list-group-item">
@@ -118,26 +104,26 @@
 <li>Préparation de l'environnement [nous sommes ici, toujours]</li>
 <li>Préparation d'une image de base Linux</li>
 <li>Préparation d'une image de base Windows</li>
-<li>Utilisation des images de base pour les spécialiser, afin de les rendre &quot;Immutables&quot;</li>
+<li>Utilisation des images de base pour les spécialiser, afin de les rendre "Immutables"</li>
 <li>Déploiement d'image en CI/CD avec Packer et Terraform depuis VSTS<br>
 Nous utiliserons des technologies Microsoft (VSTS, Azure, Windows Server...) mais aussi HashiCorp (Packer, Terraform) ainsi que des technologies Open Source (Linux..). Il n'est normalement pas nécessaire d’être, ni un maître du cloud, ni un demi dieu de l'infra as code pour suivre cette mini séries de 4 articles.</li>
 </ol>
 <h1 id="introduction">Introduction <a class="direct-link" href="#introduction"> </a></h1>
-<p>Avant de foncer dans le code de notre infra, nous allons devoir réflechir à l'organisation de nos dossier de &quot;Code&quot;.</p>
-<img class="alignnone size-medium wp-image-336" src="/images/2017/10/mirror-frame-2407289_960_720-195x300.png" alt="" width="195" height="300" />
+<p>Avant de foncer dans le code de notre infra, nous allons devoir réflechir à l'organisation de nos dossier de "Code".</p>
+<img class="alignnone size-medium wp-image-336 lazyload" src="/images/2017/10/mirror-frame-2407289_960_720-195x300.png" alt="" width="195" height="300" loading="lazy" data-src="/images/2017/10/mirror-frame-2407289_960_720-195x300.png">
 <p>Ok, maintenant qu'on à réflechi, on y va !</p>
-<p>Nous allons générer deux images de base Ubuntu et Windows Server, utiliser des scripts &quot;commun&quot; et des scripts spécifiques, puis spécialiser nos images.</p>
+<p>Nous allons générer deux images de base Ubuntu et Windows Server, utiliser des scripts "commun" et des scripts spécifiques, puis spécialiser nos images.</p>
 <h1 id="let's-git-!">Let's Git ! <a class="direct-link" href="#let's-git-!"> </a></h1>
 <h2 id="dolly%2C-ou-clone%2C-comme-vous-voulez.">Dolly, ou Clone, comme vous voulez. <a class="direct-link" href="#dolly%2C-ou-clone%2C-comme-vous-voulez."> </a></h2>
 <p>Ouvrez donc Visual Studio Code (<a href="https://etienne.deneuve.xyz/2017/01/26/visual-studio-code-pour-ansible-terraform/">Quoi ? Il est pas déjà installé? </a>) et ajoutez votre repository Git VSTS dans VS Code (Vous devez installer <a href="http://lmgtfy.com/?q=install+git">Git</a> sur votre poste avant).</p>
-<p>C'est assez simple, cliquez sur &quot;Clone Git Repository&quot;:</p>
-<img class="alignnone size-medium wp-image-337" src="/images/2017/10/Git-Clone-300x217.png" alt="" width="300" height="217" />
+<p>C'est assez simple, cliquez sur "Clone Git Repository":</p>
+<img class="alignnone size-medium wp-image-337 lazyload" src="/images/2017/10/Git-Clone-300x217.png" alt="" width="300" height="217" loading="lazy" data-src="/images/2017/10/Git-Clone-300x217.png">
 <p>Récupérez l'url de votre repository dans VSTS :</p>
-<img class="alignnone wp-image-339 size-full" src="/images/2017/10/Git-Clone-2-1.png" alt="" width="1055" height="513" />
+<img class="alignnone wp-image-339 size-full lazyload" src="/images/2017/10/Git-Clone-2-1.png" alt="" width="1055" height="513" loading="lazy" data-src="/images/2017/10/Git-Clone-2-1.png">
 <p>Puis collez le dans la barre de VS code :</p>
-<img class="alignnone size-full wp-image-340" src="/images/2017/10/Git-Clone-3.png" alt="" width="835" height="161" />
-<p>Entrez votre destination, par exemple c:\Users\vous\Documents\git (la racine, le dossier sera créer automatiquement) , puis indiquez vos credentials VSTS, et enfin lorsque le clone est terminé, cliquez sur &quot;Open This repository&quot;:</p>
-<img class="alignnone size-full wp-image-341" src="/images/2017/10/Git-Clone-4.png" alt="" width="1178" height="52" />
+<img class="alignnone size-full wp-image-340 lazyload" src="/images/2017/10/Git-Clone-3.png" alt="" width="835" height="161" loading="lazy" data-src="/images/2017/10/Git-Clone-3.png">
+<p>Entrez votre destination, par exemple c:\Users\vous\Documents\git (la racine, le dossier sera créer automatiquement) , puis indiquez vos credentials VSTS, et enfin lorsque le clone est terminé, cliquez sur "Open This repository":</p>
+<img class="alignnone size-full wp-image-341 lazyload" src="/images/2017/10/Git-Clone-4.png" alt="" width="1178" height="52" loading="lazy" data-src="/images/2017/10/Git-Clone-4.png">
 <p>Félicitations, vous avez réussi a cloner votre git vsts sur votre poste!</p>
 <blockquote>Ouais, mais moi j'y comprends rien à Git, j'vais jamais m'en sortir !</blockquote>
 <h2>Git, comment ça marche</h2>
@@ -153,24 +139,24 @@ Vous inquiétez pas, VS Code va faire beaucoup à notre place !
 <h2>Création des dossiers</h2>
 <blockquote>Il faut quand même savoir une petite chose de plus, Git ne gère pas les dossiers vide, il faut donc créer un petit fichier readme.md pour les synchroniser correctement.</blockquote>
 Pour créer les dossiers, soit vous le faite en "graphique" :
-<img class="alignnone size-full wp-image-344" src="/images/2017/10/addfolder-1.png" alt="" width="532" height="193" />
+<img class="alignnone size-full wp-image-344 lazyload" src="/images/2017/10/addfolder-1.png" alt="" width="532" height="193" loading="lazy" data-src="/images/2017/10/addfolder-1.png">
 <p>Soit via le terminal intégrer avec vos commandes préférées (View -&gt; Integrated Terminal).</p>
-<p>Personnellement j'ai créer 4 dossiers à la racine  : scripts, windows, ubuntu et specialized, puis dans les dossiers Windows et Ubuntu un sous-dossier scripts. dans chacun de ces dossiers ajouter donc un fichier vide <a href="http://readme.md">readme.md</a> (et sauvegardez-les). Vous verrez plus tard le &quot;pourquoi&quot; cette arborescence :).</p>
+<p>Personnellement j'ai créer 4 dossiers à la racine&nbsp; : scripts, windows, ubuntu et specialized, puis dans les dossiers Windows et Ubuntu un sous-dossier scripts. dans chacun de ces dossiers ajouter donc un fichier vide <a href="http://readme.md">readme.md</a> (et sauvegardez-les). Vous verrez plus tard le "pourquoi" cette arborescence :).</p>
 <h2 id="commit-!">Commit ! <a class="direct-link" href="#commit-!"> </a></h2>
-<p>Maintenant on va &quot;commit&quot; nos modifications en cliquant sur les boutons (et en écrivant le pourquoi du commit :)) :</p>
-<img class="alignnone size-full wp-image-346" src="/images/2017/10/Git-Commit.png" alt="" width="549" height="396" />
+<p>Maintenant on va "commit" nos modifications en cliquant sur les boutons (et en écrivant le pourquoi du commit :)) :</p>
+<img class="alignnone size-full wp-image-346 lazyload" src="/images/2017/10/Git-Commit.png" alt="" width="549" height="396" loading="lazy" data-src="/images/2017/10/Git-Commit.png">
 <p>Youpi! votre premier commit ! (c’était dur?)</p>
 <h2 id="push">Push <a class="direct-link" href="#push"> </a></h2>
 <p>Avec notre premier commit, en bas de notre fenêtre VS Code, nous avons désormais un commit à envoyer :</p>
-<p><img class="alignnone size-full wp-image-347" src="/images/2017/10/Push.png" alt="" width="290" height="522" /> Le chiffre de gauche correspond aux modifications distante (vos collègues), celui de droite, les locales (les votre quoi :))</p>
-<p>Pour savoir ce qui se passe, ouvre la console &quot;Output&quot; (View, Output, puis sélectionnez Git dans le menu déroulant à gauche)</p>
-<img class="alignnone size-full wp-image-348" src="/images/2017/10/Git-Push.png" alt="" width="1010" height="522" />
+<p><img class="alignnone size-full wp-image-347 lazyload" src="/images/2017/10/Push.png" alt="" width="290" height="522" loading="lazy" data-src="/images/2017/10/Push.png"> Le chiffre de gauche correspond aux modifications distante (vos collègues), celui de droite, les locales (les votre quoi :))</p>
+<p>Pour savoir ce qui se passe, ouvre la console "Output" (View, Output, puis sélectionnez Git dans le menu déroulant à gauche)</p>
+<img class="alignnone size-full wp-image-348 lazyload" src="/images/2017/10/Git-Push.png" alt="" width="1010" height="522" loading="lazy" data-src="/images/2017/10/Git-Push.png">
 <p>Allez dans VSTS sur votre navigateur, vous avez tous vos fichiers qui se trouvent désormais sur le Server.</p>
-<p> </p>
+<p>&nbsp;</p>
 <h1 id="conclusion">Conclusion <a class="direct-link" href="#conclusion"> </a></h1>
 <p>Désormais, vous avez un beau Projet VSTS, cloner en local, et vous savez envoyer vos fichiers dans le repository git distant. Nous allons pouvoir passer a la suite !</p>
 <p>N'hésitez pas à commenter ou à me contacter en cas de soucis avec ces deux premières parties !</p>
-<p> </p>
+<p>&nbsp;</p>
 
     </main>
     <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2">
@@ -193,7 +179,7 @@ Pour créer les dossiers, soit vous le faite en "graphique" :
     </aside>
   </div>
 </div>
-</div>
+
     <footer class="site-footer bg-transparent pb-3 pb-md-5">
       <div class="layout-social container d-flex justify-content-center">
 
@@ -234,6 +220,29 @@ Pour créer les dossiers, soit vous le faite en "graphique" :
           }
         });
     </script>
-  </body>
+  
 
-</html>
+<script>
+            (function(selector, src) {
+  if ('loading' in HTMLImageElement.prototype) {
+    var images = document.querySelectorAll(selector);
+    var numImages = images.length;
+
+    if (numImages > 0) {
+      for (var i = 0; i < numImages; i++) {
+        images[i].src = images[i].dataset.src;
+      }
+    }
+
+    return;
+  }
+
+  var script = document.createElement('script');
+  script.async = true;
+  script.src = src;
+  document.body.appendChild(script);
+})(
+              'img',
+              'https://cdn.jsdelivr.net/npm/lazysizes@5/lazysizes.min.js'
+            );
+          </script></body></html>
