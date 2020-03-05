@@ -12,6 +12,29 @@
 	</author>
 	
 	<entry>
+		<title>Microsoft Teams show your webcam reversed in Linux</title>
+		<link href="/2020/03/05/teams-linux-webcam-error/"/>
+		<updated>2020-03-05T09:51:00+01:00</updated>
+		<id>/2020/03/05/teams-linux-webcam-error/</id>
+		<content type="html">&lt;p&gt;Your webcam is mirrored in Microsoft Teams in Linux ?&lt;/p&gt;
+&lt;h1 id=&quot;teams-on-linux&quot;&gt;Teams on Linux &lt;a class=&quot;direct-link&quot; href=&quot;#teams-on-linux&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;I use Teams on my linux laptop to work on Ansible and other open source python project.&lt;/p&gt;
+&lt;p&gt;Today, I checked if my webcam is properly displayed in Teams.&lt;br&gt;
+My webcam was reversed.&lt;/p&gt;
+&lt;h2 id=&quot;fix-it&quot;&gt;Fix it &lt;a class=&quot;direct-link&quot; href=&quot;#fix-it&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Edit the your shortcut :&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;code /usr/share/applications/teams.desktop&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;and change the line &lt;code&gt;Exec&lt;/code&gt; by this one :&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token assign-left variable&quot;&gt;Exec&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;sh -c &lt;span class=&quot;token string&quot;&gt;&#39;export LIBV4LCONTROL_FLAGS=1 &amp;amp;&amp;amp; LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libv4l/v4l1compat.so usr/bin/teams %U&#39;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You might check where is &lt;a href=&quot;http://v4l1compat.so&quot;&gt;v4l1compat.so&lt;/a&gt; on your system using :&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;locate&lt;/span&gt; v4l1compat.so&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;/usr/lib/x86_64-linux-gnu/libv4l/v4l1compat.so&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;et Voila *&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+	</entry>
+	
+	<entry>
 		<title>Terraform AzureRM 2.0 Provider</title>
 		<link href="/2020/02/25/terraform-azurerm-2/"/>
 		<updated>2020-02-25T00:00:00+01:00</updated>
