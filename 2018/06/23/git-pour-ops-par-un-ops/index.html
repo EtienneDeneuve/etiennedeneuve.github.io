@@ -112,7 +112,8 @@
     <main class="main col">
       
 
-      <p>Git est un logiciel de contrôle de code source déjà très utilisé dans le monde des dev. Lorsque l'on fait de l'Infra as Code, nous pouvons aussi utiliser git, je pense même que cela va devenir une vraie nécessité. Pour nous les Ops, ce n'est pas nécessairement naturel et j'ai donc décidé de démystifier git dans un contexte Cloud comme Azure.</p>
+      <h1 id="git-pour-ops%2C-par-un-ops">Git pour Ops, par un Ops <a class="direct-link" href="#git-pour-ops%2C-par-un-ops"> </a></h1>
+<p>Git est un logiciel de contrôle de code source déjà très utilisé dans le monde des dev. Lorsque l'on fait de l'Infra as Code, nous pouvons aussi utiliser git, je pense même que cela va devenir une vraie nécessité. Pour nous les Ops, ce n'est pas nécessairement naturel et j'ai donc décidé de démystifier git dans un contexte Cloud comme Azure.</p>
 <p>Afin de suivre ce billet, vous devez installer quelques outils sur votre poste de travail afin de pouvoir tester par vous-même.</p>
 <p>Je vous invite également à lire ces articles :</p>
 <ul>
@@ -128,7 +129,7 @@
 <li>Git-SCM</li>
 </ul>
 <p>Vous pouvez utiliser chocolatey :</p>
-<script src="https://gist.github.com/EtienneDeneuve/5738b4f0aacac785c2a7f982f0346f5d.js"></script>
+<pre class="language-powershell"><code class="language-powershell"><span class="highlight-line"><span class="token function">Write-Output</span> <span class="token string">"Installation of Chocolatey"</span></span><br><span class="token function">Set</span><span class="token operator">-</span>ExecutionPolicy Bypass <span class="token operator">-</span>Scope <span class="token keyword">Process</span> <span class="token operator">-</span>Force<span class="token punctuation">;</span> <span class="token function">iex</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">New-Object</span> System<span class="token punctuation">.</span>Net<span class="token punctuation">.</span>WebClient<span class="token punctuation">)</span><span class="token punctuation">.</span>DownloadString<span class="token punctuation">(</span><span class="token string">'https://chocolatey.org/install.ps1’))<br>$packages = ('</span>VisualStudioCode<span class="token string">', '</span>vscode<span class="token operator">-</span>powershell<span class="token string">', '</span>vscode<span class="token operator">-</span>markdownlint<span class="token string">', '</span>vscode<span class="token operator">-</span>azurerm<span class="token operator">-</span>tools<span class="token string">', '</span>vscode<span class="token operator">-</span>gitlens<span class="token string">', '</span>azure<span class="token operator">-</span><span class="token function">cli</span><span class="token string">', '</span>AzurePowerShell<span class="token string">', '</span>git<span class="token string">', '</span>terraform'<span class="token punctuation">)</span><br><span class="highlight-line">Choco upgrade <span class="token variable">$packages</span> <span class="token operator">-</span>y</span></code></pre>
 <p>Sur macOs :</p>
 <ul>
 <li>Visual Studio Code</li>
@@ -139,59 +140,48 @@
 <h3 id="repo-sur-github">Repo sur GitHub <a class="direct-link" href="#repo-sur-github"> </a></h3>
 <p>Une fois votre compte actif, créez un repository Git via le bouton vert &quot;Create Repository&quot;</p>
 <h3 id="repo-sur-vsts">Repo sur Vsts <a class="direct-link" href="#repo-sur-vsts"> </a></h3>
-<p>J'ai déjà publié un article concernant vsts<a href="https://etienne.deneuve.xyz/2017/10/09/vsts-for-ops-1/"> ici</a></p>
+<p>J'ai déjà publié un article concernant vsts <a href="https://etienne.deneuve.xyz/2017/10/09/vsts-for-ops-1/">ici</a></p>
 <h3 id="git-en-ssh">Git en SSH <a class="direct-link" href="#git-en-ssh"> </a></h3>
 <p>Afin d'avoir accès à VSTS ou à GitHub depuis un bash Windows ou Linux, il faut générer une clé SSH :</p>
 <blockquote>
-<p>Je vous recommande vivement l'utilisation de bash pour git et la suite de cet article. Si vous n'avez pas encore installer bash sur votre Windows, installer le puis suivez cet article : <a href="https://etienne.deneuve.xyz/2018/06/26/setup-vs-code-bash-git/" target="_blank" rel="noopener">Open Source + Windows = Vs Code + Bash + Git</a></p>
+<p>Je vous recommande vivement l'utilisation de bash pour git et la suite de cet article. Si vous n'avez pas encore installer bash sur votre Windows, installer le puis suivez cet article : <a href="https://etienne.deneuve.xyz/2018/06/26/setup-vs-code-bash-git/">Open Source + Windows = Vs Code + Bash + Git</a></p>
 </blockquote>
-<pre><code>mkdir -p ~/.ssh
-ssh-keygen -f ~/.ssh/vsts
-cat vsts.pub
-</code></pre>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">mkdir</span> -p ~/.ssh</span><br><span class="highlight-line">ssh-keygen -f ~/.ssh/vsts</span><br><span class="highlight-line"><span class="token function">cat</span> vsts.pub</span></code></pre>
 <p>Ouvrez VSTS ou Git puis :</p>
-<p>VSTS : https://&lt;votreurl&gt;/_details/security/keys)&lt;/votreurl&gt;Git : <a href="https://github.com/settings/keys">https://github.com/settings/keys</a></p>
+<ul>
+<li>VSTS : <a href="https://">https://</a><votreurl>/_details/security/keys)</votreurl></li>
+<li>Git : <a href="https://github.com/settings/keys">https://github.com/settings/keys</a></li>
+</ul>
 <p>Cliquez sur &quot;Add&quot; et collez la clé publique.</p>
 <p>Ensuite ajoutez la clé dans l'agent ssh :</p>
-<pre><code>ssh-agent bash
-ssh-add ~/.ssh/vsts
-</code></pre>
-<h1 id="where-to-start-%3F">Where to start ? <a class="direct-link" href="#where-to-start-%3F"> </a></h1>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line">ssh-agent <span class="token function">bash</span></span><br><span class="highlight-line">ssh-add ~/.ssh/vsts</span></code></pre>
+<h2 id="where-to-start">Where to start <a class="direct-link" href="#where-to-start"> </a></h2>
 <p>Lorsqu'on commence à travailler avec git, il est possible d'utiliser deux méthodes, soit on clone le repo distant, soit on ajoute le repo distant comme source.</p>
-<h2 id="clone-ou-remote-%3F">Clone ou Remote ? <a class="direct-link" href="#clone-ou-remote-%3F"> </a></h2>
+<h2 id="les-commandes-de-git">Les commandes de Git <a class="direct-link" href="#les-commandes-de-git"> </a></h2>
+<h3 id="clone-ou-remote">Clone ou Remote <a class="direct-link" href="#clone-ou-remote"> </a></h3>
 <p>Pour faire un clone ou ajouter un repository distant, il suffit de récupérer l'url disponible dans l'interface de GitHub ou de VSTS puis avec cette url :</p>
 <ul>
 <li>Clone</li>
 </ul>
-<pre><code>git clone https://xxxx/git.git
-# ou avec la belle cle ssh :
-git clone ssh://
-</code></pre>
-<p>&gt; Le clone est utilisable lorsque notre projet est vide, ou qu'il n'est pas encore present dans la machine de travail (reinstallation, pc fixe de la maison...)</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">git</span> clone https://xxxx/git.git</span><br><span class="highlight-line"><span class="token comment"># ou avec la belle cle ssh :</span></span><br><span class="highlight-line"><span class="token function">git</span> clone ssh://</span></code></pre>
+<blockquote>
+<p>Le clone est utilisable lorsque notre projet est vide, ou qu'il n'est pas encore present dans la machine de travail (reinstallation, pc fixe de la maison...)</p>
+</blockquote>
 <ul>
 <li>Remote</li>
 </ul>
 <p>Cette méthode est plus complexe et pas forcément nécessaire, il est juste intéressant de la connaitre.</p>
-<pre><code>git remote add origin url
-git commit . -m &quot;inital commit&quot;
-git push origin master
-git add --all
-git commit . -m &quot;add exisiting file in the remote repo&quot;
-git push origin master
-</code></pre>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">git</span> remote <span class="token function">add</span> origin url</span><br><span class="highlight-line"><span class="token function">git</span> commit <span class="token builtin class-name">.</span> -m <span class="token string">"inital commit"</span></span><br><span class="highlight-line"><span class="token function">git</span> push origin master</span><br><span class="highlight-line"><span class="token function">git</span> <span class="token function">add</span> --all</span><br><span class="highlight-line"><span class="token function">git</span> commit <span class="token builtin class-name">.</span> -m <span class="token string">"add exisiting file in the remote repo"</span></span><br><span class="highlight-line"><span class="token function">git</span> push origin master</span></code></pre>
 <blockquote>
 <p>Le remote est utilisable si le projet est déjà sur la machine et que le repository distant n'existe pas encore.<br>
 Je vous conseille de bien faire un premier commit &quot;vide&quot; puis d'ajouter les fichiers (git add --all) puis à nouveau d'envoyer les fichiers.</p>
 </blockquote>
-<h2 id="ajouter%2Fsupprimer-des-fichiers-%C3%A0-l'index">Ajouter/Supprimer des fichiers à l'index <a class="direct-link" href="#ajouter%2Fsupprimer-des-fichiers-%C3%A0-l'index"> </a></h2>
+<h3 id="ajouter%2Fsupprimer-des-fichiers-%C3%A0-l'index">Ajouter/Supprimer des fichiers à l'index <a class="direct-link" href="#ajouter%2Fsupprimer-des-fichiers-%C3%A0-l'index"> </a></h3>
 <p>Avec Git, quand on créer un nouveau fichier, par défaut il n'est pas forcément ajouté à l'index, c'est à dire qu'il ne sera pas envoyé au server lors d'un <code>git push</code>.</p>
 <ul>
 <li>Ajout de fichiers</li>
 </ul>
-<pre><code>git add ./monchemin/monfichier
-# ou un dossier complet :
-git add ./mondossier/
-</code></pre>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">git</span> <span class="token function">add</span> ./monchemin/monfichier</span><br><span class="highlight-line"><span class="token comment"># ou un dossier complet :</span></span><br><span class="highlight-line"><span class="token function">git</span> <span class="token function">add</span> ./mondossier/</span></code></pre>
 <blockquote>
 <p>Attention, git ne prendra jamais un dossier vide, il ne le prendra que si un fichier meme vide est present.</p>
 </blockquote>
@@ -202,58 +192,73 @@ git add ./mondossier/
 <p><em>Je ne suis pas responsable de vos fichiers perdus ;)</em><br>
 Lorsqu'on supprime un fichier du repertoire local, il n'est pas supprimé de l'index de git sans faire la commande :</p>
 </blockquote>
-<pre><code>git rm ./monchemin/monfichier --cached
-</code></pre>
-<h2 id="commit">Commit <a class="direct-link" href="#commit"> </a></h2>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">git</span> <span class="token function">rm</span> ./monchemin/monfichier --cached</span></code></pre>
+<h3 id="commit">Commit <a class="direct-link" href="#commit"> </a></h3>
 <p>Afin d'ajouter nos fichier dans l'index en attente, il est nécessaire de valider ces fichiers, un peu comme en base de données Commit, Execute, Rollback, en cas de soucis.</p>
-<pre><code>git commit -m &amp;quot;le message du commit en fonction de votre travail... (pensez à vos collègues !&amp;quot;
-</code></pre>
-<h2 id="pull-ou-fetch-%3F">Pull ou Fetch ? <a class="direct-link" href="#pull-ou-fetch-%3F"> </a></h2>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">git</span> commit -m <span class="token string">"le message du commit en fonction de votre travail... (pensez à vos collègues !"</span></span></code></pre>
+<h3 id="pull-ou-fetch">Pull ou Fetch <a class="direct-link" href="#pull-ou-fetch"> </a></h3>
 <p>Avant de valider ce <code>commit</code> sur le server, il est important de vérifier si on est bien raccord avec le canal &quot;upstream&quot;, c'est à dire le serveur distant.</p>
 <ul>
-<li>Pull</li>
-</ul>
-<pre><code>git pull
-</code></pre>
+<li>
+<p>Pull</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">git</span> pull</span></code></pre>
 <blockquote>
 <p>Git pull en réalité, c'est un <code>git fetch</code> puis un <code>git merge FETCH_HEAD</code>, pour gagner du temps.</p>
 </blockquote>
-<ul>
-<li>Fetch</li>
+</li>
+<li>
+<p>Fetch</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">git</span> fetch</span></code></pre>
+</li>
 </ul>
-<pre><code>git fetch
-</code></pre>
 <blockquote>
 <p>Git fetch permet de récupérer les commits distants qui on eu lieu de puis le dernier <code>fetch</code>. En effet, sans faire de <code>pull</code> ou de <code>fetch</code>, le server distant et local on des versions différentes des index (et donc des fichiers).</p>
 </blockquote>
-<h2 id="git-push">Git push <a class="direct-link" href="#git-push"> </a></h2>
+<h3 id="git-push">Git push <a class="direct-link" href="#git-push"> </a></h3>
 <p>Afin de partager votre travail avec vos collègues, vous devez envoyer vos modifications sur le server (si, si, si).<br>
 Il y a plusieurs façons de travailler avec git, mais lorsqu'on est dans une branche de travail (et pas de prod!) nous pouvons faire un push :</p>
-<pre><code>git push
-</code></pre>
-<h2 id="git-branch">Git branch <a class="direct-link" href="#git-branch"> </a></h2>
-<p>Avec git, l'idéal c'est de créer des branches pour le travail et pour la production.<br>
-J'ai beaucoup aimer la façon de gérer les branches que j'ai utilisé avec <a href="https://www.linkedin.com/in/yannick-neff-7754aa8/">Yannick Neff</a> et <a href="https://www.linkedin.com/in/maxencemaireaux/">Maxence Maireaux</a> sur l'<a href="github.com/societe-general/os-factory">Os Factory Open Source by Société Générale</a>.<br>
-En gros, on part du postulat qu'il y aura plusieurs versions du produit et donc dès le départ, on créer une branche v0 pour la version initial et on n'utilise pas la branch master (du tout). la v0 sera la version initiale de production du produit, en suite on créer des branches par feature request.</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">git</span> push</span></code></pre>
+<h3 id="git-branch">Git branch <a class="direct-link" href="#git-branch"> </a></h3>
+<p>Avec git, l'idéal c'est de créer des branches pour le travail et pour la production, a minima.<br>
+Pour avoir un idée de ce qui existe, regader Git Flow, GitHub Flow</p>
 <ul>
-<li>la premiere branche :</li>
+<li>
+<p>la premiere branche :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">git</span> checkout -b v0</span></code></pre>
+</li>
+<li>
+<p>puis les autres :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token comment">##support d'aws</span></span><br><span class="highlight-line"><span class="token function">git</span> checkout -b v0-aws</span><br><span class="highlight-line"><span class="token comment">##support d'azure</span></span><br><span class="highlight-line"><span class="token function">git</span> checkout -b v0-azure</span></code></pre>
+</li>
 </ul>
-<pre><code>git checkout -b v0
-</code></pre>
-<ul>
-<li>puis les autres :</li>
-</ul>
-<pre><code># support d&amp;#039;aws
-git checkout -b v0-aws
-# support d&amp;#039;azure
-git checkout -b v0-azure
-
-</code></pre>
-<p>Voilà, vous savez maintenant utiliser les bases de git, je vous invite à poursuivre avec <a href="https://etienne.deneuve.xyz/2018/06/26/setup-vs-code-bash-git/" target="_blank" rel="noopener">Open Source + Windows = VS Code + Bash + Git</a>.</p>
+<h3 id="git-checkout">Git checkout <a class="direct-link" href="#git-checkout"> </a></h3>
+<p>La commande git checkout permet de se changer de branche de travail. C'est à dire que si nous faisons la commande <code>git checkout masuperfeature</code>, les fichiers et les dossiers seront ceux de la branche en question. Faisons donc un petit exercice pour bien comprendre comment cela fonctionne :</p>
+<blockquote>
+<p>Vous pouvez créer un repository git local sans server pour cet exercice, c'est que j'ai fais moi même et par conséquent je n'utilise pas les commande <code>git push</code> et <code>git pull</code> pour simplifier cet exercice.</p>
+</blockquote>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token comment"># on se place dans la branche master</span></span><br><span class="highlight-line"><span class="token function">git</span> checkout master</span><br><span class="highlight-line"><span class="token comment"># on creer un fichier vide :</span></span><br><span class="highlight-line"><span class="token function">touch</span> monfichier.txt</span><br><span class="highlight-line"><span class="token comment"># on l'ajoute au "stage" :</span></span><br><span class="highlight-line"><span class="token function">git</span> <span class="token function">add</span> monfichier.txt</span><br><span class="highlight-line"><span class="token comment"># puis on commit :</span></span><br><span class="highlight-line"><span class="token function">git</span> commit -m <span class="token string">"mon commit dans master"</span></span><br><span class="highlight-line"><span class="token comment"># puis on change de branch, le -b permet de créer la branche si elle n'existe pas encore</span></span><br><span class="highlight-line"><span class="token function">git</span> checkout -b manouvellebranche</span><br><span class="highlight-line"><span class="token comment"># on valide qu'elle est bien a jour par rapport au serveur</span></span><br><span class="highlight-line"><span class="token function">ls</span></span><br><span class="highlight-line"><span class="token comment"># qui nous retourne :</span></span><br><span class="highlight-line">monfichier.txt</span></code></pre>
+<p>Maintenant, ajoutons un fichier dans cette nouvelle branche :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">touch</span> monfichier2.txt</span><br><span class="highlight-line"><span class="token function">git</span> <span class="token function">add</span> monfichier2.txt <span class="token operator">&amp;&amp;</span> <span class="token function">git</span> commit -m <span class="token string">"mon commit dans manouvellebranche"</span></span></code></pre>
+<p>Retournons dans la branche &quot;master&quot; :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token comment"># on change vers master</span></span><br><span class="highlight-line"><span class="token function">git</span> checkout master</span><br><span class="highlight-line"><span class="token comment"># on creer un nouveau fichier :</span></span><br><span class="highlight-line"><span class="token function">touch</span> monfichiermaster.txt</span><br><span class="highlight-line"><span class="token function">git</span> <span class="token function">add</span> monfichiermaster.txt <span class="token operator">&amp;&amp;</span> <span class="token function">git</span> commit -m <span class="token string">"ajout du fichier dans master"</span></span><br><span class="highlight-line"><span class="token function">ls</span></span><br><span class="highlight-line"><span class="token comment"># nous retourne :</span></span><br><span class="highlight-line">monfichier.txt monfichiermaster.txt</span><br><span class="highlight-line"><span class="token comment"># si nous retournons dans la branche manouvellebranche :</span></span><br><span class="highlight-line"><span class="token function">git</span> checkout manouvellebranche</span><br><span class="highlight-line"><span class="token function">ls</span></span><br><span class="highlight-line">monfichier2.txt monfichier.txt</span></code></pre>
+<p>Conclusion: les branches permettent d'isoler le travail sans se mélanger entre collègues ou entre features.</p>
+<h3 id="git-rebase">Git rebase <a class="direct-link" href="#git-rebase"> </a></h3>
+<p>Il est assez fréquent de travailler sur plusieurs branches en parallèle et qui nous oblige lors de modification importante dans la branche principale de faire &quot;redescendre&quot; les modifications de la branche &quot;master&quot; (ou celle qui a servi de base à la création). Nous allons voir comment récupérer ces modifications dans notre branche &quot;manouvellebranche&quot; :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">git</span> checkout manouvellebranch</span><br><span class="highlight-line"><span class="token function">ls</span></span><br><span class="highlight-line"><span class="token function">git</span> rebase master</span><br><span class="highlight-line"><span class="token function">git</span> checkout manouvellebranch</span><br><span class="highlight-line">First, rewinding <span class="token function">head</span> to replay your work on <span class="token function">top</span> of it<span class="token punctuation">..</span>.</span><br><span class="highlight-line">Applying: mon commit dans manouvellebranche</span></code></pre>
+<h3 id="git-merge">Git Merge <a class="direct-link" href="#git-merge"> </a></h3>
+<p>Une fois que notre feature est prête, il peut être intéressant de migrer le travail dans la branche &quot;mère&quot;. Dès lors nous allons pouvoir &quot;merger&quot;, il existe plusieurs façon de merger, soit on merge tout avec l'historique de chaque commit dans la branche &quot;mère&quot;, soit on merge sans l'historique, rassembler dans un seul commit, je préfère cette option afin de ne pas polluer l'historique de la branche de &quot;production&quot; :</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token comment"># ajoutons quelques fichiers dans la branche manouvellebranche</span></span><br><span class="highlight-line"><span class="token function">touch</span> toto<span class="token punctuation">{</span><span class="token number">0</span><span class="token punctuation">..</span><span class="token number">9</span><span class="token punctuation">}</span><span class="token punctuation">{</span><span class="token number">0</span><span class="token punctuation">..</span><span class="token number">9</span><span class="token punctuation">}</span>.txt</span><br><span class="highlight-line"><span class="token function">git</span> <span class="token function">add</span> toto*</span><br><span class="highlight-line"><span class="token function">git</span> commit -m <span class="token string">"adding 100 files"</span></span></code></pre>
+<p>Ensuite, changeons de branche puis effectuons un merge, simple (le moins bien):</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">git</span> checkout master</span><br><span class="highlight-line"><span class="token function">git</span> merge manouvellebranch</span></code></pre>
+<p>Et si je me suis trompé ?</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token comment"># d'abord on vérifie l'id du commit : (-B permets de récupéré 6 lignes de avant le contexte, -A la meme chose mais apres le contexte)</span></span><br><span class="highlight-line"><span class="token function">git</span> log <span class="token operator">|</span> <span class="token function">grep</span> -B <span class="token number">6</span> -A <span class="token number">6</span> adding</span><br><span class="highlight-line"></span><br><span class="highlight-line">commit 126d0fe758ebb8b7c155d58968063edec996a673</span><br><span class="highlight-line">Author: Etienne Deneuve <span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>etienne.deneuve@cellenza.com<span class="token operator">></span></span><br><span class="highlight-line">Date: Thu Jun <span class="token number">28</span> <span class="token number">13</span>:07:27 <span class="token number">2018</span> +0200</span><br><span class="highlight-line"></span><br><span class="highlight-line">adding <span class="token number">100</span> <span class="token function">file</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">commit c9323cb10debb1a0a028f9e7db65a622fb8906a1</span><br><span class="highlight-line">Author: Etienne Deneuve <span class="token operator">&amp;</span>lt<span class="token punctuation">;</span>etienne.deneuve@cellenza.com<span class="token operator">></span></span><br><span class="highlight-line">Date: Thu Jun <span class="token number">28</span> <span class="token number">12</span>:27:02 <span class="token number">2018</span> +0200</span><br><span class="highlight-line"></span><br><span class="highlight-line">mon commit dans manouvellebranche</span><br><span class="highlight-line"><span class="token comment"># puis on annule notre commit en prenant celui juste avant notre erreur :</span></span><br><span class="highlight-line"><span class="token function">git</span> reset c9323cb10debb1a0a028f9e7db65a622fb8906a1</span><br><span class="highlight-line"><span class="token function">git</span> status</span><br><span class="highlight-line">On branch master</span><br><span class="highlight-line">nothing to commit, working tree clean</span></code></pre>
+<p>Cela tombe, bien nous allons pouvoir faire le deuxième merge (le mieux):</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">git</span> checkout master</span><br><span class="highlight-line"><span class="token function">git</span> merge --squash manouvellebranch</span><br><span class="highlight-line"><span class="token function">git</span> status</span><br><span class="highlight-line">On branch master</span><br><span class="highlight-line">Changes to be committed:</span><br><span class="highlight-line"><span class="token punctuation">(</span>use <span class="token string">"git reset HEAD ..."</span> to unstage<span class="token punctuation">)</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">new file: toto00.txt</span><br><span class="highlight-line"></span><br><span class="highlight-line">new file: toto99.txt</span><br><span class="highlight-line"><span class="token comment"># dès lors, nous devons commiter:</span></span><br><span class="highlight-line"><span class="token function">git</span> commit -m <span class="token string">"oui, c'est bon on y va !"</span></span></code></pre>
+<p>Voilà, vous savez maintenant utiliser les bases de git, je vous invite à poursuivre avec <a href="https://etienne.deneuve.xyz/2018/06/26/setup-vs-code-bash-git/">Open Source + Windows = VS Code + Bash + Git</a>.</p>
 
     </main>
     <aside class="aside aside-supplemental d-none d-lg-block col-lg-2 col-xl-2">
-      <span class="meta__stats">About 4 min reading time</span>
+      <span class="meta__stats">About 5 min reading time</span>
       <nav class="sticky-top">
         <div class="">
                 <ol>
@@ -276,7 +281,14 @@ git checkout -b v0-azure
                 </ol>
             		</li>
 
-                    <li><a href="#clone-ou-remote-%3F">Clone ou Remote ?  </a>
+                    <li><a href="#where-to-start">Where to start  </a>
+            		</li>
+
+                    <li><a href="#les-commandes-de-git">Les commandes de Git  </a>
+            
+                <ol>
+                    
+                    <li><a href="#clone-ou-remote">Clone ou Remote  </a>
             		</li>
 
                     <li><a href="#ajouter%2Fsupprimer-des-fichiers-%C3%A0-l'index">Ajouter/Supprimer des fichiers à l'index  </a>
@@ -285,13 +297,24 @@ git checkout -b v0-azure
                     <li><a href="#commit">Commit  </a>
             		</li>
 
-                    <li><a href="#pull-ou-fetch-%3F">Pull ou Fetch ?  </a>
+                    <li><a href="#pull-ou-fetch">Pull ou Fetch  </a>
             		</li>
 
                     <li><a href="#git-push">Git push  </a>
             		</li>
 
                     <li><a href="#git-branch">Git branch  </a>
+            		</li>
+
+                    <li><a href="#git-checkout">Git checkout  </a>
+            		</li>
+
+                    <li><a href="#git-rebase">Git rebase  </a>
+            		</li>
+
+                    <li><a href="#git-merge">Git Merge  </a>
+            		</li>
+                </ol>
             		</li>
                 </ol>
             </div>

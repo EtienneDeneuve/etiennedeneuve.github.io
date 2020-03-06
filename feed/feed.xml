@@ -704,119 +704,6 @@ Addresses: 192.168.0.2
 	</entry>
 	
 	<entry>
-		<title>Git pour les Ops, par un ops le retour</title>
-		<link href="/2018/06/28/git-pour-les-ops-par-un-ops-le-retour/"/>
-		<updated>2018-06-28T15:43:00+02:00</updated>
-		<id>/2018/06/28/git-pour-les-ops-par-un-ops-le-retour/</id>
-		<content type="html">&lt;p&gt;Dans le premier article &lt;a href=&quot;https://etienne.deneuve.xyz/2018/06/23/git-pour-ops-par-un-ops/&quot;&gt;git for ops&lt;/a&gt; nous avons appris à :&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Créer un repo sur Github ou VSTS&lt;/li&gt;
-&lt;li&gt;Configurer une clé ssh pour Git&lt;/li&gt;
-&lt;li&gt;Ajouter/Supprimer des fichiers à l&#39;index local&lt;/li&gt;
-&lt;li&gt;Commit des fichiers dans l&#39;index local&lt;/li&gt;
-&lt;li&gt;Cloner un repo ou ajouter une source distante&lt;/li&gt;
-&lt;li&gt;Récupérer le travail existant dans le repo distant&lt;/li&gt;
-&lt;li&gt;Envoyer ces commits dans le repository distant&lt;/li&gt;
-&lt;li&gt;Créer une branche&lt;/li&gt;
-&lt;/ul&gt;
-&lt;!--more--&gt;
-&lt;p&gt;Dans cet article, nous allons aller un peu plus loin et apprendre quelques éléments de git qui sont primordiaux lorsque l&#39;on travaille avec des branches.&lt;/p&gt;
-&lt;h2 id=&quot;git-checkout&quot;&gt;Git checkout &lt;a class=&quot;direct-link&quot; href=&quot;#git-checkout&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;La commande git checkout permet de se changer de branche de travail. C&#39;est à dire que si nous faisons la commande &lt;code&gt;git checkout masuperfeature&lt;/code&gt;, les fichiers et les dossiers seront ceux de la branche en question. Faisons donc un petit exercice pour bien comprendre comment cela fonctionne :&lt;/p&gt;
-&lt;p&gt;&amp;gt; Vous pouvez créer un repository git local sans server pour cet exercice, c&#39;est que j&#39;ai fais moi même et par conséquent je n&#39;utilise pas les commande &lt;code&gt;git push&lt;/code&gt; et &lt;code&gt;git pull&lt;/code&gt; pour simplifier cet exercice.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;# on se place dans la branche master
-git checkout master
-# on creer un fichier vide :
-touch monfichier.txt
-# on l&amp;amp;#039;ajoute au &amp;amp;quot;stage&amp;amp;quot; :
-git add monfichier.txt
-# puis on commit :
-git commit -m &amp;amp;quot;mon commit dans master&amp;amp;quot;
-# puis on change de branch, le -b permet de créer la branche si elle n&amp;amp;#039;existe pas encore
-git checkout -b manouvellebranche
-# on valide qu&amp;amp;#039;elle est bien a jour par rapport au serveur
-ls
-# qui nous retourne :
-monfichier.txt
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Maintenant, ajoutons un fichier dans cette nouvelle branche :&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;touch monfichier2.txt
-git add monfichier2.txt &amp;amp;amp;&amp;amp;amp; git commit -m &amp;amp;quot;mon commit dans manouvellebranche&amp;amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Retournons dans la branche &amp;quot;master&amp;quot; :&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;# on change vers master
-git checkout master
-# on creer un nouveau fichier :
-touch monfichiermaster.txt
-git add monfichiermaster.txt &amp;amp;amp;&amp;amp;amp; git commit -m &amp;amp;quot;ajout du fichier dans master&amp;amp;quot;
-ls
-# nous retourne :
-monfichier.txt monfichiermaster.txt
-# si nous retournons dans la branche manouvellebranche :
-git checkout manouvellebranche
-ls
-monfichier2.txt monfichier.txt
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Conclusion: les branches permettent d&#39;isoler le travail sans se mélanger entre collègues ou entre features.&lt;/p&gt;
-&lt;h2 id=&quot;git-rebase&quot;&gt;Git rebase &lt;a class=&quot;direct-link&quot; href=&quot;#git-rebase&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;Il est assez fréquent de travailler sur plusieurs branches en parallèle et qui nous oblige lors de modification importante dans la branche principale de faire &amp;quot;redescendre&amp;quot; les modifications de la branche &amp;quot;master&amp;quot; (ou celle qui a servi de base à la création). Nous allons voir comment récupérer ces modifications dans notre branche &amp;quot;manouvellebranche&amp;quot; :&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;git checkout manouvellebranch
-ls
-git rebase master
-git checkout manouvellebranch
-First, rewinding head to replay your work on top of it...
-Applying: mon commit dans manouvellebranche
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;git-merge&quot;&gt;Git Merge &lt;a class=&quot;direct-link&quot; href=&quot;#git-merge&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;Une fois que notre feature est prête, il peut être intéressant de migrer le travail dans la branche &amp;quot;mère&amp;quot;. Dès lors nous allons pouvoir &amp;quot;merger&amp;quot;, il existe plusieurs façon de merger, soit on merge tout avec l&#39;historique de chaque commit dans la branche &amp;quot;mère&amp;quot;, soit on merge sans l&#39;historique, rassembler dans un seul commit, je préfère cette option afin de ne pas polluer l&#39;historique de la branche de &amp;quot;production&amp;quot; :&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;# ajoutons quelques fichiers dans la branche manouvellebranche
-touch toto{0..9}{0..9}.txt
-git add toto*
-git commit -m &amp;amp;quot;adding 100 files&amp;amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Ensuite, changeons de branche puis effectuons un merge, simple (le moins bien):&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;git checkout master
-git merge manouvellebranch
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Et si je me suis trompé ?&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;# d&amp;amp;#039;abord on vérifie l&amp;amp;#039;id du commit : (-B permets de récupéré 6 lignes de avant le contexte, -A la meme chose mais apres le contexte)
-git log | grep -B 6 -A 6 adding
-
-commit 126d0fe758ebb8b7c155d58968063edec996a673
-Author: Etienne Deneuve &amp;amp;lt;etienne.deneuve@cellenza.com&amp;amp;gt;
-Date: Thu Jun 28 13:07:27 2018 +0200
-
-adding 100 file
-
-commit c9323cb10debb1a0a028f9e7db65a622fb8906a1
-Author: Etienne Deneuve &amp;amp;lt;etienne.deneuve@cellenza.com&amp;amp;gt;
-Date: Thu Jun 28 12:27:02 2018 +0200
-
-mon commit dans manouvellebranche
-# puis on annule notre commit en prenant celui juste avant notre erreur :
-git reset c9323cb10debb1a0a028f9e7db65a622fb8906a1
-git status
-On branch master
-nothing to commit, working tree clean
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Cela tombe, bien nous allons pouvoir faire le deuxième merge (le mieux):&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;git checkout master
-git merge --squash manouvellebranch
-git status
-On branch master
-Changes to be committed:
-(use &amp;amp;quot;git reset HEAD ...&amp;amp;quot; to unstage)
-
-new file: toto00.txt
-
-new file: toto99.txt
-# dès lors, nous devons commiter:
-git commit -m &amp;amp;quot;oui, c&amp;amp;#039;est bon on y va !&amp;amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-</content>
-	</entry>
-	
-	<entry>
 		<title>Documentation as Code</title>
 		<link href="/2018/06/26/documentation-as-code/"/>
 		<updated>2018-06-26T15:43:44+02:00</updated>
@@ -1188,7 +1075,8 @@ create mode 100644 test.yml
 		<link href="/2018/06/23/git-pour-ops-par-un-ops/"/>
 		<updated>2018-06-23T21:57:39+02:00</updated>
 		<id>/2018/06/23/git-pour-ops-par-un-ops/</id>
-		<content type="html">&lt;p&gt;Git est un logiciel de contrôle de code source déjà très utilisé dans le monde des dev. Lorsque l&#39;on fait de l&#39;Infra as Code, nous pouvons aussi utiliser git, je pense même que cela va devenir une vraie nécessité. Pour nous les Ops, ce n&#39;est pas nécessairement naturel et j&#39;ai donc décidé de démystifier git dans un contexte Cloud comme Azure.&lt;/p&gt;
+		<content type="html">&lt;h1 id=&quot;git-pour-ops%2C-par-un-ops&quot;&gt;Git pour Ops, par un Ops &lt;a class=&quot;direct-link&quot; href=&quot;#git-pour-ops%2C-par-un-ops&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;Git est un logiciel de contrôle de code source déjà très utilisé dans le monde des dev. Lorsque l&#39;on fait de l&#39;Infra as Code, nous pouvons aussi utiliser git, je pense même que cela va devenir une vraie nécessité. Pour nous les Ops, ce n&#39;est pas nécessairement naturel et j&#39;ai donc décidé de démystifier git dans un contexte Cloud comme Azure.&lt;/p&gt;
 &lt;p&gt;Afin de suivre ce billet, vous devez installer quelques outils sur votre poste de travail afin de pouvoir tester par vous-même.&lt;/p&gt;
 &lt;p&gt;Je vous invite également à lire ces articles :&lt;/p&gt;
 &lt;ul&gt;
@@ -1204,7 +1092,7 @@ create mode 100644 test.yml
 &lt;li&gt;Git-SCM&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Vous pouvez utiliser chocolatey :&lt;/p&gt;
-&lt;script src=&quot;https://gist.github.com/EtienneDeneuve/5738b4f0aacac785c2a7f982f0346f5d.js&quot;&gt;&lt;/script&gt;
+&lt;pre class=&quot;language-powershell&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;Write-Output&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Installation of Chocolatey&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;token function&quot;&gt;Set&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;ExecutionPolicy Bypass &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Scope &lt;span class=&quot;token keyword&quot;&gt;Process&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Force&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;iex&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;New-Object&lt;/span&gt; System&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Net&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;WebClient&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;DownloadString&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&#39;https://chocolatey.org/install.ps1’))&lt;br&gt;$packages = (&#39;&lt;/span&gt;VisualStudioCode&lt;span class=&quot;token string&quot;&gt;&#39;, &#39;&lt;/span&gt;vscode&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;powershell&lt;span class=&quot;token string&quot;&gt;&#39;, &#39;&lt;/span&gt;vscode&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;markdownlint&lt;span class=&quot;token string&quot;&gt;&#39;, &#39;&lt;/span&gt;vscode&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;azurerm&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;tools&lt;span class=&quot;token string&quot;&gt;&#39;, &#39;&lt;/span&gt;vscode&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;gitlens&lt;span class=&quot;token string&quot;&gt;&#39;, &#39;&lt;/span&gt;azure&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;cli&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&#39;, &#39;&lt;/span&gt;AzurePowerShell&lt;span class=&quot;token string&quot;&gt;&#39;, &#39;&lt;/span&gt;git&lt;span class=&quot;token string&quot;&gt;&#39;, &#39;&lt;/span&gt;terraform&#39;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Choco upgrade &lt;span class=&quot;token variable&quot;&gt;$packages&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;y&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Sur macOs :&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Visual Studio Code&lt;/li&gt;
@@ -1215,59 +1103,48 @@ create mode 100644 test.yml
 &lt;h3 id=&quot;repo-sur-github&quot;&gt;Repo sur GitHub &lt;a class=&quot;direct-link&quot; href=&quot;#repo-sur-github&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;Une fois votre compte actif, créez un repository Git via le bouton vert &amp;quot;Create Repository&amp;quot;&lt;/p&gt;
 &lt;h3 id=&quot;repo-sur-vsts&quot;&gt;Repo sur Vsts &lt;a class=&quot;direct-link&quot; href=&quot;#repo-sur-vsts&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
-&lt;p&gt;J&#39;ai déjà publié un article concernant vsts&lt;a href=&quot;https://etienne.deneuve.xyz/2017/10/09/vsts-for-ops-1/&quot;&gt; ici&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;J&#39;ai déjà publié un article concernant vsts &lt;a href=&quot;https://etienne.deneuve.xyz/2017/10/09/vsts-for-ops-1/&quot;&gt;ici&lt;/a&gt;&lt;/p&gt;
 &lt;h3 id=&quot;git-en-ssh&quot;&gt;Git en SSH &lt;a class=&quot;direct-link&quot; href=&quot;#git-en-ssh&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;Afin d&#39;avoir accès à VSTS ou à GitHub depuis un bash Windows ou Linux, il faut générer une clé SSH :&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;Je vous recommande vivement l&#39;utilisation de bash pour git et la suite de cet article. Si vous n&#39;avez pas encore installer bash sur votre Windows, installer le puis suivez cet article : &lt;a href=&quot;https://etienne.deneuve.xyz/2018/06/26/setup-vs-code-bash-git/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Open Source + Windows = Vs Code + Bash + Git&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Je vous recommande vivement l&#39;utilisation de bash pour git et la suite de cet article. Si vous n&#39;avez pas encore installer bash sur votre Windows, installer le puis suivez cet article : &lt;a href=&quot;https://etienne.deneuve.xyz/2018/06/26/setup-vs-code-bash-git/&quot;&gt;Open Source + Windows = Vs Code + Bash + Git&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;pre&gt;&lt;code&gt;mkdir -p ~/.ssh
-ssh-keygen -f ~/.ssh/vsts
-cat vsts.pub
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;mkdir&lt;/span&gt; -p ~/.ssh&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;ssh-keygen -f ~/.ssh/vsts&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;cat&lt;/span&gt; vsts.pub&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Ouvrez VSTS ou Git puis :&lt;/p&gt;
-&lt;p&gt;VSTS : https://&amp;lt;votreurl&amp;gt;/_details/security/keys)&amp;lt;/votreurl&amp;gt;Git : &lt;a href=&quot;https://github.com/settings/keys&quot;&gt;https://github.com/settings/keys&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;VSTS : &lt;a href=&quot;https://&quot;&gt;https://&lt;/a&gt;&lt;votreurl&gt;/_details/security/keys)&lt;/votreurl&gt;&lt;/li&gt;
+&lt;li&gt;Git : &lt;a href=&quot;https://github.com/settings/keys&quot;&gt;https://github.com/settings/keys&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;p&gt;Cliquez sur &amp;quot;Add&amp;quot; et collez la clé publique.&lt;/p&gt;
 &lt;p&gt;Ensuite ajoutez la clé dans l&#39;agent ssh :&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;ssh-agent bash
-ssh-add ~/.ssh/vsts
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h1 id=&quot;where-to-start-%3F&quot;&gt;Where to start ? &lt;a class=&quot;direct-link&quot; href=&quot;#where-to-start-%3F&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;ssh-agent &lt;span class=&quot;token function&quot;&gt;bash&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;ssh-add ~/.ssh/vsts&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;where-to-start&quot;&gt;Where to start &lt;a class=&quot;direct-link&quot; href=&quot;#where-to-start&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Lorsqu&#39;on commence à travailler avec git, il est possible d&#39;utiliser deux méthodes, soit on clone le repo distant, soit on ajoute le repo distant comme source.&lt;/p&gt;
-&lt;h2 id=&quot;clone-ou-remote-%3F&quot;&gt;Clone ou Remote ? &lt;a class=&quot;direct-link&quot; href=&quot;#clone-ou-remote-%3F&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;les-commandes-de-git&quot;&gt;Les commandes de Git &lt;a class=&quot;direct-link&quot; href=&quot;#les-commandes-de-git&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;h3 id=&quot;clone-ou-remote&quot;&gt;Clone ou Remote &lt;a class=&quot;direct-link&quot; href=&quot;#clone-ou-remote&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;Pour faire un clone ou ajouter un repository distant, il suffit de récupérer l&#39;url disponible dans l&#39;interface de GitHub ou de VSTS puis avec cette url :&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Clone&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;git clone https://xxxx/git.git
-# ou avec la belle cle ssh :
-git clone ssh://
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&amp;gt; Le clone est utilisable lorsque notre projet est vide, ou qu&#39;il n&#39;est pas encore present dans la machine de travail (reinstallation, pc fixe de la maison...)&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; clone https://xxxx/git.git&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# ou avec la belle cle ssh :&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; clone ssh://&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Le clone est utilisable lorsque notre projet est vide, ou qu&#39;il n&#39;est pas encore present dans la machine de travail (reinstallation, pc fixe de la maison...)&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;Remote&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Cette méthode est plus complexe et pas forcément nécessaire, il est juste intéressant de la connaitre.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;git remote add origin url
-git commit . -m &amp;quot;inital commit&amp;quot;
-git push origin master
-git add --all
-git commit . -m &amp;quot;add exisiting file in the remote repo&amp;quot;
-git push origin master
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; remote &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; origin url&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; commit &lt;span class=&quot;token builtin class-name&quot;&gt;.&lt;/span&gt; -m &lt;span class=&quot;token string&quot;&gt;&quot;inital commit&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; push origin master&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; --all&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; commit &lt;span class=&quot;token builtin class-name&quot;&gt;.&lt;/span&gt; -m &lt;span class=&quot;token string&quot;&gt;&quot;add exisiting file in the remote repo&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; push origin master&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Le remote est utilisable si le projet est déjà sur la machine et que le repository distant n&#39;existe pas encore.&lt;br&gt;
 Je vous conseille de bien faire un premier commit &amp;quot;vide&amp;quot; puis d&#39;ajouter les fichiers (git add --all) puis à nouveau d&#39;envoyer les fichiers.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2 id=&quot;ajouter%2Fsupprimer-des-fichiers-%C3%A0-l&#39;index&quot;&gt;Ajouter/Supprimer des fichiers à l&#39;index &lt;a class=&quot;direct-link&quot; href=&quot;#ajouter%2Fsupprimer-des-fichiers-%C3%A0-l&#39;index&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;h3 id=&quot;ajouter%2Fsupprimer-des-fichiers-%C3%A0-l&#39;index&quot;&gt;Ajouter/Supprimer des fichiers à l&#39;index &lt;a class=&quot;direct-link&quot; href=&quot;#ajouter%2Fsupprimer-des-fichiers-%C3%A0-l&#39;index&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;Avec Git, quand on créer un nouveau fichier, par défaut il n&#39;est pas forcément ajouté à l&#39;index, c&#39;est à dire qu&#39;il ne sera pas envoyé au server lors d&#39;un &lt;code&gt;git push&lt;/code&gt;.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Ajout de fichiers&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;git add ./monchemin/monfichier
-# ou un dossier complet :
-git add ./mondossier/
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; ./monchemin/monfichier&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# ou un dossier complet :&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; ./mondossier/&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Attention, git ne prendra jamais un dossier vide, il ne le prendra que si un fichier meme vide est present.&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -1278,54 +1155,69 @@ git add ./mondossier/
 &lt;p&gt;&lt;em&gt;Je ne suis pas responsable de vos fichiers perdus ;)&lt;/em&gt;&lt;br&gt;
 Lorsqu&#39;on supprime un fichier du repertoire local, il n&#39;est pas supprimé de l&#39;index de git sans faire la commande :&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;pre&gt;&lt;code&gt;git rm ./monchemin/monfichier --cached
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;commit&quot;&gt;Commit &lt;a class=&quot;direct-link&quot; href=&quot;#commit&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;rm&lt;/span&gt; ./monchemin/monfichier --cached&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;commit&quot;&gt;Commit &lt;a class=&quot;direct-link&quot; href=&quot;#commit&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;Afin d&#39;ajouter nos fichier dans l&#39;index en attente, il est nécessaire de valider ces fichiers, un peu comme en base de données Commit, Execute, Rollback, en cas de soucis.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;git commit -m &amp;amp;quot;le message du commit en fonction de votre travail... (pensez à vos collègues !&amp;amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;pull-ou-fetch-%3F&quot;&gt;Pull ou Fetch ? &lt;a class=&quot;direct-link&quot; href=&quot;#pull-ou-fetch-%3F&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; commit -m &lt;span class=&quot;token string&quot;&gt;&quot;le message du commit en fonction de votre travail... (pensez à vos collègues !&quot;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;pull-ou-fetch&quot;&gt;Pull ou Fetch &lt;a class=&quot;direct-link&quot; href=&quot;#pull-ou-fetch&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;Avant de valider ce &lt;code&gt;commit&lt;/code&gt; sur le server, il est important de vérifier si on est bien raccord avec le canal &amp;quot;upstream&amp;quot;, c&#39;est à dire le serveur distant.&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Pull&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;git pull
-&lt;/code&gt;&lt;/pre&gt;
+&lt;li&gt;
+&lt;p&gt;Pull&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; pull&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Git pull en réalité, c&#39;est un &lt;code&gt;git fetch&lt;/code&gt; puis un &lt;code&gt;git merge FETCH_HEAD&lt;/code&gt;, pour gagner du temps.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;Fetch&lt;/li&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Fetch&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; fetch&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;git fetch
-&lt;/code&gt;&lt;/pre&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Git fetch permet de récupérer les commits distants qui on eu lieu de puis le dernier &lt;code&gt;fetch&lt;/code&gt;. En effet, sans faire de &lt;code&gt;pull&lt;/code&gt; ou de &lt;code&gt;fetch&lt;/code&gt;, le server distant et local on des versions différentes des index (et donc des fichiers).&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2 id=&quot;git-push&quot;&gt;Git push &lt;a class=&quot;direct-link&quot; href=&quot;#git-push&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;h3 id=&quot;git-push&quot;&gt;Git push &lt;a class=&quot;direct-link&quot; href=&quot;#git-push&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;Afin de partager votre travail avec vos collègues, vous devez envoyer vos modifications sur le server (si, si, si).&lt;br&gt;
 Il y a plusieurs façons de travailler avec git, mais lorsqu&#39;on est dans une branche de travail (et pas de prod!) nous pouvons faire un push :&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;git push
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;git-branch&quot;&gt;Git branch &lt;a class=&quot;direct-link&quot; href=&quot;#git-branch&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;Avec git, l&#39;idéal c&#39;est de créer des branches pour le travail et pour la production.&lt;br&gt;
-J&#39;ai beaucoup aimer la façon de gérer les branches que j&#39;ai utilisé avec &lt;a href=&quot;https://www.linkedin.com/in/yannick-neff-7754aa8/&quot;&gt;Yannick Neff&lt;/a&gt; et &lt;a href=&quot;https://www.linkedin.com/in/maxencemaireaux/&quot;&gt;Maxence Maireaux&lt;/a&gt; sur l&#39;&lt;a href=&quot;github.com/societe-general/os-factory&quot;&gt;Os Factory Open Source by Société Générale&lt;/a&gt;.&lt;br&gt;
-En gros, on part du postulat qu&#39;il y aura plusieurs versions du produit et donc dès le départ, on créer une branche v0 pour la version initial et on n&#39;utilise pas la branch master (du tout). la v0 sera la version initiale de production du produit, en suite on créer des branches par feature request.&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; push&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;git-branch&quot;&gt;Git branch &lt;a class=&quot;direct-link&quot; href=&quot;#git-branch&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Avec git, l&#39;idéal c&#39;est de créer des branches pour le travail et pour la production, a minima.&lt;br&gt;
+Pour avoir un idée de ce qui existe, regader Git Flow, GitHub Flow&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;la premiere branche :&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;la premiere branche :&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; checkout -b v0&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;puis les autres :&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;##support d&#39;aws&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; checkout -b v0-aws&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;##support d&#39;azure&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; checkout -b v0-azure&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;git checkout -b v0
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;puis les autres :&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;# support d&amp;amp;#039;aws
-git checkout -b v0-aws
-# support d&amp;amp;#039;azure
-git checkout -b v0-azure
-
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Voilà, vous savez maintenant utiliser les bases de git, je vous invite à poursuivre avec &lt;a href=&quot;https://etienne.deneuve.xyz/2018/06/26/setup-vs-code-bash-git/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Open Source + Windows = VS Code + Bash + Git&lt;/a&gt;.&lt;/p&gt;
+&lt;h3 id=&quot;git-checkout&quot;&gt;Git checkout &lt;a class=&quot;direct-link&quot; href=&quot;#git-checkout&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;La commande git checkout permet de se changer de branche de travail. C&#39;est à dire que si nous faisons la commande &lt;code&gt;git checkout masuperfeature&lt;/code&gt;, les fichiers et les dossiers seront ceux de la branche en question. Faisons donc un petit exercice pour bien comprendre comment cela fonctionne :&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Vous pouvez créer un repository git local sans server pour cet exercice, c&#39;est que j&#39;ai fais moi même et par conséquent je n&#39;utilise pas les commande &lt;code&gt;git push&lt;/code&gt; et &lt;code&gt;git pull&lt;/code&gt; pour simplifier cet exercice.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# on se place dans la branche master&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; checkout master&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# on creer un fichier vide :&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;touch&lt;/span&gt; monfichier.txt&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# on l&#39;ajoute au &quot;stage&quot; :&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; monfichier.txt&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# puis on commit :&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; commit -m &lt;span class=&quot;token string&quot;&gt;&quot;mon commit dans master&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# puis on change de branch, le -b permet de créer la branche si elle n&#39;existe pas encore&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; checkout -b manouvellebranche&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# on valide qu&#39;elle est bien a jour par rapport au serveur&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;ls&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# qui nous retourne :&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;monfichier.txt&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Maintenant, ajoutons un fichier dans cette nouvelle branche :&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;touch&lt;/span&gt; monfichier2.txt&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; monfichier2.txt &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; commit -m &lt;span class=&quot;token string&quot;&gt;&quot;mon commit dans manouvellebranche&quot;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Retournons dans la branche &amp;quot;master&amp;quot; :&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# on change vers master&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; checkout master&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# on creer un nouveau fichier :&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;touch&lt;/span&gt; monfichiermaster.txt&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; monfichiermaster.txt &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; commit -m &lt;span class=&quot;token string&quot;&gt;&quot;ajout du fichier dans master&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;ls&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# nous retourne :&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;monfichier.txt monfichiermaster.txt&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# si nous retournons dans la branche manouvellebranche :&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; checkout manouvellebranche&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;ls&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;monfichier2.txt monfichier.txt&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Conclusion: les branches permettent d&#39;isoler le travail sans se mélanger entre collègues ou entre features.&lt;/p&gt;
+&lt;h3 id=&quot;git-rebase&quot;&gt;Git rebase &lt;a class=&quot;direct-link&quot; href=&quot;#git-rebase&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Il est assez fréquent de travailler sur plusieurs branches en parallèle et qui nous oblige lors de modification importante dans la branche principale de faire &amp;quot;redescendre&amp;quot; les modifications de la branche &amp;quot;master&amp;quot; (ou celle qui a servi de base à la création). Nous allons voir comment récupérer ces modifications dans notre branche &amp;quot;manouvellebranche&amp;quot; :&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; checkout manouvellebranch&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;ls&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; rebase master&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; checkout manouvellebranch&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;First, rewinding &lt;span class=&quot;token function&quot;&gt;head&lt;/span&gt; to replay your work on &lt;span class=&quot;token function&quot;&gt;top&lt;/span&gt; of it&lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;.&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Applying: mon commit dans manouvellebranche&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;git-merge&quot;&gt;Git Merge &lt;a class=&quot;direct-link&quot; href=&quot;#git-merge&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Une fois que notre feature est prête, il peut être intéressant de migrer le travail dans la branche &amp;quot;mère&amp;quot;. Dès lors nous allons pouvoir &amp;quot;merger&amp;quot;, il existe plusieurs façon de merger, soit on merge tout avec l&#39;historique de chaque commit dans la branche &amp;quot;mère&amp;quot;, soit on merge sans l&#39;historique, rassembler dans un seul commit, je préfère cette option afin de ne pas polluer l&#39;historique de la branche de &amp;quot;production&amp;quot; :&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# ajoutons quelques fichiers dans la branche manouvellebranche&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;touch&lt;/span&gt; toto&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;.txt&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; toto*&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; commit -m &lt;span class=&quot;token string&quot;&gt;&quot;adding 100 files&quot;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Ensuite, changeons de branche puis effectuons un merge, simple (le moins bien):&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; checkout master&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; merge manouvellebranch&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Et si je me suis trompé ?&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# d&#39;abord on vérifie l&#39;id du commit : (-B permets de récupéré 6 lignes de avant le contexte, -A la meme chose mais apres le contexte)&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; log &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;grep&lt;/span&gt; -B &lt;span class=&quot;token number&quot;&gt;6&lt;/span&gt; -A &lt;span class=&quot;token number&quot;&gt;6&lt;/span&gt; adding&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;commit 126d0fe758ebb8b7c155d58968063edec996a673&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Author: Etienne Deneuve &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&lt;/span&gt;lt&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;etienne.deneuve@cellenza.com&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Date: Thu Jun &lt;span class=&quot;token number&quot;&gt;28&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;13&lt;/span&gt;:07:27 &lt;span class=&quot;token number&quot;&gt;2018&lt;/span&gt; +0200&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;adding &lt;span class=&quot;token number&quot;&gt;100&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;file&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;commit c9323cb10debb1a0a028f9e7db65a622fb8906a1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Author: Etienne Deneuve &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&lt;/span&gt;lt&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;etienne.deneuve@cellenza.com&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Date: Thu Jun &lt;span class=&quot;token number&quot;&gt;28&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;12&lt;/span&gt;:27:02 &lt;span class=&quot;token number&quot;&gt;2018&lt;/span&gt; +0200&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;mon commit dans manouvellebranche&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# puis on annule notre commit en prenant celui juste avant notre erreur :&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; reset c9323cb10debb1a0a028f9e7db65a622fb8906a1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; status&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;On branch master&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;nothing to commit, working tree clean&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Cela tombe, bien nous allons pouvoir faire le deuxième merge (le mieux):&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; checkout master&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; merge --squash manouvellebranch&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; status&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;On branch master&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;Changes to be committed:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;use &lt;span class=&quot;token string&quot;&gt;&quot;git reset HEAD ...&quot;&lt;/span&gt; to unstage&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;new file: toto00.txt&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;new file: toto99.txt&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# dès lors, nous devons commiter:&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; commit -m &lt;span class=&quot;token string&quot;&gt;&quot;oui, c&#39;est bon on y va !&quot;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Voilà, vous savez maintenant utiliser les bases de git, je vous invite à poursuivre avec &lt;a href=&quot;https://etienne.deneuve.xyz/2018/06/26/setup-vs-code-bash-git/&quot;&gt;Open Source + Windows = VS Code + Bash + Git&lt;/a&gt;.&lt;/p&gt;
 </content>
 	</entry>
 	
@@ -1682,6 +1574,151 @@ Le chiffre de gauche correspond aux modifications distante (vos collègues), cel
 &lt;h1 id=&quot;conclusion&quot;&gt;Conclusion &lt;a class=&quot;direct-link&quot; href=&quot;#conclusion&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
 &lt;p&gt;Désormais, vous avez un beau Projet VSTS, cloner en local, et vous savez envoyer vos fichiers dans le repository git distant. Nous allons pouvoir passer a la suite !&lt;/p&gt;
 &lt;p&gt;N&#39;hésitez pas à commenter ou à me contacter en cas de soucis avec ces deux premières parties !&lt;/p&gt;
+</content>
+	</entry>
+	
+	<entry>
+		<title>Azure Devops</title>
+		<link href="/2017/10/09/azure-devops/"/>
+		<updated>2017-10-09T20:30:55+02:00</updated>
+		<id>/2017/10/09/azure-devops/</id>
+		<content type="html">&lt;p&gt;This post is a traduction of &lt;a href=&quot;&quot;&gt;Vsts For Ops&lt;/a&gt;&lt;br&gt;
+Dans cet article, je vous détaille la partie (cachée) de ma démo lors de ma session au Microsoft Expérience 17 avec Stanislas Quastana. Le but de cet article est de préparer le terrain pour les articles suivants. Les prochains arriverons rapidement, avec dans l&#39;idée, de vous aider à mieux appréhendez le CI/CD en tant qu&#39;OPS, pour des sujets qui nous concernent, l&#39;infra as code.&lt;/p&gt;
+&lt;p&gt;Voici le chemin que nous allons suivre :&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Préparation de l&#39;environnement [nous sommes ici]&lt;/li&gt;
+&lt;li&gt;Préparation d&#39;une image de base Linux&lt;/li&gt;
+&lt;li&gt;Préparation d&#39;une image de base Windows&lt;/li&gt;
+&lt;li&gt;Utilisation des images de base pour les spécialiser, afin de les rendre &amp;quot;Immutables&amp;quot;&lt;/li&gt;
+&lt;li&gt;Déploiement d&#39;image en CI/CD avec Packer et Terraform depuis VSTS&lt;br&gt;
+Nous utiliserons des technologies Microsoft (VSTS, Azure, Windows Server...) mais aussi HashiCorp (Packer, Terraform) ainsi que des technologies Open Source (Linux..). Il n&#39;est normalement pas nécessaire d’être, ni un maître du cloud, ni un demi dieu de l&#39;infra as code pour suivre cette mini séries de 4 articles.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&quot;cr%C3%A9ation-des-comptes-n%C3%A9cessaire&quot;&gt;Création des comptes nécessaire &lt;a class=&quot;direct-link&quot; href=&quot;#cr%C3%A9ation-des-comptes-n%C3%A9cessaire&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;Il faut créer un compte sur Visual Studio Team Services &lt;a href=&quot;https://go.microsoft.com/fwlink/?LinkId=307137&quot;&gt;ici&lt;/a&gt; et un compte Azure &lt;a href=&quot;https://azure.microsoft.com/fr-fr/offers/ms-azr-0044p/&quot;&gt;ici&lt;/a&gt;.&lt;/p&gt;
+&lt;h1 id=&quot;cr%C3%A9ation-du-workspace-vsts&quot;&gt;Création du Workspace VSTS &lt;a class=&quot;direct-link&quot; href=&quot;#cr%C3%A9ation-du-workspace-vsts&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
+&lt;h2 id=&quot;cr%C3%A9ation-du-projet&quot;&gt;Création du Projet &lt;a class=&quot;direct-link&quot; href=&quot;#cr%C3%A9ation-du-projet&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://%7Bvotrenomavous%7D.visualstudio.com/_projects?_a=new&quot;&gt;https://{votrenomavous}.visualstudio.com/_projects?_a=new&lt;/a&gt;&lt;br&gt;
+Indiquez le nom que vous souhaitez et sélectionnez Git comme &amp;quot;Version Control&amp;quot; :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-1-1.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;initialisation-du-repository&quot;&gt;Initialisation du repository &lt;a class=&quot;direct-link&quot; href=&quot;#initialisation-du-repository&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-2-1.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;c&#39;est-pr%C3%AAt&quot;&gt;C&#39;est prêt &lt;a class=&quot;direct-link&quot; href=&quot;#c&#39;est-pr%C3%AAt&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-3-1.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Voila, 3 étapes, notre premier projet est &amp;quot;prêt&amp;quot;.&lt;/p&gt;
+&lt;h1 id=&quot;pr%C3%A9paration-de-l&#39;agent-pour-vsts&quot;&gt;Préparation de l&#39;Agent pour VSTS &lt;a class=&quot;direct-link&quot; href=&quot;#pr%C3%A9paration-de-l&#39;agent-pour-vsts&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
+&lt;h2 id=&quot;pr%C3%A9paration-de-la-vm&quot;&gt;Préparation de la VM &lt;a class=&quot;direct-link&quot; href=&quot;#pr%C3%A9paration-de-la-vm&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Dans Azure, avec le &lt;a href=&quot;https://github.com/Azure/azure-quickstart-templates/tree/master/101-vm-simple-linux&quot;&gt;template suivant&lt;/a&gt;, déployez une vm Ubuntu basique.&lt;br&gt;
+Installez les prérequis de l&#39;agent VSTS via les commandes suivantes :&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;apt-get&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; -y libunwind8 libcurl3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; apt-add-repository ppa:git-core/ppa&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;apt-get&lt;/span&gt; update&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;apt-get&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;apt-get&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; libcurl4-openssl-dev&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;installation-de-l&#39;agent&quot;&gt;Installation de l&#39;agent &lt;a class=&quot;direct-link&quot; href=&quot;#installation-de-l&#39;agent&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;h3 id=&quot;pr%C3%A9paration-dans-vsts&quot;&gt;Préparation dans VSTS &lt;a class=&quot;direct-link&quot; href=&quot;#pr%C3%A9paration-dans-vsts&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Accédez à la partie sécurité &lt;a href=&quot;https://%7Bvotrenomavous%7D.visualstudio.com/_details/security/tokens&quot;&gt;https://{votrenomavous}.visualstudio.com/_details/security/tokens&lt;/a&gt; et créer un PAT (Personnal Access Tokens).&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Attention, c&#39;est comme un mot de passe, il ne faut pas le diffuser. (Keepass, LastPass et autres peuvent les stocker correctement!).&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Dans notre cas, l&#39;agent devra avoir les droits Agent Pools et Deployment Group, car nous n&#39;utiliserons qu&#39;un seul agent. En prod, séparez-les !&lt;/p&gt;
+&lt;h3 id=&quot;installation-de-l&#39;agent-2&quot;&gt;Installation de l&#39;agent &lt;a class=&quot;direct-link&quot; href=&quot;#installation-de-l&#39;agent-2&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;wget&lt;/span&gt; https://github.com/Microsoft/vsts-agent/releases/download/v2.123.0/vsts-agent-ubuntu.16.04-x64-2.123.0.tar.gz -O vsts-agent-ubuntu.16.04-x64-2.123.0.tar.gz&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;mkdir&lt;/span&gt; agent &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&lt;/span&gt;amp&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&amp;amp;&lt;/span&gt;amp&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; agent&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;tar&lt;/span&gt; -xvf &lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;/vsts-agent-ubuntu.16.04-x64-2.123.0.tar.gz&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;./config.sh&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Répondez aux questions&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; ./svc.sh &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; ./svc.sh start&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Pour plus d&#39;info sur l&#39;&lt;a href=&quot;https://docs.microsoft.com/fr-fr/vsts/build-release/actions/agents/v2-linux&quot;&gt;agent VSTS&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;v%C3%A9rification-dans-vsts&quot;&gt;Vérification dans VSTS &lt;a class=&quot;direct-link&quot; href=&quot;#v%C3%A9rification-dans-vsts&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Si vous accédez à l&#39;url &lt;a href=&quot;https://%7Bvotrenomavous%7D.visualstudio.com/_admin/_AgentPool&quot;&gt;https://{votrenomavous}.visualstudio.com/_admin/_AgentPool&lt;/a&gt; vous devriez voir que votre agent est en vert !&lt;br&gt;
+&lt;img src=&quot;/images/2017/10/Capture-Agent-Pool.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;h1 id=&quot;introduction&quot;&gt;Introduction &lt;a class=&quot;direct-link&quot; href=&quot;#introduction&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;Avant de foncer dans le code de notre infra, nous allons devoir réflechir à l&#39;organisation de nos dossier de &amp;quot;Code&amp;quot;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/mirror-frame-2407289_960_720-195x300.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Ok, maintenant qu&#39;on à réflechi, on y va !&lt;/p&gt;
+&lt;p&gt;Nous allons générer deux images de base Ubuntu et Windows Server, utiliser des scripts &amp;quot;commun&amp;quot; et des scripts spécifiques, puis spécialiser nos images.&lt;/p&gt;
+&lt;h1 id=&quot;let&#39;s-git&quot;&gt;Let&#39;s Git &lt;a class=&quot;direct-link&quot; href=&quot;#let&#39;s-git&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
+&lt;h2 id=&quot;dolly%2C-ou-clone%2C-comme-vous-voulez&quot;&gt;Dolly, ou Clone, comme vous voulez &lt;a class=&quot;direct-link&quot; href=&quot;#dolly%2C-ou-clone%2C-comme-vous-voulez&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Ouvrez donc Visual Studio Code (&lt;a href=&quot;https://etienne.deneuve.xyz/2017/01/26/visual-studio-code-pour-ansible-terraform/&quot;&gt;Quoi ? Il est pas déjà installé?&lt;/a&gt;) et ajoutez votre repository Git VSTS dans VS Code (Vous devez installer &lt;a href=&quot;http://lmgtfy.com/?q=install+git&quot;&gt;Git&lt;/a&gt; sur votre poste avant).&lt;/p&gt;
+&lt;p&gt;C&#39;est assez simple, cliquez sur &amp;quot;Clone Git Repository&amp;quot;:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Git-Clone-300x217.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Récupérez l&#39;url de votre repository dans VSTS :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Git-Clone-2-1.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Puis collez le dans la barre de VS code :&lt;br&gt;
+&lt;img src=&quot;/images/2017/10/Git-Clone-3.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Entrez votre destination, par exemple c:\Users\vous\Documents\git (la racine, le dossier sera créer automatiquement) , puis indiquez vos credentials VSTS, et enfin lorsque le clone est terminé, cliquez sur &amp;quot;Open This repository&amp;quot;:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Git-Clone-4.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Félicitations, vous avez réussi a cloner votre git vsts sur votre poste!&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Ouais, mais moi j&#39;y comprends rien à Git, j&#39;vais jamais m&#39;en sortir !&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;git%2C-comment-%C3%A7a-marche&quot;&gt;Git, comment ça marche &lt;a class=&quot;direct-link&quot; href=&quot;#git%2C-comment-%C3%A7a-marche&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Bon, on va faire simple, Git en usage basique comme on va le faire, ce n&#39;est que quelques opérations :&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Git clone -&amp;gt; On récupère un git distant sur notre poste de travail&lt;/li&gt;
+&lt;li&gt;Git Add -&amp;gt; on ajoute les fichiers dans le git &amp;quot;local&amp;quot;&lt;/li&gt;
+&lt;li&gt;Git Commit -&amp;gt; on valide nos modification (en local)&lt;/li&gt;
+&lt;li&gt;Git pull -&amp;gt; on va chercher les modifications coté remote&lt;/li&gt;
+&lt;li&gt;Git push -&amp;gt; on pousse nos modifciation vers remote&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Vous inquiétez pas, VS Code va faire beaucoup à notre place !&lt;/p&gt;
+&lt;h2 id=&quot;cr%C3%A9ation-des-dossiers&quot;&gt;Création des dossiers &lt;a class=&quot;direct-link&quot; href=&quot;#cr%C3%A9ation-des-dossiers&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Il faut quand même savoir une petite chose de plus, Git ne gère pas les dossiers vide, il faut donc créer un petit fichier &lt;a href=&quot;http://readme.md&quot;&gt;readme.md&lt;/a&gt; pour les synchroniser correctement.&lt;br&gt;
+Pour créer les dossiers, soit vous le faite en &amp;quot;graphique&amp;quot; :&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/addfolder-1.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Soit via le terminal intégrer avec vos commandes préférées (View -&amp;gt; Integrated Terminal).&lt;/p&gt;
+&lt;p&gt;Personnellement j&#39;ai créer 4 dossiers à la racine  : scripts, windows, ubuntu et specialized, puis dans les dossiers Windows et Ubuntu un sous-dossier scripts. dans chacun de ces dossiers ajouter donc un fichier vide &lt;a href=&quot;http://readme.md&quot;&gt;readme.md&lt;/a&gt; (et sauvegardez-les). Vous verrez plus tard le &amp;quot;pourquoi&amp;quot; cette arborescence :).&lt;/p&gt;
+&lt;h2 id=&quot;commit&quot;&gt;Commit &lt;a class=&quot;direct-link&quot; href=&quot;#commit&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Maintenant on va &amp;quot;commit&amp;quot; nos modifications en cliquant sur les boutons (et en écrivant le pourquoi du commit :)) :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Git-Commit.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Youpi! votre premier commit ! (c’était dur?)&lt;/p&gt;
+&lt;h2 id=&quot;push&quot;&gt;Push &lt;a class=&quot;direct-link&quot; href=&quot;#push&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Avec notre premier commit, en bas de notre fenêtre VS Code, nous avons désormais un commit à envoyer :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Push.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Le chiffre de gauche correspond aux modifications distante (vos collègues), celui de droite, les locales (les votre quoi :))&lt;/p&gt;
+&lt;p&gt;Pour savoir ce qui se passe, ouvre la console &amp;quot;Output&amp;quot; (View, Output, puis sélectionnez Git dans le menu déroulant à gauche)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Git-Push.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Allez dans VSTS sur votre navigateur, vous avez tous vos fichiers qui se trouvent désormais sur le Server.&lt;/p&gt;
+&lt;h1 id=&quot;introduction-2&quot;&gt;Introduction &lt;a class=&quot;direct-link&quot; href=&quot;#introduction-2&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;Voici un petit récapitulatif ce qu&#39;on aimerait :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Packer.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Vous devez créer deux comptes de stockage dans Azure vous même, un de &amp;quot;Production&amp;quot; et un &amp;quot;Eval&amp;quot; vous pouvez le faire avec Azure Cloud Shell depuis le portail Azure :&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;#create resource group&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;az group create -l westeurope -n vstsforops&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;#create storage account&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;az storage account create -n sto0eval -g vstsforops -l westeurope --sku Standard_LRS&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;az storage account create -n sto0prod -g vstsforops -lwesteurope --sku Standard_LRS&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Du coup je vous ai déjà préparer les éléments histoire de ne pas perdre de temps sur la construction des templates packer. Récupérez l&#39;archive ici : &lt;a href=&quot;https://github.com/EtienneDeneuve/vsts-for-ops/archive/master.zip&quot;&gt;Download ZIP&lt;/a&gt;, puis copiez les fichiers dans votre répertoire que vous avez cloné la fois dernière. J&#39;ai fais quelques modifications sur la hiérarchie des dossiers afin que ça soit plus évolutif dans le temps, nous y reviendrons plus tard.&lt;/p&gt;
+&lt;p&gt;Le fichier packer qui nous intéresse est dans le dossier /storage/windows/base/windows_base_packer.json, il est tout a fait standard, comme ceux que Stanislas détaille &lt;a href=&quot;https://github.com/squasta/PackerAzureRM&quot;&gt;ici&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Vous noterez peut être que j&#39;ai ajouté un provisionner &amp;quot;windows-update&amp;quot; :&lt;/p&gt;
+&lt;pre class=&quot;language-json&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;provisioners&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;windows-update&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Celui n&#39;est pas standard, vous devez le mettre dans le même répertoire que votre exécutable packer, il est téléchargeable à &lt;a href=&quot;https://github.com/rgl/packer-provisioner-windows-update/releases&quot;&gt;l&#39;adresse suivante&lt;/a&gt; mais je l&#39;ai aussi inclus dans mon repository git au passage nous allons également mettre la dernière version de Packer. Ces actions sont à faire sur la machine &amp;quot;Agent&amp;quot; de &lt;a href=&quot;https://etienne.deneuve.xyz/2017/10/09/vsts-for-ops-1/&quot;&gt;vsts-for-ops-1&lt;/a&gt; :&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;apt&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;unzip&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;wget&lt;/span&gt; https://github.com/rgl/packer-provisioner-windows-update/releases/download/v0.4.0/packer-provisioner-windows-update-linux.tgz&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;wget&lt;/span&gt; https://releases.hashicorp.com/packer/1.1.0/packer_1.1.0_linux_amd64.zip&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;tar&lt;/span&gt; -xvf ./packer-provisioner-windows-update-linux.tgz&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;unzip&lt;/span&gt; packer_1.1.0_linux_amd64.zip&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;mv&lt;/span&gt; ./packer-provisioner-windows-update-windows /usr/local/bin/&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;mv&lt;/span&gt; ./packer /usr/local/bin/&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Si vous n&#39;avez pas installé azure cli et l&#39;agent, vous pouvez aussi utiliser ce script sur votre vm agent:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://raw.githubusercontent.com/EtienneDeneuve/vsts-for-ops/master/scripts/platform/agent/prepare_vm.sh&quot;&gt;Script&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&quot;bon-et-la-build&quot;&gt;Bon et La build &lt;a class=&quot;direct-link&quot; href=&quot;#bon-et-la-build&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;Ouvrez VSTS :&lt;/p&gt;
+&lt;p&gt;puis cliquez sur &amp;quot;build &amp;amp; release&amp;quot; :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/Sans-titre.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Puis sur &amp;quot;+ New&amp;quot;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-1.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Puis sur &amp;quot;Empty process&amp;quot;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-2.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Puis complétez le champs &amp;quot;Name&amp;quot; avec par exemple &amp;quot;Packer-Base-Windows 2012 R2&amp;quot;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-3.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Dans la Phase 1 nous allons ajouter deux étape &amp;quot;build immutable image&amp;quot; et &amp;quot;azure cli&amp;quot; :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-4.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Renseignez les variables telles que ci dessous :&lt;/p&gt;
+&lt;p&gt;Packer Template : &amp;quot;User Provided&amp;quot;&lt;/p&gt;
+&lt;p&gt;Packer template location, naviguer vers &amp;quot;storage/Windows/base/windows_base_packer.json&amp;quot;&lt;/p&gt;
+&lt;p&gt;Dans le template parameters (je suis sympa, copiez collez ca :):&lt;/p&gt;
+&lt;pre class=&quot;language-json&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;client_id&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_CLIENT_ID)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;client_secret&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_CLIENT_SECRET)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;resource_group_name&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_RESOURCE_GROUP_NAME)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;storage_account&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_STORAGE_ACCOUNT)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;subscription_id&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_SUBSCRIPTION_ID)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;object_id&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_OBJECT_ID)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;tenant_id&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_TENANT_ID)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;windows_sku&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(WINDOWS_SKU)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;build_resquestfor&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(BUILD_REQUESTEDFOR)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;location&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_LOCATION)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;vm_size&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(ARM_VM_SIZE)&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;capture_name&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;$(CAPTURE_NAME)&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Puis, dans &amp;quot;Output&amp;quot;, renseigner IMAGEURI :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-5.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Ajoutez maintenant une tâche &amp;quot;Azure CLI&amp;quot; :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-6.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Sélectionnez votre souscription azure (si elle n&#39;est pas dans la liste, cliquez sur manage et ajoutez la) et indiquez le chemin vers le script bash &amp;quot;script/platform/tasks/az-move-vhd.vhd&amp;quot; et ajoutez les arguments &amp;quot;-d &amp;quot;$(DESTACCOUNTKEY)&amp;quot; -s &amp;quot;$(SOURCEACCOUNTKEY)&amp;quot;&amp;quot;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-7.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Une fois que ces deux tâches sont complétées, nous allons déclarer nos variables (si vous ne savez pas comment les récupérées, suivez le guide sur le dépôt git de Stanislas plus haut) :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-8.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Vous remarquerez que certaines sont masquées, rien de bien compliqué, cliquez sur le cadenas et elle sera &amp;quot;protégée&amp;quot; :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/vsts-create-9.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Dans l’idéal, les variables a protégées seraient : ARM_CLIENT_SECRET, ARM_SUBSCRIPTION_ID, ARM_TENANT_ID, DESTACCOUNTKEY, SOURCEACCOUNTKEY mais pour des questions de simplifications dans cet exercices, nous ne protégerons que les clés du compte de stockage, nous corrigerons par la suite.&lt;/p&gt;
+&lt;p&gt;Pour récupérer les clés des comptes de stockage sélectionnez votre compte de stockage dans le resource group que vous avez créer et allez dans &amp;quot;Access Keys&amp;quot; :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/storage-account-key.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+Ensuite, comme nous allons construire des images Packer Windows, il y a des chances pour que la build dure plus d&#39;une heure (Mise à jour etc) donc dans les options de la build nous allons passer le time out de la build a 240 minutes :&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2017/10/timeout-e1508918816983.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Cliquez maintenant sur &amp;quot;Save &amp;amp; Queue&amp;quot;.&lt;/p&gt;
+&lt;p&gt;Votre build est maintenant lancé.&lt;/p&gt;
 </content>
 	</entry>
 	

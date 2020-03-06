@@ -62,6 +62,11 @@
   </url>
   
   <url>
+    <loc>/2017/10/09/azure-devops/</loc>
+    <lastmod>2017-10-09</lastmod>
+  </url>
+  
+  <url>
     <loc>/2017/10/13/vsts-for-ops-2/</loc>
     <lastmod>2017-10-13</lastmod>
   </url>
@@ -99,11 +104,6 @@
   <url>
     <loc>/2018/06/26/documentation-as-code/</loc>
     <lastmod>2018-06-26</lastmod>
-  </url>
-  
-  <url>
-    <loc>/2018/06/28/git-pour-les-ops-par-un-ops-le-retour/</loc>
-    <lastmod>2018-06-28</lastmod>
   </url>
   
   <url>
@@ -157,7 +157,7 @@
   </url>
   
   <url>
-    <loc>/tags/Linux/</loc>
+    <loc>/tags/Azure Cli/</loc>
     <lastmod>2020-02-28</lastmod>
   </url>
   
