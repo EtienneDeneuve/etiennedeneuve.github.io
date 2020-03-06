@@ -250,7 +250,7 @@
     
   "tags" : "Azure,Powershell" },
   
-  { "title": "[Update] Azure Cloud Shell &amp;#8211; Pleins de nouveautés ! (Et du gros) &amp;#8211; Powershell is Coming !", "date" : "Sep 25, 2017",
+  { "title": "Azure Cloud Shell &amp;#8211; Pleins de nouveautés ! (Et du gros) &amp;#8211; Powershell is Coming !", "date" : "Sep 25, 2017",
   "summary" : "Bonjour à tous,&lt;br /&gt; Si vous utilisez Azure, il y a de grandes chances que vous ayez aperçu Cloud Shell. Ce qui est moins sur c&#39;est que vous ayez vu que pas mal de petits outils on été récemment intégrés !![](/images/2017/09/cloudshell-containers.png)&lt;br /&gt; ",
   
 
@@ -265,7 +265,7 @@
     
   "tags" : "Azure,French" },
   
-  { "title": "[update] Project Honolulu Public Preview &amp;#8211; Mon retour", "date" : "Sep 24, 2017",
+  { "title": "Project Honolulu Public Preview &amp;#8211; Mon retour", "date" : "Sep 24, 2017",
   
   
 
