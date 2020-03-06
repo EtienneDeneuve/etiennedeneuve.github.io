@@ -134,7 +134,25 @@
   
   
   "url": "/2018/06/23/git-pour-ops-par-un-ops/",
-  "tags" : "" },
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  "tags" : "Infra as Code,Visual Studio Code,Git,macOs,Windows,French" },
   
   { "title": "Terraform: Providers à connaître, DataSource à redécouvrir !", "date" : "Apr 06, 2018",
   "summary" : " Terraform&lt;br /&gt;  Avant de &amp;quot;coder&amp;quot;&lt;br /&gt; Je ne vous présente pas à nouveau Terraform, je l&#39;ai déjà fait [ici](https://etienne.deneuve.xyz/2017/10/01/microsoft-experience-17-infrastructure-code-modelisez-et-provisionnez-vos-services-azure-avec-terraform-et-packer/), [ici](https://stanislas.io/2017/01/24/infrastructure-dans-azure-c-est-comme-du-lego-slides-et-ressources-utiles/) ou sinon sur mon [github](https://github.com/etiennedeneuve/Azure/tree/master/Terraform). Je vous invite également à regarder la [vidéo](https://stanislas.io/2017/09/18/video-infrastructure-as-code-dans-azure-avec-terraform/) de Stanislas Quastana.&lt;br /&gt; ",
@@ -154,24 +172,6 @@
   "url": "/2018/03/28/os-factory-azure-et-aws/",
   "tags" : "" },
   
-  { "title": "Microsoft Expérience 17 – VSTS For OPS part 3 !", "date" : "Oct 25, 2017",
-  "summary" : "Dans cet article, je vous détaille la partie (cachée) de ma démo lors de ma session au Microsoft Expérience 17 avec Stanislas Quastana. Le but de cet article est de créer notre première build ! Les prochains arriveront rapidement, avec dans l’idée, de vous aider à mieux appréhender le CI/CD en tant qu’OPS, pour des sujets qui nous concernent, l’infra as code.&lt;br /&gt; ",
-  
-
-  
-  
-  "url": "/2017/10/25/vsts-for-ops-part-3/",
-  "tags" : "" },
-  
-  { "title": "Microsoft Expérience 17 – VSTS For OPS part 2 !", "date" : "Oct 13, 2017",
-  "summary" : "Dans cet article, je vous détaille la partie (cachée) de ma démo lors de ma session au Microsoft Expérience 17 avec Stanislas Quastana. Le but de cet article est de préparer les éléments nécessaire a notre usine à images systèmes. Les prochains arriverons rapidement, avec dans l&#39;idée, de vous aider à mieux appréhendez le CI/CD en tant qu&#39;OPS, pour des sujets qui nous concernent, l&#39;infra as code.&lt;br /&gt; ",
-  
-
-  
-  
-  "url": "/2017/10/13/vsts-for-ops-2/",
-  "tags" : "" },
-  
   { "title": "Azure Devops", "date" : "Oct 09, 2017",
   "summary" : "This post is a traduction of [Vsts For Ops]()&lt;br /&gt; Dans cet article, je vous détaille la partie (cachée) de ma démo lors de ma session au Microsoft Expérience 17 avec Stanislas Quastana. Le but de cet article est de préparer le terrain pour les articles suivants. Les prochains arriverons rapidement, avec dans l&#39;idée, de vous aider à mieux appréhendez le CI/CD en tant qu&#39;OPS, pour des sujets qui nous concernent, l&#39;infra as code.&lt;br /&gt; ",
   
@@ -188,7 +188,28 @@
   
   
   "url": "/2017/10/09/vsts-for-ops-1/",
-  "tags" : "" },
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  "tags" : "Infra as Code,Visual Studio Code,Ansible,Terraform,macOs,Windows,French" },
   
   { "title": "Azure Powershell &amp;#8211; Nettoyer les Tags", "date" : "Sep 27, 2017",
   "summary" : "Quand on fait de l&#39;Azure, il peut arriver qu&#39;on souhaite nettoyer les Tags, pour de multiples raisons.&lt;br /&gt; ",
