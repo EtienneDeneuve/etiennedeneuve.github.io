@@ -1,0 +1,30 @@
+{
+  "short_name": "XYZ",
+  "name": "XYZ Blog",
+  "theme_color": "#eb5252",
+  "background_color": "#2a2d33",
+  "display": "fullscreen",
+  "Scope": "/",
+  "orientation": "portrait",
+  "start_url": "/?source=pwa",
+  "icons": [{
+      "src": "/images/xyz-192.svg",
+      "type": "image/svg",
+      "sizes": "192x192",
+      "purpose": "any"
+
+    },
+    {
+      "src": "/images/xyz-512.svg",
+      "type": "image/svg",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/xyz-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    }
+  ]
+}

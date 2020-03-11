@@ -28,107 +28,107 @@ workbox.core.clientsClaim();
 self.__precacheManifest = [
   {
     "url": "2015/12/16/get-nexttrain/index.html",
-    "revision": "4d5c33997ba6134ad6a59cb51f817585"
+    "revision": "b04e82ba463fa26cfb2823624dc0b518"
   },
   {
     "url": "2016/01/15/get-ink-level-from-hp-printers-in-powershell/index.html",
-    "revision": "1bc8087eb6b60abcbaa61429fbb21043"
+    "revision": "b470d90f3b3e633f3b870fbc0af26cfb"
   },
   {
     "url": "2017/01/26/visual-studio-code-pour-ansible-terraform/index.html",
-    "revision": "b95be6b0bba0a796911ef7d9ccd0cbdd"
+    "revision": "38e5de3c13f241d7fb6b252686014e1a"
   },
   {
     "url": "2017/02/02/installation-de-nginx-en-reverse-proxy-avec-reecriture-du-html/index.html",
-    "revision": "f98f0e1649b8e3aa080ce1ea871dbe90"
+    "revision": "bb9008e0c982a9e9ca6e81750b806f9b"
   },
   {
     "url": "2017/03/14/azure-et-le-backup-dun-mac/index.html",
-    "revision": "6529be5e8eec7a24c353b1edfb3d4f06"
+    "revision": "4c6b22c638d80558dfddc176ba14eb75"
   },
   {
     "url": "2017/04/25/azure-networking-tp-part-1/index.html",
-    "revision": "cd95e83aac60993874a9ed0325813b99"
+    "revision": "9e23404b394c2fe9ebae4476d296db59"
   },
   {
     "url": "2017/09/24/project-honolulu-public-preview-mon-retour/index.html",
-    "revision": "93544ccc4d8017e41b27477c440bd553"
+    "revision": "0d54f0057c3d91c1da1eb7e05b026cc3"
   },
   {
     "url": "2017/09/25/azure-cloud-shell-pleins-de-nouveautes-et-du-gros/index.html",
-    "revision": "9711c255fb8c6f5eec399ecd0d032e56"
+    "revision": "24f15af58060a8c354268f20fbe7332b"
   },
   {
     "url": "2017/09/26/azurepscmdnotfound/index.html",
-    "revision": "d183c0435263991034893fd9ebf7e4a8"
+    "revision": "c69e818146711ac3cc3ad54d6d2716ac"
   },
   {
     "url": "2017/09/27/azure-powershell-nettoyer-les-tags/index.html",
-    "revision": "d03f8f6749cbf191405601a7e680bfb2"
+    "revision": "d13441462af667858d72a5079cb3c95b"
   },
   {
     "url": "2017/09/27/frpsug-powershell-saturday-et-contenu-de-la-session-de-lutile-ou-pas/index.html",
-    "revision": "96fa294e84bfb9c461e735ee872b8a0c"
+    "revision": "ce04c85000f258a7efc43ba29c878d75"
   },
   {
     "url": "2017/10/09/azure-devops/index.html",
-    "revision": "3b2fb331e139ec754594facf656b8b88"
+    "revision": "10bfcfb96a93d32e0cc6e4dce517d800"
   },
   {
     "url": "2017/10/09/vsts-for-ops-1/index.html",
-    "revision": "dd3b495eb57de496d617c228149fdcc4"
+    "revision": "cf530da535e30bb81e0a56b6242c526c"
   },
   {
     "url": "2018/03/28/os-factory-azure-et-aws/index.html",
-    "revision": "4b00f3e50f57bb6ec0275e468509abd1"
+    "revision": "7963f6c79fe2f7d3188e0d3ea1ab0d45"
   },
   {
     "url": "2018/04/06/terraform-providers-datasource/index.html",
-    "revision": "b22e86f892639678702b17b5eb63d0c0"
+    "revision": "35289e563fc5aec9ceee6a4c4d875eec"
   },
   {
     "url": "2018/06/23/git-pour-ops-par-un-ops/index.html",
-    "revision": "589c6397b295014358551362eb6ffc39"
+    "revision": "43bf526c77adcc7d9a704c7933840360"
   },
   {
     "url": "2018/06/26/documentation-as-code/index.html",
-    "revision": "275adbb5f9a716a5330bb186e77accdd"
+    "revision": "278bd21f37adf719e6c8dfd03ee7a09b"
   },
   {
     "url": "2018/06/26/setup-vs-code-bash-git/index.html",
-    "revision": "5be874ca067b3f484e58974cc430db75"
+    "revision": "75e508776dbbe943026362e61ec0babf"
   },
   {
     "url": "2018/07/02/az-cli-20-tricks/index.html",
-    "revision": "a717218529360c8797c6f64388baea19"
+    "revision": "f1c265fae44d9f72e55e7b10220843da"
   },
   {
     "url": "2018/07/02/how-to-manage-dns-terraform/index.html",
-    "revision": "7d6bc9bc7f281f5fddc007d7e6e06e4f"
+    "revision": "f4de58fc1ac6f1706dbf9ab6f536e2f7"
   },
   {
     "url": "2018/12/05/adsk-in-a-breeze/index.html",
-    "revision": "b06bc4b25ec12d3778a98a33afc17d2d"
+    "revision": "6b23a2d1bcaf4a0af563d09437edc44d"
   },
   {
     "url": "2020/02/07/infra-testing-easy-path/index.html",
-    "revision": "814753ef33a32db8d422f2412cb93a6c"
+    "revision": "582384c4e94de33fd5b882a3b828b5bf"
   },
   {
     "url": "2020/02/25/terraform-azurerm-2/index.html",
-    "revision": "8ea8ebc0f0771cc9ae24c792a28436ce"
+    "revision": "5c3f9431caebbf88df49bfc8d15f5889"
   },
   {
     "url": "2020/03/05/teams-linux-webcam-error/index.html",
-    "revision": "bb49a75969c1f38c4c1c4fa8f74b1e86"
+    "revision": "1b802bce41732f9c3105fa19727fba46"
   },
   {
     "url": "404.html",
-    "revision": "bd4a360d73b19ded9ab85213b97bbce5"
+    "revision": "6a99cb866b8c14c86b8aba8bc1bf9d63"
   },
   {
     "url": "about/index.html",
-    "revision": "c7b85803dc0015154da687fc6ea2dbe1"
+    "revision": "7111712663326e06acfbf3dda47dad3d"
   },
   {
     "url": "css/style.css",
@@ -1527,12 +1527,32 @@ self.__precacheManifest = [
     "revision": "ccf4550b689c5428c6afe263374d28b8"
   },
   {
+    "url": "images/Fichier_.xyz_logo.svg",
+    "revision": "af77fc97f2328253010a181735242f40"
+  },
+  {
     "url": "images/search.svg",
     "revision": "55473c271992498166a1e0682f38d393"
   },
   {
+    "url": "images/xyz-192.png",
+    "revision": "8ea65373f738da0fed5fb0b4c2bd65e7"
+  },
+  {
+    "url": "images/xyz-192.svg",
+    "revision": "ac7def42b377f4c4a87bd47c65cde640"
+  },
+  {
+    "url": "images/xyz-512.svg",
+    "revision": "5b5198723eaae333284bd9f7668f6bc1"
+  },
+  {
+    "url": "images/XYZ.svg",
+    "revision": "9f5d6a56d2e6b6c010f3051d6b308d1d"
+  },
+  {
     "url": "index.html",
-    "revision": "30e68a8754ed2fa9a0a24be52faf0e48"
+    "revision": "31f453b2394f705095606adaa167204e"
   },
   {
     "url": "js/data.js",
@@ -1543,136 +1563,140 @@ self.__precacheManifest = [
     "revision": "17723de196ea6c0512b61171acab4976"
   },
   {
+    "url": "manifest.json",
+    "revision": "f4a3cbd089584373f5127e6bf5df5022"
+  },
+  {
     "url": "posts/0/index.html",
-    "revision": "5099c1b83e3e7e7ca1cb90870b160efc"
+    "revision": "525afe91de803e2772917b76483592ba"
   },
   {
     "url": "posts/1/index.html",
-    "revision": "6e2017b3594e1d36b8ee4cad9954782c"
+    "revision": "1c11faa7b5ef5d9e262708e1d4566b13"
   },
   {
     "url": "posts/2/index.html",
-    "revision": "c6b906cbe84f89ab758f3953459bc2fc"
+    "revision": "42cafb0265c300a36984ac11ddd1069b"
   },
   {
     "url": "privacy/index.html",
-    "revision": "96fc8699dd698bb14f68127b9c1c45c4"
+    "revision": "ea7e7cfd0c225cbb11f73da6ab36fbc3"
   },
   {
     "url": "tags/Ansible/index.html",
-    "revision": "25c44e0835632e5ecb6984717bf6933b"
+    "revision": "595a7f6e48a2bf93aa2405428288e684"
   },
   {
     "url": "tags/Azure Cli/index.html",
-    "revision": "540ffd0246e17f73eaf9cf48fcfa4dd3"
+    "revision": "d26f0f4bc15a7a70abbbfe5b28c24dc5"
   },
   {
     "url": "tags/Azure Devops/index.html",
-    "revision": "247590342ae9b24f6cbd5e243a5aca05"
+    "revision": "f73dfb019d751971847c14d1dc670b58"
   },
   {
     "url": "tags/Azure Stack/index.html",
-    "revision": "d3c3a4c25aa608afe9e87f1e906e2153"
+    "revision": "9954b9aa2f7431002221e33bf4b3812c"
   },
   {
     "url": "tags/Azure/index.html",
-    "revision": "9cf00d957c5a93001e228b3565f65732"
+    "revision": "fe0edb3452b0c08ab95a1960466399ff"
   },
   {
     "url": "tags/Cloud/index.html",
-    "revision": "9c248f5d8fe087b9ff61adc9d5e3272e"
+    "revision": "5e14d88d1f6e3fa1c5e9fa385fbb4e91"
   },
   {
     "url": "tags/English/index.html",
-    "revision": "62418b98c8545cec91eace02f3e610eb"
+    "revision": "25d39230cc7c8350e234d47bca8d1d68"
   },
   {
     "url": "tags/French/index.html",
-    "revision": "05dba76f9f27706a3a9da2c8153717d6"
+    "revision": "aedf83d6d0c1f43f6b8dd5b3b2f007b2"
   },
   {
     "url": "tags/Fun/index.html",
-    "revision": "607f36ef2390f53e7e6eacdae437cb6e"
+    "revision": "9d78d9bf51b6df1e8f38b9ec7844e4d4"
   },
   {
     "url": "tags/Git/index.html",
-    "revision": "01f663d46986cbd5a4d7b89a94f40d05"
+    "revision": "53a6287f364d2f721efd2378f3885cd3"
   },
   {
     "url": "tags/index.html",
-    "revision": "ac6844158c30bc53b912ae23a59898ef"
+    "revision": "e4583bfb206c0ea4074839d55a02b0e4"
   },
   {
     "url": "tags/Infra as Code/index.html",
-    "revision": "1c1ae1b6f917c30bc82fcc1a2d52048c"
+    "revision": "8d96ea117366ba8cd4ae47fecba0b6cc"
   },
   {
     "url": "tags/Linux/index.html",
-    "revision": "b2ebedf8ce6df88d2cb582726e3df937"
+    "revision": "ca5dd225325b231690b3a5477cc7d7c1"
   },
   {
     "url": "tags/macOs/index.html",
-    "revision": "1be7ef0a25ac21ce13c22b816523a245"
+    "revision": "36c719559fa566327862ecbd5b889c7c"
   },
   {
     "url": "tags/nav/index.html",
-    "revision": "15ac8bec63b076f8aa5567980a36724a"
+    "revision": "dea482e659d5e9c309c463ac966ee065"
   },
   {
     "url": "tags/Networking/index.html",
-    "revision": "e41b7644e28a188fff21f8e9b6b3b934"
+    "revision": "9dbb7ec82b12210c91d2d8d742b30a2d"
   },
   {
     "url": "tags/Nginx/index.html",
-    "revision": "59ae8738848d180a65d16bf3f1cca4be"
+    "revision": "3d7a51efedd63ad1b025c8160bf56095"
   },
   {
     "url": "tags/Powershell/index.html",
-    "revision": "5e1b69801a9a01c6f5776a3b277b074b"
+    "revision": "d2ed6c254516e79c239cc4a613dc4817"
   },
   {
     "url": "tags/PowerShell/index.html",
-    "revision": "f2c6a64c9f5eac6a82782d0da9477ffa"
+    "revision": "7ba32ef4954ed8f74c8fce519447e4b9"
   },
   {
     "url": "tags/Reverse Proxy/index.html",
-    "revision": "df2dad8d871f619b4ad7701ce8a06db1"
+    "revision": "0f39dc53574bcc172ecad39115b09938"
   },
   {
     "url": "tags/searchable/index.html",
-    "revision": "3ce4882b092d31aba41d0691ae3cd1e5"
+    "revision": "a7a2f3c8f09f1653b438badce725ad37"
   },
   {
     "url": "tags/tagList/index.html",
-    "revision": "3bc9a0e03a68fafbfa931c227c567e8a"
+    "revision": "fc33b36a6a294f43bea3e20aac73cd81"
   },
   {
     "url": "tags/Teams/index.html",
-    "revision": "e17e279583f6a84ca5fb06ba7fe6f5d6"
+    "revision": "3560b9d9d3ef07aeaa60a4293a2a7738"
   },
   {
     "url": "tags/Terraform/index.html",
-    "revision": "a70a2705b0fe746afe33212080d5e838"
+    "revision": "caf9655758108846b1a447bf9a6bbe6e"
   },
   {
     "url": "tags/Tests/index.html",
-    "revision": "cce07403a9265710564f08ddc2fe7a44"
+    "revision": "ed0f867a022f89fc1758abf28396da28"
   },
   {
     "url": "tags/Tips &amp; Tricks/index.html",
-    "revision": "d72127b196259c5da2605189cb262d9f"
+    "revision": "df5abe99def6c8842db7dbe4f07629bc"
   },
   {
     "url": "tags/updated/index.html",
-    "revision": "a662cea4cadb239ffd37b8efd091a563"
+    "revision": "4eaa350fbc4b565de83ea9dd673d99f2"
   },
   {
     "url": "tags/Visual Studio Code/index.html",
-    "revision": "8386dad2cbf729b7bea5726a76d2ca28"
+    "revision": "dcc07a3dbffbeaad23e12e0012ad5238"
   },
   {
     "url": "tags/Windows/index.html",
-    "revision": "d3c0042add9701dc2f945b0f2300e5a0"
+    "revision": "e3b0688369b6c0deadd0f608e6eb21e6"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});

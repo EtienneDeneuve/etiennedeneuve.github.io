@@ -1,0 +1,24 @@
+<svg width="512px" height="512px" xmlns="http://www.w3.org/2000/svg" viewBox="154.914990234375 9.197509765625 190.17001953125 131.60498046875" style="background: rgb(34, 34, 34);" preserveAspectRatio="xMidYMid">
+	<defs>
+		<filter id="editing-jagged" x="-100%" y="-100%" width="300%" height="300%">
+			<feTurbulence result="turb" baseFrequency="0.46" numOctaves="1" seed="1">
+			</feTurbulence>
+			<feDisplacementMap in="SourceGraphic" in2="turb" scale="11.5">
+			</feDisplacementMap>
+		</filter>
+	</defs>
+	<g filter="url(#editing-jagged)">
+		<g transform="translate(187.5299997329712, 98.03000068664551)">
+			<path d="M39.31-46.06L26.88-22.38L38.56 0L29.88 0L22.56-17.38L21.94-17.38L14.06 0L5.38 0L17.06-22.38L4.63-46.06L13.19-46.06L21.31-27.31L21.94-27.31L30.75-46.06L39.31-46.06ZM73-46.06L81.56-46.06L67.88-18.75L67.88 0L60.25 0L60.25-18.13L47.25-46.06L55.81-46.06L63.75-25.44L64.44-25.44L73-46.06ZM89.69-46.06L120.31-46.06L120.31-40L98.38-7.06L97.13-6.06L120.31-6.06L120.31 0L89.69 0L89.69-6.06L111.63-39L112.94-40L89.69-40L89.69-46.06Z" fill="#444">
+			</path>
+		</g>
+	</g>
+	<style>
+		text {
+		font-size: 64px;
+		font-family: Arial Black;
+		dominant-baseline: central;
+		text-anchor: middle;
+		}
+	</style>
+</svg>
