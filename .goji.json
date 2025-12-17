@@ -1,0 +1,68 @@
+{
+  "types": [
+    {
+      "emoji": "✨",
+      "code": ":sparkles:",
+      "description": "Introducing new features.",
+      "name": "feat"
+    },
+    {
+      "emoji": "🐛",
+      "code": ":bug:",
+      "description": "Fixing a bug.",
+      "name": "fix"
+    },
+    {
+      "emoji": "📝",
+      "code": ":memo:",
+      "description": "Writing or updating documentation or content.",
+      "name": "docs"
+    },
+    {
+      "emoji": "🚧",
+      "code": ":construction:",
+      "description": "Work in progress / small refactors.",
+      "name": "refactor"
+    },
+    {
+      "emoji": "🧪",
+      "code": ":test_tube:",
+      "description": "Adding or updating tests.",
+      "name": "test"
+    },
+    {
+      "emoji": "📦",
+      "code": ":package:",
+      "description": "Dependency or build tooling changes.",
+      "name": "chore"
+    },
+    {
+      "emoji": "⚡️",
+      "code": ":zap:",
+      "description": "Performance or SEO improvements.",
+      "name": "perf"
+    },
+    {
+      "emoji": "🔧",
+      "code": ":wrench:",
+      "description": "CI/CD or configuration changes.",
+      "name": "ci"
+    }
+  ],
+  "scopes": [
+    "astro",
+    "seo",
+    "ai",
+    "content",
+    "layout",
+    "components",
+    "config",
+    "deps"
+  ],
+  "noemoji": false,
+  "skipquestions": [],
+  "subjectmaxlength": 72,
+  "signoff": false
+}
+
+

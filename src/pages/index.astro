@@ -22,6 +22,37 @@ const projects = (await getCollection("blog"))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 4);
 
+const canonicalUrl = new URL(Astro.url.pathname || "/", Astro.site ?? "https://etienne.deneuve.xyz").toString();
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Etienne Deneuve",
+  url: canonicalUrl,
+  image: new URL("/assets/portrait.jpg", "https://etienne.deneuve.xyz").toString(),
+  jobTitle: "Senior Solutions Architect",
+  sameAs: [
+    "https://twitter.com/EtienneDinfo",
+    "https://github.com/EtienneDeneuve",
+    "https://www.linkedin.com/in/EtienneDeneuve",
+    "https://www.youtube.com/@EtienneDeneuve/",
+    "https://www.omnivya.fr",
+    "https://www.my-dare.com",
+  ],
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Etienne Deneuve - Personal Blog",
+  url: canonicalUrl,
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${canonicalUrl}?q={search_term_string}`,
+    "query-input": "required name=search_term_string",
+  },
+};
+
 // Full Astro Component Syntax:
 // https://docs.astro.build/core-concepts/astro-components/
 ---
@@ -111,6 +142,13 @@ const projects = (await getCollection("blog"))
       </section> -->
     </main>
   </div>
+
+  <script is:inline type="application/ld+json">
+    {JSON.stringify(personJsonLd)}
+  </script>
+  <script is:inline type="application/ld+json">
+    {JSON.stringify(websiteJsonLd)}
+  </script>
 </BaseLayout>
 
 <style>

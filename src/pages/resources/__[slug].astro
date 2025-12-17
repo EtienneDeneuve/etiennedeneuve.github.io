@@ -18,6 +18,32 @@ const pubDate = data.pubDate
           year: "numeric",
       })
     : null;
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://etienne.deneuve.xyz").toString();
+
+const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: data.title,
+    description: data.description,
+    url: canonicalUrl,
+    datePublished: data.pubDate?.toISOString?.(),
+    about: data.category,
+    inLanguage: "fr",
+    mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": canonicalUrl,
+    },
+    image: data.img
+        ? new URL(data.img, "https://etienne.deneuve.xyz").toString()
+        : undefined,
+    author: {
+        "@type": "Person",
+        name: "Etienne Deneuve",
+        url: "https://etienne.deneuve.xyz",
+    },
+    sameAs: data.url ? [data.url] : undefined,
+};
 ---
 
 <BaseLayout>
@@ -47,6 +73,10 @@ const pubDate = data.pubDate
             )
         }
     </article>
+
+    <script is:inline type="application/ld+json">
+        {JSON.stringify(jsonLd)}
+    </script>
 
     <style>
         .resource {

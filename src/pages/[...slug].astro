@@ -26,6 +26,36 @@ const { entry } = Astro.props;
 const { Content } = await entry.render();
 
 const og = `https://etienne.deneuve.xyz/open-graph/${entry.slug}.png`;
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://etienne.deneuve.xyz").toString();
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: entry.data.title,
+  description: entry.data.description,
+  datePublished: entry.data.pubDate?.toISOString?.() ?? undefined,
+  dateModified: entry.data.lastModified?.toISOString?.() ?? undefined,
+  url: canonicalUrl,
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": canonicalUrl,
+  },
+  image: entry.data.img
+    ? new URL(entry.data.img, "https://etienne.deneuve.xyz").toString()
+    : og,
+  author: {
+    "@type": "Person",
+    name: "Etienne Deneuve",
+    url: "https://etienne.deneuve.xyz",
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "Etienne Deneuve",
+    url: "https://etienne.deneuve.xyz",
+  },
+  keywords: entry.data.tags,
+};
 ---
 
 <BaseLayout
@@ -64,6 +94,9 @@ const og = `https://etienne.deneuve.xyz/open-graph/${entry.slug}.png`;
       </main>
     </div>
   </div>
+  <script is:inline type="application/ld+json">
+    {JSON.stringify(jsonLd)}
+  </script>
 </BaseLayout>
 
 <style>
