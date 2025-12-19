@@ -44,7 +44,7 @@
   - `pnpm lint` (or `pnpm eslint .` if configured)  
   - Fix reported issues.
 
-### 5. SEO Enhancements ⏳
+### 5. SEO & Performance Enhancements ⏳
 - **Metadata & structured data**  
   - Ensure each page has proper `<title>`, meta description, canonical URL, and Open Graph / Twitter tags (likely via `MainHead.astro` or layout).  
   - Add JSON-LD structured data for:  
@@ -56,7 +56,13 @@
   - Confirm `@astrojs/sitemap` is configured correctly and that `robots.txt` is aligned with desired crawl rules.
 
 - **Performance & accessibility**  
-  - Ensure images use `astro:assets` or optimized responsive images where possible.  
+  - From Unlighthouse / Lighthouse reports, prioritize:  
+    - Reducing **First Contentful Paint / Largest Contentful Paint** times (currently ~9s / ~18s on some pages).  
+    - Fixing audits like `render-blocking-resources`, `uses-optimized-images`, `uses-responsive-images`.  
+  - Concrete actions to make the site feel “blazing fast”:  
+    - Compress and/or convert large hero/background images (`/assets/portrait.jpg`, `stock-*.jpg`, big backgrounds) and, over time, move to `astro:assets` or `<picture>` with `srcset`.  
+    - Ensure all images have explicit `width` / `height` and are not rendered much larger than their display size, especially on mobile.  
+    - Where safe, defer or async non-critical JS, and consider simplifying heavy background effects on small screens.  
   - Check heading hierarchy, alt text, and link semantics (for SEO + a11y).
 
 ### 6. AI / LLM Optimization ⏳
@@ -114,6 +120,10 @@
   - Optionally, at build time:  
     - Fetch latest videos via YouTube Data API (if API key available).  
     - Generate a simple JSON or Astro component that lists latest N videos on a dedicated “Videos” or “Media” page.
+
+- **Brand naming consistency**  
+  - Replace remaining references to “Simplifi'ed” as the primary brand with “Omnivya” where appropriate (CTA texts, headings, descriptions), while keeping Etienne Deneuve as the personal brand.  
+  - Double-check `Footer.astro`, CTAs, and any hero/intro copy for the old name and update copy to reflect the Omnivya branding and positioning.
 
 ### 11. Conventional Commits (Goji) & Content Validation
 - **Conventional commits with Goji**  
