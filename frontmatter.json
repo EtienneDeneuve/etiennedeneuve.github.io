@@ -18,22 +18,13 @@
       "contentTypes": ["blog"],
       "bulk": true,
       "output": "notification",
-      "nodeBin": "node"
+      "nodeBin": "/Users/etienne/.nvm/versions/node/v20.17.0/bin/node"
     },
     {
       "id": "test",
       "title": "Test",
       "script": "./scripts/test.mjs",
-      "command": "node"
-    },
-    {
-      "id": "validate-content",
-      "title": "Validate blog content",
-      "script": "./scripts/validate-content.mjs",
-      "command": "node",
-      "contentTypes": ["blog"],
-      "bulk": true,
-      "output": "notification"
+      "command": "/Users/etienne/.nvm/versions/node/v20.17.0/bin/node"
     }
   ],
   "frontMatter.taxonomy.contentTypes": [

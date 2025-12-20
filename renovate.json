@@ -1,39 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended",
-    ":enableGitHubActions"
-  ],
-  "labels": ["dependencies"],
-  "packageRules": [
-    {
-      "groupName": "astro core & integrations",
-      "matchPackagePatterns": ["^astro$", "^@astrojs/"],
-      "labels": ["dependencies", "astro"],
-      "rangeStrategy": "bump"
-    },
-    {
-      "groupName": "react stack",
-      "matchPackageNames": [
-        "react",
-        "react-dom",
-        "@types/react",
-        "@types/react-dom"
-      ],
-      "labels": ["dependencies", "react"],
-      "separateMinorPatch": true
-    },
-    {
-      "groupName": "dev tooling",
-      "matchDepTypes": ["devDependencies"],
-      "labels": ["dependencies", "dev-tools"],
-      "separateMajorMinor": true
-    },
-    {
-      "groupName": "github actions",
-      "matchManagers": ["github-actions"],
-      "labels": ["dependencies", "github-actions"],
-      "separateMinorPatch": true
-    }
+    "config:recommended"
   ]
 }
