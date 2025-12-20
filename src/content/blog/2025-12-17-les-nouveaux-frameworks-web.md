@@ -1,11 +1,10 @@
 ---
 title: Svelte, Astro et la nouvelle génération de frameworks Web 
 pubDate: 2025-12-17T12:00:00.000Z
-description: Canalyse technique, factuelle et sans préférence des nouveaux frameworks web
+description: Analyse technique, factuelle et sans préférence des nouveaux frameworks web
 tags:
   - framework web
   - developement
-
 slug: 2025-12-17/automate-nouveaux framewroks web
 img: /assets/stock-3.jpg
 img_alt: nice abstract image
