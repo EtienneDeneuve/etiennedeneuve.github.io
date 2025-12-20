@@ -4,6 +4,7 @@ import { Image } from "astro:assets";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import "dayjs/locale/fr";
+import { siteConfig } from "../config/site.ts";
 dayjs.locale("fr");
 dayjs.extend(utc);
 
@@ -14,16 +15,16 @@ const { project } = Astro.props;
 const { Content, remarkPluginFrontmatter } = await project.render();
 
 const pubDate = dayjs(project.data.pubDate).utc().format("DD MMMM YYYY");
-const lastModified = dayjs(remarkPluginFrontmatter.lastModified)
-  .utc()
-  .format("DD MMMM YYYY");
+const lastModified = remarkPluginFrontmatter.lastModified
+  ? dayjs(remarkPluginFrontmatter.lastModified).utc().format("DD MMMM YYYY")
+  : null;
 ---
 
 <a class="card" href={`/${project.slug}`}>
   <span class="title">{project.data.title}</span>
   <Image
-    src={`https://etienne.deneuve.xyz/${project.data.img}` ||
-      "https://etienne.deneuve.xyz/assets/portrait.jpg"}
+    src={`${siteConfig.site.url}/${project.data.img}` ||
+      siteConfig.site.defaultOgImage}
     alt={project.data.img_alt || ""}
     inferSize={true}
     loading="lazy"
@@ -36,11 +37,12 @@ const lastModified = dayjs(remarkPluginFrontmatter.lastModified)
           <td>Publié le: </td>
           <td>{pubDate}</td>
         </tr>
-
-        <tr>
-          <td>Mis à jour le: </td>
-          <td>{lastModified}</td>
-        </tr>
+        {lastModified && (
+          <tr>
+            <td>Mis à jour le: </td>
+            <td>{lastModified}</td>
+          </tr>
+        )}
       </table>
       <!-- <div class="pubDate">Publié le: {pubDate}</div>
       <div class="updateDate">Mis à jour le: {lastModified}</div> -->

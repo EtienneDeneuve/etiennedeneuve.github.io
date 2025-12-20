@@ -1,6 +1,7 @@
 ---
 import { ViewTransitions } from "astro:transitions";
 import "../styles/global.css";
+import { siteConfig, getBrandText } from "../config/site.ts";
 
 interface Props {
   title?: string | undefined;
@@ -9,35 +10,39 @@ interface Props {
 }
 
 const {
-  title = "Etienne Deneuve: Personal Site",
-  description = "The personal site of Etienne Deneuve",
-  og = "null",
+  title = siteConfig.site.title,
+  description = siteConfig.site.description,
+  og = siteConfig.site.defaultOgImage,
 } = Astro.props;
 
 const { url, site } = Astro;
+
+// Generate canonical URL
+const canonicalUrl = new URL(url.pathname, siteConfig.site.url).href;
 ---
 
 <meta charset="UTF-8" />
+<link rel="canonical" href={canonicalUrl} />
 <meta property="og:type" content="website" />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={og} />
 <meta property="og:title" content={title} />
 <meta property="og:url" content={url} />
-<meta property="og:locale" content="fr_FR" />
-<meta property="og:site_name" content="Etienne Deneuve - Personal Blog" />
+<meta property="og:locale" content={siteConfig.site.locale} />
+<meta property="og:site_name" content={siteConfig.author.siteName} />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta property="twitter:domain" content="etienne.deneuve.xyz" />
-<meta property="twitter:url" content="https://etienne.deneuve.xyz" />
+<meta property="twitter:domain" content={new URL(siteConfig.site.url).hostname} />
+<meta property="twitter:url" content={siteConfig.site.url} />
 <meta name="twitter:title" content={title} />
 <meta
   name="twitter:description"
-  content="The personal site of Etienne Deneuve"
+  content={description}
 />
 <meta
   name="twitter:image"
-  content="https://etienne.deneuve.xyz/public/assets/portrait.jpg"
+  content={siteConfig.site.defaultOgImage}
 />
 
 <meta name="viewport" content="width=device-width" />

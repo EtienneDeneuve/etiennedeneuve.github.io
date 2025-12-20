@@ -1,6 +1,7 @@
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import ogApi from "@thewebforge/astro-og-images";
+import { siteConfig } from "../../config/site.ts";
 
 const entries = await getCollection("blog");
 
@@ -10,9 +11,9 @@ export const { getStaticPaths, GET } = ogApi({
     template: "eCommerce",
 
     getImageOptions: async ({ id, data }: CollectionEntry<"blog">) => {
-        let imgPath = `https://etienne.deneuve.xyz/${data.img}`
+        let imgPath = `${siteConfig.site.url}/${data.img}`
         if (data.img?.startsWith("https://") || data.img?.startsWith("/assets/social/")) {
-            imgPath = "https://etienne.deneuve.xyz/assets/stock-1.jpg"
+            imgPath = `${siteConfig.site.url}/assets/stock-1.jpg`
         }
         return {
             path: id,
@@ -25,7 +26,7 @@ export const { getStaticPaths, GET } = ogApi({
                 fontSize: "20"
             },
             site: {
-                text: "etienne.deneuve.xyz"
+                text: new URL(siteConfig.site.url).hostname
             },
             colors: {
                 brand: "#090b11",
@@ -37,7 +38,7 @@ export const { getStaticPaths, GET } = ogApi({
             },
             format: "WEBP",
             author: {
-                text: "Etienne Deneuve",
+                text: siteConfig.author.name,
                 color: "#1480de"
             },
             image: {

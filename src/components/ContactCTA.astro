@@ -1,16 +1,13 @@
 ---
-import CallToAction from "./CallToAction.astro";
-import Icon from "./Icon.astro";
+import BookingCTA from "./BookingCTA.astro";
+import { getBrandText } from "../config/site.ts";
 ---
 
 <aside>
-  <h2>Vous voulez travailler avec moi ?</h2>
-  <CallToAction
-    href="https://outlook.office365.com/owa/calendar/SimplifiED1@simplified.fr/bookings/"
-  >
+  <h2>{getBrandText.contactCta()}</h2>
+  <BookingCTA bookingSubject="Prise de rendez-vous">
     Prendre un rendez-vous !
-    <Icon icon="paper-plane-tilt" size="1.2em" />
-  </CallToAction>
+  </BookingCTA>
 </aside>
 
 <style>

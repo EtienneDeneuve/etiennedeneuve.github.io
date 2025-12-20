@@ -1,0 +1,136 @@
+---
+import CallToAction from "./CallToAction.astro";
+import Icon from "./Icon.astro";
+import { siteConfig } from "../config/site.ts";
+
+interface Props {
+  variant?: "primary" | "secondary";
+  bookingSubject?: string;
+}
+
+const { variant = "primary", bookingSubject = "Prise de rendez-vous" } = Astro.props;
+
+// Generate calendar link (ICS format via mailto or direct calendar URL)
+const calendarLink = `https://outlook.office365.com/owa/calendar/SimplifiED1@simplified.fr/bookings/`;
+const mailtoLink = `mailto:${siteConfig.contact.businessEmail}?subject=${encodeURIComponent(bookingSubject)}`;
+---
+
+<div class="booking-cta">
+  <CallToAction href={siteConfig.contact.businessBookingUrl}>
+    <slot />
+    <Icon icon="paper-plane-tilt" size="1.2em" />
+  </CallToAction>
+  
+  <!-- Fallback links for no-JS users -->
+  <noscript>
+    <div class="no-js-fallback">
+      <p class="fallback-label">Ou contactez-moi directement :</p>
+      <div class="fallback-links">
+        <a href={mailtoLink} class="fallback-link">
+          📧 Par email
+        </a>
+        <a href={calendarLink} class="fallback-link" target="_blank" rel="noopener">
+          📅 Calendrier de réservation
+        </a>
+      </div>
+    </div>
+  </noscript>
+  
+  <!-- Also show fallbacks for users with JS disabled or when booking link fails -->
+  <div class="js-fallback" hidden>
+    <p class="fallback-label">Alternative :</p>
+    <div class="fallback-links">
+      <a href={mailtoLink} class="fallback-link">
+        📧 Par email
+      </a>
+      <a href={calendarLink} class="fallback-link" target="_blank" rel="noopener">
+        📅 Calendrier de réservation
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .booking-cta {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .no-js-fallback,
+  .js-fallback {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 1rem;
+    background: var(--gray-999_20);
+    border-radius: 0.5rem;
+    border: 1px solid var(--gray-800);
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .fallback-label {
+    font-size: var(--text-sm);
+    color: var(--gray-400);
+    margin: 0;
+    text-align: center;
+  }
+
+  .fallback-links {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .fallback-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    color: var(--accent-dark);
+    text-decoration: none;
+    border: 1px solid var(--accent-dark);
+    border-radius: 0.25rem;
+    font-size: var(--text-sm);
+    transition: background-color var(--theme-transition), color var(--theme-transition);
+  }
+
+  .fallback-link:hover,
+  .fallback-link:focus {
+    background-color: var(--accent-dark);
+    color: var(--accent-text-over);
+    text-decoration: none;
+  }
+
+  .js-fallback[hidden] {
+    display: none;
+  }
+
+  @media (min-width: 50em) {
+    .fallback-links {
+      flex-direction: row;
+    }
+  }
+</style>
+
+<script>
+  // Show fallback links if booking URL fails to load or if JS is disabled
+  // This provides a graceful degradation
+  document.addEventListener('DOMContentLoaded', () => {
+    const bookingLinks = document.querySelectorAll('a[href*="bookings"]');
+    bookingLinks.forEach(link => {
+      link.addEventListener('error', () => {
+        // If booking link fails, show fallback
+        const fallback = link.closest('.booking-cta')?.querySelector('.js-fallback');
+        if (fallback) {
+          fallback.removeAttribute('hidden');
+        }
+      });
+    });
+  });
+</script>

@@ -1,25 +1,23 @@
 ---
-import CallToAction from "./CallToAction.astro";
+import BookingCTA from "./BookingCTA.astro";
 import Icon from "./Icon.astro";
+import { siteConfig, getBrandText } from "../config/site.ts";
 const currentYear = new Date().getFullYear();
 ---
 
 <footer class="wrapper">
   <div class="cta">
-    <h2>Vous voulez travailler avec Simplifi'ed ?</h2>
-    <CallToAction
-      href="https://outlook.office365.com/owa/calendar/SimplifiED1@simplified.fr/bookings/"
-    >
+    <h2>{getBrandText.footerCta()}</h2>
+    <BookingCTA bookingSubject="Prise de rendez-vous">
       Prenez un rendez-vous avec moi !
-      <Icon icon="paper-plane-tilt" size="1.2em" />
-    </CallToAction>
+    </BookingCTA>
   </div>
   <div class="wrapper">
     <div class="group col">
       <p>
         <Icon icon="rocket-launch" size="1.2em" />
       </p>
-      <p>&copy; {currentYear} Etienne Deneuve</p>
+      <p>&copy; {currentYear} {siteConfig.author.name}</p>
     </div>
     <p class="socials col">
       <a href="https://twitter.com/EtienneDinfo"> Twitter</a>
@@ -56,7 +54,10 @@ const currentYear = new Date().getFullYear();
   }
 
   .cta {
-    &
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
   }
 
   .wrapper {

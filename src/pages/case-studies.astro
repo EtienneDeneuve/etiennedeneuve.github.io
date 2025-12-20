@@ -1,0 +1,347 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import Grid from "../components/Grid.astro";
+import Icon from "../components/Icon.astro";
+import Pill from "../components/Pill.astro";
+import { siteConfig, getBrandText } from "../config/site.ts";
+
+// Get all case studies (excluding drafts)
+const allCaseStudies = await getCollection("caseStudies");
+const caseStudies = allCaseStudies.filter((cs) => !cs.data.draft);
+
+// Extract unique tags and industries for filtering
+const allTags = new Set<string>();
+const allIndustries = new Set<string>();
+caseStudies.forEach((cs) => {
+  cs.data.tags?.forEach((tag) => allTags.add(tag));
+  allIndustries.add(cs.data.clientIndustry);
+});
+
+const tags = Array.from(allTags).sort();
+const industries = Array.from(allIndustries).sort();
+
+// Sort by featured first, then by date if available
+const sortedCaseStudies = caseStudies.sort((a, b) => {
+  if (a.data.featured && !b.data.featured) return -1;
+  if (!a.data.featured && b.data.featured) return 1;
+  if (a.data.pubDate && b.data.pubDate) {
+    return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+  }
+  return 0;
+});
+---
+
+<BaseLayout
+  title={getBrandText.siteTitle("Case Studies")}
+  description="Découvrez des exemples concrets de transformations réussies en DevSecOps et Platform Engineering."
+>
+  <link rel="canonical" href={`${siteConfig.site.url}/case-studies`} />
+  <div class="stack gap-20 lg:gap-48">
+    <div class="wrapper stack gap-20 lg:gap-20">
+      <header class="hero">
+        <Hero
+          title="Case Studies"
+          tagline="Des résultats concrets et mesurables pour des organisations qui ont transformé leur infrastructure et leurs pratiques."
+          align="start"
+        >
+          <div class="roles">
+            <Pill><Icon icon="code" size="1.33em" /> Réalisations</Pill>
+            <Pill><Icon icon="strategy" size="1.33em" /> Résultats</Pill>
+            <Pill><Icon icon="trophy" size="1.33em" /> Succès</Pill>
+          </div>
+        </Hero>
+      </header>
+    </div>
+
+    <main class="wrapper stack gap-20 lg:gap-48">
+      {caseStudies.length === 0 ? (
+        <section class="empty-state">
+          <p>Aucun case study disponible pour le moment.</p>
+        </section>
+      ) : (
+        <section class="section with-background section-full-width">
+          <header class="section-header stack gap-2 lg:gap-4">
+            <h2>Nos Réalisations</h2>
+            <p>
+              Chaque case study présente le contexte, l'approche mise en œuvre et les résultats obtenus,
+              avec des métriques concrètes.
+            </p>
+          </header>
+
+          <div class="case-studies-grid case-studies-content">
+            {sortedCaseStudies.map((caseStudy) => (
+              <a
+                href={`/case-studies/${caseStudy.slug}`}
+                class="case-study-card"
+              >
+                {caseStudy.data.featured && (
+                  <div class="featured-badge">
+                    <Pill><Icon icon="trophy" size="1em" /> Recommandé</Pill>
+                  </div>
+                )}
+                <div class="card-header">
+                  <h3 class="card-title">{caseStudy.data.title}</h3>
+                  <p class="card-industry">{caseStudy.data.clientIndustry}</p>
+                </div>
+                <p class="card-description">{caseStudy.data.problem}</p>
+                <div class="card-tags">
+                  {caseStudy.data.tags?.slice(0, 3).map((tag) => (
+                    <span class="tag">{tag}</span>
+                  ))}
+                </div>
+                <div class="card-footer">
+                  <span class="card-timeframe">
+                    <Icon icon="rocket-launch" size="1em" />
+                    {caseStudy.data.timeframe}
+                  </span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .roles {
+    display: none;
+  }
+
+  @media (min-width: 50em) {
+    .hero {
+      display: grid;
+      grid-template-columns: 6fr 4fr;
+      padding-inline: 2.5rem;
+      gap: 3.75rem;
+    }
+
+    .roles {
+      margin-top: 0.5rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+  }
+
+  .section {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .section-full-width {
+    width: calc(100% + 3rem);
+    max-width: calc(100% + 3rem);
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    padding-inline: 1.5rem;
+  }
+
+  @media (min-width: 50em) {
+    .section-full-width {
+      width: calc(100% + 5rem);
+      max-width: calc(100% + 5rem);
+      margin-left: -2.5rem;
+      margin-right: -2.5rem;
+      padding-inline: 2.5rem;
+    }
+  }
+
+  .with-background {
+    position: relative;
+  }
+
+  .with-background::before {
+    --hero-bg: var(--bg-image-subtle-2);
+
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    left: 50%;
+    width: 100vw;
+    aspect-ratio: calc(2.25 / var(--bg-scale));
+    top: 0;
+    transform: translateY(-75%) translateX(-50%);
+    background:
+      url("/assets/backgrounds/noise.png") top center/220px repeat,
+      var(--hero-bg) center center / var(--bg-gradient-size) no-repeat,
+      var(--gray-999);
+    background-blend-mode: overlay, normal, normal, normal;
+    mix-blend-mode: var(--bg-blend-mode);
+    z-index: -1;
+    will-change: transform;
+    contain: layout style paint;
+  }
+
+  .section-header {
+    justify-self: center;
+    text-align: center;
+    max-width: 65ch;
+    font-size: var(--text-md);
+    color: var(--gray-300);
+  }
+
+  .section-header h2 {
+    font-size: var(--text-2xl);
+    color: var(--gray-0);
+    margin: 0;
+  }
+
+  @media (min-width: 50em) {
+    .section {
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-areas: "header header header header" "grid grid grid grid";
+      gap: 5rem;
+    }
+
+    .section-header {
+      grid-area: header;
+      font-size: var(--text-lg);
+    }
+
+    .section-header h2 {
+      font-size: var(--text-4xl);
+    }
+
+    .case-studies-content {
+      grid-area: grid;
+      width: 100%;
+    }
+  }
+
+  .case-studies-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 50em) {
+    .case-studies-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+  }
+
+  .case-study-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--gradient-subtle);
+    border: 1px solid var(--gray-800);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    gap: 1rem;
+    text-decoration: none;
+    box-shadow: var(--shadow-sm);
+    transition: all var(--theme-transition);
+    position: relative;
+  }
+
+  .case-study-card:hover,
+  .case-study-card:focus {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    border-color: var(--accent-regular);
+    outline: 2px solid var(--accent-regular);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .case-study-card {
+      transition: none;
+    }
+    
+    .case-study-card:hover,
+    .case-study-card:focus {
+      transform: none;
+    }
+  }
+
+  .featured-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1;
+  }
+
+  .card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-right: 0;
+    position: relative;
+  }
+
+  /* Add padding to header when badge is present to avoid overlap */
+  .case-study-card:has(.featured-badge) .card-header {
+    padding-right: 8rem;
+  }
+
+  @media (min-width: 50em) {
+    .case-study-card:has(.featured-badge) .card-header {
+      padding-right: 10rem;
+    }
+  }
+
+  .card-title {
+    font-size: var(--text-xl);
+    font-weight: 600;
+    color: var(--gray-0);
+    margin: 0;
+    line-height: 1.3;
+    word-wrap: break-word;
+  }
+
+  .card-industry {
+    font-size: var(--text-sm);
+    color: var(--gray-400);
+    margin: 0;
+  }
+
+  .card-description {
+    color: var(--gray-300);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    flex: 1;
+    margin: 0;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .card-tags .tag {
+    font-size: var(--text-xs);
+    padding: 0.25rem 0.75rem;
+    background: var(--gray-999);
+    border: 1px solid var(--gray-800);
+    border-radius: 999rem;
+    color: var(--gray-300);
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--gray-800);
+    color: var(--gray-400);
+    font-size: var(--text-sm);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--gray-400);
+  }
+</style>

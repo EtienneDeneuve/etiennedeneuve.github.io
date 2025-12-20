@@ -1,0 +1,1215 @@
+{
+  "meta": {
+    "schema": "github-issues-backlog-v1",
+    "conventions": {
+      "type": "epic|feature|task",
+      "repo": "my-dare|omnivya|personal-site|shared-tooling",
+      "id": "stable identifier used in Parent/DependsOn",
+      "labels": "labels to apply",
+      "parent": "id of parent epic/feature",
+      "depends_on": "list of ids",
+      "acceptance": "definition of done bullets"
+    }
+  },
+  "issues": [
+    {
+      "id": "SH-EP-01",
+      "type": "epic",
+      "repo": "shared-tooling",
+      "title": "Shared growth tooling package (validators, OG images, PDFs)",
+      "labels": ["epic", "platform", "automation"],
+      "acceptance": [
+        "A workspace package usable by all 3 repos",
+        "Single `npm run validate` entrypoint works everywhere",
+        "No breaking builds across repos"
+      ]
+    },
+    {
+      "id": "SH-FE-01",
+      "type": "feature",
+      "repo": "shared-tooling",
+      "parent": "SH-EP-01",
+      "title": "Build-time validators (proof, SEO, images, freshness, dates)",
+      "labels": ["feature", "platform", "quality-gate"],
+      "acceptance": [
+        "Fails build with file path + line reference where possible",
+        "Configurable per repo (feature flags, thresholds)"
+      ]
+    },
+    {
+      "id": "SH-TS-01",
+      "type": "task",
+      "repo": "shared-tooling",
+      "parent": "SH-FE-01",
+      "title": "Validator: numeric metrics require `source`",
+      "labels": ["task", "validator"],
+      "acceptance": [
+        "Any metric field containing numbers/percent fails without source"
+      ]
+    },
+    {
+      "id": "SH-TS-02",
+      "type": "task",
+      "repo": "shared-tooling",
+      "parent": "SH-FE-01",
+      "title": "Validator: testimonials require identity or anonymous justification",
+      "labels": ["task", "validator"],
+      "acceptance": [
+        "Testimonial must have name+role(+company optional) OR `anonymous=true` + `why_anonymous`"
+      ]
+    },
+    {
+      "id": "SH-TS-03",
+      "type": "task",
+      "repo": "shared-tooling",
+      "parent": "SH-FE-01",
+      "title": "Validator: all images must have alt text (gallery/events/og exclusions)",
+      "labels": ["task", "validator", "a11y"],
+      "acceptance": [
+        "Build fails if any content image lacks alt",
+        "OG/system images are excluded via allowlist"
+      ]
+    },
+    {
+      "id": "SH-TS-04",
+      "type": "task",
+      "repo": "shared-tooling",
+      "parent": "SH-FE-01",
+      "title": "Validator: unique title/description per landing page",
+      "labels": ["task", "validator", "seo"],
+      "acceptance": ["Detect duplicates in built output or content sources"]
+    },
+    {
+      "id": "SH-TS-05",
+      "type": "task",
+      "repo": "shared-tooling",
+      "parent": "SH-FE-01",
+      "title": "Validator: last_reviewed freshness (default 365d, configurable)",
+      "labels": ["task", "validator", "content"],
+      "acceptance": ["Fails when last_reviewed exceeds threshold unless exempt"]
+    },
+    {
+      "id": "SH-TS-06",
+      "type": "task",
+      "repo": "shared-tooling",
+      "parent": "SH-FE-01",
+      "title": "Validator: published/updated date integrity (no fake global updated date)",
+      "labels": ["task", "validator", "content"],
+      "acceptance": [
+        "Detects suspicious identical updated dates across many posts/pages"
+      ]
+    },
+    {
+      "id": "SH-FE-02",
+      "type": "feature",
+      "repo": "shared-tooling",
+      "parent": "SH-EP-01",
+      "title": "OpenGraph image generator (build-time, cached)",
+      "labels": ["feature", "seo", "automation"],
+      "acceptance": [
+        "Generates OG images for shareable pages",
+        "CI verifies og:image exists and is referenced"
+      ]
+    },
+    {
+      "id": "SH-FE-03",
+      "type": "feature",
+      "repo": "shared-tooling",
+      "parent": "SH-EP-01",
+      "title": "PDF generator (one-pagers, media kits) at build time",
+      "labels": ["feature", "automation", "sales"],
+      "acceptance": [
+        "Generates PDFs into /public/downloads (or equivalent)",
+        "Linkcheck validates PDFs exist"
+      ]
+    },
+    {
+      "id": "SH-FE-04",
+      "type": "feature",
+      "repo": "shared-tooling",
+      "parent": "SH-EP-01",
+      "title": "Provider-agnostic analytics abstraction (no-op default)",
+      "labels": ["feature", "analytics"],
+      "acceptance": [
+        "track(event,payload) available on all repos",
+        "No JS hard dependency; safe when disabled"
+      ]
+    },
+
+    {
+      "id": "SH-EP-02",
+      "type": "epic",
+      "repo": "shared-tooling",
+      "title": "CI Red Line (quality gates + scheduled monitoring)",
+      "labels": ["epic", "ci", "automation"],
+      "depends_on": ["SH-EP-01"],
+      "acceptance": [
+        "All repos run same CI stages",
+        "Weekly scheduled linkcheck + lighthouse runs",
+        "Artifacts uploaded (reports + dist + PDFs)"
+      ]
+    },
+    {
+      "id": "SH-FE-05",
+      "type": "feature",
+      "repo": "shared-tooling",
+      "parent": "SH-EP-02",
+      "title": "Reusable GitHub Actions workflow template",
+      "labels": ["feature", "ci"],
+      "acceptance": [
+        "install cache, lint, typecheck, build, validate, spellcheck, linkcheck, lighthouse",
+        "Clear logs + annotations on PR"
+      ]
+    },
+    {
+      "id": "SH-TS-07",
+      "type": "task",
+      "repo": "shared-tooling",
+      "parent": "SH-FE-05",
+      "title": "Spellcheck FR+EN (cspell) config + custom dictionary",
+      "labels": ["task", "ci"],
+      "acceptance": ["npm run spellcheck works and CI fails on typos"]
+    },
+    {
+      "id": "SH-TS-08",
+      "type": "task",
+      "repo": "shared-tooling",
+      "parent": "SH-FE-05",
+      "title": "Linkcheck (lychee) config + allowlist",
+      "labels": ["task", "ci"],
+      "acceptance": [
+        "Checks internal + external links with retries/timeouts",
+        "Scheduled weekly run enabled"
+      ]
+    },
+    {
+      "id": "SH-TS-09",
+      "type": "task",
+      "repo": "shared-tooling",
+      "parent": "SH-FE-05",
+      "title": "Lighthouse CI baseline + artifact upload",
+      "labels": ["task", "ci", "perf"],
+      "acceptance": [
+        "Runs against key routes per repo",
+        "Uploads HTML reports as artifacts"
+      ]
+    },
+
+    {
+      "id": "SH-EP-03",
+      "type": "epic",
+      "repo": "shared-tooling",
+      "title": "Content engines (OG/PDF/SEO) + multi-repo DX",
+      "labels": ["epic", "platform", "dx"],
+      "acceptance": [
+        "Shared tooling documented and versioned",
+        "Each repo can bump tooling version safely"
+      ]
+    },
+    {
+      "id": "SH-TS-10",
+      "type": "task",
+      "repo": "shared-tooling",
+      "parent": "SH-FE-02",
+      "title": "OG generator: templates per brand + per content type",
+      "labels": ["task", "seo"],
+      "acceptance": [
+        "Different OG templates for: blog, offer, case study, whitepaper, event"
+      ]
+    },
+    {
+      "id": "SH-TS-11",
+      "type": "task",
+      "repo": "shared-tooling",
+      "parent": "SH-FE-03",
+      "title": "PDF generator: HTML templates + print CSS baseline",
+      "labels": ["task", "sales"],
+      "acceptance": [
+        "PDFs render identically in CI and locally",
+        "Fonts/assets embedded or copied deterministically"
+      ]
+    },
+    {
+      "id": "SH-FE-06",
+      "type": "feature",
+      "repo": "shared-tooling",
+      "parent": "SH-EP-02",
+      "title": "CI: scheduled monitoring job (weekly) with drift detection",
+      "labels": ["feature", "ci", "monitoring"],
+      "acceptance": [
+        "Weekly job runs linkcheck + lighthouse + validators",
+        "Artifacts include trend-friendly filenames"
+      ]
+    },
+    {
+      "id": "SH-FE-07",
+      "type": "feature",
+      "repo": "shared-tooling",
+      "parent": "SH-EP-02",
+      "title": "CI: release workflow (tag tooling, changelog, version pin)",
+      "labels": ["feature", "ci", "release"],
+      "acceptance": [
+        "Tooling package can be pinned per repo",
+        "Changelog generated for changes"
+      ]
+    },
+    {
+      "id": "SH-FE-08",
+      "type": "feature",
+      "repo": "shared-tooling",
+      "parent": "SH-EP-01",
+      "title": "Experimentation framework (A/B) shared",
+      "labels": ["feature", "growth"],
+      "acceptance": [
+        "Config-driven experiments with variant assignment",
+        "Analytics events include experiment metadata"
+      ]
+    },
+    {
+      "id": "SH-TS-12",
+      "type": "task",
+      "repo": "shared-tooling",
+      "parent": "SH-FE-08",
+      "title": "Experiment targets baseline: hero + CTA label + pricing layout",
+      "labels": ["task", "growth"],
+      "acceptance": ["Variants can be enabled per repo independently"]
+    },
+    {
+      "id": "SH-FE-09",
+      "type": "feature",
+      "repo": "shared-tooling",
+      "parent": "SH-EP-01",
+      "title": "UTM discipline helper + canonical cross-site link builder",
+      "labels": ["feature", "growth", "seo"],
+      "acceptance": [
+        "UTM helper used across repos for cross-links",
+        "Linkcheck validates cross-site routes and avoids circular spam"
+      ]
+    },
+    {
+      "id": "SH-TS-13",
+      "type": "task",
+      "repo": "shared-tooling",
+      "parent": "SH-FE-04",
+      "title": "Analytics: event name registry + schema validation",
+      "labels": ["task", "analytics"],
+      "acceptance": [
+        "Unknown events fail CI (or warn) depending on config",
+        "Payload schema checked for required keys"
+      ]
+    },
+    {
+      "id": "SH-FE-10",
+      "type": "feature",
+      "repo": "shared-tooling",
+      "parent": "SH-EP-01",
+      "title": "Privacy/compliance scaffolds (legal pages presence checks)",
+      "labels": ["feature", "privacy", "seo"],
+      "acceptance": [
+        "Validators ensure required legal routes exist when forms/analytics enabled"
+      ]
+    },
+
+    {
+      "id": "CX-EP-01",
+      "type": "epic",
+      "repo": "shared-tooling",
+      "title": "Cross-site funnel linking + UTM discipline + link integrity",
+      "labels": ["epic", "growth", "seo"],
+      "acceptance": [
+        "Consistent UTMs on cross-site links",
+        "Linkcheck prevents drift and 404s"
+      ]
+    },
+    {
+      "id": "CX-FE-01",
+      "type": "feature",
+      "repo": "shared-tooling",
+      "parent": "CX-EP-01",
+      "title": "Cross-site link rules + UTM helpers",
+      "labels": ["feature", "growth"],
+      "acceptance": [
+        "Helper for generating links with UTMs",
+        "Docs for where to link from/to"
+      ]
+    },
+    {
+      "id": "CX-FE-02",
+      "type": "feature",
+      "repo": "shared-tooling",
+      "parent": "CX-EP-01",
+      "title": "Cross-site linkcheck configuration",
+      "labels": ["feature", "ci"],
+      "acceptance": ["CI catches broken cross-links between sites"]
+    },
+
+    {
+      "id": "CX-EP-02",
+      "type": "epic",
+      "repo": "shared-tooling",
+      "title": "Unified revenue funnel model (lead types, sources, UTMs, routing)",
+      "labels": ["epic", "growth", "ops"],
+      "acceptance": [
+        "All forms emit a consistent lead payload schema",
+        "Attribution preserved across sites"
+      ]
+    },
+    {
+      "id": "CX-FE-03",
+      "type": "feature",
+      "repo": "shared-tooling",
+      "parent": "CX-EP-02",
+      "title": "Lead payload schema + adapters (webhook/DB) per repo",
+      "labels": ["feature", "ops"],
+      "acceptance": [
+        "Same fields across sites: source_site, page, offer, persona, utm_*",
+        "Local dev mode works without secrets"
+      ]
+    },
+
+    {
+      "id": "SH-EP-04",
+      "type": "epic",
+      "repo": "shared-tooling",
+      "title": "Telemetry pipeline (OpenTelemetry OTLP) to Grafana Cloud or self-hosted stack",
+      "labels": ["epic", "observability", "analytics", "automation"],
+      "acceptance": [
+        "All sites emit standardized events/metrics/logs via OTLP",
+        "Grafana Cloud path and free/self-host path both supported",
+        "Config-driven enabling per repo (no secrets in PR builds)"
+      ]
+    },
+    {
+      "id": "SH-FE-11",
+      "type": "feature",
+      "repo": "shared-tooling",
+      "parent": "SH-EP-04",
+      "title": "OTel collector strategy (Grafana Alloy + OTLP exporter + redaction/sampling)",
+      "labels": ["feature", "observability", "grafana-cloud"],
+      "acceptance": [
+        "Alloy config templates exist for local/prod",
+        "OTLP export to Grafana Cloud endpoint works",
+        "Redaction/sampling rules included (PII-safe defaults)"
+      ]
+    },
+    {
+      "id": "SH-TS-14",
+      "type": "task",
+      "repo": "shared-tooling",
+      "parent": "SH-FE-11",
+      "title": "Define unified telemetry schema (events + attributes + naming registry)",
+      "labels": ["task", "observability", "analytics"],
+      "acceptance": [
+        "Event registry + payload schema validation exists (CI gate)"
+      ]
+    },
+    {
+      "id": "SH-TS-15",
+      "type": "task",
+      "repo": "shared-tooling",
+      "parent": "SH-FE-11",
+      "title": "Collector config: OTLP receivers + exporters + rate limits",
+      "labels": ["task", "observability", "grafana-cloud"],
+      "acceptance": [
+        "Local mode ships to local backends or no-op",
+        "Prod mode ships to Grafana Cloud OTLP"
+      ]
+    },
+    {
+      "id": "SH-FE-12",
+      "type": "feature",
+      "repo": "shared-tooling",
+      "parent": "SH-EP-04",
+      "title": "Frontend RUM + error telemetry using Grafana Faro (optional)",
+      "labels": ["feature", "rum", "grafana-cloud"],
+      "acceptance": [
+        "Faro SDK integration template (Astro-compatible)",
+        "Supports sending via Alloy faro receiver or direct",
+        "PII-safe defaults and opt-in toggles"
+      ]
+    },
+    {
+      "id": "SH-TS-16",
+      "type": "task",
+      "repo": "shared-tooling",
+      "parent": "SH-FE-12",
+      "title": "RUM event mapping: page_view, cta_click, form_submit, js_error, perf vitals",
+      "labels": ["task", "rum", "analytics"],
+      "acceptance": [
+        "Consistent attribute keys across the 3 sites",
+        "Disabled by default; enable via config"
+      ]
+    },
+    {
+      "id": "SH-FE-13",
+      "type": "feature",
+      "repo": "shared-tooling",
+      "parent": "SH-EP-04",
+      "title": "CI-to-Grafana telemetry (synthetic KPIs from Lighthouse/linkcheck)",
+      "labels": ["feature", "ci", "observability"],
+      "acceptance": [
+        "GitHub Actions posts build KPIs as logs or metrics",
+        "Dashboardable trend: perf/seo/a11y score, broken links count, validator failures"
+      ]
+    },
+    {
+      "id": "SH-TS-17",
+      "type": "task",
+      "repo": "shared-tooling",
+      "parent": "SH-FE-13",
+      "title": "Define KPI payloads (lighthouse scores, linkcheck counts, build duration)",
+      "labels": ["task", "ci", "analytics"],
+      "acceptance": [
+        "Stable series names + labels (repo, branch, commit, environment)"
+      ]
+    },
+    {
+      "id": "SH-FE-14",
+      "type": "feature",
+      "repo": "shared-tooling",
+      "parent": "SH-EP-04",
+      "title": "Free/self-host web analytics option (Umami) + export bridge",
+      "labels": ["feature", "analytics", "self-hosted"],
+      "acceptance": [
+        "Umami deployment docs + docker-compose baseline",
+        "Site integration snippet and event naming aligns with unified schema",
+        "Optional bridge job exports Umami stats into Grafana (logs/metrics)"
+      ]
+    },
+    {
+      "id": "SH-TS-18",
+      "type": "task",
+      "repo": "shared-tooling",
+      "parent": "SH-FE-14",
+      "title": "Umami integration templates for Astro + event tracking mapping",
+      "labels": ["task", "analytics"],
+      "acceptance": [
+        "Works with strict privacy defaults; no cookies unless enabled"
+      ]
+    },
+    {
+      "id": "SH-FE-15",
+      "type": "feature",
+      "repo": "shared-tooling",
+      "parent": "SH-EP-04",
+      "title": "Grafana Cloud cost guardrails (free tier-aware throttling + retention)",
+      "labels": ["feature", "finops", "grafana-cloud"],
+      "acceptance": [
+        "Configurable caps and sampling to stay within usage limits",
+        "Alerts/dashboards highlight ingestion spikes"
+      ]
+    },
+    {
+      "id": "SH-EP-05",
+      "type": "epic",
+      "repo": "shared-tooling",
+      "title": "Grafana dashboards pack (conversion, SEO, CI quality, funnel health)",
+      "labels": ["epic", "dashboards", "observability"],
+      "depends_on": ["SH-EP-04"],
+      "acceptance": [
+        "Dashboards imported from JSON provisioning (no click-ops)",
+        "Panels: funnel events, lighthouse trends, broken links trends, error rates"
+      ]
+    },
+    {
+      "id": "SH-FE-16",
+      "type": "feature",
+      "repo": "shared-tooling",
+      "parent": "SH-EP-05",
+      "title": "Provisioned dashboards + alerts (conversion drops, CI regressions)",
+      "labels": ["feature", "dashboards", "alerts"],
+      "acceptance": [
+        "Alert when: broken links > threshold, lighthouse perf dips, form_submit_fail spikes",
+        "Alerts wired to chosen channel without leaking secrets in repo"
+      ]
+    },
+
+    {
+      "id": "MD-EP-01",
+      "type": "epic",
+      "repo": "my-dare",
+      "title": "Recurring revenue engine (membership + domiciliation + credits)",
+      "labels": ["epic", "revenue", "recurring"],
+      "acceptance": [
+        "Clear monthly/annual plans visible",
+        "Teams + invoicing flow exists",
+        "Upsell loops implemented"
+      ]
+    },
+    {
+      "id": "MD-FE-01",
+      "type": "feature",
+      "repo": "my-dare",
+      "parent": "MD-EP-01",
+      "title": "Offers data model + /offers with comparison tables",
+      "labels": ["feature", "pricing", "conversion"],
+      "acceptance": [
+        "Single source of truth for plans + add-ons",
+        "Offers page shows plans + included features + CTAs",
+        "No broken existing URLs"
+      ]
+    },
+    {
+      "id": "MD-TS-01",
+      "type": "task",
+      "repo": "my-dare",
+      "parent": "MD-FE-01",
+      "title": "Define plan ladder: coworking recurring + domiciliation tiers + add-ons",
+      "labels": ["task", "pricing"],
+      "acceptance": ["Plan fields include cadence + placeholders for prices"]
+    },
+    {
+      "id": "MD-TS-02",
+      "type": "task",
+      "repo": "my-dare",
+      "parent": "MD-FE-01",
+      "title": "Build UI components: PriceCard, CompareTable, FeatureList",
+      "labels": ["task", "ui"],
+      "acceptance": ["Reusable components wired to offers model"]
+    },
+    {
+      "id": "MD-FE-02",
+      "type": "feature",
+      "repo": "my-dare",
+      "parent": "MD-EP-01",
+      "title": "Annual prepay + teams (invoice-first) + procurement assets",
+      "labels": ["feature", "b2b", "sales"],
+      "acceptance": [
+        "/teams page exists with plans and lead capture",
+        "Teams one-pager PDF generated at build time"
+      ]
+    },
+    {
+      "id": "MD-FE-03",
+      "type": "feature",
+      "repo": "my-dare",
+      "parent": "MD-EP-01",
+      "title": "Domiciliation SLA + workflow + upsell meeting credits",
+      "labels": ["feature", "domiciliation", "upsell"],
+      "acceptance": [
+        "SLA block is data-driven and visible",
+        "Add-on packs + bundle displayed"
+      ]
+    },
+    {
+      "id": "MD-FE-04",
+      "type": "feature",
+      "repo": "my-dare",
+      "parent": "MD-EP-01",
+      "title": "Meeting room credits + booking request flow",
+      "labels": ["feature", "rooms", "recurring"],
+      "acceptance": [
+        "Credits model exists and is surfaced in plans",
+        "/rooms catalog + booking request works (no-JS submit)"
+      ]
+    },
+
+    {
+      "id": "MD-EP-02",
+      "type": "epic",
+      "repo": "my-dare",
+      "title": "High-conversion visit funnel + reputation loop",
+      "labels": ["epic", "conversion", "local"],
+      "acceptance": [
+        "/visit page is primary conversion hub",
+        "WhatsApp-first CTA tracked",
+        "Review loop implemented (delayed CTA)"
+      ]
+    },
+    {
+      "id": "MD-FE-05",
+      "type": "feature",
+      "repo": "my-dare",
+      "parent": "MD-EP-02",
+      "title": "/visit funnel (WhatsApp + booking + fallback + form)",
+      "labels": ["feature", "conversion"],
+      "acceptance": [
+        "All visit CTAs route to /visit",
+        "No-JS fallback exists (mailto/phone)"
+      ]
+    },
+    {
+      "id": "MD-FE-06",
+      "type": "feature",
+      "repo": "my-dare",
+      "parent": "MD-EP-02",
+      "title": "Google review loop (config-driven, non-spam)",
+      "labels": ["feature", "reputation"],
+      "depends_on": ["MD-FE-05"],
+      "acceptance": [
+        "Review CTA shown after delay",
+        "Review URL is config-driven"
+      ]
+    },
+
+    {
+      "id": "MD-EP-03",
+      "type": "epic",
+      "repo": "my-dare",
+      "title": "Proof + Work Club differentiation (assets, gallery, facts)",
+      "labels": ["epic", "brand", "trust"],
+      "acceptance": [
+        "Work Club narrative exists",
+        "Gallery is structured + validated",
+        "Facts are data-driven"
+      ]
+    },
+    {
+      "id": "MD-FE-07",
+      "type": "feature",
+      "repo": "my-dare",
+      "parent": "MD-EP-03",
+      "title": "Gallery refactor (captions + alt + responsive + filters)",
+      "labels": ["feature", "ux", "a11y"],
+      "acceptance": [
+        "All images have alt + caption",
+        "Lazy load + responsive sizes"
+      ]
+    },
+    {
+      "id": "MD-FE-08",
+      "type": "feature",
+      "repo": "my-dare",
+      "parent": "MD-EP-03",
+      "title": "ProofBlock (facts + testimonial policy)",
+      "labels": ["feature", "trust"],
+      "acceptance": [
+        "Facts are config-driven",
+        "Testimonials enforce policy via validator"
+      ]
+    },
+
+    {
+      "id": "MD-EP-04",
+      "type": "epic",
+      "repo": "my-dare",
+      "title": "Local SEO capture (landing pages + schema + metadata discipline)",
+      "labels": ["epic", "seo", "acquisition"],
+      "acceptance": [
+        "Cluster pages exist and are indexed-ready",
+        "LocalBusiness + FAQ schema present",
+        "Unique metadata enforced"
+      ]
+    },
+    {
+      "id": "MD-FE-09",
+      "type": "feature",
+      "repo": "my-dare",
+      "parent": "MD-EP-04",
+      "title": "Local SEO cluster pages (coworking/domiciliation/rooms)",
+      "labels": ["feature", "seo"],
+      "acceptance": [
+        "Pages exist with FAQs and CTAs",
+        "Sitemap/robots/canonical/hreflang correct"
+      ]
+    },
+
+    {
+      "id": "MD-EP-05",
+      "type": "epic",
+      "repo": "my-dare",
+      "title": "Lead pipeline + anti-spam + export",
+      "labels": ["epic", "ops", "automation"],
+      "acceptance": [
+        "All forms protected (honeypot/rate limit)",
+        "Submissions stored durably",
+        "Export available (admin or artifact)"
+      ]
+    },
+    {
+      "id": "MD-FE-10",
+      "type": "feature",
+      "repo": "my-dare",
+      "parent": "MD-EP-05",
+      "title": "Forms hardening (validation + honeypot + consent)",
+      "labels": ["feature", "security", "privacy"],
+      "acceptance": [
+        "Consent copy + privacy link present",
+        "Server-side validation implemented where applicable"
+      ]
+    },
+    {
+      "id": "MD-FE-11",
+      "type": "feature",
+      "repo": "my-dare",
+      "parent": "MD-EP-05",
+      "title": "Durable storage (DB/table or webhook) + export",
+      "labels": ["feature", "ops"],
+      "acceptance": [
+        "Storage works in production via env vars",
+        "Export is available and documented"
+      ]
+    },
+
+    {
+      "id": "MD-EP-06",
+      "type": "epic",
+      "repo": "my-dare",
+      "title": "B2B bankability pack (policies, decks, SLAs, procurement)",
+      "labels": ["epic", "b2b", "recurring"],
+      "acceptance": [
+        "Procurement-ready assets exist and are downloadable",
+        "Policies are explicit and versioned"
+      ]
+    },
+    {
+      "id": "MD-FE-12",
+      "type": "feature",
+      "repo": "my-dare",
+      "parent": "MD-EP-06",
+      "title": "House rules + visitor policy + terms pages (FR/EN if needed)",
+      "labels": ["feature", "ops", "privacy"],
+      "acceptance": [
+        "Rules pages exist and are linked from offers/teams/contact",
+        "No generic placeholders left in production"
+      ]
+    },
+    {
+      "id": "MD-FE-13",
+      "type": "feature",
+      "repo": "my-dare",
+      "parent": "MD-EP-01",
+      "title": "Member portal-lite (/members): credits usage, upgrades, renewals",
+      "labels": ["feature", "retention", "upsell"],
+      "acceptance": [
+        "Members page explains how to use credits/book/upgrade",
+        "Annual switch CTA is present (config-driven)"
+      ]
+    },
+    {
+      "id": "MD-FE-14",
+      "type": "feature",
+      "repo": "my-dare",
+      "parent": "MD-EP-01",
+      "title": "Upsell engine: add-ons cards + upgrade flows (invoice-first)",
+      "labels": ["feature", "upsell", "recurring"],
+      "depends_on": ["MD-FE-01", "MD-FE-04"],
+      "acceptance": [
+        "Add-ons can be requested from any plan page",
+        "Upgrade intent captured as lead with plan context"
+      ]
+    },
+    {
+      "id": "MD-FE-15",
+      "type": "feature",
+      "repo": "my-dare",
+      "parent": "MD-EP-03",
+      "title": "Virtual tour page (/tour) + OG/SEO",
+      "labels": ["feature", "trust", "seo"],
+      "acceptance": [
+        "Tour page exists with media embeds and captions",
+        "OG image present and validated"
+      ]
+    },
+    {
+      "id": "MD-FE-16",
+      "type": "feature",
+      "repo": "my-dare",
+      "parent": "MD-EP-02",
+      "title": "Occupancy signal widget (manual admin update)",
+      "labels": ["feature", "conversion", "ops"],
+      "acceptance": [
+        "Widget shows seats-available / next-quiet-slot (config/manual)",
+        "Admin update path exists and is protected"
+      ]
+    },
+    {
+      "id": "MD-FE-17",
+      "type": "feature",
+      "repo": "my-dare",
+      "parent": "MD-EP-02",
+      "title": "Referral program (credits) + attribution tracking",
+      "labels": ["feature", "growth", "recurring"],
+      "acceptance": [
+        "Referral codes generated and captured on signup/lead",
+        "Events tracked: referral_open/start/complete"
+      ]
+    },
+    {
+      "id": "MD-FE-18",
+      "type": "feature",
+      "repo": "my-dare",
+      "parent": "MD-EP-05",
+      "title": "Form integration tests (local) for visit/contact/rooms/teams",
+      "labels": ["feature", "ci", "ops"],
+      "acceptance": [
+        "CI runs a local submission test suite with deterministic outputs"
+      ]
+    },
+    {
+      "id": "MD-FE-19",
+      "type": "feature",
+      "repo": "my-dare",
+      "parent": "MD-EP-04",
+      "title": "Google Business Profile assets checklist + site hooks",
+      "labels": ["feature", "local", "reputation"],
+      "acceptance": [
+        "Config includes review URL and map parameters",
+        "Site surfaces review and map consistently"
+      ]
+    },
+    {
+      "id": "MD-FE-20",
+      "type": "feature",
+      "repo": "my-dare",
+      "title": "MyDare: instrument revenue funnel + push telemetry (OTLP/RUM) with privacy defaults",
+      "labels": ["feature", "observability", "conversion", "recurring"],
+      "depends_on": ["SH-FE-11", "SH-TS-14"],
+      "acceptance": [
+        "Track: plan_selected, visit_cta_click, whatsapp_click, rooms_booking_request, teams_lead_submit",
+        "No PII in telemetry; lead payload stays in lead store, only IDs in telemetry"
+      ]
+    },
+
+    {
+      "id": "OM-EP-01",
+      "type": "epic",
+      "repo": "omnivya",
+      "title": "Nearshore revenue line (pods) + delivery model + retainers",
+      "labels": ["epic", "revenue", "nearshore", "recurring"],
+      "acceptance": [
+        "Nearshore pages exist with pod packaging",
+        "Retainer tiers exist",
+        "One-pagers generated"
+      ]
+    },
+    {
+      "id": "OM-FE-01",
+      "type": "feature",
+      "repo": "omnivya",
+      "parent": "OM-EP-01",
+      "title": "Nearshore pods offers (+ /nearshore + /how-we-deliver)",
+      "labels": ["feature", "nearshore", "sales"],
+      "acceptance": [
+        "Pods are productized (composition, cadence, deliverables)",
+        "How-we-deliver page exists and is credible"
+      ]
+    },
+    {
+      "id": "OM-FE-02",
+      "type": "feature",
+      "repo": "omnivya",
+      "parent": "OM-EP-01",
+      "title": "Retainer tiers (/retainers) + PDFs",
+      "labels": ["feature", "recurring", "sales"],
+      "acceptance": [
+        "3 tiers with rituals/deliverables/SLA",
+        "Tier one-pagers generated at build"
+      ]
+    },
+
+    {
+      "id": "OM-EP-02",
+      "type": "epic",
+      "repo": "omnivya",
+      "title": "Procurement-grade proof system (case studies + claim policy)",
+      "labels": ["epic", "trust", "sales"],
+      "acceptance": [
+        "Case studies structured and scalable",
+        "Metrics/testimonials policy enforced by validator"
+      ]
+    },
+    {
+      "id": "OM-FE-03",
+      "type": "feature",
+      "repo": "omnivya",
+      "parent": "OM-EP-02",
+      "title": "Case studies engine (listing + detail + schema + OG)",
+      "labels": ["feature", "trust", "seo"],
+      "acceptance": [
+        "Listing + detail pages exist",
+        "No fake logos/numbers; sources enforced"
+      ]
+    },
+    {
+      "id": "OM-FE-04",
+      "type": "feature",
+      "repo": "omnivya",
+      "parent": "OM-EP-02",
+      "title": "Claims/testimonials audit + ProofBlock refactor",
+      "labels": ["feature", "trust"],
+      "acceptance": [
+        "Unverifiable claims removed/rephrased",
+        "ProofBlock is used site-wide"
+      ]
+    },
+
+    {
+      "id": "OM-EP-03",
+      "type": "epic",
+      "repo": "omnivya",
+      "title": "Whitepapers funnel (optional gating) + i18n correctness",
+      "labels": ["epic", "funnel", "content", "i18n"],
+      "acceptance": [
+        "Whitepapers have detail pages + PDFs validated",
+        "No mixed-language strings in locale routes"
+      ]
+    },
+    {
+      "id": "OM-FE-05",
+      "type": "feature",
+      "repo": "omnivya",
+      "parent": "OM-EP-03",
+      "title": "Whitepapers content model + detail pages + optional gating",
+      "labels": ["feature", "content", "conversion"],
+      "acceptance": [
+        "Collection schema enforced",
+        "Optional gate stores leads durably"
+      ]
+    },
+    {
+      "id": "OM-FE-06",
+      "type": "feature",
+      "repo": "omnivya",
+      "parent": "OM-EP-03",
+      "title": "i18n hardening (dictionaries + hreflang + canonical + CI heuristic)",
+      "labels": ["feature", "i18n", "seo"],
+      "acceptance": [
+        "Locale pages clean",
+        "CI fails on mixed-language regressions"
+      ]
+    },
+
+    {
+      "id": "OM-EP-04",
+      "type": "epic",
+      "repo": "omnivya",
+      "title": "Service pages standardization (decision-ready templates)",
+      "labels": ["epic", "conversion", "seo"],
+      "acceptance": [
+        "All service pages follow same template",
+        "Service JSON-LD present"
+      ]
+    },
+    {
+      "id": "OM-FE-07",
+      "type": "feature",
+      "repo": "omnivya",
+      "parent": "OM-EP-04",
+      "title": "Service template + schema + CTA bundle",
+      "labels": ["feature", "conversion"],
+      "acceptance": [
+        "who/typical/deliverables/metrics/prereqs/week1/cta sections exist"
+      ]
+    },
+
+    {
+      "id": "OM-EP-05",
+      "type": "epic",
+      "repo": "omnivya",
+      "title": "Conversion system (pre-qual forms + routing + lead storage)",
+      "labels": ["epic", "conversion", "recurring"],
+      "acceptance": [
+        "Pre-qualification exists before booking/contact",
+        "Leads stored durably with source attribution"
+      ]
+    },
+    {
+      "id": "OM-FE-08",
+      "type": "feature",
+      "repo": "omnivya",
+      "parent": "OM-EP-05",
+      "title": "Pre-qualification forms for offers/nearshore/retainers (webhook/DB)",
+      "labels": ["feature", "conversion", "ops"],
+      "acceptance": [
+        "Forms work without JS submission",
+        "Lead payload includes page/offer context + UTMs"
+      ]
+    },
+    {
+      "id": "OM-FE-09",
+      "type": "feature",
+      "repo": "omnivya",
+      "parent": "OM-EP-05",
+      "title": "Booking resilience (no-JS fallback + email + calendar link)",
+      "labels": ["feature", "conversion"],
+      "acceptance": [
+        "Booking CTA always has fallback paths",
+        "No dead-ends on disabled JS"
+      ]
+    },
+    {
+      "id": "OM-FE-10",
+      "type": "feature",
+      "repo": "omnivya",
+      "parent": "OM-EP-03",
+      "title": "Legal pages pack (mentions, privacy, cookies) + consent gating",
+      "labels": ["feature", "privacy", "risk"],
+      "acceptance": [
+        "Legal routes exist and are linked from forms",
+        "Analytics is gated when required"
+      ]
+    },
+    {
+      "id": "OM-FE-11",
+      "type": "feature",
+      "repo": "omnivya",
+      "parent": "OM-EP-03",
+      "title": "Rebrand banner rationalization (dismissible + page targeting)",
+      "labels": ["feature", "ux", "growth"],
+      "acceptance": [
+        "Banner dismiss persists (TTL)",
+        "Banner not shown on contact/checkout-like pages"
+      ]
+    },
+    {
+      "id": "OM-FE-12",
+      "type": "feature",
+      "repo": "omnivya",
+      "parent": "OM-EP-04",
+      "title": "Service one-pagers generation + link placement on every service page",
+      "labels": ["feature", "sales", "automation"],
+      "depends_on": ["SH-FE-03", "OM-FE-07"],
+      "acceptance": [
+        "Every service page links to its PDF",
+        "CI validates PDFs exist"
+      ]
+    },
+    {
+      "id": "OM-FE-13",
+      "type": "feature",
+      "repo": "omnivya",
+      "title": "Omnivya: instrument offers/nearshore/retainers funnel + push telemetry (OTLP/RUM)",
+      "labels": ["feature", "observability", "sales", "nearshore"],
+      "depends_on": ["SH-FE-11", "SH-TS-14"],
+      "acceptance": [
+        "Track: offer_open, nearshore_pod_open, prequal_submit, pdf_download, booking_start",
+        "Dashboards show conversion per offer and per channel (UTM)"
+      ]
+    },
+
+    {
+      "id": "PS-EP-01",
+      "type": "epic",
+      "repo": "personal-site",
+      "title": "Trust engine that routes to Omnivya (offers, case studies, lead magnets)",
+      "labels": ["epic", "authority", "conversion"],
+      "acceptance": [
+        "Clear outcome-first positioning",
+        "Start-here personas route to Omnivya",
+        "Lead magnets generated and tracked"
+      ]
+    },
+    {
+      "id": "PS-FE-01",
+      "type": "feature",
+      "repo": "personal-site",
+      "parent": "PS-EP-01",
+      "title": "Outcome-first hero + dual CTA (book + one-pager) + no-JS fallback",
+      "labels": ["feature", "conversion"],
+      "acceptance": [
+        "Primary and secondary CTAs exist site-wide",
+        "Booking works without JS (mailto fallback)"
+      ]
+    },
+    {
+      "id": "PS-FE-02",
+      "type": "feature",
+      "repo": "personal-site",
+      "parent": "PS-EP-01",
+      "title": "/start-here personas (CTO/Platform/Sec/Delivery) with routing rules",
+      "labels": ["feature", "ux", "conversion"],
+      "acceptance": [
+        "Persona tiles route to Omnivya + content",
+        "No manual curation beyond tags/featured"
+      ]
+    },
+    {
+      "id": "PS-FE-03",
+      "type": "feature",
+      "repo": "personal-site",
+      "parent": "PS-EP-01",
+      "title": "Lead magnets PDFs (audit checklist, incident readiness) + tracking",
+      "labels": ["feature", "sales", "automation"],
+      "acceptance": [
+        "PDFs generated at build",
+        "Downloads tracked via analytics abstraction"
+      ]
+    },
+    {
+      "id": "PS-FE-04",
+      "type": "feature",
+      "repo": "personal-site",
+      "parent": "PS-EP-01",
+      "title": "Blog retention pack (TOC, related posts, takeaways, date integrity)",
+      "labels": ["feature", "content", "seo"],
+      "acceptance": [
+        "TOC + related + takeaways wired",
+        "Published/updated logic fixed"
+      ]
+    },
+
+    {
+      "id": "PS-EP-02",
+      "type": "epic",
+      "repo": "personal-site",
+      "title": "Offer + proof surface (case studies, speaking, resources) to drive Omnivya",
+      "labels": ["epic", "authority", "sales"],
+      "acceptance": [
+        "Speaking + media kit exist",
+        "Case studies exist and are structured",
+        "Resources catalog exists with freshness policy"
+      ]
+    },
+    {
+      "id": "PS-FE-05",
+      "type": "feature",
+      "repo": "personal-site",
+      "parent": "PS-EP-02",
+      "title": "Speaking page + build-time media kit PDF",
+      "labels": ["feature", "sales", "automation"],
+      "acceptance": [
+        "/speaking exists with topics/formats",
+        "Media kit PDF generated and linked"
+      ]
+    },
+    {
+      "id": "PS-FE-06",
+      "type": "feature",
+      "repo": "personal-site",
+      "parent": "PS-EP-02",
+      "title": "Case studies engine (anonymized allowed) + validators",
+      "labels": ["feature", "trust"],
+      "acceptance": [
+        "/case-studies listing + detail pages exist",
+        "Metrics/testimonials policy enforced"
+      ]
+    },
+    {
+      "id": "PS-FE-07",
+      "type": "feature",
+      "repo": "personal-site",
+      "parent": "PS-EP-02",
+      "title": "Resources catalog + last_reviewed freshness enforcement",
+      "labels": ["feature", "content", "seo"],
+      "acceptance": [
+        "/resources is filterable and useful",
+        "Build fails if last_reviewed stale"
+      ]
+    },
+    {
+      "id": "PS-FE-08",
+      "type": "feature",
+      "repo": "personal-site",
+      "parent": "PS-EP-01",
+      "title": "Pre-qual form + durable lead storage (webhook/DB) before booking",
+      "labels": ["feature", "conversion", "ops"],
+      "acceptance": [
+        "Lead stored with UTMs and persona path",
+        "No JS hard dependency"
+      ]
+    },
+    {
+      "id": "PS-FE-09",
+      "type": "feature",
+      "repo": "personal-site",
+      "title": "Personal site: trust engine telemetry (content→Omnivya routing) + push telemetry (OTLP/RUM)",
+      "labels": ["feature", "observability", "authority"],
+      "depends_on": ["SH-FE-11", "SH-TS-14"],
+      "acceptance": [
+        "Track: persona_select, case_study_open, leadmagnet_download, outbound_to_omnivya_click",
+        "Outbounds include UTM discipline and are validated in CI"
+      ]
+    }
+  ]
+}

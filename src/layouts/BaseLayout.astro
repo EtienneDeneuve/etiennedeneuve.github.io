@@ -10,6 +10,7 @@ import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import CustomStyles from "../components/CustomStyles.astro";
 import CustomScripts from "../components/CustomScripts.astro";
+import { siteConfig } from "../config/site.ts";
 
 interface Props {
   title?: string | undefined;
@@ -29,7 +30,7 @@ const { title, description, og } = Astro.props;
     <MainHead
       title={title}
       description={description}
-      og={og ? og : "https://etienne.deneuve.xyz/public/assets/portrait.jpg"}
+      og={og ? og : siteConfig.site.defaultOgImage}
     />
   </head>
   <body>

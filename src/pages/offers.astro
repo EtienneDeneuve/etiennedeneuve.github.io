@@ -1,0 +1,445 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import OfferCard from "../components/OfferCard.astro";
+import Grid from "../components/Grid.astro";
+import Icon from "../components/Icon.astro";
+import Pill from "../components/Pill.astro";
+import { siteConfig, getBrandText } from "../config/site.ts";
+
+// Define the 3 offers
+const offers = [
+  {
+    title: "DevSecOps / Platform Audit",
+    whoItFor: "Organisations cherchant à évaluer et améliorer leur maturité DevSecOps et leur plateforme technique.",
+    scope: [
+      "Audit complet de la chaîne CI/CD",
+      "Évaluation de la sécurité dans le cycle de développement",
+      "Analyse de l'architecture de la plateforme",
+      "Review des pratiques de déploiement et rollback",
+      "Évaluation de la culture DevOps/DevSecOps",
+      "Recommandations prioritaires avec roadmap"
+    ],
+    timeline: "2-3 semaines",
+    deliverables: [
+      "Rapport d'audit détaillé (30-50 pages)",
+      "Matrice de maturité DevSecOps",
+      "Roadmap de transformation priorisée",
+      "Présentation exécutive des résultats",
+      "Plan d'action immédiat (quick wins)"
+    ],
+    successMetrics: [
+      { label: "DORA Metrics", value: "Amélioration visée" },
+      { label: "MTTR", value: "Réduction 30-50%" },
+      { label: "Incidents", value: "Réduction 40-60%" },
+      { label: "Compliance", value: "Score 80%+" }
+    ],
+    startingPrice: "Sur demande"
+  },
+  {
+    title: "Platform Engineering Starter Kit",
+    whoItFor: "Équipes techniques prêtes à construire une plateforme interne pour accélérer le développement.",
+    scope: [
+      "Design de l'architecture de plateforme",
+      "Sélection et configuration des outils (IaC, CI/CD, monitoring)",
+      "Mise en place des golden paths",
+      "Création des templates et boilerplates",
+      "Documentation et runbooks",
+      "Formation de l'équipe plateforme"
+    ],
+    timeline: "4-6 semaines",
+    deliverables: [
+      "Architecture de plateforme documentée",
+      "Environnement de développement opérationnel",
+      "Templates IaC (Terraform/Ansible)",
+      "Pipelines CI/CD de référence",
+      "Documentation technique complète",
+      "Formation et handover à l'équipe"
+    ],
+    successMetrics: [
+      { label: "Time to Market", value: "Réduction 50-70%" },
+      { label: "Developer Experience", value: "Score 8/10+" },
+      { label: "Self-Service", value: "80%+ des besoins" },
+      { label: "Standardization", value: "90%+ des projets" }
+    ],
+    startingPrice: "Sur demande"
+  },
+  {
+    title: "CTO/Staff Coaching",
+    whoItFor: "CTO, Staff Engineers et leaders techniques cherchant à développer leurs compétences stratégiques et techniques.",
+    scope: [
+      "Coaching individuel ou en petit groupe",
+      "Architecture technique et décisions stratégiques",
+      "Leadership technique et influence",
+      "Gestion de la dette technique",
+      "Transformation organisationnelle",
+      "Mentoring sur les pratiques modernes"
+    ],
+    timeline: "Engagement mensuel (3-6 mois)",
+    deliverables: [
+      "Sessions de coaching régulières (2-4h/mois)",
+      "Plan de développement personnel",
+      "Ressources et références ciblées",
+      "Feedback et recommandations",
+      "Support par email entre sessions"
+    ],
+    successMetrics: [
+      { label: "Confiance technique", value: "Amélioration mesurable" },
+      { label: "Décisions stratégiques", value: "Qualité accrue" },
+      { label: "Impact organisationnel", value: "Visibilité augmentée" },
+      { label: "Satisfaction", value: "Score 9/10+" }
+    ],
+    startingPrice: "Sur demande"
+  },
+  {
+    title: "Observabilité Fine / OTEL Implementation",
+    whoItFor: "Équipes techniques cherchant à mettre en place une observabilité moderne avec OpenTelemetry pour une visibilité complète sur leurs systèmes distribués.",
+    scope: [
+      "Architecture et design de l'observabilité avec OpenTelemetry",
+      "Instrumentation des applications (traces, métriques, logs)",
+      "Configuration des collectors OTEL",
+      "Intégration avec les backends (Jaeger, Prometheus, Grafana, etc.)",
+      "Mise en place des dashboards et alertes",
+      "Formation de l'équipe sur les bonnes pratiques OTEL"
+    ],
+    timeline: "4-8 semaines",
+    deliverables: [
+      "Architecture d'observabilité documentée",
+      "Applications instrumentées avec OTEL",
+      "Collectors configurés et déployés",
+      "Dashboards Grafana personnalisés",
+      "Documentation technique et runbooks",
+      "Formation et handover à l'équipe"
+    ],
+    successMetrics: [
+      { label: "Couverture d'instrumentation", value: "80%+ des services" },
+      { label: "Time to Detect", value: "Réduction 60-80%" },
+      { label: "Time to Resolve", value: "Réduction 40-60%" },
+      { label: "Visibilité système", value: "End-to-end tracing" }
+    ],
+    startingPrice: "Sur demande"
+  },
+  {
+    title: "FinOps & Cloud Cost Optimization",
+    whoItFor: "Organisations cherchant à optimiser leurs coûts cloud et mettre en place une culture FinOps pour une meilleure gouvernance financière.",
+    scope: [
+      "Audit complet des coûts cloud (multi-cloud si applicable)",
+      "Identification des opportunités d'optimisation",
+      "Mise en place d'outils de monitoring et allocation des coûts",
+      "Définition de budgets et alertes de coûts",
+      "Optimisation des ressources (right-sizing, réservations, spot instances)",
+      "Formation FinOps et bonnes pratiques"
+    ],
+    timeline: "3-6 semaines",
+    deliverables: [
+      "Rapport d'analyse des coûts cloud",
+      "Plan d'optimisation priorisé (quick wins + long terme)",
+      "Dashboard de monitoring des coûts",
+      "Politiques de gouvernance FinOps",
+      "Documentation et runbooks",
+      "Formation de l'équipe"
+    ],
+    successMetrics: [
+      { label: "Réduction des coûts", value: "20-40% en 3 mois" },
+      { label: "Visibilité des coûts", value: "100% des ressources taguées" },
+      { label: "Time to optimize", value: "Détection < 24h" },
+      { label: "ROI", value: "Retour sur investissement mesurable" }
+    ],
+    startingPrice: "Sur demande"
+  },
+  {
+    title: "Kubernetes Migration & Optimization",
+    whoItFor: "Équipes cherchant à migrer vers Kubernetes ou optimiser leur cluster existant pour améliorer la résilience, la scalabilité et l'efficacité opérationnelle.",
+    scope: [
+      "Audit de l'infrastructure actuelle et plan de migration",
+      "Design de l'architecture Kubernetes (multi-cluster si nécessaire)",
+      "Migration des applications vers Kubernetes",
+      "Configuration CI/CD pour Kubernetes",
+      "Mise en place de la sécurité (RBAC, network policies, Pod Security)",
+      "Optimisation des ressources (HPA, VPA, cluster autoscaling)",
+      "Formation et handover"
+    ],
+    timeline: "6-12 semaines",
+    deliverables: [
+      "Architecture Kubernetes documentée",
+      "Applications migrées et opérationnelles",
+      "Manifests Kubernetes (Helm charts si applicable)",
+      "Pipelines CI/CD configurés",
+      "Documentation technique complète",
+      "Formation de l'équipe SRE/Platform"
+    ],
+    successMetrics: [
+      { label: "Uptime", value: "99.9%+ SLA" },
+      { label: "Resource efficiency", value: "Utilisation 70-80%" },
+      { label: "Time to deploy", value: "Réduction 50-70%" },
+      { label: "Cost per workload", value: "Optimisation 30-50%" }
+    ],
+    startingPrice: "Sur demande"
+  },
+  {
+    title: "GreenOps & Cloud Sustainability",
+    whoItFor: "Organisations soucieuses de réduire leur empreinte carbone et d'optimiser l'efficacité énergétique de leur infrastructure cloud.",
+    scope: [
+      "Audit de l'empreinte carbone actuelle",
+      "Analyse de l'efficacité énergétique des workloads",
+      "Optimisation des ressources (consolidation, scheduling intelligent)",
+      "Migration vers des régions/zonnes plus vertes",
+      "Mise en place de métriques de durabilité",
+      "Formation sur les pratiques GreenOps"
+    ],
+    timeline: "4-8 semaines",
+    deliverables: [
+      "Rapport d'empreinte carbone baseline",
+      "Plan d'action de réduction",
+      "Dashboard de monitoring de la durabilité",
+      "Recommandations d'optimisation énergétique",
+      "Documentation et bonnes pratiques",
+      "Formation de l'équipe"
+    ],
+    successMetrics: [
+      { label: "Réduction carbone", value: "20-40% en 6 mois" },
+      { label: "Efficacité énergétique", value: "Amélioration mesurable" },
+      { label: "Coûts énergétiques", value: "Réduction 15-30%" },
+      { label: "Compliance", value: "Alignement avec objectifs RSE" }
+    ],
+    startingPrice: "Sur demande"
+  },
+  {
+    title: "Cloud Security & DevSecOps Implementation",
+    whoItFor: "Organisations cherchant à renforcer la sécurité de leur infrastructure cloud et intégrer la sécurité dans leur cycle de développement.",
+    scope: [
+      "Audit de sécurité cloud (CSPM, posture management)",
+      "Configuration de la sécurité (IAM, encryption, network security)",
+      "Intégration sécurité dans CI/CD (SAST, DAST, SCA)",
+      "Mise en place de la gestion des secrets",
+      "Configuration de la compliance (SOC2, ISO27001, etc.)",
+      "Formation DevSecOps et bonnes pratiques"
+    ],
+    timeline: "6-10 semaines",
+    deliverables: [
+      "Rapport d'audit de sécurité",
+      "Architecture sécurisée documentée",
+      "Pipelines CI/CD sécurisés",
+      "Politiques de sécurité et runbooks",
+      "Configuration de monitoring et alertes sécurité",
+      "Formation de l'équipe"
+    ],
+    successMetrics: [
+      { label: "Vulnérabilités", value: "Réduction 60-80%" },
+      { label: "Time to remediate", value: "Réduction 50-70%" },
+      { label: "Security posture", value: "Score 90%+" },
+      { label: "Compliance", value: "Conformité maintenue" }
+    ],
+    startingPrice: "Sur demande"
+  }
+];
+
+// Generate JSON-LD structured data for services
+const jsonLdServices = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "itemListElement": offers.map((offer, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "item": {
+      "@type": "Service",
+      "name": offer.title,
+      "description": offer.whoItFor,
+      "provider": {
+        "@type": "Organization",
+        "name": siteConfig.business.name,
+        "url": `https://${siteConfig.business.website}`,
+        "email": siteConfig.business.email
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "France"
+      },
+      "serviceType": "Professional Services"
+    }
+  }))
+};
+---
+
+<BaseLayout
+  title={getBrandText.siteTitle("Offres")}
+  description="Découvrez nos offres de services en DevSecOps, Platform Engineering et coaching technique."
+>
+  <link rel="canonical" href={`${siteConfig.site.url}/offers`} />
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLdServices)} />
+  
+  <div class="stack gap-20 lg:gap-48">
+    <div class="wrapper stack gap-20 lg:gap-20">
+      <header class="hero">
+        <Hero
+          title="Nos Offres"
+          tagline="Des solutions concrètes pour transformer votre infrastructure, votre plateforme et votre équipe technique."
+          align="start"
+        >
+          <div class="roles">
+            <Pill><Icon icon="code" size="1.33em" /> DevSecOps</Pill>
+            <Pill><Icon icon="rocket-launch" size="1.33em" /> Platform Engineering</Pill>
+            <Pill><Icon icon="strategy" size="1.33em" /> Coaching</Pill>
+            <Pill><Icon icon="chart-line" size="1.33em" /> Observabilité</Pill>
+            <Pill><Icon icon="cloud" size="1.33em" /> Cloud</Pill>
+            <Pill><Icon icon="chart-bar" size="1.33em" /> FinOps</Pill>
+            <Pill><Icon icon="leaf" size="1.33em" /> GreenOps</Pill>
+          </div>
+        </Hero>
+      </header>
+    </div>
+
+    <main class="wrapper stack gap-20 lg:gap-48">
+      <section class="section with-background section-full-width">
+        <header class="section-header stack gap-2 lg:gap-4">
+          <h2>Services Professionnels</h2>
+          <p>
+            Chaque offre est conçue pour répondre à des besoins spécifiques, avec des livrables clairs,
+            des métriques de succès mesurables et un accompagnement personnalisé.
+          </p>
+        </header>
+
+        <div class="offers-grid offers-content">
+          {offers.map((offer) => (
+            <OfferCard {...offer} />
+          ))}
+        </div>
+      </section>
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .roles {
+    display: none;
+  }
+
+  @media (min-width: 50em) {
+    .hero {
+      display: grid;
+      grid-template-columns: 6fr 4fr;
+      padding-inline: 2.5rem;
+      gap: 3.75rem;
+    }
+
+    .roles {
+      margin-top: 0.5rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+  }
+
+  .section {
+    display: block;
+    width: 100%;
+    gap: 2rem;
+  }
+
+  @media (min-width: 50em) {
+    .section {
+      gap: 5rem;
+    }
+  }
+
+  .section-full-width {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding-inline: 1.5rem;
+    overflow: visible;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 50em) {
+    .section-full-width {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  .with-background {
+    position: relative;
+  }
+
+  .with-background::before {
+    --hero-bg: var(--bg-image-subtle-2);
+
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    left: 50%;
+    width: 100vw;
+    aspect-ratio: calc(2.25 / var(--bg-scale));
+    top: 0;
+    transform: translateY(-75%) translateX(-50%);
+    background:
+      url("/assets/backgrounds/noise.png") top center/220px repeat,
+      var(--hero-bg) center center / var(--bg-gradient-size) no-repeat,
+      var(--gray-999);
+    background-blend-mode: overlay, normal, normal, normal;
+    mix-blend-mode: var(--bg-blend-mode);
+    z-index: -1;
+    will-change: transform;
+  }
+
+  .section-header {
+    text-align: center;
+    max-width: 65ch;
+    margin: 0 auto;
+    font-size: var(--text-md);
+    color: var(--gray-300);
+  }
+
+  .section-header h2 {
+    font-size: var(--text-2xl);
+    color: var(--gray-0);
+    margin: 0;
+  }
+
+  @media (min-width: 50em) {
+    .section-header {
+      font-size: var(--text-lg);
+    }
+
+    .section-header h2 {
+      font-size: var(--text-4xl);
+    }
+
+    .offers-content {
+      width: 100%;
+    }
+  }
+
+  .offers-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
+    align-items: stretch; /* Stretch all cards to same height */
+    width: 100%;
+    max-width: 100%;
+  }
+
+  @media (min-width: 50em) {
+    .offers-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2rem;
+      align-items: stretch; /* Stretch all cards to same height */
+    }
+  }
+
+  /* Only show 3 columns on very large screens where there's enough space */
+  @media (min-width: 90em) {
+    .offers-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2.5rem;
+      align-items: stretch; /* Stretch all cards to same height */
+    }
+  }
+</style>

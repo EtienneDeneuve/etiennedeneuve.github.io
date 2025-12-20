@@ -5,15 +5,16 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import ResourceLinkPreview from "../../components/ResourcesPreview.astro";
 import Hero from "../../components/Hero.astro";
 import Grid from "../../components/Grid.astro";
+import { siteConfig, getBrandText } from "../../config/site.ts";
 
-// Charger toutes les ressources depuis la collection "resources" et les trier par date de publication
+// Charger toutes les ressources depuis la collection "resources" et les trier par date de review
 const resources = (await getCollection("resources")).sort(
-    (a, b) => b.data.pubDate?.valueOf() - a.data.pubDate?.valueOf(),
+    (a, b) => b.data.lastReviewed.valueOf() - a.data.lastReviewed.valueOf(),
 );
 ---
 
 <BaseLayout
-    title="Mes Ressources | Etienne Deneuve"
+    title={getBrandText.siteTitle("Mes Ressources")}
     description="Découvrez une collection de ressources utiles pour enrichir vos connaissances"
 >
     <div class="stack gap-20">

@@ -1,0 +1,132 @@
+{
+  "github": {
+    "publicRepos": 47,
+    "followers": 77,
+    "following": 54,
+    "contributions": 0,
+    "lastUpdated": "2025-12-20T18:07:26.054Z"
+  },
+  "youtube": {
+    "subscribers": 0,
+    "totalViews": 0,
+    "videoCount": 0,
+    "lastUpdated": "2025-12-20T18:07:26.054Z"
+  },
+  "linkedin": {
+    "profileViews": 0,
+    "connections": 500,
+    "followers": 7828,
+    "headline": "Cloud Infrastructure & Platform Strategy Advisor Expert Kubernetes & Azure - DevSecOps - FinOps - Platform engineering",
+    "location": "Clamart, Île-de-France, France",
+    "experienceCount": 0,
+    "educationCount": 0,
+    "skillsCount": 0,
+    "lastUpdated": "2025-12-20T18:07:26.054Z"
+  },
+  "omnivya": {
+    "websiteStatus": "online",
+    "websiteAccessible": true,
+    "linkedinFollowers": 0,
+    "lastUpdated": "2025-12-20T18:07:26.054Z"
+  },
+  "simplifiEd": {
+    "publicRepos": 19,
+    "members": 0,
+    "totalStars": 54,
+    "totalForks": 3,
+    "repos": [
+      {
+        "name": "cloudcost",
+        "description": "Go cli to check Cloud services (Azure for now) prices on the fly",
+        "stars": 25,
+        "forks": 0,
+        "language": "Go",
+        "url": "https://github.com/Simplifi-ED/cloudcost",
+        "updated": "2024-10-16T18:25:13Z"
+      },
+      {
+        "name": "azdo-kube-operator",
+        "description": "Kubernetes Operator for Azure DevOps Agents",
+        "stars": 14,
+        "forks": 1,
+        "language": "Go",
+        "url": "https://github.com/Simplifi-ED/azdo-kube-operator",
+        "updated": "2025-12-19T13:54:55Z"
+      },
+      {
+        "name": "akslifecycle",
+        "description": "",
+        "stars": 6,
+        "forks": 1,
+        "language": "Go",
+        "url": "https://github.com/Simplifi-ED/akslifecycle",
+        "updated": "2024-09-11T20:04:41Z"
+      },
+      {
+        "name": "go-amumu",
+        "description": "A go CLI app for sending emails using Microsoft Graph API",
+        "stars": 4,
+        "forks": 0,
+        "language": "Go",
+        "url": "https://github.com/Simplifi-ED/go-amumu",
+        "updated": "2025-02-05T05:47:33Z"
+      },
+      {
+        "name": "chart-version",
+        "description": "A cli + helm plugin that changes the chart version to any desired version (for use in cicd)",
+        "stars": 2,
+        "forks": 0,
+        "language": "Shell",
+        "url": "https://github.com/Simplifi-ED/chart-version",
+        "updated": "2024-04-02T09:04:14Z"
+      },
+      {
+        "name": "install-pipx",
+        "description": "auto install pipx",
+        "stars": 1,
+        "forks": 0,
+        "language": "Shell",
+        "url": "https://github.com/Simplifi-ED/install-pipx",
+        "updated": "2025-11-24T10:17:48Z"
+      },
+      {
+        "name": "GetIPBack",
+        "description": "A cli to recover lost ips in Azure",
+        "stars": 1,
+        "forks": 0,
+        "language": "Go",
+        "url": "https://github.com/Simplifi-ED/GetIPBack",
+        "updated": "2025-11-24T10:16:10Z"
+      },
+      {
+        "name": "ShaiHulud-AzureDevops-Scanner",
+        "description": "",
+        "stars": 1,
+        "forks": 0,
+        "language": "Python",
+        "url": "https://github.com/Simplifi-ED/ShaiHulud-AzureDevops-Scanner",
+        "updated": "2025-09-23T07:15:47Z"
+      },
+      {
+        "name": ".github",
+        "description": "Public organization profile",
+        "stars": 0,
+        "forks": 0,
+        "language": "",
+        "url": "https://github.com/Simplifi-ED/.github",
+        "updated": "2025-12-14T17:10:16Z"
+      },
+      {
+        "name": "nx-extend",
+        "description": "Nx Workspaces builders and tools",
+        "stars": 0,
+        "forks": 0,
+        "language": "TypeScript",
+        "url": "https://github.com/Simplifi-ED/nx-extend",
+        "updated": "2025-11-24T10:17:51Z"
+      }
+    ],
+    "lastUpdated": "2025-12-20T18:07:26.054Z"
+  },
+  "lastFetched": "2025-12-20T18:07:26.054Z"
+}

@@ -16,6 +16,7 @@ import PortfolioPreview from "../components/PortfolioPreview.astro";
 // import ContactCTA from "../components/ContactCTA.astro";
 import Skills from "../components/Skills.astro";
 import { fade } from "astro:transitions";
+import { siteConfig, getBrandText } from "../config/site.ts";
 
 // Content Fetching: List four most recent work projects
 const projects = (await getCollection("blog"))
@@ -24,20 +25,58 @@ const projects = (await getCollection("blog"))
 
 // Full Astro Component Syntax:
 // https://docs.astro.build/core-concepts/astro-components/
+
+// Generate JSON-LD structured data
+const jsonLdPerson = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": siteConfig.author.name,
+  "url": siteConfig.site.url,
+  "sameAs": [
+    siteConfig.social.twitter,
+    siteConfig.social.github,
+    siteConfig.social.linkedin,
+    siteConfig.social.youtube,
+  ],
+  "jobTitle": siteConfig.author.jobTitle || "Cloud Infrastructure & Platform Strategy Advisor",
+  "description": siteConfig.author.tagline,
+};
+
+const jsonLdWebsite = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": siteConfig.author.siteName,
+  "url": siteConfig.site.url,
+  "description": siteConfig.site.description,
+  "author": {
+    "@type": "Person",
+    "name": siteConfig.author.name,
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": siteConfig.business.name,
+    "url": `https://${siteConfig.business.website}`,
+  },
+};
 ---
 
-<BaseLayout>
+<BaseLayout
+  title={getBrandText.siteTitle()}
+  description={siteConfig.author.tagline}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLdPerson)} />
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLdWebsite)} />
   <div class="stack gap-20 lg:gap-48">
     <div class="wrapper stack gap-20 lg:gap-20">
       <header class="hero">
         <Hero
-          title="Hello, je suis Etienne Deneuve"
-          tagline="Je suis passioné par le Cloud, le DevSecOps, le Platform Engineering, la cybersécurité et beaucoup d'autres sujets."
+          title={`Hello, je suis ${siteConfig.author.name}`}
+          tagline={siteConfig.author.tagline}
           align="start"
         >
           <div class="roles">
             <Pill
-              ><Icon icon="code" size="1.33em" /> Senior Architect Solutions</Pill
+              ><Icon icon="code" size="1.33em" /> {siteConfig.author.jobTitle}</Pill
             >
             <Pill><Icon icon="microphone-stage" size="1.33em" /> Speaker</Pill>
             <Pill><Icon icon="pencil-line" size="1.33em" /> Writer</Pill>

@@ -1,0 +1,6 @@
+This PDF should be generated from media-kit.html using a tool like puppeteer.
+  
+To generate:
+1. Install puppeteer: npm install -D puppeteer
+2. Use puppeteer to convert HTML to PDF
+3. Or use browser print-to-PDF on media-kit.html

@@ -1,0 +1,30 @@
+{
+  "timeout": "20s",
+  "retryOn429": true,
+  "retryCount": 3,
+  "fallbackRetryDelay": "1s",
+  "aliveStatusCodes": [200, 201, 202, 204, 301, 302, 307, 308],
+  "ignorePatterns": [
+    {
+      "pattern": "^mailto:"
+    },
+    {
+      "pattern": "^#"
+    },
+    {
+      "pattern": "^javascript:"
+    },
+    {
+      "pattern": "localhost"
+    },
+    {
+      "pattern": "127\\.0\\.0\\.1"
+    }
+  ],
+  "replacementPatterns": [
+    {
+      "pattern": "^/",
+      "replacement": "https://etienne.deneuve.xyz/"
+    }
+  ]
+}

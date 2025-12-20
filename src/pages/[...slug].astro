@@ -6,6 +6,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
 import Icon from "../components/Icon.astro";
 import Pill from "../components/Pill.astro";
+import { siteConfig } from "../config/site.ts";
 
 interface Props {
   entry: CollectionEntry<"blog">;
@@ -25,7 +26,47 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await entry.render();
 
-const og = `https://etienne.deneuve.xyz/open-graph/${entry.slug}.png`;
+const og = `${siteConfig.site.url}/open-graph/${entry.slug}.png`;
+const articleUrl = `${siteConfig.site.url}/${entry.slug}`;
+
+// Generate JSON-LD Article schema
+const jsonLdArticle = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": entry.data.title,
+  "description": entry.data.description,
+  "url": articleUrl,
+  "datePublished": entry.data.pubDate.toISOString(),
+  "dateModified": entry.data.lastModified
+    ? new Date(entry.data.lastModified).toISOString()
+    : entry.data.pubDate.toISOString(),
+  "author": {
+    "@type": "Person",
+    "name": siteConfig.author.name,
+    "url": siteConfig.site.url,
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": siteConfig.business.name,
+    "url": `https://${siteConfig.business.website}`,
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": articleUrl,
+  },
+  ...(entry.data.img && {
+    "image": {
+      "@type": "ImageObject",
+      "url": entry.data.img.startsWith("http")
+        ? entry.data.img
+        : `${siteConfig.site.url}/${entry.data.img}`,
+      ...(entry.data.img_alt && { "caption": entry.data.img_alt }),
+    },
+  }),
+  ...(entry.data.tags && entry.data.tags.length > 0 && {
+    "keywords": entry.data.tags.join(", "),
+  }),
+};
 ---
 
 <BaseLayout
@@ -33,6 +74,8 @@ const og = `https://etienne.deneuve.xyz/open-graph/${entry.slug}.png`;
   description={entry.data.description}
   og={og}
 >
+  <link rel="canonical" href={articleUrl} />
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLdArticle)} />
   <div class="stack gap-20">
     <div class="stack gap-15">
       <header>
