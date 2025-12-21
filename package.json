@@ -17,7 +17,7 @@
     "spellcheck:fix": "cspell \"**/*.{md,astro,ts,js,mjs,json}\" --no-progress --no-must-find-files",
     "linkcheck": "node src/scripts/check-links.mjs",
     "linkcheck:markdown": "find src -name '*.md' -type f | xargs -I {} markdown-link-check {} --config .markdown-link-check.json",
-    "lighthouse": "lhci autorun --config=lighthouserc.js",
+    "lighthouse": "lhci autorun --config=lighthouserc.cjs",
     "fetch-social-stats": "node src/scripts/fetch-social-stats.mjs",
     "sync-linkedin": "node src/scripts/sync-linkedin-profile.mjs",
     "harmonize-profile": "node src/scripts/harmonize-profile.mjs",
