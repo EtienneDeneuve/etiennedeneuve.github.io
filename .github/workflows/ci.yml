@@ -224,7 +224,7 @@ jobs:
           path: ${{ env.BUILD_PATH }}/dist
       
       - name: Run Lighthouse CI
-        run: lhci autorun --config=lighthouserc.js
+        run: pnpm exec lhci autorun --config=lighthouserc.js
         working-directory: ${{ env.BUILD_PATH }}
         continue-on-error: true
       
