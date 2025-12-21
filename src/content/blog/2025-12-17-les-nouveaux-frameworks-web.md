@@ -4,8 +4,8 @@ pubDate: 2025-12-17T12:00:00.000Z
 description: Analyse technique, factuelle et sans préférence des nouveaux frameworks web
 tags:
   - framework web
-  - developement
-slug: 2025-12-17/automate-nouveaux framewroks web
+  - development
+slug: 2025-12-17/les-nouveaux-frameworks-web
 img: /assets/stock-3.jpg
 img_alt: nice abstract image
 lastModified: 2025-12-17T12:00:00.000Z
