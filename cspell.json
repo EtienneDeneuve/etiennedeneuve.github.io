@@ -50,7 +50,9 @@
     "*.min.js",
     "*.min.css",
     "ARCHITECTURE_MAP.md",
-    "BRAND_CONSISTENCY_SUMMARY.md"
+    "BRAND_CONSISTENCY_SUMMARY.md",
+    "src/scripts/**",
+    "scripts/**"
   ],
   "words": [
     "Astro",
