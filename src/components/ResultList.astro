@@ -1,0 +1,74 @@
+---
+interface Props {
+  results: string[];
+}
+
+const { results } = Astro.props;
+---
+
+<ul class="result-list">
+  {results.map((result) => (
+    <li class="result-item">
+      <span class="result-icon">✓</span>
+      <span class="result-text">{result}</span>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .result-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .result-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--gray-999);
+    border: 1px solid var(--gray-800);
+    border-radius: 0.75rem;
+    transition: all var(--theme-transition);
+  }
+
+  .result-item:hover {
+    border-color: var(--accent-regular);
+    background: var(--accent-subtle-overlay);
+  }
+
+  .result-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: var(--accent-regular);
+    color: var(--accent-text-over);
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: var(--text-sm);
+  }
+
+  .result-text {
+    flex: 1;
+    color: var(--gray-200);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+  }
+
+  @media (min-width: 50em) {
+    .result-item {
+      padding: 1.25rem;
+    }
+
+    .result-text {
+      font-size: var(--text-md);
+    }
+  }
+</style>

@@ -8,6 +8,16 @@
       "title": "blog",
       "path": "[[workspace]]/src/content/blog",
       "contentTypes": ["blog"]
+    },
+    {
+      "title": "caseStudies",
+      "path": "[[workspace]]/src/content/caseStudies",
+      "contentTypes": ["caseStudies"]
+    },
+    {
+      "title": "resources",
+      "path": "[[workspace]]/src/content/resources",
+      "contentTypes": ["resources"]
     }
   ],
   "frontMatter.custom.scripts": [
@@ -87,6 +97,165 @@
           "name": "preview",
           "type": "string",
           "isPreviewImage": true
+        }
+      ]
+    },
+    {
+      "name": "caseStudies",
+      "previewPath": "'case-studies'",
+      "pageBundle": false,
+      "clearEmpty": false,
+      "fields": [
+        {
+          "name": "title",
+          "type": "string",
+          "single": true,
+          "required": true
+        },
+        {
+          "name": "clientIndustry",
+          "type": "string",
+          "single": true,
+          "required": true
+        },
+        {
+          "name": "timeframe",
+          "type": "string",
+          "single": true,
+          "required": true
+        },
+        {
+          "name": "problem",
+          "type": "string",
+          "single": true,
+          "required": true
+        },
+        {
+          "name": "approach",
+          "type": "string",
+          "single": true,
+          "required": true
+        },
+        {
+          "name": "results",
+          "type": "array",
+          "required": true
+        },
+        {
+          "name": "metrics",
+          "type": "dictionary",
+          "required": false
+        },
+        {
+          "name": "tags",
+          "type": "tags"
+        },
+        {
+          "name": "featured",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "name": "draft",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "name": "pubDate",
+          "type": "datetime",
+          "default": "{{now}}"
+        },
+        {
+          "name": "img",
+          "type": "string",
+          "single": true
+        },
+        {
+          "name": "img_alt",
+          "type": "string",
+          "single": true
+        }
+      ]
+    },
+    {
+      "name": "resources",
+      "previewPath": "'resources'",
+      "pageBundle": false,
+      "clearEmpty": false,
+      "fields": [
+        {
+          "name": "title",
+          "type": "string",
+          "single": true,
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "single": true,
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "choice",
+          "choices": ["guide", "link", "tool", "book", "podcast", "video", "course"],
+          "required": true
+        },
+        {
+          "name": "level",
+          "type": "choice",
+          "choices": ["beginner", "intermediate", "advanced"],
+          "required": true
+        },
+        {
+          "name": "topic",
+          "type": "choice",
+          "choices": ["DevSecOps", "Platform Engineering", "Infrastructure as Code", "CI/CD", "Cloud", "Security", "Leadership", "General", "Podcast", "Other"],
+          "required": true
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "single": true
+        },
+        {
+          "name": "img",
+          "type": "string",
+          "single": true
+        },
+        {
+          "name": "tags",
+          "type": "tags"
+        },
+        {
+          "name": "summary",
+          "type": "string",
+          "single": true
+        },
+        {
+          "name": "whyItMatters",
+          "type": "string",
+          "single": true
+        },
+        {
+          "name": "whenToUse",
+          "type": "string",
+          "single": true
+        },
+        {
+          "name": "timeToConsume",
+          "type": "string",
+          "single": true
+        },
+        {
+          "name": "lastReviewed",
+          "type": "datetime",
+          "default": "{{now}}",
+          "required": true
+        },
+        {
+          "name": "pubDate",
+          "type": "datetime"
         }
       ]
     }

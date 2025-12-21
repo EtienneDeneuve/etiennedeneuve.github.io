@@ -1,10 +1,18 @@
 ---
 title: "PodCast - Techspresso"
 description: "Un podcast sur la Tech ;)"
+type: "podcast"
+level: "beginner"
+topic: "Podcast"
 category: "Podcast"
 url: "https://www.youtube.com/@TechSpresso-ug5hl/?utm_source=etienne_deneuve&utm_medium=links&utm_campaign=etienne_deneuve"
-img: https://i.ytimg.com/vi/kEx4dXOPtMc/maxresdefault.jpg?sqp=-oaymwEjCPYBEIoBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLAFAXo_5rjCGVbgnq-xjZOUjpxbLw
+img: "https://i.ytimg.com/vi/kEx4dXOPtMc/maxresdefault.jpg?sqp=-oaymwEjCPYBEIoBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLAFAXo_5rjCGVbgnq-xjZOUjpxbLw"
 tags: ["Podcast"]
+summary: "Un podcast matinal décontracté sur la tech avec discussions animées et découvertes."
+whyItMatters: "Une façon agréable de rester à jour avec l'actualité tech dans une ambiance décontractée."
+whenToUse: "Parfait pour écouter pendant votre routine matinale ou vos trajets."
+timeToConsume: "15-30 min par épisode"
+lastReviewed: 2025-12-20
 pubDate: 2024-01-15
 ---
 

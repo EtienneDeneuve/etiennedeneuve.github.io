@@ -1,0 +1,266 @@
+# Unified CI Pipeline with Quality Gates
+# 
+# This workflow runs all quality checks in a structured pipeline:
+# 1. Setup & Dependencies
+# 2. Quality Checks (lint, spellcheck, linkcheck)
+# 3. Build & Test
+# 4. Performance & SEO (Lighthouse)
+# 5. Deploy
+
+name: CI Quality Gate
+
+on:
+  push:
+    branches: ["master", "main"]
+  pull_request:
+    branches: ["master", "main"]
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+env:
+  BUILD_PATH: "."
+
+jobs:
+  # ============================================
+  # STAGE 1: Setup & Dependencies
+  # ============================================
+  setup:
+    name: Setup Environment
+    runs-on: ubuntu-latest
+    outputs:
+      node-version: ${{ steps.setup-node.outputs.node-version }}
+      pnpm-version: ${{ steps.setup-pnpm.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.head_ref || github.ref }}
+          fetch-depth: 0  # Full history for git date calculations
+      
+      - name: Setup pnpm
+        id: setup-pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.4.0
+      
+      - name: Setup Node.js
+        id: setup-node
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install
+        working-directory: ${{ env.BUILD_PATH }}
+      
+      - name: Install Playwright Browsers
+        run: npx playwright install chromium --with-deps
+        working-directory: ${{ env.BUILD_PATH }}
+
+  # ============================================
+  # STAGE 2: Quality Checks
+  # ============================================
+  quality-checks:
+    name: Quality Checks
+    runs-on: ubuntu-latest
+    needs: setup
+    strategy:
+      fail-fast: false
+      matrix:
+        check: [spellcheck, linkcheck, verify-seo, verify-git-dates, check-resources]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.head_ref || github.ref }}
+          fetch-depth: 0
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.4.0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install
+        working-directory: ${{ env.BUILD_PATH }}
+      
+      - name: Run ${{ matrix.check }}
+        run: pnpm run ${{ matrix.check }}
+        working-directory: ${{ env.BUILD_PATH }}
+        # Critical checks that should fail the build: spellcheck, check-resources
+        # Non-critical checks (warnings only): linkcheck, verify-seo, verify-git-dates
+        continue-on-error: ${{ matrix.check == 'linkcheck' || matrix.check == 'verify-seo' || matrix.check == 'verify-git-dates' }}
+
+  # ============================================
+  # STAGE 3: Build & Test
+  # ============================================
+  build:
+    name: Build Site
+    runs-on: ubuntu-latest
+    needs: [setup, quality-checks]
+    outputs:
+      dist-path: ${{ steps.setup-pages.outputs.base_path }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.head_ref || github.ref }}
+          fetch-depth: 0
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.4.0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install
+        working-directory: ${{ env.BUILD_PATH }}
+      
+      - name: Install Playwright Browsers
+        run: npx playwright install chromium --with-deps
+        working-directory: ${{ env.BUILD_PATH }}
+      
+      - name: Setup Pages
+        id: setup-pages
+        uses: actions/configure-pages@v3
+      
+      - name: Generate Media Kit
+        run: pnpm run generate-media-kit
+        working-directory: ${{ env.BUILD_PATH }}
+      
+      - name: Fetch Social Stats
+        run: pnpm run fetch-social-stats
+        working-directory: ${{ env.BUILD_PATH }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+        continue-on-error: true
+      
+      - name: Sync LinkedIn Profile
+        run: pnpm run sync-linkedin
+        working-directory: ${{ env.BUILD_PATH }}
+        env:
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+        continue-on-error: true
+      
+      - name: Build with Astro
+        run: |
+          npx astro build \
+            --site "${{ steps.setup-pages.outputs.origin }}" \
+            --base "${{ steps.setup-pages.outputs.base_path }}"
+        working-directory: ${{ env.BUILD_PATH }}
+      
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: ${{ env.BUILD_PATH }}/dist
+          retention-days: 1
+      
+      - name: Upload Media Kit artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: media-kit
+          path: ${{ env.BUILD_PATH }}/public/media-kit.html
+          retention-days: 30
+
+  # ============================================
+  # STAGE 4: Performance & SEO (Lighthouse)
+  # ============================================
+  lighthouse:
+    name: Lighthouse CI
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.head_ref || github.ref }}
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.4.0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install
+        working-directory: ${{ env.BUILD_PATH }}
+      
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: ${{ env.BUILD_PATH }}/dist
+      
+      - name: Run Lighthouse CI
+        run: pnpm exec lhci autorun --config=lighthouserc.cjs
+        working-directory: ${{ env.BUILD_PATH }}
+        continue-on-error: true
+      
+      - name: Upload Lighthouse results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-results
+          path: ${{ env.BUILD_PATH }}/.lighthouseci
+          retention-days: 7
+          if-no-files-found: warn
+
+  # ============================================
+  # STAGE 5: Deploy
+  # ============================================
+  deploy:
+    name: Deploy to GitHub Pages
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: [build, lighthouse]
+    # Only deploy on push to main/master, not on PRs
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.head_ref || github.ref }}
+      
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: ${{ env.BUILD_PATH }}/dist
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

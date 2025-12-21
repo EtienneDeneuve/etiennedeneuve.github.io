@@ -1,0 +1,134 @@
+{
+  "version": "0.2",
+  "language": "en,fr",
+  "dictionaryDefinitions": [
+    {
+      "name": "custom",
+      "path": "./cspell-custom.txt",
+      "addWords": true
+    },
+    {
+      "name": "fr-common",
+      "path": "./cspell-fr-common.txt",
+      "addWords": true
+    }
+  ],
+  "dictionaries": [
+    "typescript",
+    "node",
+    "npm",
+    "html",
+    "css",
+    "bash",
+    "companies",
+    "softwareTerms",
+    "filetypes",
+    "fonts",
+    "misc",
+    "custom",
+    "fr-common"
+  ],
+  "import": [
+    "@cspell/dict-fr-fr/cspell-ext.json",
+    "@cspell/dict-aws/cspell-ext.json",
+    "@cspell/dict-docker/cspell-ext.json",
+    "@cspell/dict-k8s/cspell-ext.json",
+    "@cspell/dict-terraform/cspell-ext.json"
+  ],
+  "ignorePaths": [
+    "node_modules/**",
+    "dist/**",
+    ".astro/**",
+    "pnpm-lock.yaml",
+    "package-lock.json",
+    "yarn.lock",
+    ".git/**",
+    ".trunk/**",
+    ".vscode/**",
+    ".github/**",
+    "public/assets/**",
+    "*.min.js",
+    "*.min.css",
+    "ARCHITECTURE_MAP.md",
+    "BRAND_CONSISTENCY_SUMMARY.md",
+    "src/scripts/**",
+    "scripts/**"
+  ],
+  "words": [
+    "Astro",
+    "DevSecOps",
+    "DevOps",
+    "IaC",
+    "CI/CD",
+    "DORA",
+    "MTTR",
+    "Omnivya",
+    "SimplifiED",
+    "Deneuve",
+    "Etienne",
+    "pubDate",
+    "frontmatter",
+    "gray-matter",
+    "dayjs",
+    "rehype",
+    "remark",
+    "shiki",
+    "mermaid",
+    "partytown",
+    "cookieconsent",
+    "outlook",
+    "office365",
+    "owa",
+    "bookings",
+    "mailto",
+    "canonical",
+    "OpenGraph",
+    "ogimage",
+    "sitemap",
+    "rss",
+    "jsonld",
+    "schema",
+    "lastModified",
+    "lastReviewed",
+    "timeToConsume",
+    "whyItMatters",
+    "whenToUse",
+    "clientIndustry",
+    "img",
+    "img_alt",
+    "pubDate",
+    "gray-matter",
+    "lychee",
+    "cspell",
+    "spellcheck",
+    "spellchecking"
+  ],
+  "flagWords": [],
+  "overrides": [
+    {
+      "filename": "**/*.md",
+      "language": "en,fr",
+      "caseSensitive": false
+    },
+    {
+      "filename": "**/*.astro",
+      "language": "en,fr",
+      "caseSensitive": false
+    },
+    {
+      "filename": "**/*.ts",
+      "language": "en",
+      "caseSensitive": true
+    },
+    {
+      "filename": "**/*.js",
+      "language": "en",
+      "caseSensitive": true
+    },
+    {
+      "filename": "**/*.mjs",
+      "language": "en",
+      "caseSensitive": true
+    }
+  ]
+}

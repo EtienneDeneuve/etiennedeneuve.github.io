@@ -11,9 +11,13 @@ import remarkMermaid from "remark-mermaidjs";
 
 import react from "@astrojs/react";
 
+// Site URL - should match src/config/site.ts
+// Using hardcoded value here since .mjs cannot import .ts directly
+const SITE_URL = "https://etienne.deneuve.xyz";
+
 // https://astro.build/config
 export default defineConfig({
-  site: "https://etienne.deneuve.xyz",
+  site: SITE_URL,
   base: "",
   redirects: {
     "/blog": "/blog/page/1",

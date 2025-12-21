@@ -1,0 +1,425 @@
+---
+import BookingCTA from "./BookingCTA.astro";
+import Icon from "./Icon.astro";
+import { siteConfig } from "../config/site.ts";
+
+interface Props {
+  title: string;
+  whoItFor: string;
+  scope: string[];
+  timeline: string;
+  deliverables: string[];
+  successMetrics: { label: string; value: string }[];
+  startingPrice?: string;
+}
+
+const {
+  title,
+  whoItFor,
+  scope,
+  timeline,
+  deliverables,
+  successMetrics,
+  startingPrice = "Sur demande",
+} = Astro.props;
+---
+
+<article class="offer-card" data-offer-card>
+  <header class="offer-header">
+    <button class="offer-header-toggle" type="button" aria-expanded="false" aria-controls={`offer-content-${title.replace(/\s+/g, '-').toLowerCase()}`}>
+      <h3 class="offer-title">{title}</h3>
+      <span class="toggle-icon">▼</span>
+    </button>
+  </header>
+
+  <div class="offer-content" id={`offer-content-${title.replace(/\s+/g, '-').toLowerCase()}`}>
+    <section class="offer-section">
+      <h4 class="section-title">
+        <Icon icon="code" size="1.2em" /> Pour qui ?
+      </h4>
+      <p class="section-text">{whoItFor}</p>
+    </section>
+
+    <section class="offer-section">
+      <h4 class="section-title">
+        <Icon icon="list" size="1.2em" /> Périmètre
+      </h4>
+      <ul class="scope-list">
+        {scope.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="offer-section">
+      <h4 class="section-title">
+        <Icon icon="rocket-launch" size="1.2em" /> Délai
+      </h4>
+      <p class="section-text">{timeline}</p>
+    </section>
+
+    <section class="offer-section">
+      <h4 class="section-title">
+        <Icon icon="pencil-line" size="1.2em" /> Livrables
+      </h4>
+      <ul class="deliverables-list">
+        {deliverables.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="offer-section">
+      <h4 class="section-title">
+        <Icon icon="strategy" size="1.2em" /> Métriques de succès
+      </h4>
+      <div class="metrics-grid">
+        {successMetrics.map((metric) => (
+          <div class="metric-item">
+            <span class="metric-label">{metric.label}</span>
+            <span class="metric-value">{metric.value}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="offer-section pricing">
+      <h4 class="section-title">
+        <Icon icon="trophy" size="1.2em" /> Tarif de départ
+      </h4>
+      <p class="price-text">{startingPrice}</p>
+    </section>
+  </div>
+
+  <footer class="offer-footer">
+    <BookingCTA bookingSubject={`Demande d'information: ${title}`}>
+      Réserver un appel
+    </BookingCTA>
+    <a
+      href={`mailto:${siteConfig.contact.personalEmail}?subject=Demande de one-pager: ${title}`}
+      class="secondary-cta"
+    >
+      <Icon icon="pencil-line" size="1.2em" />
+      Télécharger le one-pager
+    </a>
+  </footer>
+</article>
+
+<style>
+  .offer-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--gradient-subtle);
+    border: 1px solid var(--gray-800);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    gap: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--theme-transition), transform var(--theme-transition);
+    position: relative;
+    align-items: stretch;
+    min-width: 0; /* Allow grid items to shrink below content size */
+    width: 100%; /* Ensure cards take full width of grid cell */
+  }
+
+  /* When collapsed, ensure all cards have uniform height */
+  .offer-card[aria-expanded="false"] {
+    height: 100%;
+  }
+
+  /* When expanded, fill grid cell height */
+  .offer-card[aria-expanded="true"] {
+    height: 100%;
+  }
+
+  .offer-card:hover,
+  .offer-card:focus-within {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .offer-card {
+      transition: none;
+    }
+    
+    .offer-card:hover,
+    .offer-card:focus-within {
+      transform: none;
+    }
+  }
+
+  .offer-header {
+    margin-bottom: 0;
+    padding-right: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .offer-card[aria-expanded="true"] .offer-header {
+    margin-bottom: 0.75rem;
+  }
+
+  /* When collapsed, center header vertically within card */
+  .offer-card[aria-expanded="false"] .offer-header {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .offer-header-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
+    transition: opacity var(--theme-transition);
+  }
+
+  .offer-header-toggle:hover,
+  .offer-header-toggle:focus {
+    opacity: 0.8;
+    outline: none;
+  }
+
+  .offer-header-toggle:focus-visible {
+    outline: 2px solid var(--accent-regular);
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+  }
+
+  .toggle-icon {
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+    color: var(--gray-400);
+    display: inline-block;
+    font-size: 0.8em;
+    line-height: 1;
+  }
+
+  .offer-card[aria-expanded="false"] .toggle-icon {
+    transform: rotate(-90deg);
+  }
+
+  .offer-card[aria-expanded="true"] .toggle-icon {
+    transform: rotate(0deg);
+  }
+
+  .offer-title {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--gray-0);
+    margin: 0;
+    line-height: 1.4;
+    word-wrap: break-word;
+    letter-spacing: -0.01em;
+  }
+
+  .offer-content {
+    flex: 1; /* Allow content to grow and push footer to bottom */
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    min-height: 0; /* Allow flex item to shrink */
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease, margin 0.3s ease, padding 0.3s ease;
+    max-height: 5000px; /* Large enough for expanded content */
+    opacity: 1;
+  }
+
+  .offer-card[aria-expanded="false"] .offer-content {
+    max-height: 0 !important;
+    opacity: 0;
+    margin: 0 !important;
+    padding: 0 !important;
+    gap: 0;
+    overflow: hidden;
+  }
+
+  .offer-card[aria-expanded="false"] .offer-footer {
+    display: none !important;
+  }
+
+  .offer-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--text-md);
+    font-weight: 600;
+    color: var(--gray-200);
+    margin: 0;
+  }
+
+  .section-text {
+    color: var(--gray-300);
+    font-size: var(--text-sm);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .scope-list,
+  .deliverables-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .scope-list li,
+  .deliverables-list li {
+    color: var(--gray-300);
+    font-size: var(--text-sm);
+    padding-left: 1.5rem;
+    position: relative;
+    line-height: 1.6;
+  }
+
+  .scope-list li::before,
+  .deliverables-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--accent-regular);
+    font-weight: bold;
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+
+  .metric-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.75rem;
+    background: var(--gray-999);
+    border-radius: 0.5rem;
+    border: 1px solid var(--gray-800);
+  }
+
+  .metric-label {
+    font-size: var(--text-xs);
+    color: var(--gray-400);
+  }
+
+  .metric-value {
+    font-size: var(--text-md);
+    font-weight: 600;
+    color: var(--accent-regular);
+  }
+
+  .pricing {
+    padding-top: 1rem;
+    border-top: 1px solid var(--gray-800);
+  }
+
+  .price-text {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--gray-0);
+    margin: 0;
+  }
+
+  .offer-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--gray-800);
+    margin-top: auto; /* Push footer to bottom */
+  }
+
+  /* Reduce button size in offer cards */
+  .offer-footer :global(a) {
+    padding: 0.5rem 1.25rem !important;
+    font-size: var(--text-sm) !important;
+  }
+
+  .secondary-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    color: var(--gray-300);
+    text-decoration: none;
+    border: 1px solid var(--gray-800);
+    border-radius: 999rem;
+    font-size: var(--text-xs);
+    transition: all var(--theme-transition);
+    background: var(--gray-999);
+  }
+
+  .secondary-cta:hover,
+  .secondary-cta:focus {
+    color: var(--gray-0);
+    border-color: var(--accent-regular);
+    background: var(--accent-subtle-overlay);
+  }
+
+  @media (min-width: 50em) {
+    .offer-card {
+      padding: 2.5rem;
+    }
+
+    .offer-title {
+      font-size: var(--text-xl);
+      line-height: 1.35;
+    }
+
+    .offer-footer {
+      /* Keep buttons stacked vertically */
+      flex-direction: column;
+    }
+
+    .offer-footer :global(a) {
+      padding: 0.625rem 1.5rem !important;
+      font-size: var(--text-base) !important;
+    }
+
+    .secondary-cta {
+      padding: 0.625rem 1.25rem;
+      font-size: var(--text-sm);
+    }
+
+    .metrics-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const offerCards = document.querySelectorAll('[data-offer-card]');
+    
+    offerCards.forEach((card) => {
+      const toggle = card.querySelector('.offer-header-toggle');
+      if (!toggle) return;
+      
+      // Set initial state - all cards collapsed by default
+      card.setAttribute('aria-expanded', 'false');
+      
+      toggle.addEventListener('click', () => {
+        const isExpanded = card.getAttribute('aria-expanded') === 'true';
+        card.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
+        toggle.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
+      });
+    });
+  });
+</script>

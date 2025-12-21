@@ -1,0 +1,257 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Hero from "../../components/Hero.astro";
+import Icon from "../../components/Icon.astro";
+import MetricPill from "../../components/MetricPill.astro";
+import ResultList from "../../components/ResultList.astro";
+import { siteConfig, getBrandText } from "../../config/site.ts";
+
+interface Props {
+  entry: CollectionEntry<"caseStudies">;
+}
+
+export async function getStaticPaths() {
+  const caseStudies = await getCollection("caseStudies");
+  return caseStudies.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+const og = entry.data.img
+  ? `${siteConfig.site.url}/${entry.data.img}`
+  : siteConfig.site.defaultOgImage;
+---
+
+<BaseLayout
+  title={getBrandText.siteTitle(entry.data.title)}
+  description={entry.data.problem}
+  og={og}
+>
+  <link rel="canonical" href={`${siteConfig.site.url}/case-studies/${entry.slug}`} />
+  <div class="stack gap-20">
+    <div class="stack gap-15">
+      <header>
+        <div class="wrapper stack gap-2">
+          <a class="back-link" href="/case-studies/">
+            <Icon icon="arrow-left" />Case Studies
+          </a>
+          <Hero title={entry.data.title} align="start">
+            <div class="details">
+              <div class="meta-info">
+                <span class="meta-item">
+                  <Icon icon="code" size="1em" />
+                  {entry.data.clientIndustry}
+                </span>
+                <span class="meta-item">
+                  <Icon icon="rocket-launch" size="1em" />
+                  {entry.data.timeframe}
+                </span>
+              </div>
+              {entry.data.tags && entry.data.tags.length > 0 && (
+                <div class="tags">
+                  {entry.data.tags.map((tag) => (
+                    <span class="tag">{tag}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </Hero>
+        </div>
+      </header>
+
+      <main class="wrapper">
+        <div class="stack gap-8 content">
+          {entry.data.img && (
+            <img
+              src={entry.data.img}
+              alt={entry.data.img_alt || entry.data.title}
+              class="case-study-image"
+            />
+          )}
+
+          <section class="case-section">
+            <h2 class="section-title">
+              <Icon icon="code" size="1.2em" /> Contexte
+            </h2>
+            <div class="section-content">
+              <p class="problem-text">{entry.data.problem}</p>
+            </div>
+          </section>
+
+          <section class="case-section">
+            <h2 class="section-title">
+              <Icon icon="strategy" size="1.2em" /> Approche
+            </h2>
+            <div class="section-content">
+              <p class="approach-text">{entry.data.approach}</p>
+            </div>
+          </section>
+
+          <section class="case-section">
+            <h2 class="section-title">
+              <Icon icon="trophy" size="1.2em" /> Résultats
+            </h2>
+            <div class="section-content">
+              <ResultList results={entry.data.results} />
+            </div>
+          </section>
+
+          {Object.keys(entry.data.metrics).length > 0 && (
+            <section class="case-section">
+              <h2 class="section-title">
+                <Icon icon="strategy" size="1.2em" /> Métriques
+              </h2>
+              <div class="section-content">
+                <div class="metrics-container">
+                  {Object.entries(entry.data.metrics).map(([label, value]) => (
+                    <MetricPill label={label} value={value} />
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+
+          {Content && (
+            <section class="case-section">
+              <div class="section-content">
+                <Content />
+              </div>
+            </section>
+          )}
+        </div>
+      </main>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  header {
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--gray-800);
+  }
+
+  .back-link {
+    display: none;
+    color: var(--gray-300);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    align-self: flex-start;
+    transition: color var(--theme-transition);
+  }
+
+  .back-link:hover,
+  .back-link:focus {
+    color: var(--gray-0);
+  }
+
+  .details {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 0.5rem;
+  }
+
+  .meta-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--gray-300);
+    font-size: var(--text-sm);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    font-size: var(--text-xs);
+    padding: 0.25rem 0.75rem;
+    background: var(--gray-999);
+    border: 1px solid var(--gray-800);
+    border-radius: 999rem;
+    color: var(--gray-300);
+  }
+
+  .content {
+    max-width: 100%;
+    margin-inline: auto;
+  }
+
+  .case-study-image {
+    width: 100%;
+    border-radius: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    background: var(--gradient-subtle);
+    border: 1px solid var(--gray-800);
+  }
+
+  .case-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--text-xl);
+    font-weight: 600;
+    color: var(--gray-0);
+    margin: 0;
+  }
+
+  .section-content {
+    color: var(--gray-300);
+    font-size: var(--text-md);
+    line-height: 1.7;
+  }
+
+  .problem-text,
+  .approach-text {
+    font-size: var(--text-lg);
+    line-height: 1.8;
+    margin: 0;
+  }
+
+  .metrics-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  @media (min-width: 50em) {
+    .back-link {
+      display: block;
+    }
+
+    .details {
+      flex-direction: row;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .section-title {
+      font-size: var(--text-2xl);
+    }
+
+    .problem-text,
+    .approach-text {
+      font-size: var(--text-xl);
+    }
+  }
+</style>

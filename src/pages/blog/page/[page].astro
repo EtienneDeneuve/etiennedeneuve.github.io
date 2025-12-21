@@ -5,6 +5,7 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import PortfolioPreview from "../../../components/PortfolioPreview.astro";
 import Hero from "../../../components/Hero.astro";
 import Grid from "../../../components/Grid.astro";
+import { siteConfig, getBrandText } from "../../../config/site.ts";
 
 // Charger tous les articles de blog et les trier par date de publication décroissante
 const projects = (await getCollection("blog")).sort(
@@ -38,8 +39,8 @@ export async function getStaticPaths() {
 ---
 
 <BaseLayout
-  title={`Page ${currentPage} du Blog | Etienne Deneuve`}
-  description="Parcourez les articles de blog récents d'Etienne Deneuve."
+  title={getBrandText.siteTitle(`Page ${currentPage} du Blog`)}
+  description={`Parcourez les articles de blog récents d'${siteConfig.author.name}.`}
 >
   <div class="stack gap-20">
     <main class="wrapper stack gap-8">

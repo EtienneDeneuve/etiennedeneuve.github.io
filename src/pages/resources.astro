@@ -6,14 +6,39 @@ import Grid from "../components/Grid.astro";
 import Hero from "../components/Hero.astro";
 import Icon from "../components/Icon.astro";
 import Pill from "../components/Pill.astro";
-import PortfolioPreview from "../components/PortfolioPreview.astro";
 import ResourcesPreview from "../components/ResourcesPreview.astro";
+import { siteConfig, getBrandText } from "../config/site.ts";
 
 // Charger les ressources depuis la collection
-const resources = await getCollection("resources");
+const allResources = await getCollection("resources");
+
+// Grouper par topic
+const resourcesByTopic = new Map();
+allResources.forEach((resource) => {
+  const topic = resource.data.topic || "Other";
+  if (!resourcesByTopic.has(topic)) {
+    resourcesByTopic.set(topic, []);
+  }
+  resourcesByTopic.get(topic).push(resource);
+});
+
+// Trier par date de review récente (pour "Recently reviewed")
+const recentlyReviewed = allResources
+  .sort((a, b) => b.data.lastReviewed.valueOf() - a.data.lastReviewed.valueOf())
+  .slice(0, 3);
+
+// Vérifier les ressources à revoir (lastReviewed > 365 jours)
+const now = new Date();
+const oneYearAgo = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+const needsReview = allResources.filter(
+  (r) => r.data.lastReviewed.valueOf() < oneYearAgo.getTime()
+);
 ---
 
-<BaseLayout>
+<BaseLayout
+  title={getBrandText.siteTitle("Resources")}
+  description="Découvrez une collection de ressources utiles pour enrichir vos connaissances."
+>
   <div class="stack gap-20 lg:gap-48">
     <div class="wrapper stack gap-20 lg:gap-20">
       <header class="hero">
@@ -32,31 +57,48 @@ const resources = await getCollection("resources");
     </div>
 
     <main class="wrapper stack gap-20 lg:gap-48">
-      <section class="section with-background with-cta">
-        <header class="section-header stack gap-2 lg:gap-4">
-          <h3>Ressources Recommandées</h3>
-          <p>Découvrez des ressources utiles et enrichissantes.</p>
-        </header>
-
-        <div class="gallery">
-          <Grid variant="offset">
-            {
-              resources.map((resource) => (
+      {recentlyReviewed.length > 0 && (
+        <section class="section with-background">
+          <header class="section-header stack gap-2 lg:gap-4">
+            <h3>Récemment Révisées</h3>
+            <p>Ressources mises à jour récemment pour garantir leur pertinence.</p>
+          </header>
+          <div class="gallery">
+            <Grid variant="offset">
+              {recentlyReviewed.map((resource) => (
                 <li>
                   <ResourcesPreview resource={resource} />
                 </li>
-              ))
-            }
-          </Grid>
-        </div>
+              ))}
+            </Grid>
+          </div>
+        </section>
+      )}
 
-        <div class="cta">
-          <CallToAction href="/resources/all">
-            Voir toutes les ressources
-            <Icon icon="arrow-right" size="1.2em" />
-          </CallToAction>
-        </div>
-      </section>
+      {Array.from(resourcesByTopic.entries()).map(([topic, resources]) => (
+        <section class="section with-background">
+          <header class="section-header stack gap-2 lg:gap-4">
+            <h3>{topic}</h3>
+            <p>{resources.length} ressource{resources.length > 1 ? "s" : ""}</p>
+          </header>
+          <div class="gallery">
+            <Grid variant="offset">
+              {resources.map((resource) => (
+                <li>
+                  <ResourcesPreview resource={resource} />
+                </li>
+              ))}
+            </Grid>
+          </div>
+        </section>
+      ))}
+
+      <div class="cta">
+        <CallToAction href="/resources/all">
+          Voir toutes les ressources
+          <Icon icon="arrow-right" size="1.2em" />
+        </CallToAction>
+      </div>
     </main>
   </div>
 </BaseLayout>

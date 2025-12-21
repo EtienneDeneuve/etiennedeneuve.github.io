@@ -1,0 +1,189 @@
+---
+import socialStats from "../data/social-stats.json";
+import Icon from "./Icon.astro";
+import Pill from "./Pill.astro";
+
+// Get top repos (already sorted by stars)
+const topRepos = socialStats.simplifiEd.repos
+  .filter(repo => repo.stars > 0) // Only show repos with stars
+  .slice(0, 6); // Top 6 repos
+---
+
+{socialStats.simplifiEd.publicRepos > 0 && (
+  <section class="simplified-projects">
+    <div class="header">
+      <h2>Projets Simplifi'ed</h2>
+      <p class="summary">
+        {socialStats.simplifiEd.publicRepos} repos publics • {socialStats.simplifiEd.totalStars} ⭐ • {socialStats.simplifiEd.totalForks} 🍴
+      </p>
+      <a 
+        href="https://github.com/simplifi-ed" 
+        target="_blank" 
+        rel="noopener"
+        class="org-link"
+      >
+        Voir sur GitHub <Icon icon="arrow-right" size="1em" />
+      </a>
+    </div>
+
+    {topRepos.length > 0 && (
+      <div class="projects-grid">
+        {topRepos.map((repo) => (
+          <a 
+            href={repo.url} 
+            target="_blank" 
+            rel="noopener"
+            class="project-card"
+          >
+            <div class="project-header">
+              <h3>{repo.name}</h3>
+              {repo.language && (
+                <Pill>{repo.language}</Pill>
+              )}
+            </div>
+            
+            {repo.description && (
+              <p class="project-description">{repo.description}</p>
+            )}
+            
+            <div class="project-stats">
+              <span class="stat">
+                <Icon icon="trophy" size="1em" />
+                {repo.stars}
+              </span>
+              {repo.forks > 0 && (
+                <span class="stat">
+                  <Icon icon="code" size="1em" />
+                  {repo.forks}
+                </span>
+              )}
+              <span class="stat updated">
+                Mis à jour {new Date(repo.updated).toLocaleDateString("fr-FR", { month: "short", year: "numeric" })}
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+    )}
+  </section>
+)}
+
+<style>
+  .simplified-projects {
+    padding: 3rem 2rem;
+    background: var(--gray-999_20);
+    border-radius: 1rem;
+    border: 1px solid var(--gray-800);
+  }
+
+  .header {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .header h2 {
+    margin: 0 0 0.5rem 0;
+    font-size: var(--text-2xl);
+  }
+
+  .summary {
+    margin: 0 0 1rem 0;
+    color: var(--gray-400);
+    font-size: var(--text-sm);
+  }
+
+  .org-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--accent-dark);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    transition: color var(--theme-transition);
+  }
+
+  .org-link:hover,
+  .org-link:focus {
+    color: var(--accent-light);
+    text-decoration: underline;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: var(--gray-999_40);
+    border: 1px solid var(--gray-800);
+    border-radius: 0.5rem;
+    text-decoration: none;
+    color: inherit;
+    transition: transform var(--theme-transition), box-shadow var(--theme-transition), border-color var(--theme-transition);
+  }
+
+  .project-card:hover,
+  .project-card:focus {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--accent-dark);
+    text-decoration: none;
+  }
+
+  .project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .project-header h3 {
+    margin: 0;
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--accent-dark);
+    flex: 1;
+  }
+
+  .project-description {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--gray-300);
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .project-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    font-size: var(--text-xs);
+    color: var(--gray-400);
+  }
+
+  .project-stats .stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .project-stats .stat.updated {
+    margin-left: auto;
+  }
+
+  @media (min-width: 50em) {
+    .simplified-projects {
+      padding: 4rem 3rem;
+    }
+
+    .projects-grid {
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    }
+  }
+</style>

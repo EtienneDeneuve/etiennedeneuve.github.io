@@ -1,0 +1,684 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import Icon from "../components/Icon.astro";
+import Pill from "../components/Pill.astro";
+import BookingCTA from "../components/BookingCTA.astro";
+import CallToAction from "../components/CallToAction.astro";
+import { siteConfig, getBrandText } from "../config/site.ts";
+
+// Speaking topics
+const topics = [
+  {
+    title: "DevSecOps : Transformer la sécurité dans le cycle de développement",
+    abstract: "Comment intégrer la sécurité dès la conception et automatiser les contrôles de sécurité dans votre pipeline CI/CD. Cette session couvre les pratiques shift-left, les outils de sécurité automatisés, et la culture DevSecOps.",
+    audienceLevel: "Intermediate",
+    formats: ["Keynote", "Workshop"],
+    duration: "45-60 min",
+    languages: ["FR", "EN"]
+  },
+  {
+    title: "Platform Engineering : Construire une plateforme interne pour accélérer le développement",
+    abstract: "Découvrez comment concevoir et déployer une Internal Developer Platform qui permet aux équipes de développement de se concentrer sur le code métier plutôt que sur l'infrastructure. Cas d'usage, architecture, et retours d'expérience.",
+    audienceLevel: "Intermediate to Advanced",
+    formats: ["Keynote", "Workshop", "Panel"],
+    duration: "45-90 min",
+    languages: ["FR", "EN"]
+  },
+  {
+    title: "Infrastructure as Code : Terraform et au-delà",
+    abstract: "Au-delà des bases de Terraform, cette session explore les patterns avancés, la gestion d'état, les modules réutilisables, et les bonnes pratiques pour maintenir une infrastructure complexe avec du code.",
+    audienceLevel: "Intermediate",
+    formats: ["Workshop", "Hands-on"],
+    duration: "90-120 min",
+    languages: ["FR"]
+  },
+  {
+    title: "Zero Trust : Architecture et implémentation",
+    abstract: "Comprendre les principes du Zero Trust et comment les appliquer concrètement dans votre infrastructure cloud. Cette session couvre l'architecture, les outils open source, et les stratégies d'implémentation progressive.",
+    audienceLevel: "Intermediate to Advanced",
+    formats: ["Keynote", "Workshop"],
+    duration: "60 min",
+    languages: ["FR", "EN"]
+  },
+  {
+    title: "CTO/Staff Engineering : Leadership technique et transformation",
+    abstract: "Pour les leaders techniques : comment influencer, prendre des décisions architecturales stratégiques, et transformer les organisations. Basé sur des expériences réelles de transformation.",
+    audienceLevel: "Advanced",
+    formats: ["Keynote", "Panel"],
+    duration: "45-60 min",
+    languages: ["FR", "EN"]
+  },
+  {
+    title: "Git pour les Ops : Moderniser les pratiques de développement",
+    abstract: "Comment les équipes Ops peuvent adopter Git et les pratiques de développement modernes pour améliorer la collaboration, la traçabilité, et la qualité du code infrastructure.",
+    audienceLevel: "Beginner to Intermediate",
+    formats: ["Workshop", "Hands-on"],
+    duration: "90 min",
+    languages: ["FR"]
+  }
+];
+
+// Past appearances (placeholder section)
+const pastAppearances = [
+  // Add links here when available
+  // { event: "Event Name", url: "https://...", date: "2024" }
+];
+---
+
+<BaseLayout
+  title={getBrandText.siteTitle("Speaking")}
+  description="Conférences, workshops et interventions sur DevSecOps, Platform Engineering, et leadership technique."
+>
+  <link rel="canonical" href={`${siteConfig.site.url}/speaking`} />
+  <div class="stack gap-20 lg:gap-48">
+    <div class="wrapper stack gap-20 lg:gap-20">
+      <header class="hero">
+        <Hero
+          title="Speaking"
+          tagline="Conférences, workshops et interventions sur le DevSecOps, le Platform Engineering, et le leadership technique."
+          align="start"
+        >
+          <div class="roles">
+            <Pill><Icon icon="microphone-stage" size="1.33em" /> Keynote</Pill>
+            <Pill><Icon icon="code" size="1.33em" /> Workshop</Pill>
+            <Pill><Icon icon="strategy" size="1.33em" /> Panel</Pill>
+          </div>
+        </Hero>
+      </header>
+    </div>
+
+    <main class="wrapper stack gap-20 lg:gap-48">
+      <!-- Topics Section -->
+      <section class="section with-background section-full-width">
+        <header class="section-header stack gap-2 lg:gap-4">
+          <h2>Mes Sujets</h2>
+          <p>
+            Je propose des interventions sur différents formats et durées, adaptées à votre audience.
+            Tous les sujets peuvent être personnalisés selon vos besoins.
+          </p>
+        </header>
+
+        <div class="topics-grid topics-content">
+          {topics.map((topic) => (
+            <article class="topic-card">
+              <header class="topic-header">
+                <h3 class="topic-title">{topic.title}</h3>
+                <div class="topic-badges">
+                  <Pill>{topic.audienceLevel}</Pill>
+                  {topic.formats.map((format) => (
+                    <Pill>{format}</Pill>
+                  ))}
+                </div>
+              </header>
+              <p class="topic-abstract">{topic.abstract}</p>
+              <div class="topic-meta">
+                <span class="meta-item">
+                  <Icon icon="rocket-launch" size="1em" />
+                  {topic.duration}
+                </span>
+                <span class="meta-item">
+                  <Icon icon="code" size="1em" />
+                  {topic.languages.join(", ")}
+                </span>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- Formats Section -->
+      <section class="section section-full-width">
+        <header class="section-header stack gap-2 lg:gap-4">
+          <h2>Formats Disponibles</h2>
+        </header>
+        <div class="formats-grid formats-content">
+          <div class="format-card">
+            <Icon icon="microphone-stage" size="2em" />
+            <h3>Keynote</h3>
+            <p>Présentation inspirante pour ouvrir ou clôturer votre événement. Idéal pour partager une vision et des insights stratégiques.</p>
+            <p class="format-duration">Durée : 30-60 min</p>
+          </div>
+          <div class="format-card">
+            <Icon icon="code" size="2em" />
+            <h3>Workshop</h3>
+            <p>Session interactive et pratique avec démonstrations, exercices et Q&A. Parfait pour approfondir un sujet technique.</p>
+            <p class="format-duration">Durée : 60-120 min</p>
+          </div>
+          <div class="format-card">
+            <Icon icon="strategy" size="2em" />
+            <h3>Panel</h3>
+            <p>Discussion avec d'autres experts sur un sujet donné. Format idéal pour des échanges et des débats.</p>
+            <p class="format-duration">Durée : 45-60 min</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Past Appearances Section -->
+      <section class="section section-full-width">
+        <header class="section-header stack gap-2 lg:gap-4">
+          <h2>Interventions Passées</h2>
+        </header>
+        {pastAppearances.length === 0 ? (
+          <div class="placeholder-section">
+            <p>Les liens vers les interventions passées seront ajoutés prochainement.</p>
+          </div>
+        ) : (
+          <ul class="appearances-list">
+            {pastAppearances.map((appearance) => (
+              <li>
+                <a href={appearance.url} target="_blank" rel="noopener noreferrer">
+                  {appearance.event} ({appearance.date})
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <!-- Press / Media Kit Section -->
+      <section class="section with-background section-full-width">
+        <header class="section-header stack gap-2 lg:gap-4">
+          <h2>Press / Media Kit</h2>
+          <p>
+            Ressources pour les organisateurs d'événements et les médias.
+          </p>
+        </header>
+        <div class="media-kit-content">
+          <div class="media-kit-card">
+            <div class="headshot-container">
+              <img
+                src="/assets/portrait.jpg"
+                alt={`${siteConfig.author.name} - Headshot`}
+                class="headshot"
+              />
+            </div>
+            <div class="bio-content">
+              <div class="bio-block">
+                <h3>Bio courte</h3>
+                <p>
+                  {siteConfig.author.name} est {siteConfig.author.jobTitle}, spécialisé en DevSecOps,
+                  Platform Engineering et transformation technique. Speaker, writer et expert reconnu
+                  dans l'écosystème cloud et DevOps.
+                </p>
+              </div>
+              <div class="bio-block">
+                <h3>Bio longue</h3>
+                <p>
+                  {siteConfig.author.name} est un expert en infrastructure cloud, DevSecOps et Platform Engineering
+                  avec plus de 15 ans d'expérience. Il accompagne les organisations dans leur transformation technique,
+                  de la conception à l'implémentation. En tant que {siteConfig.author.jobTitle}, il a aidé de nombreuses
+                  entreprises à moderniser leur infrastructure, améliorer leur sécurité et accélérer leurs déploiements.
+                </p>
+                <p>
+                  {siteConfig.author.name} est également un speaker actif dans la communauté technique, partageant
+                  ses connaissances lors de conférences et workshops. Il écrit régulièrement sur son blog et contribue
+                  à l'écosystème open source.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="media-kit-download">
+            <CallToAction href="/media-kit.html" target="_blank">
+              <Icon icon="pencil-line" size="1.2em" />
+              Télécharger le Media Kit complet
+            </CallToAction>
+            <p class="media-kit-note">
+              <small>Format HTML (imprimable en PDF via votre navigateur)</small>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA Section -->
+      <section class="cta-section">
+        <div class="cta-content">
+          <h2>Intéressé par une intervention ?</h2>
+          <p>Discutons de votre événement et de la meilleure façon de partager ces sujets avec votre audience.</p>
+          <div class="cta-buttons">
+            <BookingCTA bookingSubject="Demande d'intervention - Speaking">
+              Réserver un appel
+            </BookingCTA>
+            <a
+              href={`mailto:${siteConfig.contact.personalEmail}?subject=Demande d'intervention - Speaking`}
+              class="secondary-cta"
+            >
+              <Icon icon="pencil-line" size="1.2em" />
+              Envoyer un email
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .roles {
+    display: none;
+  }
+
+  @media (min-width: 50em) {
+    .hero {
+      display: grid;
+      grid-template-columns: 6fr 4fr;
+      padding-inline: 2.5rem;
+      gap: 3.75rem;
+    }
+
+    .roles {
+      margin-top: 0.5rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+  }
+
+  .section {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .section-full-width {
+    width: calc(100% + 3rem);
+    max-width: calc(100% + 3rem);
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    padding-inline: 1.5rem;
+  }
+
+  @media (min-width: 50em) {
+    .section-full-width {
+      width: calc(100% + 5rem);
+      max-width: calc(100% + 5rem);
+      margin-left: -2.5rem;
+      margin-right: -2.5rem;
+      padding-inline: 2.5rem;
+    }
+  }
+
+  .with-background {
+    position: relative;
+  }
+
+  .with-background::before {
+    --hero-bg: var(--bg-image-subtle-2);
+
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    left: 50%;
+    width: 100vw;
+    aspect-ratio: calc(2.25 / var(--bg-scale));
+    top: 0;
+    transform: translateY(-75%) translateX(-50%);
+    background:
+      url("/assets/backgrounds/noise.png") top center/220px repeat,
+      var(--hero-bg) center center / var(--bg-gradient-size) no-repeat,
+      var(--gray-999);
+    background-blend-mode: overlay, normal, normal, normal;
+    mix-blend-mode: var(--bg-blend-mode);
+    z-index: -1;
+    will-change: transform;
+    contain: layout style paint;
+  }
+
+  .section-header {
+    justify-self: center;
+    text-align: center;
+    max-width: 65ch;
+    font-size: var(--text-md);
+    color: var(--gray-300);
+  }
+
+  .section-header h2 {
+    font-size: var(--text-2xl);
+    color: var(--gray-0);
+    margin: 0;
+  }
+
+  @media (min-width: 50em) {
+    .section {
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-areas: "header header header header" "content content content content";
+      gap: 5rem;
+    }
+
+    .section-header {
+      grid-area: header;
+      font-size: var(--text-lg);
+    }
+
+    .section-header h2 {
+      font-size: var(--text-4xl);
+    }
+
+    .topics-content,
+    .formats-content,
+    .media-kit-content {
+      grid-area: content;
+      width: 100%;
+    }
+  }
+
+  .topics-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  @media (min-width: 50em) {
+    .topics-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+  }
+
+  @media (min-width: 75em) {
+    .topics-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+    }
+  }
+
+  .topic-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 2rem;
+    background: var(--gradient-subtle);
+    border: 1px solid var(--gray-800);
+    border-radius: 1.5rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .topic-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .topic-title {
+    font-size: var(--text-xl);
+    font-weight: 600;
+    color: var(--gray-0);
+    margin: 0;
+  }
+
+  .topic-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .topic-abstract {
+    color: var(--gray-300);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .topic-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--gray-800);
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--gray-400);
+    font-size: var(--text-sm);
+  }
+
+  .formats-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  @media (min-width: 50em) {
+    .formats-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+  }
+
+  .format-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+    padding: 2rem;
+    background: var(--gradient-subtle);
+    border: 1px solid var(--gray-800);
+    border-radius: 1.5rem;
+  }
+
+  .format-card h3 {
+    font-size: var(--text-lg);
+    color: var(--gray-0);
+    margin: 0;
+  }
+
+  .format-card p {
+    color: var(--gray-300);
+    font-size: var(--text-sm);
+    margin: 0;
+  }
+
+  .format-duration {
+    font-weight: 600;
+    color: var(--accent-regular);
+  }
+
+  .placeholder-section {
+    text-align: center;
+    padding: 2rem;
+    color: var(--gray-400);
+  }
+
+  .appearances-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .appearances-list a {
+    color: var(--gray-300);
+    text-decoration: none;
+    padding: 1rem;
+    background: var(--gray-999);
+    border: 1px solid var(--gray-800);
+    border-radius: 0.75rem;
+    transition: all var(--theme-transition);
+  }
+
+  .appearances-list a:hover,
+  .appearances-list a:focus {
+    color: var(--gray-0);
+    border-color: var(--accent-regular);
+    outline: 2px solid var(--accent-regular);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .topic-card,
+    .format-card,
+    .appearances-list a {
+      transition: none;
+    }
+  }
+
+  .media-kit-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    width: 100%;
+  }
+
+  .media-kit-card {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr;
+    padding: 2.5rem;
+    background: var(--gradient-subtle);
+    border: 1px solid var(--gray-800);
+    border-radius: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+  }
+
+  @media (min-width: 50em) {
+    .media-kit-card {
+      grid-template-columns: 160px 1fr;
+      gap: 3rem;
+      align-items: start;
+      padding: 3rem;
+    }
+  }
+
+  .headshot-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  @media (min-width: 50em) {
+    .headshot-container {
+      justify-content: flex-start;
+    }
+  }
+
+  .headshot {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--gray-800);
+    box-shadow: var(--shadow-md);
+  }
+
+  .bio-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .bio-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .bio-block h3 {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--gray-0);
+    margin: 0;
+  }
+
+  .bio-block p {
+    color: var(--gray-300);
+    font-size: var(--text-base);
+    line-height: 1.7;
+    margin: 0 0 1rem 0;
+  }
+
+  .bio-block p:last-child {
+    margin-bottom: 0;
+  }
+
+  .media-kit-download {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: center;
+  }
+
+  .media-kit-note {
+    margin: 0;
+    color: var(--gray-400);
+    font-size: var(--text-xs);
+  }
+
+  .cta-section {
+    padding: 4rem 2rem;
+    background: var(--gradient-subtle);
+    border: 1px solid var(--gray-800);
+    border-radius: 1.5rem;
+    text-align: center;
+  }
+
+  .cta-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 65ch;
+    margin: 0 auto;
+  }
+
+  .cta-content h2 {
+    font-size: var(--text-2xl);
+    color: var(--gray-0);
+    margin: 0;
+  }
+
+  .cta-content p {
+    color: var(--gray-300);
+    font-size: var(--text-md);
+  }
+
+  .cta-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  @media (min-width: 50em) {
+    .cta-buttons {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+
+  .secondary-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    color: var(--gray-300);
+    text-decoration: none;
+    border: 1px solid var(--gray-800);
+    border-radius: 999rem;
+    font-size: var(--text-sm);
+    transition: all var(--theme-transition);
+    background: var(--gray-999);
+  }
+
+  .secondary-cta:hover,
+  .secondary-cta:focus {
+    color: var(--gray-0);
+    border-color: var(--accent-regular);
+    background: var(--accent-subtle-overlay);
+  }
+</style>
