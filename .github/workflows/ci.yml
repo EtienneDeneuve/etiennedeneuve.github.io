@@ -235,6 +235,7 @@ jobs:
           name: lighthouse-results
           path: ${{ env.BUILD_PATH }}/.lighthouseci
           retention-days: 7
+          if-no-files-found: warn
 
   # ============================================
   # STAGE 5: Deploy
