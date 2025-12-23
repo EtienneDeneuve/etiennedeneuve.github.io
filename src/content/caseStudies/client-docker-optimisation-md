@@ -13,17 +13,17 @@ results:
   - "Amélioration notable des temps de déploiement et des rolling updates Kubernetes"
   - "Réduction mesurable de l’empreinte carbone liée aux transferts et au stockage des images"
 metrics:
-  "Taille moyenne des images": "[PLACEHOLDER: -65%]"
-  "Temps moyen de build CI": "[PLACEHOLDER: -40%]"
-  "Coûts Registry": "[PLACEHOLDER: -40%]"
-  "Temps de déploiement Kubernetes": "[PLACEHOLDER: -35%]"
-  "Vulnérabilités critiques": "[PLACEHOLDER: -50%]"
-  "Impact CO₂ lié aux images": "[PLACEHOLDER: -30%]"
+  "Réduction moyenne de la taille des images": "-65%"
+  "Réduction du temps moyen de build CI": "-40%"
+  "Réduction des coûts de stockage Registry": "-40%"
+  "Réduction du temps de déploiement Kubernetes": "-35%"
+  "Réduction des vulnérabilités critiques": "-50%"
+  "Réduction de l’empreinte carbone liée aux images": "-30%"
 tags:
   - "Docker"
   - "Kubernetes"
-  - "FinOps"
   - "DevSecOps"
+  - "FinOps"
   - "GreenOps"
 featured: true
 draft: false
