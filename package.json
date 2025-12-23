@@ -57,7 +57,7 @@
     "@types/uuid": "^9.0.8",
     "@typescript-eslint/parser": "^6.21.0",
     "cspell": "^9.4.0",
-    "date-fns": "^3.6.0",
+    "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "eslint": "^8.57.1",
     "eslint-plugin-astro": "^0.31.4",
