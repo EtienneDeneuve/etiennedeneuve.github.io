@@ -1,5 +1,4 @@
 ---
----
 title: "Analyse et rationalisation d’une volumétrie massive de serveurs de fichiers pour un acteur du luxe"
 clientIndustry: "Industrie du luxe"
 timeframe: "5 mois"
