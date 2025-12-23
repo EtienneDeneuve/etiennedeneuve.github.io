@@ -76,8 +76,8 @@ importers:
         specifier: ^1.1.3
         version: 1.1.3
       '@frontmatter/extensibility':
-        specifier: ^0.0.14
-        version: 0.0.14
+        specifier: ^0.0.18
+        version: 0.0.18
       '@lhci/cli':
         specifier: ^0.15.1
         version: 0.15.1
@@ -957,8 +957,8 @@ packages:
     resolution: {integrity: sha512-60G28ke/sXdtS9KZCpZSHHkCbdsOGEhIUGlwq6yhY74UpTiToIh8np7A8yphhM4BWsvNFtIvLpi4co+h9Mr9Ow==}
     engines: {node: '>=6'}
 
-  '@frontmatter/extensibility@0.0.14':
-    resolution: {integrity: sha512-SQ2f4hlBw4LrPYi86yuZJjwDgKMDtbZiiY05K6I4mTqydRPwc1Qu022tnIOCR6R0W6u2rtB8grWVQ3OwPXOGzg==}
+  '@frontmatter/extensibility@0.0.18':
+    resolution: {integrity: sha512-9toAfnAzy+g5+5N7cq//wLHxB5eDEQlykPD/IwLvRqm2bN8vJi3/UuTXBk+pL8LwBQai7N1FDMMRw13bhcj84Q==}
 
   '@gar/promisify@1.1.3':
     resolution: {integrity: sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==}
@@ -8802,7 +8802,7 @@ snapshots:
 
   '@fortawesome/fontawesome-free@6.6.0': {}
 
-  '@frontmatter/extensibility@0.0.14':
+  '@frontmatter/extensibility@0.0.18':
     dependencies:
       '@skypack/package-check': 0.2.2
 
