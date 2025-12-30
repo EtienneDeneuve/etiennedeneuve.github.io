@@ -54,7 +54,7 @@
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.57.0",
     "@resvg/resvg-js": "^2.6.2",
-    "@types/uuid": "^9.0.8",
+    "@types/uuid": "^11.0.0",
     "@typescript-eslint/parser": "^6.21.0",
     "cspell": "^9.4.0",
     "date-fns": "^4.1.0",
