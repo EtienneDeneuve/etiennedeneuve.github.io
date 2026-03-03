@@ -180,14 +180,14 @@ jobs:
           path: ${{ env.BUILD_PATH }}/dist
       
       - name: Upload build artifact (for Lighthouse)
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: dist
           path: ${{ env.BUILD_PATH }}/dist
           retention-days: 1
       
       - name: Upload Media Kit artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: media-kit
@@ -234,7 +234,7 @@ jobs:
         continue-on-error: true
       
       - name: Upload Lighthouse results
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: lighthouse-results
