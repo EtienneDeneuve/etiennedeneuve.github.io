@@ -49,7 +49,7 @@ jobs:
       
       - name: Setup pnpm
         id: setup-pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
         with:
           version: 8.4.0
       
@@ -87,7 +87,7 @@ jobs:
           fetch-depth: 0
       
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
         with:
           version: 8.4.0
       
@@ -125,7 +125,7 @@ jobs:
           fetch-depth: 0
       
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
         with:
           version: 8.4.0
       
@@ -208,7 +208,7 @@ jobs:
           ref: ${{ github.head_ref || github.ref }}
       
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
         with:
           version: 8.4.0
       
