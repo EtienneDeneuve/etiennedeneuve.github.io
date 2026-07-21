@@ -73,7 +73,7 @@ import Icon from "./Icon.astro";
       const button = this.querySelector("button");
       if (!button) return;
 
-      const setTheme = (dark) => {
+      const setTheme = (dark: boolean) => {
         document.documentElement.classList[dark ? "add" : "remove"]("theme-dark", "cc--darkmode");
         button.setAttribute("aria-pressed", String(dark));
       };

@@ -95,14 +95,14 @@ const linkEvent = (href: string) => {
 
       menu.hidden = true;
 
-      const setExpanded = (expand) => {
+      const setExpanded = (expand: boolean) => {
         btn.setAttribute("aria-expanded", expand ? "true" : "false");
         menu.hidden = !expand;
       };
 
       btn.addEventListener("click", () => setExpanded(menu.hidden));
 
-      const handleViewports = (e) => {
+      const handleViewports = (e: MediaQueryListEvent | MediaQueryList) => {
         setExpanded(e.matches);
         btn.hidden = e.matches;
       };
