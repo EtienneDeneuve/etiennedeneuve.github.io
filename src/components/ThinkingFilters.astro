@@ -1,0 +1,157 @@
+---
+import {
+  thinkingConfig,
+  type ThinkingContentType,
+  type ThinkingPillar,
+  type ThinkingSort,
+} from "../config/thinking.ts";
+
+interface Props {
+  lang: "fr" | "en";
+  prefix: string;
+  current: {
+    pillar?: ThinkingPillar;
+    contentType?: ThinkingContentType;
+    language?: "fr" | "en";
+    tag?: string;
+    sort?: ThinkingSort;
+  };
+  tagOptions?: Array<{ slug: string; label: string }>;
+}
+
+const { lang, prefix, current, tagOptions = [] } = Astro.props;
+const labels = thinkingConfig.labels;
+const action = `${prefix}/thinking/`;
+---
+
+<form class="filters" method="get" action={action}>
+  <div class="filter-row">
+    <label>
+      <span>{labels.pillar[lang]}</span>
+      <select name="pillar">
+        <option value="">{labels.all[lang]}</option>
+        {
+          Object.entries(thinkingConfig.pillarLabels).map(([id, label]) => (
+            <option value={id} selected={current.pillar === id}>
+              {label[lang]}
+            </option>
+          ))
+        }
+      </select>
+    </label>
+    <label>
+      <span>{labels.type[lang]}</span>
+      <select name="type">
+        <option value="">{labels.all[lang]}</option>
+        {
+          Object.entries(thinkingConfig.contentTypeLabels).map(([id, label]) => (
+            <option value={id} selected={current.contentType === id}>
+              {label[lang]}
+            </option>
+          ))
+        }
+      </select>
+    </label>
+    <label>
+      <span>{labels.language[lang]}</span>
+      <select name="lang">
+        <option value="">{labels.all[lang]}</option>
+        <option value="fr" selected={current.language === "fr"}>FR</option>
+        <option value="en" selected={current.language === "en"}>EN</option>
+      </select>
+    </label>
+    <label>
+      <span>{labels.sort[lang]}</span>
+      <select name="sort">
+        {
+          Object.entries(thinkingConfig.sortLabels).map(([id, label]) => (
+            <option value={id} selected={(current.sort ?? "featured") === id}>
+              {label[lang]}
+            </option>
+          ))
+        }
+      </select>
+    </label>
+    {
+      tagOptions.length > 0 && (
+        <label>
+          <span>{labels.browseTags[lang]}</span>
+          <select name="tag">
+            <option value="">{labels.all[lang]}</option>
+            {tagOptions.map((tag) => (
+              <option value={tag.slug} selected={current.tag === tag.slug}>
+                {tag.label}
+              </option>
+            ))}
+          </select>
+        </label>
+      )
+    }
+  </div>
+  <div class="actions">
+    <button type="submit">{labels.filters[lang]}</button>
+    <a class="reset" href={action}>{labels.reset[lang]}</a>
+  </div>
+</form>
+
+<style>
+  .filters {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    background: var(--color-bg-elevated);
+  }
+  .filter-row {
+    display: grid;
+    gap: var(--space-3);
+  }
+  @media (min-width: 50em) {
+    .filter-row {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-fg-subtle);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+  }
+  select {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    padding: 0.5rem 0.65rem;
+    border-radius: var(--radius-md);
+    border: var(--border-width) solid var(--color-border);
+    background: var(--color-bg);
+    color: var(--color-fg);
+    min-height: var(--touch-min);
+  }
+  .actions {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    margin-top: var(--space-3);
+  }
+  button {
+    border: var(--border-width-strong) solid var(--color-fg);
+    background: var(--color-fg);
+    color: var(--color-bg);
+    border-radius: var(--radius-md);
+    padding: 0.5rem 1rem;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    min-height: var(--touch-min);
+  }
+  .reset {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-fg-subtle);
+  }
+</style>

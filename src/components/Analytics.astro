@@ -1,0 +1,14 @@
+---
+/**
+ * Mounts analytics click delegation once per page.
+ * Components only set data-analytics-* attributes.
+ */
+---
+
+<script>
+  import { initAnalyticsDelegation } from "../lib/analytics.ts";
+  initAnalyticsDelegation();
+  document.addEventListener("astro:page-load", () => {
+    initAnalyticsDelegation();
+  });
+</script>

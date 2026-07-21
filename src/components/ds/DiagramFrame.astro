@@ -1,0 +1,29 @@
+---
+interface Props {
+  caption?: string;
+  title?: string;
+}
+
+const { caption, title } = Astro.props;
+---
+
+<figure class="ds-diagram">
+  {title && <figcaption class="ds-diagram__title">{title}</figcaption>}
+  <div class="ds-diagram__canvas">
+    <slot />
+  </div>
+  {caption && <figcaption class="ds-diagram__caption">{caption}</figcaption>}
+</figure>
+
+<style>
+  .ds-diagram__title {
+    font-family: var(--font-brand);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--color-fg);
+    margin-bottom: var(--space-3);
+  }
+  .ds-diagram__canvas {
+    min-height: 8rem;
+  }
+</style>

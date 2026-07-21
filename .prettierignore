@@ -1,0 +1,15 @@
+dist
+node_modules
+.astro
+.lighthouseci
+pnpm-lock.yaml
+package-lock.json
+src/content
+src/content-drafts
+src/data
+public
+megalinter-reports
+*.log
+coverage
+playwright-report
+test-results

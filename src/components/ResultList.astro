@@ -7,12 +7,14 @@ const { results } = Astro.props;
 ---
 
 <ul class="result-list">
-  {results.map((result) => (
-    <li class="result-item">
-      <span class="result-icon">✓</span>
-      <span class="result-text">{result}</span>
-    </li>
-  ))}
+  {
+    results.map((result) => (
+      <li class="result-item">
+        <span class="result-icon">✓</span>
+        <span class="result-text">{result}</span>
+      </li>
+    ))
+  }
 </ul>
 
 <style>

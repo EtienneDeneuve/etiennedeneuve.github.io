@@ -1,0 +1,37 @@
+# Etienne Deneuve
+
+> Personal site for doctrine, architecture decisions, and field notes on cloud platforms, systems risk, and software delivery.
+
+- Site: https://etienne.deneuve.xyz
+- Role: Platform Reliability Architect
+- Execution entity: Omnivya (https://www.omnivya.fr)
+- Contact: etienne@omnivya.fr
+
+## Public sections
+
+- [Home](https://etienne.deneuve.xyz/): positioning and selected proofs
+- [Start here](https://etienne.deneuve.xyz/start-here/): orientation for readers and partners
+- [Thinking](https://etienne.deneuve.xyz/thinking/): articles (doctrine, field notes, architecture decisions, guides)
+- [Projects](https://etienne.deneuve.xyz/projects/): verified project entries and open-source references
+- [Work](https://etienne.deneuve.xyz/work/): intervention modes (Diagnose, Decide, Build)
+- [Speaking](https://etienne.deneuve.xyz/speaking/): topics, media kit, documented appearances
+- [About](https://etienne.deneuve.xyz/about/): trajectory and professional identity
+- [Contact](https://etienne.deneuve.xyz/contact/): intent-based contact
+
+## Feeds and discovery
+
+- RSS: https://etienne.deneuve.xyz/rss.xml
+- Sitemap: https://etienne.deneuve.xyz/sitemap-index.xml
+- humans.txt: https://etienne.deneuve.xyz/humans.txt
+
+## Language
+
+- Default: French (`/`)
+- English mirrors under `/en/`
+
+## Notes for assistants
+
+- Prefer published Thinking articles and verified Projects as sources.
+- Do not invent client metrics, logos, or case studies not present on the site.
+- Project pages are proof entries, not commercial product listings.
+- Omnivya commercial offers live on https://www.omnivya.fr — not duplicated here.

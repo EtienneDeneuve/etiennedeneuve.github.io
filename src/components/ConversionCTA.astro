@@ -1,0 +1,69 @@
+---
+import type { ConversionEvent } from "../config/conversion.ts";
+import { analyticsAttrs } from "../lib/analytics.ts";
+
+interface Props {
+  href: string;
+  event: ConversionEvent;
+  props?: Record<string, string | number | boolean>;
+  variant?: "primary" | "secondary" | "text";
+  external?: boolean;
+  secondaryHref?: string;
+  secondaryLabel?: string;
+  secondaryEvent?: ConversionEvent;
+  secondaryProps?: Record<string, string | number | boolean>;
+}
+
+const {
+  href,
+  event,
+  props = {},
+  variant = "primary",
+  external = href.startsWith("http") || href.startsWith("mailto:"),
+  secondaryHref,
+  secondaryLabel,
+  secondaryEvent = "cta_booking",
+  secondaryProps = {},
+} = Astro.props;
+
+const primaryAttrs = analyticsAttrs(event, props);
+const secondaryAttrs = secondaryHref ? analyticsAttrs(secondaryEvent, secondaryProps) : null;
+const primaryClass =
+  variant === "secondary" ? "btn-secondary" : variant === "text" ? "btn-text" : "btn-primary";
+---
+
+<div class:list={["conversion-cta", `variant-${variant}`]}>
+  <a
+    class={primaryClass}
+    href={href}
+    {...primaryAttrs}
+    {...external && !href.startsWith("mailto:")
+      ? { target: "_blank", rel: "noopener noreferrer" }
+      : {}}
+  >
+    <slot />
+  </a>
+  {
+    secondaryHref && secondaryLabel && (
+      <a
+        class="btn-secondary"
+        href={secondaryHref}
+        {...secondaryAttrs}
+        {...(secondaryHref.startsWith("http")
+          ? { target: "_blank", rel: "noopener noreferrer" }
+          : {})}
+      >
+        {secondaryLabel}
+      </a>
+    )
+  }
+</div>
+
+<style>
+  .conversion-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: center;
+  }
+</style>

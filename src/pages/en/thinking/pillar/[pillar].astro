@@ -1,0 +1,36 @@
+---
+import ThinkingFacetContent from "../../../../components/ThinkingFacetContent.astro";
+import {
+  thinkingConfig,
+  thinkingPillars,
+  type ThinkingPillar,
+} from "../../../../config/thinking.ts";
+import { getAllThinkingArticles } from "../../../../lib/thinking.ts";
+
+export async function getStaticPaths() {
+  const articles = await getAllThinkingArticles();
+  return thinkingPillars.map((pillar) => ({
+    params: { pillar },
+    props: {
+      pillar,
+      entries: articles.filter((entry) => entry.data.pillar === pillar),
+    },
+  }));
+}
+
+interface Props {
+  pillar: ThinkingPillar;
+  entries: Awaited<ReturnType<typeof getAllThinkingArticles>>;
+}
+
+const { pillar, entries } = Astro.props;
+const label = thinkingConfig.pillarLabels[pillar];
+---
+
+<ThinkingFacetContent
+  lang="en"
+  title={label.en}
+  description={`Articles in the “${label.en}” pillar.`}
+  entries={entries}
+  facetLabel={thinkingConfig.labels.browsePillars.en}
+/>

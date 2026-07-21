@@ -1,0 +1,33 @@
+---
+interface Props {
+  tone?: "note" | "warning" | "decision" | "proof";
+  label?: string;
+  title?: string;
+}
+
+const { tone = "note", label, title } = Astro.props;
+const defaultLabels: Record<NonNullable<Props["tone"]>, string> = {
+  note: "Note",
+  warning: "Attention",
+  decision: "Décision",
+  proof: "Preuve",
+};
+---
+
+<aside class="ds-callout" data-tone={tone}>
+  <p class="ds-callout__label">{label ?? defaultLabels[tone]}</p>
+  {title && <p class="ds-callout__title">{title}</p>}
+  <div class="ds-callout__body">
+    <slot />
+  </div>
+</aside>
+
+<style>
+  .ds-callout__title {
+    margin: 0 0 var(--space-2);
+    font-family: var(--font-brand);
+    font-weight: 600;
+    color: var(--color-fg);
+    font-size: var(--text-md);
+  }
+</style>

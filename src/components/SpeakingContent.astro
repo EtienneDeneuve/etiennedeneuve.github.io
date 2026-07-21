@@ -1,0 +1,531 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import BookingCTA from "../components/BookingCTA.astro";
+import {
+  getFormatLabel,
+  getSortedSpeakingTopics,
+  mediaKitConfig,
+  speakingFormats,
+  speakingPageConfig,
+} from "../config/speaking.ts";
+import { siteConfig } from "../config/site.ts";
+import {
+  breadcrumbJsonLd,
+  buildJsonLdGraph,
+  collectionPageJsonLd,
+  eventJsonLd,
+  personJsonLd,
+} from "../lib/json-ld.ts";
+
+interface Props {
+  lang: "fr" | "en";
+}
+
+const { lang } = Astro.props;
+const prefix = lang === "en" ? "/en" : "";
+const config = speakingPageConfig;
+const topics = getSortedSpeakingTopics();
+
+const allAppearances = await getCollection("appearances");
+const appearances = allAppearances
+  .filter((entry) => !entry.data.draft)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const labels = {
+  problem: lang === "en" ? "Problem addressed" : "Problème traité",
+  audience: lang === "en" ? "Audience" : "Audience",
+  learnings: lang === "en" ? "Three takeaways" : "Trois enseignements",
+  formats: lang === "en" ? "Possible formats" : "Formats possibles",
+  languages: lang === "en" ? "Languages" : "Langues",
+  related: lang === "en" ? "Related content" : "Contenus associés",
+  shortBio: lang === "en" ? "Short bio" : "Bio courte",
+  longBio: lang === "en" ? "Long bio" : "Bio longue",
+  photo: lang === "en" ? "Headshot" : "Photographie",
+  downloadPhoto: lang === "en" ? "Download photo" : "Télécharger la photo",
+  themes: lang === "en" ? "Themes" : "Thèmes",
+  links: lang === "en" ? "Links" : "Liens",
+  contact: lang === "en" ? "Contact" : "Contact",
+  downloadHtml: lang === "en" ? "Full media kit (HTML)" : "Media kit complet (HTML)",
+  downloadPdf: lang === "en" ? "Download PDF" : "Télécharger le PDF",
+  emailCta: lang === "en" ? "Send an email" : "Envoyer un email",
+  proofEvent: lang === "en" ? "Event page" : "Page événement",
+  proofVideo: lang === "en" ? "Video" : "Vidéo",
+  proofSlides: lang === "en" ? "Slides" : "Slides",
+  proofPodcast: lang === "en" ? "Podcast" : "Podcast",
+  proofArticle: lang === "en" ? "Article" : "Article",
+};
+
+function localizedAppearanceField(
+  entry: (typeof appearances)[number],
+  field: "title" | "event" | "topic" | "location"
+): string {
+  const data = entry.data as Record<string, unknown>;
+  const enKey = `${field}_en`;
+  if (lang === "en" && typeof data[enKey] === "string") {
+    return data[enKey] as string;
+  }
+  return String(data[field] ?? "");
+}
+
+function formatAppearanceDate(date: Date): string {
+  return date.toLocaleDateString(lang === "en" ? "en-GB" : "fr-FR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
+const emailSubject = config.cta.emailSubject[lang];
+const mailtoLink = `mailto:${siteConfig.omnivya.email}?subject=${encodeURIComponent(emailSubject)}`;
+const speakingPath = `${prefix}/speaking/`;
+
+const jsonLd = buildJsonLdGraph([
+  personJsonLd(),
+  collectionPageJsonLd({
+    name: config.meta.title[lang],
+    description: config.meta.description[lang],
+    path: speakingPath,
+    lang,
+  }),
+  breadcrumbJsonLd([
+    { name: "Home", path: prefix || "/" },
+    { name: config.meta.title[lang], path: speakingPath },
+  ]),
+  ...appearances.map((entry) =>
+    eventJsonLd({
+      name: `${localizedAppearanceField(entry, "title")} — ${localizedAppearanceField(entry, "event")}`,
+      description: localizedAppearanceField(entry, "topic"),
+      startDate: entry.data.date,
+      location: localizedAppearanceField(entry, "location"),
+      url: entry.data.url ?? entry.data.videoUrl ?? entry.data.proofUrl,
+      eventAttendanceMode: entry.data.location.toLowerCase().includes("online")
+        ? "OnlineEventAttendanceMode"
+        : "OfflineEventAttendanceMode",
+    })
+  ),
+]);
+---
+
+<BaseLayout
+  title={config.meta.title[lang]}
+  description={config.meta.description[lang]}
+  lang={lang}
+  path={speakingPath}
+  alternates={[
+    { lang: "fr", href: "/speaking/" },
+    { lang: "en", href: "/en/speaking/" },
+  ]}
+  jsonLd={jsonLd}
+>
+  <main class="wrapper stack gap-12">
+    <section class="stack gap-4 hero">
+      <h1>{config.meta.title[lang]}</h1>
+      <p class="lead">{config.meta.positioning[lang]}</p>
+    </section>
+
+    <section class="stack gap-4" id="topics">
+      <header class="stack gap-2">
+        <h2>{lang === "en" ? "Topics" : "Sujets"}</h2>
+        <p class="intro">{config.meta.topicsIntro[lang]}</p>
+      </header>
+      <div class="topics-list stack gap-4">
+        {
+          topics.map((topic) => (
+            <article class="topic-card">
+              <h3>{topic.title[lang]}</h3>
+              <dl class="topic-meta">
+                <div>
+                  <dt>{labels.problem}</dt>
+                  <dd>{topic.problem[lang]}</dd>
+                </div>
+                <div>
+                  <dt>{labels.audience}</dt>
+                  <dd>{topic.audience[lang]}</dd>
+                </div>
+                <div>
+                  <dt>{labels.learnings}</dt>
+                  <dd>
+                    <ul>
+                      {topic.learnings[lang].map((item) => (
+                        <li>{item}</li>
+                      ))}
+                    </ul>
+                  </dd>
+                </div>
+                <div>
+                  <dt>{labels.formats}</dt>
+                  <dd class="pill-row">
+                    {topic.formats.map((format) => (
+                      <span class="pill">{getFormatLabel(format, lang)}</span>
+                    ))}
+                  </dd>
+                </div>
+                <div>
+                  <dt>{labels.languages}</dt>
+                  <dd>{topic.languages.map((code) => code.toUpperCase()).join(" · ")}</dd>
+                </div>
+                {topic.links.length > 0 && (
+                  <div>
+                    <dt>{labels.related}</dt>
+                    <dd>
+                      <ul class="related-links">
+                        {topic.links.map((link) => (
+                          <li>
+                            <a
+                              href={
+                                link.href.startsWith("http") ? link.href : `${prefix}${link.href}`
+                              }
+                            >
+                              {link.label[lang]}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </dd>
+                  </div>
+                )}
+              </dl>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="stack gap-4" id="formats">
+      <h2>{lang === "en" ? "Formats" : "Formats"}</h2>
+      <div class="formats-grid">
+        {
+          speakingFormats.map((format) => (
+            <article class="format-card">
+              <h3>{format.label[lang]}</h3>
+              <p>{format.description[lang]}</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    {
+      appearances.length > 0 && (
+        <section class="stack gap-4" id="appearances">
+          <h2>{config.meta.appearancesTitle[lang]}</h2>
+          <div class="appearances-list stack gap-3">
+            {appearances.map((entry) => (
+              <article class="appearance-card">
+                <header>
+                  <h3>{localizedAppearanceField(entry, "title")}</h3>
+                  <p class="appearance-event">
+                    {localizedAppearanceField(entry, "event")} —{" "}
+                    {formatAppearanceDate(entry.data.date)}
+                  </p>
+                  <p class="appearance-meta">
+                    {localizedAppearanceField(entry, "location")} ·{" "}
+                    {localizedAppearanceField(entry, "topic")}
+                  </p>
+                </header>
+                <div class="proof-links">
+                  {entry.data.url && (
+                    <a href={entry.data.url} target="_blank" rel="noopener noreferrer">
+                      {labels.proofArticle}
+                    </a>
+                  )}
+                  {entry.data.videoUrl && (
+                    <a href={entry.data.videoUrl} target="_blank" rel="noopener noreferrer">
+                      {labels.proofVideo}
+                    </a>
+                  )}
+                  {entry.data.slidesUrl && (
+                    <a href={entry.data.slidesUrl} target="_blank" rel="noopener noreferrer">
+                      {labels.proofSlides}
+                    </a>
+                  )}
+                  {entry.data.proofUrl && entry.data.proofUrl !== entry.data.url && (
+                    <a href={entry.data.proofUrl} target="_blank" rel="noopener noreferrer">
+                      {entry.data.type === "podcast" ? labels.proofPodcast : labels.proofEvent}
+                    </a>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section class="stack gap-4" id="media-kit">
+      <header class="stack gap-2">
+        <h2>{config.meta.mediaKitTitle[lang]}</h2>
+        <p class="intro">{config.meta.mediaKitIntro[lang]}</p>
+      </header>
+      <div class="media-kit-grid">
+        <div class="photo-block">
+          <img
+            src={mediaKitConfig.photo.src}
+            alt={mediaKitConfig.photo.alt[lang]}
+            width={mediaKitConfig.photo.width}
+            height={mediaKitConfig.photo.height}
+            loading="lazy"
+            decoding="async"
+            class="headshot"
+          />
+          <a
+            href={mediaKitConfig.photo.fullSrc}
+            download={mediaKitConfig.photo.downloadFilename}
+            class="photo-download"
+          >
+            {labels.downloadPhoto}
+          </a>
+        </div>
+        <div class="bio-block stack gap-4">
+          <div>
+            <h3>{labels.shortBio}</h3>
+            <p>{mediaKitConfig.shortBio[lang]}</p>
+          </div>
+          <div>
+            <h3>{labels.longBio}</h3>
+            {mediaKitConfig.longBio[lang].map((paragraph) => <p>{paragraph}</p>)}
+          </div>
+          <div>
+            <h3>{labels.themes}</h3>
+            <ul>
+              {topics.map((topic) => <li>{topic.title[lang]}</li>)}
+            </ul>
+          </div>
+          <div>
+            <h3>{labels.languages}</h3>
+            <p>{mediaKitConfig.languages[lang]}</p>
+          </div>
+          <div>
+            <h3>{labels.links}</h3>
+            <ul class="social-links">
+              <li>
+                <a href={siteConfig.seo.siteUrl}>{siteConfig.seo.siteUrl}</a>
+              </li>
+              <li>
+                <a href={siteConfig.social.linkedin}>LinkedIn</a>
+              </li>
+              <li>
+                <a href={siteConfig.social.github}>GitHub</a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3>{labels.contact}</h3>
+            <p>
+              <a href={`mailto:${siteConfig.omnivya.email}`}>{siteConfig.omnivya.email}</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="media-kit-downloads actions">
+        <a class="btn-primary" href="/media-kit.html" target="_blank" rel="noopener noreferrer">
+          {labels.downloadHtml}
+        </a>
+        <a class="btn-secondary" href="/media-kit.pdf" download>
+          {labels.downloadPdf}
+        </a>
+      </div>
+    </section>
+
+    <section class="cta-section stack gap-3">
+      <h2>{config.meta.ctaTitle[lang]}</h2>
+      <p>{config.meta.ctaBody[lang]}</p>
+      <div class="actions">
+        <BookingCTA lang={lang} bookingSubject={emailSubject} surface="speaking">
+          {lang === "en" ? "Book a call" : "Réserver un appel"}
+        </BookingCTA>
+        <a class="btn-secondary" href={mailtoLink}>
+          {labels.emailCta}
+        </a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .hero {
+    max-width: 72ch;
+  }
+  .lead {
+    font-size: var(--text-lg);
+    color: var(--color-fg-muted);
+    margin: 0;
+    line-height: 1.6;
+  }
+  .intro {
+    margin: 0;
+    color: var(--color-fg-muted);
+    max-width: 72ch;
+  }
+  .topic-card {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    background: var(--color-bg-elevated);
+  }
+  .topic-card h3 {
+    margin: 0 0 0.75rem;
+    font-size: var(--text-lg);
+  }
+  .topic-meta {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+  }
+  @media (min-width: 50em) {
+    .topic-meta {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .topic-meta dt {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-fg-subtle);
+    margin-bottom: 0.15rem;
+  }
+  .topic-meta dd {
+    margin: 0;
+    color: var(--color-fg-muted);
+    line-height: 1.5;
+  }
+  .topic-meta ul,
+  .bio-block ul {
+    margin: 0;
+    padding-left: 1.1rem;
+  }
+  .pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+  .pill {
+    font-size: var(--text-xs);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0.15rem 0.55rem;
+    color: var(--color-fg-muted);
+  }
+  .related-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .related-links a {
+    color: var(--color-fg);
+  }
+  .formats-grid {
+    display: grid;
+    gap: 1rem;
+  }
+  @media (min-width: 50em) {
+    .formats-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .format-card {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    background: var(--color-bg-elevated);
+  }
+  .format-card h3 {
+    margin: 0 0 0.35rem;
+    font-size: var(--text-md);
+  }
+  .format-card p {
+    margin: 0;
+    color: var(--color-fg-muted);
+    font-size: var(--text-sm);
+  }
+  .appearance-card {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.15rem;
+    background: var(--color-bg-elevated);
+  }
+  .appearance-card h3 {
+    margin: 0 0 0.25rem;
+    font-size: var(--text-md);
+  }
+  .appearance-event {
+    margin: 0;
+    color: var(--color-fg-muted);
+    font-size: var(--text-sm);
+  }
+  .appearance-meta {
+    margin: 0.25rem 0 0.75rem;
+    color: var(--color-fg-subtle);
+    font-size: var(--text-xs);
+  }
+  .proof-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+  .proof-links a {
+    color: var(--color-fg);
+    font-size: var(--text-sm);
+    text-decoration: none;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0.2rem 0.65rem;
+  }
+  .proof-links a:hover {
+    border-color: var(--accent-regular);
+  }
+  .media-kit-grid {
+    display: grid;
+    gap: 1.5rem;
+  }
+  @media (min-width: 50em) {
+    .media-kit-grid {
+      grid-template-columns: 160px 1fr;
+      gap: 2rem;
+    }
+  }
+  .photo-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .headshot {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--gray-800);
+  }
+  .photo-download {
+    font-size: var(--text-sm);
+    color: var(--color-fg-muted);
+  }
+  .bio-block h3 {
+    margin: 0 0 0.35rem;
+    font-size: var(--text-md);
+  }
+  .bio-block p {
+    margin: 0 0 0.65rem;
+    color: var(--color-fg-muted);
+    line-height: 1.6;
+  }
+  .social-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .media-kit-downloads {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+  .cta-section {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    background: var(--color-bg-elevated);
+    max-width: 72ch;
+  }
+</style>

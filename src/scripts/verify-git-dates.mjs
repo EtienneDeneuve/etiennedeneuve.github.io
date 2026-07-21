@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
  * Verify Git Dates Script
- * 
+ *
  * This script verifies that git dates can be retrieved for blog posts.
  * Used as a build-time assertion to catch issues early.
- * 
+ *
  * Usage: node src/scripts/verify-git-dates.mjs
  */
 
@@ -59,10 +59,11 @@ blogFiles.forEach((filePath) => {
 
     // Try to get git last modified
     try {
-      const gitDate = execSync(
-        `git log -1 --format=%cI -- "${filePath}"`,
-        { encoding: "utf-8", stdio: ["ignore", "pipe", "ignore"], cwd: rootDir }
-      ).trim();
+      const gitDate = execSync(`git log -1 --format=%cI -- "${filePath}"`, {
+        encoding: "utf-8",
+        stdio: ["ignore", "pipe", "ignore"],
+        cwd: rootDir,
+      }).trim();
 
       if (!gitDate) {
         warnings.push(`⚠️  ${filePath.split("/").pop()}: No git history`);
@@ -82,7 +83,9 @@ blogFiles.forEach((filePath) => {
     } catch (gitError) {
       // File might not be tracked or have no history - this is OK
       if (!gitError.message.includes("does not have any commits yet")) {
-        warnings.push(`⚠️  ${filePath.split("/").pop()}: Could not get git date: ${gitError.message}`);
+        warnings.push(
+          `⚠️  ${filePath.split("/").pop()}: Could not get git date: ${gitError.message}`
+        );
       }
     }
   } catch (error) {

@@ -1,0 +1,32 @@
+---
+import type { ResolvedContent } from "../lib/resolve-content.ts";
+
+interface Props {
+  item: ResolvedContent;
+  eyebrow?: string;
+  external?: boolean;
+  lang?: "fr" | "en";
+}
+
+const { item, eyebrow, external = item.kind === "resource", lang = "fr" } = Astro.props;
+const actionLabel = external
+  ? lang === "en"
+    ? "Open"
+    : "Ouvrir"
+  : lang === "en"
+    ? "Read"
+    : "Lire";
+---
+
+<article class="surface-card interactive">
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  <h3>{item.title}</h3>
+  <p>{item.description}</p>
+  <a
+    class="read-more"
+    href={item.href}
+    {...external ? { target: "_blank", rel: "noopener noreferrer" } : {}}
+  >
+    {actionLabel} →
+  </a>
+</article>

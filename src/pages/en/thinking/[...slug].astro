@@ -1,0 +1,47 @@
+---
+import ArticleDetailContent from "../../../components/ArticleDetailContent.astro";
+import {
+  getAllThinkingArticles,
+  getArticleLanguage,
+  getArticlePath,
+  getCanonicalSlug,
+  getLegacySlug,
+  type ThinkingArticle,
+} from "../../../lib/thinking.ts";
+
+interface Props {
+  entry: ThinkingArticle;
+}
+
+export async function getStaticPaths() {
+  const articles = await getAllThinkingArticles();
+  const paths: Array<{ params: { slug: string }; props: { entry: ThinkingArticle } }> = [];
+  const seen = new Set<string>();
+
+  for (const entry of articles) {
+    if (getArticleLanguage(entry) !== "en") continue;
+    const canonical = getCanonicalSlug(entry);
+    if (!seen.has(canonical)) {
+      seen.add(canonical);
+      paths.push({ params: { slug: canonical }, props: { entry } });
+    }
+    const legacy = getLegacySlug(entry);
+    if (legacy && legacy !== canonical && !seen.has(legacy)) {
+      seen.add(legacy);
+      paths.push({ params: { slug: legacy }, props: { entry } });
+    }
+  }
+
+  return paths;
+}
+
+const { entry } = Astro.props;
+const requestedSlug = Astro.params.slug;
+const canonicalSlug = getCanonicalSlug(entry);
+
+if (requestedSlug && requestedSlug !== canonicalSlug) {
+  return Astro.redirect(getArticlePath(canonicalSlug, "en"), 301);
+}
+---
+
+<ArticleDetailContent entry={entry} lang="en" />

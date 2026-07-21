@@ -1,0 +1,83 @@
+# Pull request quality gate
+name: Pull Request
+
+on:
+  pull_request:
+    branches: ["master", "main"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI: true
+  NODE_ENV: production
+
+jobs:
+  quality:
+    name: Quality & build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          install-playwright: "true"
+
+      - name: Format check
+        run: pnpm run format:check
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Astro check
+        run: pnpm run check
+
+      - name: Validate collections
+        run: pnpm run validate:collections
+
+      - name: Publication policy
+        run: pnpm run validate-publication
+
+      - name: Spellcheck
+        run: pnpm run spellcheck
+
+      - name: SEO config
+        run: pnpm run verify-seo
+
+      - name: Build
+        run: |
+          export SOURCE_DATE_EPOCH="$(git log -1 --pretty=%ct)"
+          echo "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH"
+          pnpm run build
+
+      - name: Internal linkcheck
+        run: pnpm run linkcheck
+
+      - name: SEO HTML checks
+        run: pnpm run verify-seo
+
+      - name: Unit tests
+        run: pnpm run test
+
+      - name: Playwright (built site)
+        run: pnpm run test:e2e
+
+      - name: Lighthouse (critical pages)
+        run: pnpm run lighthouse
+
+      - name: Upload Lighthouse results
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: lighthouse-results
+          path: .lighthouseci
+          retention-days: 7
+          if-no-files-found: warn

@@ -1,0 +1,46 @@
+---
+interface Props {
+  caption?: string;
+  language?: string;
+}
+
+const { caption, language } = Astro.props;
+---
+
+<figure class="ds-code-panel">
+  {
+    language && (
+      <figcaption class="ds-code-panel__meta">
+        <span>{language}</span>
+      </figcaption>
+    )
+  }
+  <div class="ds-code">
+    <slot />
+  </div>
+  {caption && <figcaption class="ds-code-panel__caption">{caption}</figcaption>}
+</figure>
+
+<style>
+  .ds-code-panel {
+    margin: 0;
+  }
+  .ds-code-panel__meta {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-fg-subtle);
+    margin-bottom: var(--space-2);
+  }
+  .ds-code-panel__caption {
+    margin-top: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-fg-subtle);
+  }
+  .ds-code :global(pre) {
+    margin: 0;
+    border: 0;
+    background: transparent;
+    padding: 0;
+  }
+</style>

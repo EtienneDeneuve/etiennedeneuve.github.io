@@ -1,0 +1,255 @@
+---
+import type { ResolvedContent } from "../lib/resolve-content.ts";
+
+interface Props {
+  id: string;
+  title: string;
+  objective: string;
+  scopeExamples: string[];
+  possibleDeliverables?: string[];
+  startingSituation: string;
+  expectedOutcome: string;
+  engagementShape: string;
+  included: string[];
+  excluded: string[];
+  proofs: ResolvedContent[];
+  ctaLabel: string;
+  ctaEmail: string;
+  calendarUrl: string;
+  secondaryLink?: { label: string; href: string };
+  labels: {
+    objective: string;
+    scopeExamples: string;
+    possibleDeliverables: string;
+    startingSituation: string;
+    expectedOutcome: string;
+    engagementShape: string;
+    included: string;
+    excluded: string;
+    proofs: string;
+    emailCta: string;
+    calendarCta: string;
+    readProof: string;
+    openProof: string;
+  };
+}
+
+const {
+  id,
+  title,
+  objective,
+  scopeExamples,
+  possibleDeliverables,
+  startingSituation,
+  expectedOutcome,
+  engagementShape,
+  included,
+  excluded,
+  proofs,
+  ctaLabel,
+  ctaEmail,
+  calendarUrl,
+  secondaryLink,
+  labels,
+} = Astro.props;
+
+const proofAction = (item: ResolvedContent) =>
+  item.kind === "resource" || item.href.startsWith("http") ? labels.openProof : labels.readProof;
+---
+
+<section class="intervention-mode" id={id}>
+  <header class="mode-header">
+    <h2>{title}</h2>
+    <p class="objective">{objective}</p>
+  </header>
+
+  <div class="mode-grid">
+    <div class="mode-block">
+      <h3>{labels.scopeExamples}</h3>
+      <ul>
+        {scopeExamples.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+
+    {
+      possibleDeliverables && possibleDeliverables.length > 0 && (
+        <div class="mode-block">
+          <h3>{labels.possibleDeliverables}</h3>
+          <ul>
+            {possibleDeliverables.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+
+    <div class="mode-block">
+      <h3>{labels.startingSituation}</h3>
+      <p>{startingSituation}</p>
+    </div>
+
+    <div class="mode-block">
+      <h3>{labels.expectedOutcome}</h3>
+      <p>{expectedOutcome}</p>
+    </div>
+
+    <div class="mode-block">
+      <h3>{labels.engagementShape}</h3>
+      <p>{engagementShape}</p>
+    </div>
+
+    <div class="mode-block">
+      <h3>{labels.included}</h3>
+      <ul>
+        {included.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+
+    <div class="mode-block">
+      <h3>{labels.excluded}</h3>
+      <ul class="excluded">
+        {excluded.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+
+    {
+      proofs.length > 0 && (
+        <div class="mode-block proofs">
+          <h3>{labels.proofs}</h3>
+          <ul class="proof-list">
+            {proofs.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  {...(item.kind === "resource" || item.href.startsWith("http")
+                    ? { target: "_blank", rel: "noopener noreferrer" }
+                    : {})}
+                >
+                  {item.title}
+                </a>
+                <span class="proof-action">{proofAction(item)}</span>
+                <p>{item.description}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+  </div>
+
+  <footer class="mode-cta">
+    <p class="cta-intro">{ctaLabel}</p>
+    <div class="actions">
+      <a class="btn-primary" href={ctaEmail}>{labels.emailCta}</a>
+      {
+        secondaryLink && (
+          <a
+            class="btn-secondary"
+            href={secondaryLink.href}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {secondaryLink.label}
+          </a>
+        )
+      }
+      <a class="btn-secondary" href={calendarUrl} target="_blank" rel="noopener noreferrer">
+        {labels.calendarCta}
+      </a>
+    </div>
+  </footer>
+</section>
+
+<style>
+  .intervention-mode {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    background: var(--color-bg-elevated);
+    box-shadow: var(--shadow-sm);
+  }
+  .mode-header h2 {
+    margin: 0 0 var(--space-2);
+  }
+  .objective {
+    margin: 0;
+    color: var(--color-fg-muted);
+    font-size: var(--text-lg);
+  }
+  .mode-grid {
+    display: grid;
+    gap: var(--space-5);
+    margin-top: var(--space-6);
+  }
+  @media (min-width: 50em) {
+    .mode-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .proofs {
+      grid-column: 1 / -1;
+    }
+  }
+  .mode-block h3 {
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-md);
+    color: var(--color-fg);
+  }
+  .mode-block p {
+    margin: 0;
+    color: var(--color-fg-muted);
+    line-height: var(--leading-relaxed);
+  }
+  .mode-block ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: var(--color-fg-muted);
+    display: grid;
+    gap: var(--space-1);
+  }
+  .excluded li {
+    color: var(--color-fg-subtle);
+  }
+  .proof-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--space-3);
+  }
+  .proof-list li {
+    border-top: var(--border-width) solid var(--color-border);
+    padding-top: var(--space-3);
+  }
+  .proof-list li:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+  .proof-list a {
+    color: var(--color-fg);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .proof-list a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .proof-action {
+    margin-left: var(--space-2);
+    color: var(--color-fg-subtle);
+    font-size: var(--text-sm);
+  }
+  .proof-list p {
+    margin: var(--space-1) 0 0;
+    font-size: var(--text-sm);
+  }
+  .mode-cta {
+    margin-top: var(--space-6);
+    padding-top: var(--space-5);
+    border-top: var(--border-width) solid var(--color-border);
+  }
+  .cta-intro {
+    margin: 0 0 var(--space-3);
+    color: var(--color-fg);
+    font-weight: 600;
+  }
+</style>

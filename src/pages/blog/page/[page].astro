@@ -1,105 +1,13 @@
 ---
-import { getCollection } from "astro:content";
-
-import BaseLayout from "../../../layouts/BaseLayout.astro";
-import PortfolioPreview from "../../../components/PortfolioPreview.astro";
-import Hero from "../../../components/Hero.astro";
-import Grid from "../../../components/Grid.astro";
-import { siteConfig, getBrandText } from "../../../config/site.ts";
-
-// Charger tous les articles de blog et les trier par date de publication décroissante
-const projects = (await getCollection("blog")).sort(
-  (a, b) => b.data.pubDate?.valueOf() - a.data.pubDate?.valueOf(),
-);
-
-const ITEMS_PER_PAGE = 5;
-
-const { page } = Astro.params;
-const currentPage = parseInt(page, 10);
-
-// Calculer l'index de début et de fin pour les articles à afficher sur cette page
-const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-const endIndex = startIndex + ITEMS_PER_PAGE;
-const currentProjects = projects.slice(startIndex, endIndex);
-
+/**
+ * Legacy paginated blog routes — always redirect to Thinking.
+ * Kept so old /blog/page/N URLs resolve during static generation.
+ */
 export async function getStaticPaths() {
-  const ITEMS_PER_PAGE = 5;
-
-  // Charger les articles de blog pour déterminer le nombre total de pages
-  const projects = await getCollection("blog");
-  const totalPages = Math.ceil(projects.length / ITEMS_PER_PAGE);
-
-  // Générer les chemins pour chaque page
-  let paths = [];
-  for (let i = 1; i <= totalPages; i++) {
-    paths.push({ params: { page: i.toString() } });
-  }
-  return paths;
+  return Array.from({ length: 12 }, (_, i) => ({
+    params: { page: String(i + 1) },
+  }));
 }
+
+return Astro.redirect("/thinking/", 301);
 ---
-
-<BaseLayout
-  title={getBrandText.siteTitle(`Page ${currentPage} du Blog`)}
-  description={`Parcourez les articles de blog récents d'${siteConfig.author.name}.`}
->
-  <div class="stack gap-20">
-    <main class="wrapper stack gap-8">
-      <Hero
-        title="Mon Blog"
-        tagline="Lisez mes articles, vous aurez ainsi une meilleure idée de mes travaux."
-        align="start"
-      />
-      <Grid variant="offset">
-        {
-          currentProjects.map((project) => (
-            <li>
-              <PortfolioPreview project={project} />
-            </li>
-          ))
-        }
-      </Grid>
-
-      <!-- Pagination Navigation -->
-      <nav class="pagination">
-        {
-          currentPage > 1 && (
-            <a href={`/blog/page/${currentPage - 1}`} class="previous">
-              ← Page précédente
-            </a>
-          )
-        }
-        {
-          currentPage < Math.ceil(projects.length / ITEMS_PER_PAGE) && (
-            <a href={`/blog/page/${currentPage + 1}`} class="next">
-              Page suivante →
-            </a>
-          )
-        }
-      </nav>
-    </main>
-  </div>
-
-  <style>
-    .pagination {
-      display: flex;
-      justify-content: space-between;
-      padding: 1rem 0;
-    }
-
-    .previous,
-    .next {
-      color: var(--link-color);
-      text-decoration: none;
-      padding: 0.5rem 1rem;
-      border: 1px solid var(--gray-800);
-      border-radius: 0.5rem;
-      transition: background-color 0.3s;
-    }
-
-    .previous:hover,
-    .next:hover {
-      background-color: var(--gray-800);
-      color: var(--gray-100);
-    }
-  </style>
-</BaseLayout>

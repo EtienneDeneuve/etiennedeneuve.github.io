@@ -1,0 +1,29 @@
+---
+interface Props {
+  cite?: string;
+  attribution?: string;
+}
+
+const { cite, attribution } = Astro.props;
+---
+
+<blockquote class="ds-quote" cite={cite}>
+  <div class="ds-quote__body">
+    <slot />
+  </div>
+  {
+    attribution && (
+      <footer>
+        — {attribution}
+        {cite && (
+          <>
+            {" "}
+            <cite>
+              <a href={cite}>{cite}</a>
+            </cite>
+          </>
+        )}
+      </footer>
+    )
+  }
+</blockquote>

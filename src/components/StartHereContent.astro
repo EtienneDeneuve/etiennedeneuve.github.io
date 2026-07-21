@@ -1,0 +1,244 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ConversionCTA from "../components/ConversionCTA.astro";
+import ContentCard from "../components/ContentCard.astro";
+import LearningPath from "../components/LearningPath.astro";
+import { siteConfig } from "../config/site.ts";
+import { startHereConfig } from "../config/start-here.ts";
+import { resolveContentRefs } from "../lib/resolve-content.ts";
+import { contactConfig } from "../config/contact.ts";
+import {
+  breadcrumbJsonLd,
+  buildJsonLdGraph,
+  collectionPageJsonLd,
+  personJsonLd,
+} from "../lib/json-ld.ts";
+
+interface Props {
+  lang: "fr" | "en";
+}
+
+const { lang } = Astro.props;
+const config = startHereConfig;
+const prefix = lang === "en" ? "/en" : "";
+const alternates = [
+  { lang: "fr" as const, href: "/start-here/" },
+  { lang: "en" as const, href: "/en/start-here/" },
+];
+
+const [articles, projects, resources] = await Promise.all([
+  getCollection("blog"),
+  getCollection("projects"),
+  getCollection("resources"),
+]);
+
+const collections = { articles, projects, resources };
+
+const proofProjects = resolveContentRefs(config.sections.proofs.items, collections, lang)
+  .map((resolved) => {
+    const entry = projects.find(
+      (project) => project.id.includes(resolved.ref.id) && !project.data.draft
+    );
+    return entry ? { resolved, entry } : null;
+  })
+  .filter((item): item is NonNullable<typeof item> => Boolean(item));
+
+const starterItems = config.sections.starterContent.items
+  .map((item) => {
+    const resolved = resolveContentRefs([item], collections, lang)[0];
+    if (!resolved) return null;
+    const label = config.contentTypeLabels[item.labelKey]?.[lang];
+    return { resolved, label };
+  })
+  .filter((item): item is NonNullable<typeof item> => Boolean(item));
+
+const learningPaths = config.learningPaths.map((path) => ({
+  id: path.id,
+  title: path.title[lang],
+  summary: path.summary[lang],
+  themes: path.themes[lang],
+  items: resolveContentRefs(path.items, collections, lang),
+}));
+
+const readProofLabel = lang === "en" ? "View proof" : "Voir la preuve";
+const openOmnivyaLabel = lang === "en" ? "Open Omnivya" : "Voir Omnivya";
+
+const startHerePath = `${prefix}/start-here/`;
+const jsonLd = buildJsonLdGraph([
+  personJsonLd(),
+  collectionPageJsonLd({
+    name: config.meta.title[lang],
+    description: config.meta.description[lang],
+    path: startHerePath,
+    lang,
+  }),
+  breadcrumbJsonLd([
+    { name: "Home", path: prefix || "/" },
+    { name: config.meta.title[lang], path: startHerePath },
+  ]),
+]);
+---
+
+<BaseLayout
+  title={config.meta.title[lang]}
+  description={config.meta.description[lang]}
+  lang={lang}
+  path={startHerePath}
+  alternates={alternates}
+  jsonLd={jsonLd}
+>
+  <main class="wrapper stack gap-12">
+    <section class="stack gap-4 page-hero">
+      <p class="eyebrow">{config.meta.eyebrow[lang]}</p>
+      <h1>{config.meta.title[lang]}</h1>
+      <p class="lede">{config.meta.intro[lang]}</p>
+    </section>
+
+    <section class="stack gap-4">
+      <h2>{config.sections.whatIBuild.title[lang]}</h2>
+      {config.sections.whatIBuild.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
+    </section>
+
+    <section class="stack gap-4">
+      <h2>{config.sections.problems.title[lang]}</h2>
+      <ul class="list">
+        {config.sections.problems.items[lang].map((item) => <li>{item}</li>)}
+      </ul>
+    </section>
+
+    <section class="stack gap-4">
+      <h2>{config.sections.reasoning.title[lang]}</h2>
+      <ul class="list">
+        {config.sections.reasoning.principles[lang].map((principle) => <li>{principle}</li>)}
+      </ul>
+    </section>
+
+    <section class="stack gap-4">
+      <h2>{config.sections.omnivyaRole.title[lang]}</h2>
+      {config.sections.omnivyaRole.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
+      <p>
+        <a href={siteConfig.omnivya.website} target="_blank" rel="noopener noreferrer">
+          {openOmnivyaLabel} →
+        </a>
+      </p>
+    </section>
+
+    <section class="stack gap-4">
+      <h2>{config.sections.proofs.title[lang]}</h2>
+      <p>{config.sections.proofs.intro[lang]}</p>
+      <div class="stack gap-3">
+        {
+          proofProjects.map(({ entry }) => (
+            <article class="surface-card">
+              <h3>{entry.data.name}</h3>
+              <p>
+                <strong>{lang === "en" ? "Problem:" : "Problème :"}</strong> {entry.data.problem}
+              </p>
+              <p>
+                <strong>{lang === "en" ? "Role:" : "Rôle :"}</strong> {entry.data.role}
+              </p>
+              <p>
+                <strong>{lang === "en" ? "Principle demonstrated:" : "Principe démontré :"}</strong>{" "}
+                {entry.data.principles[0] ?? "—"}
+              </p>
+              <a
+                class="read-more"
+                href={
+                  entry.data.proofLinks[0] ??
+                  entry.data.website ??
+                  entry.data.repository ??
+                  `${prefix}/projects/${entry.id}/`
+                }
+                {...(entry.data.proofLinks[0] || entry.data.website || entry.data.repository
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
+              >
+                {readProofLabel} →
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="stack gap-4">
+      <h2>{config.sections.starterContent.title[lang]}</h2>
+      <p>{config.sections.starterContent.intro[lang]}</p>
+      <div class="grid-auto">
+        {
+          starterItems.map(({ resolved, label }) => (
+            <ContentCard item={resolved} eyebrow={label} lang={lang} />
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="stack gap-4">
+      <h2>{lang === "en" ? "Editorial paths" : "Parcours éditoriaux"}</h2>
+      <p>
+        {
+          lang === "en"
+            ? "Choose the path closest to your context. Each list references published content by identifier."
+            : "Choisissez le parcours le plus proche de votre contexte. Chaque liste référence des contenus publiés par identifiant."
+        }
+      </p>
+      <div class="stack gap-4">
+        {
+          learningPaths.map((path) => (
+            <LearningPath
+              id={path.id}
+              title={path.title}
+              summary={path.summary}
+              themes={path.themes}
+              items={path.items}
+              lang={lang}
+            />
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="stack gap-4">
+      <h2>{config.sections.continue.title[lang]}</h2>
+      <div class="grid-auto">
+        {
+          config.sections.continue.options[lang].map((option) => (
+            <a class="surface-card interactive" href={option.href}>
+              <h3>{option.label}</h3>
+              <p>{option.description}</p>
+              <span class="read-more">{lang === "en" ? "Open" : "Ouvrir"} →</span>
+            </a>
+          ))
+        }
+      </div>
+      <div class="actions">
+        <ConversionCTA
+          href={`${prefix}/contact/`}
+          event="cta_contact_email"
+          props={{ intent: "qualification", surface: "start-here", lang }}
+          secondaryHref={contactConfig.buildMailto(
+            lang === "en" ? "Contact — diagnosis or mission" : "Contact — diagnostic ou mission"
+          )}
+          secondaryLabel={lang === "en" ? "Send an email" : "Envoyer un email"}
+          secondaryEvent="cta_contact_email"
+          secondaryProps={{ intent: "mission", surface: "start-here", lang }}
+        >
+          {lang === "en" ? "Discuss a complex system" : "Parler d’un système complexe"}
+        </ConversionCTA>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .hero {
+    max-width: 72ch;
+  }
+  .list {
+    display: grid;
+    gap: var(--space-3);
+    padding-left: 1.25rem;
+    color: var(--color-fg-muted);
+  }
+</style>

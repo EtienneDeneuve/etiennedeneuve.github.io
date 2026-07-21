@@ -1,0 +1,2 @@
+# Progressive migration target for enriched article frontmatter.
+# Legacy posts remain in src/content/blog until manually migrated.

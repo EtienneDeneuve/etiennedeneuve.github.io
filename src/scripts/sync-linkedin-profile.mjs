@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
  * Sync LinkedIn Profile Information
- * 
+ *
  * This script fetches profile information from LinkedIn and updates site config.
  * It can use either:
  * 1. LinkedIn API v2 (requires OAuth token)
  * 2. Open Graph meta tags from public profile (limited info)
- * 
+ *
  * Usage: node src/scripts/sync-linkedin-profile.mjs
  */
 
@@ -30,17 +30,17 @@ async function fetchFromAPI() {
   try {
     const [profileResponse, emailResponse] = await Promise.all([
       fetch("https://api.linkedin.com/v2/me", {
-        headers: { "Authorization": `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` },
       }),
       fetch("https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))", {
-        headers: { "Authorization": `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` },
       }),
     ]);
 
     if (profileResponse.ok && emailResponse.ok) {
       const profile = await profileResponse.json();
       const emailData = await emailResponse.json();
-      
+
       return {
         firstName: profile.localizedFirstName || "",
         lastName: profile.localizedLastName || "",
@@ -70,22 +70,25 @@ async function fetchFromOpenGraph() {
     if (!response.ok) return null;
 
     const html = await response.text();
-    
+
     // Extract Open Graph data
     const ogTitle = html.match(/<meta\s+property="og:title"\s+content="([^"]+)"/i)?.[1] || "";
-    const ogDescription = html.match(/<meta\s+property="og:description"\s+content="([^"]+)"/i)?.[1] || "";
+    const ogDescription =
+      html.match(/<meta\s+property="og:description"\s+content="([^"]+)"/i)?.[1] || "";
     const ogImage = html.match(/<meta\s+property="og:image"\s+content="([^"]+)"/i)?.[1] || "";
 
     // Try to extract headline from structured data (JSON-LD)
     let headline = "";
-    const jsonLdMatch = html.match(/<script[^>]*type=["']application\/ld\+json["'][^>]*>(.*?)<\/script>/is);
+    const jsonLdMatch = html.match(
+      /<script[^>]*type=["']application\/ld\+json["'][^>]*>(.*?)<\/script>/is
+    );
     if (jsonLdMatch) {
       try {
         const jsonLd = JSON.parse(jsonLdMatch[1]);
         if (jsonLd.headline) {
           headline = jsonLd.headline;
         } else if (Array.isArray(jsonLd)) {
-          const personData = jsonLd.find(item => item["@type"] === "Person");
+          const personData = jsonLd.find((item) => item["@type"] === "Person");
           if (personData?.jobTitle) {
             headline = personData.jobTitle;
           }
@@ -97,20 +100,20 @@ async function fetchFromOpenGraph() {
 
     // Parse title (usually "Name | Headline" or "Name - Company")
     let name = "";
-    
+
     if (!headline) {
       if (ogTitle.includes("|")) {
-        const parts = ogTitle.split("|").map(s => s.trim());
+        const parts = ogTitle.split("|").map((s) => s.trim());
         name = parts[0] || "";
         headline = parts.slice(1).join(" | ") || "";
       } else if (ogTitle.includes("-")) {
-        const parts = ogTitle.split("-").map(s => s.trim());
+        const parts = ogTitle.split("-").map((s) => s.trim());
         name = parts[0] || "";
         headline = parts.slice(1).join(" - ") || "";
       } else {
         name = ogTitle.trim();
       }
-      
+
       // If headline is empty or generic, try description
       if (!headline || headline.toLowerCase() === "linkedin") {
         headline = ogDescription || "";
@@ -128,7 +131,9 @@ async function fetchFromOpenGraph() {
 
     // Try to extract location from meta tags or structured data
     let location = "";
-    const locationMatch = html.match(/<meta\s+name="geo\.(?:placename|region)"\s+content="([^"]+)"/i);
+    const locationMatch = html.match(
+      /<meta\s+name="geo\.(?:placename|region)"\s+content="([^"]+)"/i
+    );
     if (locationMatch) {
       location = locationMatch[1];
     } else {
@@ -199,7 +204,7 @@ async function main() {
 
   // Try API first (if token available)
   let linkedinData = await fetchFromAPI();
-  
+
   // Fallback to Open Graph
   if (!linkedinData) {
     console.log("📡 Fetching from LinkedIn public profile (Open Graph)...");

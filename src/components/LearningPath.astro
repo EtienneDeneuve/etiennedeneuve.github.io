@@ -1,0 +1,127 @@
+---
+import type { ResolvedContent } from "../lib/resolve-content.ts";
+
+interface Props {
+  id: string;
+  title: string;
+  summary: string;
+  themes: string[];
+  items: ResolvedContent[];
+  lang: "fr" | "en";
+}
+
+const { id, title, summary, themes, items, lang } = Astro.props;
+const readLabel = lang === "en" ? "Read" : "Lire";
+const openLabel = lang === "en" ? "Open" : "Ouvrir";
+---
+
+<section class="learning-path" id={id}>
+  <header class="path-header">
+    <h3>{title}</h3>
+    <p>{summary}</p>
+  </header>
+
+  <ul class="themes" aria-label={lang === "en" ? "Topics covered" : "Sujets couverts"}>
+    {themes.map((theme) => <li>{theme}</li>)}
+  </ul>
+
+  {
+    items.length > 0 ? (
+      <ol class="path-items">
+        {items.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              {...(item.kind === "resource"
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : {})}
+            >
+              <span class="item-title">{item.title}</span>
+              <span class="item-meta">{item.kind === "resource" ? openLabel : readLabel}</span>
+            </a>
+            <p>{item.description}</p>
+          </li>
+        ))}
+      </ol>
+    ) : (
+      <p class="empty">{lang === "en" ? "Content coming soon." : "Contenu à venir."}</p>
+    )
+  }
+</section>
+
+<style>
+  .learning-path {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    background: var(--color-bg-elevated);
+  }
+  .path-header h3 {
+    margin: 0 0 var(--space-2);
+    font-family: var(--font-body);
+  }
+  .path-header p {
+    margin: 0;
+    color: var(--color-fg-muted);
+  }
+  .themes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    list-style: none;
+    padding: 0;
+    margin: var(--space-4) 0;
+  }
+  .themes li {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-sm);
+    border: var(--border-width) solid var(--color-border);
+    color: var(--color-fg-subtle);
+  }
+  .path-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-3);
+  }
+  .path-items li {
+    border-top: var(--border-width) solid var(--color-border);
+    padding-top: var(--space-3);
+  }
+  .path-items li:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+  .path-items a {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+    text-decoration: none;
+    color: var(--color-fg);
+  }
+  .path-items a:hover .item-title {
+    color: var(--accent-regular);
+  }
+  .item-meta {
+    color: var(--color-fg-subtle);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .path-items p {
+    margin: var(--space-1) 0 0;
+    color: var(--color-fg-muted);
+    font-size: var(--text-sm);
+  }
+  .empty {
+    color: var(--color-fg-subtle);
+    margin: var(--space-4) 0 0;
+  }
+</style>

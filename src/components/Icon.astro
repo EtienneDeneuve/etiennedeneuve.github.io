@@ -3,71 +3,67 @@ import type { HTMLAttributes } from "astro/types";
 import { iconPaths } from "./IconPaths";
 
 export interface Props {
-	icon: keyof typeof iconPaths;
-	color?: string;
-	gradient?: boolean;
-	size?: string;
+  icon: keyof typeof iconPaths;
+  color?: string;
+  gradient?: boolean;
+  size?: string;
 }
 
-const { color = "currentcolor", gradient, icon, size } = Astro.props;
+const { gradient, icon, size } = Astro.props;
 const iconPath = iconPaths[icon];
 
 const attrs: HTMLAttributes<"svg"> = {};
 if (size) attrs.style = { "--size": size };
 
-const gradientId =
-	"icon-gradient-" + Math.round(Math.random() * 10e12).toString(36);
+const gradientId = "icon-gradient-" + Math.round(Math.random() * 10e12).toString(36);
 ---
 
 <svg
-	xmlns="http://www.w3.org/2000/svg"
-	width="40"
-	height="40"
-	viewBox="0 0 256 256"
-	aria-hidden="true"
-	stroke={gradient ? `url(#${gradientId})` : "currentColor"}
-	fill={gradient ? `url(#${gradientId})` : "currentColor"}
-	{...attrs}
+  xmlns="http://www.w3.org/2000/svg"
+  width="40"
+  height="40"
+  viewBox="0 0 256 256"
+  aria-hidden="true"
+  stroke={gradient ? `url(#${gradientId})` : "currentColor"}
+  fill={gradient ? `url(#${gradientId})` : "currentColor"}
+  {...attrs}
 >
-	<g set:html={iconPath} />
-	{
-		gradient && (
-			<linearGradient
-				id={gradientId}
-				x1="23"
-				x2="235"
-				y1="43"
-				y2="202"
-				gradientUnits="userSpaceOnUse"
-			>
-				<stop stop-color="var(--gradient-stop-1)" />
-				<stop offset=".5" stop-color="var(--gradient-stop-2)" />
-				<stop offset="1" stop-color="var(--gradient-stop-3)" />
-			</linearGradient>
-		)
-	}
+  <g set:html={iconPath} />
+  {
+    gradient && (
+      <linearGradient
+        id={gradientId}
+        x1="23"
+        x2="235"
+        y1="43"
+        y2="202"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stop-color="var(--gradient-stop-1)" />
+        <stop offset=".5" stop-color="var(--gradient-stop-2)" />
+        <stop offset="1" stop-color="var(--gradient-stop-3)" />
+      </linearGradient>
+    )
+  }
 </svg>
 
 <style>
-	svg {
-		vertical-align: middle;
-		width: var(--size, 1em);
-		height: var(--size, 1em);
-		fill: var(
-			--icon-color,
-			currentColor
-		); /* Utilisation d'une variable CSS pour la couleur */
-		stroke: var(--icon-color, currentColor);
-	}
+  svg {
+    vertical-align: middle;
+    width: var(--size, 1em);
+    height: var(--size, 1em);
+    fill: var(--icon-color, currentColor); /* Utilisation d'une variable CSS pour la couleur */
+    stroke: var(--icon-color, currentColor);
+  }
 
-	/* Styles pour le thème sombre */
-	.theme-dark svg {
-		--icon-color: white; /* Blanc pour le thème sombre */
-	}
+  /* Styles pour le thème sombre */
+  .theme-dark svg {
+    --icon-color: white; /* Blanc pour le thème sombre */
+  }
 
-	/* Styles pour le thème clair */
-	a .social {
-		color: black !important;
-		--icon-color: black !important; /* Noir pour le thème clair */
-	}
+  /* Styles pour le thème clair */
+  a .social {
+    color: black !important;
+    --icon-color: black !important; /* Noir pour le thème clair */
+  }
 </style>

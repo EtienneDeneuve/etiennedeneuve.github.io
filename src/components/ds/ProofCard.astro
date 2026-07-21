@@ -1,0 +1,47 @@
+---
+interface Props {
+  type?: string;
+  label?: string;
+  description: string;
+  href?: string;
+  lang?: "fr" | "en";
+}
+
+const { type, label, description, href, lang = "fr" } = Astro.props;
+const openLabel = lang === "en" ? "Open" : "Ouvrir";
+---
+
+<article class="ds-proof interactive">
+  {type && <p class="ds-proof__type">{type}</p>}
+  {label && <h3 class="ds-proof__label">{label}</h3>}
+  <p class="ds-proof__desc">{description}</p>
+  {
+    href && (
+      <a class="touch-target ds-proof__link" href={href} target="_blank" rel="noopener noreferrer">
+        {openLabel}
+      </a>
+    )
+  }
+</article>
+
+<style>
+  .ds-proof__label {
+    margin: var(--space-1) 0 var(--space-2);
+    font-size: var(--text-md);
+  }
+  .ds-proof__desc {
+    margin: 0;
+    color: var(--color-fg-muted);
+    line-height: var(--leading-normal);
+  }
+  .ds-proof__link {
+    margin-top: var(--space-3);
+    display: inline-flex;
+    padding-inline: var(--space-3);
+    text-decoration: none;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-pill);
+    font-size: var(--text-sm);
+    color: var(--color-fg);
+  }
+</style>

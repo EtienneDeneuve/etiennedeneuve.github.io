@@ -137,6 +137,7 @@ This is an **Astro-based personal blog/portfolio site** hosted on GitHub Pages. 
 ### Custom Scripts
 
 1. **Generate Social Image** (`scripts/social-img.mjs`)
+
    - Generates social media preview images using `node-html-to-image`
    - Updates frontmatter `preview` field with generated image path
    - Uses FrontMatter API (`@frontmatter/extensibility`)
@@ -163,6 +164,7 @@ This is an **Astro-based personal blog/portfolio site** hosted on GitHub Pages. 
 - `@frontmatter/extensibility`: ^0.0.14 (devDependency) - API for custom scripts
 
 **Note**: FrontMatterCMS is a VS Code extension tool, not a runtime dependency. It provides:
+
 - Visual content editor with form fields
 - Taxonomy management (tags)
 - Custom script execution (social image generation)
@@ -196,6 +198,7 @@ This is an **Astro-based personal blog/portfolio site** hosted on GitHub Pages. 
 **Jobs:**
 
 1. **build** (ubuntu-latest)
+
    - Checkout code
    - Setup pnpm 8.4.0
    - Setup Node.js LTS

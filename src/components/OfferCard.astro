@@ -26,13 +26,18 @@ const {
 
 <article class="offer-card" data-offer-card>
   <header class="offer-header">
-    <button class="offer-header-toggle" type="button" aria-expanded="false" aria-controls={`offer-content-${title.replace(/\s+/g, '-').toLowerCase()}`}>
+    <button
+      class="offer-header-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls={`offer-content-${title.replace(/\s+/g, "-").toLowerCase()}`}
+    >
       <h3 class="offer-title">{title}</h3>
       <span class="toggle-icon">▼</span>
     </button>
   </header>
 
-  <div class="offer-content" id={`offer-content-${title.replace(/\s+/g, '-').toLowerCase()}`}>
+  <div class="offer-content" id={`offer-content-${title.replace(/\s+/g, "-").toLowerCase()}`}>
     <section class="offer-section">
       <h4 class="section-title">
         <Icon icon="code" size="1.2em" /> Pour qui ?
@@ -45,9 +50,7 @@ const {
         <Icon icon="list" size="1.2em" /> Périmètre
       </h4>
       <ul class="scope-list">
-        {scope.map((item) => (
-          <li>{item}</li>
-        ))}
+        {scope.map((item) => <li>{item}</li>)}
       </ul>
     </section>
 
@@ -63,9 +66,7 @@ const {
         <Icon icon="pencil-line" size="1.2em" /> Livrables
       </h4>
       <ul class="deliverables-list">
-        {deliverables.map((item) => (
-          <li>{item}</li>
-        ))}
+        {deliverables.map((item) => <li>{item}</li>)}
       </ul>
     </section>
 
@@ -74,12 +75,14 @@ const {
         <Icon icon="strategy" size="1.2em" /> Métriques de succès
       </h4>
       <div class="metrics-grid">
-        {successMetrics.map((metric) => (
-          <div class="metric-item">
-            <span class="metric-label">{metric.label}</span>
-            <span class="metric-value">{metric.value}</span>
-          </div>
-        ))}
+        {
+          successMetrics.map((metric) => (
+            <div class="metric-item">
+              <span class="metric-label">{metric.label}</span>
+              <span class="metric-value">{metric.value}</span>
+            </div>
+          ))
+        }
       </div>
     </section>
 
@@ -92,9 +95,7 @@ const {
   </div>
 
   <footer class="offer-footer">
-    <BookingCTA bookingSubject={`Demande d'information: ${title}`}>
-      Réserver un appel
-    </BookingCTA>
+    <BookingCTA bookingSubject={`Demande d'information: ${title}`}> Réserver un appel </BookingCTA>
     <a
       href={`mailto:${siteConfig.contact.personalEmail}?subject=Demande de one-pager: ${title}`}
       class="secondary-cta"
@@ -115,7 +116,9 @@ const {
     padding: 2rem;
     gap: 1.5rem;
     box-shadow: var(--shadow-sm);
-    transition: box-shadow var(--theme-transition), transform var(--theme-transition);
+    transition:
+      box-shadow var(--theme-transition),
+      transform var(--theme-transition);
     position: relative;
     align-items: stretch;
     min-width: 0; /* Allow grid items to shrink below content size */
@@ -142,7 +145,7 @@ const {
     .offer-card {
       transition: none;
     }
-    
+
     .offer-card:hover,
     .offer-card:focus-within {
       transform: none;
@@ -228,7 +231,11 @@ const {
     gap: 1.5rem;
     min-height: 0; /* Allow flex item to shrink */
     overflow: hidden;
-    transition: max-height 0.3s ease, opacity 0.3s ease, margin 0.3s ease, padding 0.3s ease;
+    transition:
+      max-height 0.3s ease,
+      opacity 0.3s ease,
+      margin 0.3s ease,
+      padding 0.3s ease;
     max-height: 5000px; /* Large enough for expanded content */
     opacity: 1;
   }
@@ -405,20 +412,20 @@ const {
 </style>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const offerCards = document.querySelectorAll('[data-offer-card]');
-    
+  document.addEventListener("DOMContentLoaded", () => {
+    const offerCards = document.querySelectorAll("[data-offer-card]");
+
     offerCards.forEach((card) => {
-      const toggle = card.querySelector('.offer-header-toggle');
+      const toggle = card.querySelector(".offer-header-toggle");
       if (!toggle) return;
-      
+
       // Set initial state - all cards collapsed by default
-      card.setAttribute('aria-expanded', 'false');
-      
-      toggle.addEventListener('click', () => {
-        const isExpanded = card.getAttribute('aria-expanded') === 'true';
-        card.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
-        toggle.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
+      card.setAttribute("aria-expanded", "false");
+
+      toggle.addEventListener("click", () => {
+        const isExpanded = card.getAttribute("aria-expanded") === "true";
+        card.setAttribute("aria-expanded", isExpanded ? "false" : "true");
+        toggle.setAttribute("aria-expanded", isExpanded ? "false" : "true");
       });
     });
   });

@@ -3,20 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Media Kit - Etienne Deneuve</title>
+  <title>Media Kit — Etienne Deneuve</title>
   <style>
     @media print {
-      @page {
-        margin: 2cm;
-        size: A4;
-      }
-      body {
-        font-size: 12pt;
-        line-height: 1.6;
-      }
-      .page-break {
-        page-break-before: always;
-      }
+      @page { margin: 2cm; size: A4; }
+      body { font-size: 12pt; line-height: 1.6; }
+      .no-print { display: none; }
     }
     body {
       font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -28,62 +20,35 @@
     }
     .header {
       text-align: center;
-      margin-bottom: 3rem;
-      padding-bottom: 2rem;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
       border-bottom: 3px solid #14deba;
     }
-    .header h1 {
-      font-size: 2.5rem;
-      margin: 0 0 0.5rem 0;
-      color: #090b11;
-    }
-    .header p {
-      font-size: 1.1rem;
-      color: #666;
-      margin: 0;
-    }
-    .section {
-      margin-bottom: 2.5rem;
-    }
+    .header h1 { font-size: 2.2rem; margin: 0 0 0.35rem 0; color: #090b11; }
+    .header p { font-size: 1rem; color: #666; margin: 0; }
+    .section { margin-bottom: 2rem; }
     .section h2 {
-      font-size: 1.8rem;
+      font-size: 1.5rem;
       color: #090b11;
-      margin: 0 0 1rem 0;
-      padding-bottom: 0.5rem;
+      margin: 0 0 0.75rem 0;
+      padding-bottom: 0.35rem;
       border-bottom: 2px solid #14deba;
     }
-    .section h3 {
-      font-size: 1.3rem;
-      color: #090b11;
-      margin: 1.5rem 0 0.5rem 0;
+    .section h3 { font-size: 1.1rem; color: #090b11; margin: 1rem 0 0.35rem 0; }
+    .section p { margin: 0 0 0.75rem 0; text-align: justify; }
+    .headshot {
+      display: block;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 1rem;
+      border: 2px solid #e0e0e0;
     }
-    .section p {
-      margin: 0 0 1rem 0;
-      text-align: justify;
-    }
-    .contact-info {
-      background: #f5f5f5;
-      padding: 1.5rem;
-      border-radius: 8px;
-      margin-top: 2rem;
-    }
-    .contact-info h3 {
-      margin-top: 0;
-    }
-    .contact-info p {
-      margin: 0.5rem 0;
-    }
-    .contact-info a {
-      color: #14deba;
-      text-decoration: none;
-    }
-    .topics-list {
-      list-style: none;
-      padding: 0;
-    }
+    .topics-list { list-style: none; padding: 0; margin: 0; }
     .topics-list li {
-      margin: 1rem 0;
-      padding-left: 1.5rem;
+      margin: 0.65rem 0;
+      padding-left: 1.25rem;
       position: relative;
     }
     .topics-list li::before {
@@ -92,89 +57,103 @@
       left: 0;
       color: #14deba;
       font-weight: bold;
-      font-size: 1.5rem;
     }
+    .contact-info {
+      background: #f5f5f5;
+      padding: 1.25rem;
+      border-radius: 8px;
+    }
+    .contact-info p { margin: 0.35rem 0; text-align: left; }
+    .contact-info a { color: #0a8f78; text-decoration: none; }
     .footer {
-      margin-top: 3rem;
-      padding-top: 2rem;
+      margin-top: 2rem;
+      padding-top: 1.25rem;
       border-top: 2px solid #e0e0e0;
       text-align: center;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: #666;
     }
+    .download-links { text-align: center; margin: 1rem 0; }
+    .download-links a { color: #0a8f78; margin: 0 0.5rem; }
   </style>
 </head>
 <body>
   <div class="header">
     <h1>Etienne Deneuve</h1>
-    <p>Media Kit - Press & Event Organizers</p>
+    <p>Presse et organisateurs d'événements</p>
   </div>
 
   <div class="section">
-    <h2>Bio Courte</h2>
-    <p>
-      Etienne Deneuve est undefined, spécialisé en DevSecOps,
-      Platform Engineering et transformation technique. Speaker, writer et expert reconnu
-      dans l'écosystème cloud et DevOps.
+    <h2>Photographie</h2>
+    <img class="headshot" src="https://etienne.deneuve.xyz/assets/portrait.jpg" alt="Etienne Deneuve — portrait" width="160" height="160">
+    <p class="download-links no-print">
+      <a href="https://etienne.deneuve.xyz/assets/portrait.jpg" download="etienne-deneuve-portrait.jpg">Télécharger la photo</a>
     </p>
   </div>
 
   <div class="section">
-    <h2>Bio Longue</h2>
-    <p>
-      Etienne Deneuve est un expert en infrastructure cloud, DevSecOps et Platform Engineering
-      avec plus de 15 ans d'expérience. Il accompagne les organisations dans leur transformation technique,
-      de la conception à l'implémentation. En tant que undefined, il a aidé de nombreuses
-      entreprises à moderniser leur infrastructure, améliorer leur sécurité et accélérer leurs déploiements.
-    </p>
-    <p>
-      Etienne Deneuve est également un speaker actif dans la communauté technique, partageant
-      ses connaissances lors de conférences et workshops. Il écrit régulièrement sur son blog et contribue
-      à l'écosystème open source.
-    </p>
+    <h2>Bio courte</h2>
+    <p>Etienne Deneuve est Platform Reliability Architect et CTO d'Omnivya, basé près de Paris. Via cette structure, il conçoit et sécurise des plateformes cloud et Kubernetes — observabilité (OpenTelemetry), FinOps, DevSecOps et platform engineering — pour des organisations en finance, luxe et santé numérique. Il publie sur etienne.deneuve.xyz.</p>
   </div>
 
   <div class="section">
-    <h2>Sujets de Conférence</h2>
-    <ul class="topics-list">
-      <li>DevSecOps : Transformer la sécurité dans le cycle de développement</li>
-      <li>Platform Engineering : Construire une plateforme interne pour accélérer le développement</li>
-      <li>Infrastructure as Code : Terraform et au-delà</li>
-      <li>Zero Trust : Architecture et implémentation</li>
-      <li>CTO/Staff Engineering : Leadership technique et transformation</li>
-      <li>Git pour les Ops : Moderniser les pratiques de développement</li>
-    </ul>
+    <h2>Bio longue</h2>
+    <p>Depuis plus de quinze ans, Etienne Deneuve construit et modernise des infrastructures — d'abord en exploitation et avant-vente, puis en mission via des ESN et éditeurs (Cellenza, Dell Technologies), et depuis 2020 comme CTO d'Omnivya.</p>
+<p>Ancien Microsoft MVP — Cloud and Datacenter Management (cycles 2017-2018, 2018-2019, 2019-2020). Son périmètre couvre Kubernetes (AKS), l'infrastructure as code (Terraform, Flux), la sécurité intégrée au delivery et la gouvernabilité des plateformes.</p>
+<p>Il a présenté à Microsoft Experience 2017 et au French PowerShell User Group ; il a contribué à l'open source OS Factory dans une mission via Cellenza. Il intervient sur la compréhension, la gouvernance et la transformation des systèmes numériques complexes.</p>
   </div>
 
   <div class="section">
-    <h2>Formats Disponibles</h2>
+    <h2>Thèmes d'intervention</h2>
+    <p>Thèmes documentés sur etienne.deneuve.xyz/speaking — adaptables au format et à l'audience.</p>
+    <ul class="topics-list"><li>Construire une carte vivante du système d'information</li>
+<li>Le SBOM comme outil de décision, pas comme fichier de conformité</li>
+<li>Pourquoi cinquante mille alertes ne rendent pas un système plus sûr</li>
+<li>Platform engineering : réduire la charge cognitive sans créer une nouvelle bureaucratie</li>
+<li>Concevoir des produits numériques pour des marchés contraints</li>
+<li>Dépendances externes : ce que Kubernetes ne vous montre pas</li>
+<li>Architecture, risque et décisions irréversibles</li></ul>
+  </div>
+
+  <div class="section">
+    <h2>Formats disponibles</h2>
+    
     <h3>Keynote</h3>
-    <p>Présentation inspirante pour ouvrir ou clôturer votre événement. Durée : 30-60 min</p>
-    
-    <h3>Workshop</h3>
-    <p>Session interactive et pratique avec démonstrations, exercices et Q&A. Durée : 60-120 min</p>
-    
+    <p>Vision et décisions structurantes pour ouvrir ou clôturer un événement.</p>
+
+    <h3>Conférence</h3>
+    <p>Session approfondie avec cadre, exemples et implications opérationnelles.</p>
+
     <h3>Panel</h3>
-    <p>Discussion avec d'autres experts sur un sujet donné. Durée : 45-60 min</p>
+    <p>Échange avec d'autres praticiens sur un sujet de gouvernance ou d'architecture.</p>
+
+    <h3>Workshop</h3>
+    <p>Travail guidé sur un cas réel : cartographie, arbitrages ou critères de décision.</p>
+
+    <h3>Briefing exécutif</h3>
+    <p>Synthèse pour décideurs : risque, options et conséquences irréversibles.</p>
+
+    <h3>Podcast</h3>
+    <p>Conversation longue format sur un angle précis, sans slide deck obligatoire.</p>
   </div>
 
   <div class="section">
     <h2>Langues</h2>
-    <p>Français (FR) et Anglais (EN)</p>
+    <p>Français et anglais</p>
   </div>
 
-  <div class="contact-info">
-    <h3>Contact</h3>
+  <div class="section contact-info">
+    <h2 style="border: none; margin-top: 0;">Contact</h2>
     <p><strong>Email:</strong> <a href="mailto:etienne@omnivya.fr">etienne@omnivya.fr</a></p>
     <p><strong>Site web:</strong> <a href="https://etienne.deneuve.xyz">https://etienne.deneuve.xyz</a></p>
-    <p><strong>Réserver un appel:</strong> <a href="https://outlook.office365.com/owa/calendar/SimplifiED1@simplified.fr/bookings/">Lien de réservation</a></p>
-    <p><strong>Twitter:</strong> <a href="https://twitter.com/EtienneDinfo">@EtienneDinfo</a></p>
+    <p><strong>Page Speaking:</strong> <a href="https://etienne.deneuve.xyz/speaking/">https://etienne.deneuve.xyz/speaking/</a></p>
     <p><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/EtienneDeneuve">Etienne Deneuve</a></p>
+    <p><strong>GitHub:</strong> <a href="https://github.com/EtienneDeneuve">EtienneDeneuve</a></p>
   </div>
 
   <div class="footer">
-    <p>Media Kit généré le 20/12/2025</p>
-    <p>https://etienne.deneuve.xyz/speaking</p>
+    <p>Généré à partir des mêmes données que la page Speaking.</p>
+    <p>2026-07-21 — https://etienne.deneuve.xyz/speaking/</p>
   </div>
 </body>
 </html>

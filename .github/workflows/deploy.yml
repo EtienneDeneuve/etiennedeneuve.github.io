@@ -1,0 +1,130 @@
+# Master branch: quality gate + deterministic build + GitHub Pages deploy
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches: ["master", "main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  CI: true
+  NODE_ENV: production
+
+jobs:
+  quality:
+    name: Quality & deterministic build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          install-playwright: "true"
+
+      - name: Format check
+        run: pnpm run format:check
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Astro check
+        run: pnpm run check
+
+      - name: Validate collections
+        run: pnpm run validate:collections
+
+      - name: Publication policy
+        run: pnpm run validate-publication
+
+      - name: Spellcheck
+        run: pnpm run spellcheck
+
+      - name: SEO config
+        run: pnpm run verify-seo
+
+      - name: Generate assets
+        run: pnpm run generate:assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+        continue-on-error: true
+
+      - name: Generate media kit
+        run: pnpm run generate-media-kit
+
+      - name: Sync GitHub project metadata (fallback safe)
+        run: pnpm run sync:github-projects
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deterministic build
+        run: |
+          export SOURCE_DATE_EPOCH="$(git log -1 --pretty=%ct)"
+          echo "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH"
+          pnpm run build
+
+      - name: Internal linkcheck
+        run: pnpm run linkcheck
+
+      - name: SEO HTML checks
+        run: pnpm run verify-seo
+
+      - name: Unit tests
+        run: pnpm run test
+
+      - name: Playwright (built site)
+        run: pnpm run test:e2e
+
+      - name: Lighthouse (critical pages)
+        run: pnpm run lighthouse
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+      - name: Upload Lighthouse results
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: lighthouse-results
+          path: .lighthouseci
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Upload media kit
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: media-kit
+          path: |
+            public/media-kit.html
+            public/media-kit.pdf
+          retention-days: 30
+          if-no-files-found: warn
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: quality
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

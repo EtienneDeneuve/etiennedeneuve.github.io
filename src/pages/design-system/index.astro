@@ -1,0 +1,370 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { isDesignSystemEnabled } from "../../lib/design-system-gate.ts";
+import Callout from "../../components/ds/Callout.astro";
+import QuoteBlock from "../../components/ds/QuoteBlock.astro";
+import DecisionList from "../../components/ds/DecisionList.astro";
+import DiagramFrame from "../../components/ds/DiagramFrame.astro";
+import CodePanel from "../../components/ds/CodePanel.astro";
+import ResponsiveTable from "../../components/ds/ResponsiveTable.astro";
+import MediaFrame from "../../components/ds/MediaFrame.astro";
+import ProofCard from "../../components/ds/ProofCard.astro";
+import ProjectPanel from "../../components/ds/ProjectPanel.astro";
+import OutcomeMetric from "../../components/OutcomeMetric.astro";
+import DisclosureBadge from "../../components/DisclosureBadge.astro";
+import ConversionCTA from "../../components/ConversionCTA.astro";
+import EvidenceList from "../../components/EvidenceList.astro";
+
+if (!isDesignSystemEnabled()) {
+  return new Response(
+    `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><title>Design system unavailable</title></head><body>Not found</body></html>`,
+    {
+      status: 404,
+      headers: { "Content-Type": "text/html; charset=utf-8" },
+    }
+  );
+}
+---
+
+<BaseLayout
+  title="Design system"
+  description="Internal design system reference — not for public indexing."
+  lang="fr"
+  canonical="https://etienne.deneuve.xyz/design-system/"
+  noIndex={true}
+>
+  <main class="wrapper ds-page stack gap-12">
+    <header class="stack gap-3 measure">
+      <p class="eyebrow">Internal · Ink Doctrine</p>
+      <h1>Design system</h1>
+      <p class="lede">
+        Encre, papier, IBM Plex. Tokens et composants pour doctrine, preuves, décisions et code —
+        sans template SaaS.
+      </p>
+    </header>
+
+    <section class="stack gap-4" id="tokens">
+      <h2>Tokens</h2>
+      <div class="grid-ds-3">
+        <div
+          class="swatch"
+          style="background: var(--color-bg); border: 1px solid var(--color-border);"
+        >
+          <code>--color-bg</code>
+        </div>
+        <div
+          class="swatch"
+          style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);"
+        >
+          <code>--color-bg-elevated</code>
+        </div>
+        <div
+          class="swatch"
+          style="background: var(--accent-regular); color: var(--accent-text-over);"
+        >
+          <code>--accent-regular</code>
+        </div>
+        <div class="swatch" style="background: var(--color-success); color: #fff;">
+          <code>--color-success</code>
+        </div>
+        <div class="swatch" style="background: var(--color-warning); color: #111;">
+          <code>--color-warning</code>
+        </div>
+        <div class="swatch" style="background: var(--color-danger); color: #fff;">
+          <code>--color-danger</code>
+        </div>
+      </div>
+      <p class="meta">
+        Spacing: <code>--space-1</code> … <code>--space-24</code> · Measure: <code>--measure</code> (68ch)
+        · Touch: <code>--touch-min</code> (44px)
+      </p>
+    </section>
+
+    <section class="stack gap-4" id="type">
+      <h2>Typographie</h2>
+      <div class="stack gap-3">
+        <h1 class="sample">Heading 1 — hiérarchie forte</h1>
+        <h2 class="sample">Heading 2 — section</h2>
+        <h3 class="sample">Heading 3 — sous-section</h3>
+        <p class="prose">
+          Corps Public Sans. Dense mais lisible. <a href="#focus">Lien focusable</a> et
+          <code class="ds-code-inline">code inline</code>.
+        </p>
+      </div>
+    </section>
+
+    <section class="stack gap-4" id="states">
+      <h2>États interaction</h2>
+      <div class="row">
+        <a class="demo-btn" href="#states">Default / hover / focus</a>
+        <button class="demo-btn interactive" type="button">Button interactive</button>
+        <a class="demo-btn touch-target" href="#states">Touch target</a>
+      </div>
+    </section>
+
+    <section class="stack gap-4" id="callouts">
+      <h2>Callouts</h2>
+      <div class="stack gap-4">
+        <Callout tone="note">Observation terrain sans claim chiffré.</Callout>
+        <Callout tone="warning" title="Risque">
+          Décision irréversible si le rollback n’est pas budgété.
+        </Callout>
+        <Callout tone="decision">Séparer doctrine (site) et delivery (Omnivya).</Callout>
+        <Callout tone="proof">Preuve attachée : dépôt public ou article daté.</Callout>
+      </div>
+    </section>
+
+    <section class="stack gap-4" id="quote">
+      <h2>Citation</h2>
+      <QuoteBlock attribution="Doctrine de travail">
+        Comprendre avant d’automatiser — cartographier le système et ses contraintes réelles.
+      </QuoteBlock>
+    </section>
+
+    <section class="stack gap-4" id="decisions">
+      <h2>Liste de décisions</h2>
+      <DecisionList
+        title="Arbitrages"
+        items={[
+          "Documenter le contexte avant d’industrialiser.",
+          "Mesurer la capacité à agir, pas le volume d’alertes.",
+          "Construire pour les contraintes réelles.",
+        ]}
+      />
+    </section>
+
+    <section class="stack gap-4" id="diagram">
+      <h2>Diagramme</h2>
+      <DiagramFrame title="Flux de décision" caption="Schéma SVG — pas de JS requis.">
+        <svg
+          viewBox="0 0 480 140"
+          width="480"
+          height="140"
+          role="img"
+          aria-label="Carte → décision → exécution"
+        >
+          <rect
+            x="10"
+            y="40"
+            width="120"
+            height="60"
+            rx="6"
+            fill="var(--color-bg-muted)"
+            stroke="var(--color-border)"></rect>
+          <text x="70" y="75" text-anchor="middle" fill="var(--color-fg)" font-size="14">Carte</text
+          >
+          <path
+            d="M140 70 H190"
+            stroke="var(--color-fg-subtle)"
+            stroke-width="2"
+            marker-end="url(#arrow)"></path>
+          <rect
+            x="190"
+            y="40"
+            width="120"
+            height="60"
+            rx="6"
+            fill="var(--color-bg-muted)"
+            stroke="var(--color-border)"></rect>
+          <text x="250" y="75" text-anchor="middle" fill="var(--color-fg)" font-size="14"
+            >Décision</text
+          >
+          <path d="M320 70 H370" stroke="var(--color-fg-subtle)" stroke-width="2"></path>
+          <rect
+            x="370"
+            y="40"
+            width="100"
+            height="60"
+            rx="6"
+            fill="var(--color-bg-muted)"
+            stroke="var(--color-border)"></rect>
+          <text x="420" y="75" text-anchor="middle" fill="var(--color-fg)" font-size="14"
+            >Exécution</text
+          >
+        </svg>
+      </DiagramFrame>
+    </section>
+
+    <section class="stack gap-4" id="code">
+      <h2>Bloc de code</h2>
+      <CodePanel language="yaml" caption="Exemple — pas d’exploit.">
+        <pre><code>apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: platform-decision</code></pre>
+      </CodePanel>
+    </section>
+
+    <section class="stack gap-4" id="table">
+      <h2>Table responsive</h2>
+      <ResponsiveTable caption="Critères de publication">
+        <table>
+          <thead>
+            <tr>
+              <th>Critère</th>
+              <th>Règle</th>
+              <th>État</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Métrique</td>
+              <td>verified = true</td>
+              <td>requis</td>
+            </tr>
+            <tr>
+              <td>Draft</td>
+              <td>exclu du build public</td>
+              <td>actif</td>
+            </tr>
+            <tr>
+              <td>Focus</td>
+              <td>visible au clavier</td>
+              <td>AA</td>
+            </tr>
+          </tbody>
+        </table>
+      </ResponsiveTable>
+    </section>
+
+    <section class="stack gap-4" id="media">
+      <h2>Media (anti CLS)</h2>
+      <MediaFrame ratio="16/9" src="/assets/portrait.jpg" alt="Portrait — ratio réservé" />
+    </section>
+
+    <section class="stack gap-4" id="proof">
+      <h2>Preuve & métrique</h2>
+      <div class="grid-ds-2">
+        <ProofCard
+          type="Public repository"
+          label="External Metrics Exporter"
+          description="Signaux comparables pour dépendances hors cluster."
+          href="https://github.com/EtienneDeneuve"
+        />
+        <OutcomeMetric
+          label="Exemple vérifié"
+          before="n/a"
+          after="documenté"
+          unit="text"
+          source="design-system demo"
+          verified={true}
+        />
+      </div>
+      <div class="row">
+        <DisclosureBadge level="public" />
+        <DisclosureBadge level="anonymized" />
+        <DisclosureBadge level="confidential-summary" />
+      </div>
+      <EvidenceList
+        evidence={[
+          {
+            type: "technical-article",
+            label: "Article",
+            description: "Preuve structurée de démonstration.",
+            url: "/thinking/",
+          },
+        ]}
+      />
+    </section>
+
+    <section class="stack gap-4" id="project">
+      <h2>Projet</h2>
+      <ProjectPanel
+        name="Omnivya"
+        status="production"
+        meta="company"
+        summary="Structure d’exécution pour missions cloud native et plateforme."
+        href="/projects/omnivya/"
+      />
+    </section>
+
+    <section class="stack gap-4" id="cta">
+      <h2>CTA</h2>
+      <ConversionCTA
+        href="/contact/"
+        event="cta_contact_email"
+        props={{ surface: "design-system", intent: "qualification" }}
+        secondaryHref="https://www.omnivya.fr"
+        secondaryLabel="Calendrier Omnivya"
+        secondaryEvent="cta_booking"
+        secondaryProps={{ surface: "design-system" }}
+      >
+        Contact
+      </ConversionCTA>
+    </section>
+
+    <section class="stack gap-4" id="focus">
+      <h2>Accessibilité</h2>
+      <ul class="checklist">
+        <li>Contraste sémantique clair / sombre (AA cible)</li>
+        <li>Focus visible (:focus-visible)</li>
+        <li>Cible tactile ≥ 44px (.touch-target)</li>
+        <li>prefers-reduced-motion respecté</li>
+        <li>Images avec aspect-ratio (media-frame)</li>
+      </ul>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .ds-page {
+    padding-block: var(--space-10) var(--space-20);
+  }
+  .eyebrow {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-fg-subtle);
+  }
+  .lede {
+    color: var(--color-fg-muted);
+    font-size: var(--text-lg);
+    line-height: var(--leading-snug);
+    margin: 0;
+  }
+  .meta,
+  .checklist {
+    color: var(--color-fg-subtle);
+    font-size: var(--text-sm);
+  }
+  .checklist {
+    padding-left: 1.2rem;
+    display: grid;
+    gap: var(--space-2);
+  }
+  .swatch {
+    min-height: 4.5rem;
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    display: flex;
+    align-items: flex-end;
+    font-size: var(--text-xs);
+  }
+  .sample {
+    margin: 0;
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: center;
+  }
+  .demo-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--touch-min);
+    padding: 0 var(--space-4);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-pill);
+    background: var(--color-bg-elevated);
+    color: var(--color-fg);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .demo-btn:hover {
+    border-color: var(--color-border-strong);
+  }
+</style>

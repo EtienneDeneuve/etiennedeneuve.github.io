@@ -1,298 +1,211 @@
 ---
 import { getCollection } from "astro:content";
-
-// Layout import — provides basic page elements: <head>, <nav>, <footer> etc.
 import BaseLayout from "../layouts/BaseLayout.astro";
-
-// Component Imports
 import CallToAction from "../components/CallToAction.astro";
-import Grid from "../components/Grid.astro";
-import Hero from "../components/Hero.astro";
-import Icon from "../components/Icon.astro";
-import Pill from "../components/Pill.astro";
-import PortfolioPreview from "../components/PortfolioPreview.astro";
+import { siteConfig } from "../config/site.ts";
+import {
+  buildJsonLdGraph,
+  organizationJsonLd,
+  personJsonLd,
+  websiteJsonLd,
+} from "../lib/json-ld.ts";
+import { getReleasedArticles } from "../lib/publication-policy.ts";
+import { selectHomeThinking } from "../lib/home-thinking.ts";
+import { getArticlePath, getCanonicalSlug } from "../lib/thinking.ts";
 
-// Page section components
-// import ContactCTA from "../components/ContactCTA.astro";
-import Skills from "../components/Skills.astro";
-import { fade } from "astro:transitions";
-import { siteConfig, getBrandText } from "../config/site.ts";
+const homeJsonLd = buildJsonLdGraph([personJsonLd(), organizationJsonLd(), websiteJsonLd()]);
 
-// Content Fetching: List four most recent work projects
-const projects = (await getCollection("blog"))
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 4);
+const allArticles = getReleasedArticles(await getCollection("blog"))
+  .filter((entry) => (entry.data.language ?? "fr") === "fr")
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-// Full Astro Component Syntax:
-// https://docs.astro.build/core-concepts/astro-components/
+const selectedThinking = selectHomeThinking(allArticles, "fr");
 
-// Generate JSON-LD structured data
-const jsonLdPerson = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": siteConfig.author.name,
-  "url": siteConfig.site.url,
-  "sameAs": [
-    siteConfig.social.twitter,
-    siteConfig.social.github,
-    siteConfig.social.linkedin,
-    siteConfig.social.youtube,
-  ],
-  "jobTitle": siteConfig.author.jobTitle || "Cloud Infrastructure & Platform Strategy Advisor",
-  "description": siteConfig.author.tagline,
-};
+const allProjects = (await getCollection("projects")).filter(
+  (project) => !project.data.draft && project.data.verified
+);
 
-const jsonLdWebsite = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": siteConfig.author.siteName,
-  "url": siteConfig.site.url,
-  "description": siteConfig.site.description,
-  "author": {
-    "@type": "Person",
-    "name": siteConfig.author.name,
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": siteConfig.business.name,
-    "url": `https://${siteConfig.business.website}`,
-  },
-};
+const priorityNames = ["Sanad", "My Dare", "External Metrics Exporter"];
+const priorityProjects = priorityNames
+  .map((name) => allProjects.find((project) => project.data.name === name))
+  .filter((project): project is (typeof allProjects)[number] => Boolean(project));
+const featuredOthers = allProjects.filter(
+  (project) => project.data.featured && !priorityNames.includes(project.data.name)
+);
+const proofProjects = [...priorityProjects, ...featuredOthers];
 ---
 
 <BaseLayout
-  title={getBrandText.siteTitle()}
-  description={siteConfig.author.tagline}
+  title={siteConfig.identity.name}
+  description="Je rends les systèmes complexes lisibles, gouvernables et actionnables."
+  lang="fr"
+  path="/"
+  brandTitle={false}
+  ogType="website"
+  alternates={[
+    { lang: "fr", href: "/" },
+    { lang: "en", href: "/en/" },
+  ]}
+  jsonLd={homeJsonLd}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLdPerson)} />
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLdWebsite)} />
-  <div class="stack gap-20 lg:gap-48">
-    <div class="wrapper stack gap-20 lg:gap-20">
-      <header class="hero">
-        <Hero
-          title={`Hello, je suis ${siteConfig.author.name}`}
-          tagline={siteConfig.author.tagline}
-          align="start"
+  <main class="wrapper stack gap-16">
+    <section class="stack gap-5 page-hero">
+      <p class="brand-mark">{siteConfig.identity.name}</p>
+      <p class="eyebrow">{siteConfig.professionalRole.title}</p>
+      <h1>Je rends les systèmes complexes lisibles, gouvernables et actionnables.</h1>
+      <p class="lede">
+        Doctrine, décisions d’architecture et preuves publiques — pour piloter un SI sous
+        contraintes réelles. Omnivya exécute quand la mission l’exige.
+      </p>
+      <div class="actions">
+        <CallToAction
+          href="/start-here/"
+          event="cta_start_here"
+          props={{ surface: "home", lang: "fr" }}
         >
-          <div class="roles">
-            <Pill
-              ><Icon icon="code" size="1.33em" /> {siteConfig.author.jobTitle}</Pill
-            >
-            <Pill><Icon icon="microphone-stage" size="1.33em" /> Speaker</Pill>
-            <Pill><Icon icon="pencil-line" size="1.33em" /> Writer</Pill>
-          </div>
-        </Hero>
+          Start Here
+        </CallToAction>
+        <a class="btn-text" href="/projects/">Voir les preuves</a>
+      </div>
+    </section>
 
-        <img
-          alt="Etienne Deneuve, in a wonderfull garden in St Georges Hotel in Algeria"
-          width="480"
-          height="620"
-          src="/assets/portrait.jpg"
-        />
-      </header>
+    <hr class="section-rule" />
 
-      <Skills />
-    </div>
+    <section class="stack gap-4">
+      <div class="section-head">
+        <h2>Problèmes</h2>
+      </div>
+      <ul class="grid-auto problem-grid">
+        <li class="surface">Le système est devenu impossible à comprendre.</li>
+        <li class="surface">Les équipes déploient mais ne maîtrisent plus le risque.</li>
+        <li class="surface">
+          Les choix cloud et plateforme ne produisent pas les résultats attendus.
+        </li>
+        <li class="surface">
+          L’organisation accumule des outils sans retrouver de capacité de décision.
+        </li>
+      </ul>
+    </section>
 
-    <main class="wrapper stack gap-20 lg:gap-48">
-      <section class="section with-background with-cta">
-        <header class="section-header stack gap-2 lg:gap-4">
-          <h3>Articles récents</h3>
-          <p>Lisez ou Re-lisez certains de mes articles ;-).</p>
-        </header>
+    <section class="stack gap-4">
+      <div class="section-head">
+        <h2>Doctrine</h2>
+      </div>
+      <ul class="grid-auto problem-grid">
+        <li class="surface">Comprendre avant d’automatiser.</li>
+        <li class="surface">Modéliser les dépendances et le risque.</li>
+        <li class="surface">Réduire la charge cognitive, pas ajouter des dashboards.</li>
+        <li class="surface">
+          Construire pour les contraintes réelles, pas pour une architecture théorique.
+        </li>
+      </ul>
+    </section>
 
-        <div class="gallery" transition:animate={fade({ duration: "1s" })}>
-          <Grid variant="offset">
-            {
-              projects.map((project) => (
-                <li>
-                  <PortfolioPreview project={project} />
-                </li>
-              ))
-            }
-          </Grid>
-        </div>
+    <section class="stack gap-4">
+      <div class="section-head">
+        <h2>Preuves</h2>
+        <a class="btn-text" href="/projects/">Tous les projets</a>
+      </div>
+      <div class="grid-auto">
+        {
+          proofProjects.map((project) => (
+            <a class="surface-card interactive" href={`/projects/${project.id}/`}>
+              <p class="eyebrow">{project.data.type}</p>
+              <h3>{project.data.name}</h3>
+              <p>{project.data.problem}</p>
+              <span class="read-more">Preuve</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
 
-        <div class="cta">
-          <CallToAction href="/blog/page/1">
-            Voir tous les articles
-            <Icon icon="arrow-right" size="1.2em" />
-          </CallToAction>
-        </div>
-      </section>
+    <section class="stack gap-4">
+      <div class="section-head">
+        <h2>Thinking</h2>
+        <a class="btn-text" href="/thinking/">Index</a>
+      </div>
+      <div class="grid-auto">
+        {
+          selectedThinking.map((item) =>
+            item.entry ? (
+              <a
+                class="surface-card interactive"
+                href={getArticlePath(getCanonicalSlug(item.entry), "fr")}
+              >
+                <p class="eyebrow">{item.label}</p>
+                <h3>{item.entry.data.title}</h3>
+                <p>{item.entry.data.description}</p>
+                <span class="read-more">Lire</span>
+              </a>
+            ) : null
+          )
+        }
+      </div>
+    </section>
 
-      <!-- <section class="section with-background bg-variant">
-        <header class="section-header stack gap-2 lg:gap-4">
-          <h3>Mentions</h3>
-          <p>
-            I have been fortunate enough to recieve praise for my work in
-            several publications. Take a look below to learn more.
-          </p>
-        </header>
+    <section class="stack gap-4">
+      <div class="section-head">
+        <h2>Parcours</h2>
+      </div>
+      <div class="grid-auto">
+        <a class="surface-card interactive path-card" href="/start-here/">
+          <h3>Je dirige un système complexe</h3>
+          <span class="read-more">Start Here</span>
+        </a>
+        <a class="surface-card interactive path-card" href="/work/">
+          <h3>Je construis une plateforme</h3>
+          <span class="read-more">Work</span>
+        </a>
+        <a class="surface-card interactive path-card" href="/speaking/">
+          <h3>Je cherche un intervenant</h3>
+          <span class="read-more">Speaking</span>
+        </a>
+      </div>
+    </section>
 
-        <div class="gallery">
-          <Grid variant="small">
-            {
-              [
-                "Medium",
-                "BuzzFeed",
-                "The Next Web",
-                "awwwards.",
-                "TechCrunch",
-              ].map((brand) => (
-                <li class="mention-card">
-                  <p>{brand}</p>
-                </li>
-              ))
-            }
-          </Grid>
-        </div>
-      </section> -->
-    </main>
-  </div>
+    <section class="stack gap-4 closing">
+      <hr class="section-rule" />
+      <h2>
+        Le bon point de départ n’est pas un outil. C’est une compréhension partagée du système.
+      </h2>
+      <div class="actions">
+        <CallToAction
+          href="/start-here/"
+          event="cta_start_here"
+          props={{ surface: "home-closing", lang: "fr" }}
+        >
+          Lire Start Here
+        </CallToAction>
+        <a class="btn-secondary" href={`mailto:${siteConfig.omnivya.email}`}>Email</a>
+        <a class="btn-text" href="/contact/">Contact</a>
+      </div>
+    </section>
+  </main>
 </BaseLayout>
 
 <style>
-  .hero {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
+  .problem-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
   }
-
-  .roles {
-    display: none;
+  .problem-grid .surface {
+    font-size: var(--text-sm);
+    line-height: var(--leading-snug);
+    color: var(--color-fg-muted);
   }
-
-  .hero img {
-    aspect-ratio: 5 / 4;
-    object-fit: cover;
-    object-position: top;
-    border-radius: 1.5rem;
-    box-shadow: var(--shadow-md);
+  .path-card {
+    min-height: 7.5rem;
+    justify-content: space-between;
   }
-
-  @media (min-width: 50em) {
-    .hero {
-      display: grid;
-      grid-template-columns: 6fr 4fr;
-      padding-inline: 2.5rem;
-      gap: 3.75rem;
-    }
-
-    .roles {
-      margin-top: 0.5rem;
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .hero img {
-      aspect-ratio: 3 / 4;
-      border-radius: 4.5rem;
-      object-fit: cover;
-    }
+  .closing {
+    max-width: var(--measure-wide);
+    padding-block: var(--space-4) var(--space-10);
+    gap: var(--space-5);
   }
-
-  /* ====================================================== */
-
-  .section {
-    display: grid;
-    gap: 2rem;
-  }
-
-  .with-background {
-    position: relative;
-  }
-
-  .with-background::before {
-    --hero-bg: var(--bg-image-subtle-2);
-
-    content: "";
-    position: absolute;
-    pointer-events: none;
-    left: 50%;
-    width: 100vw;
-    aspect-ratio: calc(2.25 / var(--bg-scale));
-    top: 0;
-    transform: translateY(-75%) translateX(-50%);
-    background:
-      url("/assets/backgrounds/noise.png") top center/220px repeat,
-      var(--hero-bg) center center / var(--bg-gradient-size) no-repeat,
-      var(--gray-999);
-    background-blend-mode: overlay, normal, normal, normal;
-    mix-blend-mode: var(--bg-blend-mode);
-    z-index: -1;
-  }
-
-  .with-background.bg-variant::before {
-    --hero-bg: var(--bg-image-subtle-1);
-  }
-
-  .section-header {
-    justify-self: center;
-    text-align: center;
-    max-width: 50ch;
-    font-size: var(--text-md);
-    color: var(--gray-300);
-  }
-
-  .section-header h3 {
-    font-size: var(--text-2xl);
-  }
-
-  @media (min-width: 50em) {
-    .section {
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-areas: "header header header header" "gallery gallery gallery gallery";
-      gap: 5rem;
-    }
-
-    .section.with-cta {
-      grid-template-areas: "header header header cta" "gallery gallery gallery gallery";
-    }
-
-    .section-header {
-      grid-area: header;
-      font-size: var(--text-lg);
-    }
-
-    .section-header h3 {
-      font-size: var(--text-4xl);
-    }
-
-    .with-cta .section-header {
-      justify-self: flex-start;
-      text-align: left;
-    }
-
-    .gallery {
-      grid-area: gallery;
-    }
-
-    .cta {
-      grid-area: cta;
-    }
-  }
-
-  /* ====================================================== */
-
-  .mention-card {
-    display: flex;
-    height: 7rem;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    border: 1px solid var(--gray-800);
-    border-radius: 1.5rem;
-    color: var(--gray-300);
-    background: var(--gradient-subtle);
-    box-shadow: var(--shadow-sm);
-  }
-
-  @media (min-width: 50em) {
-    .mention-card {
-      border-radius: 1.5rem;
-      height: 9.5rem;
-    }
+  .closing h2 {
+    max-width: 22ch;
+    font-size: clamp(var(--text-2xl), 3vw, var(--text-3xl));
   }
 </style>
