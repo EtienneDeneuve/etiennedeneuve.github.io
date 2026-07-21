@@ -1,0 +1,72 @@
+---
+import type { StructuredEvidence } from "../lib/publication-policy.ts";
+import { normalizeEvidenceList, proofTypeLabel } from "../lib/publication-policy.ts";
+
+interface Props {
+  evidence: Array<string | StructuredEvidence>;
+  lang?: "fr" | "en";
+}
+
+const { evidence, lang = "fr" } = Astro.props;
+const items = normalizeEvidenceList(evidence);
+const openLabel = lang === "en" ? "Open" : "Ouvrir";
+---
+
+{
+  items.length > 0 ? (
+    <ul class="evidence-list">
+      {items.map((item) => (
+        <li>
+          {item.type && <span class="evidence-type">{proofTypeLabel(item.type, lang)}</span>}
+          {item.label && <strong class="evidence-label">{item.label}</strong>}
+          <p>{item.description}</p>
+          {item.url && (
+            <a href={item.url} target="_blank" rel="noopener noreferrer">
+              {openLabel}
+            </a>
+          )}
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p class="empty">
+      {lang === "en" ? "No structured evidence attached." : "Aucune preuve structurée associée."}
+    </p>
+  )
+}
+
+<style>
+  .evidence-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.85rem;
+  }
+  .evidence-list li {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1rem;
+    background: var(--color-bg-elevated);
+  }
+  .evidence-type {
+    display: inline-block;
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-fg-subtle);
+    margin-bottom: 0.25rem;
+  }
+  .evidence-label {
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  .evidence-list p {
+    margin: 0 0 0.5rem;
+    color: var(--color-fg-muted);
+  }
+  .empty {
+    color: var(--color-fg-subtle);
+    margin: 0;
+  }
+</style>

@@ -1,102 +1,124 @@
 ---
-import BookingCTA from "./BookingCTA.astro";
-import Icon from "./Icon.astro";
-import { siteConfig, getBrandText } from "../config/site.ts";
-const currentYear = new Date().getFullYear();
+import { siteConfig } from "../config/site.ts";
+import { navigationConfig } from "../config/navigation.ts";
+import { analyticsAttrs } from "../lib/analytics.ts";
+
+const pathname = Astro.url.pathname;
+const locale =
+  pathname.startsWith("/en/") || pathname === "/en" || pathname === "/en/" ? "en" : "fr";
+const secondary = navigationConfig.secondary[locale];
+const legal = navigationConfig.legal[locale];
 ---
 
 <footer class="wrapper">
-  <div class="cta">
-    <h2>{getBrandText.footerCta()}</h2>
-    <BookingCTA bookingSubject="Prise de rendez-vous">
-      Prenez un rendez-vous avec moi !
-    </BookingCTA>
-  </div>
-  <div class="wrapper">
-    <div class="group col">
-      <p>
-        <Icon icon="rocket-launch" size="1.2em" />
-      </p>
-      <p>&copy; {currentYear} {siteConfig.author.name}</p>
-    </div>
-    <p class="socials col">
-      <a href="https://twitter.com/EtienneDinfo"> Twitter</a>
-      <a href="https://github.com/EtienneDeneuve"> GitHub</a>
-      <a href="https://linkedin.com/in/EtienneDeneuve"> Linkedin</a>
+  <div class="identity">
+    <strong>{siteConfig.identity.name}</strong>
+    <p class="role">{siteConfig.professionalRole.title}</p>
+    <p class="domains">{siteConfig.professionalRole.subtitle}</p>
+    <p>
+      <a
+        href={`mailto:${siteConfig.omnivya.email}`}
+        {...analyticsAttrs("cta_contact_email", {
+          surface: "footer",
+          intent: "qualification",
+          lang: locale,
+        })}
+      >
+        {siteConfig.omnivya.email}
+      </a>
     </p>
   </div>
+
+  <div class="links">
+    {
+      secondary.map((item) => (
+        <a
+          href={item.href}
+          {...(item.href.includes("rss")
+            ? analyticsAttrs("cta_rss", { surface: "footer", lang: locale })
+            : item.href.includes("contact")
+              ? analyticsAttrs("cta_contact_email", {
+                  surface: "footer",
+                  intent: "qualification",
+                  lang: locale,
+                })
+              : {})}
+        >
+          {item.label}
+        </a>
+      ))
+    }
+    <a href={siteConfig.social.linkedin}>LinkedIn</a>
+    <a
+      href={siteConfig.social.github}
+      {...analyticsAttrs("cta_github", { surface: "footer", lang: locale })}
+    >
+      GitHub
+    </a>
+    <a href={siteConfig.social.x}>X</a>
+    {legal.map((item) => <a href={item.href}>{item.label}</a>)}
+  </div>
+
+  <small>{siteConfig.copyright.notice}</small>
 </footer>
 
 <style>
-  .wrapper {
-    display: flex;
-    flex-direction: column;
-  }
   footer {
-    gap: 3rem;
+    display: grid;
+    gap: var(--space-5);
     margin-top: auto;
-    padding: 3rem 2rem 3rem;
-    text-align: center;
-    color: var(--gray-400);
+    padding: var(--space-10) var(--space-6) var(--space-8);
+    text-align: left;
+    color: var(--color-fg-subtle);
     font-size: var(--text-sm);
+    border-top: var(--border-width-strong) solid var(--color-fg);
   }
 
   footer a {
-    color: var(--gray-400);
-    text-decoration: 1px solid underline transparent;
-    text-underline-offset: 0.25em;
-    transition: text-decoration-color var(--theme-transition);
+    color: var(--color-fg-muted);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    transition: color var(--motion-fast);
   }
 
   footer a:hover,
-  footer a:focus {
-    text-decoration-color: currentColor;
+  footer a:focus-visible {
+    color: var(--accent-regular);
   }
 
-  .cta {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
+  .identity strong {
+    color: var(--color-fg);
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 600;
   }
 
-  .wrapper {
-    display: flex;
-  }
-  .col {
-    flex: 1;
-    justify-content: space-between;
-  }
-  .group {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+  .role {
+    margin: var(--space-2) 0 0;
+    color: var(--color-fg-muted);
+    font-size: var(--text-sm);
   }
 
-  .socials {
+  .domains {
+    margin: var(--space-1) 0 var(--space-3);
+    max-width: 40rem;
+    color: var(--color-fg-subtle);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.02em;
+  }
+
+  .links {
     display: flex;
-    flex: 1;
-    justify-content: center;
-    gap: 1rem;
     flex-wrap: wrap;
+    gap: var(--space-4);
   }
 
-  @media (min-width: 50em) {
-    footer {
-      flex-direction: row;
-      justify-content: space-between;
-      padding: 2.5rem 5rem;
-    }
-
-    .group {
-      flex-direction: row;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .socials {
-      justify-content: flex-end;
-    }
+  small {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
   }
 </style>

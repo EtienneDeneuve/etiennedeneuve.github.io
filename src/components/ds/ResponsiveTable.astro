@@ -1,0 +1,25 @@
+---
+interface Props {
+  caption?: string;
+}
+
+const { caption } = Astro.props;
+---
+
+<figure class="ds-table-figure">
+  <div class="ds-table-wrap" role="region" aria-label={caption ?? "Table"} tabindex="0">
+    <slot />
+  </div>
+  {caption && <figcaption class="ds-table-caption">{caption}</figcaption>}
+</figure>
+
+<style>
+  .ds-table-figure {
+    margin: 0;
+  }
+  .ds-table-caption {
+    margin-top: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-fg-subtle);
+  }
+</style>

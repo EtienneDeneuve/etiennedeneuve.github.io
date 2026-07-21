@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import CallToAction from "../components/CallToAction.astro";
 import Grid from "../components/Grid.astro";
@@ -7,32 +7,25 @@ import Hero from "../components/Hero.astro";
 import Icon from "../components/Icon.astro";
 import Pill from "../components/Pill.astro";
 import ResourcesPreview from "../components/ResourcesPreview.astro";
-import { siteConfig, getBrandText } from "../config/site.ts";
+import { getBrandText } from "../config/site.ts";
 
 // Charger les ressources depuis la collection
 const allResources = await getCollection("resources");
 
 // Grouper par topic
-const resourcesByTopic = new Map();
+const resourcesByTopic = new Map<string, CollectionEntry<"resources">[]>();
 allResources.forEach((resource) => {
   const topic = resource.data.topic || "Other";
   if (!resourcesByTopic.has(topic)) {
     resourcesByTopic.set(topic, []);
   }
-  resourcesByTopic.get(topic).push(resource);
+  resourcesByTopic.get(topic)!.push(resource);
 });
 
 // Trier par date de review récente (pour "Recently reviewed")
 const recentlyReviewed = allResources
   .sort((a, b) => b.data.lastReviewed.valueOf() - a.data.lastReviewed.valueOf())
   .slice(0, 3);
-
-// Vérifier les ressources à revoir (lastReviewed > 365 jours)
-const now = new Date();
-const oneYearAgo = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
-const needsReview = allResources.filter(
-  (r) => r.data.lastReviewed.valueOf() < oneYearAgo.getTime()
-);
 ---
 
 <BaseLayout
@@ -57,41 +50,47 @@ const needsReview = allResources.filter(
     </div>
 
     <main class="wrapper stack gap-20 lg:gap-48">
-      {recentlyReviewed.length > 0 && (
-        <section class="section with-background">
-          <header class="section-header stack gap-2 lg:gap-4">
-            <h3>Récemment Révisées</h3>
-            <p>Ressources mises à jour récemment pour garantir leur pertinence.</p>
-          </header>
-          <div class="gallery">
-            <Grid variant="offset">
-              {recentlyReviewed.map((resource) => (
-                <li>
-                  <ResourcesPreview resource={resource} />
-                </li>
-              ))}
-            </Grid>
-          </div>
-        </section>
-      )}
+      {
+        recentlyReviewed.length > 0 && (
+          <section class="section with-background">
+            <header class="section-header stack gap-2 lg:gap-4">
+              <h3>Récemment Révisées</h3>
+              <p>Ressources mises à jour récemment pour garantir leur pertinence.</p>
+            </header>
+            <div class="gallery">
+              <Grid variant="offset">
+                {recentlyReviewed.map((resource) => (
+                  <li>
+                    <ResourcesPreview resource={resource} />
+                  </li>
+                ))}
+              </Grid>
+            </div>
+          </section>
+        )
+      }
 
-      {Array.from(resourcesByTopic.entries()).map(([topic, resources]) => (
-        <section class="section with-background">
-          <header class="section-header stack gap-2 lg:gap-4">
-            <h3>{topic}</h3>
-            <p>{resources.length} ressource{resources.length > 1 ? "s" : ""}</p>
-          </header>
-          <div class="gallery">
-            <Grid variant="offset">
-              {resources.map((resource) => (
-                <li>
-                  <ResourcesPreview resource={resource} />
-                </li>
-              ))}
-            </Grid>
-          </div>
-        </section>
-      ))}
+      {
+        Array.from(resourcesByTopic.entries()).map(([topic, resources]) => (
+          <section class="section with-background">
+            <header class="section-header stack gap-2 lg:gap-4">
+              <h3>{topic}</h3>
+              <p>
+                {resources.length} ressource{resources.length > 1 ? "s" : ""}
+              </p>
+            </header>
+            <div class="gallery">
+              <Grid variant="offset">
+                {resources.map((resource) => (
+                  <li>
+                    <ResourcesPreview resource={resource} />
+                  </li>
+                ))}
+              </Grid>
+            </div>
+          </section>
+        ))
+      }
 
       <div class="cta">
         <CallToAction href="/resources/all">
@@ -119,8 +118,8 @@ const needsReview = allResources.filter(
     aspect-ratio: 5 / 4;
     object-fit: cover;
     object-position: top;
-    border-radius: 1.5rem;
-    box-shadow: var(--shadow-md);
+    border-radius: var(--radius-md);
+    /* no shadow */
   }
 
   @media (min-width: 50em) {
@@ -184,7 +183,7 @@ const needsReview = allResources.filter(
     text-align: center;
     max-width: 50ch;
     font-size: var(--text-md);
-    color: var(--gray-300);
+    color: var(--color-fg-muted);
   }
 
   .section-header h3 {
@@ -233,16 +232,16 @@ const needsReview = allResources.filter(
     justify-content: center;
     align-items: center;
     text-align: center;
-    border: 1px solid var(--gray-800);
-    border-radius: 1.5rem;
-    color: var(--gray-300);
-    background: var(--gradient-subtle);
-    box-shadow: var(--shadow-sm);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-fg-muted);
+    background: var(--color-bg-elevated);
+    /* no shadow */
   }
 
   @media (min-width: 50em) {
     .mention-card {
-      border-radius: 1.5rem;
+      border-radius: var(--radius-md);
       height: 9.5rem;
     }
   }

@@ -27,6 +27,7 @@
 ## Files Modified
 
 ### Components
+
 - `src/components/Footer.astro` - Uses config for brand name and booking URL
 - `src/components/ContactCTA.astro` - Uses config for CTA text and booking URL
 - `src/components/MainHead.astro` - Uses config for meta tags, OG tags, Twitter cards
@@ -35,6 +36,7 @@
 - `src/components/ResourcesPreview.astro` - Uses config for default image URL
 
 ### Pages
+
 - `src/pages/index.astro` - Uses config for hero title and tagline
 - `src/pages/blog/page/[page].astro` - Uses config for page title
 - `src/pages/[...slug].astro` - Uses config for OG image URL
@@ -42,14 +44,17 @@
 - `src/pages/rss.xml.js` - Uses config for RSS feed title and description
 
 ### Layouts
+
 - `src/layouts/BaseLayout.astro` - Uses config for default OG image
 
 ### Other
+
 - `src/pages/open-graph/[...ogimage].ts` - Uses config for OG image generation (site URL, author name, domain)
 
 ## Brand References Updated
 
 ### Before
+
 - Hardcoded "Simplifi'ed" in footer
 - Hardcoded booking URL: `https://outlook.office365.com/owa/calendar/SimplifiED1@simplified.fr/bookings/`
 - Hardcoded "Etienne Deneuve" strings throughout
@@ -57,6 +62,7 @@
 - Hardcoded social media URLs
 
 ### After
+
 - All brand references use `siteConfig` from `src/config/site.ts`
 - Footer CTA: `getBrandText.footerCta()` → "Vous voulez travailler avec Simplifi'ed ?"
 - Booking URL: `siteConfig.contact.businessBookingUrl`
@@ -67,6 +73,7 @@
 ## Brand Consistency Rules
 
 1. **Primary Brand**: "Etienne Deneuve" used in:
+
    - Site title/navigation
    - Page titles
    - Meta tags (og:site_name, twitter:title)
@@ -74,6 +81,7 @@
    - Copyright footer
 
 2. **Secondary Brand**: "Simplifi'ed" mentioned only in:
+
    - Footer CTA (business inquiries)
    - Booking links (professional context)
    - Business entity references when relevant
@@ -92,6 +100,7 @@
 ## Next Steps
 
 The brand configuration is now centralized. Future tasks can:
+
 - Add new pages/components that automatically use consistent branding
 - Easily update brand information in one place (`src/config/site.ts`)
 - Extend config for new features (offers, case studies, etc.)

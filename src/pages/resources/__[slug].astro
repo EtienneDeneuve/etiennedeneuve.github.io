@@ -1,91 +1,87 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const { slug } = Astro.params;
 const resources = await getCollection("resources");
-const resource = resources.find((res) => res.slug === slug);
+const resource = resources.find((res) => res.id === slug);
 
 if (!resource) {
-    throw new Error(`Ressource avec le slug "${slug}" introuvable`);
+  throw new Error(`Ressource avec le slug "${slug}" introuvable`);
 }
 
-const { Content, data } = await resource.render();
+const { Content } = await render(resource);
+const data = resource.data;
 const pubDate = data.pubDate
-    ? new Date(data.pubDate).toLocaleDateString("fr-FR", {
-          day: "2-digit",
-          month: "long",
-          year: "numeric",
-      })
-    : null;
+  ? new Date(data.pubDate).toLocaleDateString("fr-FR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    })
+  : null;
 ---
 
 <BaseLayout>
-    <article class="resource">
-        <header>
-            <h1>{data.title}</h1>
-            {pubDate && <p class="pubDate">Publié le : {pubDate}</p>}
-            <p class="category">Catégorie : {data.category}</p>
-        </header>
+  <article class="resource">
+    <header>
+      <h1>{data.title}</h1>
+      {pubDate && <p class="pubDate">Publié le : {pubDate}</p>}
+      <p class="category">Catégorie : {data.category}</p>
+    </header>
 
-        <section class="content">
-            <Content />
-        </section>
+    <section class="content">
+      <Content />
+    </section>
 
-        {
-            data.url && (
-                <footer>
-                    <a
-                        href={data.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="external-link"
-                    >
-                        Accéder à la ressource
-                    </a>
-                </footer>
-            )
-        }
-    </article>
+    {
+      data.url && (
+        <footer>
+          <a href={data.url} target="_blank" rel="noopener noreferrer" class="external-link">
+            Accéder à la ressource
+          </a>
+        </footer>
+      )
+    }
+  </article>
 
-    <style>
-        .resource {
-            max-width: 800px;
-            margin: auto;
-            padding: 2rem;
-        }
+  <style>
+    .resource {
+      max-width: 800px;
+      margin: auto;
+      padding: 2rem;
+    }
 
-        h1 {
-            font-size: var(--text-4xl);
-            font-weight: bold;
-            margin-bottom: 1rem;
-        }
+    h1 {
+      font-size: var(--text-4xl);
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
 
-        .pubDate,
-        .category {
-            font-size: var(--text-md);
-            color: var(--gray-600);
-            margin-bottom: 1rem;
-        }
+    .pubDate,
+    .category {
+      font-size: var(--text-md);
+      color: var(--gray-600);
+      margin-bottom: 1rem;
+    }
 
-        .content {
-            margin-top: 2rem;
-            line-height: 1.75;
-        }
+    .content {
+      margin-top: 2rem;
+      line-height: 1.75;
+    }
 
-        .external-link {
-            display: inline-block;
-            margin-top: 2rem;
-            padding: 0.75rem 1.5rem;
-            background-color: var(--primary);
-            color: white;
-            border-radius: 0.5rem;
-            text-decoration: none;
-            transition: background-color 0.3s;
-        }
+    .external-link {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 0.75rem 1.5rem;
+      background-color: var(--primary);
+      color: white;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
 
-        .external-link:hover {
-            background-color: var(--primary-dark);
-        }
-    </style>
+    .external-link:hover {
+      background-color: var(--primary-dark);
+    }
+  </style>
 </BaseLayout>

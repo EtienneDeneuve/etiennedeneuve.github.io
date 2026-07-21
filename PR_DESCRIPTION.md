@@ -1,11 +1,13 @@
 # Amélioration de la page Offres et Speaking/Media Kit
 
 ## 🎯 Objectif
+
 Amélioration de l'expérience utilisateur et enrichissement du contenu marketing des pages principales du site.
 
 ## ✨ Nouvelles fonctionnalités
 
 ### Page Offres (`/offers`)
+
 - ✅ **Système de pliage/dépliage** : Les cartes d'offres sont maintenant repliées par défaut pour une vue d'ensemble plus claire
 - ✅ **8 offres au total** (au lieu de 3) :
   1. DevSecOps / Platform Audit
@@ -20,6 +22,7 @@ Amélioration de l'expérience utilisateur et enrichissement du contenu marketin
 - ✅ **Design épuré** : Headers plus compacts, boutons mieux dimensionnés
 
 ### Page Speaking/Media Kit (`/speaking`)
+
 - ✅ **Section Press/Media Kit améliorée** : Design plus propre avec carte unifiée
 - ✅ **Mise en page optimisée** : Le contenu prend toute la largeur disponible
 
@@ -30,21 +33,25 @@ Amélioration de l'expérience utilisateur et enrichissement du contenu marketin
 #### Page Offres - Descriptions des nouvelles offres :
 
 1. **Observabilité Fine / OTEL Implementation**
+
    - Description : "Équipes techniques cherchant à mettre en place une observabilité moderne avec OpenTelemetry"
    - Métriques : "Couverture d'instrumentation 80%+", "Time to Detect - Réduction 60-80%"
    - Délai : "4-8 semaines"
 
 2. **FinOps & Cloud Cost Optimization**
+
    - Description : "Organisations cherchant à optimiser leurs coûts cloud et mettre en place une culture FinOps"
    - Métriques : "Réduction des coûts 20-40% en 3 mois"
    - Délai : "3-6 semaines"
 
 3. **Kubernetes Migration & Optimization**
+
    - Description : "Équipes cherchant à migrer vers Kubernetes ou optimiser leur cluster existant"
    - Métriques : "Uptime 99.9%+", "Resource efficiency 70-80%"
    - Délai : "6-12 semaines"
 
 4. **GreenOps & Cloud Sustainability**
+
    - Description : "Organisations soucieuses de réduire leur empreinte carbone"
    - Métriques : "Réduction carbone 20-40% en 6 mois"
    - Délai : "4-8 semaines"
@@ -78,6 +85,7 @@ Amélioration de l'expérience utilisateur et enrichissement du contenu marketin
 ## 🎨 Aperçu
 
 Les pages sont maintenant plus professionnelles avec :
+
 - Une meilleure organisation visuelle
 - Un contenu plus riche et complet
 - Une expérience utilisateur améliorée

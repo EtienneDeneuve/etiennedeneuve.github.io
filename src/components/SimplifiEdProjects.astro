@@ -5,68 +5,61 @@ import Pill from "./Pill.astro";
 
 // Get top repos (already sorted by stars)
 const topRepos = socialStats.simplifiEd.repos
-  .filter(repo => repo.stars > 0) // Only show repos with stars
+  .filter((repo) => repo.stars > 0) // Only show repos with stars
   .slice(0, 6); // Top 6 repos
 ---
 
-{socialStats.simplifiEd.publicRepos > 0 && (
-  <section class="simplified-projects">
-    <div class="header">
-      <h2>Projets Simplifi'ed</h2>
-      <p class="summary">
-        {socialStats.simplifiEd.publicRepos} repos publics • {socialStats.simplifiEd.totalStars} ⭐ • {socialStats.simplifiEd.totalForks} 🍴
-      </p>
-      <a 
-        href="https://github.com/simplifi-ed" 
-        target="_blank" 
-        rel="noopener"
-        class="org-link"
-      >
-        Voir sur GitHub <Icon icon="arrow-right" size="1em" />
-      </a>
-    </div>
-
-    {topRepos.length > 0 && (
-      <div class="projects-grid">
-        {topRepos.map((repo) => (
-          <a 
-            href={repo.url} 
-            target="_blank" 
-            rel="noopener"
-            class="project-card"
-          >
-            <div class="project-header">
-              <h3>{repo.name}</h3>
-              {repo.language && (
-                <Pill>{repo.language}</Pill>
-              )}
-            </div>
-            
-            {repo.description && (
-              <p class="project-description">{repo.description}</p>
-            )}
-            
-            <div class="project-stats">
-              <span class="stat">
-                <Icon icon="trophy" size="1em" />
-                {repo.stars}
-              </span>
-              {repo.forks > 0 && (
-                <span class="stat">
-                  <Icon icon="code" size="1em" />
-                  {repo.forks}
-                </span>
-              )}
-              <span class="stat updated">
-                Mis à jour {new Date(repo.updated).toLocaleDateString("fr-FR", { month: "short", year: "numeric" })}
-              </span>
-            </div>
-          </a>
-        ))}
+{
+  socialStats.simplifiEd.publicRepos > 0 && (
+    <section class="simplified-projects">
+      <div class="header">
+        <h2>Projets Simplifi'ed</h2>
+        <p class="summary">
+          {socialStats.simplifiEd.publicRepos} repos publics • {socialStats.simplifiEd.totalStars}{" "}
+          ⭐ • {socialStats.simplifiEd.totalForks} 🍴
+        </p>
+        <a href="https://github.com/simplifi-ed" target="_blank" rel="noopener" class="org-link">
+          Voir sur GitHub <Icon icon="arrow-right" size="1em" />
+        </a>
       </div>
-    )}
-  </section>
-)}
+
+      {topRepos.length > 0 && (
+        <div class="projects-grid">
+          {topRepos.map((repo) => (
+            <a href={repo.url} target="_blank" rel="noopener" class="project-card">
+              <div class="project-header">
+                <h3>{repo.name}</h3>
+                {repo.language && <Pill>{repo.language}</Pill>}
+              </div>
+
+              {repo.description && <p class="project-description">{repo.description}</p>}
+
+              <div class="project-stats">
+                <span class="stat">
+                  <Icon icon="trophy" size="1em" />
+                  {repo.stars}
+                </span>
+                {repo.forks > 0 && (
+                  <span class="stat">
+                    <Icon icon="code" size="1em" />
+                    {repo.forks}
+                  </span>
+                )}
+                <span class="stat updated">
+                  Mis à jour{" "}
+                  {new Date(repo.updated).toLocaleDateString("fr-FR", {
+                    month: "short",
+                    year: "numeric",
+                  })}
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+    </section>
+  )
+}
 
 <style>
   .simplified-projects {
@@ -124,7 +117,10 @@ const topRepos = socialStats.simplifiEd.repos
     border-radius: 0.5rem;
     text-decoration: none;
     color: inherit;
-    transition: transform var(--theme-transition), box-shadow var(--theme-transition), border-color var(--theme-transition);
+    transition:
+      transform var(--theme-transition),
+      box-shadow var(--theme-transition),
+      border-color var(--theme-transition);
   }
 
   .project-card:hover,

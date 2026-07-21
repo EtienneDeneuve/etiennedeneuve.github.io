@@ -3,8 +3,8 @@ import Icon from "./Icon.astro";
 ---
 
 <theme-toggle>
-  <button>
-    <span class="sr-only">Dark theme</span>
+  <button type="button">
+    <span class="sr-only">Toggle theme</span>
     <span class="icon light"><Icon icon="sun" /></span>
     <span class="icon dark"><Icon icon="moon-stars" /></span>
   </button>
@@ -13,11 +13,10 @@ import Icon from "./Icon.astro";
 <style>
   button {
     display: flex;
-    border: 0;
-    border-radius: 999rem;
+    border: var(--border-width-strong) solid var(--color-fg);
+    border-radius: var(--radius-md);
     padding: 0;
-    background-color: var(--gray-999);
-    box-shadow: inset 0 0 0 1px var(--accent-overlay);
+    background-color: transparent;
     cursor: pointer;
   }
 
@@ -25,11 +24,11 @@ import Icon from "./Icon.astro";
     z-index: 1;
     position: relative;
     display: flex;
-    padding: 0.5rem;
+    padding: 0.45rem;
     width: 2rem;
     height: 2rem;
     font-size: 1rem;
-    color: var(--accent-dark);
+    color: var(--color-fg-muted);
   }
 
   .icon.light::before {
@@ -38,7 +37,6 @@ import Icon from "./Icon.astro";
     position: absolute;
     inset: 0;
     background-color: var(--accent-regular);
-    border-radius: 999rem;
   }
 
   :global(.theme-dark) .icon.light::before {
@@ -72,21 +70,15 @@ import Icon from "./Icon.astro";
     constructor() {
       super();
 
-      const button = this.querySelector("button")!;
+      const button = this.querySelector("button");
+      if (!button) return;
 
-      /** Set the theme to dark/light mode. */
-      const setTheme = (dark: boolean) => {
-        document.documentElement.classList[dark ? "add" : "remove"](
-          "theme-dark",
-          "cc--darkmode",
-        );
+      const setTheme = (dark) => {
+        document.documentElement.classList[dark ? "add" : "remove"]("theme-dark", "cc--darkmode");
         button.setAttribute("aria-pressed", String(dark));
       };
 
-      // Toggle the theme when a user clicks the button.
       button.addEventListener("click", () => setTheme(!this.isDark()));
-
-      // Initialize button state to reflect current theme.
       setTheme(this.isDark());
     }
 

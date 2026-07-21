@@ -1,0 +1,105 @@
+---
+import type { ThinkingArticle } from "../lib/thinking.ts";
+import {
+  formatArticleDate,
+  getArticleLanguage,
+  getArticlePath,
+  getContentTypeLabel,
+  getPillarLabel,
+  getReadingTime,
+  type ThinkingContentType,
+  type ThinkingPillar,
+} from "../lib/thinking.ts";
+
+interface Props {
+  entry: ThinkingArticle;
+  lang: "fr" | "en";
+}
+
+const { entry, lang } = Astro.props;
+const articleLang = getArticleLanguage(entry);
+const href = getArticlePath(entry.id, articleLang);
+const pillar = entry.data.pillar as ThinkingPillar;
+const contentType = entry.data.contentType as ThinkingContentType;
+const readingTime = getReadingTime(entry);
+const readLabel = lang === "en" ? "Read" : "Lire";
+const prefix = lang === "en" ? "/en" : "";
+---
+
+<article class="surface-card interactive article-card">
+  <header class="card-header">
+    <span class="badge badge-accent">{getContentTypeLabel(contentType, lang)}</span>
+    <span class="badge">{articleLang.toUpperCase()}</span>
+  </header>
+  <h3><a href={href}>{entry.data.title}</a></h3>
+  {entry.data.description && <p class="description">{entry.data.description}</p>}
+  <dl class="meta">
+    <div>
+      <dt>{lang === "en" ? "Published" : "Publié"}</dt>
+      <dd>{formatArticleDate(entry.data.pubDate, lang)}</dd>
+    </div>
+    {
+      readingTime && (
+        <div>
+          <dt>{lang === "en" ? "Reading" : "Lecture"}</dt>
+          <dd>{readingTime}</dd>
+        </div>
+      )
+    }
+    <div>
+      <dt>{lang === "en" ? "Pillar" : "Pilier"}</dt>
+      <dd>
+        <a href={`${prefix}/thinking/pillar/${pillar}/`}>{getPillarLabel(pillar, lang)}</a>
+      </dd>
+    </div>
+  </dl>
+  <a class="read-link" href={href}>{readLabel} →</a>
+</article>
+
+<style>
+  .article-card {
+    height: 100%;
+  }
+  .card-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .article-card h3 {
+    margin: 0;
+    font-size: var(--text-lg);
+    line-height: var(--leading-snug);
+  }
+  .article-card h3 a {
+    color: var(--color-fg);
+    text-decoration: none;
+  }
+  .article-card h3 a:hover {
+    text-decoration: underline;
+  }
+  .description {
+    margin: 0;
+    color: var(--color-fg-muted);
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+  }
+  .meta {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2);
+    margin: 0;
+    font-size: var(--text-xs);
+  }
+  .meta dt {
+    color: var(--color-fg-subtle);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+  }
+  .meta dd {
+    margin: 0.1rem 0 0;
+    color: var(--color-fg-muted);
+  }
+  .meta a {
+    color: var(--color-fg-muted);
+  }
+</style>

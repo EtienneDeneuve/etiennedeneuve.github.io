@@ -1,0 +1,104 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ArticleCard from "./ArticleCard.astro";
+import { thinkingConfig } from "../config/thinking.ts";
+import { sortArticles, type ThinkingArticle } from "../lib/thinking.ts";
+import { breadcrumbJsonLd, buildJsonLdGraph, collectionPageJsonLd } from "../lib/json-ld.ts";
+import type { SeoLang } from "../config/seo.ts";
+
+interface Props {
+  lang: SeoLang;
+  title: string;
+  description: string;
+  entries: ThinkingArticle[];
+  facetLabel: string;
+  path?: string;
+  alternates?: { lang: SeoLang; href: string }[];
+}
+
+const { lang, title, description, entries, facetLabel, path, alternates } = Astro.props;
+const prefix = lang === "en" ? "/en" : "";
+const sorted = sortArticles(entries, "featured");
+
+const frPath = (Astro.url.pathname.replace(/^\/en/, "") || "/thinking/").replace(/\/?$/, "/");
+const facetPath = path ?? (lang === "en" ? `/en${frPath}` : frPath);
+const resolvedAlternates = alternates ?? [
+  { lang: "fr" as const, href: frPath },
+  { lang: "en" as const, href: `/en${frPath}` },
+];
+
+const jsonLd = buildJsonLdGraph([
+  collectionPageJsonLd({
+    name: title,
+    description,
+    path: facetPath,
+    lang,
+  }),
+  breadcrumbJsonLd([
+    { name: "Home", path: prefix || "/" },
+    { name: thinkingConfig.meta.title[lang], path: `${prefix}/thinking/` },
+    { name: title, path: facetPath },
+  ]),
+]);
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  lang={lang}
+  path={facetPath}
+  alternates={resolvedAlternates}
+  jsonLd={jsonLd}
+>
+  <main class="wrapper stack gap-8">
+    <header class="stack gap-2">
+      <a class="back" href={`${prefix}/thinking/`}>← {thinkingConfig.meta.title[lang]}</a>
+      <p class="eyebrow">{facetLabel}</p>
+      <h1>{title}</h1>
+      <p class="intro">{description}</p>
+      <p class="count">{sorted.length} {thinkingConfig.labels.articlesCount[lang]}</p>
+    </header>
+    <div class="cards-grid">
+      {sorted.map((entry) => <ArticleCard entry={entry} lang={lang} />)}
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .back {
+    color: var(--color-fg-subtle);
+    text-decoration: none;
+    font-size: var(--text-sm);
+  }
+  .eyebrow {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-fg-subtle);
+    font-size: var(--text-xs);
+  }
+  .intro {
+    margin: 0;
+    color: var(--color-fg-muted);
+    max-width: 72ch;
+  }
+  .count {
+    margin: 0;
+    color: var(--color-fg-subtle);
+    font-size: var(--text-sm);
+  }
+  .cards-grid {
+    display: grid;
+    gap: 1rem;
+  }
+  @media (min-width: 50em) {
+    .cards-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 75em) {
+    .cards-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

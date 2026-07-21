@@ -7,9 +7,7 @@ import fs from "fs";
 import path from "path";
 import { encode } from "html-entities";
 
-const html = fs
-  .readFileSync(path.resolve("./scripts/social-banner.html"))
-  .toString();
+const html = fs.readFileSync(path.resolve("./scripts/social-banner.html")).toString();
 
 const setDate = (date) => {
   return format(date, "MMM dd, yyyy");
@@ -34,7 +32,7 @@ if (contentScriptArgs) {
         .then(() =>
           ContentScript.updateFrontMatter({
             preview: `/assets/social/${fileName}`,
-          }),
+          })
         )
         .catch(() => ContentScript.done(`preview: /assets/social/${fileName}`));
     } else {

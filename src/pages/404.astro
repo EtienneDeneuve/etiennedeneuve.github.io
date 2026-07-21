@@ -1,8 +1,73 @@
 ---
-import Hero from '../components/Hero.astro';
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import CallToAction from "../components/CallToAction.astro";
+
+const links = [
+  { href: "/", label: "Accueil" },
+  { href: "/start-here/", label: "Start here" },
+  { href: "/thinking/", label: "Thinking" },
+  { href: "/projects/", label: "Projects" },
+  { href: "/work/", label: "Work" },
+  { href: "/speaking/", label: "Speaking" },
+  { href: "/about/", label: "About" },
+  { href: "/contact/", label: "Contact" },
+];
 ---
 
-<BaseLayout title="Not Found" description="404 Error — this page was not found">
-	<Hero title="Page Not Found" tagline="Not found" />
+<BaseLayout
+  title="Page introuvable"
+  description="Cette page n’existe pas ou a été déplacée. Explorez Start here, Thinking ou Projects."
+  lang="fr"
+  path="/404/"
+  noIndex={true}
+  brandTitle={true}
+>
+  <main class="wrapper stack gap-8 not-found">
+    <header class="stack gap-3 page-hero">
+      <p class="eyebrow">404</p>
+      <h1>Page introuvable</h1>
+      <p class="lede">
+        L’URL demandée n’existe pas, a été déplacée, ou n’est plus publique. Les anciennes URLs blog
+        / case studies redirigent vers Thinking et Work.
+      </p>
+    </header>
+
+    <nav class="stack gap-3" aria-label="Pages utiles">
+      <p class="subtle">Aller vers</p>
+      <ul class="links">
+        {
+          links.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="actions">
+      <CallToAction href="/start-here/">Start here</CallToAction>
+      <a class="btn-secondary" href="/thinking/">Thinking</a>
+      <a class="btn-text" href="/contact/">Contact</a>
+    </div>
+  </main>
 </BaseLayout>
+
+<style>
+  .not-found {
+    max-width: 40rem;
+    padding-block: var(--space-12);
+  }
+  .links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+  .links a {
+    color: var(--color-fg-muted);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+</style>

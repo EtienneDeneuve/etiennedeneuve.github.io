@@ -210,7 +210,18 @@
         {
           "name": "topic",
           "type": "choice",
-          "choices": ["DevSecOps", "Platform Engineering", "Infrastructure as Code", "CI/CD", "Cloud", "Security", "Leadership", "General", "Podcast", "Other"],
+          "choices": [
+            "DevSecOps",
+            "Platform Engineering",
+            "Infrastructure as Code",
+            "CI/CD",
+            "Cloud",
+            "Security",
+            "Leadership",
+            "General",
+            "Podcast",
+            "Other"
+          ],
           "required": true
         },
         {

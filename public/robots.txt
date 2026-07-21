@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
 
+# Private / non-public surfaces
+Disallow: /design-system
+Disallow: /draft/
+
 Sitemap: https://etienne.deneuve.xyz/sitemap-index.xml

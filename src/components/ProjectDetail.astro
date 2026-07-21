@@ -1,0 +1,239 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import EvidenceList from "../components/EvidenceList.astro";
+import { projectsPageConfig } from "../config/projects-page.ts";
+import { projectEntityHref, projectField, projectList } from "../lib/projects-i18n.ts";
+import { resolveContentRefs } from "../lib/resolve-content.ts";
+import type { StructuredEvidence } from "../lib/publication-policy.ts";
+import {
+  breadcrumbJsonLd,
+  buildJsonLdGraph,
+  organizationJsonLd,
+  personJsonLd,
+  projectPageJsonLd,
+  softwareSourceCodeJsonLd,
+} from "../lib/json-ld.ts";
+
+interface Props {
+  entry: CollectionEntry<"projects">;
+  lang: "fr" | "en";
+}
+
+const { entry, lang } = Astro.props;
+const prefix = lang === "en" ? "/en" : "";
+const projectPath = `${prefix}/projects/${entry.id}/`;
+const labels = Object.fromEntries(
+  Object.entries(projectsPageConfig.labels).map(([k, v]) => [k, v[lang]])
+) as Record<keyof typeof projectsPageConfig.labels, string>;
+const statusLabel = projectsPageConfig.statusLabels[entry.data.status]?.[lang] ?? entry.data.status;
+
+const name = projectField(entry, "name", lang) || entry.data.name;
+const summary = projectField(entry, "summary", lang) || entry.data.summary;
+
+const articles = await getCollection("blog");
+const relatedItems = resolveContentRefs(
+  entry.data.relatedArticles.map((id) => ({ kind: "article" as const, id })),
+  { articles, projects: [], resources: [] },
+  lang
+);
+
+const entityHref = projectEntityHref(entry);
+const proofs: Array<string | StructuredEvidence> =
+  entry.data.proofs.length > 0
+    ? (entry.data.proofs as Array<string | StructuredEvidence>)
+    : entry.data.proofLinks.map((url) => ({
+        type: "public-repository" as const,
+        label: name,
+        url,
+        description: summary,
+      }));
+
+function section(title: string, items: string[]) {
+  return items.length > 0 ? { title, items } : null;
+}
+
+const listSections = [
+  section(labels.decisions, projectList(entry, "decisions", lang)),
+  section(labels.principles, projectList(entry, "principles", lang)),
+  section(labels.whatExists, projectList(entry, "whatExists", lang)),
+  section(labels.limitations, projectList(entry, "limitations", lang)),
+  section(labels.learnings, projectList(entry, "learnings", lang)),
+].filter(Boolean);
+
+const relatedToOmnivya = entry.data.type === "company" || entry.data.type === "product";
+const isOpenSource = entry.data.type === "open-source" && Boolean(entry.data.repository);
+
+const jsonLd = buildJsonLdGraph([
+  personJsonLd(),
+  relatedToOmnivya ? organizationJsonLd() : null,
+  projectPageJsonLd({
+    name,
+    description: summary,
+    path: projectPath,
+    lang,
+    relatedToOmnivya,
+    repository: entry.data.repository,
+  }),
+  isOpenSource && entry.data.repository
+    ? softwareSourceCodeJsonLd({
+        name,
+        description: summary,
+        codeRepository: entry.data.repository,
+        programmingLanguage: entry.data.technologies[0] ?? null,
+        url: projectPath,
+      })
+    : null,
+  breadcrumbJsonLd([
+    { name: "Home", path: prefix || "/" },
+    { name: projectsPageConfig.meta.title[lang], path: `${prefix}/projects/` },
+    { name: name, path: projectPath },
+  ]),
+]);
+---
+
+<BaseLayout
+  title={name}
+  description={summary}
+  lang={lang}
+  path={projectPath}
+  alternates={[
+    { lang: "fr", href: `/projects/${entry.id}/` },
+    { lang: "en", href: `/en/projects/${entry.id}/` },
+  ]}
+  jsonLd={jsonLd}
+>
+  <main class="wrapper stack gap-10">
+    <a href={`${prefix}/projects/`}>{labels.back}</a>
+
+    <header class="stack gap-3 hero">
+      <p class="eyebrow">{statusLabel} · {entry.data.type}</p>
+      <h1>{name}</h1>
+      <p class="subtitle">{summary}</p>
+    </header>
+
+    <section class="stack gap-2">
+      <h2>{labels.problem}</h2>
+      <p>{projectField(entry, "problem", lang)}</p>
+    </section>
+
+    <section class="stack gap-2">
+      <h2>{labels.context}</h2>
+      <p>{projectField(entry, "context", lang)}</p>
+    </section>
+
+    <section class="stack gap-2">
+      <h2>{labels.role}</h2>
+      <p>{projectField(entry, "role", lang)}</p>
+    </section>
+
+    {
+      listSections.map((block) =>
+        block ? (
+          <section class="stack gap-2">
+            <h2>{block.title}</h2>
+            <ul class="list">
+              {block.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </section>
+        ) : null
+      )
+    }
+
+    <section class="stack gap-2">
+      <h2>{labels.currentState}</h2>
+      <p>{projectField(entry, "currentState", lang)}</p>
+    </section>
+
+    <section class="stack gap-3">
+      <h2>{labels.proofs}</h2>
+      <EvidenceList evidence={proofs} lang={lang} />
+    </section>
+
+    {
+      relatedItems.length > 0 && (
+        <section class="stack gap-3">
+          <h2>{labels.related}</h2>
+          <ul class="related">
+            {relatedItems.map((item) => (
+              <li>
+                <a href={item.href}>{item.title}</a>
+                <p>{item.description}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      entityHref && (
+        <footer class="entity-links">
+          {entry.data.website && (
+            <a
+              class="btn-primary"
+              href={entry.data.website}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {labels.entityLink}
+            </a>
+          )}
+          {entry.data.repository && entry.data.repository !== entry.data.website && (
+            <a
+              class="btn-secondary"
+              href={entry.data.repository}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {labels.repositoryLink}
+            </a>
+          )}
+        </footer>
+      )
+    }
+  </main>
+</BaseLayout>
+
+<style>
+  .hero {
+    max-width: 72ch;
+  }
+  .list {
+    margin: 0;
+    padding-left: 1.25rem;
+    display: grid;
+    gap: var(--space-2);
+    color: var(--color-fg-muted);
+  }
+  .related {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-3);
+  }
+  .related a {
+    color: var(--color-fg);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .related a:hover {
+    text-decoration: underline;
+  }
+  .related p {
+    margin: var(--space-1) 0 0;
+    color: var(--color-fg-subtle);
+    font-size: var(--text-sm);
+  }
+  .entity-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    padding-top: var(--space-4);
+    border-top: var(--border-width) solid var(--color-border);
+  }
+</style>

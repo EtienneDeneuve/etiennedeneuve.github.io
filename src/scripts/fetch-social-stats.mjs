@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
  * Fetch Social Media Statistics
- * 
+ *
  * This script fetches statistics from various social platforms during build time:
  * - GitHub: repos, followers, contributions
  * - YouTube: subscribers, views (if API key available)
  * - LinkedIn: profile views (limited without API)
- * 
+ *
  * Usage: node src/scripts/fetch-social-stats.mjs
  */
 
@@ -31,7 +31,8 @@ const LINKEDIN_PROFILE_URL = "https://www.linkedin.com/in/etiennedeneuve/";
 const LINKEDIN_KNOWN_STATS = {
   followers: 7828, // From profile screenshot
   connections: 500, // 500+ means at least 500
-  headline: "Cloud Infrastructure & Platform Strategy Advisor Expert Kubernetes & Azure - DevSecOps - FinOps - Platform engineering",
+  headline:
+    "Cloud Infrastructure & Platform Strategy Advisor Expert Kubernetes & Azure - DevSecOps - FinOps - Platform engineering",
   location: "Clamart, Île-de-France, France",
 };
 
@@ -89,8 +90,8 @@ async function fetchGitHubStats() {
   try {
     const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}`, {
       headers: {
-        'User-Agent': 'Astro-Build-Script',
-        ...(process.env.GITHUB_TOKEN && { 'Authorization': `token ${process.env.GITHUB_TOKEN}` }),
+        "User-Agent": "Astro-Build-Script",
+        ...(process.env.GITHUB_TOKEN && { Authorization: `token ${process.env.GITHUB_TOKEN}` }),
       },
     });
 
@@ -100,7 +101,7 @@ async function fetchGitHubStats() {
     }
 
     const data = await response.json();
-    
+
     // Try to get contribution count (requires additional API call or scraping)
     // For now, we'll use basic stats
     return {
@@ -122,7 +123,7 @@ async function fetchGitHubStats() {
  */
 async function fetchYouTubeStats() {
   const apiKey = process.env.YOUTUBE_API_KEY;
-  
+
   if (!apiKey) {
     console.warn("⚠️  YOUTUBE_API_KEY not set, skipping YouTube stats");
     return defaultStats.youtube;
@@ -141,14 +142,14 @@ async function fetchYouTubeStats() {
     }
 
     const channelData = await channelResponse.json();
-    
+
     if (!channelData.items || channelData.items.length === 0) {
       console.warn("⚠️  YouTube channel not found");
       return defaultStats.youtube;
     }
 
     const channelId = channelData.items[0].snippet.channelId;
-    
+
     // Get channel statistics
     const statsResponse = await fetch(
       `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${channelId}&key=${apiKey}`
@@ -160,13 +161,13 @@ async function fetchYouTubeStats() {
     }
 
     const statsData = await statsResponse.json();
-    
+
     if (!statsData.items || statsData.items.length === 0) {
       return defaultStats.youtube;
     }
 
     const stats = statsData.items[0].statistics;
-    
+
     return {
       subscribers: parseInt(stats.subscriberCount || "0", 10),
       totalViews: parseInt(stats.viewCount || "0", 10),
@@ -181,36 +182,39 @@ async function fetchYouTubeStats() {
 
 /**
  * Fetch LinkedIn statistics
- * 
+ *
  * Note: LinkedIn API v2 requires OAuth authentication and user consent.
  * For public profiles, we can try to fetch basic info using:
  * 1. LinkedIn API (requires OAuth token)
  * 2. Open Graph meta tags (limited info)
  * 3. Structured data (if available)
- * 
+ *
  * This function attempts to fetch basic profile info from Open Graph tags.
  */
 async function fetchLinkedInStats() {
   const linkedinToken = process.env.LINKEDIN_ACCESS_TOKEN;
-  
+
   // If we have an OAuth token, use LinkedIn API v2
   if (linkedinToken) {
     try {
       const response = await fetch("https://api.linkedin.com/v2/me", {
         headers: {
-          "Authorization": `Bearer ${linkedinToken}`,
+          Authorization: `Bearer ${linkedinToken}`,
         },
       });
 
       if (response.ok) {
         const data = await response.json();
-        
+
         // Get profile stats
-        const statsResponse = await fetch("https://api.linkedin.com/v2/networkSizes/edge=connections", {
-          headers: {
-            "Authorization": `Bearer ${linkedinToken}`,
-          },
-        });
+        const statsResponse = await fetch(
+          "https://api.linkedin.com/v2/networkSizes/edge=connections",
+          {
+            headers: {
+              Authorization: `Bearer ${linkedinToken}`,
+            },
+          }
+        );
 
         let connections = 0;
         if (statsResponse.ok) {
@@ -244,11 +248,13 @@ async function fetchLinkedInStats() {
 
     if (response.ok) {
       const html = await response.text();
-      
+
       // Extract Open Graph title (usually contains name and headline)
       const ogTitleMatch = html.match(/<meta\s+property="og:title"\s+content="([^"]+)"/i);
-      const ogDescriptionMatch = html.match(/<meta\s+property="og:description"\s+content="([^"]+)"/i);
-      
+      const ogDescriptionMatch = html.match(
+        /<meta\s+property="og:description"\s+content="([^"]+)"/i
+      );
+
       let headline = "";
       if (ogTitleMatch) {
         // og:title is usually "Name | Headline"
@@ -260,7 +266,9 @@ async function fetchLinkedInStats() {
 
       // Try to extract location from description or other meta tags
       let location = "";
-      const locationMatch = html.match(/<meta\s+name="geo\.(?:placename|region)"\s+content="([^"]+)"/i);
+      const locationMatch = html.match(
+        /<meta\s+name="geo\.(?:placename|region)"\s+content="([^"]+)"/i
+      );
       if (locationMatch) {
         location = locationMatch[1];
       }
@@ -310,8 +318,8 @@ async function fetchSimplifiEdStats() {
   try {
     const response = await fetch(`https://api.github.com/orgs/${GITHUB_ORG}`, {
       headers: {
-        'User-Agent': 'Astro-Build-Script',
-        ...(process.env.GITHUB_TOKEN && { 'Authorization': `token ${process.env.GITHUB_TOKEN}` }),
+        "User-Agent": "Astro-Build-Script",
+        ...(process.env.GITHUB_TOKEN && { Authorization: `token ${process.env.GITHUB_TOKEN}` }),
       },
     });
 
@@ -321,7 +329,7 @@ async function fetchSimplifiEdStats() {
     }
 
     const orgData = await response.json();
-    
+
     // Fetch all public repos
     let allRepos = [];
     let page = 1;
@@ -332,8 +340,8 @@ async function fetchSimplifiEdStats() {
         `https://api.github.com/orgs/${GITHUB_ORG}/repos?per_page=100&page=${page}&sort=updated`,
         {
           headers: {
-            'User-Agent': 'Astro-Build-Script',
-            ...(process.env.GITHUB_TOKEN && { 'Authorization': `token ${process.env.GITHUB_TOKEN}` }),
+            "User-Agent": "Astro-Build-Script",
+            ...(process.env.GITHUB_TOKEN && { Authorization: `token ${process.env.GITHUB_TOKEN}` }),
           },
         }
       );
@@ -344,7 +352,7 @@ async function fetchSimplifiEdStats() {
       }
 
       const repos = await reposResponse.json();
-      
+
       if (repos.length === 0) {
         hasMore = false;
       } else {
@@ -365,7 +373,7 @@ async function fetchSimplifiEdStats() {
     const topRepos = allRepos
       .sort((a, b) => (b.stargazers_count || 0) - (a.stargazers_count || 0))
       .slice(0, 10)
-      .map(repo => ({
+      .map((repo) => ({
         name: repo.name,
         description: repo.description || "",
         stars: repo.stargazers_count || 0,
@@ -406,7 +414,7 @@ async function fetchOmnivyaStats() {
         redirect: "follow",
         signal: AbortSignal.timeout(5000), // 5 second timeout
       });
-      
+
       websiteAccessible = response.ok;
       websiteStatus = response.status === 200 ? "online" : `http_${response.status}`;
     } catch (error) {
@@ -417,7 +425,7 @@ async function fetchOmnivyaStats() {
     // Try to get LinkedIn company page info (if available)
     // Note: LinkedIn company API requires authentication
     let linkedinFollowers = 0;
-    
+
     // You could add LinkedIn company page scraping here if needed
     // But it requires authentication or web scraping (not recommended)
 
@@ -439,13 +447,14 @@ async function fetchOmnivyaStats() {
 async function main() {
   console.log("📊 Fetching social media statistics...\n");
 
-  const [githubStats, youtubeStats, linkedinStats, omnivyaStats, simplifiEdStats] = await Promise.all([
-    fetchGitHubStats(),
-    fetchYouTubeStats(),
-    fetchLinkedInStats(),
-    fetchOmnivyaStats(),
-    fetchSimplifiEdStats(),
-  ]);
+  const [githubStats, youtubeStats, linkedinStats, omnivyaStats, simplifiEdStats] =
+    await Promise.all([
+      fetchGitHubStats(),
+      fetchYouTubeStats(),
+      fetchLinkedInStats(),
+      fetchOmnivyaStats(),
+      fetchSimplifiEdStats(),
+    ]);
 
   const stats = {
     github: githubStats,
@@ -462,10 +471,16 @@ async function main() {
   console.log("✅ Social stats fetched successfully:");
   console.log(`   GitHub: ${githubStats.followers} followers, ${githubStats.publicRepos} repos`);
   if (youtubeStats.subscribers > 0) {
-    console.log(`   YouTube: ${youtubeStats.subscribers} subscribers, ${youtubeStats.videoCount} videos`);
+    console.log(
+      `   YouTube: ${youtubeStats.subscribers} subscribers, ${youtubeStats.videoCount} videos`
+    );
   }
-  console.log(`   Omnivya: Website ${omnivyaStats.websiteAccessible ? "✅ accessible" : "❌ not accessible"} (${omnivyaStats.websiteStatus})`);
-  console.log(`   Simplifi'ed: ${simplifiEdStats.publicRepos} repos, ${simplifiEdStats.totalStars} ⭐ total, ${simplifiEdStats.totalForks} 🍴 forks`);
+  console.log(
+    `   Omnivya: Website ${omnivyaStats.websiteAccessible ? "✅ accessible" : "❌ not accessible"} (${omnivyaStats.websiteStatus})`
+  );
+  console.log(
+    `   Simplifi'ed: ${simplifiEdStats.publicRepos} repos, ${simplifiEdStats.totalStars} ⭐ total, ${simplifiEdStats.totalForks} 🍴 forks`
+  );
   console.log(`\n📁 Stats saved to: ${outputPath}\n`);
 }
 

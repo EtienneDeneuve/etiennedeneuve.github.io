@@ -1,0 +1,366 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import OpenSourceSection from "../components/OpenSourceSection.astro";
+import { aboutConfig } from "../config/about.ts";
+import { siteConfig } from "../config/site.ts";
+import { getPublishableEntries } from "../lib/publication-policy.ts";
+import {
+  buildJsonLdGraph,
+  organizationJsonLd,
+  personJsonLd,
+  profilePageJsonLd,
+  websiteJsonLd,
+} from "../lib/json-ld.ts";
+
+interface Props {
+  lang: "fr" | "en";
+}
+
+const { lang } = Astro.props;
+const prefix = lang === "en" ? "/en" : "";
+const aboutPath = `${prefix}/about/`;
+const config = aboutConfig;
+const labels = config.labels;
+
+const projects = getPublishableEntries(await getCollection("projects"))
+  .filter((entry) => entry.data.verified)
+  .sort((a, b) => (a.data.displayOrder ?? 99) - (b.data.displayOrder ?? 99));
+
+const appearances = getPublishableEntries(await getCollection("appearances")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const emailSubject =
+  lang === "en" ? "Discussion — complex system" : "Discussion — système complexe";
+const mailto = `mailto:${siteConfig.omnivya.email}?subject=${encodeURIComponent(emailSubject)}`;
+
+const jsonLd = buildJsonLdGraph([
+  personJsonLd(),
+  organizationJsonLd(),
+  websiteJsonLd(),
+  profilePageJsonLd(aboutPath),
+]);
+---
+
+<BaseLayout
+  title={config.meta.title[lang]}
+  description={config.meta.description[lang]}
+  lang={lang}
+  path={aboutPath}
+  ogType="profile"
+  alternates={[
+    { lang: "fr", href: "/about/" },
+    { lang: "en", href: "/en/about/" },
+  ]}
+  jsonLd={jsonLd}
+>
+  <main class="wrapper about stack gap-12">
+    <header class="page-hero stack gap-4">
+      <p class="eyebrow">{siteConfig.professionalRole.title}</p>
+      <h1>{config.meta.title[lang]}</h1>
+      <p class="lede">{config.meta.lead[lang]}</p>
+      <ul class="unity" aria-label={config.unity.title[lang]}>
+        {config.unity.items.map((item) => <li>{item[lang]}</li>)}
+      </ul>
+    </header>
+
+    <section class="stack gap-3" id="today">
+      <h2>{config.today.title[lang]}</h2>
+      {config.today.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
+      <p>
+        <a href={`${prefix}/start-here/`}>{labels.startHere[lang]}</a>
+        {" · "}
+        <a href={`${prefix}/work/`}>{lang === "en" ? "Work" : "Work"}</a>
+      </p>
+    </section>
+
+    <section class="stack gap-3" id="with-taous">
+      <h2>{config.withTaous.title[lang]}</h2>
+      {config.withTaous.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
+    </section>
+
+    <section class="stack gap-3" id="path">
+      <h2>{config.path.title[lang]}</h2>
+      {config.path.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
+    </section>
+
+    <section class="stack gap-4" id="timeline" aria-labelledby="timeline-heading">
+      <div class="stack gap-2">
+        <h2 id="timeline-heading">{config.timeline.title[lang]}</h2>
+        <p class="intro">{config.timeline.intro[lang]}</p>
+      </div>
+      <ol class="timeline">
+        {
+          config.timeline.items.map((item) => (
+            <li class="timeline-item">
+              <p class="timeline-period">
+                <time>{item.period}</time>
+              </p>
+              <div class="timeline-body">
+                <h3>{item.title[lang]}</h3>
+                <p>{item.body[lang]}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="stack gap-3" id="twenty-years">
+      <h2>{config.twentyYears.title[lang]}</h2>
+      {config.twentyYears.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
+    </section>
+
+    <section class="stack gap-3" id="omnivya">
+      <h2>{config.omnivya.title[lang]}</h2>
+      {config.omnivya.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
+      <p>
+        <a href={`${prefix}/projects/omnivya/`}>{labels.omnivyaLink[lang]}</a>
+        {" · "}
+        <a href={siteConfig.omnivya.website} target="_blank" rel="noopener noreferrer">
+          omnivya.fr
+        </a>
+      </p>
+    </section>
+
+    <section class="stack gap-3" id="products">
+      <h2>{config.products.title[lang]}</h2>
+      {config.products.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
+      <ul class="product-links">
+        <li>
+          <a href={`${prefix}/projects/sanad/`}>Sanad</a>
+        </li>
+        <li>
+          <a href={`${prefix}/projects/my-dare/`}>My Dare</a>
+        </li>
+        <li>
+          <a href={`${prefix}/projects/`}>{labels.projects[lang]}</a>
+        </li>
+      </ul>
+    </section>
+
+    <section class="stack gap-3" id="doctrine">
+      <h2>{config.doctrine.title[lang]}</h2>
+      <ul class="principles">
+        {config.doctrine.principles[lang].map((item) => <li>{item}</li>)}
+      </ul>
+      <p>
+        <a href={`${prefix}/thinking/`}>{labels.thinking[lang]}</a>
+      </p>
+    </section>
+
+    <section class="stack gap-3" id="refuse">
+      <h2>{config.refuse.title[lang]}</h2>
+      <ul class="refuse-list">
+        {config.refuse.items[lang].map((item) => <li>{item}</li>)}
+      </ul>
+    </section>
+
+    <section class="stack gap-4" id="contributions">
+      <h2>{labels.contributions[lang]}</h2>
+
+      {
+        projects.length > 0 && (
+          <div class="stack gap-2">
+            <h3>{labels.projects[lang]}</h3>
+            <ul class="contrib-list">
+              {projects.map((project) => (
+                <li>
+                  <a href={`${prefix}/projects/${project.id}/`}>{project.data.name}</a>
+                  <span class="contrib-meta"> — {project.data.summary}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+
+      {
+        appearances.length > 0 && (
+          <div class="stack gap-2">
+            <h3>{labels.speaking[lang]}</h3>
+            <ul class="contrib-list">
+              {appearances.map((entry) => (
+                <li>
+                  <a href={`${prefix}/speaking/#appearances`}>
+                    {entry.data.title} — {entry.data.event}
+                  </a>
+                  <span class="contrib-meta">
+                    {" "}
+                    (
+                    {entry.data.date.toLocaleDateString(lang === "en" ? "en-GB" : "fr-FR", {
+                      year: "numeric",
+                    })}
+                    )
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <p>
+              <a href={`${prefix}/speaking/`}>{labels.speaking[lang]}</a>
+            </p>
+          </div>
+        )
+      }
+
+      <OpenSourceSection lang={lang} />
+    </section>
+
+    <section class="stack gap-3 contact" id="contact">
+      <h2>{config.contact.title[lang]}</h2>
+      {config.contact.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
+      <p>
+        <a class="cta" href={mailto}>{labels.emailCta[lang]}</a>
+        {" · "}
+        <a href={`mailto:${siteConfig.omnivya.email}`}>{siteConfig.omnivya.email}</a>
+      </p>
+      <p class="social">
+        <a href={siteConfig.social.linkedin} target="_blank" rel="noopener noreferrer">
+          LinkedIn
+        </a>
+        {" · "}
+        <a href={siteConfig.social.github} target="_blank" rel="noopener noreferrer"> GitHub </a>
+      </p>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .about {
+    max-width: 72ch;
+  }
+  .hero {
+    max-width: 72ch;
+  }
+  .identity {
+    margin: 0;
+    color: var(--color-fg-muted);
+    font-size: var(--text-md);
+  }
+  .lead {
+    margin: 0;
+    font-size: var(--text-lg);
+    color: var(--color-fg);
+    line-height: 1.55;
+  }
+  .intro {
+    margin: 0;
+    color: var(--color-fg-subtle);
+    font-size: var(--text-sm);
+  }
+  .about p {
+    margin: 0;
+    color: var(--color-fg-muted);
+    line-height: 1.65;
+  }
+  .unity {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.35rem;
+  }
+  .unity li {
+    padding-left: 1rem;
+    position: relative;
+    color: var(--color-fg-muted);
+  }
+  .unity li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--color-fg-subtle);
+  }
+  .principles,
+  .refuse-list,
+  .product-links,
+  .contrib-list {
+    margin: 0;
+    padding-left: 1.15rem;
+    display: grid;
+    gap: 0.45rem;
+    color: var(--color-fg-muted);
+  }
+  .contrib-meta {
+    color: var(--color-fg-subtle);
+    font-size: var(--text-sm);
+  }
+  .contact .cta {
+    display: inline-block;
+    margin-top: 0.25rem;
+    padding: 0.45rem 0.9rem;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-fg);
+    text-decoration: none;
+    font-size: var(--text-sm);
+  }
+  .social {
+    font-size: var(--text-sm);
+  }
+
+  /* Progressive enhancement: readable ordered list without advanced CSS */
+  .timeline {
+    list-style: decimal;
+    margin: 0;
+    padding-left: 1.5rem;
+    display: grid;
+    gap: 1.25rem;
+  }
+  .timeline-item {
+    display: block;
+  }
+  .timeline-period {
+    margin: 0 0 0.25rem;
+    font-weight: 600;
+    color: var(--color-fg);
+  }
+  .timeline-body h3 {
+    margin: 0 0 0.35rem;
+    font-size: var(--text-md);
+  }
+  .timeline-body p {
+    margin: 0;
+  }
+
+  /* Enhanced timeline when CSS is available */
+  @supports (display: grid) {
+    .timeline {
+      list-style: none;
+      padding-left: 0;
+      border-left: 2px solid var(--gray-800);
+      margin-left: 0.65rem;
+      padding-left: 1.25rem;
+      gap: 1.5rem;
+    }
+    .timeline-item {
+      position: relative;
+    }
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: calc(-1.25rem - 5px);
+      top: 0.35rem;
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 50%;
+      background: var(--gray-400);
+      border: 2px solid var(--gray-999);
+    }
+    .timeline-period time {
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.02em;
+      color: var(--color-fg-subtle);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .timeline-item::before {
+      transition: none;
+    }
+  }
+</style>

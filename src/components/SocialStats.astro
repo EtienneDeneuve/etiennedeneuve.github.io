@@ -12,97 +12,120 @@ const formatNumber = (num: number) => {
 <div class="social-stats">
   <h3>Statistiques</h3>
   <div class="stats-grid">
-    {socialStats.github.followers > 0 && (
-      <a href={siteConfig.social.github} target="_blank" rel="noopener" class="stat-card">
-        <Icon icon="github-logo" size="1.5em" />
-        <div class="stat-content">
-          <span class="stat-value">{formatNumber(socialStats.github.followers)}</span>
-          <span class="stat-label">Followers GitHub</span>
-        </div>
-      </a>
-    )}
-    
-    {socialStats.github.publicRepos > 0 && (
-      <a href={siteConfig.social.github} target="_blank" rel="noopener" class="stat-card">
-        <Icon icon="code" size="1.5em" />
-        <div class="stat-content">
-          <span class="stat-value">{formatNumber(socialStats.github.publicRepos)}</span>
-          <span class="stat-label">Repos publics</span>
-        </div>
-      </a>
-    )}
-    
-    {socialStats.youtube.subscribers > 0 && (
-      <a href={siteConfig.social.youtube} target="_blank" rel="noopener" class="stat-card">
-        <Icon icon="youtube-logo" size="1.5em" />
-        <div class="stat-content">
-          <span class="stat-value">{formatNumber(socialStats.youtube.subscribers)}</span>
-          <span class="stat-label">Abonnés YouTube</span>
-        </div>
-      </a>
-    )}
-    
-    {socialStats.youtube.videoCount > 0 && (
-      <a href={siteConfig.social.youtube} target="_blank" rel="noopener" class="stat-card">
-        <Icon icon="microphone-stage" size="1.5em" />
-        <div class="stat-content">
-          <span class="stat-value">{formatNumber(socialStats.youtube.videoCount)}</span>
-          <span class="stat-label">Vidéos</span>
-        </div>
-      </a>
-    )}
-    
-    {socialStats.omnivya.websiteAccessible && (
-      <a href={`https://${siteConfig.business.website}`} target="_blank" rel="noopener" class="stat-card">
-        <Icon icon="rocket-launch" size="1.5em" />
-        <div class="stat-content">
-          <span class="stat-value">✅</span>
-          <span class="stat-label">{siteConfig.business.name}</span>
-        </div>
-      </a>
-    )}
-    
-    {socialStats.simplifiEd.publicRepos > 0 && (
-      <a href={`https://github.com/simplifi-ed`} target="_blank" rel="noopener" class="stat-card">
-        <Icon icon="github-logo" size="1.5em" />
-        <div class="stat-content">
-          <span class="stat-value">{formatNumber(socialStats.simplifiEd.publicRepos)}</span>
-          <span class="stat-label">Repos Simplifi'ed</span>
-        </div>
-      </a>
-    )}
-    
-    {socialStats.simplifiEd.totalStars > 0 && (
-      <a href={`https://github.com/simplifi-ed`} target="_blank" rel="noopener" class="stat-card">
-        <Icon icon="trophy" size="1.5em" />
-        <div class="stat-content">
-          <span class="stat-value">{formatNumber(socialStats.simplifiEd.totalStars)}</span>
-          <span class="stat-label">⭐ Simplifi'ed</span>
-        </div>
-      </a>
-    )}
-    
-    {socialStats.linkedin.followers > 0 && (
-      <a href={siteConfig.social.linkedin} target="_blank" rel="noopener" class="stat-card">
-        <Icon icon="linkedin-logo" size="1.5em" />
-        <div class="stat-content">
-          <span class="stat-value">{formatNumber(socialStats.linkedin.followers)}</span>
-          <span class="stat-label">Followers LinkedIn</span>
-        </div>
-      </a>
-    )}
-    
-    {socialStats.linkedin.connections > 0 && (
-      <a href={siteConfig.social.linkedin} target="_blank" rel="noopener" class="stat-card">
-        <Icon icon="linkedin-logo" size="1.5em" />
-        <div class="stat-content">
-          <span class="stat-value">{formatNumber(socialStats.linkedin.connections)}+</span>
-          <span class="stat-label">Connexions</span>
-        </div>
-      </a>
-    )}
+    {
+      socialStats.github.followers > 0 && (
+        <a href={siteConfig.social.github} target="_blank" rel="noopener" class="stat-card">
+          <Icon icon="github-logo" size="1.5em" />
+          <div class="stat-content">
+            <span class="stat-value">{formatNumber(socialStats.github.followers)}</span>
+            <span class="stat-label">Followers GitHub</span>
+          </div>
+        </a>
+      )
+    }
+
+    {
+      socialStats.github.publicRepos > 0 && (
+        <a href={siteConfig.social.github} target="_blank" rel="noopener" class="stat-card">
+          <Icon icon="code" size="1.5em" />
+          <div class="stat-content">
+            <span class="stat-value">{formatNumber(socialStats.github.publicRepos)}</span>
+            <span class="stat-label">Repos publics</span>
+          </div>
+        </a>
+      )
+    }
+
+    {
+      socialStats.youtube.subscribers > 0 && (
+        <a href={siteConfig.social.youtube} target="_blank" rel="noopener" class="stat-card">
+          <Icon icon="youtube-logo" size="1.5em" />
+          <div class="stat-content">
+            <span class="stat-value">{formatNumber(socialStats.youtube.subscribers)}</span>
+            <span class="stat-label">Abonnés YouTube</span>
+          </div>
+        </a>
+      )
+    }
+
+    {
+      socialStats.youtube.videoCount > 0 && (
+        <a href={siteConfig.social.youtube} target="_blank" rel="noopener" class="stat-card">
+          <Icon icon="microphone-stage" size="1.5em" />
+          <div class="stat-content">
+            <span class="stat-value">{formatNumber(socialStats.youtube.videoCount)}</span>
+            <span class="stat-label">Vidéos</span>
+          </div>
+        </a>
+      )
+    }
+
+    {
+      socialStats.omnivya.websiteAccessible && (
+        <a
+          href={`https://${siteConfig.business.website}`}
+          target="_blank"
+          rel="noopener"
+          class="stat-card"
+        >
+          <Icon icon="rocket-launch" size="1.5em" />
+          <div class="stat-content">
+            <span class="stat-value">✅</span>
+            <span class="stat-label">{siteConfig.business.name}</span>
+          </div>
+        </a>
+      )
+    }
+
+    {
+      socialStats.simplifiEd.publicRepos > 0 && (
+        <a href={`https://github.com/simplifi-ed`} target="_blank" rel="noopener" class="stat-card">
+          <Icon icon="github-logo" size="1.5em" />
+          <div class="stat-content">
+            <span class="stat-value">{formatNumber(socialStats.simplifiEd.publicRepos)}</span>
+            <span class="stat-label">Repos Simplifi'ed</span>
+          </div>
+        </a>
+      )
+    }
+
+    {
+      socialStats.simplifiEd.totalStars > 0 && (
+        <a href={`https://github.com/simplifi-ed`} target="_blank" rel="noopener" class="stat-card">
+          <Icon icon="trophy" size="1.5em" />
+          <div class="stat-content">
+            <span class="stat-value">{formatNumber(socialStats.simplifiEd.totalStars)}</span>
+            <span class="stat-label">⭐ Simplifi'ed</span>
+          </div>
+        </a>
+      )
+    }
+
+    {
+      socialStats.linkedin.followers > 0 && (
+        <a href={siteConfig.social.linkedin} target="_blank" rel="noopener" class="stat-card">
+          <Icon icon="linkedin-logo" size="1.5em" />
+          <div class="stat-content">
+            <span class="stat-value">{formatNumber(socialStats.linkedin.followers)}</span>
+            <span class="stat-label">Followers LinkedIn</span>
+          </div>
+        </a>
+      )
+    }
+
+    {
+      socialStats.linkedin.connections > 0 && (
+        <a href={siteConfig.social.linkedin} target="_blank" rel="noopener" class="stat-card">
+          <Icon icon="linkedin-logo" size="1.5em" />
+          <div class="stat-content">
+            <span class="stat-value">{formatNumber(socialStats.linkedin.connections)}+</span>
+            <span class="stat-label">Connexions</span>
+          </div>
+        </a>
+      )
+    }
   </div>
-  
+
   <p class="stats-note">
     Dernière mise à jour: {new Date(socialStats.lastFetched).toLocaleDateString("fr-FR")}
   </p>
@@ -140,7 +163,9 @@ const formatNumber = (num: number) => {
     border-radius: 0.5rem;
     text-decoration: none;
     color: inherit;
-    transition: transform var(--theme-transition), box-shadow var(--theme-transition);
+    transition:
+      transform var(--theme-transition),
+      box-shadow var(--theme-transition);
   }
 
   .stat-card:hover,

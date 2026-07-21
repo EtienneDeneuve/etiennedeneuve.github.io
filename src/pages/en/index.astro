@@ -1,0 +1,207 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CallToAction from "../../components/CallToAction.astro";
+import { siteConfig } from "../../config/site.ts";
+import {
+  buildJsonLdGraph,
+  organizationJsonLd,
+  personJsonLd,
+  websiteJsonLd,
+} from "../../lib/json-ld.ts";
+import { getReleasedArticles } from "../../lib/publication-policy.ts";
+import { selectHomeThinking } from "../../lib/home-thinking.ts";
+import { getArticlePath, getCanonicalSlug } from "../../lib/thinking.ts";
+
+const homeJsonLd = buildJsonLdGraph([personJsonLd(), organizationJsonLd(), websiteJsonLd()]);
+
+const released = getReleasedArticles(await getCollection("blog")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+const enArticles = released.filter((entry) => entry.data.language === "en");
+const allArticles =
+  enArticles.length > 0
+    ? enArticles
+    : released.filter((entry) => (entry.data.language ?? "fr") === "fr");
+
+const selectedThinking = selectHomeThinking(allArticles, "en");
+
+const allProjects = (await getCollection("projects")).filter(
+  (project) => !project.data.draft && project.data.verified
+);
+const priorityNames = ["Sanad", "My Dare", "External Metrics Exporter"];
+const priorityProjects = priorityNames
+  .map((name) => allProjects.find((project) => project.data.name === name))
+  .filter((project): project is (typeof allProjects)[number] => Boolean(project));
+const featuredOthers = allProjects.filter(
+  (project) => project.data.featured && !priorityNames.includes(project.data.name)
+);
+const proofProjects = [...priorityProjects, ...featuredOthers];
+---
+
+<BaseLayout
+  title={siteConfig.identity.name}
+  description="I make complex systems readable, governable and actionable."
+  lang="en"
+  path="/en/"
+  brandTitle={false}
+  ogType="website"
+  alternates={[
+    { lang: "fr", href: "/" },
+    { lang: "en", href: "/en/" },
+  ]}
+  jsonLd={homeJsonLd}
+>
+  <main class="wrapper stack gap-16">
+    <section class="stack gap-5 page-hero">
+      <p class="brand-mark">{siteConfig.identity.name}</p>
+      <p class="eyebrow">{siteConfig.professionalRole.title}</p>
+      <h1>I make complex systems readable, governable and actionable.</h1>
+      <p class="lede">
+        Doctrine, architecture decisions and public proof — to steer an estate under real
+        constraints. Omnivya executes when the mission requires it.
+      </p>
+      <div class="actions">
+        <CallToAction
+          href="/en/start-here/"
+          event="cta_start_here"
+          props={{ surface: "home", lang: "en" }}
+        >
+          Start Here
+        </CallToAction>
+        <a class="btn-text" href="/en/projects/">See the evidence</a>
+      </div>
+    </section>
+
+    <hr class="section-rule" />
+
+    <section class="stack gap-4">
+      <div class="section-head">
+        <h2>Problems</h2>
+      </div>
+      <ul class="grid-auto problem-grid">
+        <li class="surface">The system has become impossible to understand.</li>
+        <li class="surface">Teams deploy but no longer control risk.</li>
+        <li class="surface">Cloud and platform choices do not produce expected outcomes.</li>
+        <li class="surface">The organization adds tools but loses decision capacity.</li>
+      </ul>
+    </section>
+
+    <section class="stack gap-4">
+      <div class="section-head">
+        <h2>Doctrine</h2>
+      </div>
+      <ul class="grid-auto problem-grid">
+        <li class="surface">Understand before automating.</li>
+        <li class="surface">Model dependencies and risk.</li>
+        <li class="surface">Reduce cognitive load, not add dashboards.</li>
+        <li class="surface">Build for real constraints, not theoretical architecture.</li>
+      </ul>
+    </section>
+
+    <section class="stack gap-4">
+      <div class="section-head">
+        <h2>Evidence</h2>
+        <a class="btn-text" href="/en/projects/">All projects</a>
+      </div>
+      <div class="grid-auto">
+        {
+          proofProjects.map((project) => (
+            <a class="surface-card interactive" href={`/en/projects/${project.id}/`}>
+              <p class="eyebrow">{project.data.type}</p>
+              <h3>{project.data.name}</h3>
+              <p>{project.data.problem}</p>
+              <span class="read-more">Proof</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="stack gap-4">
+      <div class="section-head">
+        <h2>Thinking</h2>
+        <a class="btn-text" href="/en/thinking/">Index</a>
+      </div>
+      <div class="grid-auto">
+        {
+          selectedThinking.map((item) =>
+            item.entry ? (
+              <a
+                class="surface-card interactive"
+                href={getArticlePath(getCanonicalSlug(item.entry), "en")}
+              >
+                <p class="eyebrow">{item.label}</p>
+                <h3>{item.entry.data.title}</h3>
+                <p>{item.entry.data.description}</p>
+                <span class="read-more">Read</span>
+              </a>
+            ) : null
+          )
+        }
+      </div>
+    </section>
+
+    <section class="stack gap-4">
+      <div class="section-head">
+        <h2>Paths</h2>
+      </div>
+      <div class="grid-auto">
+        <a class="surface-card interactive path-card" href="/en/start-here/">
+          <h3>I lead a complex system</h3>
+          <span class="read-more">Start Here</span>
+        </a>
+        <a class="surface-card interactive path-card" href="/en/work/">
+          <h3>I build a platform</h3>
+          <span class="read-more">Work</span>
+        </a>
+        <a class="surface-card interactive path-card" href="/en/speaking/">
+          <h3>I need a speaker</h3>
+          <span class="read-more">Speaking</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="stack gap-4 closing">
+      <hr class="section-rule" />
+      <h2>The right starting point is not a tool. It is shared system understanding.</h2>
+      <div class="actions">
+        <CallToAction
+          href="/en/start-here/"
+          event="cta_start_here"
+          props={{ surface: "home-closing", lang: "en" }}
+        >
+          Read Start Here
+        </CallToAction>
+        <a class="btn-secondary" href={`mailto:${siteConfig.omnivya.email}`}>Email</a>
+        <a class="btn-text" href="/en/contact/">Contact</a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .problem-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .problem-grid .surface {
+    font-size: var(--text-sm);
+    line-height: var(--leading-snug);
+    color: var(--color-fg-muted);
+  }
+  .path-card {
+    min-height: 7.5rem;
+    justify-content: space-between;
+  }
+  .closing {
+    max-width: var(--measure-wide);
+    padding-block: var(--space-4) var(--space-10);
+    gap: var(--space-5);
+  }
+  .closing h2 {
+    max-width: 22ch;
+    font-size: clamp(var(--text-2xl), 3vw, var(--text-3xl));
+  }
+</style>

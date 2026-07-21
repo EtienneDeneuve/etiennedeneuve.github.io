@@ -1,0 +1,19 @@
+/* TEAM */
+Name: Etienne Deneuve
+Role: Platform Reliability Architect
+Site: https://etienne.deneuve.xyz
+Contact: etienne@omnivya.fr
+Location: France (remote-first, Europe)
+Twitter: @EtienneDinfo
+GitHub: EtienneDeneuve
+LinkedIn: /in/EtienneDeneuve
+
+/* THANKS */
+Astro — static site framework
+Omnivya — execution entity
+
+/* SITE */
+Standards: HTML5, CSS, JSON-LD
+Components: Astro, Markdown content collections
+Languages: French (default), English
+Last update: 2026

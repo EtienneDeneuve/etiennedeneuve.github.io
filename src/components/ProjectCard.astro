@@ -1,0 +1,70 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { projectField } from "../lib/projects-i18n.ts";
+import { projectsPageConfig } from "../config/projects-page.ts";
+import { analyticsAttrs } from "../lib/analytics.ts";
+
+interface Props {
+  entry: CollectionEntry<"projects">;
+  lang: "fr" | "en";
+}
+
+const { entry, lang } = Astro.props;
+const labels = Object.fromEntries(
+  Object.entries(projectsPageConfig.labels).map(([k, v]) => [k, v[lang]])
+) as Record<keyof typeof projectsPageConfig.labels, string>;
+const statusLabel = projectsPageConfig.statusLabels[entry.data.status]?.[lang] ?? entry.data.status;
+const name = projectField(entry, "name", lang) || entry.data.name;
+const summary = projectField(entry, "summary", lang) || entry.data.summary;
+const prefix = lang === "en" ? "/en" : "";
+const href = `${prefix}/projects/${entry.id}/`;
+const projectAttrs = analyticsAttrs("cta_project_open", {
+  surface: "project-card",
+  project: entry.id,
+  lang,
+});
+---
+
+<article class="surface-card interactive project-card">
+  <header class="card-header">
+    <p class="eyebrow">{statusLabel} · {entry.data.type}</p>
+    <h2>
+      <a href={href} {...projectAttrs}>{name}</a>
+    </h2>
+  </header>
+  <p class="problem">
+    <strong>{labels.problem}:</strong>
+    {projectField(entry, "problem", lang)}
+  </p>
+  <p class="summary">{summary}</p>
+  <a class="read-more" href={href} {...projectAttrs}>
+    {lang === "en" ? "View project" : "Voir le projet"} →
+  </a>
+</article>
+
+<style>
+  .project-card {
+    height: 100%;
+  }
+  .card-header h2 {
+    margin: var(--space-1) 0 0;
+    font-size: var(--text-xl);
+  }
+  .card-header h2 a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .card-header h2 a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .problem {
+    color: var(--color-fg-muted);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+  }
+  .summary {
+    color: var(--color-fg-muted);
+    flex: 1;
+  }
+</style>

@@ -1,0 +1,369 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ArticleCard from "../components/ArticleCard.astro";
+import ArticleTableOfContents from "../components/ArticleTableOfContents.astro";
+import {
+  thinkingConfig,
+  type ThinkingContentType,
+  type ThinkingPillar,
+} from "../config/thinking.ts";
+import { siteConfig } from "../config/site.ts";
+import {
+  formatArticleDate,
+  getAllThinkingArticles,
+  getArticleLanguage,
+  getArticlePath,
+  getCanonicalSlug,
+  getCanonicalUrl,
+  getContentTypeLabel,
+  getPillarLabel,
+  getPrevNextArticles,
+  getReadingTime,
+  getRelatedArticles,
+  getRelatedProjectSlugs,
+  getTranslationSiblings,
+  shouldShowUpdatedDate,
+  type ThinkingArticle,
+} from "../lib/thinking.ts";
+import { articleJsonLd, breadcrumbJsonLd, buildJsonLdGraph, personJsonLd } from "../lib/json-ld.ts";
+
+interface Props {
+  entry: ThinkingArticle;
+  lang: "fr" | "en";
+}
+
+const { entry, lang } = Astro.props;
+const { Content, headings } = await render(entry);
+const prefix = lang === "en" ? "/en" : "";
+const labels = thinkingConfig.labels;
+const articleLang = getArticleLanguage(entry);
+const indexHref = `${prefix}/thinking/`;
+const articlePath = getArticlePath(getCanonicalSlug(entry), articleLang);
+
+const allArticles = await getAllThinkingArticles();
+const translations = getTranslationSiblings(entry, allArticles);
+const { prev, next } = getPrevNextArticles(entry, allArticles);
+const relatedArticles = getRelatedArticles(entry, allArticles);
+const relatedProjectSlugs = getRelatedProjectSlugs(entry);
+
+const projects = (await getCollection("projects")).filter(
+  (project) =>
+    !project.data.draft &&
+    (relatedProjectSlugs.includes(project.id) ||
+      relatedProjectSlugs.some((slug) => project.id.includes(slug)))
+);
+
+const canonicalUrl = getCanonicalUrl(entry, siteConfig.seo.siteUrl);
+const pillar = entry.data.pillar as ThinkingPillar;
+const contentType = entry.data.contentType as ThinkingContentType;
+const readingTime = getReadingTime(entry);
+
+const alternates: { lang: "fr" | "en"; href: string }[] = [
+  {
+    lang: articleLang,
+    href: getArticlePath(getCanonicalSlug(entry), articleLang),
+  },
+];
+for (const translated of translations) {
+  const tLang = getArticleLanguage(translated);
+  alternates.push({
+    lang: tLang,
+    href: getArticlePath(getCanonicalSlug(translated), tLang),
+  });
+}
+
+const jsonLd = buildJsonLdGraph([
+  personJsonLd(),
+  articleJsonLd({
+    title: entry.data.title,
+    description: entry.data.description || entry.data.title,
+    path: articlePath,
+    lang: articleLang,
+    datePublished: entry.data.pubDate,
+    dateModified: entry.data.lastModified ?? entry.data.updateDate,
+    image: entry.data.img,
+    draft: entry.data.draft,
+  }),
+  breadcrumbJsonLd([
+    { name: "Home", path: prefix || "/" },
+    { name: thinkingConfig.meta.title[lang], path: indexHref },
+    { name: entry.data.title, path: articlePath },
+  ]),
+]);
+---
+
+<BaseLayout
+  title={entry.data.title}
+  description={entry.data.description || entry.data.title}
+  lang={lang}
+  path={articlePath}
+  ogType="article"
+  image={entry.data.img}
+  publishedTime={entry.data.pubDate}
+  modifiedTime={entry.data.lastModified ?? entry.data.updateDate}
+  alternates={alternates}
+  canonical={canonicalUrl}
+  jsonLd={jsonLd}
+>
+  <main class="wrapper article-layout stack gap-8">
+    <a class="back-link" href={indexHref}>← {thinkingConfig.meta.title[lang]}</a>
+
+    <header class="article-header stack gap-3">
+      <div class="badges">
+        <a class="badge" href={`${prefix}/thinking/type/${contentType}/`}>
+          {getContentTypeLabel(contentType, lang)}
+        </a>
+        <a class="badge" href={`${prefix}/thinking/pillar/${pillar}/`}>
+          {getPillarLabel(pillar, lang)}
+        </a>
+        <span class="badge muted">{articleLang.toUpperCase()}</span>
+      </div>
+      <h1>{entry.data.title}</h1>
+      {entry.data.description && <p class="dek">{entry.data.description}</p>}
+      <dl class="article-meta">
+        <div>
+          <dt>{labels.published[lang]}</dt>
+          <dd>{formatArticleDate(entry.data.pubDate, lang)}</dd>
+        </div>
+        {
+          shouldShowUpdatedDate(entry) && entry.data.lastModified && (
+            <div>
+              <dt>{labels.updated[lang]}</dt>
+              <dd>{formatArticleDate(entry.data.lastModified, lang)}</dd>
+            </div>
+          )
+        }
+        {
+          readingTime && (
+            <div>
+              <dt>{labels.readingTime[lang]}</dt>
+              <dd>{readingTime}</dd>
+            </div>
+          )
+        }
+      </dl>
+      {
+        translations.length > 0 && (
+          <p class="translations">
+            {labels.translation[lang]}:{" "}
+            {translations.map((translated, index) => (
+              <>
+                {index > 0 && " · "}
+                <a
+                  href={getArticlePath(
+                    getCanonicalSlug(translated),
+                    getArticleLanguage(translated)
+                  )}
+                >
+                  {getArticleLanguage(translated).toUpperCase()} — {translated.data.title}
+                </a>
+              </>
+            ))}
+          </p>
+        )
+      }
+    </header>
+
+    <div class="article-body">
+      <ArticleTableOfContents headings={headings} lang={lang} />
+      <div class="prose">
+        {
+          entry.data.img && (
+            <div class="media-frame" data-ratio="16/9">
+              <img
+                src={entry.data.img}
+                alt={entry.data.imgAlt || entry.data.title}
+                loading="lazy"
+                decoding="async"
+                width="1200"
+                height="675"
+              />
+            </div>
+          )
+        }
+        <Content />
+      </div>
+    </div>
+
+    {
+      (relatedArticles.length > 0 || projects.length > 0) && (
+        <section class="related stack gap-3">
+          <h2>{labels.related[lang]}</h2>
+          {projects.length > 0 && (
+            <div>
+              <h3>{labels.relatedProjects[lang]}</h3>
+              <ul>
+                {projects.map((project) => (
+                  <li>
+                    <a href={`${prefix}/projects/${project.id}/`}>{project.data.name}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {relatedArticles.length > 0 && (
+            <div class="cards-grid">
+              {relatedArticles.map((related) => (
+                <ArticleCard entry={related} lang={lang} />
+              ))}
+            </div>
+          )}
+        </section>
+      )
+    }
+
+    {
+      (prev || next) && (
+        <nav
+          class="prev-next"
+          aria-label={lang === "en" ? "Previous and next" : "Précédent et suivant"}
+        >
+          {prev ? (
+            <a
+              class="nav-card"
+              href={getArticlePath(getCanonicalSlug(prev), getArticleLanguage(prev))}
+            >
+              <span>{labels.prev[lang]}</span>
+              <strong>{prev.data.title}</strong>
+            </a>
+          ) : (
+            <span />
+          )}
+          {next ? (
+            <a
+              class="nav-card next"
+              href={getArticlePath(getCanonicalSlug(next), getArticleLanguage(next))}
+            >
+              <span>{labels.next[lang]}</span>
+              <strong>{next.data.title}</strong>
+            </a>
+          ) : (
+            <span />
+          )}
+        </nav>
+      )
+    }
+  </main>
+</BaseLayout>
+
+<style>
+  .back-link {
+    color: var(--color-fg-subtle);
+    text-decoration: none;
+    font-size: var(--text-sm);
+  }
+  .article-header {
+    max-width: 72ch;
+  }
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+  .badge {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0.15rem 0.55rem;
+    color: var(--color-fg-muted);
+    text-decoration: none;
+  }
+  .badge.muted {
+    color: var(--color-fg-subtle);
+  }
+  .dek {
+    margin: 0;
+    color: var(--color-fg-muted);
+    font-size: var(--text-lg);
+    line-height: 1.55;
+  }
+  .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 0;
+    font-size: var(--text-sm);
+  }
+  .article-meta dt {
+    color: var(--color-fg-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: var(--text-xs);
+  }
+  .article-meta dd {
+    margin: 0.15rem 0 0;
+    color: var(--color-fg-muted);
+  }
+  .translations {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--color-fg-subtle);
+  }
+  .translations a {
+    color: var(--color-fg);
+  }
+  .article-body {
+    display: grid;
+    gap: 1.5rem;
+  }
+  @media (min-width: 60em) {
+    .article-body {
+      grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+  .prose :global(h2),
+  .prose :global(h3) {
+    scroll-margin-top: 5rem;
+  }
+  .related ul {
+    margin: 0;
+    padding-left: 1rem;
+  }
+  .cards-grid {
+    display: grid;
+    gap: 1rem;
+  }
+  @media (min-width: 50em) {
+    .cards-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .prev-next {
+    display: grid;
+    gap: 0.75rem;
+  }
+  @media (min-width: 50em) {
+    .prev-next {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .nav-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1rem;
+    text-decoration: none;
+    color: var(--color-fg-muted);
+    background: var(--color-bg-elevated);
+  }
+  .nav-card.next {
+    text-align: right;
+  }
+  .nav-card span {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-fg-subtle);
+  }
+  .nav-card strong {
+    color: var(--color-fg);
+    font-size: var(--text-sm);
+    line-height: 1.4;
+  }
+</style>

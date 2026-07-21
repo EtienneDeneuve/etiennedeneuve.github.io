@@ -1,0 +1,39 @@
+---
+import ThinkingFacetContent from "../../../components/ThinkingFacetContent.astro";
+import { thinkingConfig } from "../../../config/thinking.ts";
+import {
+  getAllThinkingArticles,
+  getQualifyingTags,
+  getEntryTags,
+  slugifyTag,
+} from "../../../lib/thinking.ts";
+
+export async function getStaticPaths() {
+  const articles = await getAllThinkingArticles();
+  const qualifying = getQualifyingTags(articles);
+  return qualifying.map((tag) => ({
+    params: { tag: tag.slug },
+    props: {
+      tag,
+      entries: articles.filter((entry) =>
+        getEntryTags(entry).some((label) => slugifyTag(label) === tag.slug)
+      ),
+    },
+  }));
+}
+
+interface Props {
+  tag: { slug: string; label: string; count: number };
+  entries: Awaited<ReturnType<typeof getAllThinkingArticles>>;
+}
+
+const { tag, entries } = Astro.props;
+---
+
+<ThinkingFacetContent
+  lang="fr"
+  title={tag.label}
+  description={`Articles tagués « ${tag.label} » (${tag.count}).`}
+  entries={entries}
+  facetLabel={thinkingConfig.labels.browseTags.fr}
+/>

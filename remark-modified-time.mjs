@@ -6,12 +6,12 @@ export function remarkModifiedTime() {
   return function (tree, file) {
     try {
       const filepath = file.history[0];
-      
+
       // Get git last modified date
-      const gitLastModified = execSync(
-        `git log -1 --format=%cI -- "${filepath}"`,
-        { encoding: "utf-8", stdio: ["ignore", "pipe", "ignore"] }
-      ).trim();
+      const gitLastModified = execSync(`git log -1 --format=%cI -- "${filepath}"`, {
+        encoding: "utf-8",
+        stdio: ["ignore", "pipe", "ignore"],
+      }).trim();
 
       if (!gitLastModified) {
         // No git history, skip
@@ -42,7 +42,9 @@ export function remarkModifiedTime() {
       // Git command failed (e.g., file not in git, no git repo, etc.)
       // Silently skip - this is expected in some environments
       if (error.message && !error.message.includes("does not have any commits yet")) {
-        console.warn(`Warning: Could not get git last modified for ${file.history[0]}: ${error.message}`);
+        console.warn(
+          `Warning: Could not get git last modified for ${file.history[0]}: ${error.message}`
+        );
       }
     }
   };

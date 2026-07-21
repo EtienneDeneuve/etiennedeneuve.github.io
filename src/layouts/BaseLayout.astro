@@ -1,46 +1,80 @@
 ---
 import { slide } from "astro:transitions";
-
-// Learn about using Astro layouts:
-// https://docs.astro.build/en/core-concepts/layouts/
-
-// Component Imports
 import MainHead from "../components/MainHead.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import CustomStyles from "../components/CustomStyles.astro";
 import CustomScripts from "../components/CustomScripts.astro";
-import { siteConfig } from "../config/site.ts";
+import Analytics from "../components/Analytics.astro";
+import JsonLd from "../components/JsonLd.astro";
+import type { SeoLang, SeoOgType } from "../config/seo.ts";
+import type { JsonLdObject } from "../lib/json-ld.ts";
 
 interface Props {
-  title?: string | undefined;
-  description?: string | undefined;
-  og?: string | undefined;
+  title?: string;
+  description?: string;
+  og?: string;
+  image?: string;
+  lang?: SeoLang;
+  alternates?: { lang: SeoLang; href: string }[];
+  canonical?: string;
+  path?: string;
+  noIndex?: boolean;
+  robots?: string;
+  ogType?: SeoOgType;
+  publishedTime?: Date | string;
+  modifiedTime?: Date | string;
+  brandTitle?: boolean;
+  jsonLd?: JsonLdObject | JsonLdObject[] | null;
 }
 
-const { title, description, og } = Astro.props;
+const {
+  title,
+  description,
+  og,
+  image,
+  lang = "fr",
+  alternates = [],
+  canonical,
+  path,
+  noIndex = false,
+  robots,
+  ogType = "website",
+  publishedTime,
+  modifiedTime,
+  brandTitle,
+  jsonLd = null,
+} = Astro.props;
 ---
 
-<html
-  lang="fr"
-  transition:animate={slide({ duration: "0.4s" })}
-  prefix="og: https://ogp.me/ns#"
->
+<html lang={lang} transition:animate={slide({ duration: "0.22s" })} prefix="og: https://ogp.me/ns#">
   <head>
     <MainHead
       title={title}
       description={description}
-      og={og ? og : siteConfig.site.defaultOgImage}
+      og={og}
+      image={image}
+      alternates={alternates}
+      canonical={canonical}
+      path={path}
+      noIndex={noIndex}
+      robots={robots}
+      lang={lang}
+      ogType={ogType}
+      publishedTime={publishedTime}
+      modifiedTime={modifiedTime}
+      brandTitle={brandTitle}
     />
+    {jsonLd && <JsonLd data={jsonLd} />}
   </head>
   <body>
     <div class="stack backgrounds">
       <Nav />
       <slot />
-      <!-- <ContactCTA /> -->
       <Footer />
     </div>
     <CustomScripts />
     <CustomStyles />
+    <Analytics />
   </body>
 </html>

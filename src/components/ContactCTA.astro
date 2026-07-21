@@ -1,13 +1,24 @@
 ---
-import BookingCTA from "./BookingCTA.astro";
+import ConversionCTA from "./ConversionCTA.astro";
 import { getBrandText } from "../config/site.ts";
+
+interface Props {
+  lang?: "fr" | "en";
+}
+
+const { lang = "fr" } = Astro.props;
+const contactHref = lang === "en" ? "/en/contact/" : "/contact/";
 ---
 
 <aside>
   <h2>{getBrandText.contactCta()}</h2>
-  <BookingCTA bookingSubject="Prise de rendez-vous">
-    Prendre un rendez-vous !
-  </BookingCTA>
+  <ConversionCTA
+    href={contactHref}
+    event="cta_contact_email"
+    props={{ intent: "qualification", surface: "contact-cta", lang }}
+  >
+    {lang === "en" ? "Go to Contact" : "Aller sur Contact"}
+  </ConversionCTA>
 </aside>
 
 <style>

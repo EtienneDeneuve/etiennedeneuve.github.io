@@ -1,0 +1,64 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+  lang: "fr" | "en";
+}
+
+const { headings, lang } = Astro.props;
+const items = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
+---
+
+{
+  items.length >= 2 && (
+    <nav class="toc" aria-label={lang === "en" ? "Table of contents" : "Sommaire"}>
+      <h2>{lang === "en" ? "Table of contents" : "Sommaire"}</h2>
+      <ol>
+        {items.map((heading) => (
+          <li class={`depth-${heading.depth}`}>
+            <a href={`#${heading.slug}`}>{heading.text}</a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}
+
+<style>
+  .toc {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.1rem;
+    background: var(--color-bg-elevated);
+  }
+  .toc h2 {
+    margin: 0 0 0.65rem;
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-fg-subtle);
+  }
+  .toc ol {
+    margin: 0;
+    padding-left: 1.1rem;
+    display: grid;
+    gap: 0.35rem;
+  }
+  .toc a {
+    color: var(--color-fg-muted);
+    text-decoration: none;
+    font-size: var(--text-sm);
+  }
+  .toc a:hover {
+    color: var(--color-fg);
+    text-decoration: underline;
+  }
+  .depth-3 {
+    margin-left: 0.75rem;
+  }
+</style>

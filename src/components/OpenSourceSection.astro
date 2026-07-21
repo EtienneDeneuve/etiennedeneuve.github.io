@@ -1,0 +1,260 @@
+---
+import {
+  getGitHubProjectsByCategory,
+  isCacheStale,
+  loadGitHubProjects,
+} from "../lib/github-projects.ts";
+
+interface Props {
+  lang: "fr" | "en";
+  showStaleNotice?: boolean;
+}
+
+const { lang, showStaleNotice = true } = Astro.props;
+const cache = loadGitHubProjects();
+const groups = getGitHubProjectsByCategory(lang);
+const labels = {
+  title: lang === "en" ? "Open source" : "Open source",
+  intro:
+    lang === "en"
+      ? "Curated public repositories, grouped by intent — not an exhaustive GitHub listing. Strategic descriptions live on this site; metadata may be enriched at build time."
+      : "Repositories publics sélectionnés, regroupés par intention — pas une liste exhaustive GitHub. Les descriptions stratégiques vivent sur ce site ; les métadonnées peuvent être enrichies au build.",
+  problem: lang === "en" ? "Problem addressed" : "Problème traité",
+  status: lang === "en" ? "Status" : "Statut",
+  language: lang === "en" ? "Main language" : "Langage principal",
+  license: lang === "en" ? "License" : "Licence",
+  role: lang === "en" ? "Etienne’s role" : "Rôle d’Etienne",
+  documentation: lang === "en" ? "Documentation" : "Documentation",
+  contribution: lang === "en" ? "Contribution sought" : "Contribution recherchée",
+  lastUpdated: lang === "en" ? "Last update" : "Dernière mise à jour",
+  github: lang === "en" ? "GitHub" : "GitHub",
+  unknown: lang === "en" ? "Not available" : "Non disponible",
+  stale:
+    lang === "en"
+      ? "GitHub metadata may be outdated — last sync did not complete successfully."
+      : "Les métadonnées GitHub peuvent être périmées — la dernière synchronisation n’a pas abouti.",
+  projectLink: lang === "en" ? "Project page" : "Page projet",
+  notPublished: lang === "en" ? "Not published yet" : "Pas encore publié",
+};
+
+function formatDate(iso: string | null): string {
+  if (!iso) return labels.unknown;
+  try {
+    return new Date(iso).toLocaleDateString(lang === "en" ? "en-GB" : "fr-FR", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  } catch {
+    return labels.unknown;
+  }
+}
+
+const prefix = lang === "en" ? "/en" : "";
+---
+
+<section class="open-source stack gap-6" id="open-source">
+  <header class="stack gap-2">
+    <h2>{labels.title}</h2>
+    <p class="intro">{labels.intro}</p>
+    {
+      showStaleNotice && isCacheStale(cache) && (
+        <p class="stale-notice" role="status">
+          {labels.stale}
+        </p>
+      )
+    }
+  </header>
+
+  {
+    groups.map((group) => (
+      <section class="category stack gap-3" id={`oss-${group.category}`}>
+        <header class="category-header stack gap-1">
+          <h3>{group.label}</h3>
+          <p class="category-desc">{group.description}</p>
+        </header>
+        <div class="repo-list stack gap-4">
+          {group.repositories.map((repo) => (
+            <article class="repo-card">
+              <header class="repo-header">
+                <h4>{repo.name[lang]}</h4>
+                {repo.metadataStatus !== "fresh" && (
+                  <span class="meta-badge">{repo.metadataStatus}</span>
+                )}
+              </header>
+
+              <dl class="repo-meta">
+                <div>
+                  <dt>{labels.problem}</dt>
+                  <dd>{repo.problem[lang]}</dd>
+                </div>
+                <div>
+                  <dt>{labels.status}</dt>
+                  <dd>{repo.status[lang]}</dd>
+                </div>
+                <div>
+                  <dt>{labels.language}</dt>
+                  <dd>{repo.language ?? labels.notPublished}</dd>
+                </div>
+                <div>
+                  <dt>{labels.license}</dt>
+                  <dd>{repo.license ?? labels.unknown}</dd>
+                </div>
+                <div>
+                  <dt>{labels.role}</dt>
+                  <dd>{repo.role[lang]}</dd>
+                </div>
+                <div>
+                  <dt>{labels.documentation}</dt>
+                  <dd>
+                    {repo.documentation[lang]}
+                    {repo.documentationUrl && (
+                      <>
+                        {" "}
+                        <a href={repo.documentationUrl} target="_blank" rel="noopener noreferrer">
+                          →
+                        </a>
+                      </>
+                    )}
+                  </dd>
+                </div>
+                <div>
+                  <dt>{labels.contribution}</dt>
+                  <dd>{repo.contributionSought[lang]}</dd>
+                </div>
+                <div>
+                  <dt>{labels.lastUpdated}</dt>
+                  <dd>{formatDate(repo.lastUpdated)}</dd>
+                </div>
+              </dl>
+
+              <footer class="repo-footer">
+                {repo.relatedProjectSlug && (
+                  <a class="secondary-link" href={`${prefix}/projects/${repo.relatedProjectSlug}/`}>
+                    {labels.projectLink}
+                  </a>
+                )}
+                <a
+                  class="github-link"
+                  href={repo.htmlUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-analytics-event="cta_github"
+                  data-analytics-props={JSON.stringify({
+                    surface: "open-source",
+                    repo: `${repo.github.owner}/${repo.github.repo}`,
+                    category: repo.category,
+                    lang,
+                  })}
+                >
+                  {labels.github} — {repo.github.owner}/{repo.github.repo}
+                </a>
+              </footer>
+            </article>
+          ))}
+        </div>
+      </section>
+    ))
+  }
+</section>
+
+<style>
+  .intro {
+    margin: 0;
+    color: var(--color-fg-muted);
+    max-width: 72ch;
+  }
+  .stale-notice {
+    margin: 0;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    border: var(--border-width) solid var(--color-border);
+    background: var(--color-bg-elevated);
+    color: var(--color-fg-muted);
+    font-size: var(--text-sm);
+    max-width: 72ch;
+  }
+  .category-header h3 {
+    margin: 0;
+    font-size: var(--text-xl);
+    font-family: var(--font-body);
+  }
+  .category-desc {
+    margin: 0;
+    color: var(--color-fg-muted);
+    max-width: 72ch;
+    font-size: var(--text-sm);
+  }
+  .repo-card {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    background: var(--color-bg-elevated);
+  }
+  .repo-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-3);
+  }
+  .repo-header h4 {
+    margin: 0;
+    font-size: var(--text-lg);
+    font-family: var(--font-body);
+  }
+  .meta-badge {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-fg-subtle);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 0.15rem 0.5rem;
+  }
+  .repo-meta {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+  }
+  @media (min-width: 50em) {
+    .repo-meta {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .repo-meta dt {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-fg-subtle);
+    margin-bottom: 0.15rem;
+  }
+  .repo-meta dd {
+    margin: 0;
+    color: var(--color-fg-muted);
+    line-height: 1.5;
+  }
+  .repo-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+    padding-top: var(--space-3);
+    border-top: var(--border-width) solid var(--color-border);
+  }
+  .github-link {
+    color: var(--color-fg);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .github-link:hover {
+    color: var(--accent-regular);
+  }
+  .secondary-link {
+    color: var(--color-fg-muted);
+    font-size: var(--text-sm);
+  }
+</style>

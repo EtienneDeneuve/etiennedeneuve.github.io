@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
  * Check Resource Review Dates
- * 
+ *
  * This script checks if resources have been reviewed within the last 365 days.
  * Fails the build if any resource is older than the threshold.
- * 
+ *
  * Usage: node src/scripts/check-resource-review.mjs [--threshold-days=365]
  */
 
@@ -19,9 +19,8 @@ const rootDir = join(__dirname, "../..");
 const resourcesDir = join(rootDir, "src/content/resources");
 
 // Parse threshold from args (default: 365 days)
-const thresholdDays = process.argv
-  .find((arg) => arg.startsWith("--threshold-days="))
-  ?.split("=")[1] || "365";
+const thresholdDays =
+  process.argv.find((arg) => arg.startsWith("--threshold-days="))?.split("=")[1] || "365";
 
 const THRESHOLD_MS = parseInt(thresholdDays) * 24 * 60 * 60 * 1000;
 const now = new Date();
@@ -47,9 +46,7 @@ resourceFiles.forEach((filePath) => {
 
     const lastReviewed = new Date(data.lastReviewed);
     if (lastReviewed.valueOf() < thresholdDate.getTime()) {
-      const daysOld = Math.floor(
-        (now.getTime() - lastReviewed.getTime()) / (24 * 60 * 60 * 1000)
-      );
+      const daysOld = Math.floor((now.getTime() - lastReviewed.getTime()) / (24 * 60 * 60 * 1000));
       staleResources.push({
         file: filePath.split("/").pop(),
         title: data.title || "Unknown",
@@ -70,15 +67,15 @@ if (errors.length > 0) {
 }
 
 if (staleResources.length > 0) {
-  console.error(`\n❌ ${staleResources.length} resource(s) need review (>${thresholdDays} days old):\n`);
+  console.error(
+    `\n❌ ${staleResources.length} resource(s) need review (>${thresholdDays} days old):\n`
+  );
   staleResources.forEach((resource) => {
     console.error(
       `  - ${resource.title} (${resource.file})\n    Last reviewed: ${resource.lastReviewed} (${resource.daysOld} days ago)`
     );
   });
-  console.error(
-    `\n⚠️  Please update the 'lastReviewed' field in these files and rebuild.\n`
-  );
+  console.error(`\n⚠️  Please update the 'lastReviewed' field in these files and rebuild.\n`);
   process.exit(1);
 }
 

@@ -1,0 +1,33 @@
+---
+import type { DisclosureLevel } from "../lib/publication-policy.ts";
+import { disclosureLabel } from "../lib/publication-policy.ts";
+
+interface Props {
+  level: DisclosureLevel;
+  lang?: "fr" | "en";
+}
+
+const { level, lang = "fr" } = Astro.props;
+---
+
+<span class="disclosure-badge" data-level={level}>
+  {disclosureLabel(level, lang)}
+</span>
+
+<style>
+  .disclosure-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: var(--text-xs);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.55rem;
+    border-radius: var(--radius-md);
+    border: var(--border-width) solid var(--color-border);
+    color: var(--color-fg-muted);
+    background: var(--color-bg-elevated);
+  }
+  .disclosure-badge[data-level="public"] {
+    border-color: color-mix(in srgb, var(--accent-regular) 40%, var(--gray-700));
+  }
+</style>

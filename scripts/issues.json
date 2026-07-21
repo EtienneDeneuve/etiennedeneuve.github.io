@@ -43,9 +43,7 @@
       "parent": "SH-FE-01",
       "title": "Validator: numeric metrics require `source`",
       "labels": ["task", "validator"],
-      "acceptance": [
-        "Any metric field containing numbers/percent fails without source"
-      ]
+      "acceptance": ["Any metric field containing numbers/percent fails without source"]
     },
     {
       "id": "SH-TS-02",
@@ -95,9 +93,7 @@
       "parent": "SH-FE-01",
       "title": "Validator: published/updated date integrity (no fake global updated date)",
       "labels": ["task", "validator", "content"],
-      "acceptance": [
-        "Detects suspicious identical updated dates across many posts/pages"
-      ]
+      "acceptance": ["Detects suspicious identical updated dates across many posts/pages"]
     },
     {
       "id": "SH-FE-02",
@@ -189,10 +185,7 @@
       "parent": "SH-FE-05",
       "title": "Lighthouse CI baseline + artifact upload",
       "labels": ["task", "ci", "perf"],
-      "acceptance": [
-        "Runs against key routes per repo",
-        "Uploads HTML reports as artifacts"
-      ]
+      "acceptance": ["Runs against key routes per repo", "Uploads HTML reports as artifacts"]
     },
 
     {
@@ -213,9 +206,7 @@
       "parent": "SH-FE-02",
       "title": "OG generator: templates per brand + per content type",
       "labels": ["task", "seo"],
-      "acceptance": [
-        "Different OG templates for: blog, offer, case study, whitepaper, event"
-      ]
+      "acceptance": ["Different OG templates for: blog, offer, case study, whitepaper, event"]
     },
     {
       "id": "SH-TS-11",
@@ -248,10 +239,7 @@
       "parent": "SH-EP-02",
       "title": "CI: release workflow (tag tooling, changelog, version pin)",
       "labels": ["feature", "ci", "release"],
-      "acceptance": [
-        "Tooling package can be pinned per repo",
-        "Changelog generated for changes"
-      ]
+      "acceptance": ["Tooling package can be pinned per repo", "Changelog generated for changes"]
     },
     {
       "id": "SH-FE-08",
@@ -305,9 +293,7 @@
       "parent": "SH-EP-01",
       "title": "Privacy/compliance scaffolds (legal pages presence checks)",
       "labels": ["feature", "privacy", "seo"],
-      "acceptance": [
-        "Validators ensure required legal routes exist when forms/analytics enabled"
-      ]
+      "acceptance": ["Validators ensure required legal routes exist when forms/analytics enabled"]
     },
 
     {
@@ -316,10 +302,7 @@
       "repo": "shared-tooling",
       "title": "Cross-site funnel linking + UTM discipline + link integrity",
       "labels": ["epic", "growth", "seo"],
-      "acceptance": [
-        "Consistent UTMs on cross-site links",
-        "Linkcheck prevents drift and 404s"
-      ]
+      "acceptance": ["Consistent UTMs on cross-site links", "Linkcheck prevents drift and 404s"]
     },
     {
       "id": "CX-FE-01",
@@ -328,10 +311,7 @@
       "parent": "CX-EP-01",
       "title": "Cross-site link rules + UTM helpers",
       "labels": ["feature", "growth"],
-      "acceptance": [
-        "Helper for generating links with UTMs",
-        "Docs for where to link from/to"
-      ]
+      "acceptance": ["Helper for generating links with UTMs", "Docs for where to link from/to"]
     },
     {
       "id": "CX-FE-02",
@@ -399,9 +379,7 @@
       "parent": "SH-FE-11",
       "title": "Define unified telemetry schema (events + attributes + naming registry)",
       "labels": ["task", "observability", "analytics"],
-      "acceptance": [
-        "Event registry + payload schema validation exists (CI gate)"
-      ]
+      "acceptance": ["Event registry + payload schema validation exists (CI gate)"]
     },
     {
       "id": "SH-TS-15",
@@ -459,9 +437,7 @@
       "parent": "SH-FE-13",
       "title": "Define KPI payloads (lighthouse scores, linkcheck counts, build duration)",
       "labels": ["task", "ci", "analytics"],
-      "acceptance": [
-        "Stable series names + labels (repo, branch, commit, environment)"
-      ]
+      "acceptance": ["Stable series names + labels (repo, branch, commit, environment)"]
     },
     {
       "id": "SH-FE-14",
@@ -483,9 +459,7 @@
       "parent": "SH-FE-14",
       "title": "Umami integration templates for Astro + event tracking mapping",
       "labels": ["task", "analytics"],
-      "acceptance": [
-        "Works with strict privacy defaults; no cookies unless enabled"
-      ]
+      "acceptance": ["Works with strict privacy defaults; no cookies unless enabled"]
     },
     {
       "id": "SH-FE-15",
@@ -586,10 +560,7 @@
       "parent": "MD-EP-01",
       "title": "Domiciliation SLA + workflow + upsell meeting credits",
       "labels": ["feature", "domiciliation", "upsell"],
-      "acceptance": [
-        "SLA block is data-driven and visible",
-        "Add-on packs + bundle displayed"
-      ]
+      "acceptance": ["SLA block is data-driven and visible", "Add-on packs + bundle displayed"]
     },
     {
       "id": "MD-FE-04",
@@ -623,10 +594,7 @@
       "parent": "MD-EP-02",
       "title": "/visit funnel (WhatsApp + booking + fallback + form)",
       "labels": ["feature", "conversion"],
-      "acceptance": [
-        "All visit CTAs route to /visit",
-        "No-JS fallback exists (mailto/phone)"
-      ]
+      "acceptance": ["All visit CTAs route to /visit", "No-JS fallback exists (mailto/phone)"]
     },
     {
       "id": "MD-FE-06",
@@ -636,10 +604,7 @@
       "title": "Google review loop (config-driven, non-spam)",
       "labels": ["feature", "reputation"],
       "depends_on": ["MD-FE-05"],
-      "acceptance": [
-        "Review CTA shown after delay",
-        "Review URL is config-driven"
-      ]
+      "acceptance": ["Review CTA shown after delay", "Review URL is config-driven"]
     },
 
     {
@@ -661,10 +626,7 @@
       "parent": "MD-EP-03",
       "title": "Gallery refactor (captions + alt + responsive + filters)",
       "labels": ["feature", "ux", "a11y"],
-      "acceptance": [
-        "All images have alt + caption",
-        "Lazy load + responsive sizes"
-      ]
+      "acceptance": ["All images have alt + caption", "Lazy load + responsive sizes"]
     },
     {
       "id": "MD-FE-08",
@@ -673,10 +635,7 @@
       "parent": "MD-EP-03",
       "title": "ProofBlock (facts + testimonial policy)",
       "labels": ["feature", "trust"],
-      "acceptance": [
-        "Facts are config-driven",
-        "Testimonials enforce policy via validator"
-      ]
+      "acceptance": ["Facts are config-driven", "Testimonials enforce policy via validator"]
     },
 
     {
@@ -698,10 +657,7 @@
       "parent": "MD-EP-04",
       "title": "Local SEO cluster pages (coworking/domiciliation/rooms)",
       "labels": ["feature", "seo"],
-      "acceptance": [
-        "Pages exist with FAQs and CTAs",
-        "Sitemap/robots/canonical/hreflang correct"
-      ]
+      "acceptance": ["Pages exist with FAQs and CTAs", "Sitemap/robots/canonical/hreflang correct"]
     },
 
     {
@@ -832,9 +788,7 @@
       "parent": "MD-EP-05",
       "title": "Form integration tests (local) for visit/contact/rooms/teams",
       "labels": ["feature", "ci", "ops"],
-      "acceptance": [
-        "CI runs a local submission test suite with deterministic outputs"
-      ]
+      "acceptance": ["CI runs a local submission test suite with deterministic outputs"]
     },
     {
       "id": "MD-FE-19",
@@ -892,10 +846,7 @@
       "parent": "OM-EP-01",
       "title": "Retainer tiers (/retainers) + PDFs",
       "labels": ["feature", "recurring", "sales"],
-      "acceptance": [
-        "3 tiers with rituals/deliverables/SLA",
-        "Tier one-pagers generated at build"
-      ]
+      "acceptance": ["3 tiers with rituals/deliverables/SLA", "Tier one-pagers generated at build"]
     },
 
     {
@@ -916,10 +867,7 @@
       "parent": "OM-EP-02",
       "title": "Case studies engine (listing + detail + schema + OG)",
       "labels": ["feature", "trust", "seo"],
-      "acceptance": [
-        "Listing + detail pages exist",
-        "No fake logos/numbers; sources enforced"
-      ]
+      "acceptance": ["Listing + detail pages exist", "No fake logos/numbers; sources enforced"]
     },
     {
       "id": "OM-FE-04",
@@ -928,10 +876,7 @@
       "parent": "OM-EP-02",
       "title": "Claims/testimonials audit + ProofBlock refactor",
       "labels": ["feature", "trust"],
-      "acceptance": [
-        "Unverifiable claims removed/rephrased",
-        "ProofBlock is used site-wide"
-      ]
+      "acceptance": ["Unverifiable claims removed/rephrased", "ProofBlock is used site-wide"]
     },
 
     {
@@ -952,10 +897,7 @@
       "parent": "OM-EP-03",
       "title": "Whitepapers content model + detail pages + optional gating",
       "labels": ["feature", "content", "conversion"],
-      "acceptance": [
-        "Collection schema enforced",
-        "Optional gate stores leads durably"
-      ]
+      "acceptance": ["Collection schema enforced", "Optional gate stores leads durably"]
     },
     {
       "id": "OM-FE-06",
@@ -964,10 +906,7 @@
       "parent": "OM-EP-03",
       "title": "i18n hardening (dictionaries + hreflang + canonical + CI heuristic)",
       "labels": ["feature", "i18n", "seo"],
-      "acceptance": [
-        "Locale pages clean",
-        "CI fails on mixed-language regressions"
-      ]
+      "acceptance": ["Locale pages clean", "CI fails on mixed-language regressions"]
     },
 
     {
@@ -976,10 +915,7 @@
       "repo": "omnivya",
       "title": "Service pages standardization (decision-ready templates)",
       "labels": ["epic", "conversion", "seo"],
-      "acceptance": [
-        "All service pages follow same template",
-        "Service JSON-LD present"
-      ]
+      "acceptance": ["All service pages follow same template", "Service JSON-LD present"]
     },
     {
       "id": "OM-FE-07",
@@ -988,9 +924,7 @@
       "parent": "OM-EP-04",
       "title": "Service template + schema + CTA bundle",
       "labels": ["feature", "conversion"],
-      "acceptance": [
-        "who/typical/deliverables/metrics/prereqs/week1/cta sections exist"
-      ]
+      "acceptance": ["who/typical/deliverables/metrics/prereqs/week1/cta sections exist"]
     },
 
     {
@@ -1023,10 +957,7 @@
       "parent": "OM-EP-05",
       "title": "Booking resilience (no-JS fallback + email + calendar link)",
       "labels": ["feature", "conversion"],
-      "acceptance": [
-        "Booking CTA always has fallback paths",
-        "No dead-ends on disabled JS"
-      ]
+      "acceptance": ["Booking CTA always has fallback paths", "No dead-ends on disabled JS"]
     },
     {
       "id": "OM-FE-10",
@@ -1060,10 +991,7 @@
       "title": "Service one-pagers generation + link placement on every service page",
       "labels": ["feature", "sales", "automation"],
       "depends_on": ["SH-FE-03", "OM-FE-07"],
-      "acceptance": [
-        "Every service page links to its PDF",
-        "CI validates PDFs exist"
-      ]
+      "acceptance": ["Every service page links to its PDF", "CI validates PDFs exist"]
     },
     {
       "id": "OM-FE-13",
@@ -1121,10 +1049,7 @@
       "parent": "PS-EP-01",
       "title": "Lead magnets PDFs (audit checklist, incident readiness) + tracking",
       "labels": ["feature", "sales", "automation"],
-      "acceptance": [
-        "PDFs generated at build",
-        "Downloads tracked via analytics abstraction"
-      ]
+      "acceptance": ["PDFs generated at build", "Downloads tracked via analytics abstraction"]
     },
     {
       "id": "PS-FE-04",
@@ -1133,10 +1058,7 @@
       "parent": "PS-EP-01",
       "title": "Blog retention pack (TOC, related posts, takeaways, date integrity)",
       "labels": ["feature", "content", "seo"],
-      "acceptance": [
-        "TOC + related + takeaways wired",
-        "Published/updated logic fixed"
-      ]
+      "acceptance": ["TOC + related + takeaways wired", "Published/updated logic fixed"]
     },
 
     {
@@ -1158,10 +1080,7 @@
       "parent": "PS-EP-02",
       "title": "Speaking page + build-time media kit PDF",
       "labels": ["feature", "sales", "automation"],
-      "acceptance": [
-        "/speaking exists with topics/formats",
-        "Media kit PDF generated and linked"
-      ]
+      "acceptance": ["/speaking exists with topics/formats", "Media kit PDF generated and linked"]
     },
     {
       "id": "PS-FE-06",
@@ -1182,10 +1101,7 @@
       "parent": "PS-EP-02",
       "title": "Resources catalog + last_reviewed freshness enforcement",
       "labels": ["feature", "content", "seo"],
-      "acceptance": [
-        "/resources is filterable and useful",
-        "Build fails if last_reviewed stale"
-      ]
+      "acceptance": ["/resources is filterable and useful", "Build fails if last_reviewed stale"]
     },
     {
       "id": "PS-FE-08",
@@ -1194,10 +1110,7 @@
       "parent": "PS-EP-01",
       "title": "Pre-qual form + durable lead storage (webhook/DB) before booking",
       "labels": ["feature", "conversion", "ops"],
-      "acceptance": [
-        "Lead stored with UTMs and persona path",
-        "No JS hard dependency"
-      ]
+      "acceptance": ["Lead stored with UTMs and persona path", "No JS hard dependency"]
     },
     {
       "id": "PS-FE-09",

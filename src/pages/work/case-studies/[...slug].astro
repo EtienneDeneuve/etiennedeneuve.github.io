@@ -1,0 +1,158 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import DisclosureBadge from "../../../components/DisclosureBadge.astro";
+import EvidenceList from "../../../components/EvidenceList.astro";
+import OutcomeMetric from "../../../components/OutcomeMetric.astro";
+import { getPublishableEntries } from "../../../lib/publication-policy.ts";
+import {
+  articleJsonLd,
+  breadcrumbJsonLd,
+  buildJsonLdGraph,
+  personJsonLd,
+} from "../../../lib/json-ld.ts";
+
+interface Props {
+  entry: CollectionEntry<"caseStudies">;
+}
+
+export async function getStaticPaths() {
+  const caseStudies = getPublishableEntries(await getCollection("caseStudies"));
+  return caseStudies.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const verifiedMetrics = entry.data.outcomes.metrics.filter((metric) => metric.verified);
+const casePath = `/work/case-studies/${entry.id}/`;
+const jsonLd = buildJsonLdGraph([
+  personJsonLd(),
+  articleJsonLd({
+    title: entry.data.title,
+    description: entry.data.summary,
+    path: casePath,
+    lang: "fr",
+    datePublished: entry.data.pubDate,
+    draft: entry.data.draft,
+  }),
+  breadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "Work", path: "/work/" },
+    { name: "Case Studies", path: "/work/case-studies/" },
+    { name: entry.data.title, path: casePath },
+  ]),
+]);
+---
+
+<BaseLayout
+  title={entry.data.title}
+  description={entry.data.summary}
+  lang="fr"
+  path={casePath}
+  ogType="article"
+  publishedTime={entry.data.pubDate}
+  alternates={[
+    { lang: "fr", href: casePath },
+    { lang: "en", href: `/en/work/case-studies/${entry.id}/` },
+  ]}
+  jsonLd={jsonLd}
+>
+  <main class="wrapper stack gap-8">
+    <a href="/work/case-studies/">← Case Studies</a>
+
+    <header class="stack gap-3">
+      <DisclosureBadge level={entry.data.disclosureLevel} lang="fr" />
+      <h1>{entry.data.title}</h1>
+      <p>{entry.data.summary}</p>
+      <p class="meta">{entry.data.industry} — {entry.data.context}</p>
+    </header>
+
+    {
+      entry.data.constraints.length > 0 && (
+        <section class="stack gap-2">
+          <h2>Contraintes</h2>
+          <ul>
+            {entry.data.constraints.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      entry.data.decisions.length > 0 && (
+        <section class="stack gap-2">
+          <h2>Décisions</h2>
+          <ul>
+            {entry.data.decisions.map((decision) => (
+              <li>{decision}</li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      entry.data.workPerformed.length > 0 && (
+        <section class="stack gap-2">
+          <h2>Travail réalisé</h2>
+          <ul>
+            {entry.data.workPerformed.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <section class="stack gap-3">
+      <h2>Résultats</h2>
+      {entry.data.outcomes.summary && <p>{entry.data.outcomes.summary}</p>}
+      {
+        verifiedMetrics.length > 0 ? (
+          <div class="metrics">
+            {verifiedMetrics.map((metric) => (
+              <OutcomeMetric
+                label={metric.label}
+                before={metric.before}
+                after={metric.after}
+                unit={metric.unit}
+                source={metric.source}
+                verified={metric.verified}
+                lang="fr"
+              />
+            ))}
+          </div>
+        ) : (
+          <p class="note">
+            Aucune métrique vérifiée n’est publiée pour cette étude. Voir les preuves associées.
+          </p>
+        )
+      }
+    </section>
+
+    <section class="stack gap-3">
+      <h2>Preuves</h2>
+      <EvidenceList evidence={entry.data.evidence} lang="fr" />
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .meta {
+    color: var(--gray-400);
+    margin: 0;
+  }
+  .metrics {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .note {
+    color: var(--gray-400);
+    margin: 0;
+  }
+</style>

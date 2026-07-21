@@ -1,0 +1,159 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import InterventionMode from "../components/InterventionMode.astro";
+import { siteConfig } from "../config/site.ts";
+import { workConfig } from "../config/work.ts";
+import { resolveContentRefs } from "../lib/resolve-content.ts";
+import {
+  breadcrumbJsonLd,
+  buildJsonLdGraph,
+  collectionPageJsonLd,
+  organizationJsonLd,
+  personJsonLd,
+  serviceJsonLd,
+} from "../lib/json-ld.ts";
+
+interface Props {
+  lang: "fr" | "en";
+}
+
+const { lang } = Astro.props;
+const config = workConfig;
+const prefix = lang === "en" ? "/en" : "";
+const labels = Object.fromEntries(
+  Object.entries(config.labels).map(([key, value]) => [key, value[lang]])
+) as Record<keyof typeof config.labels, string>;
+
+const [articles, projects, resources] = await Promise.all([
+  getCollection("blog"),
+  getCollection("projects"),
+  getCollection("resources"),
+]);
+
+const collections = { articles, projects, resources };
+const calendarUrl = siteConfig.omnivya.contactPage;
+const emailBase = siteConfig.omnivya.email;
+
+const modes = config.modes.map((mode) => ({
+  id: mode.id,
+  title: mode.title[lang],
+  objective: mode.objective[lang],
+  scopeExamples: mode.scopeExamples[lang],
+  possibleDeliverables: mode.possibleDeliverables?.[lang],
+  startingSituation: mode.startingSituation[lang],
+  expectedOutcome: mode.expectedOutcome[lang],
+  engagementShape: mode.engagementShape[lang],
+  included: mode.included[lang],
+  excluded: mode.excluded[lang],
+  proofs: resolveContentRefs(mode.proofs, collections, lang),
+  ctaLabel: mode.cta.label[lang],
+  ctaEmail: `mailto:${emailBase}?subject=${encodeURIComponent(mode.cta.subject[lang])}`,
+  secondaryLink: mode.cta.secondaryLink?.[lang],
+}));
+
+const speaking = config.speaking;
+const speakingEmail = `mailto:${emailBase}?subject=${encodeURIComponent(speaking.cta.subject[lang])}`;
+const workPath = `${prefix}/work/`;
+
+const jsonLd = buildJsonLdGraph([
+  personJsonLd(),
+  organizationJsonLd(),
+  collectionPageJsonLd({
+    name: config.meta.title[lang],
+    description: config.meta.description[lang],
+    path: workPath,
+    lang,
+  }),
+  breadcrumbJsonLd([
+    { name: "Home", path: prefix || "/" },
+    { name: config.meta.title[lang], path: workPath },
+  ]),
+  ...modes.map((mode) =>
+    serviceJsonLd({
+      name: mode.title,
+      description: mode.objective,
+      url: `${workPath}#${mode.id}`,
+      serviceType: mode.title,
+    })
+  ),
+]);
+---
+
+<BaseLayout
+  title={config.meta.title[lang]}
+  description={config.meta.description[lang]}
+  lang={lang}
+  path={workPath}
+  alternates={[
+    { lang: "fr", href: "/work/" },
+    { lang: "en", href: "/en/work/" },
+  ]}
+  jsonLd={jsonLd}
+>
+  <main class="wrapper stack gap-12">
+    <section class="stack gap-4 page-hero">
+      <p class="eyebrow">{config.meta.eyebrow[lang]}</p>
+      <h1>{config.meta.title[lang]}</h1>
+      <p class="lede">{config.meta.intro[lang]}</p>
+      <p class="subtle">
+        <a href={`${prefix}/work/case-studies/`}>{labels.caseStudiesLink}</a>
+      </p>
+    </section>
+
+    <div class="stack gap-8">
+      {
+        modes.map((mode) => (
+          <InterventionMode
+            id={mode.id}
+            title={mode.title}
+            objective={mode.objective}
+            scopeExamples={mode.scopeExamples}
+            possibleDeliverables={mode.possibleDeliverables}
+            startingSituation={mode.startingSituation}
+            expectedOutcome={mode.expectedOutcome}
+            engagementShape={mode.engagementShape}
+            included={mode.included}
+            excluded={mode.excluded}
+            proofs={mode.proofs}
+            ctaLabel={mode.ctaLabel}
+            ctaEmail={mode.ctaEmail}
+            calendarUrl={calendarUrl}
+            secondaryLink={mode.secondaryLink}
+            labels={labels}
+          />
+        ))
+      }
+    </div>
+
+    <section class="speaking-block stack gap-4" id="speaking-advisory">
+      <h2>{speaking.title[lang]}</h2>
+      <p>{speaking.summary[lang]}</p>
+      <ul class="list">
+        {speaking.included[lang].map((item) => <li>{item}</li>)}
+      </ul>
+      <div class="actions">
+        <a class="btn-primary" href={`${prefix}/speaking/`}>{labels.speakingLink}</a>
+        <a class="btn-secondary" href={speakingEmail}>{labels.emailCta}</a>
+        <a class="btn-secondary" href={calendarUrl} target="_blank" rel="noopener noreferrer">
+          {labels.calendarCta}
+        </a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .speaking-block {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    background: var(--color-bg-elevated);
+  }
+  .list {
+    display: grid;
+    gap: var(--space-2);
+    padding-left: 1.25rem;
+    color: var(--color-fg-muted);
+  }
+</style>

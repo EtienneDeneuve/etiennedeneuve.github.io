@@ -41,6 +41,7 @@ Ce document explique comment configurer la récupération automatique des statis
 ### 1. GitHub Token (Optionnel mais recommandé)
 
 1. Créer un Personal Access Token sur GitHub :
+
    - Aller sur <https://github.com/settings/tokens>
    - Générer un nouveau token (classic)
    - Permissions : `public_repo` (read-only)
@@ -55,11 +56,13 @@ Ce document explique comment configurer la récupération automatique des statis
 ### 2. YouTube API Key (Optionnel)
 
 1. Créer un projet sur Google Cloud Console :
+
    - Aller sur <https://console.cloud.google.com/>
    - Créer un nouveau projet
    - Activer l'API "YouTube Data API v3"
 
 2. Créer une clé API :
+
    - APIs & Services → Credentials
    - Créer une clé API
    - (Optionnel) Restreindre la clé à YouTube Data API v3
@@ -72,11 +75,13 @@ Ce document explique comment configurer la récupération automatique des statis
 ### 3. LinkedIn Access Token (Optionnel, pour données complètes)
 
 1. Créer une application LinkedIn :
+
    - Aller sur <https://www.linkedin.com/developers/apps>
    - Créer une nouvelle app
    - Obtenir les permissions : `r_liteprofile`, `r_emailaddress`
 
 2. Générer un token OAuth :
+
    - Suivre le processus OAuth 2.0
    - Obtenir un access token
 
@@ -171,10 +176,12 @@ Les statistiques sont mises à jour :
 ## ⚠️ Limitations
 
 1. **Rate Limits** :
+
    - GitHub : 60 req/h sans token, 5000 req/h avec token
    - YouTube : 10,000 units/jour (gratuit)
 
 2. **Données en cache** :
+
    - Les stats sont mises à jour uniquement au build
    - Pour des stats en temps réel, utiliser une API côté client
 

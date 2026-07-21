@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
  * Audit Pages with Unlighthouse
- * 
+ *
  * Builds the site, starts preview server, and runs unlighthouse
  * on the new pages (offers, case-studies, speaking).
- * 
+ *
  * Usage: node src/scripts/audit-pages.mjs
  */
 
@@ -54,7 +54,7 @@ async function build() {
 async function startPreview() {
   return new Promise((resolve, reject) => {
     console.log("🚀 Starting preview server...");
-    
+
     previewProcess = spawn("pnpm", ["run", "preview"], {
       cwd: rootDir,
       stdio: ["ignore", "pipe", "pipe"],
@@ -62,12 +62,12 @@ async function startPreview() {
     });
 
     let output = "";
-    
+
     previewProcess.stdout.on("data", (data) => {
       const text = data.toString();
       output += text;
       process.stdout.write(text);
-      
+
       // Check if server is ready
       if (text.includes("Local:") || text.includes("localhost:4321")) {
         console.log("\n✅ Preview server ready\n");
@@ -103,14 +103,14 @@ async function startPreview() {
  */
 async function runUnlighthouse() {
   console.log("🔍 Running Unlighthouse audit...\n");
-  
+
   try {
     // Unlighthouse scans specific URLs using --urls option
     const baseUrl = "http://localhost:4321";
-    const urls = PAGES_TO_AUDIT.map(url => url.replace(baseUrl, "")).join(",");
-    
+    const urls = PAGES_TO_AUDIT.map((url) => url.replace(baseUrl, "")).join(",");
+
     console.log(`📋 Auditing pages: ${urls}\n`);
-    
+
     const { stdout, stderr } = await execAsync(
       `npx unlighthouse --site ${baseUrl} --urls ${urls} --output-path .unlighthouse --samples 1`,
       {
@@ -119,12 +119,12 @@ async function runUnlighthouse() {
         maxBuffer: 10 * 1024 * 1024, // 10MB buffer
       }
     );
-    
+
     console.log(stdout);
     if (stderr) {
       console.warn(stderr);
     }
-    
+
     console.log("\n✅ Audit complete!");
     console.log("📊 Results available in .unlighthouse/ directory");
     console.log("🌐 Open .unlighthouse/index.html in your browser to view results\n");
@@ -141,7 +141,7 @@ function stopPreview() {
   if (previewProcess && !previewProcess.killed) {
     console.log("\n🛑 Stopping preview server...");
     previewProcess.kill("SIGTERM");
-    
+
     // Force kill after 5 seconds if still running
     setTimeout(() => {
       if (previewProcess && !previewProcess.killed) {

@@ -1,0 +1,93 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import EcosystemMap from "../components/EcosystemMap.astro";
+import OpenSourceSection from "../components/OpenSourceSection.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { projectsPageConfig } from "../config/projects-page.ts";
+import { getPublishableEntries } from "../lib/publication-policy.ts";
+import { sortProjects } from "../lib/projects-i18n.ts";
+import { getSortedGitHubProjects } from "../lib/github-projects.ts";
+import {
+  breadcrumbJsonLd,
+  buildJsonLdGraph,
+  collectionPageJsonLd,
+  softwareSourceCodeJsonLd,
+} from "../lib/json-ld.ts";
+
+interface Props {
+  lang: "fr" | "en";
+}
+
+const { lang } = Astro.props;
+const prefix = lang === "en" ? "/en" : "";
+const projectsPath = `${prefix}/projects/`;
+const config = projectsPageConfig;
+const projects = sortProjects(getPublishableEntries(await getCollection("projects")));
+const githubProjects = getSortedGitHubProjects(lang);
+
+const jsonLd = buildJsonLdGraph([
+  collectionPageJsonLd({
+    name: config.meta.title[lang],
+    description: config.meta.description[lang],
+    path: projectsPath,
+    lang,
+  }),
+  breadcrumbJsonLd([
+    { name: "Home", path: prefix || "/" },
+    { name: config.meta.title[lang], path: projectsPath },
+  ]),
+  ...githubProjects.map((repo) =>
+    softwareSourceCodeJsonLd({
+      name: repo.name[lang],
+      description: repo.problem[lang],
+      codeRepository: repo.htmlUrl,
+      programmingLanguage: repo.language,
+      license: repo.license,
+      url: projectsPath,
+    })
+  ),
+]);
+---
+
+<BaseLayout
+  title={config.meta.title[lang]}
+  description={config.meta.description[lang]}
+  lang={lang}
+  path={projectsPath}
+  alternates={[
+    { lang: "fr", href: "/projects/" },
+    { lang: "en", href: "/en/projects/" },
+  ]}
+  jsonLd={jsonLd}
+>
+  <main class="wrapper stack gap-12">
+    <section class="stack gap-4 page-hero">
+      <p class="eyebrow">{config.meta.eyebrow[lang]}</p>
+      <h1>{config.meta.title[lang]}</h1>
+      <p class="lede">{config.meta.intro[lang]}</p>
+    </section>
+
+    <EcosystemMap lang={lang} />
+
+    <section class="stack gap-4">
+      <h2 class="section-title">
+        {lang === "en" ? "Proof entries" : "Entrées de preuve"}
+      </h2>
+      <div class="grid-auto">
+        {projects.map((project) => <ProjectCard entry={project} lang={lang} />)}
+      </div>
+    </section>
+
+    <OpenSourceSection lang={lang} />
+  </main>
+</BaseLayout>
+
+<style>
+  .hero {
+    max-width: 72ch;
+  }
+  .section-title {
+    margin: 0;
+  }
+</style>

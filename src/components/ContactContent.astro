@@ -1,0 +1,162 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ConversionCTA from "../components/ConversionCTA.astro";
+import { contactConfig } from "../config/contact.ts";
+import { siteConfig } from "../config/site.ts";
+import {
+  breadcrumbJsonLd,
+  buildJsonLdGraph,
+  collectionPageJsonLd,
+  personJsonLd,
+} from "../lib/json-ld.ts";
+
+interface Props {
+  lang: "fr" | "en";
+}
+
+const { lang } = Astro.props;
+const config = contactConfig;
+const labels = config.labels;
+const prefix = lang === "en" ? "/en" : "";
+const contactPath = `${prefix}/contact/`;
+
+const jsonLd = buildJsonLdGraph([
+  personJsonLd(),
+  collectionPageJsonLd({
+    name: config.meta.title[lang],
+    description: config.meta.description[lang],
+    path: contactPath,
+    lang,
+  }),
+  breadcrumbJsonLd([
+    { name: "Home", path: prefix || "/" },
+    { name: config.meta.title[lang], path: contactPath },
+  ]),
+]);
+---
+
+<BaseLayout
+  title={config.meta.title[lang]}
+  description={config.meta.description[lang]}
+  lang={lang}
+  path={contactPath}
+  alternates={[
+    { lang: "fr", href: "/contact/" },
+    { lang: "en", href: "/en/contact/" },
+  ]}
+  jsonLd={jsonLd}
+>
+  <main class="wrapper contact stack gap-10">
+    <header class="page-hero stack gap-3">
+      <h1>{config.meta.title[lang]}</h1>
+      <p class="lede">{config.meta.intro[lang]}</p>
+      <p class="subtle">
+        {labels.emailAddress[lang]}:{" "}
+        <a href={`mailto:${siteConfig.omnivya.email}`}>{siteConfig.omnivya.email}</a>
+      </p>
+    </header>
+
+    <section class="intents stack gap-4" aria-label={config.meta.title[lang]}>
+      {
+        config.intents.map((intent) => {
+          const subject = intent.emailSubject[lang];
+          const href = config.buildMailto(subject);
+          return (
+            <article class="intent" id={intent.id}>
+              <header class="stack gap-2">
+                <h2>{intent.title[lang]}</h2>
+                <p>{intent.summary[lang]}</p>
+              </header>
+              <div class="fields stack gap-2">
+                <h3>{labels.includeInEmail[lang]}</h3>
+                <ul>
+                  {intent.fields.map((field) => (
+                    <li>{field[lang]}</li>
+                  ))}
+                </ul>
+              </div>
+              <ConversionCTA
+                href={href}
+                event="cta_contact_email"
+                props={{ intent: intent.eventIntent, surface: "contact", lang }}
+              >
+                {labels.writeEmail[lang]}
+              </ConversionCTA>
+            </article>
+          );
+        })
+      }
+    </section>
+
+    <section class="calendar stack gap-3" id="calendar">
+      <h2>{config.calendar.label[lang]}</h2>
+      <p>{config.calendar.note[lang]}</p>
+      <ConversionCTA
+        href={config.calendar.href}
+        event="cta_booking"
+        props={{ surface: "contact", lang }}
+        variant="secondary"
+        external
+      >
+        {config.calendar.label[lang]}
+      </ConversionCTA>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .contact {
+    max-width: 72ch;
+  }
+  .intro {
+    margin: 0;
+    color: var(--color-fg-muted);
+    line-height: 1.6;
+    font-size: var(--text-lg);
+  }
+  .address {
+    margin: 0;
+    color: var(--color-fg-subtle);
+    font-size: var(--text-sm);
+  }
+  .intent {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1.15rem 1.25rem;
+    background: var(--color-bg-elevated);
+    display: grid;
+    gap: 0.85rem;
+  }
+  .intent h2 {
+    margin: 0;
+    font-size: var(--text-lg);
+  }
+  .intent p {
+    margin: 0;
+    color: var(--color-fg-muted);
+    line-height: 1.55;
+  }
+  .fields h3 {
+    margin: 0;
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-fg-subtle);
+  }
+  .fields ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    color: var(--color-fg-muted);
+    display: grid;
+    gap: 0.3rem;
+  }
+  .calendar {
+    border-top: var(--border-width) solid var(--color-border);
+    padding-top: 1.5rem;
+  }
+  .calendar p {
+    margin: 0;
+    color: var(--color-fg-subtle);
+    font-size: var(--text-sm);
+  }
+</style>

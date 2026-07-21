@@ -1,5 +1,5 @@
 ---
-title: "Side loading application without SCCM - Part 2"
+title: "Side loading application without SCCM - Part 3"
 description: "Automatisez le déploiement des applications avec Powershell : simplifiez le sideloading d'Appx et gérez les certificats. Découvrez le script complet sur GitHub."
 tags:
   [

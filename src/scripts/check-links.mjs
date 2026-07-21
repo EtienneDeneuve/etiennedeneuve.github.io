@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
  * Link Checker Script
- * 
+ *
  * Checks all links in markdown and HTML files for broken links, redirects, and anchors.
- * 
+ *
  * Usage: node src/scripts/check-links.mjs
  */
 
@@ -71,7 +71,7 @@ function collectFiles(dir, fileList = []) {
 // Extract links from content
 function extractLinks(content, filePath) {
   const links = [];
-  
+
   // Markdown links: [text](url)
   const markdownLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
   let match;
@@ -156,12 +156,8 @@ async function main() {
 
   // Group by status
   const ignored = allLinks.filter((l) => shouldIgnore(l.url));
-  const relative = allLinks.filter(
-    (l) => l.url.startsWith("/") || !l.url.includes("://")
-  );
-  const external = allLinks.filter(
-    (l) => !shouldIgnore(l.url) && l.url.includes("://")
-  );
+  const relative = allLinks.filter((l) => l.url.startsWith("/") || !l.url.includes("://"));
+  const external = allLinks.filter((l) => !shouldIgnore(l.url) && l.url.includes("://"));
 
   console.log(`📊 Link Statistics:`);
   console.log(`  - Ignored (mailto, anchors, etc.): ${ignored.length}`);
@@ -169,9 +165,7 @@ async function main() {
   console.log(`  - External links: ${external.length}\n`);
 
   if (external.length > 0) {
-    console.log(
-      `⚠️  Note: External link checking requires markdown-link-check or a build step.\n`
-    );
+    console.log(`⚠️  Note: External link checking requires markdown-link-check or a build step.\n`);
     console.log(
       `💡 Tip: Use 'pnpm run linkcheck:markdown' to check markdown files with markdown-link-check.\n`
     );
@@ -181,7 +175,7 @@ async function main() {
   const suspiciousRelative = relative.filter(
     (l) => !l.url.startsWith("/") && !l.url.startsWith("./") && !l.url.startsWith("../")
   );
-  
+
   if (suspiciousRelative.length > 0) {
     console.log(`⚠️  Found ${suspiciousRelative.length} potentially problematic relative links:\n`);
     suspiciousRelative.slice(0, 10).forEach((link) => {
