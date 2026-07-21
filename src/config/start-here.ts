@@ -22,8 +22,8 @@ export const startHereConfig = {
       en: "5 minutes to understand",
     } as Localized<string>,
     intro: {
-      fr: "Cette page résume comment je raisonne, ce que je construis, et où commencer selon votre contexte — sans catalogue d’outils ni promesses chiffrées.",
-      en: "This page summarizes how I reason, what I build, and where to start based on your context — without a tool catalog or unverified metrics.",
+      fr: "Cette page résume comment je raisonne, ce que je construis, et où commencer selon votre contexte, sans catalogue d’outils ni promesses chiffrées.",
+      en: "This page summarizes how I reason, what I build, and where to start based on your context, without a tool catalog or unverified metrics.",
     } as Localized<string>,
   },
   sections: {
@@ -31,14 +31,14 @@ export const startHereConfig = {
       title: { fr: "Ce que je construis", en: "What I build" },
       paragraphs: {
         fr: [
-          "Des systèmes lisibles : cartographies, modèles de décision et trajectoires de plateforme qui rendent le SI pilotable.",
-          "Des composants opérables : Omnivya, My Dare (coworking), Sanad (outil via IT Challenge / Omnivya Expert), plus l’open source — chacun ancré dans une contrainte réelle.",
-          "Des cadres de gouvernance : sécurité intégrée au cycle de vie, observabilité utile, réduction de la charge cognitive — pas des dashboards de plus.",
+          "Des systèmes lisibles : cartographies, modèles de décision et feuilles de route plateforme qui rendent le SI pilotable.",
+          "Des composants opérables : Omnivya, My Dare (coworking), Sanad (outil via IT Challenge / Omnivya Expert), plus l’open source, chacun ancré dans une contrainte réelle.",
+          "Des cadres de gouvernance : sécurité intégrée au cycle de vie, observabilité utile, réduction de la charge cognitive, plutôt que des dashboards de plus.",
         ],
         en: [
-          "Readable systems: mappings, decision models and platform trajectories that make the IT estate governable.",
-          "Operable components: Omnivya, My Dare (coworking), Sanad (tool via IT Challenge / Omnivya Expert), plus open source — each anchored in a real constraint.",
-          "Governance frameworks: security embedded in the lifecycle, useful observability, reduced cognitive load — not more dashboards.",
+          "Readable systems: mappings, decision models and platform roadmaps that make the IT estate governable.",
+          "Operable components: Omnivya, My Dare (coworking), Sanad (tool via IT Challenge / Omnivya Expert), plus open source, each anchored in a real constraint.",
+          "Governance frameworks: security embedded in the lifecycle, useful observability, reduced cognitive load, rather than more dashboards.",
         ],
       },
     },
@@ -46,16 +46,16 @@ export const startHereConfig = {
       title: { fr: "Les problèmes auxquels je m’intéresse", en: "The problems I care about" },
       items: {
         fr: [
-          "Le système est devenu impossible à comprendre — personne ne peut expliquer les dépendances ni prioriser le risque.",
-          "Les équipes déploient mais ne maîtrisent plus le changement : chaque modification augmente la dette invisible.",
-          "Les choix cloud et plateforme ne produisent pas les résultats attendus — golden paths absents, self-service illusoire.",
-          "L’organisation accumule des outils sans retrouver de capacité de décision — la gouvernance reste théorique.",
+          "Personne ne sait plus qui dépend de quoi, ni où prioriser le risque.",
+          "Les équipes déploient, mais chaque modification augmente une dette qu’on ne voit plus.",
+          "Cloud et plateforme ne livrent pas : golden paths absents, self-service illusoire.",
+          "On empile les outils sans pouvoir trancher plus vite ; la gouvernance reste sur papier.",
         ],
         en: [
-          "The system became impossible to understand — no one can explain dependencies or prioritize risk.",
-          "Teams ship but no longer control change: every modification increases invisible debt.",
-          "Cloud and platform choices do not deliver expected outcomes — missing golden paths, illusory self-service.",
-          "The organization accumulates tools without recovering decision capacity — governance stays theoretical.",
+          "Nobody can explain who depends on what, or where to prioritize risk.",
+          "Teams ship, but every change grows debt that no longer shows up clearly.",
+          "Cloud and platform bets miss: missing golden paths, illusory self-service.",
+          "Tool catalogs grow while decisions stay slow; governance stays on paper.",
         ],
       },
     },
@@ -63,16 +63,16 @@ export const startHereConfig = {
       title: { fr: "Ma manière de raisonner", en: "How I reason" },
       principles: {
         fr: [
-          "Comprendre avant d’automatiser — cartographier le système et ses contraintes réelles.",
-          "Modéliser les dépendances et le risque — pas seulement les composants techniques.",
-          "Réduire la charge cognitive — chaque artefact doit aider une décision concrète.",
-          "Construire pour les contraintes réelles — réglementaires, organisationnelles, territoriales.",
+          "Comprendre avant d’automatiser : cartographier le système et ses contraintes réelles.",
+          "Modéliser les dépendances et le risque, pas seulement les composants techniques.",
+          "Réduire la charge cognitive : chaque artefact doit aider une décision concrète.",
+          "Construire pour les contraintes réelles : réglementaires, organisationnelles, territoriales.",
         ],
         en: [
-          "Understand before automating — map the system and its real constraints.",
-          "Model dependencies and risk — not just technical components.",
-          "Reduce cognitive load — every artifact must support a concrete decision.",
-          "Build for real constraints — regulatory, organizational, territorial.",
+          "Understand before automating: map the system and its real constraints.",
+          "Model dependencies and risk, not just technical components.",
+          "Reduce cognitive load: every artifact must support a concrete decision.",
+          "Build for real constraints: regulatory, organizational, territorial.",
         ],
       },
     },
@@ -80,12 +80,12 @@ export const startHereConfig = {
       title: { fr: "Le rôle d’Omnivya", en: "The role of Omnivya" },
       paragraphs: {
         fr: [
-          "Ce site exprime ma doctrine et mes preuves publiques. Omnivya est l’entité d’exécution : conseil, construction de plateformes, transformation DevSecOps, missions cloud native et Kubernetes.",
-          "Quand une mission demande de l’exécution structurée plutôt qu’un échange doctrinal, c’est Omnivya qui porte la delivery — avec les mêmes principes de lisibilité et de gouvernabilité.",
+          "Ce site exprime mon raisonnement et mes preuves publiques. Omnivya est l’entité d’exécution : conseil, construction de plateformes, transformation DevSecOps, missions cloud native et Kubernetes.",
+          "Quand une mission demande de l’exécution structurée plutôt qu’un échange de principes, c’est Omnivya qui porte la delivery, avec les mêmes exigences de lisibilité et de gouvernabilité.",
         ],
         en: [
-          "This site expresses my doctrine and public proof. Omnivya is the execution entity: consulting, platform building, DevSecOps transformation, cloud native and Kubernetes missions.",
-          "When a mission requires structured execution rather than doctrinal exchange, Omnivya carries delivery — with the same principles of readability and governability.",
+          "This site expresses my reasoning and public proof. Omnivya is the execution entity: consulting, platform building, DevSecOps transformation, cloud native and Kubernetes missions.",
+          "When a mission requires structured execution rather than a principles discussion, Omnivya carries delivery, with the same readability and governability bar.",
         ],
       },
     },
@@ -95,8 +95,8 @@ export const startHereConfig = {
         en: "Products and experiences that serve as proof",
       },
       intro: {
-        fr: "Chaque preuve répond à un problème documenté. Les métadonnées proviennent des collections — pas de claims inventés.",
-        en: "Each proof addresses a documented problem. Metadata comes from collections — no invented claims.",
+        fr: "Chaque preuve répond à un problème documenté. Les métadonnées proviennent des collections, pas de claims inventés.",
+        en: "Each proof addresses a documented problem. Metadata comes from collections, no invented claims.",
       },
       items: [
         { kind: "project", id: "sanad" },

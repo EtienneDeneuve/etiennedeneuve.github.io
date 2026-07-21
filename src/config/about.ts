@@ -10,16 +10,16 @@ export const aboutConfig = {
   meta: {
     title: { fr: "About", en: "About" } as Localized,
     description: {
-      fr: "Trajectoire, doctrine et unité de travail — comprendre les systèmes, réduire la complexité, sécuriser les décisions.",
-      en: "Trajectory, doctrine and working unity — understand systems, reduce complexity, secure decisions.",
+      fr: "Parcours, principes de travail et ce que je construis : systèmes, complexité, décisions sécurisées.",
+      en: "Background, working principles and what I build: systems, complexity, decisions you can stand behind.",
     } as Localized,
     lead: {
-      fr: "Une trajectoire, cinq constantes : comprendre les systèmes, réduire la complexité, sécuriser les décisions, construire ce qui manque, confronter les idées au terrain.",
-      en: "One trajectory, five constants: understand systems, reduce complexity, secure decisions, build what is missing, confront ideas with the field.",
+      fr: "Cinq constantes depuis le terrain : comprendre les systèmes, réduire la complexité, sécuriser les décisions, construire ce qui manque, confronter les idées à la réalité.",
+      en: "Five constants from the field: understand systems, reduce complexity, secure decisions, build what is missing, confront ideas with reality.",
     } as Localized,
   },
   unity: {
-    title: { fr: "L’unité de la trajectoire", en: "The unity of the trajectory" } as Localized,
+    title: { fr: "Ce qui ne change pas", en: "What stays constant" } as Localized,
     items: [
       {
         fr: "Comprendre les systèmes",
@@ -47,12 +47,12 @@ export const aboutConfig = {
     title: { fr: "Ce que je fais aujourd’hui", en: "What I do today" } as Localized,
     paragraphs: {
       fr: [
-        "Je conçois, sécurise et rends gouvernables des systèmes numériques complexes — plateformes cloud, Kubernetes, DevSecOps, observabilité et architecture de décision.",
-        "Je suis Platform Reliability Architect. Omnivya porte le conseil et la delivery quand l’exécution est requise. Ce site documente ma doctrine, les preuves publiques et le raisonnement — pas un catalogue commercial.",
+        "Je conçois, sécurise et rends gouvernables des systèmes numériques complexes : plateformes cloud, Kubernetes, DevSecOps, observabilité et architecture de décision.",
+        "Je suis Platform Reliability Architect. Omnivya porte le conseil et la delivery quand l’exécution est requise. Ce site documente mes principes, les preuves publiques et le raisonnement, pas un catalogue commercial.",
       ],
       en: [
-        "I design, secure and make complex digital systems governable — cloud platforms, Kubernetes, DevSecOps, observability and decision architecture.",
-        "I am a Platform Reliability Architect. Omnivya carries consulting and delivery when execution is required. This site documents my doctrine, public proof and reasoning — not a commercial catalog.",
+        "I design, secure and make complex digital systems governable: cloud platforms, Kubernetes, DevSecOps, observability and decision architecture.",
+        "I am a Platform Reliability Architect. Omnivya carries consulting and delivery when execution is required. This site documents my principles, public proof and reasoning, not a commercial catalog.",
       ],
     },
   },
@@ -63,12 +63,12 @@ export const aboutConfig = {
     } as Localized,
     paragraphs: {
       fr: [
-        "Taous est cofondatrice d’Omnivya, d’IT Challenge / Omnivya Expert, de My Dare et de Sanad — France et Algérie.",
-        "Ce site documente ma doctrine. Les structures d’exécution et le terrain se portent à deux.",
+        "Taous est cofondatrice d’Omnivya, d’IT Challenge / Omnivya Expert, de My Dare et de Sanad, en France et en Algérie.",
+        "Ce site documente mon raisonnement. Les structures d’exécution et le terrain se portent à deux.",
       ],
       en: [
-        "Taous is co-founder of Omnivya, IT Challenge / Omnivya Expert, My Dare and Sanad — France and Algeria.",
-        "This site documents my doctrine. Execution structures and the field are carried jointly.",
+        "Taous is co-founder of Omnivya, IT Challenge / Omnivya Expert, My Dare and Sanad, in France and Algeria.",
+        "This site documents my reasoning. Execution structures and the field are carried jointly.",
       ],
     },
   },
@@ -76,14 +76,14 @@ export const aboutConfig = {
     title: { fr: "Comment j’en suis arrivé là", en: "How I got here" } as Localized,
     paragraphs: {
       fr: [
-        "La carrière a commencé en 2006. Le parcours va du terrain opérationnel — dont le support ADSL — à l’architecture et à la direction technique. L’évolution n’est pas une accumulation de titres : c’est un élargissement du périmètre, du composant au système, de l’incident à la décision irréversible.",
+        "La carrière a commencé en 2006. Le parcours va du terrain opérationnel, dont le support ADSL, à l’architecture et à la direction technique. Les titres se sont empilés ; surtout, le périmètre s’est élargi : du composant au système, de l’incident à la décision irréversible.",
         "Cloud, infrastructure, plateforme, DevSecOps et architecture se sont empilés sur la même question : comment un système reste-t-il lisible, opérable et gouvernable quand la complexité augmente ?",
-        "Le travail se déroule entre la France et l’Algérie. Cette double ancrage n’est pas une anecdote géographique : elle force à concevoir pour des contraintes réelles — réglementaires, organisationnelles, territoriales — plutôt que pour un marché idéal.",
+        "Le travail se déroule entre la France et l’Algérie. Ce n’est pas du storytelling géographique : ça impose des contraintes réglementaires, organisationnelles et territoriales concrètes, plutôt qu’un marché idéal.",
       ],
       en: [
-        "The career started in 2006. The path runs from operational fieldwork — including ADSL support — to architecture and technical leadership. The evolution is not a stack of titles: it is a widening of scope, from component to system, from incident to irreversible decision.",
+        "The career started in 2006. The path runs from operational fieldwork, including ADSL support, to architecture and technical leadership. Titles stacked; more importantly, scope widened: from component to system, from incident to irreversible decision.",
         "Cloud, infrastructure, platform, DevSecOps and architecture stacked on the same question: how does a system stay readable, operable and governable as complexity grows?",
-        "Work spans France and Algeria. That dual anchoring is not a geographic anecdote: it forces design for real constraints — regulatory, organizational, territorial — rather than for an ideal market.",
+        "Work spans France and Algeria. That is not geographic storytelling: it forces design for real regulatory, organizational and territorial constraints, rather than for an ideal market.",
       ],
     },
   },
@@ -95,13 +95,13 @@ export const aboutConfig = {
     paragraphs: {
       fr: [
         "Vingt ans de terrain ont déplacé le centre de gravité : moins d’outils à collectionner, plus de décisions à sécuriser. La technique reste nécessaire ; elle ne suffit plus comme seule réponse.",
-        "Les systèmes que j’accompagne ne manquent rarement d’outils. Ils manquent de carte partagée, de critères de décision et de capacité à agir sans augmenter la dette invisible.",
-        "Concevoir, aujourd’hui, signifie d’abord rendre le système compréhensible — puis seulement automatiser, industrialiser ou industrialiser davantage.",
+        "Les systèmes que j’accompagne ne manquent rarement d’outils. Ils manquent de carte partagée, de critères de décision et de la possibilité d’agir sans augmenter la dette invisible.",
+        "Concevoir, aujourd’hui, signifie d’abord rendre le système compréhensible, puis seulement automatiser ou industrialiser davantage.",
       ],
       en: [
         "Twenty years in the field shifted the center of gravity: fewer tools to collect, more decisions to secure. Technique remains necessary; it is no longer enough as the only answer.",
         "The systems I work with rarely lack tools. They lack a shared map, decision criteria and the ability to act without growing invisible debt.",
-        "Designing, today, means first making the system understandable — and only then automating, industrializing or industrializing further.",
+        "Designing, today, means first making the system understandable, and only then automating or industrializing further.",
       ],
     },
   },
@@ -112,47 +112,47 @@ export const aboutConfig = {
     } as Localized,
     paragraphs: {
       fr: [
-        "Omnivya existe pour exécuter sans diluer le cadre de décision. Doctrine personnelle (ce site) et delivery structurée (Omnivya) restent séparées à dessein — l’une clarifie le raisonnement ; l’autre le porte en mission.",
-        "Sans structure d’exécution, les idées restent des slides. Sans doctrine, l’exécution devient un catalogue d’outils. Omnivya relie les deux pour des contextes à forte complexité technique et organisationnelle.",
+        "Omnivya existe pour exécuter sans diluer le cadre de décision. Raisonnement publié (ce site) et delivery structurée (Omnivya) restent séparés à dessein : l’un clarifie ; l’autre porte en mission.",
+        "Sans structure d’exécution, les idées restent des slides. Sans principes clairs, l’exécution devient un catalogue d’outils. Omnivya relie les deux pour des contextes à forte complexité technique et organisationnelle.",
       ],
       en: [
-        "Omnivya exists to execute without diluting the decision frame. Personal doctrine (this site) and structured delivery (Omnivya) stay deliberately separate — one clarifies reasoning; the other carries it into missions.",
-        "Without an execution structure, ideas stay slides. Without doctrine, execution becomes a tool catalog. Omnivya connects both for contexts of high technical and organizational complexity.",
+        "Omnivya exists to execute without diluting the decision frame. Published reasoning (this site) and structured delivery (Omnivya) stay deliberately separate: one clarifies; the other carries into missions.",
+        "Without an execution structure, ideas stay slides. Without clear principles, execution becomes a tool catalog. Omnivya connects both for contexts of high technical and organizational complexity.",
       ],
     },
   },
   products: {
     title: {
-      fr: "Algérie — terrain et outils",
-      en: "Algeria — field and tools",
+      fr: "Algérie : terrain et outils",
+      en: "Algeria: field and tools",
     } as Localized,
     paragraphs: {
       fr: [
         "Côté Algérie : My Dare (coworking à Alger), Sanad (outil via IT Challenge / Omnivya Expert), et la filiale qui porte le build sur place.",
-        "IT Challenge / Omnivya Expert ancre le build local. My Dare ancre le terrain. Sanad est une preuve d’outil — pas un portefeuille marketing.",
+        "IT Challenge / Omnivya Expert ancre le build local. My Dare ancre le terrain. Sanad est une preuve d’outil, pas un portefeuille marketing.",
       ],
       en: [
         "On the Algeria side: My Dare (coworking in Algiers), Sanad (tool via IT Challenge / Omnivya Expert), and the subsidiary that carries the build on the ground.",
-        "IT Challenge / Omnivya Expert anchors local build. My Dare anchors the field. Sanad is tool-level proof — not a marketing portfolio.",
+        "IT Challenge / Omnivya Expert anchors local build. My Dare anchors the field. Sanad is tool-level proof, not a marketing portfolio.",
       ],
     },
   },
   doctrine: {
-    title: { fr: "Ma doctrine de travail", en: "My working doctrine" } as Localized,
+    title: { fr: "Ma façon de travailler", en: "How I work" } as Localized,
     principles: {
       fr: [
-        "Comprendre avant d’automatiser — cartographier le système et ses contraintes réelles.",
-        "Modéliser les dépendances et le risque — pas seulement les composants techniques.",
-        "Réduire la charge cognitive — chaque artefact doit aider une décision concrète.",
+        "Comprendre avant d’automatiser : cartographier le système et ses contraintes réelles.",
+        "Modéliser les dépendances et le risque, pas seulement les composants techniques.",
+        "Réduire la charge cognitive : chaque artefact doit aider une décision concrète.",
         "Documenter les choix irréversibles et les alternatives écartées.",
-        "Construire pour les contraintes réelles — réglementaires, organisationnelles, territoriales.",
+        "Construire pour les contraintes réelles : réglementaires, organisationnelles, territoriales.",
       ],
       en: [
-        "Understand before automating — map the system and its real constraints.",
-        "Model dependencies and risk — not just technical components.",
-        "Reduce cognitive load — every artifact must support a concrete decision.",
+        "Understand before automating: map the system and its real constraints.",
+        "Model dependencies and risk, not just technical components.",
+        "Reduce cognitive load: every artifact must support a concrete decision.",
         "Document irreversible choices and rejected alternatives.",
-        "Build for real constraints — regulatory, organizational, territorial.",
+        "Build for real constraints: regulatory, organizational, territorial.",
       ],
     },
   },
@@ -187,10 +187,10 @@ export const aboutConfig = {
     },
   },
   timeline: {
-    title: { fr: "Repères de trajectoire", en: "Trajectory markers" } as Localized,
+    title: { fr: "Chronologie", en: "Timeline" } as Localized,
     intro: {
-      fr: "Repères progressifs — lisibles sans style avancé. Ce n’est pas un CV exhaustif.",
-      en: "Progressive markers — readable without advanced styling. This is not an exhaustive CV.",
+      fr: "Repères progressifs, lisibles sans style avancé. Ce n’est pas un CV exhaustif.",
+      en: "Progressive markers, readable without advanced styling. This is not an exhaustive CV.",
     } as Localized,
     items: [
       {
@@ -200,8 +200,8 @@ export const aboutConfig = {
           en: "Start of field career",
         },
         body: {
-          fr: "Entrée par l’opérationnel et le support — dont le terrain ADSL — au contact direct des pannes et des utilisateurs.",
-          en: "Entry through operations and support — including ADSL fieldwork — in direct contact with failures and users.",
+          fr: "Entrée par l’opérationnel et le support, dont le terrain ADSL, au contact direct des pannes et des utilisateurs.",
+          en: "Entry through operations and support, including ADSL fieldwork, in direct contact with failures and users.",
         },
       },
       {
@@ -211,8 +211,8 @@ export const aboutConfig = {
           en: "Infrastructure and systems",
         },
         body: {
-          fr: "Élargissement vers l’administration, l’infrastructure et la préparation des environnements — du composant au périmètre système.",
-          en: "Expansion into administration, infrastructure and environment preparation — from component to system scope.",
+          fr: "Élargissement vers l’administration, l’infrastructure et la préparation des environnements, du composant au périmètre système.",
+          en: "Expansion into administration, infrastructure and environment preparation, from component to system scope.",
         },
       },
       {
@@ -222,8 +222,8 @@ export const aboutConfig = {
           en: "Cloud, platform, architecture",
         },
         body: {
-          fr: "Architecture cloud, infrastructure as code, DevSecOps et plateforme — décisions plus larges, conséquences plus durables.",
-          en: "Cloud architecture, infrastructure as code, DevSecOps and platform — broader decisions, longer-lived consequences.",
+          fr: "Architecture cloud, infrastructure as code, DevSecOps et plateforme : décisions plus larges, conséquences plus durables.",
+          en: "Cloud architecture, infrastructure as code, DevSecOps and platform: broader decisions, longer-lived consequences.",
         },
       },
       {
@@ -233,8 +233,8 @@ export const aboutConfig = {
           en: "Founding of Omnivya",
         },
         body: {
-          fr: "Création d’Omnivya avec Taous — structure d’exécution pour porter conseil et delivery sans diluer le cadre de décision.",
-          en: "Founding of Omnivya with Taous — execution structure to carry consulting and delivery without diluting the decision frame.",
+          fr: "Création d’Omnivya avec Taous : structure d’exécution pour porter conseil et delivery sans diluer le cadre de décision.",
+          en: "Founding of Omnivya with Taous: execution structure to carry consulting and delivery without diluting the decision frame.",
         },
       },
       {

@@ -4,13 +4,13 @@ export const projectsPageConfig = {
   meta: {
     title: { fr: "Projects", en: "Projects" },
     description: {
-      fr: "Surface principale de preuve : entités, produits et open source — problème, décisions, système, limites.",
-      en: "Main proof surface: entities, products and open source — problem, decisions, system, limits.",
+      fr: "Page de preuves : entités, produits et open source. Problème, décisions, système, limites.",
+      en: "Proof page: entities, products and open source. Problem, decisions, system, limits.",
     },
     eyebrow: { fr: "Preuves publiques", en: "Public proof" },
     intro: {
-      fr: "Chaque entrée documente un problème réel, les décisions prises, ce qui existe aujourd’hui et ce qui n’est pas encore publiable. Pas de success story : une trajectoire vérifiable.",
-      en: "Each entry documents a real problem, decisions made, what exists today and what is not yet publishable. No success story — a verifiable trajectory.",
+      fr: "Chaque entrée documente un problème réel, les décisions prises, ce qui existe aujourd’hui et ce qui n’est pas encore publiable. Pas de success story : un historique vérifiable.",
+      en: "Each entry documents a real problem, decisions made, what exists today and what is not yet publishable. No success story: a verifiable track record.",
     },
   },
   labels: {

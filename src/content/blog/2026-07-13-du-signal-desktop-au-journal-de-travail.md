@@ -21,13 +21,13 @@ relatedArticles: []
 
 Un ordinateur produit une quantité impressionnante de traces : fenêtre active, application au premier plan, commit Git, ticket consulté, terminal utilisé, document ouvert, période de verrouillage. Il est tentant d’additionner ces événements pour obtenir automatiquement une feuille de temps.
 
-C’est précisément là que commencent les erreurs.
+C’est là que commencent les erreurs.
 
 Une trace numérique prouve qu’un événement a eu lieu. Elle ne prouve ni l’intention de la personne, ni la continuité du travail, ni son rattachement à un projet, encore moins son caractère facturable. Entre la télémétrie brute et un journal de travail défendable, il faut construire une chaîne d’interprétation explicite.
 
-Le bon modèle mental n’est donc pas celui d’un chronomètre omniscient. C’est celui d’un système de comptabilité de preuves : il collecte des signaux, les transforme en épisodes cohérents, propose une attribution, puis laisse une décision humaine valider ce qui pourra être déclaré.
+Le modèle utile n’est pas un chronomètre omniscient, mais une comptabilité de preuves : collecter des signaux, les transformer en épisodes cohérents, proposer une attribution, puis laisser une décision humaine valider ce qui pourra être déclaré.
 
-## Le mauvais réflexe : confondre présence et travail
+## Confondre présence à l’écran et travail
 
 Les outils de suivi d’activité savent généralement mesurer le temps pendant lequel une fenêtre reste active. Cette mesure paraît objective, mais son sens est très limité.
 
@@ -93,7 +93,7 @@ Il faut donc attacher la confiance à chaque assertion :
 
 Cette séparation évite une erreur fréquente : laisser une preuve technique forte contaminer une conclusion métier faible. Un commit signé et parfaitement horodaté prouve qu’un changement a été produit. Il ne prouve pas à lui seul combien de temps il a demandé, ni à qui ce temps doit être facturé.
 
-Un système mature sait donc dire « inconnu ». L’absence de classification est une information exploitable : elle déclenche une question ciblée au lieu de produire une estimation séduisante mais fragile.
+Un système fiable sait donc dire « inconnu ». L’absence de classification est une information exploitable : elle déclenche une question ciblée au lieu de produire une estimation séduisante mais fragile.
 
 ## La validation humaine comme contrôle, pas comme rattrapage
 
@@ -116,7 +116,7 @@ Avant d’utiliser un journal de travail pour estimer une facturation, je vérif
 
 Ces critères dépassent largement la facturation. Ils s’appliquent à toute tentative de résumer automatiquement le travail : reporting d’équipe, suivi de portefeuille, capitalisation de connaissances ou analyse des interruptions.
 
-Ils ne sont pas un ticket bloquant pour la v1. On peut commencer avec l’observation et un regroupement grossier, laisser la facturation entièrement manuelle, puis durcir couche par couche. Un journal imparfait, auditable et corrigible bat l’absence de journal, ou la feuille de temps inventée après coup.
+Ils ne sont pas un ticket bloquant pour la v1. On peut commencer avec l’observation et un regroupement grossier, laisser la facturation entièrement manuelle, puis durcir couche par couche. Un journal incomplet mais auditable et corrigible vaut mieux qu’aucune trace, ou qu’une feuille de temps inventée après coup.
 
 ## Mesurer moins, expliquer mieux
 
@@ -124,4 +124,4 @@ La promesse séduisante d’un suivi automatique est de supprimer toute saisie. 
 
 Un bon journal de travail ne prétend pas connaître parfaitement la journée. Il distingue ce qui a été observé, ce qui a été déduit et ce qui a été validé. Il regroupe les signaux sans les additionner aveuglément, exclut l’inactivité sans la faire disparaître et refuse de confondre activité technique avec décision de facturation.
 
-La fiabilité ne vient pas du volume de télémétrie. Elle vient de la qualité de la chaîne de preuve, et de sa capacité à rester honnête lorsqu’elle ne sait pas. Cette honnêteté inclut d’admettre qu’on itère : le système existe d’abord, puis il devient défendable.
+La fiabilité ne vient pas du volume de télémétrie. Elle vient de la qualité de la chaîne de preuve, et de sa capacité à rester honnête lorsqu’elle ne sait pas. On peut commencer simple, puis durcir ce qui doit l’être.

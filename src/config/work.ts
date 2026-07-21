@@ -25,8 +25,8 @@ export const workConfig = {
   meta: {
     title: { fr: "Work", en: "Work" },
     description: {
-      fr: "Trois modes d’intervention — Diagnose, Decide, Build — pour rendre un système complexe lisible, décidable et opérable.",
-      en: "Three intervention modes — Diagnose, Decide, Build — to make a complex system readable, decidable and operable.",
+      fr: "Trois modes d’intervention (Diagnose, Decide, Build) pour rendre un système complexe compréhensible, tranché, puis opérable.",
+      en: "Three intervention modes (Diagnose, Decide, Build) to make a complex system understandable, decided, then operable.",
     },
     eyebrow: {
       fr: "Modes d’intervention",
@@ -147,7 +147,7 @@ export const workConfig = {
           "migration cloud",
           "build versus buy",
           "découpage de systèmes",
-          "trajectoire de sécurité",
+          "feuille de route sécurité",
           "préparation d’un programme de transformation",
         ],
         en: [
@@ -156,7 +156,7 @@ export const workConfig = {
           "cloud migration",
           "build versus buy",
           "system decomposition",
-          "security trajectory",
+          "security roadmap",
           "transformation program preparation",
         ],
       },
@@ -259,15 +259,15 @@ export const workConfig = {
           "Exécution technique via Omnivya",
           "Plateforme, GitOps, observabilité selon périmètre",
           "Sécurité supply chain intégrée au delivery",
-          "Documentation et transfert de capacité",
-          "Alignement avec la doctrine et les décisions documentées",
+          "Documentation et montée en compétence",
+          "Alignement avec les principes publiés et les décisions documentées",
         ],
         en: [
           "Technical execution via Omnivya",
           "Platform, GitOps, observability per scope",
           "Supply chain security integrated into delivery",
-          "Documentation and capability transfer",
-          "Alignment with doctrine and documented decisions",
+          "Documentation and skills transfer",
+          "Alignment with published principles and documented decisions",
         ],
       },
       excluded: {

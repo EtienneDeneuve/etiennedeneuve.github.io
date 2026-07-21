@@ -48,8 +48,8 @@ export const githubProjectCategoryLabels: Record<
     fr: "Références historiques",
     en: "Historical references",
     description: {
-      fr: "Trajectoire et preuves de construction — pas des produits actifs.",
-      en: "Trajectory and build proof — not active products.",
+      fr: "Historique et preuves de build, pas des produits actifs.",
+      en: "History and build proof, not active products.",
     },
   },
 };

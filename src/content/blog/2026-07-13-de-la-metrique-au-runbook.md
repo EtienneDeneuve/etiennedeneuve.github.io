@@ -31,19 +31,19 @@ Cette définition paraît évidente. Pourtant, beaucoup de plateformes évaluent
 
 C’est là que se joue la différence entre une observabilité visible et un alerting opérable.
 
-Ce contrat ne naît pas parfait. Une première alerte critique avec un runbook court et un test de bout en bout imparfait vaut mieux qu’un catalogue de règles jamais exercées. L’exigence porte sur la direction (prouver la chaîne), pas sur l’exhaustivité du jour 1.
+Ce contrat ne naît pas parfait. Une première alerte critique avec un runbook court et un test de bout en bout imparfait vaut mieux qu’un catalogue de règles jamais exercées. L’exigence porte sur la direction (prouver la chaîne), pas sur tout couvrir dès la première règle.
 
-## Le mauvais réflexe : commencer par écrire des alertes
+## Pourquoi on commence trop vite par le YAML d’alerte
 
 Lorsqu’un incident révèle un angle mort, la réaction habituelle consiste à ajouter une règle. On choisit un seuil, une durée, une sévérité et un canal de notification. La règle passe en revue, elle est fusionnée, puis l’équipe considère le sujet comme traité.
 
-Cette approche produit souvent trois illusions.
+Cette approche produit souvent trois confusions.
 
-La première est **l’illusion de présence** : une métrique exposée par un composant n’est pas nécessairement collectée par la plateforme. Entre les deux se trouvent la découverte, le transport, l’authentification, l’étiquetage et la rétention. Une métrique locale n’est encore qu’une promesse.
+On croit avoir une métrique parce qu’un composant l’expose. Entre l’exposition et la plateforme se trouvent la découverte, le transport, l’authentification, l’étiquetage et la rétention. Une métrique locale n’est encore qu’une promesse.
 
-La deuxième est **l’illusion de déploiement** : une règle versionnée n’est pas forcément une règle chargée et évaluée par le moteur actif. Dans les environnements GitOps, l’intention peut vivre à un endroit, le runtime à un autre, et plusieurs chemins de déploiement peuvent sembler légitimes. « Le fichier existe » ne signifie pas « l’alerte fonctionne ».
+On croit qu’une règle versionnée est une règle chargée et évaluée par le moteur actif. Dans les environnements GitOps, l’intention peut vivre à un endroit, le runtime à un autre, et plusieurs chemins de déploiement peuvent sembler légitimes. « Le fichier existe » ne signifie pas « l’alerte fonctionne ».
 
-La troisième est **l’illusion d’action** : une notification qui nomme un symptôme sans indiquer la prochaine décision transfère simplement le travail d’analyse à l’astreinte. Elle détecte peut-être un état anormal, mais elle ne crée pas encore de capacité d’intervention.
+On croit qu’une notification qui nomme un symptôme crée déjà une capacité d’intervention. Sans prochaine décision écrite, elle transfère surtout le travail d’analyse à l’astreinte.
 
 Le problème n’est donc pas la qualité isolée d’une règle. C’est l’absence de chaîne vérifiable entre le système réel et l’action humaine.
 
@@ -128,14 +128,14 @@ Pour une alerte critique, la fusion du code n’est qu’une étape. La cible de
 - un test de bout en bout a été exécuté ;
 - une date ou un événement de révision est prévu.
 
-Cette checklist n’est pas un prérequis pour oser publier la première règle. C’est la trajectoire. Le premier pas utile, c’est souvent plus modeste : **une** alerte sur un phénomène réel, un runbook d’une page, un exercice de bout en bout même grossier, puis une date de révision. Un système imparfait qui existe et s’améliore bat un modèle parfait qui reste dans un ticket.
+Cette checklist n’est pas un prérequis pour oser publier la première règle. C’est la direction, pas le ticket bloquant. Le premier pas utile, c’est souvent plus modeste : **une** alerte sur un phénomène réel, un runbook d’une page, un exercice de bout en bout même grossier, puis une date de révision. Une chaîne courte déjà en prod vaut mieux qu’un modèle idéal resté dans un ticket.
 
 Attendre la couverture idéale avant d’avoir une seule chaîne opérable, c’est souvent choisir le rien. Le coût de ce rien (bruit d’astreinte, confiance perdue, redécouverte du système en panne) dépasse largement celui d’une v1 franche et itérée.
 
-## Le véritable indicateur de maturité : la confiance
+## Ce qui compte : la confiance dans les alertes
 
 Ce modèle s’applique aux agents CI éphémères comme aux bases managées, aux ingress, aux traitements batch ou aux files de messages. Les outils et les métriques changent ; le contrat reste le même : **un phénomène compris, un signal prouvé, une responsabilité claire et une action écrite**.
 
-Une plateforme mature ne se reconnaît donc pas au nombre d’alertes qu’elle possède. Elle se reconnaît au nombre d’alertes auxquelles les équipes font confiance, y compris celles qu’on a volontairement laissées simples au départ, puis durcies au fil des incidents.
+Une plateforme crédible ne se reconnaît donc pas au nombre d’alertes qu’elle possède. Elle se reconnaît au nombre d’alertes auxquelles les équipes font confiance, y compris celles qu’on a volontairement laissées simples au départ, puis durcies au fil des incidents.
 
-Cette confiance se construit quand chaque notification a un sens, un propriétaire et une prochaine étape. À ce moment-là, l’observabilité cesse d’être une collection d’écrans. Elle devient une capacité d’exploitation, construite par itérations plutôt que par inventaire.
+Cette confiance se construit quand chaque notification a un sens, un propriétaire et une prochaine étape. À ce moment-là, l’observabilité cesse d’être une collection d’écrans. Elle devient un moyen concret d’exploiter le système, ajusté au fil des incidents plutôt que par inventaire.

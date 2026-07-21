@@ -41,7 +41,7 @@ const proofProjects = [...priorityProjects, ...featuredOthers];
 
 <BaseLayout
   title={siteConfig.identity.name}
-  description="I make complex systems readable, governable and actionable."
+  description="Cloud platforms, Kubernetes and DevSecOps: making systems readable, governable and actionable."
   lang="en"
   path="/en/"
   brandTitle={false}
@@ -56,10 +56,13 @@ const proofProjects = [...priorityProjects, ...featuredOthers];
     <section class="stack gap-5 page-hero">
       <p class="brand-mark">{siteConfig.identity.name}</p>
       <p class="eyebrow">{siteConfig.professionalRole.title}</p>
-      <h1>I make complex systems readable, governable and actionable.</h1>
+      <h1>
+        Cloud platforms, Kubernetes and DevSecOps: making systems readable, governable and
+        actionable.
+      </h1>
       <p class="lede">
-        Doctrine, architecture decisions and public proof — to steer an estate under real
-        constraints. Omnivya executes when the mission requires it.
+        Architecture notes, documented decisions and public proof for steering an estate under
+        real constraints. Omnivya executes when the mission requires it.
       </p>
       <div class="actions">
         <CallToAction
@@ -80,22 +83,31 @@ const proofProjects = [...priorityProjects, ...featuredOthers];
         <h2>Problems</h2>
       </div>
       <ul class="grid-auto problem-grid">
-        <li class="surface">The system has become impossible to understand.</li>
-        <li class="surface">Teams deploy but no longer control risk.</li>
-        <li class="surface">Cloud and platform choices do not produce expected outcomes.</li>
-        <li class="surface">The organization adds tools but loses decision capacity.</li>
+        <li class="surface">Nobody can explain who depends on what, or where to prioritize risk.</li>
+        <li class="surface">
+          Teams ship, but every release grows debt that no longer shows up on a dashboard.
+        </li>
+        <li class="surface">
+          Cloud and platform bets miss: no golden path, self-service that exists mostly on slides.
+        </li>
+        <li class="surface">
+          Tool catalogs grow while decisions stay slow, unclear, or stuck in meetings.
+        </li>
       </ul>
     </section>
 
     <section class="stack gap-4">
       <div class="section-head">
-        <h2>Doctrine</h2>
+        <h2>Principles</h2>
       </div>
       <ul class="grid-auto problem-grid">
         <li class="surface">Understand before automating.</li>
         <li class="surface">Model dependencies and risk.</li>
-        <li class="surface">Reduce cognitive load, not add dashboards.</li>
-        <li class="surface">Build for real constraints, not theoretical architecture.</li>
+        <li class="surface">Reduce cognitive load rather than add dashboards.</li>
+        <li class="surface">
+          Design for real constraints (org, regulation, territory), not an ideal architecture
+          diagram.
+        </li>
       </ul>
     </section>
 
@@ -164,7 +176,7 @@ const proofProjects = [...priorityProjects, ...featuredOthers];
 
     <section class="stack gap-4 closing">
       <hr class="section-rule" />
-      <h2>The right starting point is not a tool. It is shared system understanding.</h2>
+      <h2>Before adding another tool, get a shared map of the system.</h2>
       <div class="actions">
         <CallToAction
           href="/en/start-here/"

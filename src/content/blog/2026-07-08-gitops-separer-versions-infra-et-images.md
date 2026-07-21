@@ -23,7 +23,7 @@ Dans beaucoup de plateformes GitOps, un seul commit fait deux choses à la fois 
 
 Puis un incident arrive. Faut-il revenir à l’image précédente, au chart précédent, ou aux deux ? Personne ne sait facilement quels changements étaient couplés par accident et lesquels étaient nécessaires ensemble. L’historique Git devient une chronique, pas une API de promotion.
 
-Le problème n’est pas GitOps. C’est le mélange de deux cycles de version qui n’ont pas la même sémantique, ni le même rythme, ni le même risque.
+GitOps n’est pas en cause : le mélange de deux cycles de version l’est. Ils n’ont pas la même sémantique, ni le même rythme, ni le même risque.
 
 ## Deux objets, deux cadences
 
@@ -31,13 +31,13 @@ Une **image** change souvent : correctif, feature, rebuild. Son risque est surto
 
 Une **version d’infrastructure** change moins souvent : chart, CRD, NetworkPolicy, valeurs de capacité, hooks de déploiement. Son risque est structurel : incompatibilité d’API, dérive de droits, changement de surface d’attaque, comportement du contrôleur.
 
-Les promouvoir dans le même geste crée trois illusions :
+Les promouvoir dans le même geste crée trois confusions :
 
-1. **Illusion d’atomicité** : on croit avoir livré « une version » alors qu’on a livré deux décisions indépendantes.
-2. **Illusion de rollback** : revenir d’un commit peut annuler trop ou pas assez.
-3. **Illusion d’audit** : on ne sait plus si un environnement diffère par le code, par le packaging, ou par la plateforme.
+1. **Atomicité** : on croit avoir livré « une version » alors qu’on a livré deux décisions indépendantes.
+2. **Rollback** : revenir d’un commit peut annuler trop ou pas assez.
+3. **Audit** : on ne sait plus si un environnement diffère par le code, par le packaging, ou par la plateforme.
 
-## Le mauvais réflexe : un tag pour tout
+## L’erreur habituelle : un tag pour tout
 
 Une convention fréquente consiste à taguer « la release » et à faire pointer infrastructure et image vers le même identifiant. C’est confortable pour le storytelling produit. C’est fragile pour l’exploitation.
 
@@ -45,7 +45,7 @@ Dès qu’une image doit être corrigée sans toucher au chart, ou qu’un chart
 
 Un tag de release peut rester une API utile pour les humains. Il ne doit pas forcer l’identité technique de tous les artefacts.
 
-## Le bon levier : des canaux de promotion explicites
+## Une approche plus saine : des canaux de promotion explicites
 
 Je sépare au minimum trois canaux :
 
@@ -88,10 +88,10 @@ Avant de figer une convention GitOps, je vérifie :
 
 Si la réponse à plusieurs de ces points est non, la plateforme vend de la simplicité apparente au prix de l’opérabilité réelle. Pour autant, la migration n’a pas besoin d’être un big bang. On peut commencer par **un** environnement, **un** produit, deux champs explicites (image + chart) là où un seul tag suffisait. La convention s’étend ensuite.
 
-Un modèle de promotion imparfait mais déjà dissocié bat un monolithe de tags qu’on refuse de toucher « jusqu’à ce que la plateforme soit prête ».
+Mieux vaut deux champs explicites (image + chart), même imparfaits, qu’un monolithe de tags qu’on refuse de toucher « jusqu’à ce que la plateforme soit prête ».
 
 ## Au-delà de Kubernetes
 
 Le même schéma apparaît dès qu’une plateforme compose un runtime et un artefact : agents CI et images d’outils, Terraform modules et versions de providers, packages et configurations déployées. Partout, **mélanger cycle de packaging et cycle de contenu** produit des promotions spectaculaires et des rollbacks confus.
 
-GitOps fonctionne mieux lorsqu’il expose des décisions, pas des amalgames. Séparer les versions d’infrastructure et d’images n’ajoute pas de complexité cosmétique. Cela rend enfin visible la complexité qui existait déjà, et qu’un seul tag avait seulement dissimulée. On peut commencer petit ; on ne peut pas commencer par le rien.
+GitOps fonctionne mieux lorsqu’il expose des décisions, pas des amalgames. Séparer les versions d’infrastructure et d’images n’ajoute pas de complexité cosmétique. Cela rend enfin visible la complexité qui existait déjà, et qu’un seul tag avait seulement dissimulée. Mieux vaut un environnement pilote déjà dissocié que d’attendre le big bang.

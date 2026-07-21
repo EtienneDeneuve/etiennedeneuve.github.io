@@ -39,7 +39,7 @@ export const siteConfig = {
     siteUrl: "https://etienne.deneuve.xyz",
     title: "Etienne Deneuve",
     description:
-      "Doctrine, architecture decisions and field notes on cloud platforms, systems risk, and software delivery.",
+      "Architecture notes, platform decisions and field write-ups on Kubernetes, cloud platforms, systems risk, and software delivery.",
     locale: "fr_FR",
     defaultLanguage: "fr",
     defaultOgImage: "https://etienne.deneuve.xyz/assets/portrait.jpg",
@@ -92,7 +92,7 @@ export const siteConfig = {
     url: "https://etienne.deneuve.xyz",
     title: "Etienne Deneuve",
     description:
-      "Doctrine, architecture decisions and field notes on cloud platforms, systems risk, and software delivery.",
+      "Architecture notes, platform decisions and field write-ups on Kubernetes, cloud platforms, systems risk, and software delivery.",
     locale: "fr_FR",
     defaultOgImage: "https://etienne.deneuve.xyz/assets/portrait.jpg",
   },

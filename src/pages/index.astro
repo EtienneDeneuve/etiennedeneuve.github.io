@@ -37,7 +37,7 @@ const proofProjects = [...priorityProjects, ...featuredOthers];
 
 <BaseLayout
   title={siteConfig.identity.name}
-  description="Je rends les systèmes complexes lisibles, gouvernables et actionnables."
+  description="Plateformes cloud, Kubernetes et DevSecOps : rendre les systèmes lisibles, gouvernables et actionnables."
   lang="fr"
   path="/"
   brandTitle={false}
@@ -52,9 +52,12 @@ const proofProjects = [...priorityProjects, ...featuredOthers];
     <section class="stack gap-5 page-hero">
       <p class="brand-mark">{siteConfig.identity.name}</p>
       <p class="eyebrow">{siteConfig.professionalRole.title}</p>
-      <h1>Je rends les systèmes complexes lisibles, gouvernables et actionnables.</h1>
+      <h1>
+        Plateformes cloud, Kubernetes et DevSecOps : rendre les systèmes lisibles, gouvernables et
+        actionnables.
+      </h1>
       <p class="lede">
-        Doctrine, décisions d’architecture et preuves publiques — pour piloter un SI sous
+        Notes d’architecture, décisions documentées et preuves publiques pour piloter un SI sous
         contraintes réelles. Omnivya exécute quand la mission l’exige.
       </p>
       <div class="actions">
@@ -76,27 +79,32 @@ const proofProjects = [...priorityProjects, ...featuredOthers];
         <h2>Problèmes</h2>
       </div>
       <ul class="grid-auto problem-grid">
-        <li class="surface">Le système est devenu impossible à comprendre.</li>
-        <li class="surface">Les équipes déploient mais ne maîtrisent plus le risque.</li>
         <li class="surface">
-          Les choix cloud et plateforme ne produisent pas les résultats attendus.
+          Personne ne sait plus qui dépend de quoi, ni où prioriser le risque.
         </li>
         <li class="surface">
-          L’organisation accumule des outils sans retrouver de capacité de décision.
+          Les équipes déploient, mais chaque release augmente une dette qu’on ne voit plus.
+        </li>
+        <li class="surface">
+          Cloud et plateforme ne livrent pas : pas de golden path, self-service illusoire.
+        </li>
+        <li class="surface">
+          On empile les outils sans pouvoir trancher plus vite ni plus clairement.
         </li>
       </ul>
     </section>
 
     <section class="stack gap-4">
       <div class="section-head">
-        <h2>Doctrine</h2>
+        <h2>Principes</h2>
       </div>
       <ul class="grid-auto problem-grid">
         <li class="surface">Comprendre avant d’automatiser.</li>
         <li class="surface">Modéliser les dépendances et le risque.</li>
-        <li class="surface">Réduire la charge cognitive, pas ajouter des dashboards.</li>
+        <li class="surface">Réduire la charge cognitive plutôt qu’ajouter des dashboards.</li>
         <li class="surface">
-          Construire pour les contraintes réelles, pas pour une architecture théorique.
+          Concevoir pour les contraintes réelles (orga, réglementation, territoire), pas pour un
+          schéma idéal.
         </li>
       </ul>
     </section>
@@ -166,9 +174,7 @@ const proofProjects = [...priorityProjects, ...featuredOthers];
 
     <section class="stack gap-4 closing">
       <hr class="section-rule" />
-      <h2>
-        Le bon point de départ n’est pas un outil. C’est une compréhension partagée du système.
-      </h2>
+      <h2>Avant d’ajouter un outil, il faut une carte partagée du système.</h2>
       <div class="actions">
         <CallToAction
           href="/start-here/"

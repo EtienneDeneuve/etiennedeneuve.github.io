@@ -28,7 +28,7 @@ Lorsqu’un job échoue, l’équipe applicative voit une étape rouge et quelqu
 
 Le problème n’est donc pas seulement de « monitorer un runner ». Il faut rendre observable un système dont chaque instance a une durée de vie courte, sans demander à chaque pipeline de devenir un projet d’instrumentation.
 
-## Le mauvais réflexe : pousser l’instrumentation dans les pipelines
+## L’erreur fréquente : pousser l’instrumentation dans les pipelines
 
 La première réponse consiste souvent à ajouter une étape commune dans les pipelines : démarrer un collecteur, envelopper certaines commandes ou envoyer des logs en fin de job. Cette approche déplace le coût au mauvais endroit. Chaque dépôt doit adopter la convention, les anciens pipelines divergent et les templates se multiplient. Surtout, une instrumentation lancée par le job voit mal ce qui se passe avant son démarrage ou après son interruption brutale.
 
@@ -36,13 +36,13 @@ Le dashboard-first est un autre piège. Un beau tableau de bord peut agréger de
 
 L’observabilité ne commence ni dans le pipeline ni dans Grafana. Elle commence par une question de responsabilité : **quel composant doit garantir que tout agent neuf émet les signaux nécessaires à son exploitation ?**
 
-## Le bon levier : traiter l’observabilité comme une capacité de l’image
+## Mieux : embarquer l’observabilité dans l’image
 
 Lorsque la plateforme maîtrise l’image de ses agents, elle possède déjà un point de distribution commun. Cette image définit les outils disponibles, leurs versions, l’utilisateur système et le comportement de démarrage. Elle peut aussi définir le contrat d’observabilité.
 
 Le changement de modèle mental tient en une phrase :
 
-> Un agent n’est pas une machine jetable sur laquelle on ajoute du monitoring ; c’est un produit éphémère qui doit naître observable.
+> Un agent jetable doit naître déjà observable, sans projet d’instrumentation par pipeline.
 
 L’image devient alors le véhicule de trois garanties :
 
@@ -125,7 +125,7 @@ Avant de déclarer un pool « observable », je cherche des preuves. Pas toutes 
 
 Le premier jalon utile est souvent plus étroit : **l’image naît avec un signal**, ce signal arrive dans le système central, une alerte de pool pointe vers une procédure d’une page. Les wrappers d’outils, le raffinement des labels et la couverture des faux positifs viennent ensuite. Viser la checklist complète avant la première image instrumentée, c’est souvent ne jamais démarrer.
 
-Un pool imparfait mais déjà lisible en incident vaut mieux qu’un plan d’observabilité resté sur un slide.
+Un pool déjà lisible en incident, même incomplet, vaut mieux qu’un plan d’observabilité resté sur un slide.
 
 ## Au-delà d’un produit de CI
 
@@ -137,4 +137,4 @@ Les agents éphémères ne rendent donc pas l’observabilité impossible. Ils o
 
 La vraie réussite ne se mesure pas au nombre de métriques ajoutées. Elle se reconnaît à une propriété simple : **un agent peut disparaître sans emporter avec lui la compréhension de ce qui vient de se passer, et sans que les développeurs aient eu à changer leur manière de travailler.**
 
-Cette propriété s’acquiert par itérations. Le jour 1, elle est partielle. Le jour 1 où rien n’existe encore, elle est nulle.
+Cette propriété s’acquiert par étapes. Au départ, la couverture est partielle ; sans image instrumentée, elle est nulle.

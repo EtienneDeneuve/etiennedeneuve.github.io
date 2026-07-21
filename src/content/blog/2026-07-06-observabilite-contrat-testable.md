@@ -21,13 +21,9 @@ relatedArticles:
   - 2026-07-13-rendre-observables-agents-ci-ephemeres
 ---
 
-Une alerte présente dans Git n’est pas nécessairement une alerte qui fonctionne.
+Une alerte présente dans Git n’est pas nécessairement une alerte qui fonctionne. C’est d’abord un fichier : il peut être syntaxiquement valide, relu, approuvé, fusionné et déployé sans jamais atteindre la bonne personne, sans pointer vers le bon contexte et parfois sans même être évalué par le moteur supposé le faire.
 
-C’est un fichier.
-
-Il peut être syntaxiquement valide, relu, approuvé, fusionné et déployé sans jamais atteindre la bonne personne, sans pointer vers le bon contexte et parfois sans même être évalué par le moteur supposé le faire.
-
-Le YAML ne prouve rien. Le PromQL ne prouve rien. Un dashboard vert ne prouve rien.
+Le YAML ne prouve rien à lui seul. Le PromQL non plus. Un dashboard vert non plus.
 
 La seule question utile est la suivante :
 
@@ -35,7 +31,7 @@ La seule question utile est la suivante :
 
 Tant que cette chaîne n’a pas été testée, nous ne possédons pas une capacité d’exploitation. Nous possédons une intention versionnée.
 
-## Le YAML est un emballage, pas le produit
+## Le YAML est un emballage
 
 Dans beaucoup de plateformes, l’observabilité est encore pilotée comme un inventaire.
 
@@ -306,7 +302,7 @@ L’objectif n’est donc pas de réussir parfaitement dès le premier jour. L�
 
 Puis recommencer.
 
-## « Fail to learn », pas « fail and forget »
+## Échouer pour apprendre, pas pour oublier
 
 La formule « fail fast » est souvent utilisée pour justifier le déploiement rapide de systèmes incomplets.
 
@@ -314,7 +310,7 @@ Elle ne suffit pas.
 
 Échouer vite n’a aucune valeur si le système ne capture pas ce qui s’est passé, si personne ne revoit la règle et si les mêmes erreurs sont reproduites six mois plus tard.
 
-Le bon principe est plutôt : **fail to learn**.
+Le principe utile, c’est d’échouer de façon à apprendre quelque chose de vérifiable.
 
 Une fausse alerte doit permettre de comprendre pourquoi le signal était trop sensible.
 
@@ -328,7 +324,7 @@ Un runbook inutile doit être réécrit à partir de ce qui a réellement foncti
 
 L’erreur devient acceptable lorsqu’elle produit une amélioration vérifiable du système.
 
-Sans cette boucle, « fail fast » devient simplement une manière élégante de dire que nous déployons rapidement des choses que personne ne maintient.
+Sans cette boucle, « fail fast » devient surtout une façon élégante de dire qu’on déploie vite des choses que personne ne maintient.
 
 ## Commencer simple n’est pas un compromis honteux
 
@@ -370,15 +366,7 @@ Certains comportements n’apparaissent que :
 
 Il faut donc accepter qu’une règle soit créée, modifiée, désactivée, fusionnée avec une autre, puis parfois réintroduite sous une forme différente.
 
-On fait.
-
-On défait.
-
-On refait.
-
-On corrige.
-
-Ce n’est pas le signe d’une plateforme mal conçue. C’est la vie normale d’un système qui apprend.
+On fait, on défait, on refait, on corrige. Ce n’est pas le signe d’une plateforme mal conçue : c’est la vie normale d’un système qu’on ajuste au fil du réel.
 
 Le danger commence lorsque l’on considère les règles comme des artefacts définitifs, que l’on ne touche plus parce qu’elles ont été validées une fois.
 
@@ -436,7 +424,7 @@ Les seuils évoluent. Les SLO sont recalibrés. Les alertes inutiles disparaisse
 
 Cette évolution n’est pas une preuve d’instabilité.
 
-C’est précisément ce qui maintient la plateforme alignée avec le système réel.
+C’est ce qui maintient la plateforme alignée avec le système réel.
 
 À l’inverse, une plateforme dont les dashboards, les règles et les runbooks ne changent plus depuis deux ans n’est probablement pas mature.
 
@@ -444,7 +432,7 @@ Elle est probablement abandonnée.
 
 Le système continue à évoluer autour d’elle, mais son observabilité ne le suit plus. Elle présente encore une surface propre, des dépôts Git organisés et des pipelines verts, tout en décrivant progressivement un monde qui n’existe plus.
 
-**Si l’observabilité n’évolue plus, ce n’est pas qu’elle est terminée. C’est qu’elle est morte à l’intérieur.**
+**Si l’observabilité n’évolue plus alors que le système change, elle n’est pas « terminée » : elle se déconnecte du réel.**
 
 ## Une définition du done qui assume l’itération
 
@@ -497,10 +485,4 @@ Une plateforme mature ne se reconnaît pas au volume de règles qu’elle héber
 
 Elle se reconnaît au nombre réduit de signaux auxquels les équipes font confiance, non parce qu’ils ont été parfaitement conçus dès le départ, mais parce qu’ils ont survécu à plusieurs cycles de réalité.
 
-Nous les avons construits.
-
-Nous nous sommes trompés.
-
-Nous les avons corrigés.
-
-Et nous continuerons à le faire tant que le système sera vivant.
+On les construit, on se trompe, on corrige, et on recommence tant que le système est vivant.

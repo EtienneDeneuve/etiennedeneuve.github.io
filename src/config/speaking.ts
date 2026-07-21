@@ -135,12 +135,12 @@ export const speakingTopics: SpeakingTopic[] = [
     },
     learnings: {
       fr: [
-        "Une carte utile sert une décision — pas un dashboard de plus.",
+        "Une carte utile sert une décision, pas un dashboard de plus.",
         "Code, cloud, runtime et supply chain doivent être lus ensemble.",
         "La cartographie est un processus continu, pas un livrable ponctuel.",
       ],
       en: [
-        "A useful map serves a decision — not another dashboard.",
+        "A useful map serves a decision, not another dashboard.",
         "Code, cloud, runtime, and supply chain must be read together.",
         "Mapping is a continuous process, not a one-off deliverable.",
       ],
@@ -287,12 +287,12 @@ export const speakingTopics: SpeakingTopic[] = [
     },
     learnings: {
       fr: [
-        "La contrainte n'est pas un retard — c'est un filtre de design.",
+        "La contrainte filtre le design ; ce n’est pas un retard de planning.",
         "Architecture, conformité et go-to-market doivent être co-conçus.",
         "Les preuves de traction passent par des produits accessibles, pas des slides.",
       ],
       en: [
-        "Constraint is not lag — it is a design filter.",
+        "Constraint filters design; it is not a planning delay.",
         "Architecture, compliance, and go-to-market must be co-designed.",
         "Traction proof comes from accessible products, not slides.",
       ],
@@ -358,7 +358,7 @@ export const speakingTopics: SpeakingTopic[] = [
       en: "Architecture, risk, and irreversible decisions",
     },
     problem: {
-      fr: "Les choix d'architecture sont traités comme réversibles alors qu'ils engagent coût, sécurité et trajectoire produit sur des années.",
+      fr: "Les choix d'architecture sont traités comme réversibles alors qu'ils engagent coût, sécurité et direction produit sur des années.",
       en: "Architecture choices are treated as reversible when they commit cost, security, and product trajectory for years.",
     },
     audience: {
