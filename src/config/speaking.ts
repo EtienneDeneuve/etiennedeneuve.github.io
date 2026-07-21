@@ -153,8 +153,8 @@ export const speakingTopics: SpeakingTopic[] = [
         href: "/start-here/",
       },
       {
-        label: { fr: "Thinking — zero trust", en: "Thinking — zero trust" },
-        href: "/thinking/2024-02-15-zero-trust-tl-dr/",
+        label: { fr: "Thinking: identités managées", en: "Thinking: managed identities" },
+        href: "/thinking/2024-09-16-managed-identities/",
       },
     ],
     displayOrder: 1,

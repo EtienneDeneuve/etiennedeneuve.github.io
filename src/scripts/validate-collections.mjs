@@ -16,7 +16,7 @@ if (!existsSync(contentConfig)) {
   process.exit(1);
 }
 
-const result = spawnSync("pnpm", ["exec", "astro", "sync"], {
+const result = spawnSync("bunx", ["astro", "sync"], {
   cwd: rootDir,
   stdio: "inherit",
   shell: process.platform === "win32",

@@ -12,7 +12,7 @@ module.exports = {
         "http://127.0.0.1:4321/speaking/",
         "http://127.0.0.1:4321/thinking/2024-10-05-automatisation-carousel-linkedin/",
       ],
-      startServerCommand: "pnpm exec astro preview --host 127.0.0.1 --port 4321",
+      startServerCommand: "bunx astro preview --host 127.0.0.1 --port 4321",
       startServerReadyPattern: "Local",
       startServerReadyTimeout: 120000,
     },

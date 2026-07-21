@@ -1,5 +1,5 @@
-name: Setup Node pnpm Bun
-description: Install Node (from .nvmrc), pnpm (from packageManager), Bun, and dependencies with a frozen lockfile
+name: Setup Bun toolchain
+description: Install Bun, restore dependencies from bun.lock, optionally install Playwright Chromium
 
 inputs:
   install-playwright:
@@ -10,23 +10,16 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Setup pnpm
-      uses: pnpm/action-setup@v4
-
-    - name: Setup Node.js
-      uses: actions/setup-node@v6
-      with:
-        node-version-file: .nvmrc
-        cache: pnpm
-
     - name: Setup Bun
       uses: oven-sh/setup-bun@v2
+      with:
+        bun-version: latest
 
     - name: Install dependencies
       shell: bash
-      run: pnpm install --frozen-lockfile
+      run: bun install --frozen-lockfile
 
     - name: Install Playwright Chromium
       if: inputs.install-playwright == 'true'
       shell: bash
-      run: pnpm exec playwright install chromium --with-deps
+      run: bunx playwright install chromium --with-deps

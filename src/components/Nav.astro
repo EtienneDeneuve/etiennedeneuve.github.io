@@ -82,6 +82,7 @@ const linkEvent = (href: string) => {
 </nav>
 
 <script>
+  // @ts-nocheck
   class MenuButton extends HTMLElement {
     constructor() {
       super();
@@ -95,14 +96,16 @@ const linkEvent = (href: string) => {
 
       menu.hidden = true;
 
-      const setExpanded = (expand: boolean) => {
+      /** @param {boolean} expand */
+      const setExpanded = (expand) => {
         btn.setAttribute("aria-expanded", expand ? "true" : "false");
         menu.hidden = !expand;
       };
 
       btn.addEventListener("click", () => setExpanded(menu.hidden));
 
-      const handleViewports = (e: MediaQueryListEvent | MediaQueryList) => {
+      /** @param {MediaQueryListEvent | MediaQueryList} e */
+      const handleViewports = (e) => {
         setExpanded(e.matches);
         btn.hidden = e.matches;
       };

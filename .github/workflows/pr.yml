@@ -32,46 +32,46 @@ jobs:
           install-playwright: "true"
 
       - name: Format check
-        run: pnpm run format:check
+        run: bun run format:check
 
       - name: Lint
-        run: pnpm run lint
+        run: bun run lint
 
       - name: Astro check
-        run: pnpm run check
+        run: bun run check
 
       - name: Validate collections
-        run: pnpm run validate:collections
+        run: bun run validate:collections
 
       - name: Publication policy
-        run: pnpm run validate-publication
+        run: bun run validate-publication
 
       - name: Spellcheck
-        run: pnpm run spellcheck
+        run: bun run spellcheck
 
       - name: SEO config
-        run: pnpm run verify-seo
+        run: bun run verify-seo
 
       - name: Build
         run: |
           export SOURCE_DATE_EPOCH="$(git log -1 --pretty=%ct)"
           echo "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH"
-          pnpm run build
+          bun run build
 
       - name: Internal linkcheck
-        run: pnpm run linkcheck
+        run: bun run linkcheck
 
       - name: SEO HTML checks
-        run: pnpm run verify-seo
+        run: bun run verify-seo
 
       - name: Unit tests
-        run: pnpm run test
+        run: bun run test
 
       - name: Playwright (built site)
-        run: pnpm run test:e2e
+        run: bun run test:e2e
 
       - name: Lighthouse (critical pages)
-        run: pnpm run lighthouse
+        run: bun run lighthouse
 
       - name: Upload Lighthouse results
         if: always()

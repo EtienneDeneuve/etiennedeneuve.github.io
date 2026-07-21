@@ -11,7 +11,7 @@ import {
 } from "../../lib/json-ld.ts";
 import { getReleasedArticles } from "../../lib/publication-policy.ts";
 import { selectHomeThinking } from "../../lib/home-thinking.ts";
-import { getArticlePath, getCanonicalSlug } from "../../lib/thinking.ts";
+import { getArticlePath, getArticleLanguage, getCanonicalSlug } from "../../lib/thinking.ts";
 
 const homeJsonLd = buildJsonLdGraph([personJsonLd(), organizationJsonLd(), websiteJsonLd()]);
 
@@ -129,7 +129,7 @@ const proofProjects = [...priorityProjects, ...featuredOthers];
             item.entry ? (
               <a
                 class="surface-card interactive"
-                href={getArticlePath(getCanonicalSlug(item.entry), "en")}
+                href={getArticlePath(getCanonicalSlug(item.entry), getArticleLanguage(item.entry))}
               >
                 <p class="eyebrow">{item.label}</p>
                 <h3>{item.entry.data.title}</h3>

@@ -174,7 +174,9 @@ const jsonLd = buildJsonLdGraph([
                           <li>
                             <a
                               href={
-                                link.href.startsWith("http") ? link.href : `${prefix}${link.href}`
+                                link.href.startsWith("http") || link.href.startsWith("/thinking/")
+                                  ? link.href
+                                  : `${prefix}${link.href}`
                               }
                             >
                               {link.label[lang]}

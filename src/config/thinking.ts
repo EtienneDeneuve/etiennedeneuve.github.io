@@ -41,8 +41,8 @@ export const thinkingConfig = {
     "2026-07-06-observabilite-contrat-testable",
     "2026-07-13-rendre-observables-agents-ci-ephemeres",
     "2026-07-08-gitops-separer-versions-infra-et-images",
-    "2024-02-15-zero-trust-tl-dr",
     "2024-09-16-managed-identities",
+    "2018-06-26-documentation-as-code",
   ],
   pillarLabels: {
     "systems-and-risk": {

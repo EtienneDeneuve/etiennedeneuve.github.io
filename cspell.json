@@ -162,7 +162,9 @@
     "ephemeres",
     "observabilite",
     "gitops",
-    "separer"
+    "separer",
+    "bunx",
+    "Bun"
   ],
   "flagWords": [],
   "overrides": [

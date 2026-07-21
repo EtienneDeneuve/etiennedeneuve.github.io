@@ -8,7 +8,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const rootDir = join(dirname(fileURLToPath(import.meta.url)), "../..");
-const result = spawnSync("pnpm", ["exec", "astro", "check"], {
+const result = spawnSync("bunx", ["astro", "check"], {
   cwd: rootDir,
   encoding: "utf8",
   shell: process.platform === "win32",

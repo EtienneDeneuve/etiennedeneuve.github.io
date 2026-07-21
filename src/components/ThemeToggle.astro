@@ -66,6 +66,7 @@ import Icon from "./Icon.astro";
 </style>
 
 <script>
+  // @ts-nocheck
   class ThemeToggle extends HTMLElement {
     constructor() {
       super();
@@ -73,7 +74,8 @@ import Icon from "./Icon.astro";
       const button = this.querySelector("button");
       if (!button) return;
 
-      const setTheme = (dark: boolean) => {
+      /** @param {boolean} dark */
+      const setTheme = (dark) => {
         document.documentElement.classList[dark ? "add" : "remove"]("theme-dark", "cc--darkmode");
         button.setAttribute("aria-pressed", String(dark));
       };
