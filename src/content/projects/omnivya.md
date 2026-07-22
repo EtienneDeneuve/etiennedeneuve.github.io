@@ -1,16 +1,16 @@
 ---
 name: "Omnivya"
 name_en: "Omnivya"
-summary: "Structure qui transforme principes d’architecture et expérience terrain en missions, produits et infrastructure numérique pour des marchés complexes."
-summary_en: "Structure that turns architecture principles and field experience into missions, products and digital infrastructure for complex markets."
+summary: "Groupe d’exécution : Omnivya porte le conseil et la delivery ; Omnivya Expert porte les services et le build local (dont l’Algérie)."
+summary_en: "Execution group: Omnivya carries consulting and delivery; Omnivya Expert carries services and local build (including Algeria)."
 status: "production"
 type: "company"
 role: "Cofondateur : architecture, delivery et gouvernance plateforme"
 role_en: "Co-founder: architecture, delivery and platform governance"
 problem: "Les organisations ont besoin d’exécuter des programmes cloud, plateforme et sécurité sans perdre le cadre de décision ni la lisibilité du système."
 problem_en: "Organizations need to execute cloud, platform and security programs without losing the decision frame or system readability."
-context: "Entité d’exécution fondée en 2020 avec Taous (continuité Simplifi’ED → Omnivya). Missions cloud native, Kubernetes, DevSecOps, FinOps et GreenOps pour des contextes à forte complexité technique et organisationnelle."
-context_en: "Execution entity founded in 2020 with Taous (Simplifi’ED → Omnivya continuity). Cloud native, Kubernetes, DevSecOps, FinOps and GreenOps missions for technically and organizationally complex contexts."
+context: "Groupe fondé en 2020 avec Taous (continuité Simplifi’ED → Omnivya). Omnivya = entité d’exécution et missions. Omnivya Expert = bras services / build (IT Challenge en Algérie). Cloud native, Kubernetes, DevSecOps, FinOps et GreenOps."
+context_en: "Group founded in 2020 with Taous (Simplifi’ED → Omnivya continuity). Omnivya = execution entity and missions. Omnivya Expert = services / build arm (IT Challenge in Algeria). Cloud native, Kubernetes, DevSecOps, FinOps and GreenOps."
 decisions:
   - "Séparer raisonnement publié (site Etienne) et delivery structurée (Omnivya)"
   - "Documenter les choix d’architecture avant d’industrialiser"
@@ -28,15 +28,17 @@ principles_en:
   - "Build for real constraints, not a tool catalog"
   - "Make the system auditable and governable"
 whatExists:
-  - "Structure opérationnelle Omnivya (omnivya.fr)"
+  - "Omnivya — groupe / entité d’exécution (omnivya.fr)"
+  - "Omnivya Expert — bras services et build local (dont IT Challenge, Algérie)"
   - "Missions conseil et delivery cloud native / Kubernetes / DevSecOps"
   - "Canal de contact et qualification via etienne@omnivya.fr"
 whatExists_en:
-  - "Operational Omnivya structure (omnivya.fr)"
+  - "Omnivya — group / execution entity (omnivya.fr)"
+  - "Omnivya Expert — services and local build arm (including IT Challenge, Algeria)"
   - "Consulting and delivery missions cloud native / Kubernetes / DevSecOps"
   - "Contact and qualification channel via etienne@omnivya.fr"
-currentState: "Entité active. Les détails commerciaux et offres détaillées restent sur omnivya.fr ; ce site documente le lien entre principes publiés et exécution."
-currentState_en: "Active entity. Commercial details and detailed offers remain on omnivya.fr; this site documents the link between published principles and execution."
+currentState: "Groupe actif. Les détails commerciaux et offres détaillées restent sur omnivya.fr ; ce site documente le lien entre principes publiés et exécution (Omnivya + Omnivya Expert)."
+currentState_en: "Active group. Commercial details and detailed offers remain on omnivya.fr; this site documents the link between published principles and execution (Omnivya + Omnivya Expert)."
 limitations:
   - "Pas de duplication du site Omnivya sur etienne.deneuve.xyz"
   - "Pas de métriques client ni de logos sans autorisation explicite"
@@ -75,8 +77,8 @@ verified: true
 featured: true
 draft: false
 displayOrder: 1
-ecosystemRole: "exécution"
-ecosystemRole_en: "execution"
+ecosystemRole: "groupe · Omnivya Expert (services)"
+ecosystemRole_en: "group · Omnivya Expert (services)"
 ---
 
-Omnivya porte l’exécution lorsque la décision est prise ou le diagnostic achevé.
+Omnivya est le groupe d’exécution ; Omnivya Expert en est le bras services. Les deux portent la delivery lorsque la décision est prise ou le diagnostic achevé.

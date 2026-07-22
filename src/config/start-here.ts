@@ -36,7 +36,7 @@ export const startHereConfig = {
           "Des cadres de gouvernance : sécurité intégrée au cycle de vie, observabilité utile, réduction de la charge cognitive, plutôt que des dashboards de plus.",
         ],
         en: [
-          "Readable systems: mappings, decision models and platform roadmaps that make the IT estate governable.",
+          "Readable systems: mappings, decision models and platform trajectories that make the IT estate governable.",
           "Operable components: Omnivya, My Dare (coworking), Sanad (tool via IT Challenge / Omnivya Expert), plus open source, each anchored in a real constraint.",
           "Governance frameworks: security embedded in the lifecycle, useful observability, reduced cognitive load, rather than more dashboards.",
         ],

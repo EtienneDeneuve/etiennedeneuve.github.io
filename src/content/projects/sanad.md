@@ -7,10 +7,10 @@ status: "production"
 type: "product"
 role: "Conception via Omnivya / Omnivya Expert (IT Challenge)"
 role_en: "Design via Omnivya / Omnivya Expert (IT Challenge)"
-problem: "Les équipes locales ont besoin d’outils simples, opérables et adaptés aux contraintes algériennes, pas d’une plateforme générique surdimensionnée."
-problem_en: "Local teams need simple, operable tools adapted to Algerian constraints, not an oversized generic platform."
-context: "Sanad est un outil développé via IT Challenge (Omnivya Expert, Algérie). Il s’inscrit côté Algérie, aux côtés de My Dare, sans prétendre être un produit SaaS autonome « scale-up »."
-context_en: "Sanad is a tool developed through IT Challenge (Omnivya Expert, Algeria). It sits on the Algeria side, alongside My Dare, without claiming to be a standalone “scale-up” SaaS product."
+problem: "Sur le marché algérien uniquement : les équipes locales ont besoin d’outils simples, opérables et adaptés aux contraintes DZ — pas d’une plateforme générique surdimensionnée."
+problem_en: "Algeria market only: local teams need simple, operable tools adapted to DZ constraints — not an oversized generic platform."
+context: "Sanad est un outil développé via Omnivya Expert (IT Challenge, Algérie). Marché DZ only, aux côtés de My Dare — pas un produit SaaS international ni le fer de lance du groupe."
+context_en: "Sanad is a tool built via Omnivya Expert (IT Challenge, Algeria). DZ market only, alongside My Dare — not an international SaaS product nor the group’s flagship."
 decisions:
   - "Construire un outil ciblé plutôt qu’un catalogue de fonctionnalités"
   - "Ancrer le développement dans IT Challenge / Omnivya Expert (Algérie)"
@@ -64,9 +64,9 @@ startedAt: 2024-01-01
 verified: true
 featured: true
 draft: false
-displayOrder: 3
-ecosystemRole: "outil IT Challenge / Omnivya Expert"
-ecosystemRole_en: "IT Challenge / Omnivya Expert tool"
+displayOrder: 4
+ecosystemRole: "outil Omnivya Expert — marché DZ"
+ecosystemRole_en: "Omnivya Expert tool — DZ market"
 ---
 
-Sanad est un outil via IT Challenge (Omnivya Expert, Algérie) — utile et ancré localement, sans surjouer le discours produit.
+Sanad est un outil Omnivya Expert pour le marché algérien — utile et local, pas le fer de lance du groupe.

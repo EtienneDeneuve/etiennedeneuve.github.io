@@ -112,12 +112,12 @@ export const aboutConfig = {
     } as Localized,
     paragraphs: {
       fr: [
-        "Omnivya existe pour exécuter sans diluer le cadre de décision. Raisonnement publié (ce site) et delivery structurée (Omnivya) restent séparés à dessein : l’un clarifie ; l’autre porte en mission.",
-        "Sans structure d’exécution, les idées restent des slides. Sans principes clairs, l’exécution devient un catalogue d’outils. Omnivya relie les deux pour des contextes à forte complexité technique et organisationnelle.",
+        "Omnivya est le groupe d’exécution ; Omnivya Expert en est le bras services. Raisonnement publié (ce site) et delivery structurée restent séparés à dessein : l’un clarifie ; l’autre porte en mission.",
+        "Sans structure d’exécution, les idées restent des slides. Sans principes clairs, l’exécution devient un catalogue d’outils. Omnivya et Omnivya Expert relient les deux pour des contextes à forte complexité technique et organisationnelle.",
       ],
       en: [
-        "Omnivya exists to execute without diluting the decision frame. Published reasoning (this site) and structured delivery (Omnivya) stay deliberately separate: one clarifies; the other carries into missions.",
-        "Without an execution structure, ideas stay slides. Without clear principles, execution becomes a tool catalog. Omnivya connects both for contexts of high technical and organizational complexity.",
+        "Omnivya is the execution group; Omnivya Expert is its services arm. Published reasoning (this site) and structured delivery stay deliberately separate: one clarifies; the other carries into missions.",
+        "Without an execution structure, ideas stay slides. Without clear principles, execution becomes a tool catalog. Omnivya and Omnivya Expert connect both for contexts of high technical and organizational complexity.",
       ],
     },
   },
@@ -128,12 +128,12 @@ export const aboutConfig = {
     } as Localized,
     paragraphs: {
       fr: [
-        "Côté Algérie : My Dare (coworking à Alger), Sanad (outil via IT Challenge / Omnivya Expert), et la filiale qui porte le build sur place.",
-        "IT Challenge / Omnivya Expert ancre le build local. My Dare ancre le terrain. Sanad est une preuve d’outil, pas un portefeuille marketing.",
+        "Côté Algérie : My Dare (coworking à Alger), puis Sanad (outil marché DZ via Omnivya Expert / IT Challenge).",
+        "Omnivya Expert ancre le build local. My Dare ancre le terrain. Sanad reste un outil DZ only — pas le fer de lance du groupe.",
       ],
       en: [
-        "On the Algeria side: My Dare (coworking in Algiers), Sanad (tool via IT Challenge / Omnivya Expert), and the subsidiary that carries the build on the ground.",
-        "IT Challenge / Omnivya Expert anchors local build. My Dare anchors the field. Sanad is tool-level proof, not a marketing portfolio.",
+        "On the Algeria side: My Dare (coworking in Algiers), then Sanad (DZ-market tool via Omnivya Expert / IT Challenge).",
+        "Omnivya Expert anchors local build. My Dare anchors the field. Sanad stays a DZ-only tool — not the group’s flagship.",
       ],
     },
   },

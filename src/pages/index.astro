@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import CallToAction from "../components/CallToAction.astro";
+import HomeContent from "../components/HomeContent.astro";
 import { siteConfig } from "../config/site.ts";
 import {
   buildJsonLdGraph,
@@ -11,7 +11,6 @@ import {
 } from "../lib/json-ld.ts";
 import { getReleasedArticles } from "../lib/publication-policy.ts";
 import { selectHomeThinking } from "../lib/home-thinking.ts";
-import { getArticlePath, getCanonicalSlug } from "../lib/thinking.ts";
 
 const homeJsonLd = buildJsonLdGraph([personJsonLd(), organizationJsonLd(), websiteJsonLd()]);
 
@@ -25,7 +24,7 @@ const allProjects = (await getCollection("projects")).filter(
   (project) => !project.data.draft && project.data.verified
 );
 
-const priorityNames = ["Sanad", "My Dare", "External Metrics Exporter"];
+const priorityNames = ["Omnivya", "My Dare", "External Metrics Exporter", "Sanad"];
 const priorityProjects = priorityNames
   .map((name) => allProjects.find((project) => project.data.name === name))
   .filter((project): project is (typeof allProjects)[number] => Boolean(project));
@@ -37,7 +36,7 @@ const proofProjects = [...priorityProjects, ...featuredOthers];
 
 <BaseLayout
   title={siteConfig.identity.name}
-  description="Plateformes cloud, Kubernetes et DevSecOps : rendre les systèmes lisibles, gouvernables et actionnables."
+  description="Doctrine, décisions et preuves publiques pour piloter un SI sous contraintes réelles."
   lang="fr"
   path="/"
   brandTitle={false}
@@ -48,170 +47,5 @@ const proofProjects = [...priorityProjects, ...featuredOthers];
   ]}
   jsonLd={homeJsonLd}
 >
-  <main class="wrapper stack gap-16">
-    <section class="stack gap-5 page-hero">
-      <p class="brand-mark">{siteConfig.identity.name}</p>
-      <p class="eyebrow">{siteConfig.professionalRole.title}</p>
-      <h1>
-        Plateformes cloud, Kubernetes et DevSecOps : rendre les systèmes lisibles, gouvernables et
-        actionnables.
-      </h1>
-      <p class="lede">
-        Notes d’architecture, décisions documentées et preuves publiques pour piloter un SI sous
-        contraintes réelles. Omnivya exécute quand la mission l’exige.
-      </p>
-      <div class="actions">
-        <CallToAction
-          href="/start-here/"
-          event="cta_start_here"
-          props={{ surface: "home", lang: "fr" }}
-        >
-          Start Here
-        </CallToAction>
-        <a class="btn-text" href="/projects/">Voir les preuves</a>
-      </div>
-    </section>
-
-    <hr class="section-rule" />
-
-    <section class="stack gap-4">
-      <div class="section-head">
-        <h2>Problèmes</h2>
-      </div>
-      <ul class="grid-auto problem-grid">
-        <li class="surface">
-          Personne ne sait plus qui dépend de quoi, ni où prioriser le risque.
-        </li>
-        <li class="surface">
-          Les équipes déploient, mais chaque release augmente une dette qu’on ne voit plus.
-        </li>
-        <li class="surface">
-          Cloud et plateforme ne livrent pas : pas de golden path, self-service illusoire.
-        </li>
-        <li class="surface">
-          On empile les outils sans pouvoir trancher plus vite ni plus clairement.
-        </li>
-      </ul>
-    </section>
-
-    <section class="stack gap-4">
-      <div class="section-head">
-        <h2>Principes</h2>
-      </div>
-      <ul class="grid-auto problem-grid">
-        <li class="surface">Comprendre avant d’automatiser.</li>
-        <li class="surface">Modéliser les dépendances et le risque.</li>
-        <li class="surface">Réduire la charge cognitive plutôt qu’ajouter des dashboards.</li>
-        <li class="surface">
-          Concevoir pour les contraintes réelles (orga, réglementation, territoire), pas pour un
-          schéma idéal.
-        </li>
-      </ul>
-    </section>
-
-    <section class="stack gap-4">
-      <div class="section-head">
-        <h2>Preuves</h2>
-        <a class="btn-text" href="/projects/">Tous les projets</a>
-      </div>
-      <div class="grid-auto">
-        {
-          proofProjects.map((project) => (
-            <a class="surface-card interactive" href={`/projects/${project.id}/`}>
-              <p class="eyebrow">{project.data.type}</p>
-              <h3>{project.data.name}</h3>
-              <p>{project.data.problem}</p>
-              <span class="read-more">Preuve</span>
-            </a>
-          ))
-        }
-      </div>
-    </section>
-
-    <section class="stack gap-4">
-      <div class="section-head">
-        <h2>Thinking</h2>
-        <a class="btn-text" href="/thinking/">Index</a>
-      </div>
-      <div class="grid-auto">
-        {
-          selectedThinking.map((item) =>
-            item.entry ? (
-              <a
-                class="surface-card interactive"
-                href={getArticlePath(getCanonicalSlug(item.entry), "fr")}
-              >
-                <p class="eyebrow">{item.label}</p>
-                <h3>{item.entry.data.title}</h3>
-                <p>{item.entry.data.description}</p>
-                <span class="read-more">Lire</span>
-              </a>
-            ) : null
-          )
-        }
-      </div>
-    </section>
-
-    <section class="stack gap-4">
-      <div class="section-head">
-        <h2>Parcours</h2>
-      </div>
-      <div class="grid-auto">
-        <a class="surface-card interactive path-card" href="/start-here/">
-          <h3>Je dirige un système complexe</h3>
-          <span class="read-more">Start Here</span>
-        </a>
-        <a class="surface-card interactive path-card" href="/work/">
-          <h3>Je construis une plateforme</h3>
-          <span class="read-more">Work</span>
-        </a>
-        <a class="surface-card interactive path-card" href="/speaking/">
-          <h3>Je cherche un intervenant</h3>
-          <span class="read-more">Speaking</span>
-        </a>
-      </div>
-    </section>
-
-    <section class="stack gap-4 closing">
-      <hr class="section-rule" />
-      <h2>Avant d’ajouter un outil, il faut une carte partagée du système.</h2>
-      <div class="actions">
-        <CallToAction
-          href="/start-here/"
-          event="cta_start_here"
-          props={{ surface: "home-closing", lang: "fr" }}
-        >
-          Lire Start Here
-        </CallToAction>
-        <a class="btn-secondary" href={`mailto:${siteConfig.omnivya.email}`}>Email</a>
-        <a class="btn-text" href="/contact/">Contact</a>
-      </div>
-    </section>
-  </main>
+  <HomeContent lang="fr" proofProjects={proofProjects} selectedThinking={selectedThinking} />
 </BaseLayout>
-
-<style>
-  .problem-grid {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  .problem-grid .surface {
-    font-size: var(--text-sm);
-    line-height: var(--leading-snug);
-    color: var(--color-fg-muted);
-  }
-  .path-card {
-    min-height: 7.5rem;
-    justify-content: space-between;
-  }
-  .closing {
-    max-width: var(--measure-wide);
-    padding-block: var(--space-4) var(--space-10);
-    gap: var(--space-5);
-  }
-  .closing h2 {
-    max-width: 22ch;
-    font-size: clamp(var(--text-2xl), 3vw, var(--text-3xl));
-  }
-</style>

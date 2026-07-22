@@ -65,7 +65,7 @@ startedAt: 2023-01-01
 verified: true
 featured: true
 draft: false
-displayOrder: 5
+displayOrder: 3
 ecosystemRole: "preuves publiques"
 ecosystemRole_en: "public proof"
 ---

@@ -62,7 +62,7 @@ startedAt: 2023-01-01
 verified: true
 featured: true
 draft: false
-displayOrder: 4
+displayOrder: 2
 ecosystemRole: "terrain et opérations"
 ecosystemRole_en: "field and operations"
 ---

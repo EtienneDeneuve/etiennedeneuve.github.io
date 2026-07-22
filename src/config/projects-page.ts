@@ -44,20 +44,20 @@ export const projectsPageConfig = {
       {
         id: "omnivya",
         name: { fr: "Omnivya", en: "Omnivya" },
-        role: { fr: "exécution", en: "execution" },
+        role: { fr: "groupe · exécution", en: "group · execution" },
         href: "/projects/omnivya/",
-      },
-      {
-        id: "sanad",
-        name: { fr: "Sanad", en: "Sanad" },
-        role: { fr: "outil — IT Challenge", en: "tool — IT Challenge" },
-        href: "/projects/sanad/",
       },
       {
         id: "my-dare",
         name: { fr: "My Dare", en: "My Dare" },
         role: { fr: "coworking Alger", en: "Algiers coworking" },
         href: "/projects/my-dare/",
+      },
+      {
+        id: "sanad",
+        name: { fr: "Sanad", en: "Sanad" },
+        role: { fr: "outil — marché DZ", en: "tool — DZ market" },
+        href: "/projects/sanad/",
       },
       {
         id: "open-source",

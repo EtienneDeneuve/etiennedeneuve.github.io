@@ -1,56 +1,33 @@
-# Design system — Ink Doctrine
+# Design system — Atelier
 
 ## Direction
 
-**Ink Doctrine** : Swiss + éditorial technique. Contraste encre/papier, typographie IBM Plex,
-accent unique, bords nets. Hub de doctrine et de preuves — pas un template SaaS.
+**Atelier** : premium raffiné pour un hub doctrine tech. Pierre `#FAFAF9` / encre `#0C0A09` /
+accent or `#A16207` (palette Luxury/Premium ui-ux-pro-max). Pas de teal Shine, pas de glass SaaS,
+pas de mode terminal.
 
-Identité : papier `#F4F2EC` / encre `#0B0D10` / accent **Ink Signal** (encre, sans teal).
-**IBM Plex Serif** (display) · **IBM Plex Sans** (UI) · **IBM Plex Mono** (meta / code).
+**Cormorant** (display) · **Outfit** (UI) · **IBM Plex Mono** (code uniquement).
 
-## Surfaces partagées (`global.css`)
+## Surfaces
 
-| Classe                                                      | Usage                                  |
-| ----------------------------------------------------------- | -------------------------------------- |
-| `.surface` / `.surface-card`                                | Cartes, preuves (bordure, pas d’ombre) |
-| `.btn-primary` / `.btn-secondary` / `.btn-text`             | CTA rectangulaires                     |
-| `.eyebrow` / `.lede` / `.page-hero` / `.brand-mark`         | En-têtes                               |
-| `.badge` / `.grid-auto` / `.section-head` / `.section-rule` | Structure éditoriale                   |
-| `.actions`                                                  | Groupes de CTA                         |
+| Classe / motif                    | Usage                                      |
+| --------------------------------- | ------------------------------------------ |
+| `.btn-primary` / `.btn-secondary` | CTA (radius 8px, ombre douce)              |
+| Home `.atelier-*`                 | Hero glow, preuve lead, feed, close sombre |
+| `.surface` / `.surface-card`      | Cartes secondaires                         |
 
 ## Tokens
 
-| Groupe   | Exemples                                                                    |
-| -------- | --------------------------------------------------------------------------- |
-| Surfaces | `--color-bg`, `--color-bg-elevated`, `--color-fg`, `--color-border`         |
-| Accent   | `--accent-regular` = encre (light `#0B0D10` / dark `#F4F2EC`) — pas de teal |
-| Radius   | `--radius-sm: 0`, `--radius-md: 2px`, `--radius-lg: 4px`                    |
-| Shadows  | aucune (profondeur = bordure)                                               |
-| Fonts    | `--font-display` (Plex Serif), `--font-body` (Plex Sans), `--font-mono`     |
-| Motion   | `--motion-fast` ≈180ms, View Transitions ≤220ms                             |
-
-Clair / sombre via `:root` et `:root.theme-dark`.
-
-## Composants (`src/components/ds/`)
-
-| Composant                    | Usage                             |
-| ---------------------------- | --------------------------------- |
-| `Callout`                    | note / warning / decision / proof |
-| `QuoteBlock`                 | citations (serif)                 |
-| `DecisionList`               | listes numérotées mono            |
-| `DiagramFrame`               | SVG / mermaid                     |
-| `CodePanel`                  | blocs de code                     |
-| `ResponsiveTable`            | tables                            |
-| `MediaFrame`                 | images anti-CLS                   |
-| `ProofCard` / `ProjectPanel` | preuves / projets                 |
-
-## Page de référence
-
-`/design-system/` désactivée en prod sauf `PUBLIC_SHOW_DESIGN_SYSTEM=true`.
+| Groupe  | Exemples                                                        |
+| ------- | --------------------------------------------------------------- |
+| Accent  | `--accent-regular` or `#A16207` / dark `#EAB308`                |
+| Radius  | `--radius-md: 8px`, `--radius-lg: 14px`                         |
+| Shadows | `--shadow-sm/md/lg` soft                                        |
+| Fonts   | `--font-display` Cormorant, `--font-body` Outfit, `--font-mono` |
+| Motion  | rise ~280ms, `prefers-reduced-motion`                           |
 
 ## Contraintes
 
-- Pas de Tailwind / lib UI
-- Pas de fonds photo ; pas de pills 999 ; pas de gradients CTA
-- `prefers-reduced-motion` ; focus visible ; touch ≥44px
-- Omnivya jamais hero brand sur le site personnel
+- Omnivya secondaire, jamais hero brand
+- FR/EN parity
+- Focus visible, touch ≥44px
