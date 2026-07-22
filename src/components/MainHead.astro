@@ -111,10 +111,24 @@ const canonicalHref =
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+{/* Non-blocking: render-blocking Google Fonts were tanking / Lighthouse (0.82 < 0.9). */}
 <link
-  href="https://fonts.googleapis.com/css2?family=Cormorant:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap"
-  rel="stylesheet"
+  rel="preload"
+  as="style"
+  href="https://fonts.googleapis.com/css2?family=Cormorant:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@400;500;600;700&display=swap"
 />
+<link
+  href="https://fonts.googleapis.com/css2?family=Cormorant:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@400;500;600;700&display=swap"
+  rel="stylesheet"
+  media="print"
+  onload="this.media='all'"
+/>
+<noscript>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+</noscript>
 
 <script
   type="text/partytown"
