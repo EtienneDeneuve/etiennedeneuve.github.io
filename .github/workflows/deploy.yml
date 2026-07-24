@@ -99,7 +99,7 @@ jobs:
 
       - name: Upload Lighthouse results
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: lighthouse-results
           path: .lighthouseci
@@ -108,7 +108,7 @@ jobs:
 
       - name: Upload media kit
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: media-kit
           path: |
