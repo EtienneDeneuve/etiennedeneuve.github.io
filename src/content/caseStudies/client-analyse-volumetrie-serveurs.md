@@ -5,7 +5,7 @@ industry: "Industrie du luxe"
 clientIndustry: "Industrie du luxe"
 context: "5 mois"
 timeframe: "5 mois"
-problem: "Un acteur international du luxe (groupe L’Oréal) devait décider d’une migration cloud de serveurs de fichiers à très forte volumétrie (800+ Po), sans vision claire sur la nature et la valeur métier des données."
+problem: "Un acteur international du luxe devait décider d’une migration cloud de serveurs de fichiers à très forte volumétrie (800+ Po), sans vision claire sur la nature et la valeur métier des données."
 approach: "Après les limites d’un POC PowerShell (mémoire, stabilité), développement d’un outil C++ natif Unicode pour scanner et qualifier les arborescences UNC directement en production, sans interruption de service."
 constraints: []
 decisions:
@@ -30,7 +30,7 @@ metrics:
   "Couverture des arborescences de fichiers": "100%"
   "Support des jeux de caractères internationaux": "Complet (latin, arabe, japonais, etc.)"
 outcomes:
-  summary: "Décision de migration éclairée grâce à une qualification préalable des données (800+ Po, contexte groupe L’Oréal) — métriques à vérifier avant publication publique."
+  summary: "Décision de migration éclairée grâce à une qualification préalable des données (800+ Po, secteur luxe) — métriques à vérifier avant publication publique."
   metrics: []
 evidence: []
 disclosureLevel: "confidential-summary"
@@ -67,4 +67,4 @@ Un outil C++ natif à faible empreinte mémoire a permis une analyse à grande �
 - L’Unicode est indispensable dans un groupe international.
 - Une analyse préalable des données est essentielle avant migration cloud.
 
-> Brouillon issu de la PR axtious (#47). Volumétrie **800+ Po** confirmée (contexte groupe L’Oréal). Reste en `draft: true` tant que le niveau de disclosure / publication du nom client n’est pas validé.
+> Brouillon issu de la PR axtious (#47). Volumétrie **800+ Po** confirmée. Client non nommé (secteur luxe uniquement). `draft: true`.
