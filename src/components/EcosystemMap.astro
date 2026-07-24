@@ -12,7 +12,10 @@ const config = projectsPageConfig.ecosystem;
 <section class="ecosystem" aria-labelledby="ecosystem-title">
   <div class="ecosystem-head">
     <h2 id="ecosystem-title">{config.title[lang]}</h2>
-    <a class="ecosystem-ref" href={lang === "en" ? config.referenceHref.en : config.referenceHref.fr}>
+    <a
+      class="ecosystem-ref"
+      href={lang === "en" ? config.referenceHref.en : config.referenceHref.fr}
+    >
       {config.referenceLabel[lang]}
     </a>
   </div>

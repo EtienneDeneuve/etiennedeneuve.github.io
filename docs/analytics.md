@@ -4,10 +4,10 @@
 
 Scripts live in `src/components/AnalyticsVendors.astro`, loaded from `MainHead` only when IDs are set:
 
-| Variable | Example | Role |
-| -------- | ------- | ---- |
-| `PUBLIC_GA4_MEASUREMENT_ID` | `G-XXXXXXXX` | Google Analytics 4 |
-| `PUBLIC_CLARITY_PROJECT_ID` | project id from clarity.ms | Microsoft Clarity |
+| Variable                    | Example                    | Role               |
+| --------------------------- | -------------------------- | ------------------ |
+| `PUBLIC_GA4_MEASUREMENT_ID` | `G-XXXXXXXX`               | Google Analytics 4 |
+| `PUBLIC_CLARITY_PROJECT_ID` | project id from clarity.ms | Microsoft Clarity  |
 
 Both are gated by the CookieConsent **analytics** category. Universal Analytics (`UA-*`) is not used.
 

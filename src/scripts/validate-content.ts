@@ -78,7 +78,8 @@ const FORBIDDEN_PATTERNS: Array<{ id: string; pattern: RegExp; why: string }> = 
   },
   {
     id: "omnivya-simple-rename",
-    pattern: /Omnivya[\s\S]{0,80}(simple renommage|simple rename|renommage (juridique )?de Simplifi)/i,
+    pattern:
+      /Omnivya[\s\S]{0,80}(simple renommage|simple rename|renommage (juridique )?de Simplifi)/i,
     why: "Omnivya is not a simple rename of Simplifi’ED",
   },
 ];
@@ -125,7 +126,9 @@ async function assertSsotInvariants() {
     ok("Omnivya brandSince is 2025");
   }
 
-  const currentBrands = Object.values(ecosystemEntities).filter((e) => e.brandPosture === "current");
+  const currentBrands = Object.values(ecosystemEntities).filter(
+    (e) => e.brandPosture === "current"
+  );
   const currentNames = currentBrands.map((e) => e.canonicalName);
   if (currentNames.includes("Simplifi’ED") || currentNames.includes("IT Challenge")) {
     fail("Legacy names must not appear as current brands");
@@ -214,7 +217,10 @@ async function assertNoForbiddenCopy() {
     const text = await readFile(file, "utf8");
     for (const rule of FORBIDDEN_PATTERNS) {
       for (const match of text.matchAll(
-        new RegExp(rule.pattern, rule.pattern.flags.includes("g") ? rule.pattern.flags : `${rule.pattern.flags}g`),
+        new RegExp(
+          rule.pattern,
+          rule.pattern.flags.includes("g") ? rule.pattern.flags : `${rule.pattern.flags}g`
+        )
       )) {
         const matched = match[0] ?? "";
         // Negations in the matched span ("pas un simple renommage") are allowed.

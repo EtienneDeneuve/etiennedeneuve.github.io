@@ -8,7 +8,12 @@ import {
   ecosystemNodeId,
   validateEcosystemJsonLdGraph,
 } from "../../lib/ecosystem-json-ld.ts";
-import { buildJsonLdGraph, personJsonLd, organizationJsonLd, websiteJsonLd } from "../../lib/json-ld.ts";
+import {
+  buildJsonLdGraph,
+  personJsonLd,
+  organizationJsonLd,
+  websiteJsonLd,
+} from "../../lib/json-ld.ts";
 
 const errors: string[] = [];
 
@@ -44,7 +49,10 @@ if (!Array.isArray(omnivya?.founder) || omnivya.founder.length !== 2) {
 }
 
 const expert = nodes.find((node) => node["@id"] === ecosystemNodeId("omnivya-expert"));
-if (!expert?.memberOf || (expert.memberOf as { "@id": string })["@id"] !== ecosystemNodeId("omnivya")) {
+if (
+  !expert?.memberOf ||
+  (expert.memberOf as { "@id": string })["@id"] !== ecosystemNodeId("omnivya")
+) {
   fail("Omnivya Expert must memberOf Omnivya");
 }
 

@@ -5,11 +5,7 @@ import OpenSourceSection from "../components/OpenSourceSection.astro";
 import { aboutConfig } from "../config/about.ts";
 import { siteConfig } from "../config/site.ts";
 import { getPublishableEntries } from "../lib/publication-policy.ts";
-import {
-  buildJsonLdGraph,
-  profilePageJsonLd,
-  websiteJsonLd,
-} from "../lib/json-ld.ts";
+import { buildJsonLdGraph, profilePageJsonLd, websiteJsonLd } from "../lib/json-ld.ts";
 import { aboutIdentityNodes } from "../lib/ecosystem-json-ld.ts";
 
 interface Props {

@@ -136,7 +136,7 @@ export function getArticleLanguage(entry: ThinkingArticle): "fr" | "en" {
 /** Articles whose content language matches the UI locale (for EN/FR listing honesty). */
 export function articlesForLocale(
   articles: ThinkingArticle[],
-  locale: "fr" | "en",
+  locale: "fr" | "en"
 ): ThinkingArticle[] {
   return articles.filter((entry) => getArticleLanguage(entry) === locale);
 }

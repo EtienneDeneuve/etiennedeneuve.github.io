@@ -1,10 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { ecosystemPageConfig } from "../config/ecosystem-page.ts";
-import {
-  buildJsonLdGraph,
-  websiteJsonLd,
-} from "../lib/json-ld.ts";
+import { buildJsonLdGraph, websiteJsonLd } from "../lib/json-ld.ts";
 import { fullEcosystemNodes, ecosystemNodeId } from "../lib/ecosystem-json-ld.ts";
 
 interface Props {
@@ -66,13 +63,13 @@ const jsonLd = buildJsonLdGraph([
       <ul class="structure-list">
         {
           config.structure.items.map((item) => (
-              <li>
-                <a href={item.href[lang]}>
-                  <span class="structure-name">{item.name[lang]}</span>
-                  <span class="structure-role">{item.role[lang]}</span>
-                </a>
-              </li>
-            ))
+            <li>
+              <a href={item.href[lang]}>
+                <span class="structure-name">{item.name[lang]}</span>
+                <span class="structure-role">{item.role[lang]}</span>
+              </a>
+            </li>
+          ))
         }
       </ul>
     </section>
@@ -89,9 +86,7 @@ const jsonLd = buildJsonLdGraph([
         {
           config.timeline.steps.map((step) => (
             <li>
-              <p class="timeline-when">
-                {step.date ?? (lang === "en" ? "Later" : "Ensuite")}
-              </p>
+              <p class="timeline-when">{step.date ?? (lang === "en" ? "Later" : "Ensuite")}</p>
               <h3>{step.title[lang]}</h3>
               <p>{step.summary[lang]}</p>
             </li>

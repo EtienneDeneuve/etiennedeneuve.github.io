@@ -1,8 +1,4 @@
-import {
-  getEntity,
-  type EcosystemLocale,
-  type EcosystemEntityId,
-} from "../data/ecosystem.ts";
+import { getEntity, type EcosystemLocale, type EcosystemEntityId } from "../data/ecosystem.ts";
 import { seoConfig, absoluteUrl } from "../config/seo.ts";
 
 type JsonLdObject = Record<string, unknown>;
@@ -160,7 +156,7 @@ export function buildEcosystemEntityNodes(locale: EcosystemLocale = "fr"): JsonL
 
 export function getEcosystemEntityNode(
   id: EcosystemJsonLdId,
-  locale: EcosystemLocale = "fr",
+  locale: EcosystemLocale = "fr"
 ): JsonLdObject | undefined {
   return buildEcosystemEntityNodes(locale).find((node) => node["@id"] === ecosystemNodeId(id));
 }
@@ -171,8 +167,8 @@ export function coreIdentityNodes(locale: EcosystemLocale = "fr"): JsonLdObject[
   return nodes
     .filter((node) =>
       [ecosystemNodeId("etienne"), ecosystemNodeId("taous"), ecosystemNodeId("omnivya")].includes(
-        String(node["@id"]),
-      ),
+        String(node["@id"])
+      )
     )
     .map((node) => {
       if (node["@id"] !== ecosystemNodeId("omnivya")) return node;
@@ -194,7 +190,7 @@ export function fullEcosystemNodes(locale: EcosystemLocale = "fr"): JsonLdObject
 /** Project-detail helpers: include the entity being documented. */
 export function projectEntityNodes(
   projectId: string,
-  locale: EcosystemLocale = "fr",
+  locale: EcosystemLocale = "fr"
 ): JsonLdObject[] {
   const map: Record<string, EcosystemJsonLdId[]> = {
     omnivya: ["etienne", "taous", "omnivya", "omnivya-expert", "simplified", "it-challenge"],
@@ -210,7 +206,7 @@ export function projectEntityNodes(
     if (node["@id"] !== ecosystemNodeId("omnivya") || !Array.isArray(node.brand)) return node;
     const selectedIds = new Set(selected.map((n) => n["@id"]));
     const brand = (node.brand as Array<{ "@id": string }>).filter((item) =>
-      selectedIds.has(item["@id"]),
+      selectedIds.has(item["@id"])
     );
     const { brand: _b, ...rest } = node;
     return brand.length > 0 ? { ...rest, brand } : rest;

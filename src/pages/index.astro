@@ -3,18 +3,12 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import HomeContent from "../components/HomeContent.astro";
 import { siteConfig } from "../config/site.ts";
-import {
-  buildJsonLdGraph,
-  websiteJsonLd,
-} from "../lib/json-ld.ts";
+import { buildJsonLdGraph, websiteJsonLd } from "../lib/json-ld.ts";
 import { coreIdentityNodes } from "../lib/ecosystem-json-ld.ts";
 import { getReleasedArticles } from "../lib/publication-policy.ts";
 import { selectHomeThinking } from "../lib/home-thinking.ts";
 
-const homeJsonLd = buildJsonLdGraph([
-  ...coreIdentityNodes("fr"),
-  websiteJsonLd(),
-]);
+const homeJsonLd = buildJsonLdGraph([...coreIdentityNodes("fr"), websiteJsonLd()]);
 
 const allArticles = getReleasedArticles(await getCollection("blog"))
   .filter((entry) => (entry.data.language ?? "fr") === "fr")

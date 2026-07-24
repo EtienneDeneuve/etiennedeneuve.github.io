@@ -12,21 +12,21 @@
 
 ### Trois niveaux à distinguer
 
-| Niveau                                    | Définition                                         | Exemples                                                          | Sur le site personnel                               |
-| ----------------------------------------- | -------------------------------------------------- | ----------------------------------------------------------------- | --------------------------------------------------- |
+| Niveau                                    | Définition                                         | Exemples                                                                                               | Sur le site personnel                               |
+| ----------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | --------------------------------------------------- |
 | **A. Employeur ou structure d’exécution** | Entité qui te paie, te facture ou porte le contrat | Cellenza, Dell Technologies, Exaduo, **Omnivya Expert** (hub **Omnivya** ; historiquement Simplifi’ED) | OK comme contexte de carrière                       |
-| **B. Client final**                       | Organisation où le travail est réalisé             | Société Générale, SNCF, L’Oréal, Cegid                            | OK **seulement** avec A + période + accord si nommé |
-| **C. Secteur / type de contexte**         | Quand B n’est pas publiable                        | « Grand compte finance », « santé numérique publique »            | Préféré pour bios générales                         |
+| **B. Client final**                       | Organisation où le travail est réalisé             | Société Générale, SNCF, L’Oréal, Cegid                                                                 | OK **seulement** avec A + période + accord si nommé |
+| **C. Secteur / type de contexte**         | Quand B n’est pas publiable                        | « Grand compte finance », « santé numérique publique »                                                 | Préféré pour bios générales                         |
 
 ### Types de structures (historique)
 
-| Structure                        | Nature                           | Période clé  | Ne pas confondre avec                                                              |
-| -------------------------------- | -------------------------------- | ------------ | ---------------------------------------------------------------------------------- |
-| **Cellenza**                     | ESN / cabinet                    | ~2017–2018   | Les clients SG, SNCF, Netatmo — ce sont des **B**, pas des employeurs              |
-| **Dell Technologies**            | Éditeur + avant-vente / delivery | ~2018–2020   | Missions **pour les clients Dell**, pas « client Dell » au sens mission conseil    |
-| **Exaduo, NetApp**               | ESN / alliance éditeur           | ~2018–2020   | Idem — structure A                                                                 |
+| Structure                                                       | Nature                                           | Période clé                                              | Ne pas confondre avec                                                                     |
+| --------------------------------------------------------------- | ------------------------------------------------ | -------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| **Cellenza**                                                    | ESN / cabinet                                    | ~2017–2018                                               | Les clients SG, SNCF, Netatmo — ce sont des **B**, pas des employeurs                     |
+| **Dell Technologies**                                           | Éditeur + avant-vente / delivery                 | ~2018–2020                                               | Missions **pour les clients Dell**, pas « client Dell » au sens mission conseil           |
+| **Exaduo, NetApp**                                              | ESN / alliance éditeur                           | ~2018–2020                                               | Idem — structure A                                                                        |
 | **Omnivya** (ex-**Simplifi’ED** comme marque historique Europe) | Hub / ombrelle ; services via **Omnivya Expert** | 2020 fondation Simplifi’ED ; marque Omnivya 2025–présent | Cegid, L’Oréal, ANS sur LinkedIn = souvent **B via Omnivya Expert**, pas embauche directe |
-| **Thales DIS, ITESOFT, etc.**    | À clarifier cas par cas          | 2020–2024    | Vérifier si **A** = Omnivya ou employeur direct avant publication                  |
+| **Thales DIS, ITESOFT, etc.**                                   | À clarifier cas par cas                          | 2020–2024                                                | Vérifier si **A** = Omnivya ou employeur direct avant publication                         |
 
 ### Formulations autorisées vs interdites
 

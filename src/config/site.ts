@@ -6,10 +6,10 @@ const PROVISIONAL_GA4 = "G-2Q8B9CW53L";
 const PROVISIONAL_CLARITY = "itjvvvekvr";
 
 const ga4MeasurementId = String(
-  import.meta.env.PUBLIC_GA4_MEASUREMENT_ID ?? PROVISIONAL_GA4,
+  import.meta.env.PUBLIC_GA4_MEASUREMENT_ID ?? PROVISIONAL_GA4
 ).trim();
 const clarityProjectId = String(
-  import.meta.env.PUBLIC_CLARITY_PROJECT_ID ?? PROVISIONAL_CLARITY,
+  import.meta.env.PUBLIC_CLARITY_PROJECT_ID ?? PROVISIONAL_CLARITY
 ).trim();
 
 export const siteConfig = {

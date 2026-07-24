@@ -269,13 +269,7 @@ export const startHereConfig = {
           "contraintes locales",
           "construction depuis le terrain",
         ],
-        en: [
-          "My Dare",
-          "Omnivya Expert",
-          "Sanad",
-          "local constraints",
-          "building from the field",
-        ],
+        en: ["My Dare", "Omnivya Expert", "Sanad", "local constraints", "building from the field"],
       },
       items: [
         { kind: "project", id: "my-dare" },
