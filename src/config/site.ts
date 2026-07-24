@@ -1,6 +1,17 @@
 const currentYear = new Date().getFullYear();
 const copyrightStartYear = 2015;
 
+/** Provisional until personal-site IDs are confirmed — override via env. */
+const PROVISIONAL_GA4 = "G-2Q8B9CW53L";
+const PROVISIONAL_CLARITY = "itjvvvekvr";
+
+const ga4MeasurementId = String(
+  import.meta.env.PUBLIC_GA4_MEASUREMENT_ID ?? PROVISIONAL_GA4
+).trim();
+const clarityProjectId = String(
+  import.meta.env.PUBLIC_CLARITY_PROJECT_ID ?? PROVISIONAL_CLARITY
+).trim();
+
 export const siteConfig = {
   identity: {
     firstName: "Etienne",
@@ -42,7 +53,7 @@ export const siteConfig = {
       "Architecture notes, platform decisions and field write-ups on Kubernetes, cloud platforms, systems risk, and software delivery.",
     locale: "fr_FR",
     defaultLanguage: "fr",
-    defaultOgImage: "https://etienne.deneuve.xyz/assets/portrait.jpg",
+    defaultOgImage: "https://etienne.deneuve.xyz/assets/og-default.jpg",
     robots: "index,follow,max-image-preview:large",
   },
   languages: {
@@ -55,15 +66,17 @@ export const siteConfig = {
       href: "mailto:etienne@omnivya.fr?subject=Discussion%20mission%20plateforme",
     },
     omnivyaExecution: {
-      label: "Voir l'execution Omnivya",
+      label: "Voir Omnivya",
       href: "https://www.omnivya.fr",
     },
   },
   analytics: {
-    enabled: false,
-    provider: "none",
+    /** Scripts load only when an ID is present and the visitor accepted analytics cookies. */
+    enabled: Boolean(ga4MeasurementId || clarityProjectId),
+    provider: ga4MeasurementId ? ("ga4" as const) : ("none" as const),
     plausibleDomain: "",
-    ga4MeasurementId: "",
+    ga4MeasurementId,
+    clarityProjectId,
   },
   availability: {
     status: "selective",
@@ -94,7 +107,7 @@ export const siteConfig = {
     description:
       "Architecture notes, platform decisions and field write-ups on Kubernetes, cloud platforms, systems risk, and software delivery.",
     locale: "fr_FR",
-    defaultOgImage: "https://etienne.deneuve.xyz/assets/portrait.jpg",
+    defaultOgImage: "https://etienne.deneuve.xyz/assets/og-default.jpg",
   },
   business: {
     name: "Omnivya",

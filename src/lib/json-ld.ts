@@ -1,4 +1,5 @@
 import { seoConfig, absoluteUrl, type SeoLang } from "../config/seo.ts";
+import { ecosystemNodeId } from "./ecosystem-json-ld.ts";
 
 export type JsonLdObject = Record<string, unknown>;
 
@@ -8,26 +9,49 @@ function withContext(node: JsonLdObject): JsonLdObject {
   return { "@context": CONTEXT, ...node };
 }
 
+/**
+ * Flatten nested @graph payloads and drop nulls before emitting a single graph.
+ */
 export function buildJsonLdGraph(items: Array<JsonLdObject | null | undefined>): JsonLdObject {
-  const graph = items.filter((item): item is JsonLdObject => Boolean(item));
-  if (graph.length === 0) {
+  const graph: JsonLdObject[] = [];
+  for (const item of items) {
+    if (!item) continue;
+    if (Array.isArray(item["@graph"])) {
+      for (const nested of item["@graph"] as JsonLdObject[]) {
+        if (nested) graph.push(nested);
+      }
+      continue;
+    }
+    const { ["@context"]: _ctx, ...rest } = item;
+    graph.push(Object.keys(rest).length ? rest : item);
+  }
+
+  // Deduplicate by @id when present (last write wins for overrides).
+  const byId = new Map<string, JsonLdObject>();
+  const withoutId: JsonLdObject[] = [];
+  for (const node of graph) {
+    const id = typeof node["@id"] === "string" ? node["@id"] : null;
+    if (id) byId.set(id, node);
+    else withoutId.push(node);
+  }
+  const deduped = [...byId.values(), ...withoutId];
+
+  if (deduped.length === 0) {
     return withContext({ "@type": "WebPage" });
   }
-  if (graph.length === 1) {
-    return withContext(graph[0]);
+  if (deduped.length === 1) {
+    return withContext(deduped[0]);
   }
   return {
     "@context": CONTEXT,
-    "@graph": graph,
+    "@graph": deduped,
   };
 }
 
 export function personJsonLd(overrides: JsonLdObject = {}): JsonLdObject {
-  const orgRef = { "@id": `${seoConfig.siteUrl}/#organization` };
-  // Schema.org: founder lives on Organization; Person uses worksFor / affiliation.
   return {
     "@type": "Person",
-    "@id": `${seoConfig.siteUrl}/#person`,
+    "@id": ecosystemNodeId("etienne"),
     name: seoConfig.person.name,
     jobTitle: seoConfig.person.jobTitle,
     email: seoConfig.person.email,
@@ -35,35 +59,33 @@ export function personJsonLd(overrides: JsonLdObject = {}): JsonLdObject {
     image: absoluteUrl(seoConfig.person.image),
     sameAs: seoConfig.person.sameAs,
     knowsAbout: seoConfig.person.knowsAbout,
-    worksFor: orgRef,
+    worksFor: { "@id": ecosystemNodeId("omnivya") },
     ...overrides,
   };
 }
 
+/** Omnivya hub — kept as organizationJsonLd for call-site compatibility. */
 export function organizationJsonLd(overrides: JsonLdObject = {}): JsonLdObject {
-  const node: JsonLdObject = {
+  return {
     "@type": "Organization",
-    "@id": `${seoConfig.siteUrl}/#organization`,
+    "@id": ecosystemNodeId("omnivya"),
     name: seoConfig.organization.name,
     url: seoConfig.organization.url,
     email: seoConfig.organization.email,
+    founder: [{ "@id": ecosystemNodeId("etienne") }, { "@id": ecosystemNodeId("taous") }],
     ...overrides,
   };
-  if (seoConfig.organization.founderRelation === "founder") {
-    node.founder = { "@id": `${seoConfig.siteUrl}/#person` };
-  }
-  return node;
 }
 
 export function websiteJsonLd(): JsonLdObject {
   return {
     "@type": "WebSite",
-    "@id": `${seoConfig.siteUrl}/#website`,
+    "@id": ecosystemNodeId("website"),
     url: seoConfig.siteUrl,
     name: seoConfig.siteName,
     description: seoConfig.defaultDescription,
     inLanguage: ["fr", "en"],
-    publisher: { "@id": `${seoConfig.siteUrl}/#person` },
+    publisher: { "@id": ecosystemNodeId("etienne") },
   };
 }
 
@@ -73,8 +95,8 @@ export function profilePageJsonLd(path = "/about/"): JsonLdObject {
     "@id": absoluteUrl(path),
     url: absoluteUrl(path),
     name: `${seoConfig.person.name} — About`,
-    mainEntity: { "@id": `${seoConfig.siteUrl}/#person` },
-    isPartOf: { "@id": `${seoConfig.siteUrl}/#website` },
+    mainEntity: { "@id": ecosystemNodeId("etienne") },
+    isPartOf: { "@id": ecosystemNodeId("website") },
   };
 }
 
@@ -103,7 +125,7 @@ export function collectionPageJsonLd(input: {
     name: input.name,
     description: input.description,
     inLanguage: input.lang ?? "fr",
-    isPartOf: { "@id": `${seoConfig.siteUrl}/#website` },
+    isPartOf: { "@id": ecosystemNodeId("website") },
   };
 }
 
@@ -128,16 +150,17 @@ export function articleJsonLd(input: {
 
   return {
     "@type": "Article",
+    "@id": absoluteUrl(input.path),
     headline: input.title,
     description: input.description,
     inLanguage: input.lang,
     datePublished: published,
     dateModified: modified,
     image: input.image ? absoluteUrl(input.image) : seoConfig.defaultImage,
-    author: { "@id": `${seoConfig.siteUrl}/#person` },
-    publisher: { "@id": `${seoConfig.siteUrl}/#person` },
+    author: { "@id": ecosystemNodeId("etienne") },
+    publisher: { "@id": ecosystemNodeId("etienne") },
     mainEntityOfPage: absoluteUrl(input.path),
-    isPartOf: { "@id": `${seoConfig.siteUrl}/#website` },
+    isPartOf: { "@id": ecosystemNodeId("website") },
   };
 }
 
@@ -160,7 +183,8 @@ export function softwareSourceCodeJsonLd(input: {
     url: absoluteUrl(input.url),
     programmingLanguage: input.programmingLanguage ?? undefined,
     license: input.license ?? undefined,
-    author: { "@id": `${seoConfig.siteUrl}/#person` },
+    author: { "@id": ecosystemNodeId("etienne") },
+    isRelatedTo: { "@id": ecosystemNodeId("open-source") },
   };
 }
 
@@ -173,6 +197,7 @@ export function projectPageJsonLd(input: {
   path: string;
   lang?: SeoLang;
   relatedToOmnivya?: boolean;
+  aboutId?: string;
   repository?: string;
 }): JsonLdObject {
   const node: JsonLdObject = {
@@ -182,11 +207,13 @@ export function projectPageJsonLd(input: {
     name: input.name,
     description: input.description,
     inLanguage: input.lang ?? "fr",
-    author: { "@id": `${seoConfig.siteUrl}/#person` },
-    isPartOf: { "@id": `${seoConfig.siteUrl}/#website` },
+    author: { "@id": ecosystemNodeId("etienne") },
+    isPartOf: { "@id": ecosystemNodeId("website") },
   };
-  if (input.relatedToOmnivya) {
-    node.about = { "@id": `${seoConfig.siteUrl}/#organization` };
+  if (input.aboutId) {
+    node.about = { "@id": input.aboutId };
+  } else if (input.relatedToOmnivya) {
+    node.about = { "@id": ecosystemNodeId("omnivya") };
   }
   if (input.repository) {
     node.significantLink = input.repository;
@@ -227,7 +254,7 @@ export function eventJsonLd(input: {
         }
       : undefined,
     url: input.url,
-    performer: { "@id": `${seoConfig.siteUrl}/#person` },
+    performer: { "@id": ecosystemNodeId("etienne") },
   };
 }
 
@@ -246,8 +273,8 @@ export function serviceJsonLd(input: {
     description: input.description,
     url: absoluteUrl(input.url),
     serviceType: input.serviceType,
-    provider: { "@id": `${seoConfig.siteUrl}/#person` },
-    areaServed: "EU",
+    provider: { "@id": ecosystemNodeId("omnivya-expert") },
+    areaServed: ["Europe", "Africa"],
   };
 }
 

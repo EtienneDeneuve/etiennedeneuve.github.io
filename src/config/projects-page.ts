@@ -4,10 +4,10 @@ export const projectsPageConfig = {
   meta: {
     title: { fr: "Projects", en: "Projects" },
     description: {
-      fr: "Projets : entités, produits et open source. Problème, décisions, système, limites.",
-      en: "Projects: entities, products and open source. Problem, decisions, system, limits.",
+      fr: "Page de preuves : entités, produits et open source. Problème, décisions, système, limites.",
+      en: "Proof page: entities, products and open source. Problem, decisions, system, limits.",
     },
-    eyebrow: { fr: "Projets", en: "Projects" },
+    eyebrow: { fr: "Preuves publiques", en: "Public proof" },
     intro: {
       fr: "Chaque entrée documente un problème réel, les décisions prises, ce qui existe aujourd’hui et ce qui n’est pas encore publiable. Pas de success story : un historique vérifiable.",
       en: "Each entry documents a real problem, decisions made, what exists today and what is not yet publishable. No success story: a verifiable track record.",
@@ -21,7 +21,7 @@ export const projectsPageConfig = {
     decisions: { fr: "Décisions", en: "Decisions" },
     whatExists: { fr: "Ce qui existe réellement", en: "What actually exists" },
     currentState: { fr: "État actuel", en: "Current state" },
-    proofs: { fr: "Liens utiles", en: "Useful links" },
+    proofs: { fr: "Preuves", en: "Proof" },
     limitations: { fr: "Limites", en: "Limits" },
     learnings: { fr: "Apprentissages", en: "Learnings" },
     related: { fr: "Contenus associés", en: "Related content" },
@@ -34,11 +34,16 @@ export const projectsPageConfig = {
   },
   ecosystem: {
     title: { fr: "Écosystème", en: "Ecosystem" },
+    referenceHref: { fr: "/ecosystem/", en: "/en/ecosystem/" },
+    referenceLabel: {
+      fr: "Lire la page de référence",
+      en: "Read the reference page",
+    },
     nodes: [
       {
         id: "taous",
-        name: { fr: "Taous & Etienne", en: "Taous & Etienne" },
-        role: { fr: "origine", en: "origin" },
+        name: { fr: "Taous", en: "Taous" },
+        role: { fr: "cofondatrice · dirigeante", en: "co-founder · leader" },
         href: "/about/#with-taous",
       },
       {
@@ -48,21 +53,27 @@ export const projectsPageConfig = {
         href: "/projects/omnivya/",
       },
       {
+        id: "omnivya-expert",
+        name: { fr: "Omnivya Expert", en: "Omnivya Expert" },
+        role: { fr: "services Europe · Afrique", en: "services Europe · Africa" },
+        href: "/projects/omnivya/",
+      },
+      {
         id: "my-dare",
         name: { fr: "My Dare", en: "My Dare" },
-        role: { fr: "coworking · Alger", en: "coworking · Algiers" },
+        role: { fr: "coworking Alger", en: "Algiers coworking" },
         href: "/projects/my-dare/",
       },
       {
         id: "sanad",
         name: { fr: "Sanad", en: "Sanad" },
-        role: { fr: "gestion · marché DZ", en: "ops tool · DZ market" },
+        role: { fr: "SaaS — marché DZ", en: "SaaS — DZ market" },
         href: "/projects/sanad/",
       },
       {
         id: "open-source",
         name: { fr: "Open source", en: "Open source" },
-        role: { fr: "EME · agents AzDO…", en: "EME · AzDO agents…" },
+        role: { fr: "preuves publiques", en: "public proof" },
         href: "/projects/external-metrics-exporter/",
       },
     ] satisfies Array<{

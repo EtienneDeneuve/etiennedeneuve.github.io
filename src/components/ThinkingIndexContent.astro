@@ -34,9 +34,18 @@ const hasActiveFilters = Boolean(
 );
 
 const allArticles = await getAllThinkingArticles();
+// Index lists the full library in both locales (almost all articles are FR today).
+// Language filter in the form still lets visitors narrow to FR/EN.
 const filtered = sortArticles(filterArticles(allArticles, filters), sort);
 const featured = hasActiveFilters ? [] : getFeaturedArticles(allArticles);
 const qualifyingTags = getQualifyingTags(allArticles);
+
+const populatedPillars = thinkingPillars.filter((pillar) =>
+  allArticles.some((entry) => entry.data.pillar === pillar)
+);
+const populatedTypes = thinkingContentTypes.filter((type) =>
+  allArticles.some((entry) => entry.data.contentType === type)
+);
 
 const [projects, resources] = await Promise.all([
   getCollection("projects"),
@@ -90,7 +99,7 @@ const jsonLd = buildJsonLdGraph([
       <p class="rss-links">
         <a href="/rss.xml">{labels.rss[lang]}</a>
         {
-          thinkingPillars.map((pillar) => (
+          populatedPillars.map((pillar) => (
             <>
               {" · "}
               <a href={`/thinking/rss/${pillar}.xml`}>RSS {config.pillarLabels[pillar][lang]}</a>
@@ -103,34 +112,38 @@ const jsonLd = buildJsonLdGraph([
     <section class="stack gap-3" id="browse">
       <h2>{lang === "en" ? "Browse" : "Explorer"}</h2>
       <div class="browse-grid">
-        <div>
-          <h3>{labels.browsePillars[lang]}</h3>
-          <ul>
-            {
-              thinkingPillars.map((pillar) => (
-                <li>
-                  <a href={`${prefix}/thinking/pillar/${pillar}/`}>
-                    {config.pillarLabels[pillar][lang]}
-                  </a>
-                </li>
-              ))
-            }
-          </ul>
-        </div>
-        <div>
-          <h3>{labels.browseTypes[lang]}</h3>
-          <ul>
-            {
-              thinkingContentTypes.map((type) => (
-                <li>
-                  <a href={`${prefix}/thinking/type/${type}/`}>
-                    {config.contentTypeLabels[type][lang]}
-                  </a>
-                </li>
-              ))
-            }
-          </ul>
-        </div>
+        {
+          populatedPillars.length > 0 && (
+            <div>
+              <h3>{labels.browsePillars[lang]}</h3>
+              <ul>
+                {populatedPillars.map((pillar) => (
+                  <li>
+                    <a href={`${prefix}/thinking/pillar/${pillar}/`}>
+                      {config.pillarLabels[pillar][lang]}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+        {
+          populatedTypes.length > 0 && (
+            <div>
+              <h3>{labels.browseTypes[lang]}</h3>
+              <ul>
+                {populatedTypes.map((type) => (
+                  <li>
+                    <a href={`${prefix}/thinking/type/${type}/`}>
+                      {config.contentTypeLabels[type][lang]}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
         {
           qualifyingTags.length > 0 && (
             <div>

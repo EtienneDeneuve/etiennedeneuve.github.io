@@ -54,14 +54,15 @@ Le site personnel n’est **pas** la vitrine commerciale principale. Il remplit 
 
 Chaque entité a un rôle **fixe** sur le site personnel. Aucune entité ne devient la marque principale du site.
 
-| Entité              | Rôle sur le site                                          | Ce qu’on montre                                                          | Ce qu’on ne montre pas                                              |
-| ------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------- |
-| **Etienne Deneuve** | Doctrine, architecture, arbitrage, construction technique | Vision, articles, décisions publiques, leadership technique              | Catalogue de prestations, pricing, promesses chiffrées non sourcées |
-| **Omnivya**         | Exécution, conseil, construction de produits              | Lien sortant, mention « entité d’exécution », renvoi pour mission        | Page miroir du site Omnivya, duplication des offres                 |
-| **Scalion AI**      | Cartographie SI, risque, sécurité, deep tech              | Projet/build proof avec lien et description factuelle                    | Bloc publicitaire, métriques produit non publiées                   |
-| **Sanad**           | SaaS pour marchés complexes                               | Produit construit, contraintes adressées, statut réel (beta, prod, etc.) | Claims marché non vérifiés, clients fictifs                         |
-| **My Dare**         | Implantation, opérations, expérience terrain              | Retours terrain documentés, contexte géographique/organisationnel        | Témoignages inventés, chiffres d’impact non sourcés                 |
-| **Open source**     | Preuves publiques réutilisables                           | Repos, contributions, ADR, releases                                      | Stars/forks comme argument principal sans contexte                  |
+| Entité              | Rôle sur le site                                          | Ce qu’on montre                                                      | Ce qu’on ne montre pas                                              |
+| ------------------- | --------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| **Etienne Deneuve** | Doctrine, architecture, arbitrage, construction technique | Vision, articles, décisions publiques, leadership technique          | Catalogue de prestations, pricing, promesses chiffrées non sourcées |
+| **Omnivya**         | Hub du groupe / marque ombrelle                           | Lien sortant, mention hub, renvoi pour mission                       | Page miroir du site Omnivya, duplication des offres                 |
+| **Omnivya Expert**  | Conseil, services, ingénierie, delivery Europe et Afrique | Mention comme ligne de services ; delivery structurée                | Limiter à l’Algérie seule ou à l’Europe seule                       |
+| **Scalion AI**      | Cartographie SI, risque, sécurité, deep tech              | Projet/build proof avec lien et description factuelle                | Bloc publicitaire, métriques produit non publiées                   |
+| **Sanad**           | SaaS devis / factures / contrats — marché algérien        | Produit construit par Omnivya Expert, statut réel (beta, prod, etc.) | Claims « marchés complexes », clients fictifs                       |
+| **My Dare**         | Implantation, opérations, expérience terrain              | Retours terrain documentés, contexte géographique/organisationnel    | Témoignages inventés, chiffres d’impact non sourcés                 |
+| **Open source**     | Preuves publiques réutilisables                           | Repos, contributions, ADR, releases                                  | Stars/forks comme argument principal sans contexte                  |
 
 ### Règle de mention
 

@@ -133,6 +133,14 @@ export function getArticleLanguage(entry: ThinkingArticle): "fr" | "en" {
   return lang === "en" ? "en" : "fr";
 }
 
+/** Articles whose content language matches the UI locale (for EN/FR listing honesty). */
+export function articlesForLocale(
+  articles: ThinkingArticle[],
+  locale: "fr" | "en"
+): ThinkingArticle[] {
+  return articles.filter((entry) => getArticleLanguage(entry) === locale);
+}
+
 export function slugifyTag(tag: string): string {
   return tag
     .trim()

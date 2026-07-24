@@ -9,10 +9,10 @@ import {
   breadcrumbJsonLd,
   buildJsonLdGraph,
   collectionPageJsonLd,
-  organizationJsonLd,
-  personJsonLd,
   serviceJsonLd,
+  websiteJsonLd,
 } from "../lib/json-ld.ts";
+import { coreIdentityNodes, getEcosystemEntityNode } from "../lib/ecosystem-json-ld.ts";
 
 interface Props {
   lang: "fr" | "en";
@@ -57,8 +57,10 @@ const speakingEmail = `mailto:${emailBase}?subject=${encodeURIComponent(speaking
 const workPath = `${prefix}/work/`;
 
 const jsonLd = buildJsonLdGraph([
-  personJsonLd(),
-  organizationJsonLd(),
+  ...coreIdentityNodes(lang),
+  getEcosystemEntityNode("omnivya-expert", lang),
+  getEcosystemEntityNode("taous", lang),
+  websiteJsonLd(),
   collectionPageJsonLd({
     name: config.meta.title[lang],
     description: config.meta.description[lang],

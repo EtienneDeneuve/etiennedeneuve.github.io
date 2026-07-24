@@ -33,8 +33,8 @@ export const workConfig = {
       en: "Intervention modes",
     },
     intro: {
-      fr: "Je n’interviens pas comme un catalogue de prestations. Chaque mission commence par clarifier le mode adapté : comprendre le système, trancher une décision, ou construire avec Omnivya.",
-      en: "I do not operate as a service catalog. Every engagement starts by clarifying the right mode: understand the system, make a decision, or build with Omnivya.",
+      fr: "Je n’interviens pas comme un catalogue de prestations. Chaque mission commence par clarifier le mode adapté : comprendre le système, trancher une décision, ou construire avec Omnivya Expert.",
+      en: "I do not operate as a service catalog. Every engagement starts by clarifying the right mode: understand the system, make a decision, or build with Omnivya Expert.",
     },
   },
   modes: [
@@ -84,8 +84,8 @@ export const workConfig = {
         en: "The system became opaque: no one can explain dependencies, prioritize risk, or connect technical choices to real constraints.",
       },
       expectedOutcome: {
-        fr: "Une représentation partagée du système, des risques priorisés et un plan d’action que l’organisation peut exécuter, sans promesse chiffrée non sourcée.",
-        en: "A shared representation of the system, prioritized risks and an action plan the organization can execute, without unsourced numeric promises.",
+        fr: "Une représentation partagée du système, des risques priorisés et un plan d’action que l’organisation peut exécuter — sans promesse chiffrée non sourcée.",
+        en: "A shared representation of the system, prioritized risks and an action plan the organization can execute — without unsourced numeric promises.",
       },
       engagementShape: {
         fr: "Diagnostic ciblé : entretiens, revue d’architecture, cartographie des dépendances et des flux de décision. Durée et périmètre calibrés au contexte.",
@@ -122,7 +122,7 @@ export const workConfig = {
         ],
       },
       proofs: [
-        { kind: "article", id: "2026-07-13-de-la-metrique-au-runbook" },
+        { kind: "article", id: "2024-02-11-zero-trust-overview" },
         { kind: "project", id: "external-metrics-exporter" },
       ],
       cta: {
@@ -204,7 +204,7 @@ export const workConfig = {
       },
       proofs: [
         { kind: "article", id: "2023-07-28-megalinter-azure-devops" },
-        { kind: "article", id: "2024-09-16-managed-identities" },
+        { kind: "article", id: "2024-02-15-zero-trust-tl-dr" },
         { kind: "article", id: "2020-02-07-infra-testing-easy-path" },
       ],
       cta: {
@@ -219,8 +219,8 @@ export const workConfig = {
       id: "build",
       title: { fr: "Build", en: "Build" },
       objective: {
-        fr: "Transformer la décision en système opérationnel avec Omnivya.",
-        en: "Turn the decision into an operational system with Omnivya.",
+        fr: "Transformer la décision en système opérationnel avec Omnivya Expert.",
+        en: "Turn the decision into an operational system with Omnivya Expert.",
       },
       scopeExamples: {
         fr: [
@@ -243,12 +243,12 @@ export const workConfig = {
         ],
       },
       startingSituation: {
-        fr: "La direction est prise mais le système n’existe pas encore, ou le legacy empêche l’exécution. Il faut une entité capable de construire sans perdre le cadre de décision.",
-        en: "The direction is set but the system does not exist yet, or legacy prevents execution. An entity capable of building without losing the decision frame is needed.",
+        fr: "La direction est prise mais le système n’existe pas encore — ou le legacy empêche l’exécution. Il faut une entité capable de construire sans perdre le cadre de décision.",
+        en: "The direction is set but the system does not exist yet — or legacy prevents execution. An entity capable of building without losing the decision frame is needed.",
       },
       expectedOutcome: {
-        fr: "Un système opérationnel, gouvernable et documenté : plateforme, produit ou composant : livré via Omnivya Expert avec traçabilité des choix.",
-        en: "An operational, governable and documented system : platform, product or component : delivered via Omnivya Expert with traceability of choices.",
+        fr: "Un système opérationnel, gouvernable et documenté — plateforme, produit ou composant — livré via Omnivya Expert avec traçabilité des choix.",
+        en: "An operational, governable and documented system — platform, product or component — delivered via Omnivya Expert with traceability of choices.",
       },
       engagementShape: {
         fr: "Delivery structurée via Omnivya Expert : fondations, automatisation, sécurité et opérabilité intégrées dès le départ. Périmètre défini à partir d’une décision ou d’un diagnostic préalable.",
@@ -256,14 +256,14 @@ export const workConfig = {
       },
       included: {
         fr: [
-          "Exécution technique via Omnivya Expert",
+          "Exécution technique via Omnivya Expert (Europe et Afrique)",
           "Plateforme, GitOps, observabilité selon périmètre",
           "Sécurité supply chain intégrée au delivery",
           "Documentation et montée en compétence",
           "Alignement avec les principes publiés et les décisions documentées",
         ],
         en: [
-          "Technical execution via Omnivya Expert",
+          "Technical execution via Omnivya Expert (Europe and Africa)",
           "Platform, GitOps, observability per scope",
           "Supply chain security integrated into delivery",
           "Documentation and skills transfer",
@@ -290,10 +290,10 @@ export const workConfig = {
         { kind: "project", id: "my-dare" },
       ],
       cta: {
-        label: { fr: "Parler exécution Omnivya", en: "Discuss Omnivya execution" },
+        label: { fr: "Parler delivery Omnivya Expert", en: "Discuss Omnivya Expert delivery" },
         subject: {
-          fr: "Demande mission build Omnivya",
-          en: "Omnivya build mission request",
+          fr: "Demande mission build Omnivya Expert",
+          en: "Omnivya Expert build mission request",
         },
         secondaryLink: {
           fr: { label: "Voir Omnivya", href: "https://www.omnivya.fr" },

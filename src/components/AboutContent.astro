@@ -5,13 +5,8 @@ import OpenSourceSection from "../components/OpenSourceSection.astro";
 import { aboutConfig } from "../config/about.ts";
 import { siteConfig } from "../config/site.ts";
 import { getPublishableEntries } from "../lib/publication-policy.ts";
-import {
-  buildJsonLdGraph,
-  organizationJsonLd,
-  personJsonLd,
-  profilePageJsonLd,
-  websiteJsonLd,
-} from "../lib/json-ld.ts";
+import { buildJsonLdGraph, profilePageJsonLd, websiteJsonLd } from "../lib/json-ld.ts";
+import { aboutIdentityNodes } from "../lib/ecosystem-json-ld.ts";
 
 interface Props {
   lang: "fr" | "en";
@@ -36,8 +31,7 @@ const emailSubject =
 const mailto = `mailto:${siteConfig.omnivya.email}?subject=${encodeURIComponent(emailSubject)}`;
 
 const jsonLd = buildJsonLdGraph([
-  personJsonLd(),
-  organizationJsonLd(),
+  ...aboutIdentityNodes(lang),
   websiteJsonLd(),
   profilePageJsonLd(aboutPath),
 ]);
@@ -116,6 +110,8 @@ const jsonLd = buildJsonLdGraph([
       <h2>{config.omnivya.title[lang]}</h2>
       {config.omnivya.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
       <p>
+        <a href={`${prefix}/ecosystem/`}>{labels.ecosystemLink[lang]}</a>
+        {" · "}
         <a href={`${prefix}/projects/omnivya/`}>{labels.omnivyaLink[lang]}</a>
         {" · "}
         <a href={siteConfig.omnivya.website} target="_blank" rel="noopener noreferrer">

@@ -69,6 +69,7 @@ const jsonLd = buildJsonLdGraph([
   description={caseStudiesDescription}
   lang={lang}
   path={caseStudiesPath}
+  noIndex={studies.length === 0}
   alternates={[
     { lang: "fr", href: "/work/case-studies/" },
     { lang: "en", href: "/en/work/case-studies/" },

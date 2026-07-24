@@ -1,23 +1,23 @@
 ---
 name: "Sanad"
 name_en: "Sanad"
-summary: "Outil de gestion interne (devis, factures, contrats) pour le marché algérien, né pour opérer My Dare faute de SaaS adapté."
-summary_en: "Internal management tool (quotes, invoices, contracts) for the Algerian market, built to operate My Dare when no fit SaaS existed."
+summary: "SaaS devis, factures et contrats conçu pour le marché algérien."
+summary_en: "Quotes, invoices and contracts SaaS built for the Algerian market."
 status: "production"
 type: "product"
-role: "Conception via Omnivya / Omnivya Expert (IT Challenge)"
-role_en: "Design via Omnivya / Omnivya Expert (IT Challenge)"
-problem: "Pour opérer My Dare (devis, factures, contrats), aucun SaaS adapté aux contraintes algériennes ne tenait la route."
-problem_en: "To operate My Dare (quotes, invoices, contracts), no SaaS fit Algerian constraints well enough."
-context: "Sanad est né pour My Dare, développé via Omnivya Expert (IT Challenge, Algérie). Marché DZ only, pas un produit SaaS international ni le fer de lance du groupe."
-context_en: "Sanad was born for My Dare, built via Omnivya Expert (IT Challenge, Algeria). DZ market only, not an international SaaS product nor the group’s flagship."
+role: "Cofondateur et CTO — conception avec les équipes Omnivya Expert"
+role_en: "Co-founder and CTO — design with Omnivya Expert teams"
+problem: "Sur le marché algérien, il manquait un SaaS suffisamment adapté à la gestion locale des devis, factures et contrats — pas une plateforme générique surdimensionnée."
+problem_en: "On the Algerian market, there was no SaaS fit enough for local quotes, invoices and contracts — not an oversized generic platform."
+context: "Sanad est né d’un problème rencontré sur le terrain en Algérie. Il a été construit par les équipes aujourd’hui regroupées sous Omnivya Expert. Marché DZ only, aux côtés de My Dare — outil local de l’écosystème Omnivya, pas un produit SaaS international."
+context_en: "Sanad grew from a field problem in Algeria. It was built by the teams now gathered under Omnivya Expert. DZ market only, alongside My Dare — a local Omnivya-ecosystem tool, not an international SaaS product."
 decisions:
   - "Construire un outil ciblé plutôt qu’un catalogue de fonctionnalités"
-  - "Ancrer le développement dans IT Challenge / Omnivya Expert (Algérie)"
+  - "Ancrer le développement dans Omnivya Expert (Europe et Afrique, dont l’Algérie)"
   - "Prioriser l’usage réel local sur le storytelling produit"
 decisions_en:
   - "Build a focused tool rather than a feature catalog"
-  - "Anchor development in IT Challenge / Omnivya Expert (Algeria)"
+  - "Anchor development in Omnivya Expert (Europe and Africa, including Algeria)"
   - "Prioritize real local usage over product storytelling"
 principles:
   - "Simplicité opérationnelle"
@@ -29,26 +29,26 @@ principles_en:
   - "Honest scope: a tool, not a marketing platform"
 whatExists:
   - "Outil Sanad (sanad.cloud)"
-  - "Développé via IT Challenge, Omnivya Expert (Algérie)"
+  - "Construit par les équipes Omnivya Expert"
 whatExists_en:
   - "Sanad tool (sanad.cloud)"
-  - "Built through IT Challenge, Omnivya Expert (Algeria)"
+  - "Built by Omnivya Expert teams"
 currentState: "Outil en service / publié. Pas de claims d’adoption marché ni métriques inventées sur ce site."
 currentState_en: "Tool in service / published. No invented market-adoption claims or metrics on this site."
 limitations:
-  - "Ce n’est pas un produit SaaS indépendant « marchés complexes »"
+  - "Périmètre marché algérien uniquement"
   - "Pas de clients nommés ni chiffres d’adoption sans preuve"
-  - "Le détail commercial reste du côté Omnivya Expert / IT Challenge"
+  - "Le détail commercial reste du côté Omnivya Expert"
 limitations_en:
-  - "This is not a standalone “complex markets” SaaS product"
+  - "Algerian market scope only"
   - "No named clients or adoption figures without proof"
-  - "Commercial detail stays with Omnivya Expert / IT Challenge"
+  - "Commercial detail stays with Omnivya Expert"
 learnings:
   - "Un outil local utile vaut mieux qu’une plateforme aspirational"
-  - "Le contexte (IT Challenge) fait partie de la vérité du système"
+  - "Les contraintes de facturation et de contrat locales forcent le design"
 learnings_en:
   - "A useful local tool beats an aspirational platform"
-  - "Context (IT Challenge) is part of the system’s truth"
+  - "Local invoicing and contract constraints force the design"
 relatedArticles: []
 proofs:
   - label: "Sanad"
@@ -65,8 +65,8 @@ verified: true
 featured: true
 draft: false
 displayOrder: 4
-ecosystemRole: "outil Omnivya Expert, marché DZ"
-ecosystemRole_en: "Omnivya Expert tool, DZ market"
+ecosystemRole: "outil Omnivya Expert — marché DZ"
+ecosystemRole_en: "Omnivya Expert tool — DZ market"
 ---
 
-Sanad est un outil Omnivya Expert pour le marché algérien, utile et local, pas le fer de lance du groupe.
+Sanad est un SaaS de gestion commerciale pour le marché algérien, construit par les équipes Omnivya Expert à partir des contraintes locales de devis, factures et contrats.

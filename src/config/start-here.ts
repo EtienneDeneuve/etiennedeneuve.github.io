@@ -1,4 +1,5 @@
 import type { ContentReference } from "../lib/resolve-content.ts";
+import { getShortDescription } from "../data/ecosystem.ts";
 
 type Localized<T> = { fr: T; en: T };
 
@@ -30,38 +31,38 @@ export const startHereConfig = {
     map: {
       title: { fr: "La carte, pas le catalogue", en: "The map, not the catalog" },
       intro: {
-        fr: "Chaque branche répond à une contrainte. Omnivya rassemble le tout pour unifier les process, pas pour inventer une holding.",
-        en: "Each arm answers a constraint. Omnivya brings it together to unify processes, not to invent a holding company.",
+        fr: "Chaque branche répond à une contrainte. Omnivya est le hub commun ; le détail du récit est sur la page Écosystème.",
+        en: "Each arm answers a constraint. Omnivya is the shared hub; the full narrative lives on the Ecosystem page.",
       },
       founders: [
         {
           id: "taous",
           name: { fr: "Taous", en: "Taous" },
-          role: { fr: "cofondatrice", en: "co-founder" },
+          role: { fr: "cofondatrice · dirigeante", en: "co-founder · leader" },
           href: { fr: "/about/#with-taous", en: "/en/about/#with-taous" },
         },
         {
           id: "etienne",
           name: { fr: "Etienne", en: "Etienne" },
-          role: { fr: "cofondateur", en: "co-founder" },
+          role: { fr: "cofondateur · CTO", en: "co-founder · CTO" },
           href: { fr: "/about/", en: "/en/about/" },
         },
       ],
       hub: {
         name: { fr: "Omnivya", en: "Omnivya" },
         role: {
-          fr: "Hub du groupe · cadre commun",
-          en: "Group hub · shared frame",
+          fr: getShortDescription("omnivya", "fr"),
+          en: getShortDescription("omnivya", "en"),
         },
-        href: { fr: "/projects/omnivya/", en: "/en/projects/omnivya/" },
+        href: { fr: "/ecosystem/", en: "/en/ecosystem/" },
       },
       arms: [
         {
           id: "omnivya-expert",
           name: { fr: "Omnivya Expert", en: "Omnivya Expert" },
           role: {
-            fr: "Conseil, delivery et build en Europe et en Afrique",
-            en: "Consulting, delivery and build across Europe and Africa",
+            fr: getShortDescription("omnivya-expert", "fr"),
+            en: getShortDescription("omnivya-expert", "en"),
           },
           href: { fr: "https://www.omnivya.fr", en: "https://www.omnivya.fr" },
           external: true,
@@ -70,8 +71,8 @@ export const startHereConfig = {
           id: "my-dare",
           name: { fr: "My Dare", en: "My Dare" },
           role: {
-            fr: "Coworking premium, domiciliation et lieu de travail à Alger",
-            en: "Premium coworking, business address and workplace in Algiers",
+            fr: getShortDescription("my-dare", "fr"),
+            en: getShortDescription("my-dare", "en"),
           },
           href: { fr: "/projects/my-dare/", en: "/en/projects/my-dare/" },
         },
@@ -79,8 +80,8 @@ export const startHereConfig = {
           id: "sanad",
           name: { fr: "Sanad", en: "Sanad" },
           role: {
-            fr: "Devis, factures et contrats pour le marché algérien",
-            en: "Quotes, invoices and contracts for the Algerian market",
+            fr: getShortDescription("sanad", "fr"),
+            en: getShortDescription("sanad", "en"),
           },
           href: { fr: "/projects/sanad/", en: "/en/projects/sanad/" },
         },
@@ -88,8 +89,8 @@ export const startHereConfig = {
           id: "open-source",
           name: { fr: "Open source", en: "Open source" },
           role: {
-            fr: "Composants publics utiles à la communauté",
-            en: "Public components useful to the community",
+            fr: getShortDescription("open-source", "fr"),
+            en: getShortDescription("open-source", "en"),
           },
           href: {
             fr: "/projects/external-metrics-exporter/",
@@ -105,20 +106,20 @@ export const startHereConfig = {
       },
       paragraphs: {
         fr: [
-          "Taous et moi avons d’abord créé Simplifi’ED pour porter nos activités de conseil et d’ingénierie.",
-          "Nous n’avions pas prévu de nous développer en Algérie. Cette décision est venue plus tard, face à une difficulté très concrète : trouver suffisamment de profils techniques en Europe. Nous avons alors choisi de constituer une équipe en Algérie, où nous pouvions accéder à des compétences solides et construire une capacité de delivery complémentaire.",
-          "Pour permettre à cette équipe de travailler dans de bonnes conditions, nous avons créé My Dare. En opérant ce lieu, nous avons constaté qu’aucun SaaS ne répondait correctement aux besoins locaux de devis, de facturation et de gestion contractuelle. Nous avons donc développé Sanad, avec les équipes d’IT Challenge, aujourd’hui intégrées à Omnivya Expert.",
-          "Omnivya Expert porte désormais les activités de conseil, de services et de delivery en Europe et en Afrique. Nos composants open source prolongent la même logique : transformer les problèmes rencontrés sur le terrain en solutions réutilisables et les partager avec la communauté.",
-          "Aujourd’hui, nous réunissons progressivement cet ensemble sous Omnivya. La raison est simple : nous nous sommes rendu compte que, selon les marques, nous refaisions parfois trois ou quatre fois le même travail. Autant unifier les process, garder des marques spécialisées, et arrêter de dupliquer l’effort.",
-          "Chaque branche est née de la précédente. Non pas à partir d’un catalogue d’idées, mais d’un problème réel qu’il fallait résoudre.",
+          "Taous et moi avons créé Simplifi’ED le 4 août 2020 pour porter le conseil et l’ingénierie en Europe.",
+          "L’Algérie n’était pas dans le plan d’origine. Cette décision est venue plus tard, surtout face à la pénurie de profils techniques en Europe. Nous avons alors constitué une capacité de delivery en Algérie ; la filiale s’appelait historiquement IT Challenge (SARL toujours active ; le nom n’est plus une marque stratégique publique).",
+          "Pour que les équipes travaillent dans de bonnes conditions à Alger, nous avons créé My Dare. En opérant ce lieu, nous avons constaté qu’aucun SaaS ne répondait correctement aux besoins locaux de devis, facturation et gestion contractuelle. Nous avons donc développé Sanad avec les équipes aujourd’hui regroupées sous Omnivya Expert.",
+          "Omnivya Expert porte désormais le conseil, les services, l’ingénierie et la delivery en Europe et en Afrique. Les composants open source prolongent la même logique : transformer les problèmes de terrain en solutions réutilisables.",
+          "Depuis 2025, la marque Omnivya structure le hub commun. Les marques spécialisées restent ; on unifie les process pour arrêter de dupliquer l’effort.",
+          "Chaque branche est née de la précédente — d’un problème réel, pas d’un catalogue d’idées.",
         ],
         en: [
-          "Taous and I first built Simplifi’ED to carry our consulting and engineering work.",
-          "We had not planned to expand into Algeria. That decision came later, facing a very concrete constraint: finding enough technical profiles in Europe. We then chose to build a team in Algeria, where we could access strong skills and grow complementary delivery capacity.",
-          "To let that team work under proper conditions, we built My Dare. Running the place showed that no SaaS properly covered local needs for quotes, invoicing and contract management. So we built Sanad with the IT Challenge teams, now part of Omnivya Expert.",
-          "Omnivya Expert now carries consulting, services and delivery across Europe and Africa. Our open-source components follow the same logic: turn field problems into reusable solutions and share them with the community.",
-          "Today we are gradually bringing this set together under Omnivya. The reason is simple: we realized that, across brands, we were sometimes doing the same work three or four times. Better to unify processes, keep specialized brands, and stop duplicating effort.",
-          "Each branch was born from the previous one. Not from a catalog of ideas, but from a real problem that had to be solved.",
+          "Taous and I founded Simplifi’ED on 4 August 2020 for consulting and engineering in Europe.",
+          "Algeria was not in the original plan. That decision came later, mainly due to the shortage of technical profiles in Europe. We then built delivery capacity in Algeria; the subsidiary was historically named IT Challenge (SARL still active; the name is no longer a public strategic brand).",
+          "To give teams proper working conditions in Algiers, we built My Dare. Running the place showed that no SaaS properly covered local needs for quotes, invoicing and contract management. So we built Sanad with the teams now gathered under Omnivya Expert.",
+          "Omnivya Expert now carries consulting, services, engineering and delivery across Europe and Africa. Open-source components follow the same logic: turn field problems into reusable solutions.",
+          "Since 2025, the Omnivya brand structures the shared hub. Specialized brands remain; we unify processes to stop duplicating effort.",
+          "Each branch was born from the previous one — from a real problem, not a catalog of ideas.",
         ],
       },
     },
@@ -127,12 +128,12 @@ export const startHereConfig = {
       paragraphs: {
         fr: [
           "Des systèmes lisibles : cartographies, modèles de décision et trajectoires plateforme qui rendent un SI pilotable.",
-          "Des projets concrets : chaque bras de l’écosystème (groupe, services, coworking, outil local, open source) convertit un problème en solution ou en opportunité.",
+          "Des projets concrets : chaque bras de l’écosystème (hub, services, coworking, outil local, open source) convertit un problème en solution ou en opportunité.",
           "Des cadres de gouvernance : sécurité dans le cycle de vie, observabilité utile, moins de charge cognitive, plutôt que des dashboards de plus.",
         ],
         en: [
           "Readable systems: mappings, decision models and platform trajectories that make an IT estate governable.",
-          "Concrete projects: each arm of the ecosystem (group, services, coworking, local tool, open source) turns a problem into a solution or an opportunity.",
+          "Concrete projects: each arm of the ecosystem (hub, services, coworking, local tool, open source) turns a problem into a solution or an opportunity.",
           "Governance frames: security in the lifecycle, useful observability, less cognitive load, rather than more dashboards.",
         ],
       },
@@ -175,12 +176,12 @@ export const startHereConfig = {
       title: { fr: "Omnivya et Omnivya Expert", en: "Omnivya and Omnivya Expert" },
       paragraphs: {
         fr: [
-          "Omnivya rassemble les marques pour unifier les process : nous nous sommes rendu compte que nous refaisions parfois trois ou quatre fois le même travail. Omnivya Expert porte le conseil, les services et la delivery en Europe et en Afrique ; My Dare, Sanad et l’open source gardent leur rôle.",
-          "Ce site clarifie le raisonnement. Omnivya Expert porte l’exécution structurée.",
+          "Omnivya est le hub du groupe. Omnivya Expert porte le conseil, les services, l’ingénierie et la delivery en Europe et en Afrique ; My Dare, Sanad et l’open source gardent leur rôle.",
+          "Ce site clarifie le raisonnement et les preuves publiques. Omnivya Expert porte l’exécution structurée. Le récit canonique est sur la page Écosystème.",
         ],
         en: [
-          "Omnivya brings the brands together to unify processes: we realized we were sometimes doing the same work three or four times. Omnivya Expert carries consulting, services and delivery across Europe and Africa; My Dare, Sanad and open source keep their own roles.",
-          "This site clarifies the reasoning. Omnivya Expert carries structured execution.",
+          "Omnivya is the group hub. Omnivya Expert carries consulting, services, engineering and delivery across Europe and Africa; My Dare, Sanad and open source keep their own roles.",
+          "This site clarifies the reasoning and public proof. Omnivya Expert carries structured execution. The canonical narrative lives on the Ecosystem page.",
         ],
       },
     },
@@ -252,6 +253,12 @@ export const startHereConfig = {
             cta: "Voir",
           },
           {
+            label: "Écosystème",
+            href: "/ecosystem/",
+            description: "Récit canonique Omnivya, Omnivya Expert, My Dare et Sanad.",
+            cta: "Lire",
+          },
+          {
             label: "Contact",
             href: "/contact/",
             description: "Qualifier un contexte avant engagement.",
@@ -276,6 +283,12 @@ export const startHereConfig = {
             href: "/en/projects/",
             description: "Group, Algeria field work and open-source projects.",
             cta: "View",
+          },
+          {
+            label: "Ecosystem",
+            href: "/en/ecosystem/",
+            description: "Canonical Omnivya, Omnivya Expert, My Dare and Sanad narrative.",
+            cta: "Read",
           },
           {
             label: "Contact",
@@ -321,8 +334,8 @@ export const startHereConfig = {
         en: "Talent, workplace, local tool: the concrete chain behind My Dare and Sanad.",
       },
       themes: {
-        fr: ["My Dare", "Sanad", "Omnivya Expert", "IT Challenge", "contraintes locales"],
-        en: ["My Dare", "Sanad", "Omnivya Expert", "IT Challenge", "local constraints"],
+        fr: ["My Dare", "Sanad", "Omnivya Expert", "contraintes locales"],
+        en: ["My Dare", "Sanad", "Omnivya Expert", "local constraints"],
       },
       items: [
         { kind: "project", id: "omnivya" },

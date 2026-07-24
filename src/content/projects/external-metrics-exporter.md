@@ -33,8 +33,8 @@ whatExists:
 whatExists_en:
   - "Public repository Simplifi-ED/external-metrics-exporter"
   - "Prometheus / Kubernetes integration"
-currentState: "Production — composant publié et maintenu sous Simplifi-ED."
-currentState_en: "Production — published and maintained under Simplifi-ED."
+currentState: "Production — composant publié sous l’organisation GitHub historique Simplifi-ED ; contribution publique de l’écosystème Omnivya."
+currentState_en: "Production — published under the historical Simplifi-ED GitHub org; public contribution of the Omnivya ecosystem."
 limitations:
   - "Pas de métriques d’adoption (stars, downloads) présentées comme argument principal"
   - "Pas de promesse de couverture fournisseur exhaustive sans documentation à jour"
