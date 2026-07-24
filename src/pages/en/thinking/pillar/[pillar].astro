@@ -5,10 +5,11 @@ import {
   thinkingPillars,
   type ThinkingPillar,
 } from "../../../../config/thinking.ts";
-import { articlesForLocale, getAllThinkingArticles } from "../../../../lib/thinking.ts";
+import { getAllThinkingArticles } from "../../../../lib/thinking.ts";
 
 export async function getStaticPaths() {
-  const articles = articlesForLocale(await getAllThinkingArticles(), "en");
+  // Same article pool as FR facets: EN chrome over the shared library (mostly FR bodies).
+  const articles = await getAllThinkingArticles();
   return thinkingPillars
     .map((pillar) => ({
       params: { pillar },

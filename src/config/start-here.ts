@@ -1,4 +1,5 @@
 import type { ContentReference } from "../lib/resolve-content.ts";
+import { getShortDescription } from "../data/ecosystem.ts";
 
 type Localized<T> = { fr: T; en: T };
 
@@ -14,31 +15,126 @@ export const startHereConfig = {
   meta: {
     title: { fr: "Start Here", en: "Start Here" } as Localized<string>,
     description: {
-      fr: "Orientation en cinq minutes : doctrine, problèmes, raisonnement, preuves et parcours éditoriaux.",
-      en: "Five-minute orientation: doctrine, problems, reasoning, proof and editorial paths.",
+      fr: "Carte d’entrée : qui construit quoi, comment l’écosystème s’est formé, et où lire ensuite.",
+      en: "Entry map: who builds what, how the ecosystem formed, and where to read next.",
     } as Localized<string>,
     eyebrow: {
-      fr: "5 minutes pour comprendre",
-      en: "5 minutes to understand",
+      fr: "Point d’entrée",
+      en: "Entry point",
     } as Localized<string>,
     intro: {
-      fr: "Cette page résume comment je raisonne, ce que je construis, et où commencer selon votre contexte, sans catalogue d’outils ni promesses chiffrées.",
-      en: "This page summarizes how I reason, what I build, and where to start based on your context, without a tool catalog or unverified metrics.",
+      fr: "Ce site documente mon raisonnement. L’écosystème Omnivya s’est formé à partir de besoins réels, pas d’un plan d’expansion.",
+      en: "This site documents my reasoning. The Omnivya ecosystem formed from real needs, not from an expansion plan.",
     } as Localized<string>,
   },
   sections: {
-    whatIBuild: {
-      title: { fr: "Ce que je construis", en: "What I build" },
+    map: {
+      title: { fr: "La carte, pas le catalogue", en: "The map, not the catalog" },
+      intro: {
+        fr: "Chaque branche répond à une contrainte. Omnivya est le hub commun ; le détail du récit est sur la page Écosystème.",
+        en: "Each arm answers a constraint. Omnivya is the shared hub; the full narrative lives on the Ecosystem page.",
+      },
+      founders: [
+        {
+          id: "taous",
+          name: { fr: "Taous", en: "Taous" },
+          role: { fr: "cofondatrice · dirigeante", en: "co-founder · leader" },
+          href: { fr: "/about/#with-taous", en: "/en/about/#with-taous" },
+        },
+        {
+          id: "etienne",
+          name: { fr: "Etienne", en: "Etienne" },
+          role: { fr: "cofondateur · CTO", en: "co-founder · CTO" },
+          href: { fr: "/about/", en: "/en/about/" },
+        },
+      ],
+      hub: {
+        name: { fr: "Omnivya", en: "Omnivya" },
+        role: {
+          fr: getShortDescription("omnivya", "fr"),
+          en: getShortDescription("omnivya", "en"),
+        },
+        href: { fr: "/ecosystem/", en: "/en/ecosystem/" },
+      },
+      arms: [
+        {
+          id: "omnivya-expert",
+          name: { fr: "Omnivya Expert", en: "Omnivya Expert" },
+          role: {
+            fr: getShortDescription("omnivya-expert", "fr"),
+            en: getShortDescription("omnivya-expert", "en"),
+          },
+          href: { fr: "https://www.omnivya.fr", en: "https://www.omnivya.fr" },
+          external: true,
+        },
+        {
+          id: "my-dare",
+          name: { fr: "My Dare", en: "My Dare" },
+          role: {
+            fr: getShortDescription("my-dare", "fr"),
+            en: getShortDescription("my-dare", "en"),
+          },
+          href: { fr: "/projects/my-dare/", en: "/en/projects/my-dare/" },
+        },
+        {
+          id: "sanad",
+          name: { fr: "Sanad", en: "Sanad" },
+          role: {
+            fr: getShortDescription("sanad", "fr"),
+            en: getShortDescription("sanad", "en"),
+          },
+          href: { fr: "/projects/sanad/", en: "/en/projects/sanad/" },
+        },
+        {
+          id: "open-source",
+          name: { fr: "Open source", en: "Open source" },
+          role: {
+            fr: getShortDescription("open-source", "fr"),
+            en: getShortDescription("open-source", "en"),
+          },
+          href: {
+            fr: "/projects/external-metrics-exporter/",
+            en: "/en/projects/external-metrics-exporter/",
+          },
+        },
+      ],
+    },
+    origin: {
+      title: {
+        fr: "Un écosystème construit à partir de besoins réels",
+        en: "An ecosystem built from real needs",
+      },
       paragraphs: {
         fr: [
-          "Des systèmes lisibles : cartographies, modèles de décision et feuilles de route plateforme qui rendent le SI pilotable.",
-          "Des composants opérables : Omnivya (hub), My Dare (coworking pour les équipes), Sanad (SaaS local via Omnivya Expert), plus l’open source, chacun ancré dans une contrainte réelle.",
-          "Des cadres de gouvernance : sécurité intégrée au cycle de vie, observabilité utile, réduction de la charge cognitive, plutôt que des dashboards de plus.",
+          "Taous et moi avons créé Simplifi’ED le 4 août 2020 pour porter le conseil et l’ingénierie en Europe.",
+          "L’Algérie n’était pas dans le plan d’origine. Cette décision est venue plus tard, surtout face à la pénurie de profils techniques en Europe. Nous avons alors constitué une capacité de delivery en Algérie ; la filiale s’appelait historiquement IT Challenge (SARL toujours active ; le nom n’est plus une marque stratégique publique).",
+          "Pour que les équipes travaillent dans de bonnes conditions à Alger, nous avons créé My Dare. En opérant ce lieu, nous avons constaté qu’aucun SaaS ne répondait correctement aux besoins locaux de devis, facturation et gestion contractuelle. Nous avons donc développé Sanad avec les équipes aujourd’hui regroupées sous Omnivya Expert.",
+          "Omnivya Expert porte désormais le conseil, les services, l’ingénierie et la delivery en Europe et en Afrique. Les composants open source prolongent la même logique : transformer les problèmes de terrain en solutions réutilisables.",
+          "Depuis 2025, la marque Omnivya structure le hub commun. Les marques spécialisées restent ; on unifie les process pour arrêter de dupliquer l’effort.",
+          "Chaque branche est née de la précédente — d’un problème réel, pas d’un catalogue d’idées.",
         ],
         en: [
-          "Readable systems: mappings, decision models and platform trajectories that make the IT estate governable.",
-          "Operable components: Omnivya (hub), My Dare (workspace for the teams), Sanad (local SaaS via Omnivya Expert), plus open source, each anchored in a real constraint.",
-          "Governance frameworks: security embedded in the lifecycle, useful observability, reduced cognitive load, rather than more dashboards.",
+          "Taous and I founded Simplifi’ED on 4 August 2020 for consulting and engineering in Europe.",
+          "Algeria was not in the original plan. That decision came later, mainly due to the shortage of technical profiles in Europe. We then built delivery capacity in Algeria; the subsidiary was historically named IT Challenge (SARL still active; the name is no longer a public strategic brand).",
+          "To give teams proper working conditions in Algiers, we built My Dare. Running the place showed that no SaaS properly covered local needs for quotes, invoicing and contract management. So we built Sanad with the teams now gathered under Omnivya Expert.",
+          "Omnivya Expert now carries consulting, services, engineering and delivery across Europe and Africa. Open-source components follow the same logic: turn field problems into reusable solutions.",
+          "Since 2025, the Omnivya brand structures the shared hub. Specialized brands remain; we unify processes to stop duplicating effort.",
+          "Each branch was born from the previous one — from a real problem, not a catalog of ideas.",
+        ],
+      },
+    },
+    whatIBuild: {
+      title: { fr: "Ce que je construis ici", en: "What I build here" },
+      paragraphs: {
+        fr: [
+          "Des systèmes lisibles : cartographies, modèles de décision et trajectoires plateforme qui rendent un SI pilotable.",
+          "Des projets concrets : chaque bras de l’écosystème (hub, services, coworking, outil local, open source) convertit un problème en solution ou en opportunité.",
+          "Des cadres de gouvernance : sécurité dans le cycle de vie, observabilité utile, moins de charge cognitive, plutôt que des dashboards de plus.",
+        ],
+        en: [
+          "Readable systems: mappings, decision models and platform trajectories that make an IT estate governable.",
+          "Concrete projects: each arm of the ecosystem (hub, services, coworking, local tool, open source) turns a problem into a solution or an opportunity.",
+          "Governance frames: security in the lifecycle, useful observability, less cognitive load, rather than more dashboards.",
         ],
       },
     },
@@ -47,9 +143,9 @@ export const startHereConfig = {
       items: {
         fr: [
           "Personne ne sait plus qui dépend de quoi, ni où prioriser le risque.",
-          "Les équipes déploient, mais chaque modification augmente une dette qu’on ne voit plus.",
+          "Les équipes déploient, mais chaque modification augmente une dette qui n’est plus visible.",
           "Cloud et plateforme ne livrent pas : golden paths absents, self-service illusoire.",
-          "On empile les outils sans pouvoir trancher plus vite ; la gouvernance reste sur papier.",
+          "Les outils s’empilent sans permettre de trancher plus vite ; la gouvernance reste sur papier.",
         ],
         en: [
           "Nobody can explain who depends on what, or where to prioritize risk.",
@@ -77,99 +173,128 @@ export const startHereConfig = {
       },
     },
     omnivyaRole: {
-      title: { fr: "Le rôle d’Omnivya", en: "The role of Omnivya" },
+      title: { fr: "Omnivya et Omnivya Expert", en: "Omnivya and Omnivya Expert" },
       paragraphs: {
         fr: [
-          "Ce site exprime mon raisonnement et mes preuves publiques. Omnivya est le hub du groupe : la marque ombrelle sous laquelle s’organisent Omnivya Expert, My Dare, Sanad et l’open source. Le récit canonique est sur la page Écosystème.",
-          "Quand une mission demande du conseil ou de la delivery structurée, Omnivya Expert porte — en Europe et en Afrique — avec les mêmes exigences de lisibilité et de gouvernabilité.",
+          "Omnivya est le hub du groupe. Omnivya Expert porte le conseil, les services, l’ingénierie et la delivery en Europe et en Afrique ; My Dare, Sanad et l’open source gardent leur rôle.",
+          "Ce site clarifie le raisonnement et les preuves publiques. Omnivya Expert porte l’exécution structurée. Le récit canonique est sur la page Écosystème.",
         ],
         en: [
-          "This site expresses my reasoning and public proof. Omnivya is the group hub: the umbrella brand under which Omnivya Expert, My Dare, Sanad and open source sit. The canonical narrative is on the Ecosystem page.",
-          "When a mission needs structured consulting or delivery, Omnivya Expert carries it — in Europe and Africa — with the same readability and governability bar.",
+          "Omnivya is the group hub. Omnivya Expert carries consulting, services, engineering and delivery across Europe and Africa; My Dare, Sanad and open source keep their own roles.",
+          "This site clarifies the reasoning and public proof. Omnivya Expert carries structured execution. The canonical narrative lives on the Ecosystem page.",
         ],
       },
     },
-    proofs: {
+    featuredProjects: {
       title: {
-        fr: "Les produits et expériences qui servent de preuves",
-        en: "Products and experiences that serve as proof",
+        fr: "Projets à voir en premier",
+        en: "Projects to see first",
       },
       intro: {
-        fr: "Chaque preuve répond à un problème documenté. Les métadonnées proviennent des collections, pas de claims inventés.",
-        en: "Each proof addresses a documented problem. Metadata comes from collections, no invented claims.",
+        fr: "Quatre projets qui montrent comment un problème devient une solution ou une opportunité.",
+        en: "Four projects that show how a problem becomes a solution or an opportunity.",
       },
       items: [
-        { kind: "project", id: "sanad" },
+        { kind: "project", id: "omnivya" },
         { kind: "project", id: "my-dare" },
+        { kind: "project", id: "sanad" },
         { kind: "project", id: "external-metrics-exporter" },
       ] satisfies ContentReference[],
     },
     starterContent: {
-      title: { fr: "Les meilleurs contenus pour commencer", en: "Best content to start with" },
+      title: { fr: "Meilleurs contenus pour commencer", en: "Best content to start with" },
       intro: {
-        fr: "Quatre types de contenu pour comprendre la doctrine avant d’aller plus loin.",
-        en: "Four content types to understand the doctrine before going further.",
+        fr: "Notes récentes et guides qui montrent le raisonnement avant d’aller plus loin.",
+        en: "Recent notes and guides that show the reasoning before going further.",
       },
       items: [
-        { kind: "article", id: "2024-02-11-zero-trust-overview", labelKey: "doctrine" },
         {
           kind: "article",
-          id: "2024-10-05-automatisation-carousel-linkedin",
-          labelKey: "fieldNote",
+          id: "2026-07-13-de-la-metrique-au-runbook",
+          labelKey: "doctrine",
+        },
+        {
+          kind: "article",
+          id: "2024-09-16-managed-identities",
+          labelKey: "technicalGuide",
         },
         {
           kind: "article",
           id: "2023-07-28-megalinter-azure-devops",
           labelKey: "architectureDecision",
         },
-        { kind: "article", id: "2024-09-16-managed-identities", labelKey: "technicalGuide" },
+        {
+          kind: "article",
+          id: "2018-06-26-documentation-as-code",
+          labelKey: "fieldNote",
+        },
       ] as Array<ContentReference & { labelKey: string }>,
     },
     continue: {
-      title: { fr: "Les différentes manières de poursuivre", en: "Ways to continue" },
+      title: { fr: "Où continuer", en: "Where to continue" },
       options: {
         fr: [
           {
-            label: "Explorer Thinking",
+            label: "Thinking",
             href: "/thinking/",
             description: "Doctrine, notes de terrain et décisions d’architecture.",
+            cta: "Lire",
           },
           {
-            label: "Ouvrir Work",
+            label: "Missions et contextes",
             href: "/work/",
-            description: "Missions, case studies et contextes d’intervention.",
+            description: "Modes d’intervention et case studies publiables.",
+            cta: "Voir",
           },
           {
-            label: "Voir les projets",
+            label: "Projets",
             href: "/projects/",
-            description: "Produits, open source et expériences vérifiables.",
+            description: "Groupe, terrain Algérie et projets open source.",
+            cta: "Voir",
           },
           {
-            label: "Parler d’un système complexe",
+            label: "Écosystème",
+            href: "/ecosystem/",
+            description: "Récit canonique Omnivya, Omnivya Expert, My Dare et Sanad.",
+            cta: "Lire",
+          },
+          {
+            label: "Contact",
             href: "/contact/",
             description: "Qualifier un contexte avant engagement.",
+            cta: "Écrire",
           },
         ],
         en: [
           {
-            label: "Explore Thinking",
+            label: "Thinking",
             href: "/en/thinking/",
             description: "Doctrine, field notes and architecture decisions.",
+            cta: "Read",
           },
           {
-            label: "Open Work",
+            label: "Missions and contexts",
             href: "/en/work/",
-            description: "Missions, case studies and intervention contexts.",
+            description: "Intervention modes and publishable case studies.",
+            cta: "View",
           },
           {
-            label: "View projects",
+            label: "Projects",
             href: "/en/projects/",
-            description: "Products, open source and verifiable experiences.",
+            description: "Group, Algeria field work and open-source projects.",
+            cta: "View",
           },
           {
-            label: "Discuss a complex system",
+            label: "Ecosystem",
+            href: "/en/ecosystem/",
+            description: "Canonical Omnivya, Omnivya Expert, My Dare and Sanad narrative.",
+            cta: "Read",
+          },
+          {
+            label: "Contact",
             href: "/en/contact/",
             description: "Qualify a context before engagement.",
+            cta: "Write",
           },
         ],
       },
@@ -177,111 +302,72 @@ export const startHereConfig = {
   },
   learningPaths: [
     {
-      id: "technical-leader",
+      id: "platform-ops",
       title: {
-        fr: "Dirigeant technique",
-        en: "Technical leader",
-      },
-      summary: {
-        fr: "Pour CTO, CIO, CISO et leads qui reprennent le contrôle d’un système complexe.",
-        en: "For CTOs, CIOs, CISOs and leads taking back control of a complex system.",
-      },
-      themes: {
-        fr: [
-          "risque",
-          "maîtrise du système",
-          "décisions d’architecture",
-          "dépendances",
-          "coût du changement",
-        ],
-        en: ["risk", "system control", "architecture decisions", "dependencies", "cost of change"],
-      },
-      items: [
-        { kind: "article", id: "2024-02-11-zero-trust-overview" },
-        { kind: "article", id: "2024-02-15-zero-trust-tl-dr" },
-        { kind: "article", id: "2023-07-28-megalinter-azure-devops" },
-        { kind: "article", id: "2020-02-07-infra-testing-easy-path" },
-        { kind: "article", id: "2020-02-17-infra-testing-easy-path-2" },
-      ],
-    },
-    {
-      id: "platform-sre",
-      title: {
-        fr: "Platform / SRE",
-        en: "Platform / SRE",
+        fr: "Plateforme et opérations",
+        en: "Platform and operations",
       },
       summary: {
         fr: "Pour les équipes qui construisent et opèrent des plateformes cloud native.",
         en: "For teams building and operating cloud native platforms.",
       },
       themes: {
-        fr: ["Kubernetes", "observabilité", "platform engineering", "CI/CD", "opérations"],
-        en: ["Kubernetes", "observability", "platform engineering", "CI/CD", "operations"],
+        fr: ["Kubernetes", "observabilité", "GitOps", "CI/CD", "opérations"],
+        en: ["Kubernetes", "observability", "GitOps", "CI/CD", "operations"],
       },
       items: [
         { kind: "project", id: "external-metrics-exporter" },
-        { kind: "article", id: "2024-09-16-managed-identities" },
-        { kind: "article", id: "2017-10-09-vsts-for-ops-1" },
-        { kind: "article", id: "2017-10-13-vsts-for-ops-2" },
-        { kind: "article", id: "2017-10-25-vsts-for-ops-part-3" },
-        { kind: "article", id: "2018-06-26-documentation-as-code" },
-        { kind: "article", id: "2020-06-19-anf-rbac" },
-      ],
-    },
-    {
-      id: "security-supply-chain",
-      title: {
-        fr: "Sécurité et supply chain",
-        en: "Security and supply chain",
-      },
-      summary: {
-        fr: "Pour les contextes où sécurité, conformité et chaîne logicielle sont indissociables.",
-        en: "For contexts where security, compliance and the software chain are inseparable.",
-      },
-      themes: {
-        fr: ["SBOM", "dépendances", "secrets", "DevSecOps", "analyse de risque"],
-        en: ["SBOM", "dependencies", "secrets", "DevSecOps", "risk analysis"],
-      },
-      items: [
-        { kind: "resource", id: "DevSecOps" },
-        { kind: "article", id: "2024-02-12-zero-trust-microsoft" },
-        { kind: "article", id: "2024-02-14-zero-trust-open-source" },
-        { kind: "article", id: "2024-02-13-zero-trust-google" },
+        { kind: "article", id: "2026-07-13-de-la-metrique-au-runbook" },
         { kind: "article", id: "2024-09-16-managed-identities" },
         { kind: "article", id: "2023-07-28-megalinter-azure-devops" },
+        { kind: "article", id: "2018-06-26-documentation-as-code" },
       ],
     },
     {
-      id: "product-complex-markets",
+      id: "algeria-field",
       title: {
-        fr: "Terrain Algérie & outils locaux",
-        en: "Algeria field & local tools",
+        fr: "Terrain Algérie",
+        en: "Algeria field",
       },
       summary: {
-        fr: "Pour ceux qui construisent sous contraintes locales — coworking, équipes sur place, outil métier — sans surjouer le discours produit.",
-        en: "For those building under local constraints — coworking, on-site teams, business tool — without overplaying product narrative.",
+        fr: "Talents, lieu de travail, outil local : la chaîne concrète derrière My Dare et Sanad.",
+        en: "Talent, workplace, local tool: the concrete chain behind My Dare and Sanad.",
       },
       themes: {
-        fr: [
-          "My Dare",
-          "Omnivya Expert",
-          "Sanad",
-          "contraintes locales",
-          "construction depuis le terrain",
-        ],
-        en: ["My Dare", "Omnivya Expert", "Sanad", "local constraints", "building from the field"],
+        fr: ["My Dare", "Sanad", "Omnivya Expert", "contraintes locales"],
+        en: ["My Dare", "Sanad", "Omnivya Expert", "local constraints"],
       },
       items: [
+        { kind: "project", id: "omnivya" },
         { kind: "project", id: "my-dare" },
         { kind: "project", id: "sanad" },
-        { kind: "project", id: "omnivya" },
+      ],
+    },
+    {
+      id: "systems-risk",
+      title: {
+        fr: "Systèmes et risque",
+        en: "Systems and risk",
+      },
+      summary: {
+        fr: "Pour reprendre la main sur dépendances, décisions et coût du changement.",
+        en: "For regaining control over dependencies, decisions and cost of change.",
+      },
+      themes: {
+        fr: ["risque", "dépendances", "architecture", "supply chain", "gouvernance"],
+        en: ["risk", "dependencies", "architecture", "supply chain", "governance"],
+      },
+      items: [
+        { kind: "article", id: "2023-07-28-megalinter-azure-devops" },
         { kind: "article", id: "2018-06-26-documentation-as-code" },
+        { kind: "article", id: "2024-09-16-managed-identities" },
+        { kind: "resource", id: "DevSecOps" },
       ],
     },
   ] satisfies LearningPathDefinition[],
   contentTypeLabels: {
     doctrine: { fr: "Doctrine", en: "Doctrine" },
-    fieldNote: { fr: "Field note", en: "Field note" },
+    fieldNote: { fr: "Note terrain", en: "Field note" },
     architectureDecision: { fr: "Décision d’architecture", en: "Architecture decision" },
     technicalGuide: { fr: "Guide technique", en: "Technical guide" },
   } as Record<string, Localized<string>>,
