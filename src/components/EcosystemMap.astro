@@ -10,7 +10,12 @@ const config = projectsPageConfig.ecosystem;
 ---
 
 <section class="ecosystem" aria-labelledby="ecosystem-title">
-  <h2 id="ecosystem-title">{config.title[lang]}</h2>
+  <div class="ecosystem-head">
+    <h2 id="ecosystem-title">{config.title[lang]}</h2>
+    <a class="ecosystem-ref" href={lang === "en" ? config.referenceHref.en : config.referenceHref.fr}>
+      {config.referenceLabel[lang]}
+    </a>
+  </div>
   <ol class="ecosystem-flow">
     {
       config.nodes.map((node, index) => (
@@ -38,8 +43,19 @@ const config = projectsPageConfig.ecosystem;
     background: var(--color-bg-elevated);
   }
   .ecosystem h2 {
-    margin: 0 0 1rem;
+    margin: 0;
     font-size: var(--text-lg);
+  }
+  .ecosystem-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    margin-bottom: 1rem;
+  }
+  .ecosystem-ref {
+    font-size: var(--text-sm);
   }
   .ecosystem-flow {
     list-style: none;

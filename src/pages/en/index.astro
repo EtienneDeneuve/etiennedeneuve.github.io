@@ -5,14 +5,16 @@ import HomeContent from "../../components/HomeContent.astro";
 import { siteConfig } from "../../config/site.ts";
 import {
   buildJsonLdGraph,
-  organizationJsonLd,
-  personJsonLd,
   websiteJsonLd,
 } from "../../lib/json-ld.ts";
+import { coreIdentityNodes } from "../../lib/ecosystem-json-ld.ts";
 import { getReleasedArticles } from "../../lib/publication-policy.ts";
 import { selectHomeThinking } from "../../lib/home-thinking.ts";
 
-const homeJsonLd = buildJsonLdGraph([personJsonLd(), organizationJsonLd(), websiteJsonLd()]);
+const homeJsonLd = buildJsonLdGraph([
+  ...coreIdentityNodes("en"),
+  websiteJsonLd(),
+]);
 
 const released = getReleasedArticles(await getCollection("blog")).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()

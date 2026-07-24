@@ -156,6 +156,10 @@ const arms = map.arms.map((arm) => ({
       <h2>{config.sections.omnivyaRole.title[lang]}</h2>
       {config.sections.omnivyaRole.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
       <p>
+        <a href={`${prefix}/ecosystem/`}>
+          {lang === "en" ? "Omnivya ecosystem" : "Écosystème Omnivya"} →
+        </a>
+        {" · "}
         <a href={siteConfig.omnivya.website} target="_blank" rel="noopener noreferrer">
           {openOmnivyaLabel} →
         </a>

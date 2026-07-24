@@ -10,7 +10,8 @@ LinkedIn: /in/EtienneDeneuve
 
 /* THANKS */
 Astro — static site framework
-Omnivya — execution entity
+Omnivya — group hub / umbrella brand
+Omnivya Expert — consulting, services, engineering and delivery (Europe and Africa)
 
 /* SITE */
 Standards: HTML5, CSS, JSON-LD

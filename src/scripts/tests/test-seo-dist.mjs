@@ -138,6 +138,7 @@ function validateJsonLd(raw, file) {
   }
 
   const nodes = Array.isArray(parsed) ? parsed : parsed["@graph"] ? parsed["@graph"] : [parsed];
+  const ids = [];
 
   for (const node of nodes) {
     if (!node || typeof node !== "object") {
@@ -154,6 +155,20 @@ function validateJsonLd(raw, file) {
     if (node["@type"] === "Product") {
       fail(`${file}: Product schema is not allowed on this site`);
     }
+    if (typeof node["@id"] === "string") {
+      ids.push(node["@id"]);
+      if (node["@id"].endsWith("/#person") || node["@id"].endsWith("/#organization")) {
+        fail(`${file}: legacy JSON-LD @id ${node["@id"]} (use #etienne / #omnivya)`);
+      }
+    }
+    if (node.url === "#") {
+      fail(`${file}: placeholder JSON-LD url '#'`);
+    }
+  }
+
+  const unique = new Set(ids);
+  if (unique.size !== ids.length) {
+    fail(`${file}: duplicate JSON-LD @id values`);
   }
 }
 

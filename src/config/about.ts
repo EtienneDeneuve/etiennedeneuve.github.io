@@ -48,11 +48,11 @@ export const aboutConfig = {
     paragraphs: {
       fr: [
         "Je conçois, sécurise et rends gouvernables des systèmes numériques complexes : plateformes cloud, Kubernetes, DevSecOps, observabilité et architecture de décision.",
-        "Je suis Platform Reliability Architect. Omnivya Expert porte le conseil et la delivery quand l’exécution est requise. Ce site documente mes principes, mes projets et mon raisonnement, pas un catalogue commercial.",
+        "Je suis Platform Reliability Architect et CTO de l’écosystème Omnivya. Quand une mission demande du conseil ou de la delivery structurée, c’est Omnivya Expert qui porte — en Europe et en Afrique. Ce site documente mes principes, les preuves publiques et le raisonnement, pas un catalogue commercial.",
       ],
       en: [
         "I design, secure and make complex digital systems governable: cloud platforms, Kubernetes, DevSecOps, observability and decision architecture.",
-        "I am a Platform Reliability Architect. Omnivya Expert carries consulting and delivery when execution is required. This site documents my principles, projects and reasoning, not a commercial catalog.",
+        "I am a Platform Reliability Architect and CTO of the Omnivya ecosystem. When a mission needs structured consulting or delivery, Omnivya Expert carries it — in Europe and Africa. This site documents my principles, public proof and reasoning, not a commercial catalog.",
       ],
     },
   },
@@ -63,12 +63,12 @@ export const aboutConfig = {
     } as Localized,
     paragraphs: {
       fr: [
-        "Taous est cofondatrice d’Omnivya, d’IT Challenge / Omnivya Expert, de My Dare et de Sanad, en France et en Algérie.",
-        "Ce site documente mon raisonnement. Les structures d’exécution et le terrain se portent à deux.",
+        "Taous est cofondatrice de l’écosystème Omnivya — et elle dirige. Omnivya Expert, My Dare, Sanad et les structures associées se portent à deux, en France et en Algérie.",
+        "Ce site documente mon raisonnement. Le hub, les services et le terrain, on les construit ensemble.",
       ],
       en: [
-        "Taous is co-founder of Omnivya, IT Challenge / Omnivya Expert, My Dare and Sanad, in France and Algeria.",
-        "This site documents my reasoning. Execution structures and the field are carried jointly.",
+        "Taous is co-founder of the Omnivya ecosystem — and she leads. Omnivya Expert, My Dare, Sanad and related structures are carried jointly, in France and Algeria.",
+        "This site documents my reasoning. Hub, services and field work, we build together.",
       ],
     },
   },
@@ -107,17 +107,17 @@ export const aboutConfig = {
   },
   omnivya: {
     title: {
-      fr: "Pourquoi nous avons construit Omnivya",
+      fr: "Pourquoi on a construit Omnivya",
       en: "Why we built Omnivya",
     } as Localized,
     paragraphs: {
       fr: [
-        "Omnivya rassemble les marques pour unifier les process : trop souvent, le même travail était refait trois ou quatre fois. Omnivya Expert porte le conseil, la delivery et le build en Europe et en Afrique. Raisonnement publié (ce site) et exécution restent séparés à dessein.",
-        "Nous avons d’abord créé Simplifi’ED, puis déposé Omnivya. Les marques restent spécialisées ; le hub sert à partager les process, pas à tout diluer dans un seul produit.",
+        "Taous et moi avons créé Simplifi’ED le 4 août 2020 pour le conseil et l’ingénierie en Europe. L’écosystème s’est élargi ensuite à partir de problèmes concrets — pas d’un plan initial de holding multi-pays. En 2025, la marque Omnivya structure le hub ; Omnivya Expert regroupe les services en Europe et en Afrique. Le récit complet est sur la page Écosystème.",
+        "Ce site publie le raisonnement. Omnivya Expert porte la delivery en mission. Les deux restent séparés à dessein : l’un clarifie ; l’autre exécute sans diluer le cadre de décision.",
       ],
       en: [
-        "Omnivya brings the brands together to unify processes: too often the same work was done three or four times. Omnivya Expert carries consulting, delivery and build across Europe and Africa. Published reasoning (this site) and execution stay deliberately separate.",
-        "We first built Simplifi’ED, then registered Omnivya. Brands stay specialized; the hub exists to share processes, not to dilute everything into one product.",
+        "Taous and I founded Simplifi’ED on 4 August 2020 for consulting and engineering in Europe. The ecosystem grew afterward from concrete problems — not from an initial multi-country holding plan. In 2025, the Omnivya brand structures the hub; Omnivya Expert gathers services across Europe and Africa. The full narrative is on the Ecosystem page.",
+        "This site publishes the reasoning. Omnivya Expert carries delivery on missions. The two stay deliberately separate: one clarifies; the other executes without diluting the decision frame.",
       ],
     },
   },
@@ -128,12 +128,12 @@ export const aboutConfig = {
     } as Localized,
     paragraphs: {
       fr: [
-        "Nous n’avions pas prévu de nous développer en Algérie. La décision est venue face à la pénurie de profils techniques en Europe : constituer une équipe là-bas, puis créer My Dare pour qu’elle travaille correctement, puis Sanad faute de SaaS adapté, avec IT Challenge aujourd’hui intégré à Omnivya Expert.",
-        "Chaque branche est née de la précédente. Omnivya Expert ancre conseil et delivery. My Dare ancre le terrain. Sanad reste un outil DZ only, pas le fer de lance du groupe.",
+        "L’implantation en Algérie n’était pas prévue à l’origine. Elle est venue surtout face à la pénurie de profils techniques en Europe ; la filiale s’appelait historiquement IT Challenge — SARL toujours active, nom surtout utilisé en facturation. Aujourd’hui le public parle d’Omnivya Expert.",
+        "My Dare offre un environnement de travail à Alger pour les équipes du groupe. Sanad est un SaaS local (devis, factures, contrats) construit par les équipes Omnivya Expert — outil DZ, pas le fer de lance international.",
       ],
       en: [
-        "We had not planned to expand into Algeria. The decision came from the shortage of technical profiles in Europe: build a team there, then create My Dare so they could work properly, then Sanad when no fit SaaS existed, with IT Challenge now part of Omnivya Expert.",
-        "Each branch was born from the previous one. Omnivya Expert anchors consulting and delivery. My Dare anchors the field. Sanad stays a DZ-only tool, not the group’s flagship.",
+        "Algeria was not in the original plan. It came mainly from the shortage of technical profiles in Europe; the subsidiary was historically named IT Challenge — SARL still active, name mostly used for invoicing. Publicly we speak of Omnivya Expert today.",
+        "My Dare provides a workspace in Algiers for the group’s teams. Sanad is a local SaaS (quotes, invoices, contracts) built by Omnivya Expert teams — a DZ tool, not the international flagship.",
       ],
     },
   },
@@ -229,23 +229,23 @@ export const aboutConfig = {
       {
         period: "2020",
         title: {
-          fr: "Fondation d’Omnivya",
-          en: "Founding of Omnivya",
+          fr: "Création de Simplifi’ED",
+          en: "Simplifi’ED founded",
         },
         body: {
-          fr: "Création d’Omnivya avec Taous : hub de groupe pour rattacher les marques ; Omnivya Expert porte conseil et delivery.",
-          en: "Founding of Omnivya with Taous: group hub to attach the brands; Omnivya Expert carries consulting and delivery.",
+          fr: "Le 4 août 2020, Taous et moi créons Simplifi’ED pour le conseil et l’ingénierie en Europe. Je suis CTO ; Taous dirige.",
+          en: "On 4 August 2020, Taous and I found Simplifi’ED for consulting and engineering in Europe. I am CTO; Taous leads.",
         },
       },
       {
         period: "2020–",
         title: {
-          fr: "Produits et marchés contraints",
-          en: "Products and constrained markets",
+          fr: "Algérie, produits, marque Omnivya",
+          en: "Algeria, products, Omnivya brand",
         },
         body: {
-          fr: "Omnivya ; My Dare et Sanad en Algérie (IT Challenge / Omnivya Expert) ; open source.",
-          en: "Omnivya; My Dare and Sanad in Algeria (IT Challenge / Omnivya Expert); open source.",
+          fr: "Capacité de delivery en Algérie (filiale historiquement IT Challenge), puis My Dare et Sanad. En 2025, marque Omnivya (hub) et Omnivya Expert (services Europe et Afrique).",
+          en: "Delivery capacity in Algeria (subsidiary historically IT Challenge), then My Dare and Sanad. In 2025, Omnivya brand (hub) and Omnivya Expert (services Europe and Africa).",
         },
       },
     ] satisfies AboutTimelineItem[],
@@ -262,5 +262,6 @@ export const aboutConfig = {
     startHere: { fr: "Start Here", en: "Start Here" } as Localized,
     emailCta: { fr: "Envoyer un email", en: "Send an email" } as Localized,
     omnivyaLink: { fr: "Voir Omnivya", en: "View Omnivya" } as Localized,
+    ecosystemLink: { fr: "Écosystème Omnivya", en: "Omnivya ecosystem" } as Localized,
   },
 } as const;

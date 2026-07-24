@@ -32,12 +32,12 @@ export const conversionConfig = {
     },
     omnivya: {
       label: {
-        fr: "Voir l'exécution Omnivya",
-        en: "View Omnivya execution",
+        fr: "Voir Omnivya",
+        en: "View Omnivya",
       },
       href: "https://www.omnivya.fr",
       event: "cta_project_open" as ConversionEvent,
-      intent: "execution",
+      intent: "ecosystem",
     },
     booking: {
       label: {

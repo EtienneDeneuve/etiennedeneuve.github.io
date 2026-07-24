@@ -5,17 +5,19 @@ import {
   thinkingPillars,
   type ThinkingPillar,
 } from "../../../../config/thinking.ts";
-import { getAllThinkingArticles } from "../../../../lib/thinking.ts";
+import { articlesForLocale, getAllThinkingArticles } from "../../../../lib/thinking.ts";
 
 export async function getStaticPaths() {
-  const articles = await getAllThinkingArticles();
-  return thinkingPillars.map((pillar) => ({
-    params: { pillar },
-    props: {
-      pillar,
-      entries: articles.filter((entry) => entry.data.pillar === pillar),
-    },
-  }));
+  const articles = articlesForLocale(await getAllThinkingArticles(), "en");
+  return thinkingPillars
+    .map((pillar) => ({
+      params: { pillar },
+      props: {
+        pillar,
+        entries: articles.filter((entry) => entry.data.pillar === pillar),
+      },
+    }))
+    .filter((path) => path.props.entries.length > 0);
 }
 
 interface Props {

@@ -96,7 +96,7 @@ export const seoConfig = {
     jobTitle: siteConfig.professionalRole.title,
     email: siteConfig.omnivya.email,
     url: siteUrl,
-    image: stripPublicSegment(siteConfig.seo.defaultOgImage),
+    image: stripPublicSegment("https://etienne.deneuve.xyz/assets/portrait.jpg"),
     sameAs: [
       siteConfig.social.linkedin,
       siteConfig.social.github,

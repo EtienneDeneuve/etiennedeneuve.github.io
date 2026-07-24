@@ -10,11 +10,10 @@ import type { StructuredEvidence } from "../lib/publication-policy.ts";
 import {
   breadcrumbJsonLd,
   buildJsonLdGraph,
-  organizationJsonLd,
-  personJsonLd,
   projectPageJsonLd,
   softwareSourceCodeJsonLd,
 } from "../lib/json-ld.ts";
+import { ecosystemNodeId, projectEntityNodes } from "../lib/ecosystem-json-ld.ts";
 
 interface Props {
   entry: CollectionEntry<"projects">;
@@ -65,15 +64,22 @@ const listSections = [
 const relatedToOmnivya = entry.data.type === "company" || entry.data.type === "product";
 const isOpenSource = entry.data.type === "open-source" && Boolean(entry.data.repository);
 
+const aboutIdByProject: Record<string, string> = {
+  omnivya: ecosystemNodeId("omnivya"),
+  "my-dare": ecosystemNodeId("my-dare"),
+  sanad: ecosystemNodeId("sanad"),
+  "external-metrics-exporter": ecosystemNodeId("open-source"),
+};
+
 const jsonLd = buildJsonLdGraph([
-  personJsonLd(),
-  relatedToOmnivya ? organizationJsonLd() : null,
+  ...projectEntityNodes(entry.id, lang),
   projectPageJsonLd({
     name,
     description: summary,
     path: projectPath,
     lang,
     relatedToOmnivya,
+    aboutId: aboutIdByProject[entry.id],
     repository: entry.data.repository,
   }),
   isOpenSource && entry.data.repository

@@ -1,0 +1,67 @@
+---
+/**
+ * GA4 + Microsoft Clarity, gated by cookieconsent "analytics" category.
+ * IDs come from PUBLIC_GA4_MEASUREMENT_ID / PUBLIC_CLARITY_PROJECT_ID at build time.
+ * Legacy Universal Analytics (UA-*) is intentionally not loaded.
+ */
+import { siteConfig } from "../config/site.ts";
+
+const ga4Id = siteConfig.analytics.ga4MeasurementId;
+const clarityId = siteConfig.analytics.clarityProjectId;
+const hasGa4 = Boolean(ga4Id);
+const hasClarity = Boolean(clarityId);
+---
+
+{
+  hasGa4 && (
+    <>
+      <script
+        type="text/partytown"
+        async
+        is:inline
+        crossorigin="anonymous"
+        data-cookiecategory="analytics"
+        data-service="Google Analytics"
+        src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}
+      />
+      <script
+        is:inline
+        type="text/partytown"
+        data-cookiecategory="analytics"
+        data-service="Google Analytics"
+        define:vars={{ ga4Id }}
+      >
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+        gtag("config", ga4Id);
+      </script>
+    </>
+  )
+}
+
+{
+  hasClarity && (
+    <script
+      is:inline
+      data-cookiecategory="analytics"
+      data-service="Microsoft Clarity"
+      define:vars={{ clarityId }}
+    >
+      (function (c, l, a, r, i, t, y) {
+        c[a] =
+          c[a] ||
+          function () {
+            (c[a].q = c[a].q || []).push(arguments);
+          };
+        t = l.createElement(r);
+        t.async = 1;
+        t.src = "https://www.clarity.ms/tag/" + i;
+        y = l.getElementsByTagName(r)[0];
+        y.parentNode.insertBefore(t, y);
+      })(window, document, "clarity", "script", clarityId);
+    </script>
+  )
+}

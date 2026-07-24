@@ -5,17 +5,19 @@ import {
   thinkingContentTypes,
   type ThinkingContentType,
 } from "../../../../config/thinking.ts";
-import { getAllThinkingArticles } from "../../../../lib/thinking.ts";
+import { articlesForLocale, getAllThinkingArticles } from "../../../../lib/thinking.ts";
 
 export async function getStaticPaths() {
-  const articles = await getAllThinkingArticles();
-  return thinkingContentTypes.map((type) => ({
-    params: { type },
-    props: {
-      type,
-      entries: articles.filter((entry) => entry.data.contentType === type),
-    },
-  }));
+  const articles = articlesForLocale(await getAllThinkingArticles(), "en");
+  return thinkingContentTypes
+    .map((type) => ({
+      params: { type },
+      props: {
+        type,
+        entries: articles.filter((entry) => entry.data.contentType === type),
+      },
+    }))
+    .filter((path) => path.props.entries.length > 0);
 }
 
 interface Props {

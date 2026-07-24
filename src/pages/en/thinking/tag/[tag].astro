@@ -2,6 +2,7 @@
 import ThinkingFacetContent from "../../../../components/ThinkingFacetContent.astro";
 import { thinkingConfig } from "../../../../config/thinking.ts";
 import {
+  articlesForLocale,
   getAllThinkingArticles,
   getQualifyingTags,
   getEntryTags,
@@ -9,17 +10,19 @@ import {
 } from "../../../../lib/thinking.ts";
 
 export async function getStaticPaths() {
-  const articles = await getAllThinkingArticles();
+  const articles = articlesForLocale(await getAllThinkingArticles(), "en");
   const qualifying = getQualifyingTags(articles);
-  return qualifying.map((tag) => ({
-    params: { tag: tag.slug },
-    props: {
-      tag,
-      entries: articles.filter((entry) =>
-        getEntryTags(entry).some((label) => slugifyTag(label) === tag.slug)
-      ),
-    },
-  }));
+  return qualifying
+    .map((tag) => ({
+      params: { tag: tag.slug },
+      props: {
+        tag,
+        entries: articles.filter((entry) =>
+          getEntryTags(entry).some((label) => slugifyTag(label) === tag.slug)
+        ),
+      },
+    }))
+    .filter((path) => path.props.entries.length > 0);
 }
 
 interface Props {
