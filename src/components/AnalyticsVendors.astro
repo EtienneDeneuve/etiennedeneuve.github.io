@@ -4,6 +4,10 @@
  * IDs come from PUBLIC_GA4_MEASUREMENT_ID / PUBLIC_CLARITY_PROJECT_ID at build time.
  * Legacy Universal Analytics (UA-*) is intentionally not loaded.
  *
+ * Must use type="text/plain" + data-category (vanilla-cookieconsent v3).
+ * Partytown type="text/partytown" bypasses consent and loads third-party cookies
+ * before accept — that tanks Lighthouse best-practices (and breaks GDPR gating).
+ *
  * Vendor snippets use set:html so Prettier does not parse `arguments` inside inline scripts.
  */
 import { siteConfig } from "../config/site.ts";
@@ -33,18 +37,16 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
   hasGa4 && (
     <>
       <script
-        type="text/partytown"
-        async
         is:inline
-        crossorigin="anonymous"
-        data-cookiecategory="analytics"
+        type="text/plain"
+        data-category="analytics"
         data-service="Google Analytics"
-        src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}
+        data-src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}
       />
       <script
         is:inline
-        type="text/partytown"
-        data-cookiecategory="analytics"
+        type="text/plain"
+        data-category="analytics"
         data-service="Google Analytics"
         set:html={ga4Inline}
       />
@@ -56,7 +58,8 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
   hasClarity && (
     <script
       is:inline
-      data-cookiecategory="analytics"
+      type="text/plain"
+      data-category="analytics"
       data-service="Microsoft Clarity"
       set:html={clarityInline}
     />

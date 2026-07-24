@@ -9,7 +9,7 @@ Scripts live in `src/components/AnalyticsVendors.astro`, loaded from `MainHead` 
 | `PUBLIC_GA4_MEASUREMENT_ID` | `G-XXXXXXXX`               | Google Analytics 4 |
 | `PUBLIC_CLARITY_PROJECT_ID` | project id from clarity.ms | Microsoft Clarity  |
 
-Both are gated by the CookieConsent **analytics** category. Universal Analytics (`UA-*`) is not used.
+Both are gated by CookieConsent v3 via `type="text/plain"` + `data-category="analytics"` (not Partytown — that bypasses consent). Universal Analytics (`UA-*`) is not used.
 
 ## Principles
 
