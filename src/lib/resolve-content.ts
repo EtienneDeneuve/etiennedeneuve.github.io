@@ -1,5 +1,11 @@
 import type { CollectionEntry } from "astro:content";
-import type { ThinkingArticle } from "./thinking.ts";
+import { isReleasedByPubDate } from "./publication-policy.ts";
+import {
+  getArticleLanguage,
+  getArticlePath,
+  getCanonicalSlug,
+  type ThinkingArticle,
+} from "./thinking.ts";
 
 export type ContentReference = {
   kind: "article" | "project" | "resource";
@@ -21,14 +27,51 @@ export type ContentCollections = {
   resources: CollectionEntry<"resources">[];
 };
 
+function normalizeContentId(id: string): string {
+  return id
+    .replace(/\.mdx?$/i, "")
+    .replace(/\\/g, "/")
+    .replace(/\/+/g, "/")
+    .replace(/^\/+|\/+$/g, "");
+}
+
+function flattenContentId(id: string): string {
+  return normalizeContentId(id).replace(/\//g, "-");
+}
+
+/** Drop date prefixes and common legacy prefixes so filename ↔ WP slug can match. */
+function significantStem(id: string): string {
+  return flattenContentId(id)
+    .replace(/^\d{4}-\d{2}-\d{2}-/, "")
+    .replace(/^(autofix|auto-fix)-/, "");
+}
+
+/** Compare Astro entry ids (often `2024/02/11/slug`) with filename refs (`2024-02-11-slug`). */
 function matchesContentId(entryId: string, refId: string): boolean {
-  const normalizedEntryId = entryId.replace(/\.mdx?$/, "");
-  const normalizedRefId = refId.replace(/\.mdx?$/, "");
-  return (
-    normalizedEntryId === normalizedRefId ||
-    normalizedEntryId.endsWith(`/${normalizedRefId}`) ||
-    normalizedEntryId.includes(normalizedRefId)
-  );
+  const entry = normalizeContentId(entryId);
+  const ref = normalizeContentId(refId);
+  if (entry === ref) return true;
+
+  const entryFlat = flattenContentId(entryId);
+  const refFlat = flattenContentId(refId);
+  if (entryFlat === refFlat) return true;
+  if (entryFlat.endsWith(`-${refFlat}`) || refFlat.endsWith(`-${entryFlat}`)) return true;
+
+  const entryTail = entry.split("/").pop() ?? entry;
+  const refTail = ref.split("/").pop() ?? ref;
+  if (entryTail === refTail) return true;
+
+  const entryStem = significantStem(entryId);
+  const refStem = significantStem(refId);
+  if (
+    entryStem &&
+    refStem &&
+    (entryStem === refStem || entryStem.includes(refStem) || refStem.includes(entryStem))
+  ) {
+    return true;
+  }
+
+  return false;
 }
 
 export function resolveContentRefs(
@@ -42,12 +85,13 @@ export function resolveContentRefs(
   for (const ref of refs) {
     if (ref.kind === "article") {
       const entry = collections.articles.find((article) => matchesContentId(article.id, ref.id));
-      if (!entry) continue;
+      if (!entry || !isReleasedByPubDate(entry)) continue;
       resolved.push({
         ref,
         title: entry.data.title,
         description: entry.data.description,
-        href: `${prefix}/thinking/${entry.id}/`,
+        // Use the article's language: FR posts have no /en/thinking/ page.
+        href: getArticlePath(getCanonicalSlug(entry), getArticleLanguage(entry)),
         kind: "article",
         contentType: entry.data.contentType,
       });

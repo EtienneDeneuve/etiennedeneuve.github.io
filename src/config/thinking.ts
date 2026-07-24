@@ -29,8 +29,8 @@ export const thinkingConfig = {
       en: "Thinking library: doctrine, guides, architecture decisions, and field notes.",
     } as Localized,
     intro: {
-      fr: "Articles classés par pilier et type de contenu — la récence n'est pas le seul critère de navigation.",
-      en: "Articles organized by pillar and content type — recency is not the only navigation criterion.",
+      fr: "Articles classés par pilier et type de contenu : la récence n'est pas le seul critère de navigation.",
+      en: "Articles organized by pillar and content type : recency is not the only navigation criterion.",
     } as Localized,
   },
   /** Minimum publishable articles sharing a tag before generating a tag page. */

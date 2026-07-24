@@ -43,18 +43,20 @@ const [projects, resources] = await Promise.all([
   getCollection("resources"),
 ]);
 
-const readingPaths = config.readingPaths.map((path) => ({
-  ...path,
-  resolvedItems: resolveContentRefs(
-    path.items,
-    {
-      articles: allArticles,
-      projects,
-      resources,
-    },
-    lang
-  ),
-}));
+const readingPaths = config.readingPaths
+  .map((path) => ({
+    ...path,
+    resolvedItems: resolveContentRefs(
+      path.items,
+      {
+        articles: allArticles,
+        projects,
+        resources,
+      },
+      lang
+    ),
+  }))
+  .filter((path) => path.resolvedItems.length > 0);
 
 const jsonLd = buildJsonLdGraph([
   collectionPageJsonLd({
@@ -178,23 +180,25 @@ const jsonLd = buildJsonLdGraph([
       </div>
     </section>
 
-    <section class="stack gap-4" id="reading-paths">
-      <h2>{labels.readingPaths[lang]}</h2>
-      <div class="paths stack gap-4">
-        {
-          readingPaths.map((path) => (
-            <LearningPath
-              id={path.id}
-              title={path.title[lang]}
-              summary={path.summary[lang]}
-              themes={path.themes[lang]}
-              items={path.resolvedItems}
-              lang={lang}
-            />
-          ))
-        }
-      </div>
-    </section>
+    {
+      readingPaths.length > 0 && (
+        <section class="stack gap-4" id="reading-paths">
+          <h2>{labels.readingPaths[lang]}</h2>
+          <div class="paths stack gap-4">
+            {readingPaths.map((path) => (
+              <LearningPath
+                id={path.id}
+                title={path.title[lang]}
+                summary={path.summary[lang]}
+                themes={path.themes[lang]}
+                items={path.resolvedItems}
+                lang={lang}
+              />
+            ))}
+          </div>
+        </section>
+      )
+    }
   </main>
 </BaseLayout>
 

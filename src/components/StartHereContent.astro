@@ -4,6 +4,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import ConversionCTA from "../components/ConversionCTA.astro";
 import ContentCard from "../components/ContentCard.astro";
 import LearningPath from "../components/LearningPath.astro";
+import OmnivyaHubMap from "../components/OmnivyaHubMap.astro";
 import { siteConfig } from "../config/site.ts";
 import { startHereConfig } from "../config/start-here.ts";
 import { resolveContentRefs } from "../lib/resolve-content.ts";
@@ -35,7 +36,11 @@ const [articles, projects, resources] = await Promise.all([
 
 const collections = { articles, projects, resources };
 
-const proofProjects = resolveContentRefs(config.sections.proofs.items, collections, lang)
+const featuredProjects = resolveContentRefs(
+  config.sections.featuredProjects.items,
+  collections,
+  lang
+)
   .map((resolved) => {
     const entry = projects.find(
       (project) => project.id.includes(resolved.ref.id) && !project.data.draft
@@ -53,15 +58,17 @@ const starterItems = config.sections.starterContent.items
   })
   .filter((item): item is NonNullable<typeof item> => Boolean(item));
 
-const learningPaths = config.learningPaths.map((path) => ({
-  id: path.id,
-  title: path.title[lang],
-  summary: path.summary[lang],
-  themes: path.themes[lang],
-  items: resolveContentRefs(path.items, collections, lang),
-}));
+const learningPaths = config.learningPaths
+  .map((path) => ({
+    id: path.id,
+    title: path.title[lang],
+    summary: path.summary[lang],
+    themes: path.themes[lang],
+    items: resolveContentRefs(path.items, collections, lang),
+  }))
+  .filter((path) => path.items.length > 0);
 
-const readProofLabel = lang === "en" ? "View proof" : "Voir la preuve";
+const viewProjectLabel = lang === "en" ? "View project" : "Voir le projet";
 const openOmnivyaLabel = lang === "en" ? "Open Omnivya" : "Voir Omnivya";
 
 const startHerePath = `${prefix}/start-here/`;
@@ -78,6 +85,26 @@ const jsonLd = buildJsonLdGraph([
     { name: config.meta.title[lang], path: startHerePath },
   ]),
 ]);
+
+const map = config.sections.map;
+const founders = map.founders.map((founder) => ({
+  id: founder.id,
+  name: founder.name[lang],
+  role: founder.role[lang],
+  href: founder.href[lang],
+}));
+const hub = {
+  name: map.hub.name[lang],
+  role: map.hub.role[lang],
+  href: map.hub.href[lang],
+};
+const arms = map.arms.map((arm) => ({
+  id: arm.id,
+  name: arm.name[lang],
+  role: arm.role[lang],
+  href: arm.href[lang],
+  external: "external" in arm ? Boolean(arm.external) : false,
+}));
 ---
 
 <BaseLayout
@@ -93,6 +120,17 @@ const jsonLd = buildJsonLdGraph([
       <p class="eyebrow">{config.meta.eyebrow[lang]}</p>
       <h1>{config.meta.title[lang]}</h1>
       <p class="lede">{config.meta.intro[lang]}</p>
+    </section>
+
+    <section class="stack gap-4" id="map">
+      <h2>{map.title[lang]}</h2>
+      <p>{map.intro[lang]}</p>
+      <OmnivyaHubMap lang={lang} founders={founders} hub={hub} arms={arms} />
+    </section>
+
+    <section class="stack gap-4" id="origin">
+      <h2>{config.sections.origin.title[lang]}</h2>
+      {config.sections.origin.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
     </section>
 
     <section class="stack gap-4">
@@ -125,11 +163,11 @@ const jsonLd = buildJsonLdGraph([
     </section>
 
     <section class="stack gap-4">
-      <h2>{config.sections.proofs.title[lang]}</h2>
-      <p>{config.sections.proofs.intro[lang]}</p>
+      <h2>{config.sections.featuredProjects.title[lang]}</h2>
+      <p>{config.sections.featuredProjects.intro[lang]}</p>
       <div class="stack gap-3">
         {
-          proofProjects.map(({ entry }) => (
+          featuredProjects.map(({ entry }) => (
             <article class="surface-card">
               <h3>{entry.data.name}</h3>
               <p>
@@ -139,8 +177,8 @@ const jsonLd = buildJsonLdGraph([
                 <strong>{lang === "en" ? "Role:" : "Rôle :"}</strong> {entry.data.role}
               </p>
               <p>
-                <strong>{lang === "en" ? "Principle demonstrated:" : "Principe démontré :"}</strong>{" "}
-                {entry.data.principles[0] ?? "—"}
+                <strong>{lang === "en" ? "Approach:" : "Approche :"}</strong>{" "}
+                {entry.data.principles[0] ?? "·"}
               </p>
               <a
                 class="read-more"
@@ -154,7 +192,7 @@ const jsonLd = buildJsonLdGraph([
                   ? { target: "_blank", rel: "noopener noreferrer" }
                   : {})}
               >
-                {readProofLabel} →
+                {viewProjectLabel} →
               </a>
             </article>
           ))
@@ -162,42 +200,44 @@ const jsonLd = buildJsonLdGraph([
       </div>
     </section>
 
-    <section class="stack gap-4">
-      <h2>{config.sections.starterContent.title[lang]}</h2>
-      <p>{config.sections.starterContent.intro[lang]}</p>
-      <div class="grid-auto">
-        {
-          starterItems.map(({ resolved, label }) => (
-            <ContentCard item={resolved} eyebrow={label} lang={lang} />
-          ))
-        }
-      </div>
-    </section>
+    {
+      starterItems.length > 0 && (
+        <section class="stack gap-4">
+          <h2>{config.sections.starterContent.title[lang]}</h2>
+          <p>{config.sections.starterContent.intro[lang]}</p>
+          <div class="grid-auto">
+            {starterItems.map(({ resolved, label }) => (
+              <ContentCard item={resolved} eyebrow={label} lang={lang} />
+            ))}
+          </div>
+        </section>
+      )
+    }
 
-    <section class="stack gap-4">
-      <h2>{lang === "en" ? "Editorial paths" : "Parcours éditoriaux"}</h2>
-      <p>
-        {
-          lang === "en"
-            ? "Choose the path closest to your context. Each list references published content by identifier."
-            : "Choisissez le parcours le plus proche de votre contexte. Chaque liste référence des contenus publiés par identifiant."
-        }
-      </p>
-      <div class="stack gap-4">
-        {
-          learningPaths.map((path) => (
-            <LearningPath
-              id={path.id}
-              title={path.title}
-              summary={path.summary}
-              themes={path.themes}
-              items={path.items}
-              lang={lang}
-            />
-          ))
-        }
-      </div>
-    </section>
+    {
+      learningPaths.length > 0 && (
+        <section class="stack gap-4">
+          <h2>{lang === "en" ? "Reading paths" : "Parcours de lecture"}</h2>
+          <p>
+            {lang === "en"
+              ? "Three ways in. Each path only lists content that already exists."
+              : "Trois entrées. Chaque parcours ne liste que du contenu déjà publié."}
+          </p>
+          <div class="stack gap-4">
+            {learningPaths.map((path) => (
+              <LearningPath
+                id={path.id}
+                title={path.title}
+                summary={path.summary}
+                themes={path.themes}
+                items={path.items}
+                lang={lang}
+              />
+            ))}
+          </div>
+        </section>
+      )
+    }
 
     <section class="stack gap-4">
       <h2>{config.sections.continue.title[lang]}</h2>
@@ -207,7 +247,7 @@ const jsonLd = buildJsonLdGraph([
             <a class="surface-card interactive" href={option.href}>
               <h3>{option.label}</h3>
               <p>{option.description}</p>
-              <span class="read-more">{lang === "en" ? "Open" : "Ouvrir"} →</span>
+              <span class="read-more">{option.cta} →</span>
             </a>
           ))
         }
@@ -218,7 +258,7 @@ const jsonLd = buildJsonLdGraph([
           event="cta_contact_email"
           props={{ intent: "qualification", surface: "start-here", lang }}
           secondaryHref={contactConfig.buildMailto(
-            lang === "en" ? "Contact — diagnosis or mission" : "Contact — diagnostic ou mission"
+            lang === "en" ? "Contact: diagnosis or mission" : "Contact: diagnostic ou mission"
           )}
           secondaryLabel={lang === "en" ? "Send an email" : "Envoyer un email"}
           secondaryEvent="cta_contact_email"
@@ -232,9 +272,6 @@ const jsonLd = buildJsonLdGraph([
 </BaseLayout>
 
 <style>
-  .hero {
-    max-width: 72ch;
-  }
   .list {
     display: grid;
     gap: var(--space-3);

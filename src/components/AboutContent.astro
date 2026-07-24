@@ -32,7 +32,7 @@ const appearances = getPublishableEntries(await getCollection("appearances")).so
 );
 
 const emailSubject =
-  lang === "en" ? "Discussion — complex system" : "Discussion — système complexe";
+  lang === "en" ? "Discussion : complex system" : "Discussion : système complexe";
 const mailto = `mailto:${siteConfig.omnivya.email}?subject=${encodeURIComponent(emailSubject)}`;
 
 const jsonLd = buildJsonLdGraph([
@@ -133,7 +133,7 @@ const jsonLd = buildJsonLdGraph([
         </li>
         <li>
           <a href={`${prefix}/projects/sanad/`}>Sanad</a>
-          <span class="product-note"> — DZ</span>
+          <span class="product-note"> · DZ</span>
         </li>
         <li>
           <a href={`${prefix}/projects/`}>{labels.projects[lang]}</a>
@@ -169,7 +169,7 @@ const jsonLd = buildJsonLdGraph([
               {projects.map((project) => (
                 <li>
                   <a href={`${prefix}/projects/${project.id}/`}>{project.data.name}</a>
-                  <span class="contrib-meta"> — {project.data.summary}</span>
+                  <span class="contrib-meta"> : {project.data.summary}</span>
                 </li>
               ))}
             </ul>
@@ -185,7 +185,7 @@ const jsonLd = buildJsonLdGraph([
               {appearances.map((entry) => (
                 <li>
                   <a href={`${prefix}/speaking/#appearances`}>
-                    {entry.data.title} — {entry.data.event}
+                    {entry.data.title} : {entry.data.event}
                   </a>
                   <span class="contrib-meta">
                     {" "}
@@ -268,7 +268,7 @@ const jsonLd = buildJsonLdGraph([
     color: var(--color-fg-muted);
   }
   .unity li::before {
-    content: "—";
+    content: "·";
     position: absolute;
     left: 0;
     color: var(--color-fg-subtle);

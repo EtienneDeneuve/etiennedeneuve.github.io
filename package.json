@@ -37,6 +37,11 @@
     "sync-linkedin": "bun src/scripts/sync-linkedin-profile.mjs",
     "harmonize-profile": "bun src/scripts/harmonize-profile.mjs",
     "migrate:thinking-routes": "bun src/scripts/migrate-thinking-routes.ts",
+    "rewrite:articles": "bun src/scripts/rewrite-articles-ollama.ts",
+    "rewrite:articles:status": "bun src/scripts/rewrite-articles-ollama.ts status",
+    "rewrite:articles:triage": "bun src/scripts/rewrite-articles-ollama.ts triage",
+    "rewrite:articles:rewrite": "bun src/scripts/rewrite-articles-ollama.ts rewrite",
+    "audit:ai-voice": "bun src/scripts/audit-ai-voice.ts",
     "ci:quality": "bun run format:check && bun run lint && bun run check && bun run validate:collections && bun run validate-publication && bun run spellcheck && bun run verify-seo",
     "ci:build": "bun run build && bun run linkcheck && bun run test && bun run test:e2e && bun run lighthouse",
     "ci:deploy-prep": "bun run generate:assets && bun run generate-media-kit && bun run sync:github-projects && bun run build"

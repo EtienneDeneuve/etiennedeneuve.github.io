@@ -1,0 +1,6 @@
+# https://devenv.sh/inputs/
+# FlakeHub weekly (Determinate CDN) — avoids slow GitHub nixpkgs tarball.
+# devenv-nixpkgs/rolling still pulls NixOS/nixpkgs as nested nixpkgs-src.
+inputs:
+  nixpkgs:
+    url: https://flakehub.com/f/DeterminateSystems/nixpkgs-weekly/0.1.*

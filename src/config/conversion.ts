@@ -1,6 +1,6 @@
 /**
  * Conversion events and CTA wiring.
- * Components should use ConversionCTA + analyticsAttrs — not provider SDKs directly.
+ * Components should use ConversionCTA + analyticsAttrs, not provider SDKs directly.
  */
 
 export const conversionEvents = [

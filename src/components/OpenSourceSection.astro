@@ -17,8 +17,8 @@ const labels = {
   title: lang === "en" ? "Open source" : "Open source",
   intro:
     lang === "en"
-      ? "Curated public repositories, grouped by intent — not an exhaustive GitHub listing. Strategic descriptions live on this site; metadata may be enriched at build time."
-      : "Repositories publics sélectionnés, regroupés par intention — pas une liste exhaustive GitHub. Les descriptions stratégiques vivent sur ce site ; les métadonnées peuvent être enrichies au build.",
+      ? "Curated public repositories, grouped by intent, not an exhaustive GitHub listing. Strategic descriptions live on this site; metadata may be enriched at build time."
+      : "Repositories publics sélectionnés, regroupés par intention, pas une liste exhaustive GitHub. Les descriptions stratégiques vivent sur ce site ; les métadonnées peuvent être enrichies au build.",
   problem: lang === "en" ? "Problem addressed" : "Problème traité",
   status: lang === "en" ? "Status" : "Statut",
   language: lang === "en" ? "Main language" : "Langage principal",
@@ -31,8 +31,8 @@ const labels = {
   unknown: lang === "en" ? "Not available" : "Non disponible",
   stale:
     lang === "en"
-      ? "GitHub metadata may be outdated — last sync did not complete successfully."
-      : "Les métadonnées GitHub peuvent être périmées — la dernière synchronisation n’a pas abouti.",
+      ? "GitHub metadata may be outdated : last sync did not complete successfully."
+      : "Les métadonnées GitHub peuvent être périmées : la dernière synchronisation n’a pas abouti.",
   projectLink: lang === "en" ? "Project page" : "Page projet",
   notPublished: lang === "en" ? "Not published yet" : "Pas encore publié",
 };
@@ -147,7 +147,7 @@ const prefix = lang === "en" ? "/en" : "";
                     lang,
                   })}
                 >
-                  {labels.github} — {repo.github.owner}/{repo.github.repo}
+                  {labels.github} : {repo.github.owner}/{repo.github.repo}
                 </a>
               </footer>
             </article>

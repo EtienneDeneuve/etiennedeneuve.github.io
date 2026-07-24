@@ -1,16 +1,16 @@
 ---
 name: "My Dare"
 name_en: "My Dare"
-summary: "Coworking et infrastructure opérationnelle à Alger, construit à partir des difficultés réellement rencontrées lors d’une implantation locale."
-summary_en: "Coworking and operational infrastructure in Algiers, built from difficulties actually encountered during local implantation."
+summary: "Coworking premium, domiciliation et lieu de travail à Alger : créé parce qu’on ne trouvait pas l’environnement adapté en s’implantant pour recruter."
+summary_en: "Premium coworking, business address and workplace in Algiers: built because we could not find a fit environment while implanting to recruit."
 status: "production"
 type: "product"
-role: "Cofondateur — modèle opérationnel et implantation"
-role_en: "Co-founder — operating model and implantation"
-problem: "Implanter et opérer sur le terrain expose des contraintes — logistique, variabilité locale, infrastructure — que les modèles distants ne rendent pas visibles."
-problem_en: "Implanting and operating in the field exposes constraints — logistics, local variability, infrastructure — that remote models do not make visible."
-context: "Coworking en activité à Alger depuis environ trois ans. Expérience terrain documentée, pas brochure marketing."
-context_en: "Operating coworking in Algiers for about three years. Documented field experience, not a marketing brochure."
+role: "Cofondateur, modèle opérationnel et implantation"
+role_en: "Co-founder, operating model and implantation"
+problem: "Recruter en Algérie pour compenser le manque de ressources en Europe pose tout de suite la question du lieu de travail : on ne trouvait pas ce qu’on voulait sur place."
+problem_en: "Recruiting in Algeria to offset scarce European resources immediately raised the workplace question: we could not find what we wanted on the ground."
+context: "Coworking en activité à Alger depuis environ trois ans. Réponse directe à une contrainte d’implantation, pas une brochure marketing. Sanad est né ensuite pour opérer devis, factures et contrats."
+context_en: "Operating coworking in Algiers for about three years. A direct answer to an implantation constraint, not a marketing brochure. Sanad came next to operate quotes, invoices and contracts."
 decisions:
   - "Partir des difficultés réelles d’implantation, pas d’un modèle importé"
   - "Relier infrastructure physique et capacité opérationnelle"
@@ -33,8 +33,8 @@ whatExists:
 whatExists_en:
   - "My Dare coworking operating in Algiers (my-dare.com)"
   - "Infrastructure and field offer for ~3 years"
-currentState: "En production. Coworking réel à Alger — pas une beta produit. Pas de chiffres d’occupation ni témoignages inventés sur ce site."
-currentState_en: "In production. Real coworking in Algiers — not a product beta. No invented occupancy figures or testimonials on this site."
+currentState: "En production. Coworking réel à Alger, pas une beta produit. Pas de chiffres d’occupation ni témoignages inventés sur ce site."
+currentState_en: "In production. Real coworking in Algiers, not a product beta. No invented occupancy figures or testimonials on this site."
 limitations:
   - "Pas de chiffres d’occupation ou de croissance non sourcés sur ce site"
   - "Pas de témoignages clients sans autorisation écrite"
@@ -67,4 +67,4 @@ ecosystemRole: "terrain et opérations"
 ecosystemRole_en: "field and operations"
 ---
 
-My Dare est un coworking en activité à Alger — contraintes opérationnelles terrain et infrastructure concrète, pas un prototype.
+My Dare est un coworking en activité à Alger, contraintes opérationnelles terrain et infrastructure concrète, pas un prototype.

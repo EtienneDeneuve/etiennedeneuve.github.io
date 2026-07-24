@@ -43,9 +43,7 @@ const openLabel = lang === "en" ? "Open" : "Ouvrir";
           </li>
         ))}
       </ol>
-    ) : (
-      <p class="empty">{lang === "en" ? "Content coming soon." : "Contenu à venir."}</p>
-    )
+    ) : null
   }
 </section>
 
@@ -119,9 +117,5 @@ const openLabel = lang === "en" ? "Open" : "Ouvrir";
     margin: var(--space-1) 0 0;
     color: var(--color-fg-muted);
     font-size: var(--text-sm);
-  }
-  .empty {
-    color: var(--color-fg-subtle);
-    margin: var(--space-4) 0 0;
   }
 </style>

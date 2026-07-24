@@ -1,6 +1,6 @@
 ---
-title: "Infrastructure as Code — Terraform et Packer sur Azure"
-title_en: "Infrastructure as Code — Terraform and Packer on Azure"
+title: "Infrastructure as Code, Terraform et Packer sur Azure"
+title_en: "Infrastructure as Code, Terraform and Packer on Azure"
 event: "Microsoft Experience 2017"
 event_en: "Microsoft Experience 2017"
 type: conference
@@ -14,4 +14,4 @@ url: "https://etienne.deneuve.xyz/2017/10/01/microsoft-experience-17-infrastruct
 draft: false
 ---
 
-Intervention documentée sur le blog — session Microsoft Experience 2017.
+Intervention documentée sur le blog, session Microsoft Experience 2017.

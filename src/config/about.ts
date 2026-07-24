@@ -48,11 +48,11 @@ export const aboutConfig = {
     paragraphs: {
       fr: [
         "Je conçois, sécurise et rends gouvernables des systèmes numériques complexes : plateformes cloud, Kubernetes, DevSecOps, observabilité et architecture de décision.",
-        "Je suis Platform Reliability Architect. Omnivya porte le conseil et la delivery quand l’exécution est requise. Ce site documente mes principes, les preuves publiques et le raisonnement, pas un catalogue commercial.",
+        "Je suis Platform Reliability Architect. Omnivya Expert porte le conseil et la delivery quand l’exécution est requise. Ce site documente mes principes, mes projets et mon raisonnement, pas un catalogue commercial.",
       ],
       en: [
         "I design, secure and make complex digital systems governable: cloud platforms, Kubernetes, DevSecOps, observability and decision architecture.",
-        "I am a Platform Reliability Architect. Omnivya carries consulting and delivery when execution is required. This site documents my principles, public proof and reasoning, not a commercial catalog.",
+        "I am a Platform Reliability Architect. Omnivya Expert carries consulting and delivery when execution is required. This site documents my principles, projects and reasoning, not a commercial catalog.",
       ],
     },
   },
@@ -107,17 +107,17 @@ export const aboutConfig = {
   },
   omnivya: {
     title: {
-      fr: "Pourquoi on a construit Omnivya",
+      fr: "Pourquoi nous avons construit Omnivya",
       en: "Why we built Omnivya",
     } as Localized,
     paragraphs: {
       fr: [
-        "Omnivya est le groupe d’exécution ; Omnivya Expert en est le bras services. Raisonnement publié (ce site) et delivery structurée restent séparés à dessein : l’un clarifie ; l’autre porte en mission.",
-        "Sans structure d’exécution, les idées restent des slides. Sans principes clairs, l’exécution devient un catalogue d’outils. Omnivya et Omnivya Expert relient les deux pour des contextes à forte complexité technique et organisationnelle.",
+        "Omnivya rassemble les marques pour unifier les process : trop souvent, le même travail était refait trois ou quatre fois. Omnivya Expert porte le conseil, la delivery et le build en Europe et en Afrique. Raisonnement publié (ce site) et exécution restent séparés à dessein.",
+        "Nous avons d’abord créé Simplifi’ED, puis déposé Omnivya. Les marques restent spécialisées ; le hub sert à partager les process, pas à tout diluer dans un seul produit.",
       ],
       en: [
-        "Omnivya is the execution group; Omnivya Expert is its services arm. Published reasoning (this site) and structured delivery stay deliberately separate: one clarifies; the other carries into missions.",
-        "Without an execution structure, ideas stay slides. Without clear principles, execution becomes a tool catalog. Omnivya and Omnivya Expert connect both for contexts of high technical and organizational complexity.",
+        "Omnivya brings the brands together to unify processes: too often the same work was done three or four times. Omnivya Expert carries consulting, delivery and build across Europe and Africa. Published reasoning (this site) and execution stay deliberately separate.",
+        "We first built Simplifi’ED, then registered Omnivya. Brands stay specialized; the hub exists to share processes, not to dilute everything into one product.",
       ],
     },
   },
@@ -128,12 +128,12 @@ export const aboutConfig = {
     } as Localized,
     paragraphs: {
       fr: [
-        "Côté Algérie : My Dare (coworking à Alger), puis Sanad (outil marché DZ via Omnivya Expert / IT Challenge).",
-        "Omnivya Expert ancre le build local. My Dare ancre le terrain. Sanad reste un outil DZ only — pas le fer de lance du groupe.",
+        "Nous n’avions pas prévu de nous développer en Algérie. La décision est venue face à la pénurie de profils techniques en Europe : constituer une équipe là-bas, puis créer My Dare pour qu’elle travaille correctement, puis Sanad faute de SaaS adapté, avec IT Challenge aujourd’hui intégré à Omnivya Expert.",
+        "Chaque branche est née de la précédente. Omnivya Expert ancre conseil et delivery. My Dare ancre le terrain. Sanad reste un outil DZ only, pas le fer de lance du groupe.",
       ],
       en: [
-        "On the Algeria side: My Dare (coworking in Algiers), then Sanad (DZ-market tool via Omnivya Expert / IT Challenge).",
-        "Omnivya Expert anchors local build. My Dare anchors the field. Sanad stays a DZ-only tool — not the group’s flagship.",
+        "We had not planned to expand into Algeria. The decision came from the shortage of technical profiles in Europe: build a team there, then create My Dare so they could work properly, then Sanad when no fit SaaS existed, with IT Challenge now part of Omnivya Expert.",
+        "Each branch was born from the previous one. Omnivya Expert anchors consulting and delivery. My Dare anchors the field. Sanad stays a DZ-only tool, not the group’s flagship.",
       ],
     },
   },
@@ -233,8 +233,8 @@ export const aboutConfig = {
           en: "Founding of Omnivya",
         },
         body: {
-          fr: "Création d’Omnivya avec Taous : structure d’exécution pour porter conseil et delivery sans diluer le cadre de décision.",
-          en: "Founding of Omnivya with Taous: execution structure to carry consulting and delivery without diluting the decision frame.",
+          fr: "Création d’Omnivya avec Taous : hub de groupe pour rattacher les marques ; Omnivya Expert porte conseil et delivery.",
+          en: "Founding of Omnivya with Taous: group hub to attach the brands; Omnivya Expert carries consulting and delivery.",
         },
       },
       {

@@ -84,8 +84,8 @@ export const workConfig = {
         en: "The system became opaque: no one can explain dependencies, prioritize risk, or connect technical choices to real constraints.",
       },
       expectedOutcome: {
-        fr: "Une représentation partagée du système, des risques priorisés et un plan d’action que l’organisation peut exécuter — sans promesse chiffrée non sourcée.",
-        en: "A shared representation of the system, prioritized risks and an action plan the organization can execute — without unsourced numeric promises.",
+        fr: "Une représentation partagée du système, des risques priorisés et un plan d’action que l’organisation peut exécuter, sans promesse chiffrée non sourcée.",
+        en: "A shared representation of the system, prioritized risks and an action plan the organization can execute, without unsourced numeric promises.",
       },
       engagementShape: {
         fr: "Diagnostic ciblé : entretiens, revue d’architecture, cartographie des dépendances et des flux de décision. Durée et périmètre calibrés au contexte.",
@@ -122,7 +122,7 @@ export const workConfig = {
         ],
       },
       proofs: [
-        { kind: "article", id: "2024-02-11-zero-trust-overview" },
+        { kind: "article", id: "2026-07-13-de-la-metrique-au-runbook" },
         { kind: "project", id: "external-metrics-exporter" },
       ],
       cta: {
@@ -204,7 +204,7 @@ export const workConfig = {
       },
       proofs: [
         { kind: "article", id: "2023-07-28-megalinter-azure-devops" },
-        { kind: "article", id: "2024-02-15-zero-trust-tl-dr" },
+        { kind: "article", id: "2024-09-16-managed-identities" },
         { kind: "article", id: "2020-02-07-infra-testing-easy-path" },
       ],
       cta: {
@@ -243,27 +243,27 @@ export const workConfig = {
         ],
       },
       startingSituation: {
-        fr: "La direction est prise mais le système n’existe pas encore — ou le legacy empêche l’exécution. Il faut une entité capable de construire sans perdre le cadre de décision.",
-        en: "The direction is set but the system does not exist yet — or legacy prevents execution. An entity capable of building without losing the decision frame is needed.",
+        fr: "La direction est prise mais le système n’existe pas encore, ou le legacy empêche l’exécution. Il faut une entité capable de construire sans perdre le cadre de décision.",
+        en: "The direction is set but the system does not exist yet, or legacy prevents execution. An entity capable of building without losing the decision frame is needed.",
       },
       expectedOutcome: {
-        fr: "Un système opérationnel, gouvernable et documenté — plateforme, produit ou composant — livré via Omnivya avec traçabilité des choix.",
-        en: "An operational, governable and documented system — platform, product or component — delivered via Omnivya with traceability of choices.",
+        fr: "Un système opérationnel, gouvernable et documenté : plateforme, produit ou composant : livré via Omnivya Expert avec traçabilité des choix.",
+        en: "An operational, governable and documented system : platform, product or component : delivered via Omnivya Expert with traceability of choices.",
       },
       engagementShape: {
-        fr: "Delivery structurée via Omnivya : fondations, automatisation, sécurité et opérabilité intégrées dès le départ. Périmètre défini à partir d’une décision ou d’un diagnostic préalable.",
-        en: "Structured delivery via Omnivya: foundations, automation, security and operability integrated from the start. Scope defined from a prior decision or diagnosis.",
+        fr: "Delivery structurée via Omnivya Expert : fondations, automatisation, sécurité et opérabilité intégrées dès le départ. Périmètre défini à partir d’une décision ou d’un diagnostic préalable.",
+        en: "Structured delivery via Omnivya Expert: foundations, automation, security and operability integrated from the start. Scope defined from a prior decision or diagnosis.",
       },
       included: {
         fr: [
-          "Exécution technique via Omnivya",
+          "Exécution technique via Omnivya Expert",
           "Plateforme, GitOps, observabilité selon périmètre",
           "Sécurité supply chain intégrée au delivery",
           "Documentation et montée en compétence",
           "Alignement avec les principes publiés et les décisions documentées",
         ],
         en: [
-          "Technical execution via Omnivya",
+          "Technical execution via Omnivya Expert",
           "Platform, GitOps, observability per scope",
           "Supply chain security integrated into delivery",
           "Documentation and skills transfer",

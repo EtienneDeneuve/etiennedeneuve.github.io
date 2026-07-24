@@ -16,7 +16,7 @@ export type PageSeoInput = {
   description: string;
   path: string;
   lang?: SeoLang;
-  /** Absolute or site-relative image URL — never include `/public/`. */
+  /** Absolute or site-relative image URL : never include `/public/`. */
   image?: string;
   ogType?: SeoOgType;
   alternates?: Array<{ lang: SeoLang; href: string }>;

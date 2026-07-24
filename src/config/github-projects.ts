@@ -40,8 +40,8 @@ export const githubProjectCategoryLabels: Record<
     fr: "Developer tooling",
     en: "Developer tooling",
     description: {
-      fr: "Outils adjacents — utiles, mais hors du pitch plateforme principal.",
-      en: "Adjacent tools — useful, but outside the core platform pitch.",
+      fr: "Outils adjacents : utiles, mais hors du pitch plateforme principal.",
+      en: "Adjacent tools : useful, but outside the core platform pitch.",
     },
   },
   historical: {
@@ -70,11 +70,11 @@ export type GitHubProjectEditorial = {
 };
 
 /**
- * Liste autorisée — seuls ces dépôts sont synchronisés et affichés.
+ * Liste autorisée : seuls ces dépôts sont synchronisés et affichés.
  * Ne pas étendre automatiquement depuis l’API GitHub.
  */
 export const githubProjectsEditorial: GitHubProjectEditorial[] = [
-  // —— Kubernetes & platform
+  // -- Kubernetes & platform
   {
     id: "external-metrics-exporter",
     category: "kubernetes-platform",
@@ -88,8 +88,8 @@ export const githubProjectsEditorial: GitHubProjectEditorial[] = [
       en: "Teams deploy on Kubernetes without reliable visibility on external dependencies or comparable signals across vendors.",
     },
     status: {
-      fr: "Actif — repository public",
-      en: "Active — public repository",
+      fr: "Actif : repository public",
+      en: "Active : public repository",
     },
     role: {
       fr: "Auteur et mainteneur",
@@ -180,8 +180,8 @@ export const githubProjectsEditorial: GitHubProjectEditorial[] = [
       en: "Stand up a reproducible Kubernetes cluster on Hyper-V without an opaque stack.",
     },
     status: {
-      fr: "Maintenance — lab / référence",
-      en: "Maintenance — lab / reference",
+      fr: "Maintenance : lab / référence",
+      en: "Maintenance : lab / reference",
     },
     role: {
       fr: "Auteur",
@@ -198,7 +198,7 @@ export const githubProjectsEditorial: GitHubProjectEditorial[] = [
     displayOrder: 4,
   },
 
-  // —— FinOps
+  // -- FinOps
   {
     id: "cloudcost",
     category: "finops",
@@ -220,8 +220,8 @@ export const githubProjectsEditorial: GitHubProjectEditorial[] = [
       en: "Author and maintainer",
     },
     documentation: {
-      fr: "CLI Go — README du repository.",
-      en: "Go CLI — repository README.",
+      fr: "CLI Go : README du repository.",
+      en: "Go CLI : repository README.",
     },
     contributionSought: {
       fr: "Couverture de nouveaux services et formats de sortie.",
@@ -230,7 +230,7 @@ export const githubProjectsEditorial: GitHubProjectEditorial[] = [
     displayOrder: 5,
   },
 
-  // —— DevSecOps
+  // -- DevSecOps
   {
     id: "shaihulud-azuredevops-scanner",
     category: "devsecops",
@@ -282,8 +282,8 @@ export const githubProjectsEditorial: GitHubProjectEditorial[] = [
       en: "Author",
     },
     documentation: {
-      fr: "CLI + plugin Helm — README.",
-      en: "CLI + Helm plugin — README.",
+      fr: "CLI + plugin Helm : README.",
+      en: "CLI + Helm plugin : README.",
     },
     contributionSought: {
       fr: "Cas d’usage CI et compatibilité Helm.",
@@ -292,7 +292,7 @@ export const githubProjectsEditorial: GitHubProjectEditorial[] = [
     displayOrder: 7,
   },
 
-  // —— Developer tooling
+  // -- Developer tooling
   {
     id: "compose",
     category: "developer-tooling",
@@ -387,7 +387,7 @@ export const githubProjectsEditorial: GitHubProjectEditorial[] = [
     displayOrder: 10,
   },
 
-  // —— Historical
+  // -- Historical
   {
     id: "os-factory",
     category: "historical",
@@ -413,8 +413,8 @@ export const githubProjectsEditorial: GitHubProjectEditorial[] = [
       en: "README and related blog articles.",
     },
     contributionSought: {
-      fr: "Non actif — conservé comme preuve de construction.",
-      en: "Not active — kept as build proof.",
+      fr: "Non actif : conservé comme preuve de construction.",
+      en: "Not active : kept as build proof.",
     },
     displayOrder: 11,
   },
@@ -423,8 +423,8 @@ export const githubProjectsEditorial: GitHubProjectEditorial[] = [
     category: "historical",
     github: { owner: "EtienneDeneuve", repo: "AzureNetappFiles" },
     name: {
-      fr: "Azure NetApp Files — rôles RBAC",
-      en: "Azure NetApp Files — RBAC roles",
+      fr: "Azure NetApp Files : rôles RBAC",
+      en: "Azure NetApp Files : RBAC roles",
     },
     problem: {
       fr: "Provisionner Azure NetApp Files avec des rôles RBAC adaptés sans réinventer les policies.",
@@ -444,8 +444,8 @@ export const githubProjectsEditorial: GitHubProjectEditorial[] = [
     },
     documentationUrl: "https://etienne.deneuve.xyz/thinking/2020-06-19-anf-rbac/",
     contributionSought: {
-      fr: "Non actif — conservé avec l’article ANF RBAC.",
-      en: "Not active — kept with the ANF RBAC article.",
+      fr: "Non actif : conservé avec l’article ANF RBAC.",
+      en: "Not active : kept with the ANF RBAC article.",
     },
     displayOrder: 12,
   },

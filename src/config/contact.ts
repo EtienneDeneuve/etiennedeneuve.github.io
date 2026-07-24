@@ -21,8 +21,8 @@ export const contactConfig = {
   meta: {
     title: { fr: "Contact", en: "Contact" } as Localized,
     description: {
-      fr: "Quatre intentions claires pour démarrer une conversation utile — sans formulaire serveur.",
-      en: "Four clear intents to start a useful conversation — no server form.",
+      fr: "Quatre intentions claires pour démarrer une conversation utile, sans formulaire serveur.",
+      en: "Four clear intents to start a useful conversation, no server form.",
     } as Localized,
     intro: {
       fr: "Choisissez une intention. L’email est le canal principal. Le calendrier Omnivya reste une action secondaire.",
@@ -35,8 +35,8 @@ export const contactConfig = {
       en: "Open Omnivya calendar",
     } as Localized,
     note: {
-      fr: "Action secondaire — utile pour un créneau court après un premier message.",
-      en: "Secondary action — useful for a short slot after a first message.",
+      fr: "Action secondaire : utile pour un créneau court après un premier message.",
+      en: "Secondary action : useful for a short slot after a first message.",
     } as Localized,
     href: siteConfig.omnivya.contactPage,
   },
@@ -66,8 +66,8 @@ export const contactConfig = {
         en: "To qualify a complex IT context before engagement.",
       },
       emailSubject: {
-        fr: "Contact — diagnostic ou mission",
-        en: "Contact — diagnosis or mission",
+        fr: "Contact : diagnostic ou mission",
+        en: "Contact : diagnosis or mission",
       },
       fields: [
         { fr: "Contexte", en: "Context" },
@@ -90,8 +90,8 @@ export const contactConfig = {
         en: "For a structured collaboration (product, distribution, co-building).",
       },
       emailSubject: {
-        fr: "Contact — partenariat",
-        en: "Contact — partnership",
+        fr: "Contact : partenariat",
+        en: "Contact : partnership",
       },
       fields: [
         { fr: "Organisation et rôle", en: "Organization and role" },
@@ -113,8 +113,8 @@ export const contactConfig = {
         en: "For a keynote, panel, workshop, briefing or interview.",
       },
       emailSubject: {
-        fr: "Contact — conférence ou média",
-        en: "Contact — conference or media",
+        fr: "Contact : conférence ou média",
+        en: "Contact : conference or media",
       },
       fields: [
         { fr: "Événement ou média", en: "Event or media outlet" },
@@ -139,8 +139,8 @@ export const contactConfig = {
         en: "For a focused question on an article, project or open-source component.",
       },
       emailSubject: {
-        fr: "Contact — échange technique",
-        en: "Contact — technical exchange",
+        fr: "Contact : échange technique",
+        en: "Contact : technical exchange",
       },
       fields: [
         { fr: "Lien vers le contenu ou le dépôt", en: "Link to the content or repository" },

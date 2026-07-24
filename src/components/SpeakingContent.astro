@@ -94,7 +94,7 @@ const jsonLd = buildJsonLdGraph([
   ]),
   ...appearances.map((entry) =>
     eventJsonLd({
-      name: `${localizedAppearanceField(entry, "title")} — ${localizedAppearanceField(entry, "event")}`,
+      name: `${localizedAppearanceField(entry, "title")} : ${localizedAppearanceField(entry, "event")}`,
       description: localizedAppearanceField(entry, "topic"),
       startDate: entry.data.date,
       location: localizedAppearanceField(entry, "location"),
@@ -218,7 +218,7 @@ const jsonLd = buildJsonLdGraph([
                 <header>
                   <h3>{localizedAppearanceField(entry, "title")}</h3>
                   <p class="appearance-event">
-                    {localizedAppearanceField(entry, "event")} —{" "}
+                    {localizedAppearanceField(entry, "event")} :{" "}
                     {formatAppearanceDate(entry.data.date)}
                   </p>
                   <p class="appearance-meta">

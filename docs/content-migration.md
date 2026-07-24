@@ -31,3 +31,24 @@ Introduire les nouvelles collections (`articles`, `projects`, `caseStudies`, `ap
 2. Enrichir manuellement le frontmatter (`pillar`, `contentType`, `description`, `relatedProjects`).
 
 3. Déplacer progressivement les fichiers vers `src/content/articles/` lorsque le frontmatter est revu.
+
+## Réécriture éditoriale (MLX MoE local)
+
+Pour repositionner les posts legacy vers la voix Thinking **sans tokens cloud** (défaut : Qwen3.5-35B-A3B OptiQ via `mlx_lm.server`) :
+
+voir [`article-rewrite.md`](./article-rewrite.md) et le brief [`editorial-rewrite-prompt.md`](./editorial-rewrite-prompt.md).
+
+```bash
+# via devenv (recommandé)
+direnv allow && mlx-serve
+
+# ou sans devenv
+uvx --from mlx-lm mlx_lm.server \
+  --model mlx-community/Qwen3.5-35B-A3B-OptiQ-4bit \
+  --port 18080
+bun run rewrite:articles:status
+bun run rewrite:articles:triage -- --limit 5
+bun run rewrite:articles:rewrite -- --limit 1
+```
+
+Les drafts sortent sous `~/Worklog/content/rewrites/` — jamais directement dans `src/content/blog/`.
