@@ -33,7 +33,7 @@ for (const id of requiredIds) {
   }
 }
 
-for (const hidden of ["taous", "my-dare", "sanad", "it-challenge"] as const) {
+for (const hidden of ["taous", "it-challenge"] as const) {
   if (nodes.some((node) => node["@id"] === ecosystemNodeId(hidden))) {
     fail(`${hidden} must not appear in the public JSON-LD graph`);
   }

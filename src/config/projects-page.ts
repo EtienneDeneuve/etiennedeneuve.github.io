@@ -8,20 +8,12 @@ export const portfolioProjectTypes = [
   "client-work",
 ] as const;
 
-/** Explicit exclusions even if draft is flipped by mistake. */
-export const portfolioExcludedProjectIds = ["sanad", "my-dare", "omnivya"] as const;
-
 export function isPortfolioProject(entry: {
   id: string;
   data: { type: string; draft?: boolean };
 }): boolean {
-  const excluded = new Set<string>(portfolioExcludedProjectIds);
   const allowedTypes = new Set<string>(portfolioProjectTypes);
-  return (
-    allowedTypes.has(entry.data.type) &&
-    !excluded.has(entry.id) &&
-    !portfolioExcludedProjectIds.some((id) => entry.id.includes(id))
-  );
+  return allowedTypes.has(entry.data.type) && entry.data.draft !== true;
 }
 
 export const projectsPageConfig = {

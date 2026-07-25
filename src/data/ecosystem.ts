@@ -5,11 +5,10 @@
  * Confirmed facts (human-validated 2026-07-24):
  * - Simplifi’ED created 2020-08-04
  * - IT Challenge (Algeria subsidiary): 2022-02
- * - My Dare: 2023-03
  * - Omnivya / Omnivya Expert brands: 2025-06 / 2025-07
- * - Sanad: planned public release 2026-09
- * - Etienne = CTO across the ecosystem; Taous = leader everywhere
+ * - Etienne = CTO; Taous = leader (Omnivya / Omnivya Expert)
  * - IT Challenge remains an Algerian SARL; public brand unused except on invoices
+ * Product ventures outside the public site narrative are intentionally absent from this file.
  */
 
 export const ecosystemLocales = ["fr", "en"] as const;
@@ -71,8 +70,6 @@ export type EcosystemEntityId =
   | "omnivya-expert"
   | "simplified"
   | "it-challenge"
-  | "my-dare"
-  | "sanad"
   | "open-source";
 
 export type EcosystemRelation = {
@@ -425,106 +422,6 @@ export const ecosystemEntities: Record<EcosystemEntityId, EcosystemEntity> = {
       },
     },
   },
-  "my-dare": {
-    id: "my-dare",
-    canonicalName: "My Dare",
-    kind: "product",
-    brandPosture: "current",
-    legalPosture: "unknown",
-    shortDescription: {
-      fr: "Espace de coworking et de travail à Alger, écosystème Omnivya.",
-      en: "Coworking and workspace in Algiers, within the Omnivya ecosystem.",
-    },
-    metaDescription: {
-      fr: "My Dare est l’espace de coworking et d’environnement de travail à Alger, créé pour les équipes de l’écosystème Omnivya et leur manière de travailler.",
-      en: "My Dare is the coworking space and work environment in Algiers, created for Omnivya ecosystem teams and the way they work together every day.",
-    },
-    longDescription: {
-      fr: "Créé pour disposer en Algérie d’un environnement de travail adapté aux équipes et à la manière de travailler du groupe. Marque et activité de l’écosystème Omnivya — pas une aventure séparée.",
-      en: "Created to provide a suitable Algeria workspace for the group’s teams and ways of working. Omnivya-ecosystem brand and activity — not a separate venture.",
-    },
-    historicalPhrase: {
-      fr: "Né du besoin d’un environnement de travail adapté à Alger pour les équipes du groupe.",
-      en: "Born from the need for a suitable Algiers workspace for group teams.",
-    },
-    geo: "algeria",
-    historicalNames: [],
-    createdAt: "2023-03",
-    internalPath: { fr: "/projects/my-dare/", en: "/en/projects/my-dare/" },
-    externalUrl: "https://my-dare.com",
-    sameAs: ["https://my-dare.com"],
-    roles: { etienne: "CTO", taous: "leader" },
-    editorial: {
-      preferName: "My Dare",
-      do: {
-        fr: [
-          "Lier à l’écosystème Omnivya.",
-          "Expliquer le besoin d’environnement de travail pour les équipes du groupe.",
-        ],
-        en: [
-          "Attach to the Omnivya ecosystem.",
-          "Explain the need for a suitable workspace for group teams.",
-        ],
-      },
-      dont: {
-        fr: ["Ne pas inventer de structure capitalistique."],
-        en: ["Do not invent a capital structure."],
-      },
-    },
-  },
-  sanad: {
-    id: "sanad",
-    canonicalName: "Sanad",
-    kind: "product",
-    brandPosture: "current",
-    legalPosture: "unknown",
-    shortDescription: {
-      fr: "SaaS devis, factures et contrats conçu pour le marché algérien.",
-      en: "Quotes, invoices and contracts SaaS built for the Algerian market.",
-    },
-    metaDescription: {
-      fr: "Sanad est un SaaS de devis, facturation et gestion contractuelle conçu pour les réalités du marché algérien, construit par les équipes Omnivya Expert.",
-      en: "Sanad is SaaS for quotes, invoicing and contract management designed for Algerian market realities, built by the Omnivya Expert delivery teams.",
-    },
-    longDescription: {
-      fr: "Né du constat d’absence de SaaS suffisamment adapté à la gestion locale des devis, factures et contrats en Algérie. Construit par les équipes aujourd’hui regroupées sous Omnivya Expert. Marché DZ only — pas le fer de lance international du groupe.",
-      en: "Born from the lack of SaaS fit for local quotes, invoices and contracts in Algeria. Built by the teams now gathered under Omnivya Expert. DZ market only — not the group’s international flagship.",
-    },
-    historicalPhrase: {
-      fr: "Construit par les équipes Omnivya Expert face au manque d’outils locaux adaptés.",
-      en: "Built by Omnivya Expert teams after a gap in fit-for-local tooling.",
-    },
-    geo: "algeria",
-    historicalNames: [],
-    createdAt: "2026-09",
-    internalPath: { fr: "/projects/sanad/", en: "/en/projects/sanad/" },
-    externalUrl: "https://sanad.cloud",
-    sameAs: ["https://sanad.cloud"],
-    roles: { etienne: "CTO", taous: "leader" },
-    editorial: {
-      preferName: "Sanad",
-      do: {
-        fr: [
-          "Citer l’origine devis / factures / contrats locaux.",
-          "Attribuer la construction à Omnivya Expert (équipes actuelles).",
-        ],
-        en: [
-          "Cite the local quotes / invoices / contracts origin.",
-          "Attribute building to Omnivya Expert (current teams).",
-        ],
-      },
-      dont: {
-        fr: [
-          "Ne pas présenter Sanad comme SaaS « marchés complexes » générique.",
-          "Ne pas mettre IT Challenge en marque actuelle sur Sanad.",
-        ],
-        en: [
-          "Do not pitch Sanad as generic “complex markets” SaaS.",
-          "Do not put IT Challenge as the current brand on Sanad.",
-        ],
-      },
-    },
-  },
   "open-source": {
     id: "open-source",
     canonicalName: "Open source",
@@ -577,22 +474,13 @@ export const ecosystemRelations: readonly EcosystemRelation[] = [
   { type: "cofounder_of", from: "taous", to: "omnivya" },
   { type: "cto_of", from: "etienne", to: "omnivya" },
   { type: "cto_of", from: "etienne", to: "omnivya-expert" },
-  { type: "cto_of", from: "etienne", to: "my-dare" },
-  { type: "cto_of", from: "etienne", to: "sanad" },
   { type: "leader_of", from: "taous", to: "omnivya" },
   { type: "leader_of", from: "taous", to: "omnivya-expert" },
-  { type: "leader_of", from: "taous", to: "my-dare" },
-  { type: "leader_of", from: "taous", to: "sanad" },
   { type: "hub_of", from: "omnivya", to: "omnivya-expert" },
-  { type: "hub_of", from: "omnivya", to: "my-dare" },
-  { type: "hub_of", from: "omnivya", to: "sanad" },
   { type: "hub_of", from: "omnivya", to: "open-source" },
   { type: "service_line_of", from: "omnivya-expert", to: "omnivya" },
   { type: "historical_name_of", from: "simplified", to: "omnivya-expert" },
   { type: "historical_name_of", from: "it-challenge", to: "omnivya-expert" },
-  { type: "brand_of_ecosystem", from: "my-dare", to: "omnivya" },
-  { type: "brand_of_ecosystem", from: "sanad", to: "omnivya" },
-  { type: "built_by", from: "sanad", to: "omnivya-expert" },
   { type: "public_contribution_of", from: "open-source", to: "omnivya" },
 ] as const;
 

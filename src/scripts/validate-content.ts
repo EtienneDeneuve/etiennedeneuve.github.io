@@ -235,35 +235,12 @@ async function assertNoForbiddenCopy() {
   ok("No forbidden narrative patterns in scanned surfaces");
 }
 
-async function assertProjectSummariesAligned() {
-  const map: Record<string, EcosystemEntityId> = {
-    "omnivya.md": "omnivya-expert",
-    "my-dare.md": "my-dare",
-    "sanad.md": "sanad",
-  };
-  for (const [file, id] of Object.entries(map)) {
-    const path = join(ROOT, "src/content/projects", file);
-    const text = await readFile(path, "utf8");
-    const summary = text.match(/^summary:\s*"([^"]+)"/m)?.[1];
-    const summaryEn = text.match(/^summary_en:\s*"([^"]+)"/m)?.[1];
-    const entity = ecosystemEntities[id];
-    if (summary !== entity.shortDescription.fr) {
-      fail(`${file} summary must match SSOT card FR`);
-    }
-    if (summaryEn !== entity.shortDescription.en) {
-      fail(`${file} summary_en must match SSOT card EN`);
-    }
-  }
-  ok("Project card summaries match SSOT");
-}
-
 async function main() {
   console.log("validate:content — ecosystem semantic checks\n");
   await assertSsotInvariants();
   await assertDescriptionBands();
   await assertJsonLdUniqueness();
   await assertNoForbiddenCopy();
-  await assertProjectSummariesAligned();
 
   if (failures > 0) {
     console.error(`\n${failures} failure(s)`);

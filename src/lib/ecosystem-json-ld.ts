@@ -14,8 +14,6 @@ export const ecosystemJsonLdIds = {
   "omnivya-expert": `${SITE}/#omnivya-expert`,
   simplified: `${SITE}/#simplified`,
   "it-challenge": `${SITE}/#it-challenge`,
-  "my-dare": `${SITE}/#my-dare`,
-  sanad: `${SITE}/#sanad`,
   "open-source": `${SITE}/#open-source`,
 } as const;
 
@@ -32,7 +30,7 @@ function ref(id: EcosystemJsonLdId): { "@id": string } {
 /**
  * Canonical ecosystem entities for JSON-LD.
  * Public graph: Etienne + Omnivya Expert + Simplifi’ED history + open source.
- * Taous / Sanad / My Dare / IT Challenge are not emitted on the public graph.
+ * Taous / IT Challenge are not emitted on the public graph.
  */
 export function buildEcosystemEntityNodes(locale: EcosystemLocale = "fr"): JsonLdObject[] {
   const etienne = getEntity("etienne");
