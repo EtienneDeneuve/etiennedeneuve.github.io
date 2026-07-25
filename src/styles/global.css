@@ -4,6 +4,7 @@
    ========================================================================== */
 
 :root {
+  color-scheme: light;
   /* ——— Ink / paper primitives (Luxury / Premium) ——— */
   --ink: #0c0a09;
   --ink-muted: #44403c;
@@ -130,11 +131,14 @@
   --grid-gap: 1rem;
   --base-unit: 0.5rem;
 
-  /* ——— Interaction ——— */
+  /* ——— Interaction / motion ———
+   * Page changes: no route animation (see BaseLayout transition:animate="none").
+   * Presence: scroll reveals below the fold (~0.9s soft rise). */
   --touch-min: 2.75rem;
-  --theme-transition: 0.2s ease-out;
-  --motion-fast: 0.2s cubic-bezier(0.22, 1, 0.36, 1);
-  --motion-page: 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --theme-transition: 0.28s var(--motion-ease);
+  --motion-fast: 0.28s var(--motion-ease);
+  --motion-reveal: 0.9s var(--motion-ease);
   --focus-ring-width: 2px;
 
   --bp-md: 50em;
@@ -142,6 +146,7 @@
 }
 
 :root.theme-dark {
+  color-scheme: dark;
   --ink: #f5f2eb;
   --ink-muted: #c4bdb3;
   --ink-subtle: #9a9288;
@@ -716,11 +721,6 @@ a.surface-card:hover,
   letter-spacing: var(--tracking-tight);
   color: var(--color-fg);
   line-height: 0.95;
-  animation: swiss-rise var(--motion-page) both;
-}
-
-.page-hero .eyebrow {
-  animation: swiss-rise var(--motion-page) 0.06s both;
 }
 
 .page-hero h1 {
@@ -728,12 +728,6 @@ a.surface-card:hover,
   max-width: 28ch;
   font-size: clamp(var(--text-xl), 3.2vw, var(--text-3xl));
   font-weight: 600;
-  animation: swiss-rise var(--motion-page) 0.1s both;
-}
-
-.page-hero .lede,
-.page-hero .actions {
-  animation: swiss-rise var(--motion-page) 0.14s both;
 }
 
 .section-rule {
@@ -743,29 +737,27 @@ a.surface-card:hover,
   opacity: 0.12;
 }
 
+/* Scroll reveal — applied by ScrollReveal.astro to below-fold sections */
 .reveal {
-  animation: swiss-rise var(--motion-page) both;
+  opacity: 0;
+  transform: translateY(1.75rem);
+  transition:
+    opacity var(--motion-reveal),
+    transform var(--motion-reveal);
+  will-change: opacity, transform;
 }
 
-@keyframes swiss-rise {
-  from {
-    opacity: 0;
-    transform: translateY(0.6rem);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.reveal.is-in {
+  opacity: 1;
+  transform: translateY(0);
+  will-change: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .page-hero .brand-mark,
-  .page-hero .eyebrow,
-  .page-hero h1,
-  .page-hero .lede,
-  .page-hero .actions,
   .reveal {
-    animation: none;
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
 

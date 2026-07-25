@@ -1,0 +1,72 @@
+---
+/**
+ * Scroll-driven entrance: below-fold sections rise in as they enter the viewport.
+ * No page-change choreography — heroes stay static.
+ */
+---
+
+<script>
+  const CANDIDATE =
+    ".atelier-section, .atelier-close, main > section:not(.page-hero):not(.atelier-hero), main.wrapper > .stack > *";
+
+  let io: IntersectionObserver | null = null;
+
+  function prefersReducedMotion() {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
+  function isNearViewport(el: HTMLElement) {
+    const rect = el.getBoundingClientRect();
+    const bottomGate = window.innerHeight * 0.88;
+    return rect.top < bottomGate && rect.bottom > 0;
+  }
+
+  function markAndObserve(root: ParentNode = document) {
+    const nodes = Array.from(root.querySelectorAll<HTMLElement>(CANDIDATE)).filter(
+      (el) => !el.classList.contains("reveal-skip")
+    );
+
+    if (!nodes.length) return;
+
+    if (prefersReducedMotion()) {
+      nodes.forEach((el) => {
+        el.classList.add("reveal", "is-in");
+      });
+      return;
+    }
+
+    io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.classList.add("is-in");
+          io?.unobserve(entry.target);
+        }
+      },
+      {
+        root: null,
+        rootMargin: "0px 0px -12% 0px",
+        threshold: 0.08,
+      }
+    );
+
+    for (const el of nodes) {
+      // Already on screen: mark in + visible together (no opacity flash).
+      if (isNearViewport(el) || el.classList.contains("is-in")) {
+        el.classList.add("reveal", "is-in");
+        continue;
+      }
+      el.classList.add("reveal");
+      io.observe(el);
+    }
+  }
+
+  function boot() {
+    io?.disconnect();
+    io = null;
+    markAndObserve(document);
+  }
+
+  boot();
+  document.addEventListener("astro:page-load", boot);
+</script>

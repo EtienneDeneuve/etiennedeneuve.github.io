@@ -134,23 +134,38 @@ const canonicalHref =
 <AnalyticsVendors />
 
 <script is:inline>
-  const getThemePreference = () => {
-    if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
-      return localStorage.getItem("theme");
-    }
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  };
-  const isDark = getThemePreference() === "dark";
-  document.documentElement.classList[isDark ? "add" : "remove"]("theme-dark", "cc--darkmode");
-  if (typeof localStorage !== "undefined") {
-    const observer = new MutationObserver(() => {
-      const isDark = document.documentElement.classList.contains("theme-dark");
-      localStorage.setItem("theme", isDark ? "dark" : "light");
+  (() => {
+    const readDark = () => {
+      try {
+        const stored = localStorage.getItem("theme");
+        if (stored === "dark" || stored === "light") return stored === "dark";
+      } catch {
+        /* private mode */
+      }
+      return (
+        typeof window.matchMedia === "function" &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+      );
+    };
+
+    const paint = (root, dark) => {
+      root.classList.toggle("theme-dark", dark);
+      root.classList.toggle("cc--darkmode", dark);
+      root.style.colorScheme = dark ? "dark" : "light";
+    };
+
+    // Initial paint (before CSS).
+    paint(document.documentElement, readDark());
+
+    // Critical: stamp the *incoming* document before Astro swaps attributes,
+    // otherwise theme-dark is lost and any class→storage sync would poison localStorage.
+    document.addEventListener("astro:before-swap", (event) => {
+      paint(event.newDocument.documentElement, readDark());
     });
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
+
+    document.addEventListener("astro:after-swap", () => {
+      paint(document.documentElement, readDark());
     });
-  }
+  })();
 </script>
 <ClientRouter />

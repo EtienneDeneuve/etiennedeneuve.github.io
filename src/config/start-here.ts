@@ -14,8 +14,8 @@ export const startHereConfig = {
   meta: {
     title: { fr: "Start Here", en: "Start Here" } as Localized<string>,
     description: {
-      fr: "Pourquoi faire appel à Etienne Deneuve sur des plateformes et SI complexes : expertise, méthode et preuves publiques.",
-      en: "Why Etienne Deneuve for complex platforms and IT estates: expertise, method and public proof.",
+      fr: "Méthode, domaines et preuves publiques pour faire évoluer des plateformes et des SI complexes sous contraintes réelles.",
+      en: "Method, domains and public proof for evolving complex platforms and IT estates under real constraints.",
     } as Localized<string>,
     eyebrow: {
       fr: "Point d’entrée",
@@ -26,8 +26,8 @@ export const startHereConfig = {
       en: "Architect, CTO and technical advisor on cloud, Kubernetes, Platform Engineering, observability, DevSecOps and complex systems architecture.",
     } as Localized<string>,
     lead: {
-      fr: "Cette page répond à une question simple : pourquoi suis-je crédible pour intervenir sur des plateformes et des systèmes d’information complexes ?",
-      en: "This page answers a simple question: why am I credible to intervene on complex platforms and information systems?",
+      fr: "Si votre SI est difficile à lire, risqué à faire évoluer ou noyé sous les outils, voici comment je travaille, ce que je traite, et les preuves que je publie.",
+      en: "If your estate is hard to read, risky to change, or buried under tools, here is how I work, what I take on, and the proof I publish.",
     } as Localized<string>,
   },
   sections: {
@@ -113,10 +113,55 @@ export const startHereConfig = {
         ],
       },
     },
+    whitepapers: {
+      title: { fr: "White papers Omnivya", en: "Omnivya white papers" },
+      intro: {
+        fr: "Livres blancs publiés avec Omnivya sur le cloud, les conteneurs et l’IaC. Lecture sur omnivya.fr.",
+        en: "White papers published with Omnivya on cloud, containers and IaC. Read on omnivya.fr.",
+      },
+      hubLabel: {
+        fr: "Tous les white papers Omnivya",
+        en: "All Omnivya white papers",
+      },
+      hubHref: {
+        fr: "https://www.omnivya.fr/fr/whitepapers/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=whitepapers&utm_content=start-here",
+        en: "https://www.omnivya.fr/whitepapers/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=whitepapers&utm_content=start-here",
+      },
+      items: [
+        {
+          title: {
+            fr: "Les coûts cachés des images de conteneurs",
+            en: "The hidden costs of container images",
+          },
+          summary: {
+            fr: "Comment 100 Mo de trop impactent CI/CD, registries, clusters Kubernetes, sécurité et empreinte carbone, et comment alléger les images.",
+            en: "How an extra 100 MB hits CI/CD, registries, Kubernetes clusters, security and carbon footprint, and how to slim images.",
+          },
+          href: {
+            fr: "https://www.omnivya.fr/fr/whitepapers/hidden-costs-of-containers-images/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=whitepapers&utm_content=start-here",
+            en: "https://www.omnivya.fr/whitepapers/hidden-costs-of-containers-images/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=whitepapers&utm_content=start-here",
+          },
+        },
+        {
+          title: {
+            fr: "La face cachée de l’Infrastructure as Code",
+            en: "The hidden side of Infrastructure as Code",
+          },
+          summary: {
+            fr: "Gouverner l’automatisation pour éviter le chaos : retours d’incidents et sept piliers d’une IaC maîtrisée.",
+            en: "Govern automation to avoid chaos: incident lessons and seven pillars of mastered IaC.",
+          },
+          href: {
+            fr: "https://www.omnivya.fr/fr/whitepapers/hidden-face-of-iac/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=whitepapers&utm_content=start-here",
+            en: "https://www.omnivya.fr/whitepapers/hidden-face-of-iac/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=whitepapers&utm_content=start-here",
+          },
+        },
+      ],
+    },
     featuredProjects: {
       title: {
-        fr: "Preuves publiques — projets",
-        en: "Public proof — projects",
+        fr: "Preuves publiques : projets",
+        en: "Public proof: projects",
       },
       intro: {
         fr: "Projets techniques et open source publiés sur ce site. Pas de catalogue commercial.",
@@ -125,7 +170,7 @@ export const startHereConfig = {
       items: [{ kind: "project", id: "external-metrics-exporter" }] satisfies ContentReference[],
     },
     starterContent: {
-      title: { fr: "Preuves publiques — écrits", en: "Public proof — writing" },
+      title: { fr: "Preuves publiques : écrits", en: "Public proof: writing" },
       intro: {
         fr: "Doctrines et guides qui montrent le raisonnement avant d’aller plus loin.",
         en: "Doctrine and guides that show the reasoning before going further.",
@@ -243,6 +288,7 @@ export const startHereConfig = {
         { kind: "project", id: "external-metrics-exporter" },
         { kind: "article", id: "2026-07-13-de-la-metrique-au-runbook" },
         { kind: "article", id: "2024-09-16-managed-identities" },
+        { kind: "resource", id: "omnivya-hidden-costs-containers" },
         { kind: "article", id: "2023-07-28-megalinter-azure-devops" },
         { kind: "article", id: "2018-06-26-documentation-as-code" },
       ],
@@ -265,6 +311,7 @@ export const startHereConfig = {
         { kind: "article", id: "2023-07-28-megalinter-azure-devops" },
         { kind: "article", id: "2018-06-26-documentation-as-code" },
         { kind: "article", id: "2024-09-16-managed-identities" },
+        { kind: "resource", id: "omnivya-hidden-face-of-iac" },
         { kind: "resource", id: "DevSecOps" },
       ],
     },

@@ -1,14 +1,13 @@
 const currentYear = new Date().getFullYear();
 const copyrightStartYear = 2015;
 
-/** Defaults when env is unset (local). Production builds must inject PUBLIC_* via CI secrets. */
-const DEFAULT_GA4 = "G-DH1KQ6T6XX";
-const DEFAULT_CLARITY = "xs4kgk0kth";
-
-const ga4MeasurementId = String(import.meta.env.PUBLIC_GA4_MEASUREMENT_ID || DEFAULT_GA4).trim();
-const clarityProjectId = String(
-  import.meta.env.PUBLIC_CLARITY_PROJECT_ID || DEFAULT_CLARITY
-).trim();
+/**
+ * Analytics IDs come only from PUBLIC_* env (CI secrets or local `.env`).
+ * No hardcoded fallbacks — otherwise production always "looks like defaults"
+ * and a missing secret is invisible. Client IDs are public in HTML once set.
+ */
+const ga4MeasurementId = String(import.meta.env.PUBLIC_GA4_MEASUREMENT_ID ?? "").trim();
+const clarityProjectId = String(import.meta.env.PUBLIC_CLARITY_PROJECT_ID ?? "").trim();
 
 export const siteConfig = {
   identity: {

@@ -58,7 +58,21 @@ jobs:
         run: |
           export SOURCE_DATE_EPOCH="$(git log -1 --pretty=%ct)"
           echo "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH"
+          if [ -z "${PUBLIC_GA4_MEASUREMENT_ID}" ] || [ -z "${PUBLIC_CLARITY_PROJECT_ID}" ]; then
+            echo "::error::Missing PUBLIC_GA4_MEASUREMENT_ID or PUBLIC_CLARITY_PROJECT_ID repository secrets"
+            exit 1
+          fi
+          echo "Analytics env: GA4=${#PUBLIC_GA4_MEASUREMENT_ID} chars, Clarity=${#PUBLIC_CLARITY_PROJECT_ID} chars"
           bun run build
+          if ! grep -Fq -- "$PUBLIC_GA4_MEASUREMENT_ID" dist/index.html; then
+            echo "::error::dist/index.html does not contain PUBLIC_GA4_MEASUREMENT_ID from the build env"
+            exit 1
+          fi
+          if ! grep -Fq -- "$PUBLIC_CLARITY_PROJECT_ID" dist/index.html; then
+            echo "::error::dist/index.html does not contain PUBLIC_CLARITY_PROJECT_ID from the build env"
+            exit 1
+          fi
+          echo "Analytics IDs from build env verified in dist/index.html"
 
       - name: Internal linkcheck
         run: bun run linkcheck
