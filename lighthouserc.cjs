@@ -32,10 +32,7 @@ module.exports = {
       // Lab CI is noisier than local (esp. home + fonts + cookie banner).
       // Floor 0.80 / median; product target remains ~0.9.
       assertions: {
-        "categories:performance": [
-          "error",
-          { minScore: 0.8, aggregationMethod: "median" },
-        ],
+        "categories:performance": ["error", { minScore: 0.8, aggregationMethod: "median" }],
         "categories:accessibility": ["error", { minScore: 0.95 }],
         "categories:best-practices": ["error", { minScore: 0.95 }],
         "categories:seo": ["error", { minScore: 0.95 }],
