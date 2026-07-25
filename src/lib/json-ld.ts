@@ -72,7 +72,7 @@ export function organizationJsonLd(overrides: JsonLdObject = {}): JsonLdObject {
     name: seoConfig.organization.name,
     url: seoConfig.organization.url,
     email: seoConfig.organization.email,
-    founder: [{ "@id": ecosystemNodeId("etienne") }],
+    founder: [{ "@id": ecosystemNodeId("etienne") }, { "@id": ecosystemNodeId("taous") }],
     ...overrides,
   };
 }

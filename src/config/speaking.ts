@@ -408,12 +408,12 @@ export const mediaKitConfig = {
   },
   longBio: {
     fr: [
-      "Depuis plus de quinze ans, Etienne Deneuve construit et modernise des infrastructures — d'abord en exploitation et avant-vente, puis en mission via des ESN et éditeurs (Cellenza, Dell Technologies). Il est cofondateur et CTO d’Omnivya ; Omnivya Expert porte les missions de conseil et de delivery structurées.",
+      "Depuis plus de quinze ans, Etienne Deneuve construit et modernise des infrastructures — d'abord en exploitation et avant-vente, puis en mission via des ESN et éditeurs (Cellenza, Dell Technologies). Cofondateur d’Omnivya avec Taous, qui dirige Omnivya et Omnivya Expert ; il en est le CTO. Omnivya Expert porte les missions de conseil et de delivery structurées.",
       "Ancien Microsoft MVP — Cloud and Datacenter Management (cycles 2017-2018, 2018-2019, 2019-2020). Son périmètre couvre Kubernetes (AKS), l'infrastructure as code (Terraform, Flux), la sécurité intégrée au delivery et la gouvernabilité des plateformes.",
       "Il a présenté à Microsoft Experience 2017 et au French PowerShell User Group ; il a contribué à l'open source OS Factory dans une mission via Cellenza. Il intervient sur la compréhension, la gouvernance et la transformation des systèmes numériques complexes.",
     ],
     en: [
-      "For over fifteen years, Etienne Deneuve has built and modernised infrastructure — first in operations and pre-sales, then on assignments via systems integrators and vendors (Cellenza, Dell Technologies). He is co-founder and CTO of Omnivya; Omnivya Expert carries structured consulting and delivery missions.",
+      "For over fifteen years, Etienne Deneuve has built and modernised infrastructure — first in operations and pre-sales, then on assignments via systems integrators and vendors (Cellenza, Dell Technologies). Co-founder of Omnivya with Taous, who leads Omnivya and Omnivya Expert; he is the CTO. Omnivya Expert carries structured consulting and delivery missions.",
       "Former Microsoft MVP — Cloud and Datacenter Management (2017-2018, 2018-2019, 2019-2020 cycles). His scope covers Kubernetes (AKS), infrastructure as code (Terraform, Flux), security integrated into delivery, and platform governability.",
       "He spoke at Microsoft Experience 2017 and the French PowerShell User Group; he contributed to the OS Factory open source project during a Cellenza assignment. He speaks about understanding, governing, and transforming complex digital systems.",
     ],

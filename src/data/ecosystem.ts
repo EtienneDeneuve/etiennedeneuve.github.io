@@ -200,16 +200,16 @@ export const ecosystemEntities: Record<EcosystemEntityId, EcosystemEntity> = {
     brandPosture: "not_a_brand",
     legalPosture: "not_applicable",
     shortDescription: {
-      fr: "Cofondatrice et dirigeante d’Omnivya Expert — France et Algérie.",
-      en: "Co-founder and leader of Omnivya Expert — France and Algeria.",
+      fr: "Cofondatrice et dirigeante d’Omnivya et d’Omnivya Expert, avec Etienne en CTO.",
+      en: "Co-founder and leader of Omnivya and Omnivya Expert, with Etienne as CTO.",
     },
     metaDescription: {
-      fr: "Taous, cofondatrice et dirigeante d’Omnivya Expert : elle porte les services de conseil et d’ingénierie en Europe et en Afrique, avec Etienne.",
-      en: "Taous, co-founder and leader of Omnivya Expert: she leads consulting and engineering services across Europe and Africa, together with Etienne.",
+      fr: "Taous, cofondatrice et dirigeante d’Omnivya et d’Omnivya Expert : elle porte le groupe et les services de conseil et d’ingénierie, avec Etienne en CTO.",
+      en: "Taous, co-founder and leader of Omnivya and Omnivya Expert: she leads the group and consulting/engineering services, with Etienne as CTO.",
     },
     longDescription: {
-      fr: "Cofondatrice avec Etienne. Dirigeante (« la vraie cheffe ») d’Omnivya Expert — services et projets open source associés.",
-      en: "Co-founder with Etienne. Leader of Omnivya Expert — services and related open-source projects.",
+      fr: "Cofondatrice avec Etienne. Dirige Omnivya et Omnivya Expert — services et projets open source associés. Etienne est CTO.",
+      en: "Co-founder with Etienne. Leads Omnivya and Omnivya Expert — services and related open-source projects. Etienne is CTO.",
     },
     geo: "personal",
     historicalNames: [],
