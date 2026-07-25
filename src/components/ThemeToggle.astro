@@ -2,7 +2,7 @@
 import Icon from "./Icon.astro";
 ---
 
-<theme-toggle>
+<theme-toggle transition:persist="theme-toggle">
   <button type="button">
     <span class="sr-only">Toggle theme</span>
     <span class="icon light"><Icon icon="sun" /></span>
@@ -66,27 +66,59 @@ import Icon from "./Icon.astro";
 </style>
 
 <script>
-  // @ts-nocheck
   class ThemeToggle extends HTMLElement {
-    constructor() {
-      super();
+    #button: HTMLButtonElement | null = null;
+    #bound = false;
+    #onClick = () => {
+      const next = !this.#isDark();
+      try {
+        localStorage.setItem("theme", next ? "dark" : "light");
+      } catch {
+        /* private mode */
+      }
+      this.#paint(next);
+    };
 
-      const button = this.querySelector("button");
-      if (!button) return;
-
-      /** @param {boolean} dark */
-      const setTheme = (dark) => {
-        document.documentElement.classList[dark ? "add" : "remove"]("theme-dark", "cc--darkmode");
-        button.setAttribute("aria-pressed", String(dark));
-      };
-
-      button.addEventListener("click", () => setTheme(!this.isDark()));
-      setTheme(this.isDark());
+    connectedCallback() {
+      this.#button = this.querySelector("button");
+      if (!this.#button) return;
+      if (!this.#bound) {
+        this.#button.addEventListener("click", this.#onClick);
+        this.#bound = true;
+      }
+      // Always prefer stored preference — never infer from a mid-swap DOM class.
+      this.#paint(this.#prefersDark());
     }
 
-    isDark() {
+    #prefersDark() {
+      try {
+        const stored = localStorage.getItem("theme");
+        if (stored === "dark" || stored === "light") return stored === "dark";
+      } catch {
+        /* private mode */
+      }
+      return window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+
+    #isDark() {
       return document.documentElement.classList.contains("theme-dark");
     }
+
+    #paint(dark: boolean) {
+      document.documentElement.classList.toggle("theme-dark", dark);
+      document.documentElement.classList.toggle("cc--darkmode", dark);
+      document.documentElement.style.colorScheme = dark ? "dark" : "light";
+      this.#button?.setAttribute("aria-pressed", String(dark));
+    }
   }
-  customElements.define("theme-toggle", ThemeToggle);
+
+  if (!customElements.get("theme-toggle")) {
+    customElements.define("theme-toggle", ThemeToggle);
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll("theme-toggle").forEach((el) => {
+      if (el instanceof ThemeToggle) el.connectedCallback();
+    });
+  });
 </script>

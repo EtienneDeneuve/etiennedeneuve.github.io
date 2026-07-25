@@ -222,6 +222,38 @@ const jsonLd = buildJsonLdGraph([
       </p>
     </section>
 
+    <section class="stack gap-4" id="whitepapers">
+      <h2>{config.sections.whitepapers.title[lang]}</h2>
+      <p>{config.sections.whitepapers.intro[lang]}</p>
+      <div class="stack gap-3">
+        {
+          config.sections.whitepapers.items.map((paper) => (
+            <article class="surface-card">
+              <h3>{paper.title[lang]}</h3>
+              <p>{paper.summary[lang]}</p>
+              <a
+                class="read-more"
+                href={paper.href[lang]}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {lang === "en" ? "Read on Omnivya" : "Lire sur Omnivya"} →
+              </a>
+            </article>
+          ))
+        }
+      </div>
+      <p>
+        <a
+          href={config.sections.whitepapers.hubHref[lang]}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {config.sections.whitepapers.hubLabel[lang]} →
+        </a>
+      </p>
+    </section>
+
     <section class="stack gap-4" id="continue">
       <h2>{config.sections.continue.title[lang]}</h2>
       <div class="grid-auto">

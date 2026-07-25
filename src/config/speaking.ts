@@ -79,25 +79,25 @@ export const speakingPageConfig = {
   meta: {
     title: { fr: "Speaking", en: "Speaking" },
     description: {
-      fr: "Interventions sur la compréhension, la gouvernance et la transformation des systèmes numériques complexes.",
-      en: "Talks on understanding, governing, and transforming complex digital systems.",
+      fr: "Talks et notes sur la compréhension, la gouvernance et la transformation des systèmes numériques complexes.",
+      en: "Talks and notes on understanding, governing, and transforming complex digital systems.",
     },
     positioning: {
-      fr: "Etienne intervient sur la manière de comprendre, gouverner et transformer les systèmes numériques complexes — pas sur une liste générique de buzzwords.",
-      en: "Etienne speaks about how to understand, govern, and transform complex digital systems — not a generic buzzword checklist.",
+      fr: "Sur ce blog, je parle de comment comprendre, gouverner et transformer les systèmes numériques complexes. Pas une checklist de buzzwords.",
+      en: "On this blog, I write and speak about how to understand, govern, and transform complex digital systems. Not a buzzword checklist.",
     },
     topicsIntro: {
-      fr: "Sujets documentés sur ce site. Chaque intervention peut être adaptée au contexte, à l'audience et au format — sans durée imposée par défaut.",
-      en: "Topics documented on this site. Each talk can be adapted to context, audience, and format — with no default fixed duration.",
+      fr: "Sujets documentés ici. Chaque talk s'adapte au contexte, à l'audience et au format, sans durée imposée par défaut.",
+      en: "Topics documented here. Each talk adapts to context, audience, and format, with no default fixed duration.",
     },
     appearancesTitle: { fr: "Apparitions documentées", en: "Documented appearances" },
     mediaKitTitle: { fr: "Media kit", en: "Media kit" },
     mediaKitIntro: {
-      fr: "Ressources pour organisateurs et médias — mêmes données que le PDF téléchargeable.",
-      en: "Resources for organizers and media — same data as the downloadable PDF.",
+      fr: "Ressources pour organisateurs et médias, alignées sur le PDF téléchargeable.",
+      en: "Resources for organizers and media, aligned with the downloadable PDF.",
     },
     ctaTitle: {
-      fr: "Proposer une intervention",
+      fr: "Proposer un talk",
       en: "Propose a talk",
     },
     ctaBody: {
@@ -107,8 +107,8 @@ export const speakingPageConfig = {
   },
   cta: {
     emailSubject: {
-      fr: "Demande intervention speaking",
-      en: "Speaking intervention request",
+      fr: "Demande speaking",
+      en: "Speaking request",
     },
   },
 } as const;
@@ -144,7 +144,7 @@ export const speakingTopics: SpeakingTopic[] = [
     languages: ["fr", "en"],
     links: [
       {
-        label: { fr: "Start Here — cartographie", en: "Start Here — mapping" },
+        label: { fr: "Start Here : cartographie", en: "Start Here : mapping" },
         href: "/start-here/",
       },
       {
@@ -172,19 +172,19 @@ export const speakingTopics: SpeakingTopic[] = [
       fr: [
         "Relier le SBOM aux décisions de patch et de déploiement.",
         "Distinguer risque réel, surface d'exposition et obligation réglementaire.",
-        "Intégrer le SBOM au cycle de delivery — pas en fin de chaîne.",
+        "Intégrer le SBOM au cycle de delivery, pas en fin de chaîne.",
       ],
       en: [
         "Connect the SBOM to patch and deployment decisions.",
         "Distinguish real risk, exposure surface, and regulatory obligation.",
-        "Integrate SBOM into the delivery cycle — not at the end of the chain.",
+        "Integrate SBOM into the delivery cycle, not at the end of the chain.",
       ],
     },
     formats: ["conference", "panel", "workshop", "executive-briefing"],
     languages: ["fr", "en"],
     links: [
       {
-        label: { fr: "Thinking — supply chain", en: "Thinking — supply chain" },
+        label: { fr: "Thinking : supply chain", en: "Thinking : supply chain" },
         href: "/thinking/",
       },
     ],
@@ -208,19 +208,19 @@ export const speakingTopics: SpeakingTopic[] = [
       fr: [
         "Mesurer la capacité à agir, pas le nombre de règles déclenchées.",
         "Relier signaux, runbooks et décisions de capacité.",
-        "OpenTelemetry comme langage commun — pas comme catalogue d'outils.",
+        "OpenTelemetry comme langage commun, pas comme catalogue d'outils.",
       ],
       en: [
         "Measure ability to act, not the number of triggered rules.",
         "Connect signals, runbooks, and capacity decisions.",
-        "OpenTelemetry as a common language — not a tool catalog.",
+        "OpenTelemetry as a common language, not a tool catalog.",
       ],
     },
     formats: ["keynote", "conference", "panel", "workshop"],
     languages: ["fr", "en"],
     links: [
       {
-        label: { fr: "Thinking — observabilité", en: "Thinking — observability" },
+        label: { fr: "Thinking : observabilité", en: "Thinking : observability" },
         href: "/thinking/",
       },
     ],
@@ -243,12 +243,12 @@ export const speakingTopics: SpeakingTopic[] = [
     learnings: {
       fr: [
         "Définir le produit plateforme par les frictions supprimées, pas par la stack.",
-        "Golden paths oui — imposition aveugle non.",
+        "Golden paths oui, imposition aveugle non.",
         "Mesurer l'adoption par les décisions accélérées, pas par le nombre de services catalogués.",
       ],
       en: [
         "Define the platform product by removed frictions, not by the stack.",
-        "Golden paths yes — blind enforcement no.",
+        "Golden paths yes, blind enforcement no.",
         "Measure adoption by accelerated decisions, not catalogued service count.",
       ],
     },
@@ -256,7 +256,7 @@ export const speakingTopics: SpeakingTopic[] = [
     languages: ["fr", "en"],
     links: [
       {
-        label: { fr: "Work — modes d'intervention", en: "Work — intervention modes" },
+        label: { fr: "Work : modes d'intervention", en: "Work : intervention modes" },
         href: "/work/",
       },
       {
@@ -376,11 +376,11 @@ export const speakingTopics: SpeakingTopic[] = [
     languages: ["fr", "en"],
     links: [
       {
-        label: { fr: "Thinking — doctrine", en: "Thinking — doctrine" },
+        label: { fr: "Thinking : doctrine", en: "Thinking : doctrine" },
         href: "/thinking/",
       },
       {
-        label: { fr: "Work — Diagnose", en: "Work — Diagnose" },
+        label: { fr: "Work : Diagnose", en: "Work : Diagnose" },
         href: "/work/#diagnose",
       },
     ],
@@ -392,24 +392,24 @@ export const mediaKitConfig = {
   photo: {
     src: "/assets/portrait-640.jpg",
     fullSrc: "/assets/portrait.jpg",
-    alt: { fr: "Etienne Deneuve — portrait", en: "Etienne Deneuve — headshot" },
+    alt: { fr: "Etienne Deneuve, portrait", en: "Etienne Deneuve, headshot" },
     downloadFilename: "etienne-deneuve-portrait.jpg",
     width: 640,
     height: 854,
   },
   shortBio: {
-    fr: "Etienne Deneuve est Platform Reliability Architect et CTO d’Omnivya, basé près de Paris. Via Omnivya Expert, il conçoit et sécurise des plateformes cloud et Kubernetes — observabilité (OpenTelemetry), FinOps, DevSecOps et platform engineering — pour des organisations en finance, luxe et santé numérique. Il publie sur etienne.deneuve.xyz.",
-    en: "Etienne Deneuve is a Platform Reliability Architect and CTO of Omnivya, based near Paris. Through Omnivya Expert, he designs and secures cloud and Kubernetes platforms — OpenTelemetry, FinOps, DevSecOps, and platform engineering — for organisations in finance, luxury, and public digital health. He writes at etienne.deneuve.xyz.",
+    fr: "Etienne Deneuve est Platform Reliability Architect et CTO d’Omnivya, basé près de Paris. Via Omnivya Expert, il conçoit et sécurise des plateformes cloud et Kubernetes (observabilité OpenTelemetry, FinOps, DevSecOps et platform engineering) pour des organisations en finance, luxe et santé numérique. Il publie sur etienne.deneuve.xyz.",
+    en: "Etienne Deneuve is a Platform Reliability Architect and CTO of Omnivya, based near Paris. Through Omnivya Expert, he designs and secures cloud and Kubernetes platforms (OpenTelemetry, FinOps, DevSecOps, and platform engineering) for organisations in finance, luxury, and public digital health. He writes at etienne.deneuve.xyz.",
   },
   longBio: {
     fr: [
-      "Depuis plus de quinze ans, Etienne Deneuve construit et modernise des infrastructures — d'abord en exploitation et avant-vente, puis en mission via des ESN et éditeurs (Cellenza, Dell Technologies). Cofondateur d’Omnivya avec Taous, qui dirige Omnivya et Omnivya Expert ; il en est le CTO. Omnivya Expert porte les missions de conseil et de delivery structurées.",
-      "Ancien Microsoft MVP — Cloud and Datacenter Management (cycles 2017-2018, 2018-2019, 2019-2020). Son périmètre couvre Kubernetes (AKS), l'infrastructure as code (Terraform, Flux), la sécurité intégrée au delivery et la gouvernabilité des plateformes.",
-      "Il a présenté à Microsoft Experience 2017 et au French PowerShell User Group ; il a contribué à l'open source OS Factory dans une mission via Cellenza. Il intervient sur la compréhension, la gouvernance et la transformation des systèmes numériques complexes.",
+      "Depuis plus de quinze ans, Etienne Deneuve construit et modernise des infrastructures, d'abord en exploitation et avant-vente, puis en mission via des ESN et éditeurs (Cellenza, Dell Technologies). Cofondateur d’Omnivya avec Taous, qui dirige Omnivya et Omnivya Expert ; il en est le CTO. Omnivya Expert porte les missions de conseil et de delivery structurées.",
+      "Ancien Microsoft MVP Cloud and Datacenter Management (cycles 2017-2018, 2018-2019, 2019-2020). Son périmètre couvre Kubernetes (AKS), l'infrastructure as code (Terraform, Flux), la sécurité intégrée au delivery et la gouvernabilité des plateformes.",
+      "Il a présenté à Microsoft Experience 2017 et au French PowerShell User Group ; il a contribué à l'open source OS Factory dans une mission via Cellenza. Ses talks portent sur la compréhension, la gouvernance et la transformation des systèmes numériques complexes.",
     ],
     en: [
-      "For over fifteen years, Etienne Deneuve has built and modernised infrastructure — first in operations and pre-sales, then on assignments via systems integrators and vendors (Cellenza, Dell Technologies). Co-founder of Omnivya with Taous, who leads Omnivya and Omnivya Expert; he is the CTO. Omnivya Expert carries structured consulting and delivery missions.",
-      "Former Microsoft MVP — Cloud and Datacenter Management (2017-2018, 2018-2019, 2019-2020 cycles). His scope covers Kubernetes (AKS), infrastructure as code (Terraform, Flux), security integrated into delivery, and platform governability.",
+      "For over fifteen years, Etienne Deneuve has built and modernised infrastructure, first in operations and pre-sales, then on assignments via systems integrators and vendors (Cellenza, Dell Technologies). Co-founder of Omnivya with Taous, who leads Omnivya and Omnivya Expert; he is the CTO. Omnivya Expert carries structured consulting and delivery missions.",
+      "Former Microsoft MVP Cloud and Datacenter Management (2017-2018, 2018-2019, 2019-2020 cycles). His scope covers Kubernetes (AKS), infrastructure as code (Terraform, Flux), security integrated into delivery, and platform governability.",
       "He spoke at Microsoft Experience 2017 and the French PowerShell User Group; he contributed to the OS Factory open source project during a Cellenza assignment. He speaks about understanding, governing, and transforming complex digital systems.",
     ],
   },
@@ -418,8 +418,8 @@ export const mediaKitConfig = {
     en: "French and English",
   },
   themesIntro: {
-    fr: "Thèmes documentés sur etienne.deneuve.xyz/speaking — adaptables au format et à l'audience.",
-    en: "Topics documented at etienne.deneuve.xyz/en/speaking — adaptable to format and audience.",
+    fr: "Thèmes documentés sur etienne.deneuve.xyz/speaking, adaptables au format et à l'audience.",
+    en: "Topics documented at etienne.deneuve.xyz/en/speaking, adaptable to format and audience.",
   },
 } as const;
 
