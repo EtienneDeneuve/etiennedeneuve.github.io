@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 /**
- * Unit checks for canonical ecosystem JSON-LD (Prompt 5).
+ * Unit checks for canonical ecosystem JSON-LD (public graph).
  * Run: bun src/scripts/tests/test-ecosystem-json-ld.ts
  */
 import {
@@ -25,16 +25,7 @@ const nodes = buildEcosystemEntityNodes("fr");
 const validation = validateEcosystemJsonLdGraph(nodes);
 for (const message of validation) fail(message);
 
-const requiredIds = [
-  "etienne",
-  "taous",
-  "omnivya",
-  "omnivya-expert",
-  "simplified",
-  "it-challenge",
-  "my-dare",
-  "sanad",
-] as const;
+const requiredIds = ["etienne", "omnivya", "omnivya-expert", "simplified", "open-source"] as const;
 
 for (const id of requiredIds) {
   if (!nodes.some((node) => node["@id"] === ecosystemNodeId(id))) {
@@ -42,10 +33,33 @@ for (const id of requiredIds) {
   }
 }
 
+for (const hidden of ["taous", "it-challenge"] as const) {
+  if (nodes.some((node) => node["@id"] === ecosystemNodeId(hidden))) {
+    fail(`${hidden} must not appear in the public JSON-LD graph`);
+  }
+}
+
+const serialized = JSON.stringify(nodes);
+for (const leak of [
+  "Taous",
+  "Sanad",
+  "My Dare",
+  "IT Challenge",
+  "Algeria",
+  "Algérie",
+  "Africa",
+  "Afrique",
+]) {
+  if (serialized.includes(leak)) {
+    fail(`Public JSON-LD must not leak "${leak}"`);
+  }
+}
+
 const omnivya = nodes.find((node) => node["@id"] === ecosystemNodeId("omnivya"));
-if (omnivya?.["@type"] !== "Organization") fail("Omnivya must be Organization");
-if (!Array.isArray(omnivya?.founder) || omnivya.founder.length !== 2) {
-  fail("Omnivya must list Etienne and Taous as founders");
+if (omnivya?.["@type"] !== "Organization") fail("Organization #omnivya must be Organization");
+if (omnivya?.name !== "Omnivya Expert") fail("Organization #omnivya must display Omnivya Expert");
+if (!Array.isArray(omnivya?.founder) || omnivya.founder.length !== 1) {
+  fail("Organization must list Etienne only as founder in the public graph");
 }
 
 const expert = nodes.find((node) => node["@id"] === ecosystemNodeId("omnivya-expert"));
@@ -53,20 +67,20 @@ if (
   !expert?.memberOf ||
   (expert.memberOf as { "@id": string })["@id"] !== ecosystemNodeId("omnivya")
 ) {
-  fail("Omnivya Expert must memberOf Omnivya");
+  fail("Omnivya Expert must memberOf organization node");
+}
+if (Array.isArray(expert?.alternateName) && expert.alternateName.includes("IT Challenge")) {
+  fail("Public Omnivya Expert alternateName must not include IT Challenge");
+}
+if (expert?.areaServed) {
+  fail("Public Omnivya Expert must not expose areaServed geography");
 }
 
-const sanad = nodes.find((node) => node["@id"] === ecosystemNodeId("sanad"));
-if (sanad?.["@type"] !== "SoftwareApplication") fail("Sanad must be SoftwareApplication");
-
-const myDare = nodes.find((node) => node["@id"] === ecosystemNodeId("my-dare"));
-if (myDare?.["@type"] !== "LocalBusiness") fail("My Dare must be LocalBusiness");
-
-// Compatibility helpers still emit stable ids
 const person = personJsonLd();
 const org = organizationJsonLd();
 if (person["@id"] !== ecosystemNodeId("etienne")) fail("personJsonLd @id must be #etienne");
 if (org["@id"] !== ecosystemNodeId("omnivya")) fail("organizationJsonLd @id must be #omnivya");
+if (JSON.stringify(org).includes("taous")) fail("organizationJsonLd must not reference Taous");
 
 const graph = buildJsonLdGraph([person, org, websiteJsonLd(), ...nodes]);
 const emitted = (graph["@graph"] as Array<Record<string, unknown>> | undefined) ?? [graph];

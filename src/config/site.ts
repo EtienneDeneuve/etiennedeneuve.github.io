@@ -29,7 +29,7 @@ export const siteConfig = {
     timezone: "Europe/Paris",
   },
   omnivya: {
-    name: "Omnivya",
+    name: "Omnivya Expert",
     website: "https://www.omnivya.fr",
     email: "etienne@omnivya.fr",
     contactPage: "https://www.omnivya.fr",
@@ -43,8 +43,6 @@ export const siteConfig = {
   },
   ecosystemLinks: {
     omnivya: "https://www.omnivya.fr",
-    sanad: "https://sanad.cloud",
-    myDare: "https://my-dare.com",
   },
   seo: {
     siteUrl: "https://etienne.deneuve.xyz",
@@ -66,7 +64,7 @@ export const siteConfig = {
       href: "mailto:etienne@omnivya.fr?subject=Discussion%20mission%20plateforme",
     },
     omnivyaExecution: {
-      label: "Voir Omnivya",
+      label: "Voir Omnivya Expert",
       href: "https://www.omnivya.fr",
     },
   },
@@ -110,12 +108,12 @@ export const siteConfig = {
     defaultOgImage: "https://etienne.deneuve.xyz/assets/og-default.jpg",
   },
   business: {
-    name: "Omnivya",
+    name: "Omnivya Expert",
     email: "etienne@omnivya.fr",
     bookingEmail: "etienne@omnivya.fr",
     bookingUrl: "https://www.omnivya.fr",
     website: "www.omnivya.fr",
-    operatingEntity: "Omnivya",
+    operatingEntity: "Omnivya Expert",
   },
   contact: {
     personalEmail: "etienne@omnivya.fr",

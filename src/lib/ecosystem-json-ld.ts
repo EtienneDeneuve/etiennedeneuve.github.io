@@ -14,8 +14,6 @@ export const ecosystemJsonLdIds = {
   "omnivya-expert": `${SITE}/#omnivya-expert`,
   simplified: `${SITE}/#simplified`,
   "it-challenge": `${SITE}/#it-challenge`,
-  "my-dare": `${SITE}/#my-dare`,
-  sanad: `${SITE}/#sanad`,
   "open-source": `${SITE}/#open-source`,
 } as const;
 
@@ -31,17 +29,14 @@ function ref(id: EcosystemJsonLdId): { "@id": string } {
 
 /**
  * Canonical ecosystem entities for JSON-LD.
- * Soft links only (memberOf / brand / provider) — no speculative legal ownership.
+ * Public graph: Etienne + Omnivya Expert + Simplifi’ED history + open source.
+ * Taous / IT Challenge are not emitted on the public graph.
  */
 export function buildEcosystemEntityNodes(locale: EcosystemLocale = "fr"): JsonLdObject[] {
   const etienne = getEntity("etienne");
-  const taous = getEntity("taous");
   const omnivya = getEntity("omnivya");
   const expert = getEntity("omnivya-expert");
-  const myDare = getEntity("my-dare");
-  const sanad = getEntity("sanad");
   const simplified = getEntity("simplified");
-  const itChallenge = getEntity("it-challenge");
   const openSource = getEntity("open-source");
 
   const nodes: JsonLdObject[] = [
@@ -49,95 +44,56 @@ export function buildEcosystemEntityNodes(locale: EcosystemLocale = "fr"): JsonL
       "@type": "Person",
       "@id": ecosystemNodeId("etienne"),
       name: etienne.canonicalName,
-      jobTitle: "CTO",
-      description: etienne.metaDescription[locale],
+      jobTitle: seoConfig.person.jobTitle,
+      description: seoConfig.defaultDescription,
       url: etienne.externalUrl ?? SITE,
       email: seoConfig.person.email,
       image: absoluteUrl(seoConfig.person.image),
       sameAs: etienne.sameAs,
       knowsAbout: seoConfig.person.knowsAbout,
-      worksFor: ref("omnivya"),
-      affiliation: ref("omnivya"),
-    },
-    {
-      "@type": "Person",
-      "@id": ecosystemNodeId("taous"),
-      name: taous.canonicalName,
-      jobTitle: locale === "fr" ? "Dirigeante" : "Leader",
-      description: taous.metaDescription[locale],
-      url: absoluteUrl(taous.internalPath?.[locale] ?? "/about/"),
-      affiliation: ref("omnivya"),
+      worksFor: ref("omnivya-expert"),
+      affiliation: ref("omnivya-expert"),
     },
     {
       "@type": "Organization",
       "@id": ecosystemNodeId("omnivya"),
-      name: omnivya.canonicalName,
-      description: omnivya.metaDescription[locale],
-      url: omnivya.externalUrl,
-      sameAs: omnivya.sameAs,
+      name: expert.canonicalName,
+      description:
+        locale === "en"
+          ? "Omnivya Expert carries consulting, engineering and structured delivery."
+          : "Omnivya Expert porte le conseil, l’ingénierie et la delivery structurée.",
+      url: expert.externalUrl ?? omnivya.externalUrl,
+      sameAs: expert.externalUrl ? [expert.externalUrl] : omnivya.sameAs,
       email: seoConfig.organization.email,
-      // Confirmed co-founders — not a speculative legal claim beyond founding roles.
-      founder: [ref("etienne"), ref("taous")],
-      brand: [ref("omnivya-expert"), ref("my-dare"), ref("sanad")],
+      founder: [ref("etienne")],
+      brand: [ref("omnivya-expert")],
     },
     {
       "@type": "Organization",
       "@id": ecosystemNodeId("omnivya-expert"),
       name: expert.canonicalName,
-      description: expert.metaDescription[locale],
+      description:
+        locale === "en"
+          ? "Consulting, engineering and structured delivery under Omnivya Expert."
+          : "Conseil, ingénierie et delivery structurée sous Omnivya Expert.",
       url: expert.externalUrl,
-      alternateName: expert.historicalNames,
+      alternateName: ["Simplifi’ED"],
       memberOf: ref("omnivya"),
-      areaServed: [
-        { "@type": "Place", name: "Europe" },
-        { "@type": "Place", name: "Africa" },
-      ],
-    },
-    {
-      "@type": "LocalBusiness",
-      "@id": ecosystemNodeId("my-dare"),
-      name: myDare.canonicalName,
-      description: myDare.metaDescription[locale],
-      url: myDare.externalUrl,
-      sameAs: myDare.sameAs,
-      memberOf: ref("omnivya"),
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Algiers",
-        addressCountry: "DZ",
-      },
-    },
-    {
-      "@type": "SoftwareApplication",
-      "@id": ecosystemNodeId("sanad"),
-      name: sanad.canonicalName,
-      description: sanad.metaDescription[locale],
-      url: sanad.externalUrl,
-      sameAs: sanad.sameAs,
-      applicationCategory: "BusinessApplication",
-      operatingSystem: "Web",
-      provider: ref("omnivya-expert"),
-      isRelatedTo: ref("omnivya"),
     },
     {
       "@type": "Organization",
       "@id": ecosystemNodeId("simplified"),
       name: simplified.canonicalName,
-      description: simplified.metaDescription[locale],
+      description:
+        locale === "en"
+          ? "Historical name of the consulting and engineering activity founded in 2020."
+          : "Nom historique de l’activité de conseil et d’ingénierie fondée en 2020.",
       foundingDate: simplified.createdAt,
       alternateName: simplified.historicalNames,
-      disambiguatingDescription: simplified.historicalPhrase?.[locale],
-    },
-    {
-      "@type": "Organization",
-      "@id": ecosystemNodeId("it-challenge"),
-      name: itChallenge.canonicalName,
-      description: itChallenge.metaDescription[locale],
-      disambiguatingDescription: itChallenge.historicalPhrase?.[locale],
-      address: {
-        "@type": "PostalAddress",
-        addressCountry: "DZ",
-      },
+      disambiguatingDescription:
+        locale === "en"
+          ? "Founded 2020; now a historical name, services under Omnivya Expert."
+          : "Créée en 2020 ; aujourd’hui nom historique, services sous Omnivya Expert.",
     },
     {
       "@type": "CreativeWork",
@@ -147,7 +103,7 @@ export function buildEcosystemEntityNodes(locale: EcosystemLocale = "fr"): JsonL
       url: openSource.externalUrl,
       sameAs: openSource.sameAs,
       creator: ref("etienne"),
-      isRelatedTo: ref("omnivya"),
+      isRelatedTo: ref("omnivya-expert"),
     },
   ];
 
@@ -161,28 +117,20 @@ export function getEcosystemEntityNode(
   return buildEcosystemEntityNodes(locale).find((node) => node["@id"] === ecosystemNodeId(id));
 }
 
-/** Core identity nodes used on most pages. */
+/** Core identity nodes used on most pages — Etienne + Omnivya Expert only. */
 export function coreIdentityNodes(locale: EcosystemLocale = "fr"): JsonLdObject[] {
   const nodes = buildEcosystemEntityNodes(locale);
-  return nodes
-    .filter((node) =>
-      [ecosystemNodeId("etienne"), ecosystemNodeId("taous"), ecosystemNodeId("omnivya")].includes(
-        String(node["@id"])
-      )
-    )
-    .map((node) => {
-      if (node["@id"] !== ecosystemNodeId("omnivya")) return node;
-      const { brand: _brand, ...hub } = node;
-      return hub;
-    });
+  return nodes.filter((node) =>
+    [ecosystemNodeId("etienne"), ecosystemNodeId("omnivya-expert")].includes(String(node["@id"]))
+  );
 }
 
-/** About / ecosystem pages: people + hub. */
+/** About identity: same public core (no group cartography). */
 export function aboutIdentityNodes(locale: EcosystemLocale = "fr"): JsonLdObject[] {
   return coreIdentityNodes(locale);
 }
 
-/** Full ecosystem graph for the canonical ecosystem page. */
+/** Full public entity set (no Sanad / My Dare / IT Challenge / Taous). */
 export function fullEcosystemNodes(locale: EcosystemLocale = "fr"): JsonLdObject[] {
   return buildEcosystemEntityNodes(locale);
 }
@@ -193,15 +141,12 @@ export function projectEntityNodes(
   locale: EcosystemLocale = "fr"
 ): JsonLdObject[] {
   const map: Record<string, EcosystemJsonLdId[]> = {
-    omnivya: ["etienne", "taous", "omnivya", "omnivya-expert", "simplified", "it-challenge"],
-    "my-dare": ["etienne", "taous", "omnivya", "my-dare"],
-    sanad: ["etienne", "taous", "omnivya", "omnivya-expert", "sanad"],
-    "external-metrics-exporter": ["etienne", "omnivya", "open-source", "simplified"],
+    omnivya: ["etienne", "omnivya", "omnivya-expert", "simplified"],
+    "external-metrics-exporter": ["etienne", "omnivya-expert", "open-source", "simplified"],
   };
-  const ids = map[projectId] ?? ["etienne", "taous", "omnivya"];
+  const ids = map[projectId] ?? ["etienne", "omnivya-expert"];
   const all = buildEcosystemEntityNodes(locale);
   const selected = all.filter((node) => ids.some((id) => node["@id"] === ecosystemNodeId(id)));
-  // Drop brand links unless all brand targets are present in this subset.
   return selected.map((node) => {
     if (node["@id"] !== ecosystemNodeId("omnivya") || !Array.isArray(node.brand)) return node;
     const selectedIds = new Set(selected.map((n) => n["@id"]));
@@ -223,13 +168,7 @@ export function validateEcosystemJsonLdGraph(nodes: JsonLdObject[]): string[] {
     seen.add(id);
   }
 
-  const publicIds: EcosystemJsonLdId[] = [
-    "etienne",
-    "omnivya",
-    "omnivya-expert",
-    "my-dare",
-    "sanad",
-  ];
+  const publicIds: EcosystemJsonLdId[] = ["etienne", "omnivya", "omnivya-expert"];
 
   for (const id of publicIds) {
     const node = nodes.find((n) => n["@id"] === ecosystemNodeId(id));
@@ -250,7 +189,7 @@ export function validateEcosystemJsonLdGraph(nodes: JsonLdObject[]): string[] {
   }
 
   // Orphan refs: every local fragment ref must resolve in the full entity set.
-  if (nodes.length >= 8) {
+  if (nodes.length >= 5) {
     const refIds = new Set<string>();
     const walk = (value: unknown) => {
       if (!value || typeof value !== "object") return;
@@ -280,9 +219,7 @@ export function validateEcosystemJsonLdGraph(nodes: JsonLdObject[]): string[] {
 /** Map content collection project ids to ecosystem entity ids when applicable. */
 export function projectIdToEcosystemId(projectId: string): EcosystemEntityId | null {
   const map: Record<string, EcosystemEntityId> = {
-    omnivya: "omnivya",
-    "my-dare": "my-dare",
-    sanad: "sanad",
+    omnivya: "omnivya-expert",
     "external-metrics-exporter": "open-source",
   };
   return map[projectId] ?? null;

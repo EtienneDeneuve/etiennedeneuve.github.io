@@ -25,14 +25,14 @@ export const contactConfig = {
       en: "Four clear intents to start a useful conversation, no server form.",
     } as Localized,
     intro: {
-      fr: "Choisissez une intention. L’email est le canal principal. Le calendrier Omnivya reste une action secondaire.",
-      en: "Pick an intent. Email is the primary channel. The Omnivya calendar remains a secondary action.",
+      fr: "Choisissez une intention. L’email est le canal principal. Le calendrier Omnivya Expert reste une action secondaire.",
+      en: "Pick an intent. Email is the primary channel. The Omnivya Expert calendar remains a secondary action.",
     } as Localized,
   },
   calendar: {
     label: {
-      fr: "Ouverture du calendrier Omnivya",
-      en: "Open Omnivya calendar",
+      fr: "Ouverture du calendrier Omnivya Expert",
+      en: "Open Omnivya Expert calendar",
     } as Localized,
     note: {
       fr: "Action secondaire : utile pour un créneau court après un premier message.",
@@ -97,7 +97,7 @@ export const contactConfig = {
         { fr: "Organisation et rôle", en: "Organization and role" },
         { fr: "Nature du partenariat envisagé", en: "Nature of the intended partnership" },
         { fr: "Périmètre et valeur attendue", en: "Scope and expected value" },
-        { fr: "Géographie (France, Algérie, autre)", en: "Geography (France, Algeria, other)" },
+        { fr: "Géographie (France, Europe, autre)", en: "Geography (France, Europe, other)" },
         { fr: "Prochaine étape souhaitée", en: "Desired next step" },
       ],
       eventIntent: "partnership",

@@ -9,10 +9,12 @@ import {
   breadcrumbJsonLd,
   buildJsonLdGraph,
   collectionPageJsonLd,
-  serviceJsonLd,
+  personJsonLd,
   websiteJsonLd,
+  type JsonLdObject,
 } from "../lib/json-ld.ts";
-import { coreIdentityNodes, getEcosystemEntityNode } from "../lib/ecosystem-json-ld.ts";
+import { ecosystemNodeId } from "../lib/ecosystem-json-ld.ts";
+import { absoluteUrl } from "../config/seo.ts";
 
 interface Props {
   lang: "fr" | "en";
@@ -56,10 +58,35 @@ const speaking = config.speaking;
 const speakingEmail = `mailto:${emailBase}?subject=${encodeURIComponent(speaking.cta.subject[lang])}`;
 const workPath = `${prefix}/work/`;
 
+/** Work-page Service nodes — no geographic areaServed, no group cartography. */
+function workServiceJsonLd(input: {
+  name: string;
+  description: string;
+  url: string;
+  serviceType?: string;
+}): JsonLdObject {
+  return {
+    "@type": "Service",
+    name: input.name,
+    description: input.description,
+    url: absoluteUrl(input.url),
+    serviceType: input.serviceType,
+    provider: { "@id": ecosystemNodeId("omnivya-expert") },
+  };
+}
+
+const omnivyaExpertNode: JsonLdObject = {
+  "@type": "Organization",
+  "@id": ecosystemNodeId("omnivya-expert"),
+  name: siteConfig.omnivya.name,
+  url: siteConfig.omnivya.website,
+};
+
 const jsonLd = buildJsonLdGraph([
-  ...coreIdentityNodes(lang),
-  getEcosystemEntityNode("omnivya-expert", lang),
-  getEcosystemEntityNode("taous", lang),
+  personJsonLd({
+    worksFor: { "@id": ecosystemNodeId("omnivya-expert") },
+  }),
+  omnivyaExpertNode,
   websiteJsonLd(),
   collectionPageJsonLd({
     name: config.meta.title[lang],
@@ -72,7 +99,7 @@ const jsonLd = buildJsonLdGraph([
     { name: config.meta.title[lang], path: workPath },
   ]),
   ...modes.map((mode) =>
-    serviceJsonLd({
+    workServiceJsonLd({
       name: mode.title,
       description: mode.objective,
       url: `${workPath}#${mode.id}`,
@@ -98,9 +125,6 @@ const jsonLd = buildJsonLdGraph([
       <p class="eyebrow">{config.meta.eyebrow[lang]}</p>
       <h1>{config.meta.title[lang]}</h1>
       <p class="lede">{config.meta.intro[lang]}</p>
-      <p class="subtle">
-        <a href={`${prefix}/work/case-studies/`}>{labels.caseStudiesLink}</a>
-      </p>
     </section>
 
     <div class="stack gap-8">

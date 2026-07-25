@@ -4,10 +4,10 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import ConversionCTA from "../components/ConversionCTA.astro";
 import ContentCard from "../components/ContentCard.astro";
 import LearningPath from "../components/LearningPath.astro";
-import OmnivyaHubMap from "../components/OmnivyaHubMap.astro";
 import { siteConfig } from "../config/site.ts";
 import { startHereConfig } from "../config/start-here.ts";
 import { resolveContentRefs } from "../lib/resolve-content.ts";
+import { projectField, projectList } from "../lib/projects-i18n.ts";
 import { contactConfig } from "../config/contact.ts";
 import {
   breadcrumbJsonLd,
@@ -69,7 +69,7 @@ const learningPaths = config.learningPaths
   .filter((path) => path.items.length > 0);
 
 const viewProjectLabel = lang === "en" ? "View project" : "Voir le projet";
-const openOmnivyaLabel = lang === "en" ? "Open Omnivya" : "Voir Omnivya";
+const openOmnivyaLabel = lang === "en" ? "Open Omnivya Expert" : "Voir Omnivya Expert";
 
 const startHerePath = `${prefix}/start-here/`;
 const jsonLd = buildJsonLdGraph([
@@ -85,26 +85,6 @@ const jsonLd = buildJsonLdGraph([
     { name: config.meta.title[lang], path: startHerePath },
   ]),
 ]);
-
-const map = config.sections.map;
-const founders = map.founders.map((founder) => ({
-  id: founder.id,
-  name: founder.name[lang],
-  role: founder.role[lang],
-  href: founder.href[lang],
-}));
-const hub = {
-  name: map.hub.name[lang],
-  role: map.hub.role[lang],
-  href: map.hub.href[lang],
-};
-const arms = map.arms.map((arm) => ({
-  id: arm.id,
-  name: arm.name[lang],
-  role: arm.role[lang],
-  href: arm.href[lang],
-  external: "external" in arm ? Boolean(arm.external) : false,
-}));
 ---
 
 <BaseLayout
@@ -120,93 +100,82 @@ const arms = map.arms.map((arm) => ({
       <p class="eyebrow">{config.meta.eyebrow[lang]}</p>
       <h1>{config.meta.title[lang]}</h1>
       <p class="lede">{config.meta.intro[lang]}</p>
+      <p>{config.meta.lead[lang]}</p>
     </section>
 
-    <section class="stack gap-4" id="map">
-      <h2>{map.title[lang]}</h2>
-      <p>{map.intro[lang]}</p>
-      <OmnivyaHubMap lang={lang} founders={founders} hub={hub} arms={arms} />
-    </section>
-
-    <section class="stack gap-4" id="origin">
-      <h2>{config.sections.origin.title[lang]}</h2>
-      {config.sections.origin.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
-    </section>
-
-    <section class="stack gap-4">
-      <h2>{config.sections.whatIBuild.title[lang]}</h2>
-      {config.sections.whatIBuild.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
-    </section>
-
-    <section class="stack gap-4">
+    <section class="stack gap-4" id="problems">
       <h2>{config.sections.problems.title[lang]}</h2>
       <ul class="list">
         {config.sections.problems.items[lang].map((item) => <li>{item}</li>)}
       </ul>
     </section>
 
-    <section class="stack gap-4">
-      <h2>{config.sections.reasoning.title[lang]}</h2>
-      <ul class="list">
-        {config.sections.reasoning.principles[lang].map((principle) => <li>{principle}</li>)}
+    <section class="stack gap-4" id="method">
+      <h2>{config.sections.method.title[lang]}</h2>
+      <p>{config.sections.method.intro[lang]}</p>
+      <ol class="list numbered">
+        {config.sections.method.steps[lang].map((step) => <li>{step}</li>)}
+      </ol>
+    </section>
+
+    <section class="stack gap-4" id="domains">
+      <h2>{config.sections.domains.title[lang]}</h2>
+      <ul class="list domains">
+        {config.sections.domains.items[lang].map((item) => <li>{item}</li>)}
       </ul>
     </section>
 
-    <section class="stack gap-4">
-      <h2>{config.sections.omnivyaRole.title[lang]}</h2>
-      {config.sections.omnivyaRole.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
-      <p>
-        <a href={`${prefix}/ecosystem/`}>
-          {lang === "en" ? "Omnivya ecosystem" : "Écosystème Omnivya"} →
-        </a>
-        {" · "}
-        <a href={siteConfig.omnivya.website} target="_blank" rel="noopener noreferrer">
-          {openOmnivyaLabel} →
-        </a>
-      </p>
-    </section>
-
-    <section class="stack gap-4">
+    <section class="stack gap-4" id="proof-projects">
       <h2>{config.sections.featuredProjects.title[lang]}</h2>
       <p>{config.sections.featuredProjects.intro[lang]}</p>
-      <div class="stack gap-3">
-        {
-          featuredProjects.map(({ entry }) => (
-            <article class="surface-card">
-              <h3>{entry.data.name}</h3>
-              <p>
-                <strong>{lang === "en" ? "Problem:" : "Problème :"}</strong> {entry.data.problem}
-              </p>
-              <p>
-                <strong>{lang === "en" ? "Role:" : "Rôle :"}</strong> {entry.data.role}
-              </p>
-              <p>
-                <strong>{lang === "en" ? "Approach:" : "Approche :"}</strong>{" "}
-                {entry.data.principles[0] ?? "·"}
-              </p>
-              <a
-                class="read-more"
-                href={
-                  entry.data.proofLinks[0] ??
-                  entry.data.website ??
-                  entry.data.repository ??
-                  `${prefix}/projects/${entry.id}/`
-                }
-                {...(entry.data.proofLinks[0] || entry.data.website || entry.data.repository
-                  ? { target: "_blank", rel: "noopener noreferrer" }
-                  : {})}
-              >
-                {viewProjectLabel} →
-              </a>
-            </article>
-          ))
-        }
-      </div>
+      {
+        featuredProjects.length > 0 ? (
+          <div class="stack gap-3">
+            {featuredProjects.map(({ entry }) => (
+              <article class="surface-card">
+                <h3>{projectField(entry, "name", lang) || entry.data.name}</h3>
+                <p>
+                  <strong>{lang === "en" ? "Problem:" : "Problème :"}</strong>{" "}
+                  {projectField(entry, "problem", lang)}
+                </p>
+                <p>
+                  <strong>{lang === "en" ? "Role:" : "Rôle :"}</strong>{" "}
+                  {projectField(entry, "role", lang)}
+                </p>
+                <p>
+                  <strong>{lang === "en" ? "Approach:" : "Approche :"}</strong>{" "}
+                  {projectList(entry, "principles", lang)[0] ?? "·"}
+                </p>
+                <a
+                  class="read-more"
+                  href={
+                    entry.data.proofLinks[0] ??
+                    entry.data.website ??
+                    entry.data.repository ??
+                    `${prefix}/projects/${entry.id}/`
+                  }
+                  {...(entry.data.proofLinks[0] || entry.data.website || entry.data.repository
+                    ? { target: "_blank", rel: "noopener noreferrer" }
+                    : {})}
+                >
+                  {viewProjectLabel} →
+                </a>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <p class="muted">
+            {lang === "en"
+              ? "No published technical project entry is available yet."
+              : "Aucune entrée de projet technique publiée n’est encore disponible."}
+          </p>
+        )
+      }
     </section>
 
     {
       starterItems.length > 0 && (
-        <section class="stack gap-4">
+        <section class="stack gap-4" id="proof-writing">
           <h2>{config.sections.starterContent.title[lang]}</h2>
           <p>{config.sections.starterContent.intro[lang]}</p>
           <div class="grid-auto">
@@ -220,12 +189,12 @@ const arms = map.arms.map((arm) => ({
 
     {
       learningPaths.length > 0 && (
-        <section class="stack gap-4">
+        <section class="stack gap-4" id="reading-paths">
           <h2>{lang === "en" ? "Reading paths" : "Parcours de lecture"}</h2>
           <p>
             {lang === "en"
-              ? "Three ways in. Each path only lists content that already exists."
-              : "Trois entrées. Chaque parcours ne liste que du contenu déjà publié."}
+              ? "Ways in. Each path only lists content that already exists."
+              : "Des entrées. Chaque parcours ne liste que du contenu déjà publié."}
           </p>
           <div class="stack gap-4">
             {learningPaths.map((path) => (
@@ -243,7 +212,17 @@ const arms = map.arms.map((arm) => ({
       )
     }
 
-    <section class="stack gap-4">
+    <section class="stack gap-4" id="omnivya">
+      <h2>{config.sections.omnivyaRole.title[lang]}</h2>
+      {config.sections.omnivyaRole.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
+      <p>
+        <a href={siteConfig.omnivya.website} target="_blank" rel="noopener noreferrer">
+          {openOmnivyaLabel} →
+        </a>
+      </p>
+    </section>
+
+    <section class="stack gap-4" id="continue">
       <h2>{config.sections.continue.title[lang]}</h2>
       <div class="grid-auto">
         {
@@ -281,5 +260,18 @@ const arms = map.arms.map((arm) => ({
     gap: var(--space-3);
     padding-left: 1.25rem;
     color: var(--color-fg-muted);
+  }
+
+  .list.numbered {
+    list-style: decimal;
+  }
+
+  .list.domains {
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    list-style: disc;
+  }
+
+  .muted {
+    color: var(--color-fg-subtle);
   }
 </style>

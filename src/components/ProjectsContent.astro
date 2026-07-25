@@ -1,10 +1,9 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import EcosystemMap from "../components/EcosystemMap.astro";
 import OpenSourceSection from "../components/OpenSourceSection.astro";
 import ProjectCard from "../components/ProjectCard.astro";
-import { projectsPageConfig } from "../config/projects-page.ts";
+import { isPortfolioProject, projectsPageConfig } from "../config/projects-page.ts";
 import { getPublishableEntries } from "../lib/publication-policy.ts";
 import { sortProjects } from "../lib/projects-i18n.ts";
 import { getSortedGitHubProjects } from "../lib/github-projects.ts";
@@ -12,6 +11,7 @@ import {
   breadcrumbJsonLd,
   buildJsonLdGraph,
   collectionPageJsonLd,
+  personJsonLd,
   softwareSourceCodeJsonLd,
 } from "../lib/json-ld.ts";
 
@@ -23,10 +23,15 @@ const { lang } = Astro.props;
 const prefix = lang === "en" ? "/en" : "";
 const projectsPath = `${prefix}/projects/`;
 const config = projectsPageConfig;
-const projects = sortProjects(getPublishableEntries(await getCollection("projects")));
+
+const projects = sortProjects(
+  getPublishableEntries(await getCollection("projects")).filter(isPortfolioProject)
+);
+
 const githubProjects = getSortedGitHubProjects(lang);
 
 const jsonLd = buildJsonLdGraph([
+  personJsonLd(),
   collectionPageJsonLd({
     name: config.meta.title[lang],
     description: config.meta.description[lang],
@@ -68,15 +73,25 @@ const jsonLd = buildJsonLdGraph([
       <p class="lede">{config.meta.intro[lang]}</p>
     </section>
 
-    <EcosystemMap lang={lang} />
-
     <section class="stack gap-4">
       <h2 class="section-title">
-        {lang === "en" ? "Proof entries" : "Entrées de preuve"}
+        {lang === "en" ? "Technical projects" : "Projets techniques"}
       </h2>
-      <div class="grid-auto">
-        {projects.map((project) => <ProjectCard entry={project} lang={lang} />)}
-      </div>
+      {
+        projects.length > 0 ? (
+          <div class="grid-auto">
+            {projects.map((project) => (
+              <ProjectCard entry={project} lang={lang} />
+            ))}
+          </div>
+        ) : (
+          <p class="muted">
+            {lang === "en"
+              ? "No published technical project entry is available yet."
+              : "Aucune entrée de projet technique publiée n’est encore disponible."}
+          </p>
+        )
+      }
     </section>
 
     <OpenSourceSection lang={lang} />
@@ -84,10 +99,10 @@ const jsonLd = buildJsonLdGraph([
 </BaseLayout>
 
 <style>
-  .hero {
-    max-width: 72ch;
-  }
   .section-title {
     margin: 0;
+  }
+  .muted {
+    color: var(--color-fg-subtle);
   }
 </style>

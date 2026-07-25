@@ -337,7 +337,7 @@ export function runPublicationPolicyChecks(
 }
 
 export const FALLBACK_PROOF_LINKS = {
-  projects: ["omnivya", "external-metrics-exporter", "sanad", "my-dare"],
+  projects: ["omnivya", "external-metrics-exporter"],
   articles: [
     "2024-09-16-managed-identities",
     "2023-07-28-megalinter-azure-devops",

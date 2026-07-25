@@ -120,10 +120,10 @@ async function assertSsotInvariants() {
     ok("Simplifi’ED createdAt is 2020-08-04");
   }
 
-  if (omnivya.brandSince !== "2025") {
-    fail(`Omnivya brandSince must be 2025 (got ${omnivya.brandSince})`);
+  if (omnivya.brandSince !== "2025-06") {
+    fail(`Omnivya brandSince must be 2025-06 (got ${omnivya.brandSince})`);
   } else {
-    ok("Omnivya brandSince is 2025");
+    ok("Omnivya brandSince is 2025-06");
   }
 
   const currentBrands = Object.values(ecosystemEntities).filter(
@@ -144,8 +144,11 @@ async function assertSsotInvariants() {
   }
 
   const algeriaStep = ecosystemTimeline.find((s) => s.id === "algeria-capacity");
-  if (!algeriaStep?.summary.fr.includes("pas le plan d’origine")) {
-    fail("Timeline must state Algeria was not the original plan");
+  if (
+    !algeriaStep?.summary.fr.includes("recruter") ||
+    !algeriaStep.summary.fr.includes("Algérie")
+  ) {
+    fail("Timeline must state Algeria team grew from European hiring difficulty");
   } else {
     ok("Timeline keeps Algeria-as-later-decision");
   }
@@ -232,35 +235,12 @@ async function assertNoForbiddenCopy() {
   ok("No forbidden narrative patterns in scanned surfaces");
 }
 
-async function assertProjectSummariesAligned() {
-  const map: Record<string, EcosystemEntityId> = {
-    "omnivya.md": "omnivya",
-    "my-dare.md": "my-dare",
-    "sanad.md": "sanad",
-  };
-  for (const [file, id] of Object.entries(map)) {
-    const path = join(ROOT, "src/content/projects", file);
-    const text = await readFile(path, "utf8");
-    const summary = text.match(/^summary:\s*"([^"]+)"/m)?.[1];
-    const summaryEn = text.match(/^summary_en:\s*"([^"]+)"/m)?.[1];
-    const entity = ecosystemEntities[id];
-    if (summary !== entity.shortDescription.fr) {
-      fail(`${file} summary must match SSOT card FR`);
-    }
-    if (summaryEn !== entity.shortDescription.en) {
-      fail(`${file} summary_en must match SSOT card EN`);
-    }
-  }
-  ok("Project card summaries match SSOT");
-}
-
 async function main() {
   console.log("validate:content — ecosystem semantic checks\n");
   await assertSsotInvariants();
   await assertDescriptionBands();
   await assertJsonLdUniqueness();
   await assertNoForbiddenCopy();
-  await assertProjectSummariesAligned();
 
   if (failures > 0) {
     console.error(`\n${failures} failure(s)`);

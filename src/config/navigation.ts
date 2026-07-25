@@ -25,13 +25,11 @@ export const navigationConfig = {
   },
   secondary: {
     fr: [
-      { label: "Écosystème", href: "/ecosystem/" },
       { label: "Contact", href: "/contact/" },
       { label: "Case Studies", href: "/work/case-studies/" },
       { label: "RSS", href: "/rss.xml" },
     ],
     en: [
-      { label: "Ecosystem", href: "/en/ecosystem/" },
       { label: "Contact", href: "/en/contact/" },
       { label: "Case Studies", href: "/en/work/case-studies/" },
       { label: "RSS", href: "/rss.xml" },

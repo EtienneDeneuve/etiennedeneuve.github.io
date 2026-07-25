@@ -3,10 +3,17 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import OpenSourceSection from "../components/OpenSourceSection.astro";
 import { aboutConfig } from "../config/about.ts";
+import { isPortfolioProject, projectsPageConfig } from "../config/projects-page.ts";
 import { siteConfig } from "../config/site.ts";
 import { getPublishableEntries } from "../lib/publication-policy.ts";
-import { buildJsonLdGraph, profilePageJsonLd, websiteJsonLd } from "../lib/json-ld.ts";
-import { aboutIdentityNodes } from "../lib/ecosystem-json-ld.ts";
+import {
+  buildJsonLdGraph,
+  personJsonLd,
+  profilePageJsonLd,
+  websiteJsonLd,
+  type JsonLdObject,
+} from "../lib/json-ld.ts";
+import { ecosystemNodeId } from "../lib/ecosystem-json-ld.ts";
 
 interface Props {
   lang: "fr" | "en";
@@ -19,7 +26,7 @@ const config = aboutConfig;
 const labels = config.labels;
 
 const projects = getPublishableEntries(await getCollection("projects"))
-  .filter((entry) => entry.data.verified)
+  .filter((entry) => entry.data.verified && isPortfolioProject(entry))
   .sort((a, b) => (a.data.displayOrder ?? 99) - (b.data.displayOrder ?? 99));
 
 const appearances = getPublishableEntries(await getCollection("appearances")).sort(
@@ -30,8 +37,18 @@ const emailSubject =
   lang === "en" ? "Discussion : complex system" : "Discussion : système complexe";
 const mailto = `mailto:${siteConfig.omnivya.email}?subject=${encodeURIComponent(emailSubject)}`;
 
+const omnivyaExpertNode: JsonLdObject = {
+  "@type": "Organization",
+  "@id": ecosystemNodeId("omnivya-expert"),
+  name: siteConfig.omnivya.name,
+  url: siteConfig.omnivya.website,
+};
+
 const jsonLd = buildJsonLdGraph([
-  ...aboutIdentityNodes(lang),
+  personJsonLd({
+    worksFor: { "@id": ecosystemNodeId("omnivya-expert") },
+  }),
+  omnivyaExpertNode,
   websiteJsonLd(),
   profilePageJsonLd(aboutPath),
 ]);
@@ -67,11 +84,6 @@ const jsonLd = buildJsonLdGraph([
         {" · "}
         <a href={`${prefix}/work/`}>{lang === "en" ? "Work" : "Work"}</a>
       </p>
-    </section>
-
-    <section class="stack gap-3" id="with-taous">
-      <h2>{config.withTaous.title[lang]}</h2>
-      {config.withTaous.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
     </section>
 
     <section class="stack gap-3" id="path">
@@ -110,31 +122,10 @@ const jsonLd = buildJsonLdGraph([
       <h2>{config.omnivya.title[lang]}</h2>
       {config.omnivya.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
       <p>
-        <a href={`${prefix}/ecosystem/`}>{labels.ecosystemLink[lang]}</a>
-        {" · "}
-        <a href={`${prefix}/projects/omnivya/`}>{labels.omnivyaLink[lang]}</a>
-        {" · "}
         <a href={siteConfig.omnivya.website} target="_blank" rel="noopener noreferrer">
-          omnivya.fr
+          {labels.omnivyaLink[lang]}
         </a>
       </p>
-    </section>
-
-    <section class="stack gap-3" id="products">
-      <h2>{config.products.title[lang]}</h2>
-      {config.products.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
-      <ul class="product-links">
-        <li>
-          <a href={`${prefix}/projects/my-dare/`}>My Dare</a>
-        </li>
-        <li>
-          <a href={`${prefix}/projects/sanad/`}>Sanad</a>
-          <span class="product-note"> · DZ</span>
-        </li>
-        <li>
-          <a href={`${prefix}/projects/`}>{labels.projects[lang]}</a>
-        </li>
-      </ul>
     </section>
 
     <section class="stack gap-3" id="doctrine">
@@ -227,20 +218,6 @@ const jsonLd = buildJsonLdGraph([
   .about {
     max-width: 72ch;
   }
-  .hero {
-    max-width: 72ch;
-  }
-  .identity {
-    margin: 0;
-    color: var(--color-fg-muted);
-    font-size: var(--text-md);
-  }
-  .lead {
-    margin: 0;
-    font-size: var(--text-lg);
-    color: var(--color-fg);
-    line-height: 1.55;
-  }
   .intro {
     margin: 0;
     color: var(--color-fg-subtle);
@@ -271,7 +248,6 @@ const jsonLd = buildJsonLdGraph([
   }
   .principles,
   .refuse-list,
-  .product-links,
   .contrib-list {
     margin: 0;
     padding-left: 1.15rem;
@@ -297,7 +273,6 @@ const jsonLd = buildJsonLdGraph([
     font-size: var(--text-sm);
   }
 
-  /* Progressive enhancement: readable ordered list without advanced CSS */
   .timeline {
     list-style: decimal;
     margin: 0;
@@ -321,7 +296,6 @@ const jsonLd = buildJsonLdGraph([
     margin: 0;
   }
 
-  /* Enhanced timeline when CSS is available */
   @supports (display: grid) {
     .timeline {
       list-style: none;

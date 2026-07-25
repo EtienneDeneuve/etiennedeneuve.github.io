@@ -25,16 +25,16 @@ export const workConfig = {
   meta: {
     title: { fr: "Work", en: "Work" },
     description: {
-      fr: "Trois modes d’intervention (Diagnose, Decide, Build) pour rendre un système complexe compréhensible, tranché, puis opérable.",
-      en: "Three intervention modes (Diagnose, Decide, Build) to make a complex system understandable, decided, then operable.",
+      fr: "Conseil, architecture et delivery technique : Diagnose, Decide, Build — systèmes complexes, cloud, Kubernetes, observabilité, DevSecOps.",
+      en: "Consulting, architecture and technical delivery: Diagnose, Decide, Build — complex systems, cloud, Kubernetes, observability, DevSecOps.",
     },
     eyebrow: {
       fr: "Modes d’intervention",
       en: "Intervention modes",
     },
     intro: {
-      fr: "Je n’interviens pas comme un catalogue de prestations. Chaque mission commence par clarifier le mode adapté : comprendre le système, trancher une décision, ou construire avec Omnivya Expert.",
-      en: "I do not operate as a service catalog. Every engagement starts by clarifying the right mode: understand the system, make a decision, or build with Omnivya Expert.",
+      fr: "Je n’interviens pas comme un catalogue de prestations. Chaque mission commence par clarifier le mode adapté : comprendre le système, trancher une décision d’architecture, accompagner un CTO, ou construire via Omnivya Expert.",
+      en: "I do not operate as a service catalog. Every engagement starts by clarifying the right mode: understand the system, make an architecture decision, advise a CTO, or build via Omnivya Expert.",
     },
   },
   modes: [
@@ -47,20 +47,20 @@ export const workConfig = {
       },
       scopeExamples: {
         fr: [
-          "architecture et plateforme",
-          "DevSecOps et supply chain",
-          "observabilité et opérabilité",
-          "coûts et capacité",
-          "dépendances externes",
-          "organisation et flux de décision",
+          "architecture de systèmes et cloud",
+          "Kubernetes et Platform Engineering",
+          "observabilité, fiabilité et opérabilité",
+          "DevSecOps et supply chain logicielle",
+          "dépendances et risques techniques",
+          "gouvernance et flux de décision",
         ],
         en: [
-          "architecture and platform",
-          "DevSecOps and supply chain",
-          "observability and operability",
-          "cost and capacity",
-          "external dependencies",
-          "organization and decision flows",
+          "systems and cloud architecture",
+          "Kubernetes and Platform Engineering",
+          "observability, reliability and operability",
+          "DevSecOps and software supply chain",
+          "dependencies and technical risk",
+          "governance and decision flows",
         ],
       },
       possibleDeliverables: {
@@ -142,22 +142,22 @@ export const workConfig = {
       },
       scopeExamples: {
         fr: [
-          "choix d’architecture",
-          "stratégie plateforme",
-          "migration cloud",
+          "choix d’architecture cloud ou Kubernetes",
+          "stratégie de plateforme interne",
+          "migration cloud ou transformation technique",
           "build versus buy",
           "découpage de systèmes",
-          "feuille de route sécurité",
-          "préparation d’un programme de transformation",
+          "feuille de route sécurité / DevSecOps",
+          "accompagnement CTO sur une décision structurante",
         ],
         en: [
-          "architecture choice",
-          "platform strategy",
-          "cloud migration",
+          "cloud or Kubernetes architecture choice",
+          "internal platform strategy",
+          "cloud migration or technical transformation",
           "build versus buy",
           "system decomposition",
-          "security roadmap",
-          "transformation program preparation",
+          "security / DevSecOps roadmap",
+          "CTO advisory on a structural decision",
         ],
       },
       startingSituation: {
@@ -224,22 +224,20 @@ export const workConfig = {
       },
       scopeExamples: {
         fr: [
-          "fondations plateforme",
-          "GitOps",
-          "observabilité",
-          "sécurité de la supply chain",
-          "automatisation",
-          "produits internes",
-          "prototypes stratégiques",
+          "fondations de plateforme cloud / Kubernetes",
+          "GitOps et automatisation du delivery",
+          "observabilité et fiabilité",
+          "sécurité de la supply chain (DevSecOps)",
+          "composants et outils de plateforme interne",
+          "prototypes techniques cadrés par une décision",
         ],
         en: [
-          "platform foundations",
-          "GitOps",
-          "observability",
-          "supply chain security",
-          "automation",
-          "internal products",
-          "strategic prototypes",
+          "cloud / Kubernetes platform foundations",
+          "GitOps and delivery automation",
+          "observability and reliability",
+          "supply chain security (DevSecOps)",
+          "internal platform components and tools",
+          "technical prototypes framed by a prior decision",
         ],
       },
       startingSituation: {
@@ -256,14 +254,14 @@ export const workConfig = {
       },
       included: {
         fr: [
-          "Exécution technique via Omnivya Expert (Europe et Afrique)",
+          "Exécution technique via Omnivya Expert",
           "Plateforme, GitOps, observabilité selon périmètre",
           "Sécurité supply chain intégrée au delivery",
           "Documentation et montée en compétence",
           "Alignement avec les principes publiés et les décisions documentées",
         ],
         en: [
-          "Technical execution via Omnivya Expert (Europe and Africa)",
+          "Technical execution via Omnivya Expert",
           "Platform, GitOps, observability per scope",
           "Supply chain security integrated into delivery",
           "Documentation and skills transfer",
@@ -286,8 +284,8 @@ export const workConfig = {
       },
       proofs: [
         { kind: "project", id: "external-metrics-exporter" },
-        { kind: "project", id: "sanad" },
-        { kind: "project", id: "my-dare" },
+        { kind: "article", id: "2026-07-13-de-la-metrique-au-runbook" },
+        { kind: "article", id: "2024-09-16-managed-identities" },
       ],
       cta: {
         label: { fr: "Parler delivery Omnivya Expert", en: "Discuss Omnivya Expert delivery" },
@@ -296,8 +294,8 @@ export const workConfig = {
           en: "Omnivya Expert build mission request",
         },
         secondaryLink: {
-          fr: { label: "Voir Omnivya", href: "https://www.omnivya.fr" },
-          en: { label: "View Omnivya", href: "https://www.omnivya.fr" },
+          fr: { label: "Voir Omnivya Expert", href: "https://www.omnivya.fr" },
+          en: { label: "View Omnivya Expert", href: "https://www.omnivya.fr" },
         },
       },
     },
@@ -305,18 +303,18 @@ export const workConfig = {
   speaking: {
     title: { fr: "Speaking and advisory", en: "Speaking and advisory" },
     summary: {
-      fr: "Interventions ponctuelles : conférences, panels, formations ciblées ou conseil court sur un sujet précis.",
-      en: "One-off interventions: conferences, panels, targeted training or short advisory on a specific topic.",
+      fr: "Interventions ponctuelles : conférences, panels, formations ciblées ou conseil court (architecture, plateforme, DevSecOps).",
+      en: "One-off interventions: conferences, panels, targeted training or short advisory (architecture, platform, DevSecOps).",
     },
     included: {
       fr: [
         "Keynotes et ateliers sur des sujets documentés",
-        "Conseil ponctuel sur architecture, plateforme ou sécurité",
+        "Conseil ponctuel ou accompagnement CTO sur un sujet précis",
         "Pas de catalogue commercial ni formulaire massif",
       ],
       en: [
         "Keynotes and workshops on documented topics",
-        "Short advisory on architecture, platform or security",
+        "Short advisory or CTO accompaniment on a specific topic",
         "No commercial catalog or mass intake form",
       ],
     },
@@ -344,6 +342,5 @@ export const workConfig = {
     readProof: { fr: "Lire", en: "Read" },
     openProof: { fr: "Ouvrir", en: "Open" },
     speakingLink: { fr: "Voir Speaking", en: "View Speaking" },
-    caseStudiesLink: { fr: "Case studies publiés", en: "Published case studies" },
   },
 } as const;

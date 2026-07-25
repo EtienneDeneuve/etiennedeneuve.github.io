@@ -4,9 +4,11 @@
  *
  * Confirmed facts (human-validated 2026-07-24):
  * - Simplifi’ED created 2020-08-04
- * - Omnivya brand introduced in 2025
- * - Etienne = CTO across the ecosystem; Taous = leader everywhere
+ * - IT Challenge (Algeria subsidiary): 2022-02
+ * - Omnivya / Omnivya Expert brands: 2025-06 / 2025-07
+ * - Etienne = CTO; Taous = leader (Omnivya / Omnivya Expert)
  * - IT Challenge remains an Algerian SARL; public brand unused except on invoices
+ * Product ventures outside the public site narrative are intentionally absent from this file.
  */
 
 export const ecosystemLocales = ["fr", "en"] as const;
@@ -68,8 +70,6 @@ export type EcosystemEntityId =
   | "omnivya-expert"
   | "simplified"
   | "it-challenge"
-  | "my-dare"
-  | "sanad"
   | "open-source";
 
 export type EcosystemRelation = {
@@ -160,16 +160,16 @@ export const ecosystemEntities: Record<EcosystemEntityId, EcosystemEntity> = {
     brandPosture: "not_a_brand",
     legalPosture: "not_applicable",
     shortDescription: {
-      fr: "Cofondateur et CTO de l’écosystème Omnivya — doctrine et preuves.",
-      en: "Co-founder and CTO of the Omnivya ecosystem — doctrine and proof.",
+      fr: "Cofondateur et CTO d’Omnivya Expert — doctrine et preuves.",
+      en: "Co-founder and CTO of Omnivya Expert — doctrine and proof.",
     },
     metaDescription: {
-      fr: "Etienne Deneuve, Platform Reliability Architect : cofondateur et CTO de l’écosystème Omnivya. Ce site publie doctrine, décisions et preuves.",
-      en: "Etienne Deneuve, Platform Reliability Architect: co-founder and CTO of the Omnivya ecosystem. This site publishes doctrine, decisions and proof.",
+      fr: "Etienne Deneuve, Platform Reliability Architect : cofondateur et CTO d’Omnivya Expert. Ce site publie doctrine, décisions et preuves.",
+      en: "Etienne Deneuve, Platform Reliability Architect: co-founder and CTO of Omnivya Expert. This site publishes doctrine, decisions and proof.",
     },
     longDescription: {
-      fr: "Platform Reliability Architect. Cofondateur avec Taous ; CTO sur l’ensemble de l’écosystème. Ce site documente son raisonnement et ses preuves publiques.",
-      en: "Platform Reliability Architect. Co-founder with Taous; CTO across the ecosystem. This site documents his reasoning and public proof.",
+      fr: "Platform Reliability Architect. Cofondateur avec Taous ; CTO d’Omnivya Expert. Ce site documente son raisonnement et ses preuves publiques.",
+      en: "Platform Reliability Architect. Co-founder with Taous; CTO of Omnivya Expert. This site documents his reasoning and public proof.",
     },
     geo: "personal",
     historicalNames: [],
@@ -200,16 +200,16 @@ export const ecosystemEntities: Record<EcosystemEntityId, EcosystemEntity> = {
     brandPosture: "not_a_brand",
     legalPosture: "not_applicable",
     shortDescription: {
-      fr: "Cofondatrice et dirigeante de l’écosystème Omnivya partout.",
-      en: "Co-founder and leader of the Omnivya ecosystem everywhere.",
+      fr: "Cofondatrice et dirigeante d’Omnivya Expert — France et Algérie.",
+      en: "Co-founder and leader of Omnivya Expert — France and Algeria.",
     },
     metaDescription: {
-      fr: "Taous, cofondatrice et dirigeante de l’écosystème Omnivya — Omnivya Expert, My Dare, Sanad et l’ensemble des structures associées.",
-      en: "Taous, co-founder and leader of the Omnivya ecosystem — Omnivya, Omnivya Expert, My Dare, Sanad and related structures across the group.",
+      fr: "Taous, cofondatrice et dirigeante d’Omnivya Expert : elle porte les services de conseil et d’ingénierie en Europe et en Afrique, avec Etienne.",
+      en: "Taous, co-founder and leader of Omnivya Expert: she leads consulting and engineering services across Europe and Africa, together with Etienne.",
     },
     longDescription: {
-      fr: "Cofondatrice avec Etienne. Dirigeante (« la vraie cheffe ») sur l’ensemble de l’écosystème — Omnivya, Omnivya Expert, My Dare, Sanad et les structures associées.",
-      en: "Co-founder with Etienne. Leader across the ecosystem — Omnivya, Omnivya Expert, My Dare, Sanad and related structures.",
+      fr: "Cofondatrice avec Etienne. Dirigeante (« la vraie cheffe ») d’Omnivya Expert — services et projets open source associés.",
+      en: "Co-founder with Etienne. Leader of Omnivya Expert — services and related open-source projects.",
     },
     geo: "personal",
     historicalNames: [],
@@ -242,19 +242,19 @@ export const ecosystemEntities: Record<EcosystemEntityId, EcosystemEntity> = {
       en: "Omnivya is the group’s shared hub: it gathers activities, brands and projects built by Taous and Etienne. Commercial detail stays on omnivya.fr.",
     },
     longDescription: {
-      fr: "Omnivya structure le cadre commun : ce n’est ni uniquement une société de conseil, ni uniquement une entité d’exécution. La marque publique Omnivya a été introduite en 2025. Le détail commercial reste sur omnivya.fr.",
-      en: "Omnivya is the shared frame: neither consulting-only nor execution-only. The public Omnivya brand was introduced in 2025. Commercial detail stays on omnivya.fr.",
+      fr: "Omnivya structure le cadre commun : ce n’est ni uniquement une société de conseil, ni uniquement une entité d’exécution. La marque publique Omnivya a été introduite en juin–juillet 2025. Le détail commercial reste sur omnivya.fr.",
+      en: "Omnivya is the shared frame: neither consulting-only nor execution-only. The public Omnivya brand was introduced in June–July 2025. Commercial detail stays on omnivya.fr.",
     },
     historicalPhrase: {
-      fr: "Marque ombrelle introduite en 2025 — pas un simple renommage de Simplifi’ED.",
-      en: "Umbrella brand introduced in 2025 — not a simple rename of Simplifi’ED.",
+      fr: "Marque ombrelle introduite en juin–juillet 2025 — pas un simple renommage de Simplifi’ED.",
+      en: "Umbrella brand introduced in June–July 2025 — not a simple rename of Simplifi’ED.",
     },
     geo: "europe_africa",
     historicalNames: [],
     internalPath: { fr: "/projects/omnivya/", en: "/en/projects/omnivya/" },
     externalUrl: "https://www.omnivya.fr",
     sameAs: ["https://www.omnivya.fr"],
-    brandSince: "2025",
+    brandSince: "2025-06",
     roles: { etienne: "CTO", taous: "leader" },
     editorial: editorial.omnivyaHub,
   },
@@ -265,32 +265,32 @@ export const ecosystemEntities: Record<EcosystemEntityId, EcosystemEntity> = {
     brandPosture: "current",
     legalPosture: "unknown",
     shortDescription: {
-      fr: "Conseil, ingénierie et delivery Omnivya en Europe et en Afrique.",
-      en: "Omnivya consulting, engineering and delivery across Europe and Africa.",
+      fr: "Conseil, ingénierie et delivery Omnivya Expert en Europe et en Afrique.",
+      en: "Omnivya Expert consulting, engineering and delivery across Europe and Africa.",
     },
     metaDescription: {
-      fr: "Omnivya Expert porte le conseil, les services, l’ingénierie et la delivery en Europe et en Afrique — anciennement Simplifi’ED et IT Challenge.",
-      en: "Omnivya Expert carries consulting, services, engineering and delivery across Europe and Africa — formerly Simplifi’ED and IT Challenge names.",
+      fr: "Omnivya Expert porte le conseil, les services, l’ingénierie et la delivery en Europe et en Afrique — anciennement Simplifi’ED (2020).",
+      en: "Omnivya Expert carries consulting, services, engineering and delivery across Europe and Africa — formerly Simplifi’ED (founded 2020).",
     },
     longDescription: {
-      fr: "Omnivya Expert regroupe les activités de services historiquement portées en Europe sous Simplifi’ED et en Algérie sous le nom IT Challenge. Périmètre : Europe et Afrique — jamais une seule zone.",
-      en: "Omnivya Expert gathers services historically carried in Europe under Simplifi’ED and in Algeria under the IT Challenge name. Scope: Europe and Africa — never a single region only.",
+      fr: "Omnivya Expert regroupe les activités de services historiquement portées sous Simplifi’ED. Capacité delivery en Algérie depuis 2022. Périmètre : Europe et Afrique — jamais une seule zone.",
+      en: "Omnivya Expert gathers services historically carried under Simplifi’ED. Delivery capacity in Algeria since 2022. Scope: Europe and Africa — never a single region only.",
     },
     historicalPhrase: {
-      fr: "Regroupe aujourd’hui ce qui était porté sous Simplifi’ED (Europe) et IT Challenge (Algérie).",
-      en: "Gathers what was formerly carried as Simplifi’ED (Europe) and IT Challenge (Algeria).",
+      fr: "Regroupe aujourd’hui ce qui était porté sous Simplifi’ED ; capacité Algérie depuis 2022.",
+      en: "Gathers what was formerly carried as Simplifi’ED; Algeria capacity since 2022.",
     },
     geo: "europe_africa",
     historicalNames: ["Simplifi’ED", "IT Challenge"],
     internalPath: { fr: "/projects/omnivya/", en: "/en/projects/omnivya/" },
     externalUrl: "https://www.omnivya.fr",
-    brandSince: "2025",
+    brandSince: "2025-06",
     roles: { etienne: "CTO", taous: "leader" },
     editorial: {
       preferName: "Omnivya Expert",
       historicalQualifier: {
-        fr: "anciennement Simplifi’ED (Europe) et IT Challenge (Algérie)",
-        en: "formerly Simplifi’ED (Europe) and IT Challenge (Algeria)",
+        fr: "anciennement Simplifi’ED",
+        en: "formerly Simplifi’ED",
       },
       do: {
         fr: [
@@ -392,6 +392,7 @@ export const ecosystemEntities: Record<EcosystemEntityId, EcosystemEntity> = {
     },
     geo: "algeria",
     historicalNames: ["ITChallenge"],
+    createdAt: "2022-02",
     roles: { etienne: "CTO", taous: "leader" },
     editorial: {
       preferName: "IT Challenge",
@@ -421,104 +422,6 @@ export const ecosystemEntities: Record<EcosystemEntityId, EcosystemEntity> = {
       },
     },
   },
-  "my-dare": {
-    id: "my-dare",
-    canonicalName: "My Dare",
-    kind: "product",
-    brandPosture: "current",
-    legalPosture: "unknown",
-    shortDescription: {
-      fr: "Espace de coworking et de travail à Alger, écosystème Omnivya.",
-      en: "Coworking and workspace in Algiers, within the Omnivya ecosystem.",
-    },
-    metaDescription: {
-      fr: "My Dare est l’espace de coworking et d’environnement de travail à Alger, créé pour les équipes de l’écosystème Omnivya et leur manière de travailler.",
-      en: "My Dare is the coworking space and work environment in Algiers, created for Omnivya ecosystem teams and the way they work together every day.",
-    },
-    longDescription: {
-      fr: "Créé pour disposer en Algérie d’un environnement de travail adapté aux équipes et à la manière de travailler du groupe. Marque et activité de l’écosystème Omnivya — pas une aventure séparée.",
-      en: "Created to provide a suitable Algeria workspace for the group’s teams and ways of working. Omnivya-ecosystem brand and activity — not a separate venture.",
-    },
-    historicalPhrase: {
-      fr: "Né du besoin d’un environnement de travail adapté à Alger pour les équipes du groupe.",
-      en: "Born from the need for a suitable Algiers workspace for group teams.",
-    },
-    geo: "algeria",
-    historicalNames: [],
-    internalPath: { fr: "/projects/my-dare/", en: "/en/projects/my-dare/" },
-    externalUrl: "https://my-dare.com",
-    sameAs: ["https://my-dare.com"],
-    roles: { etienne: "CTO", taous: "leader" },
-    editorial: {
-      preferName: "My Dare",
-      do: {
-        fr: [
-          "Lier à l’écosystème Omnivya.",
-          "Expliquer le besoin d’environnement de travail pour les équipes du groupe.",
-        ],
-        en: [
-          "Attach to the Omnivya ecosystem.",
-          "Explain the need for a suitable workspace for group teams.",
-        ],
-      },
-      dont: {
-        fr: ["Ne pas inventer de structure capitalistique."],
-        en: ["Do not invent a capital structure."],
-      },
-    },
-  },
-  sanad: {
-    id: "sanad",
-    canonicalName: "Sanad",
-    kind: "product",
-    brandPosture: "current",
-    legalPosture: "unknown",
-    shortDescription: {
-      fr: "SaaS devis, factures et contrats conçu pour le marché algérien.",
-      en: "Quotes, invoices and contracts SaaS built for the Algerian market.",
-    },
-    metaDescription: {
-      fr: "Sanad est un SaaS de devis, facturation et gestion contractuelle conçu pour les réalités du marché algérien, construit par les équipes Omnivya Expert.",
-      en: "Sanad is SaaS for quotes, invoicing and contract management designed for Algerian market realities, built by the Omnivya Expert delivery teams.",
-    },
-    longDescription: {
-      fr: "Né du constat d’absence de SaaS suffisamment adapté à la gestion locale des devis, factures et contrats en Algérie. Construit par les équipes aujourd’hui regroupées sous Omnivya Expert. Marché DZ only — pas le fer de lance international du groupe.",
-      en: "Born from the lack of SaaS fit for local quotes, invoices and contracts in Algeria. Built by the teams now gathered under Omnivya Expert. DZ market only — not the group’s international flagship.",
-    },
-    historicalPhrase: {
-      fr: "Construit par les équipes Omnivya Expert face au manque d’outils locaux adaptés.",
-      en: "Built by Omnivya Expert teams after a gap in fit-for-local tooling.",
-    },
-    geo: "algeria",
-    historicalNames: [],
-    internalPath: { fr: "/projects/sanad/", en: "/en/projects/sanad/" },
-    externalUrl: "https://sanad.cloud",
-    sameAs: ["https://sanad.cloud"],
-    roles: { etienne: "CTO", taous: "leader" },
-    editorial: {
-      preferName: "Sanad",
-      do: {
-        fr: [
-          "Citer l’origine devis / factures / contrats locaux.",
-          "Attribuer la construction à Omnivya Expert (équipes actuelles).",
-        ],
-        en: [
-          "Cite the local quotes / invoices / contracts origin.",
-          "Attribute building to Omnivya Expert (current teams).",
-        ],
-      },
-      dont: {
-        fr: [
-          "Ne pas présenter Sanad comme SaaS « marchés complexes » générique.",
-          "Ne pas mettre IT Challenge en marque actuelle sur Sanad.",
-        ],
-        en: [
-          "Do not pitch Sanad as generic “complex markets” SaaS.",
-          "Do not put IT Challenge as the current brand on Sanad.",
-        ],
-      },
-    },
-  },
   "open-source": {
     id: "open-source",
     canonicalName: "Open source",
@@ -526,16 +429,16 @@ export const ecosystemEntities: Record<EcosystemEntityId, EcosystemEntity> = {
     brandPosture: "not_a_brand",
     legalPosture: "not_applicable",
     shortDescription: {
-      fr: "Composants publics issus des problèmes terrain de l’écosystème.",
-      en: "Public components from the ecosystem’s real-world engineering problems.",
+      fr: "Composants publics issus des problèmes terrain d’Omnivya Expert.",
+      en: "Public components from Omnivya Expert’s real-world engineering problems.",
     },
     metaDescription: {
-      fr: "Projets open source publiés à partir de problèmes rencontrés en ingénierie et delivery Omnivya — preuves publiques, pas une marque commerciale séparée.",
-      en: "Open-source components published from problems met in Omnivya engineering and delivery — public proof of the ecosystem, not a separate commercial brand.",
+      fr: "Projets open source publiés à partir de problèmes rencontrés en ingénierie et delivery Omnivya Expert — preuves publiques, pas une marque commerciale séparée.",
+      en: "Open-source components published from problems met in Omnivya Expert engineering and delivery — public proof, not a separate commercial brand.",
     },
     longDescription: {
-      fr: "Composants et outils publiés, souvent sous l’organisation GitHub historique Simplifi-ED, développés à partir de problèmes rencontrés en conseil, delivery ou construction de produits. Ce sont des preuves publiques de l’écosystème Omnivya, pas une marque produit séparée.",
-      en: "Published components and tools, often under the historical Simplifi-ED GitHub org, built from problems met in consulting, delivery or product work. Public proof of the Omnivya ecosystem — not a separate product brand.",
+      fr: "Composants et outils publiés, souvent sous l’organisation GitHub historique Simplifi-ED, développés à partir de problèmes rencontrés en conseil ou delivery. Ce sont des preuves publiques d’Omnivya Expert, pas une marque produit séparée.",
+      en: "Published components and tools, often under the historical Simplifi-ED GitHub org, built from problems met in consulting or delivery. Public proof of Omnivya Expert — not a separate product brand.",
     },
     historicalPhrase: {
       fr: "Souvent publiés sous l’org GitHub legacy Simplifi-ED.",
@@ -550,11 +453,11 @@ export const ecosystemEntities: Record<EcosystemEntityId, EcosystemEntity> = {
       preferName: "open source",
       do: {
         fr: [
-          "Rattacher les repos à l’écosystème Omnivya.",
+          "Rattacher les repos à Omnivya Expert.",
           "Qualifier Simplifi-ED comme org GitHub legacy lorsque cité.",
         ],
         en: [
-          "Attach repos to the Omnivya ecosystem.",
+          "Attach repos to Omnivya Expert.",
           "Qualify Simplifi-ED as a legacy GitHub org when cited.",
         ],
       },
@@ -571,26 +474,17 @@ export const ecosystemRelations: readonly EcosystemRelation[] = [
   { type: "cofounder_of", from: "taous", to: "omnivya" },
   { type: "cto_of", from: "etienne", to: "omnivya" },
   { type: "cto_of", from: "etienne", to: "omnivya-expert" },
-  { type: "cto_of", from: "etienne", to: "my-dare" },
-  { type: "cto_of", from: "etienne", to: "sanad" },
   { type: "leader_of", from: "taous", to: "omnivya" },
   { type: "leader_of", from: "taous", to: "omnivya-expert" },
-  { type: "leader_of", from: "taous", to: "my-dare" },
-  { type: "leader_of", from: "taous", to: "sanad" },
   { type: "hub_of", from: "omnivya", to: "omnivya-expert" },
-  { type: "hub_of", from: "omnivya", to: "my-dare" },
-  { type: "hub_of", from: "omnivya", to: "sanad" },
   { type: "hub_of", from: "omnivya", to: "open-source" },
   { type: "service_line_of", from: "omnivya-expert", to: "omnivya" },
   { type: "historical_name_of", from: "simplified", to: "omnivya-expert" },
   { type: "historical_name_of", from: "it-challenge", to: "omnivya-expert" },
-  { type: "brand_of_ecosystem", from: "my-dare", to: "omnivya" },
-  { type: "brand_of_ecosystem", from: "sanad", to: "omnivya" },
-  { type: "built_by", from: "sanad", to: "omnivya-expert" },
   { type: "public_contribution_of", from: "open-source", to: "omnivya" },
 ] as const;
 
-/** Confirmed chronology — only dated, validated milestones. */
+/** Confirmed chronology — only dated, validated milestones (public narrative). */
 export const ecosystemTimeline = [
   {
     date: "2020-08-04",
@@ -606,56 +500,30 @@ export const ecosystemTimeline = [
     entityIds: ["simplified", "etienne", "taous"] as EcosystemEntityId[],
   },
   {
-    date: undefined,
+    date: "2022-02",
     id: "algeria-capacity" as const,
     title: {
-      fr: "Capacité de delivery en Algérie",
-      en: "Delivery capacity in Algeria",
+      fr: "Équipe en Algérie",
+      en: "Team in Algeria",
     },
     summary: {
-      fr: "Décision ultérieure, surtout face à la pénurie de profils techniques en Europe — pas le plan d’origine. Filiale historiquement appelée IT Challenge (SARL toujours active).",
-      en: "Later decision, mainly due to shortage of technical profiles in Europe — not the original plan. Subsidiary historically named IT Challenge (SARL still active).",
+      fr: "Février 2022. Face à la difficulté de recruter assez de profils techniques en Europe, création d’une capacité delivery en Algérie.",
+      en: "February 2022. Facing the difficulty of hiring enough technical profiles in Europe, creation of delivery capacity in Algeria.",
     },
     entityIds: ["it-challenge", "omnivya-expert"] as EcosystemEntityId[],
   },
   {
-    date: undefined,
-    id: "my-dare" as const,
-    title: {
-      fr: "Création de My Dare",
-      en: "My Dare created",
-    },
-    summary: {
-      fr: "Environnement de travail à Alger pour les équipes et la manière de travailler du groupe.",
-      en: "Algiers workspace for the group’s teams and ways of working.",
-    },
-    entityIds: ["my-dare", "omnivya"] as EcosystemEntityId[],
-  },
-  {
-    date: undefined,
-    id: "sanad" as const,
-    title: {
-      fr: "Création de Sanad",
-      en: "Sanad created",
-    },
-    summary: {
-      fr: "SaaS local (devis, factures, contrats) faute d’offre adaptée en Algérie — construit par les équipes Omnivya Expert.",
-      en: "Local SaaS (quotes, invoices, contracts) after a local tooling gap in Algeria — built by Omnivya Expert teams.",
-    },
-    entityIds: ["sanad", "omnivya-expert"] as EcosystemEntityId[],
-  },
-  {
-    date: "2025",
+    date: "2025-06",
     id: "omnivya-brand" as const,
     title: {
-      fr: "Marque Omnivya",
-      en: "Omnivya brand",
+      fr: "Omnivya Expert",
+      en: "Omnivya Expert",
     },
     summary: {
-      fr: "Introduction de la marque ombrelle Omnivya et regroupement des services sous Omnivya Expert (Europe et Afrique).",
-      en: "Introduction of the Omnivya umbrella brand and gathering of services under Omnivya Expert (Europe and Africa).",
+      fr: "Juin–juillet 2025. Les activités de services sont portées sous Omnivya Expert (Europe et Afrique).",
+      en: "June–July 2025. Services activities are carried under Omnivya Expert (Europe and Africa).",
     },
-    entityIds: ["omnivya", "omnivya-expert"] as EcosystemEntityId[],
+    entityIds: ["omnivya-expert", "omnivya"] as EcosystemEntityId[],
   },
 ] as const;
 
@@ -771,20 +639,22 @@ export function getProjectCardData(
 }
 
 export function listProjectCards(locale: EcosystemLocale = "fr"): ProjectCardData[] {
-  const order: EcosystemEntityId[] = ["omnivya", "my-dare", "sanad", "open-source"];
+  const order: EcosystemEntityId[] = ["omnivya-expert", "open-source"];
   return order.map((id) => getProjectCardData(id, locale));
 }
 
 /** Thin list for existing ecosystem UI until pages are rewired (Prompt 3). */
 export function getEcosystemConfigEntities(locale: EcosystemLocale = "en") {
-  return listCurrentBrands()
-    .filter((entity) => entity.kind !== "service_line")
-    .map((entity) => ({
+  const publicIds: EcosystemEntityId[] = ["omnivya-expert", "open-source"];
+  return publicIds.map((id) => {
+    const entity = ecosystemEntities[id];
+    return {
       id: entity.id,
       name: entity.canonicalName,
-      kind: entity.kind === "group_hub" ? ("company" as const) : ("product" as const),
+      kind: entity.kind === "service_line" ? ("company" as const) : ("product" as const),
       role: entity.shortDescription[locale],
-      url: entity.externalUrl ?? entity.internalPath?.[locale] ?? "https://etienne.deneuve.xyz/ecosystem/",
+      url: entity.externalUrl ?? entity.internalPath?.[locale] ?? "https://etienne.deneuve.xyz/about/",
       status: "active" as const,
-    }));
+    };
+  });
 }
