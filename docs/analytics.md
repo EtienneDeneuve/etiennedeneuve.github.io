@@ -9,6 +9,8 @@ Scripts live in `src/components/AnalyticsVendors.astro`, loaded from `MainHead` 
 | `PUBLIC_GA4_MEASUREMENT_ID` | `G-XXXXXXXX`               | Google Analytics 4 |
 | `PUBLIC_CLARITY_PROJECT_ID` | project id from clarity.ms | Microsoft Clarity  |
 
+Set them as **repository secrets** (same names). Deploy/PR workflows pass them into the Astro build so they are inlined into the static HTML. Locally, copy `.env.example` → `.env`.
+
 Both are gated by CookieConsent v3 via `type="text/plain"` + `data-category="analytics"` (not Partytown — that bypasses consent). Universal Analytics (`UA-*`) is not used.
 
 ## Principles

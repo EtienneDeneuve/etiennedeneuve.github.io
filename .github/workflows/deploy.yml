@@ -18,6 +18,9 @@ concurrency:
 env:
   CI: true
   NODE_ENV: production
+  # Astro inlines PUBLIC_* at build time — must be present on the build step.
+  PUBLIC_GA4_MEASUREMENT_ID: ${{ secrets.PUBLIC_GA4_MEASUREMENT_ID }}
+  PUBLIC_CLARITY_PROJECT_ID: ${{ secrets.PUBLIC_CLARITY_PROJECT_ID }}
 
 jobs:
   quality:
@@ -75,6 +78,12 @@ jobs:
         run: |
           export SOURCE_DATE_EPOCH="$(git log -1 --pretty=%ct)"
           echo "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH"
+          if [ -z "${PUBLIC_GA4_MEASUREMENT_ID}" ] || [ -z "${PUBLIC_CLARITY_PROJECT_ID}" ]; then
+            echo "::error::Missing PUBLIC_GA4_MEASUREMENT_ID or PUBLIC_CLARITY_PROJECT_ID repository secrets"
+            exit 1
+          fi
+          # Confirm IDs are present without printing secret values
+          echo "Analytics env: GA4=${#PUBLIC_GA4_MEASUREMENT_ID} chars, Clarity=${#PUBLIC_CLARITY_PROJECT_ID} chars"
           bun run build
 
       - name: Internal linkcheck
