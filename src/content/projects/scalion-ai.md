@@ -60,8 +60,8 @@ technologies:
   - "Platform engineering"
 startedAt: 2025-01-01
 verified: true
-featured: true
-draft: false
+featured: false
+draft: true
 displayOrder: 2
 ecosystemRole: "cartographie technique"
 ecosystemRole_en: "technical mapping"
