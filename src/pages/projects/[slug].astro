@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import { getCollection } from "astro:content";
 import ProjectDetail from "../../components/ProjectDetail.astro";
+import { isPortfolioProject } from "../../config/projects-page.ts";
 import { getPublishableEntries } from "../../lib/publication-policy.ts";
 
 interface Props {
@@ -9,7 +10,9 @@ interface Props {
 }
 
 export async function getStaticPaths() {
-  const projects = getPublishableEntries(await getCollection("projects"));
+  const projects = getPublishableEntries(await getCollection("projects")).filter(
+    isPortfolioProject
+  );
   return projects.map((entry) => ({
     params: { slug: entry.id },
     props: { entry },

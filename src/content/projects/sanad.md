@@ -3,38 +3,38 @@ name: "Sanad"
 name_en: "Sanad"
 summary: "SaaS devis, factures et contrats conçu pour le marché algérien."
 summary_en: "Quotes, invoices and contracts SaaS built for the Algerian market."
-status: "production"
+status: "beta"
 type: "product"
-role: "Cofondateur et CTO — conception avec les équipes Omnivya Expert"
-role_en: "Co-founder and CTO — design with Omnivya Expert teams"
-problem: "Sur le marché algérien, il manquait un SaaS suffisamment adapté à la gestion locale des devis, factures et contrats — pas une plateforme générique surdimensionnée."
-problem_en: "On the Algerian market, there was no SaaS fit enough for local quotes, invoices and contracts — not an oversized generic platform."
-context: "Sanad est né d’un problème rencontré sur le terrain en Algérie. Il a été construit par les équipes aujourd’hui regroupées sous Omnivya Expert. Marché DZ only, aux côtés de My Dare — outil local de l’écosystème Omnivya, pas un produit SaaS international."
-context_en: "Sanad grew from a field problem in Algeria. It was built by the teams now gathered under Omnivya Expert. DZ market only, alongside My Dare — a local Omnivya-ecosystem tool, not an international SaaS product."
+role: "Cofondateur et CTO — conception du produit avec l’équipe Omnivya Expert"
+role_en: "Co-founder and CTO — product design with the Omnivya Expert team"
+problem: "Pour gérer My Dare, aucun outil ne répondait correctement aux contraintes algériennes de devis, facturation et contrats."
+problem_en: "To run My Dare, no tool properly covered Algerian constraints for quotes, invoicing and contracts."
+context: "Sanad est un SaaS pour le marché algérien, construit par les équipes aujourd’hui réunies sous Omnivya Expert. Sortie publique prévue en septembre 2026. Périmètre DZ, aux côtés de My Dare."
+context_en: "Sanad is a SaaS for the Algerian market, built by the teams now gathered under Omnivya Expert. Public launch planned for September 2026. DZ scope, alongside My Dare."
 decisions:
-  - "Construire un outil ciblé plutôt qu’un catalogue de fonctionnalités"
-  - "Ancrer le développement dans Omnivya Expert (Europe et Afrique, dont l’Algérie)"
+  - "Construire un SaaS ciblé plutôt qu’un catalogue de fonctionnalités"
+  - "Ancrer le développement dans Omnivya Expert"
   - "Prioriser l’usage réel local sur le storytelling produit"
 decisions_en:
-  - "Build a focused tool rather than a feature catalog"
-  - "Anchor development in Omnivya Expert (Europe and Africa, including Algeria)"
+  - "Build a focused SaaS rather than a feature catalog"
+  - "Anchor development in Omnivya Expert"
   - "Prioritize real local usage over product storytelling"
 principles:
-  - "Simplicité opérationnelle"
+  - "Construire un outil simple à partir des usages locaux, plutôt qu’adapter artificiellement un produit étranger"
   - "Contraintes locales d’abord"
-  - "Honnêteté sur le périmètre : un outil, pas une plateforme marketing"
+  - "Honnêteté sur le périmètre : marché algérien, pas plateforme mondiale"
 principles_en:
-  - "Operational simplicity"
+  - "Build a simple tool from local usage, rather than artificially adapting a foreign product"
   - "Local constraints first"
-  - "Honest scope: a tool, not a marketing platform"
+  - "Honest scope: Algerian market, not a global platform"
 whatExists:
-  - "Outil Sanad (sanad.cloud)"
+  - "Produit Sanad en préparation (sanad.cloud)"
   - "Construit par les équipes Omnivya Expert"
 whatExists_en:
-  - "Sanad tool (sanad.cloud)"
+  - "Sanad product in preparation (sanad.cloud)"
   - "Built by Omnivya Expert teams"
-currentState: "Outil en service / publié. Pas de claims d’adoption marché ni métriques inventées sur ce site."
-currentState_en: "Tool in service / published. No invented market-adoption claims or metrics on this site."
+currentState: "Beta — sortie publique prévue en septembre 2026. Pas de claims d’adoption marché ni métriques inventées sur ce site."
+currentState_en: "Beta — public launch planned for September 2026. No invented market-adoption claims or metrics on this site."
 limitations:
   - "Périmètre marché algérien uniquement"
   - "Pas de clients nommés ni chiffres d’adoption sans preuve"
@@ -60,13 +60,13 @@ website: "https://sanad.cloud"
 technologies:
   - "Business tooling"
   - "Local constraints"
-startedAt: 2024-01-01
+startedAt: 2026-09-01
 verified: true
-featured: true
-draft: false
+featured: false
+draft: true
 displayOrder: 4
-ecosystemRole: "outil Omnivya Expert — marché DZ"
-ecosystemRole_en: "Omnivya Expert tool — DZ market"
+ecosystemRole: "SaaS Omnivya Expert — marché DZ"
+ecosystemRole_en: "Omnivya Expert SaaS — DZ market"
 ---
 
-Sanad est un SaaS de gestion commerciale pour le marché algérien, construit par les équipes Omnivya Expert à partir des contraintes locales de devis, factures et contrats.
+Sanad est un SaaS de devis, facturation et gestion contractuelle pour le marché algérien, construit par les équipes Omnivya Expert à partir des besoins rencontrés en opérant My Dare. Sortie publique prévue en septembre 2026.

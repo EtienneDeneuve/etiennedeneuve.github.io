@@ -120,10 +120,10 @@ async function assertSsotInvariants() {
     ok("Simplifi’ED createdAt is 2020-08-04");
   }
 
-  if (omnivya.brandSince !== "2025") {
-    fail(`Omnivya brandSince must be 2025 (got ${omnivya.brandSince})`);
+  if (omnivya.brandSince !== "2025-06") {
+    fail(`Omnivya brandSince must be 2025-06 (got ${omnivya.brandSince})`);
   } else {
-    ok("Omnivya brandSince is 2025");
+    ok("Omnivya brandSince is 2025-06");
   }
 
   const currentBrands = Object.values(ecosystemEntities).filter(
@@ -144,8 +144,11 @@ async function assertSsotInvariants() {
   }
 
   const algeriaStep = ecosystemTimeline.find((s) => s.id === "algeria-capacity");
-  if (!algeriaStep?.summary.fr.includes("pas le plan d’origine")) {
-    fail("Timeline must state Algeria was not the original plan");
+  if (
+    !algeriaStep?.summary.fr.includes("recruter") ||
+    !algeriaStep.summary.fr.includes("Algérie")
+  ) {
+    fail("Timeline must state Algeria team grew from European hiring difficulty");
   } else {
     ok("Timeline keeps Algeria-as-later-decision");
   }
@@ -234,7 +237,7 @@ async function assertNoForbiddenCopy() {
 
 async function assertProjectSummariesAligned() {
   const map: Record<string, EcosystemEntityId> = {
-    "omnivya.md": "omnivya",
+    "omnivya.md": "omnivya-expert",
     "my-dare.md": "my-dare",
     "sanad.md": "sanad",
   };

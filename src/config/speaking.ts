@@ -265,8 +265,8 @@ export const speakingTopics: SpeakingTopic[] = [
         href: "/work/",
       },
       {
-        label: { fr: "Projet Omnivya", en: "Omnivya project" },
-        href: "/projects/omnivya/",
+        label: { fr: "Omnivya Expert", en: "Omnivya Expert" },
+        href: "https://www.omnivya.fr",
       },
     ],
     displayOrder: 4,
@@ -301,12 +301,12 @@ export const speakingTopics: SpeakingTopic[] = [
     languages: ["fr", "en"],
     links: [
       {
-        label: { fr: "Sanad (Omnivya Expert)", en: "Sanad (Omnivya Expert)" },
-        href: "/projects/sanad/",
+        label: { fr: "About", en: "About" },
+        href: "/about/",
       },
       {
-        label: { fr: "My Dare", en: "My Dare" },
-        href: "/projects/my-dare/",
+        label: { fr: "Omnivya Expert", en: "Omnivya Expert" },
+        href: "https://www.omnivya.fr",
       },
     ],
     displayOrder: 5,
@@ -403,17 +403,17 @@ export const mediaKitConfig = {
     height: 854,
   },
   shortBio: {
-    fr: "Etienne Deneuve est Platform Reliability Architect et CTO de l’écosystème Omnivya, basé près de Paris. Via Omnivya Expert, il conçoit et sécurise des plateformes cloud et Kubernetes — observabilité (OpenTelemetry), FinOps, DevSecOps et platform engineering — pour des organisations en finance, luxe et santé numérique. Il publie sur etienne.deneuve.xyz.",
-    en: "Etienne Deneuve is a Platform Reliability Architect and CTO of the Omnivya ecosystem, based near Paris. Through Omnivya Expert, he designs and secures cloud and Kubernetes platforms — OpenTelemetry, FinOps, DevSecOps, and platform engineering — for organisations in finance, luxury, and public digital health. He writes at etienne.deneuve.xyz.",
+    fr: "Etienne Deneuve est Platform Reliability Architect et CTO d’Omnivya, basé près de Paris. Via Omnivya Expert, il conçoit et sécurise des plateformes cloud et Kubernetes — observabilité (OpenTelemetry), FinOps, DevSecOps et platform engineering — pour des organisations en finance, luxe et santé numérique. Il publie sur etienne.deneuve.xyz.",
+    en: "Etienne Deneuve is a Platform Reliability Architect and CTO of Omnivya, based near Paris. Through Omnivya Expert, he designs and secures cloud and Kubernetes platforms — OpenTelemetry, FinOps, DevSecOps, and platform engineering — for organisations in finance, luxury, and public digital health. He writes at etienne.deneuve.xyz.",
   },
   longBio: {
     fr: [
-      "Depuis plus de quinze ans, Etienne Deneuve construit et modernise des infrastructures — d'abord en exploitation et avant-vente, puis en mission via des ESN et éditeurs (Cellenza, Dell Technologies). En 2020, Taous et lui créent Simplifi’ED ; il en est CTO. Depuis 2025, la marque Omnivya structure le hub ; Omnivya Expert porte les services en Europe et en Afrique.",
+      "Depuis plus de quinze ans, Etienne Deneuve construit et modernise des infrastructures — d'abord en exploitation et avant-vente, puis en mission via des ESN et éditeurs (Cellenza, Dell Technologies). Il est cofondateur et CTO d’Omnivya ; Omnivya Expert porte les missions de conseil et de delivery structurées.",
       "Ancien Microsoft MVP — Cloud and Datacenter Management (cycles 2017-2018, 2018-2019, 2019-2020). Son périmètre couvre Kubernetes (AKS), l'infrastructure as code (Terraform, Flux), la sécurité intégrée au delivery et la gouvernabilité des plateformes.",
       "Il a présenté à Microsoft Experience 2017 et au French PowerShell User Group ; il a contribué à l'open source OS Factory dans une mission via Cellenza. Il intervient sur la compréhension, la gouvernance et la transformation des systèmes numériques complexes.",
     ],
     en: [
-      "For over fifteen years, Etienne Deneuve has built and modernised infrastructure — first in operations and pre-sales, then on assignments via systems integrators and vendors (Cellenza, Dell Technologies). In 2020, he and Taous founded Simplifi’ED; he is CTO. Since 2025, the Omnivya brand structures the hub; Omnivya Expert carries services across Europe and Africa.",
+      "For over fifteen years, Etienne Deneuve has built and modernised infrastructure — first in operations and pre-sales, then on assignments via systems integrators and vendors (Cellenza, Dell Technologies). He is co-founder and CTO of Omnivya; Omnivya Expert carries structured consulting and delivery missions.",
       "Former Microsoft MVP — Cloud and Datacenter Management (2017-2018, 2018-2019, 2019-2020 cycles). His scope covers Kubernetes (AKS), infrastructure as code (Terraform, Flux), security integrated into delivery, and platform governability.",
       "He spoke at Microsoft Experience 2017 and the French PowerShell User Group; he contributed to the OS Factory open source project during a Cellenza assignment. He speaks about understanding, governing, and transforming complex digital systems.",
     ],

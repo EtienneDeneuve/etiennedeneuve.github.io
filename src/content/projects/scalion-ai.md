@@ -1,16 +1,16 @@
 ---
 name: "Scalion AI"
 name_en: "Scalion AI"
-summary: "Plateforme visant à reconstruire et expliquer les systèmes d’information, leurs dépendances et leurs risques à partir du code, du cloud, de Kubernetes, de la supply chain et du runtime."
-summary_en: "Platform aiming to reconstruct and explain information systems, their dependencies and risks from code, cloud, Kubernetes, supply chain and runtime."
+summary: "Projet technique de cartographie et d’analyse des systèmes d’information : dépendances, risques et lisibilité à partir du code, du cloud, de Kubernetes, de la supply chain et du runtime."
+summary_en: "Technical project for mapping and analysing information systems: dependencies, risks and readability from code, cloud, Kubernetes, supply chain and runtime."
 status: "idea"
 type: "product"
 role: "Fondateur et architecte système"
 role_en: "Founder and system architect"
 problem: "Les organisations perdent la lisibilité de leur système : dépendances floues, risque mal priorisé, décisions prises sans carte partagée."
 problem_en: "Organizations lose system readability: unclear dependencies, poorly prioritized risk, decisions made without a shared map."
-context: "Produit deep tech à l’intersection architecture, sécurité et platform engineering — cartographie SI, risque et décision."
-context_en: "Deep tech product at the intersection of architecture, security and platform engineering — IT mapping, risk and decision."
+context: "Recherche appliquée et produit technique à l’intersection architecture, sécurité et Platform Engineering — cartographie SI, risque et décision."
+context_en: "Applied research and technical product at the intersection of architecture, security and Platform Engineering — IT mapping, risk and decision."
 decisions:
   - "Partir des signaux techniques réels (code, cloud, K8s, runtime) plutôt que de diagrammes statiques"
   - "Relier dépendances, risque et décision dans un même modèle"
@@ -33,8 +33,8 @@ whatExists:
 whatExists_en:
   - "Product model and architecture in progress (unpublished)"
   - "SI / risk mapping frame (internal work)"
-currentState: "Non publié. Pas de site public pour l’instant."
-currentState_en: "Unpublished. No public site yet."
+currentState: "Idée / recherche appliquée. Pas de site public pour l’instant."
+currentState_en: "Idea / applied research. No public site yet."
 limitations:
   - "Pas de site produit public"
   - "Pas de métriques produit ni claims marché"
@@ -60,11 +60,11 @@ technologies:
   - "Platform engineering"
 startedAt: 2025-01-01
 verified: true
-featured: false
-draft: true
+featured: true
+draft: false
 displayOrder: 2
-ecosystemRole: "maîtrise du risque"
-ecosystemRole_en: "risk control"
+ecosystemRole: "cartographie technique"
+ecosystemRole_en: "technical mapping"
 ---
 
-Scalion AI reconstruit la lisibilité du système à partir de signaux techniques réels.
+Scalion AI est un projet technique de cartographie et d’analyse des systèmes : reconstruire la lisibilité à partir de signaux réels (code, cloud, Kubernetes, supply chain, runtime).

@@ -5,27 +5,27 @@ summary: "Espace de coworking et de travail à Alger, écosystème Omnivya."
 summary_en: "Coworking and workspace in Algiers, within the Omnivya ecosystem."
 status: "production"
 type: "product"
-role: "Cofondateur et CTO — modèle opérationnel et implantation"
-role_en: "Co-founder and CTO — operating model and implantation"
-problem: "Disposer en Algérie d’un environnement de travail adapté aux équipes du groupe — logistique, infrastructure, manière de travailler — que les modèles distants ne rendent pas."
-problem_en: "Having a suitable Algeria workspace for the group’s teams — logistics, infrastructure, ways of working — that remote models do not provide."
-context: "My Dare fait partie de l’écosystème Omnivya. Coworking en activité à Alger, construit à partir des difficultés réellement rencontrées lors de l’implantation locale — expérience terrain documentée, pas brochure marketing."
-context_en: "My Dare is part of the Omnivya ecosystem. Operating coworking in Algiers, built from difficulties actually met during local implantation — documented field experience, not a marketing brochure."
+role: "Cofondateur et CTO — infrastructure, outils et modèle opérationnel"
+role_en: "Co-founder and CTO — infrastructure, tools and operating model"
+problem: "En construisant une équipe en Algérie, nous ne trouvions pas l’environnement de travail que nous voulions pour elle."
+problem_en: "While building a team in Algeria, we could not find the working environment we wanted for it."
+context: "My Dare est un coworking à Alger, créé pour les équipes du groupe. Construit à partir des difficultés d’implantation, pas d’un modèle importé."
+context_en: "My Dare is a coworking space in Algiers, built for the group’s teams. It grew from implantation difficulties, not from an imported model."
 decisions:
-  - "Partir des difficultés réelles d’implantation, pas d’un modèle importé"
+  - "Partir des difficultés d’implantation, pas d’un modèle importé"
   - "Relier infrastructure physique et capacité opérationnelle des équipes"
-  - "Documenter les contraintes terrain comme input de design"
+  - "Documenter les contraintes locales comme input de design"
 decisions_en:
-  - "Start from real implantation difficulties, not an imported model"
+  - "Start from implantation difficulties, not an imported model"
   - "Link physical infrastructure and the teams’ operating capacity"
-  - "Document field constraints as design input"
+  - "Document local constraints as design input"
 principles:
-  - "Rendre les opérations actionnables"
-  - "Construire depuis le terrain"
+  - "Concevoir le lieu comme un système de travail, pas seulement comme un espace à louer"
+  - "Construire depuis les usages réels"
   - "Simplicité opérationnelle"
 principles_en:
-  - "Make operations actionable"
-  - "Build from the field"
+  - "Design the place as a work system, not only as space to rent"
+  - "Build from real usage"
   - "Operational simplicity"
 whatExists:
   - "Coworking My Dare en activité à Alger (my-dare.com)"
@@ -58,13 +58,13 @@ website: "https://my-dare.com"
 technologies:
   - "Operational workflows"
   - "Field operations"
-startedAt: 2023-01-01
+startedAt: 2023-03-01
 verified: true
-featured: true
-draft: false
+featured: false
+draft: true
 displayOrder: 2
 ecosystemRole: "terrain et opérations — écosystème Omnivya"
 ecosystemRole_en: "field and operations — Omnivya ecosystem"
 ---
 
-My Dare est un coworking à Alger, créé pour offrir aux équipes de l’écosystème Omnivya un environnement de travail adapté — contraintes terrain et infrastructure concrète.
+My Dare est un coworking à Alger, créé pour offrir aux équipes du groupe un environnement de travail adapté.

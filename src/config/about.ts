@@ -10,8 +10,8 @@ export const aboutConfig = {
   meta: {
     title: { fr: "About", en: "About" } as Localized,
     description: {
-      fr: "Parcours, principes de travail et ce que je construis : systèmes, complexité, décisions sécurisées.",
-      en: "Background, working principles and what I build: systems, complexity, decisions you can stand behind.",
+      fr: "Parcours, expertise et manière de travailler d’Etienne Deneuve : architecture, cloud, Kubernetes, plateformes, observabilité et gouvernance technique.",
+      en: "Background, expertise and working approach of Etienne Deneuve: architecture, cloud, Kubernetes, platforms, observability and technical governance.",
     } as Localized,
     lead: {
       fr: "Cinq constantes depuis le terrain : comprendre les systèmes, réduire la complexité, sécuriser les décisions, construire ce qui manque, confronter les idées à la réalité.",
@@ -48,27 +48,11 @@ export const aboutConfig = {
     paragraphs: {
       fr: [
         "Je conçois, sécurise et rends gouvernables des systèmes numériques complexes : plateformes cloud, Kubernetes, DevSecOps, observabilité et architecture de décision.",
-        "Je suis Platform Reliability Architect et CTO de l’écosystème Omnivya. Quand une mission demande du conseil ou de la delivery structurée, c’est Omnivya Expert qui porte — en Europe et en Afrique. Ce site documente mes principes, les preuves publiques et le raisonnement, pas un catalogue commercial.",
+        "Je suis Platform Reliability Architect et CTO. Je suis cofondateur et CTO d’Omnivya, où je travaille sur des sujets d’architecture, de plateforme, de sécurité et de produits techniques. Les missions nécessitant une capacité de delivery structurée sont portées par Omnivya Expert. Ce site publie mes principes, les preuves et le raisonnement ; ce n’est pas un catalogue commercial.",
       ],
       en: [
         "I design, secure and make complex digital systems governable: cloud platforms, Kubernetes, DevSecOps, observability and decision architecture.",
-        "I am a Platform Reliability Architect and CTO of the Omnivya ecosystem. When a mission needs structured consulting or delivery, Omnivya Expert carries it — in Europe and Africa. This site documents my principles, public proof and reasoning, not a commercial catalog.",
-      ],
-    },
-  },
-  withTaous: {
-    title: {
-      fr: "Taous",
-      en: "Taous",
-    } as Localized,
-    paragraphs: {
-      fr: [
-        "Taous est cofondatrice de l’écosystème Omnivya — et elle dirige. Omnivya Expert, My Dare, Sanad et les structures associées se portent à deux, en France et en Algérie.",
-        "Ce site documente mon raisonnement. Le hub, les services et le terrain, on les construit ensemble.",
-      ],
-      en: [
-        "Taous is co-founder of the Omnivya ecosystem — and she leads. Omnivya Expert, My Dare, Sanad and related structures are carried jointly, in France and Algeria.",
-        "This site documents my reasoning. Hub, services and field work, we build together.",
+        "I am a Platform Reliability Architect and CTO. I am co-founder and CTO of Omnivya, where I work on architecture, platform, security and technical product topics. Missions that need structured delivery capacity are carried by Omnivya Expert. This site publishes my principles, proof and reasoning; it is not a commercial catalog.",
       ],
     },
   },
@@ -78,12 +62,10 @@ export const aboutConfig = {
       fr: [
         "La carrière a commencé en 2006. Le parcours va du terrain opérationnel, dont le support ADSL, à l’architecture et à la direction technique. Les titres se sont empilés ; surtout, le périmètre s’est élargi : du composant au système, de l’incident à la décision irréversible.",
         "Cloud, infrastructure, plateforme, DevSecOps et architecture se sont empilés sur la même question : comment un système reste-t-il lisible, opérable et gouvernable quand la complexité augmente ?",
-        "Le travail se déroule entre la France et l’Algérie. Ce n’est pas du storytelling géographique : ça impose des contraintes réglementaires, organisationnelles et territoriales concrètes, plutôt qu’un marché idéal.",
       ],
       en: [
         "The career started in 2006. The path runs from operational fieldwork, including ADSL support, to architecture and technical leadership. Titles stacked; more importantly, scope widened: from component to system, from incident to irreversible decision.",
         "Cloud, infrastructure, platform, DevSecOps and architecture stacked on the same question: how does a system stay readable, operable and governable as complexity grows?",
-        "Work spans France and Algeria. That is not geographic storytelling: it forces design for real regulatory, organizational and territorial constraints, rather than for an ideal market.",
       ],
     },
   },
@@ -107,33 +89,17 @@ export const aboutConfig = {
   },
   omnivya: {
     title: {
-      fr: "Pourquoi on a construit Omnivya",
-      en: "Why we built Omnivya",
+      fr: "Omnivya",
+      en: "Omnivya",
     } as Localized,
     paragraphs: {
       fr: [
-        "Taous et moi avons créé Simplifi’ED le 4 août 2020 pour le conseil et l’ingénierie en Europe. L’écosystème s’est élargi ensuite à partir de problèmes concrets — pas d’un plan initial de holding multi-pays. En 2025, la marque Omnivya structure le hub ; Omnivya Expert regroupe les services en Europe et en Afrique. Le récit complet est sur la page Écosystème.",
-        "Ce site publie le raisonnement. Omnivya Expert porte la delivery en mission. Les deux restent séparés à dessein : l’un clarifie ; l’autre exécute sans diluer le cadre de décision.",
+        "Je suis cofondateur et CTO d’Omnivya, où je travaille sur des sujets d’architecture, de plateforme, de sécurité et de produits techniques.",
+        "Omnivya Expert porte les missions de conseil et de delivery structurées. Ce site publie le raisonnement ; Omnivya Expert porte l’exécution. Les deux restent séparés à dessein.",
       ],
       en: [
-        "Taous and I founded Simplifi’ED on 4 August 2020 for consulting and engineering in Europe. The ecosystem grew afterward from concrete problems — not from an initial multi-country holding plan. In 2025, the Omnivya brand structures the hub; Omnivya Expert gathers services across Europe and Africa. The full narrative is on the Ecosystem page.",
-        "This site publishes the reasoning. Omnivya Expert carries delivery on missions. The two stay deliberately separate: one clarifies; the other executes without diluting the decision frame.",
-      ],
-    },
-  },
-  products: {
-    title: {
-      fr: "Algérie : terrain et outils",
-      en: "Algeria: field and tools",
-    } as Localized,
-    paragraphs: {
-      fr: [
-        "L’implantation en Algérie n’était pas prévue à l’origine. Elle est venue surtout face à la pénurie de profils techniques en Europe ; la filiale s’appelait historiquement IT Challenge — SARL toujours active, nom surtout utilisé en facturation. Aujourd’hui le public parle d’Omnivya Expert.",
-        "My Dare offre un environnement de travail à Alger pour les équipes du groupe. Sanad est un SaaS local (devis, factures, contrats) construit par les équipes Omnivya Expert — outil DZ, pas le fer de lance international.",
-      ],
-      en: [
-        "Algeria was not in the original plan. It came mainly from the shortage of technical profiles in Europe; the subsidiary was historically named IT Challenge — SARL still active, name mostly used for invoicing. Publicly we speak of Omnivya Expert today.",
-        "My Dare provides a workspace in Algiers for the group’s teams. Sanad is a local SaaS (quotes, invoices, contracts) built by Omnivya Expert teams — a DZ tool, not the international flagship.",
+        "I am co-founder and CTO of Omnivya, where I work on architecture, platform, security and technical product topics.",
+        "Omnivya Expert carries structured consulting and delivery missions. This site publishes the reasoning; Omnivya Expert carries execution. The two stay deliberately separate.",
       ],
     },
   },
@@ -145,14 +111,14 @@ export const aboutConfig = {
         "Modéliser les dépendances et le risque, pas seulement les composants techniques.",
         "Réduire la charge cognitive : chaque artefact doit aider une décision concrète.",
         "Documenter les choix irréversibles et les alternatives écartées.",
-        "Construire pour les contraintes réelles : réglementaires, organisationnelles, territoriales.",
+        "Construire pour les contraintes réelles : techniques, réglementaires et organisationnelles.",
       ],
       en: [
         "Understand before automating: map the system and its real constraints.",
         "Model dependencies and risk, not just technical components.",
         "Reduce cognitive load: every artifact must support a concrete decision.",
         "Document irreversible choices and rejected alternatives.",
-        "Build for real constraints: regulatory, organizational, territorial.",
+        "Build for real constraints: technical, regulatory and organizational.",
       ],
     },
   },
@@ -229,23 +195,23 @@ export const aboutConfig = {
       {
         period: "2020",
         title: {
-          fr: "Création de Simplifi’ED",
-          en: "Simplifi’ED founded",
+          fr: "Activité de conseil et d’ingénierie",
+          en: "Consulting and engineering activity",
         },
         body: {
-          fr: "Le 4 août 2020, Taous et moi créons Simplifi’ED pour le conseil et l’ingénierie en Europe. Je suis CTO ; Taous dirige.",
-          en: "On 4 August 2020, Taous and I found Simplifi’ED for consulting and engineering in Europe. I am CTO; Taous leads.",
+          fr: "Démarrage de l’activité entrepreneuriale de conseil et d’ingénierie. Rôle de CTO sur l’architecture, les plateformes et la delivery technique.",
+          en: "Start of the entrepreneurial consulting and engineering activity. CTO role on architecture, platforms and technical delivery.",
         },
       },
       {
-        period: "2020–",
+        period: "2025",
         title: {
-          fr: "Algérie, produits, marque Omnivya",
-          en: "Algeria, products, Omnivya brand",
+          fr: "Omnivya et Omnivya Expert",
+          en: "Omnivya and Omnivya Expert",
         },
         body: {
-          fr: "Capacité de delivery en Algérie (filiale historiquement IT Challenge), puis My Dare et Sanad. En 2025, marque Omnivya (hub) et Omnivya Expert (services Europe et Afrique).",
-          en: "Delivery capacity in Algeria (subsidiary historically IT Challenge), then My Dare and Sanad. In 2025, Omnivya brand (hub) and Omnivya Expert (services Europe and Africa).",
+          fr: "Omnivya structure le cadre entrepreneurial et professionnel. Omnivya Expert porte les missions de conseil et de delivery structurées.",
+          en: "Omnivya structures the entrepreneurial and professional frame. Omnivya Expert carries structured consulting and delivery missions.",
         },
       },
     ] satisfies AboutTimelineItem[],
@@ -261,7 +227,6 @@ export const aboutConfig = {
     openSource: { fr: "Open source", en: "Open source" } as Localized,
     startHere: { fr: "Start Here", en: "Start Here" } as Localized,
     emailCta: { fr: "Envoyer un email", en: "Send an email" } as Localized,
-    omnivyaLink: { fr: "Voir Omnivya", en: "View Omnivya" } as Localized,
-    ecosystemLink: { fr: "Écosystème Omnivya", en: "Omnivya ecosystem" } as Localized,
+    omnivyaLink: { fr: "Voir Omnivya Expert", en: "View Omnivya Expert" } as Localized,
   },
 } as const;

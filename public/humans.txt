@@ -10,8 +10,8 @@ LinkedIn: /in/EtienneDeneuve
 
 /* THANKS */
 Astro — static site framework
-Omnivya — group hub / umbrella brand
-Omnivya Expert — consulting, services, engineering and delivery (Europe and Africa)
+Omnivya — entrepreneurial and professional frame
+Omnivya Expert — consulting, services, engineering and delivery
 
 /* SITE */
 Standards: HTML5, CSS, JSON-LD

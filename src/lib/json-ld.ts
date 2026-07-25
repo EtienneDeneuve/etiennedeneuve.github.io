@@ -64,7 +64,7 @@ export function personJsonLd(overrides: JsonLdObject = {}): JsonLdObject {
   };
 }
 
-/** Omnivya hub — kept as organizationJsonLd for call-site compatibility. */
+/** Organization node (#omnivya) — display name comes from siteConfig (Omnivya Expert). */
 export function organizationJsonLd(overrides: JsonLdObject = {}): JsonLdObject {
   return {
     "@type": "Organization",
@@ -72,7 +72,7 @@ export function organizationJsonLd(overrides: JsonLdObject = {}): JsonLdObject {
     name: seoConfig.organization.name,
     url: seoConfig.organization.url,
     email: seoConfig.organization.email,
-    founder: [{ "@id": ecosystemNodeId("etienne") }, { "@id": ecosystemNodeId("taous") }],
+    founder: [{ "@id": ecosystemNodeId("etienne") }],
     ...overrides,
   };
 }
@@ -274,7 +274,6 @@ export function serviceJsonLd(input: {
     url: absoluteUrl(input.url),
     serviceType: input.serviceType,
     provider: { "@id": ecosystemNodeId("omnivya-expert") },
-    areaServed: ["Europe", "Africa"],
   };
 }
 

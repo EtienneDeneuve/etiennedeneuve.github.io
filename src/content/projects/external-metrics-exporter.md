@@ -20,11 +20,11 @@ decisions_en:
   - "Expose a vendor-neutral Prometheus contract"
   - "Reduce cognitive load with actionable signals"
 principles:
-  - "Signaux utiles, pas dashboards de plus"
+  - "Exposer des signaux exploitables sans imposer un nouveau modèle de données"
   - "Neutralité fournisseur dans le contrat d’export"
   - "Découverte automatique plutôt qu’inventaire statique"
 principles_en:
-  - "Useful signals, not more dashboards"
+  - "Expose actionable signals without imposing a new data model"
   - "Vendor neutrality in the export contract"
   - "Automatic discovery rather than static inventory"
 whatExists:
@@ -33,8 +33,8 @@ whatExists:
 whatExists_en:
   - "Public repository Simplifi-ED/external-metrics-exporter"
   - "Prometheus / Kubernetes integration"
-currentState: "Production — composant publié sous l’organisation GitHub historique Simplifi-ED ; contribution publique de l’écosystème Omnivya."
-currentState_en: "Production — published under the historical Simplifi-ED GitHub org; public contribution of the Omnivya ecosystem."
+currentState: "Production — composant publié sous l’organisation GitHub historique Simplifi-ED."
+currentState_en: "Production — published under the historical Simplifi-ED GitHub org."
 limitations:
   - "Pas de métriques d’adoption (stars, downloads) présentées comme argument principal"
   - "Pas de promesse de couverture fournisseur exhaustive sans documentation à jour"
@@ -65,9 +65,9 @@ startedAt: 2023-01-01
 verified: true
 featured: true
 draft: false
-displayOrder: 3
-ecosystemRole: "preuves publiques"
-ecosystemRole_en: "public proof"
+displayOrder: 1
+ecosystemRole: "open source — observabilité"
+ecosystemRole_en: "open source — observability"
 ---
 
 External Metrics Exporter rend visibles les dépendances externes des workloads Kubernetes.

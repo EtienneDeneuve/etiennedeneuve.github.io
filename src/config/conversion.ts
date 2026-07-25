@@ -32,8 +32,8 @@ export const conversionConfig = {
     },
     omnivya: {
       label: {
-        fr: "Voir Omnivya",
-        en: "View Omnivya",
+        fr: "Voir Omnivya Expert",
+        en: "View Omnivya Expert",
       },
       href: "https://www.omnivya.fr",
       event: "cta_project_open" as ConversionEvent,
@@ -41,8 +41,8 @@ export const conversionConfig = {
     },
     booking: {
       label: {
-        fr: "Calendrier Omnivya",
-        en: "Omnivya calendar",
+        fr: "Calendrier Omnivya Expert",
+        en: "Omnivya Expert calendar",
       },
       href: "https://www.omnivya.fr",
       event: "cta_booking" as ConversionEvent,
