@@ -101,7 +101,7 @@
     "remark-toc": "^9.0.0",
     "tw-to-css": "^0.0.12",
     "typescript": "^5.6.2",
-    "unlighthouse": "^0.17.4",
+    "unlighthouse": "^0.18.0",
     "uuid": "^14.0.1"
   }
 }
