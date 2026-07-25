@@ -106,10 +106,10 @@ export const startHereConfig = {
       title: { fr: "Omnivya", en: "Omnivya" },
       paragraphs: {
         fr: [
-          "Je suis cofondateur et CTO d’Omnivya. Les missions nécessitant une capacité de delivery structurée sont portées par Omnivya Expert.",
+          "Avec Taous, nous cofondons Omnivya : elle dirige Omnivya et Omnivya Expert ; je suis CTO. Les missions nécessitant une capacité de delivery structurée sont portées par Omnivya Expert.",
         ],
         en: [
-          "I am co-founder and CTO of Omnivya. Missions that need structured delivery capacity are carried by Omnivya Expert.",
+          "With Taous, we co-found Omnivya: she leads Omnivya and Omnivya Expert; I am CTO. Missions that need structured delivery capacity are carried by Omnivya Expert.",
         ],
       },
     },

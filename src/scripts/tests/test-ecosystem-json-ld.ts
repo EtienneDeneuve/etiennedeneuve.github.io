@@ -25,7 +25,14 @@ const nodes = buildEcosystemEntityNodes("fr");
 const validation = validateEcosystemJsonLdGraph(nodes);
 for (const message of validation) fail(message);
 
-const requiredIds = ["etienne", "omnivya", "omnivya-expert", "simplified", "open-source"] as const;
+const requiredIds = [
+  "etienne",
+  "taous",
+  "omnivya",
+  "omnivya-expert",
+  "simplified",
+  "open-source",
+] as const;
 
 for (const id of requiredIds) {
   if (!nodes.some((node) => node["@id"] === ecosystemNodeId(id))) {
@@ -33,7 +40,7 @@ for (const id of requiredIds) {
   }
 }
 
-for (const hidden of ["taous", "it-challenge"] as const) {
+for (const hidden of ["it-challenge"] as const) {
   if (nodes.some((node) => node["@id"] === ecosystemNodeId(hidden))) {
     fail(`${hidden} must not appear in the public JSON-LD graph`);
   }
@@ -41,7 +48,6 @@ for (const hidden of ["taous", "it-challenge"] as const) {
 
 const serialized = JSON.stringify(nodes);
 for (const leak of [
-  "Taous",
   "Sanad",
   "My Dare",
   "IT Challenge",
@@ -58,8 +64,15 @@ for (const leak of [
 const omnivya = nodes.find((node) => node["@id"] === ecosystemNodeId("omnivya"));
 if (omnivya?.["@type"] !== "Organization") fail("Organization #omnivya must be Organization");
 if (omnivya?.name !== "Omnivya Expert") fail("Organization #omnivya must display Omnivya Expert");
-if (!Array.isArray(omnivya?.founder) || omnivya.founder.length !== 1) {
-  fail("Organization must list Etienne only as founder in the public graph");
+if (!Array.isArray(omnivya?.founder) || omnivya.founder.length !== 2) {
+  fail("Organization must list Etienne and Taous as founders in the public graph");
+}
+const founderIds = (omnivya?.founder as Array<{ "@id": string }>).map((f) => f["@id"]);
+if (
+  !founderIds.includes(ecosystemNodeId("etienne")) ||
+  !founderIds.includes(ecosystemNodeId("taous"))
+) {
+  fail("Organization founders must include #etienne and #taous");
 }
 
 const expert = nodes.find((node) => node["@id"] === ecosystemNodeId("omnivya-expert"));
@@ -80,7 +93,8 @@ const person = personJsonLd();
 const org = organizationJsonLd();
 if (person["@id"] !== ecosystemNodeId("etienne")) fail("personJsonLd @id must be #etienne");
 if (org["@id"] !== ecosystemNodeId("omnivya")) fail("organizationJsonLd @id must be #omnivya");
-if (JSON.stringify(org).includes("taous")) fail("organizationJsonLd must not reference Taous");
+if (!JSON.stringify(org).includes("taous"))
+  fail("organizationJsonLd must reference Taous as founder");
 
 const graph = buildJsonLdGraph([person, org, websiteJsonLd(), ...nodes]);
 const emitted = (graph["@graph"] as Array<Record<string, unknown>> | undefined) ?? [graph];

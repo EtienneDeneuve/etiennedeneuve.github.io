@@ -48,11 +48,11 @@ export const aboutConfig = {
     paragraphs: {
       fr: [
         "Je conçois, sécurise et rends gouvernables des systèmes numériques complexes : plateformes cloud, Kubernetes, DevSecOps, observabilité et architecture de décision.",
-        "Je suis Platform Reliability Architect et CTO. Je suis cofondateur et CTO d’Omnivya, où je travaille sur des sujets d’architecture, de plateforme, de sécurité et de produits techniques. Les missions nécessitant une capacité de delivery structurée sont portées par Omnivya Expert. Ce site publie mes principes, les preuves et le raisonnement ; ce n’est pas un catalogue commercial.",
+        "Je suis Platform Reliability Architect et CTO. Avec Taous, nous cofondons Omnivya : elle dirige Omnivya et Omnivya Expert ; je suis CTO. Les missions nécessitant une capacité de delivery structurée sont portées par Omnivya Expert. Ce site publie mes principes, les preuves et le raisonnement ; ce n’est pas un catalogue commercial.",
       ],
       en: [
         "I design, secure and make complex digital systems governable: cloud platforms, Kubernetes, DevSecOps, observability and decision architecture.",
-        "I am a Platform Reliability Architect and CTO. I am co-founder and CTO of Omnivya, where I work on architecture, platform, security and technical product topics. Missions that need structured delivery capacity are carried by Omnivya Expert. This site publishes my principles, proof and reasoning; it is not a commercial catalog.",
+        "I am a Platform Reliability Architect and CTO. With Taous, we co-found Omnivya: she leads Omnivya and Omnivya Expert; I am CTO. Missions that need structured delivery capacity are carried by Omnivya Expert. This site publishes my principles, proof and reasoning; it is not a commercial catalog.",
       ],
     },
   },
@@ -94,11 +94,11 @@ export const aboutConfig = {
     } as Localized,
     paragraphs: {
       fr: [
-        "Je suis cofondateur et CTO d’Omnivya, où je travaille sur des sujets d’architecture, de plateforme, de sécurité et de produits techniques.",
+        "Omnivya est cofondée avec Taous, qui dirige Omnivya et Omnivya Expert. J’en suis le CTO : architecture, plateforme, sécurité et produits techniques.",
         "Omnivya Expert porte les missions de conseil et de delivery structurées. Ce site publie le raisonnement ; Omnivya Expert porte l’exécution. Les deux restent séparés à dessein.",
       ],
       en: [
-        "I am co-founder and CTO of Omnivya, where I work on architecture, platform, security and technical product topics.",
+        "Omnivya is co-founded with Taous, who leads Omnivya and Omnivya Expert. I am the CTO: architecture, platform, security and technical products.",
         "Omnivya Expert carries structured consulting and delivery missions. This site publishes the reasoning; Omnivya Expert carries execution. The two stay deliberately separate.",
       ],
     },

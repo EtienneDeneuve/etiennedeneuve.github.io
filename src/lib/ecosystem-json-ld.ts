@@ -29,11 +29,12 @@ function ref(id: EcosystemJsonLdId): { "@id": string } {
 
 /**
  * Canonical ecosystem entities for JSON-LD.
- * Public graph: Etienne + Omnivya Expert + Simplifi’ED history + open source.
- * Taous / IT Challenge are not emitted on the public graph.
+ * Public graph: Etienne + Taous + Omnivya Expert + Simplifi’ED history + open source.
+ * IT Challenge is not emitted on the public graph.
  */
 export function buildEcosystemEntityNodes(locale: EcosystemLocale = "fr"): JsonLdObject[] {
   const etienne = getEntity("etienne");
+  const taous = getEntity("taous");
   const omnivya = getEntity("omnivya");
   const expert = getEntity("omnivya-expert");
   const simplified = getEntity("simplified");
@@ -55,6 +56,21 @@ export function buildEcosystemEntityNodes(locale: EcosystemLocale = "fr"): JsonL
       affiliation: ref("omnivya-expert"),
     },
     {
+      "@type": "Person",
+      "@id": ecosystemNodeId("taous"),
+      name: taous.canonicalName,
+      jobTitle:
+        locale === "en"
+          ? "Co-founder and leader, Omnivya and Omnivya Expert"
+          : "Cofondatrice et dirigeante, Omnivya et Omnivya Expert",
+      description:
+        locale === "en"
+          ? "Co-founder of Omnivya with Etienne Deneuve; leads Omnivya and Omnivya Expert."
+          : "Cofondatrice d’Omnivya avec Etienne Deneuve ; dirige Omnivya et Omnivya Expert.",
+      worksFor: ref("omnivya-expert"),
+      affiliation: ref("omnivya-expert"),
+    },
+    {
       "@type": "Organization",
       "@id": ecosystemNodeId("omnivya"),
       name: expert.canonicalName,
@@ -65,7 +81,7 @@ export function buildEcosystemEntityNodes(locale: EcosystemLocale = "fr"): JsonL
       url: expert.externalUrl ?? omnivya.externalUrl,
       sameAs: expert.externalUrl ? [expert.externalUrl] : omnivya.sameAs,
       email: seoConfig.organization.email,
-      founder: [ref("etienne")],
+      founder: [ref("etienne"), ref("taous")],
       brand: [ref("omnivya-expert")],
     },
     {
@@ -117,20 +133,24 @@ export function getEcosystemEntityNode(
   return buildEcosystemEntityNodes(locale).find((node) => node["@id"] === ecosystemNodeId(id));
 }
 
-/** Core identity nodes used on most pages — Etienne + Omnivya Expert only. */
+/** Core identity nodes used on most pages — Etienne + Taous + Omnivya Expert. */
 export function coreIdentityNodes(locale: EcosystemLocale = "fr"): JsonLdObject[] {
   const nodes = buildEcosystemEntityNodes(locale);
   return nodes.filter((node) =>
-    [ecosystemNodeId("etienne"), ecosystemNodeId("omnivya-expert")].includes(String(node["@id"]))
+    [
+      ecosystemNodeId("etienne"),
+      ecosystemNodeId("taous"),
+      ecosystemNodeId("omnivya-expert"),
+    ].includes(String(node["@id"]))
   );
 }
 
-/** About identity: same public core (no group cartography). */
+/** About identity: founders + Omnivya Expert (no product cartography). */
 export function aboutIdentityNodes(locale: EcosystemLocale = "fr"): JsonLdObject[] {
   return coreIdentityNodes(locale);
 }
 
-/** Full public entity set (no Sanad / My Dare / IT Challenge / Taous). */
+/** Full public entity set (no IT Challenge product cartography). */
 export function fullEcosystemNodes(locale: EcosystemLocale = "fr"): JsonLdObject[] {
   return buildEcosystemEntityNodes(locale);
 }
