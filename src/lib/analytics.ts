@@ -16,9 +16,6 @@ const PII_KEY =
 declare global {
   interface Window {
     __siteAnalyticsProvider?: AnalyticsProvider;
-    CookieConsent?: {
-      acceptedCategory?: (category: string) => boolean;
-    };
     dataLayer?: unknown[];
   }
 }

@@ -231,9 +231,7 @@ export function eventJsonLd(input: {
   location?: string;
   url?: string;
   eventAttendanceMode?:
-    | "OfflineEventAttendanceMode"
-    | "OnlineEventAttendanceMode"
-    | "MixedEventAttendanceMode";
+    "OfflineEventAttendanceMode" | "OnlineEventAttendanceMode" | "MixedEventAttendanceMode";
 }): JsonLdObject {
   const start =
     input.startDate instanceof Date
