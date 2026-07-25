@@ -24,7 +24,9 @@ const lastModified = remarkPluginFrontmatter.lastModified
 <a class="card" href={`/${project.id}`}>
   <span class="title">{project.data.title}</span>
   <Image
-    src={`${siteConfig.site.url}/${project.data.img}` || siteConfig.site.defaultOgImage}
+    src={project.data.img
+      ? `${siteConfig.site.url}/${project.data.img}`
+      : siteConfig.site.defaultOgImage}
     alt={project.data.img_alt || ""}
     inferSize={true}
     loading="lazy"
