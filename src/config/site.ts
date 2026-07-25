@@ -1,15 +1,13 @@
 const currentYear = new Date().getFullYear();
 const copyrightStartYear = 2015;
 
-/** Provisional until personal-site IDs are confirmed — override via env. */
-const PROVISIONAL_GA4 = "G-2Q8B9CW53L";
-const PROVISIONAL_CLARITY = "itjvvvekvr";
+/** Defaults when env is unset (local). Production builds must inject PUBLIC_* via CI secrets. */
+const DEFAULT_GA4 = "G-DH1KQ6T6XX";
+const DEFAULT_CLARITY = "xs4kgk0kth";
 
-const ga4MeasurementId = String(
-  import.meta.env.PUBLIC_GA4_MEASUREMENT_ID ?? PROVISIONAL_GA4
-).trim();
+const ga4MeasurementId = String(import.meta.env.PUBLIC_GA4_MEASUREMENT_ID || DEFAULT_GA4).trim();
 const clarityProjectId = String(
-  import.meta.env.PUBLIC_CLARITY_PROJECT_ID ?? PROVISIONAL_CLARITY
+  import.meta.env.PUBLIC_CLARITY_PROJECT_ID || DEFAULT_CLARITY
 ).trim();
 
 export const siteConfig = {
