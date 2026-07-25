@@ -1,10 +1,5 @@
 export type SpeakingFormat =
-  | "keynote"
-  | "conference"
-  | "panel"
-  | "workshop"
-  | "executive-briefing"
-  | "podcast";
+  "keynote" | "conference" | "panel" | "workshop" | "executive-briefing" | "podcast";
 
 export type LocalizedText = { fr: string; en: string };
 

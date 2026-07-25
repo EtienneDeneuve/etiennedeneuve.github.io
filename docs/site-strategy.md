@@ -266,7 +266,7 @@ Un CTA = **une action**, **un libellé persona-aware**, **une destination unique
 | Case studies      | ✅ Si validés, voix « j’ai » | ✅ Voix « nous » si co-marqué |
 | Blog technique    | ✅                           | ❌ Sauf cross-post explicite  |
 | Contact mission   | Qualification → Omnivya      | Conversion                    |
-| Footer            | © Etienne + lien Omnivya    | © Omnivya                    |
+| Footer            | © Etienne + lien Omnivya     | © Omnivya                     |
 
 ---
 
