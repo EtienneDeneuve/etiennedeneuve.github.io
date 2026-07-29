@@ -55,6 +55,32 @@ Je sépare au minimum trois canaux :
 
 La composition est le seul endroit où les deux se rencontrent. Elle dit : « en staging, image `a@sha` + chart `1.4.2` ». Elle ne prétend pas que `a` et `1.4.2` sont la même chose.
 
+Dans Flux, cette séparation peut tenir dans un même `HelmRelease`. La version du chart appartient à `chart.spec.version`; le digest de l’image reste une valeur du chart. Les noms sous `values.image` dépendent du contrat du chart :
+
+```yaml
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: checkout
+  namespace: production
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: checkout
+      version: "1.4.2"
+      sourceRef:
+        kind: HelmRepository
+        name: applications
+        namespace: flux-system
+  values:
+    image:
+      repository: registry.example.com/checkout
+      digest: sha256:8d1f...
+```
+
+Une promotion applicative ne modifie alors que `values.image.digest`. Une évolution du packaging ne modifie que `chart.spec.version`. Lorsqu’une version de chart exige une version minimale de l’application, une validation CI doit vérifier cette compatibilité avant de fusionner la nouvelle composition.
+
 Les canaux alpha / bêta / stable peuvent exister pour chacun, mais leurs critères diffèrent. Une image peut être stable après des tests applicatifs. Un chart peut exiger une validation de migration, un dry-run de CRD, ou une fenêtre de changement plateforme.
 
 ## Ce que la séparation rend possible
@@ -65,7 +91,7 @@ Corriger une régression applicative sans rouvrir le débat sur le chart. Ajuste
 
 ### Rollbacks ciblés
 
-Revenir uniquement sur l’artefact fautif. L’historique devient une suite de décisions lisibles plutôt qu’un paquet opaque.
+La séparation permet de revenir sur une seule référence de l’état désiré. Elle ne restaure ni les données migrées, ni une CRD devenue incompatible, ni les effets externes du déploiement. Le rollback reste soumis au contrat de compatibilité et au comportement du contrôleur : avec l’auto-sync Argo CD, par exemple, un rollback direct n’est pas disponible tant que la synchronisation automatique reste activée.
 
 ### Contrats de compatibilité
 
@@ -73,9 +99,9 @@ On peut enfin exprimer des règles utiles : cette version de chart exige telle g
 
 ### Audits plus courts
 
-Face à un drift, la première question n’est plus « qu’est-ce qui a changé dans le gros commit ? ». C’est « image, infra, ou les deux ? ».
+Face à une régression ou à une différence entre environnements, la première question n’est plus « qu’est-ce qui a changé dans le gros commit ? ». C’est « image, infra, ou les deux ? ». Le mot *drift* reste réservé à l’écart entre l’état désiré et l’état observé.
 
-## Une checklist de conception : à atteindre, pas à bloquer le départ
+## Une checklist de conception
 
 Avant de figer une convention GitOps, je vérifie :
 
@@ -86,12 +112,17 @@ Avant de figer une convention GitOps, je vérifie :
 - les tags humains (release notes, communication) sont-ils distincts des identifiants techniques ?
 - les critères alpha / bêta / stable sont-ils définis par canal, pas par slogan unique ?
 
-Si la réponse à plusieurs de ces points est non, la plateforme vend de la simplicité apparente au prix de l’opérabilité réelle. Pour autant, la migration n’a pas besoin d’être un big bang. On peut commencer par **un** environnement, **un** produit, deux champs explicites (image + chart) là où un seul tag suffisait. La convention s’étend ensuite.
+Si la réponse à plusieurs de ces points est non, la plateforme vend de la simplicité apparente au prix de l’opérabilité réelle.
 
-Mieux vaut deux champs explicites (image + chart), même imparfaits, qu’un monolithe de tags qu’on refuse de toucher « jusqu’à ce que la plateforme soit prête ».
+La migration ne demande pas de big bang. Sur un environnement, un produit, on remplace le tag unique par deux champs explicites (image et chart), et on regarde ce que ça change au prochain incident. La convention s’étend ensuite.
 
 ## Au-delà de Kubernetes
 
 Le même schéma apparaît dès qu’une plateforme compose un runtime et un artefact : agents CI et images d’outils, Terraform modules et versions de providers, packages et configurations déployées. Partout, **mélanger cycle de packaging et cycle de contenu** produit des promotions spectaculaires et des rollbacks confus.
 
-GitOps fonctionne mieux lorsqu’il expose des décisions, pas des amalgames. Séparer les versions d’infrastructure et d’images n’ajoute pas de complexité cosmétique. Cela rend enfin visible la complexité qui existait déjà, et qu’un seul tag avait seulement dissimulée. Mieux vaut un environnement pilote déjà dissocié que d’attendre le big bang.
+Séparer les versions d’infrastructure et d’images n’ajoute pas de complexité. Cela rend visible la complexité qui existait déjà, et qu’un seul tag dissimulait.
+
+## Sources officielles
+
+- [Flux : spécification et remédiation des HelmRelease](https://fluxcd.io/flux/components/helm/helmreleases/)
+- [Argo CD : synchronisation automatique et rollback](https://argo-cd.readthedocs.io/en/stable/user-guide/auto_sync/)

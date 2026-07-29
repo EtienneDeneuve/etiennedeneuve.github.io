@@ -284,7 +284,7 @@ export const workConfig = {
       },
       proofs: [
         { kind: "project", id: "external-metrics-exporter" },
-        { kind: "article", id: "2026-07-13-de-la-metrique-au-runbook" },
+        { kind: "article", id: "2026-07-06-observabilite-contrat-testable" },
         { kind: "article", id: "2024-09-16-managed-identities" },
       ],
       cta: {

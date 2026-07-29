@@ -75,9 +75,9 @@ Sa question centrale est plus étroite que celle de Trivy :
 
 > Ce package précis, dans cet écosystème et à cette version, appartient-il à une plage affectée connue ?
 
-Cette spécialisation est précieuse pour comprendre une divergence de correspondance. OSV permet aussi de relier des identifiants équivalents — OSV, CVE ou GHSA — qui décrivent la même vulnérabilité.
+Cette spécialisation est précieuse pour comprendre une divergence de correspondance. OSV permet aussi de relier des identifiants équivalents (OSV, CVE ou GHSA) qui décrivent la même vulnérabilité.
 
-En revanche, la qualité de la note dépend des données publiées dans l’advisory. Une entrée peut contenir un vecteur CVSS, plusieurs formes de sévérité ou aucune note exploitable. OSV-Scanner établit bien le fait technique ; il ne fabrique pas à lui seul la priorité de l’organisation.
+En revanche, la qualité de la note dépend des données publiées dans l’advisory. Une entrée peut contenir un vecteur CVSS, plusieurs formes de sévérité ou aucune note exploitable. OSV-Scanner établit une correspondance reproductible entre un package, une version et les plages affectées publiées dans OSV. Il ne démontre pas à lui seul que le code vulnérable est exploitable dans l’application.
 
 ## Snyk organise aussi la remédiation
 
@@ -89,7 +89,9 @@ Sa question devient :
 
 > Parmi les problèmes de ce portefeuille, lequel faut-il traiter en premier ?
 
-Il faut ici distinguer la sévérité technique des scores de priorisation. Le **Priority Score** ordonne les issues selon plusieurs facteurs, notamment le CVSS, les exploits connus, la reachability et la possibilité de corriger. Le **Risk Score**, disponible en accès anticipé pour Snyk Open Source et Snyk Container au moment de la publication, combine impact potentiel et probabilité d’exploitation. Les deux vont jusqu’à 1 000, mais ils ne représentent pas le même modèle.
+Il faut ici distinguer la sévérité technique des scores de priorisation. Le **Priority Score** ordonne les issues selon plusieurs facteurs, notamment le CVSS, les exploits connus, la reachability et la possibilité de corriger. Le **Risk Score**, disponible en accès anticipé pour Snyk Open Source et Snyk Container au moment de la publication, combine impact potentiel et probabilité d’exploitation.
+
+Les deux utilisent une échelle de 0 à 1 000, mais ils ne coexistent pas sur une même issue : lorsqu’il est activé et que le projet a été retesté, le Risk Score remplace le Priority Score. Il n’est pas disponible dans la CLI et, pendant cet accès anticipé, les champs API restent nommés `priority`.
 
 Les pondérations précises restent propres à Snyk. On peut auditer les signaux exposés, pas reconstruire exactement la formule. Cette limite doit rester visible lorsqu’un score propriétaire alimente une politique de sécurité.
 
@@ -134,15 +136,27 @@ Dans une chaîne CI/CD, les outils peuvent être complémentaires :
 - **OSV-Scanner** apporte une seconde lecture spécialisée sur les dépendances applicatives. Il aide à vérifier qu’une divergence vient bien du matching de version.
 - **Snyk** prend de la valeur quand plusieurs équipes doivent partager des propriétaires, des politiques, un historique et des campagnes de remédiation.
 
+Un gate Trivy minimal peut bloquer uniquement les vulnérabilités `HIGH` et `CRITICAL` qui disposent d’un correctif, après application d’un document VEX local :
+
+```shell
+trivy image \
+  --severity HIGH,CRITICAL \
+  --ignore-unfixed \
+  --vex ./checkout.openvex.json \
+  --exit-code 1 \
+  registry.example.com/checkout@sha256:8d1f...
+```
+
+`--ignore-unfixed` n’est pas une vérité universelle : il rend le gate actionnable en excluant les problèmes sans version corrigée, mais ces vulnérabilités doivent rester visibles dans un rapport non bloquant. Le VEX doit être versionné, justifié et révisable ; une suppression `not_affected` sans preuve ne vaut pas remédiation.
+
 La question utile n’est donc pas « quel scanner a raison ? », mais « quelle décision ce scanner permet-il de prendre, et avec quel niveau de preuve ? ».
 
-Une chaîne mature ne cherche pas un score unique qui ferait disparaître les contradictions. Elle conserve la provenance, normalise les identités, confronte les sources et applique sa propre politique de risque.
-
-Le bon résultat n’est pas celui qui contient le plus de rouge. C’est celui qui permet d’expliquer pourquoi un composant est considéré comme vulnérable, pourquoi sa note diffère et quelle action proportionnée doit suivre.
+Une chaîne mature ne cherche pas un score unique qui ferait disparaître les contradictions. Elle conserve la provenance, normalise les identités, confronte les sources, et sait expliquer pourquoi un composant est considéré comme vulnérable, pourquoi sa note diffère d’un outil à l’autre, et quelle action proportionnée doit suivre.
 
 ## Sources officielles
 
 - [Trivy — Vulnerability scanning, data source and severity selection](https://trivy.dev/docs/latest/scanner/vulnerability/)
+- [Trivy — Vulnerability Exploitability eXchange (VEX)](https://trivy.dev/docs/latest/supply-chain/vex/)
 - [OSV-Scanner — Supported artifacts and manifests](https://google.github.io/osv-scanner/supported-languages-and-lockfiles/)
 - [OSV-Scanner — Output formats and severity information](https://google.github.io/osv-scanner/output/)
 - [OSV Schema — Vulnerability data model](https://ossf.github.io/osv-schema/)

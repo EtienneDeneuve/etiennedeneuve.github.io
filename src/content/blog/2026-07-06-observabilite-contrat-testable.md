@@ -8,17 +8,19 @@ pillar: observability
 audience:
   - engineering-leads
   - engineers
+  - cto-cio-ciso
 tags:
   - Observability
   - Alerting
+  - SRE
   - GitOps
   - Platform Engineering
 featured: true
 draft: false
 relatedProjects: []
 relatedArticles:
-  - 2026-07-13-de-la-metrique-au-runbook
   - 2026-07-13-rendre-observables-agents-ci-ephemeres
+  - 2026-07-08-gitops-separer-versions-infra-et-images
 ---
 
 Une alerte présente dans Git n’est pas nécessairement une alerte qui fonctionne. C’est d’abord un fichier : il peut être syntaxiquement valide, relu, approuvé, fusionné et déployé sans jamais atteindre la bonne personne, sans pointer vers le bon contexte et parfois sans même être évalué par le moteur supposé le faire.
@@ -45,37 +47,34 @@ Tout était pourtant « vert » dans la CI.
 
 Le problème est simple : nous avons validé des fichiers alors qu’il fallait valider un système.
 
-Une alerte traverse plusieurs couches :
-
-signal réel → collecte → stockage → requête → évaluation → routage → notification → compréhension → action.
-
-Chaque flèche est un point de rupture.
-
-Tester uniquement la règle revient à tester une fonction au milieu d’une chaîne distribuée, puis à déclarer que le produit complet fonctionne.
+Une alerte traverse plusieurs couches, et chaque passage d’une couche à l’autre est un point de rupture. Tester uniquement la règle revient à tester une fonction au milieu d’une chaîne distribuée, puis à déclarer que le produit complet fonctionne.
 
 ## Une alerte est un contrat d’exploitation
 
-Une alerte n’est pas une requête PromQL avec un seuil.
+Une alerte n’est pas une requête PromQL avec un seuil. C’est un contrat entre un phénomène technique, un impact opérationnel et une décision humaine.
 
-C’est un contrat entre un phénomène technique, un impact opérationnel et une décision humaine.
+Ce contrat relie six maillons, chacun devant pouvoir être prouvé séparément :
 
-Ce contrat doit répondre explicitement à cinq questions.
+```text
+Phénomène réel
+  → signal collecté
+    → indicateur interprétable
+      → règle effectivement évaluée
+        → notification contextualisée
+          → décision guidée par un runbook
+```
 
-### 1. Qu’est-ce que nous protégeons ?
+### 1. Le phénomène réel
 
-Pas « la CPU dépasse 80 % ».
+Pas « la CPU dépasse 80 % ». Quelle capacité est menacée ? Quel service rendu à l’utilisateur risque de se dégrader ? Quel risque justifie d’interrompre quelqu’un ?
 
-Quelle capacité est menacée ? Quel service rendu à l’utilisateur risque de se dégrader ? Quel risque justifie d’interrompre quelqu’un ?
-
-Une saturation CPU peut être normale. Une API qui ne répond plus ne l’est pas.
+Une saturation CPU peut être normale. Une file qui ne se vide plus peut représenter une perte de capacité même si les machines semblent saines.
 
 Le phénomène technique n’est qu’un moyen de détecter un risque. Il ne doit pas devenir une fin en soi.
 
-### 2. Quel signal fait autorité ?
+### 2. Le signal qui fait autorité
 
-La règle doit s’appuyer sur une série disponible dans le système central, avec une sémantique connue et des dimensions suffisamment stables.
-
-Un nom de métrique découvert dans un environnement de développement n’est pas encore un contrat.
+La règle doit s’appuyer sur une série disponible dans le système central, avec une sémantique connue et des dimensions suffisamment stables. Un nom de métrique découvert dans un environnement de développement n’est pas encore un contrat.
 
 Il faut savoir :
 
@@ -83,18 +82,29 @@ Il faut savoir :
 - où elle est collectée ;
 - quels labels sont garantis ;
 - quelle cardinalité elle peut générer ;
-- comment elle se comporte lorsque la cible disparaît ;
-- si une recording rule ou une transformation intermédiaire est nécessaire.
+- comment elle se comporte lorsque la cible disparaît.
 
-Sans cela, la règle dépend d’un détail d’implémentation qui finira par changer.
+La question utile n’est pas « l’exporter tourne-t-il ? », mais « puis-je interroger aujourd’hui la série qui alimentera l’alerte demain ? ».
 
-### 3. Qui possède quoi ?
+### 3. L’indicateur interprétable
 
-L’équipe qui écrit la règle, celle qui maintient la plateforme d’observabilité et celle qui répond à l’incident ne sont pas toujours les mêmes.
+Les métriques brutes sont rarement de bons signaux d’astreinte. Elles sont volatiles, trop détaillées ou dépendantes de la topologie du moment. Un indicateur dérivé (taux d’échec, absence de progression, saturation durable, écart à une référence) porte davantage de sens.
 
-Cette séparation n’est pas un problème tant qu’elle est explicite.
+Les règles d’enregistrement peuvent fournir une interface métrique stable : elles pré-calculent une expression et écrivent une nouvelle série sous un nom choisi. Cette stabilité n’est pas automatique. Elle dépend d’un nommage gouverné, d’une expression dont les changements sont revus et d’un contrat explicite sur les labels conservés.
 
-Il faut distinguer :
+### 4. La règle réellement évaluée
+
+Une règle ne devient réelle que lorsqu’un moteur identifié la charge, l’évalue et expose son état. Pour Prometheus, l’API du moteur actif permet de le vérifier. Cette commande échoue si `QueueStalled` n’apparaît pas dans les règles exposées :
+
+```shell
+curl --fail --silent --show-error \
+  "$PROMETHEUS_URL/api/v1/rules?type=alert" |
+  jq -e '.data.groups[].rules[] | select(.name == "QueueStalled")'
+```
+
+Un `kubectl get PrometheusRule` ne remplace pas cette vérification : la présence de la ressource Kubernetes prouve l’intention déclarée, pas son chargement par le Prometheus interrogé.
+
+C’est aussi le maillon où se joue la question de propriété. L’équipe qui écrit la règle, celle qui maintient le moteur d’évaluation et celle qui répond à l’incident ne sont pas toujours les mêmes. La séparation entre **ownership de l’intention** et **ownership de l’exécution** est saine, à condition d’être écrite. Il faut pouvoir nommer :
 
 - le propriétaire du composant ;
 - le propriétaire du signal ;
@@ -102,27 +112,30 @@ Il faut distinguer :
 - le destinataire opérationnel ;
 - le responsable de la mise à jour du runbook.
 
-Lorsqu’une alerte n’a pas de propriétaire clair, elle devient mécaniquement la responsabilité de tout le monde, donc de personne.
+Sans cela, deux dépôts peuvent contenir des définitions plausibles tandis que personne ne sait laquelle est active. Et une alerte sans propriétaire clair devient mécaniquement la responsabilité de tout le monde, donc de personne.
 
-### 4. Quel est l’impact probable ?
+### 5. La notification contextualisée
 
-« Threshold exceeded » n’est pas un message d’exploitation.
-
-La notification doit expliquer ce que le signal implique probablement : augmentation des erreurs, saturation imminente, traitement bloqué, dépendance externe indisponible, perte de redondance ou risque de dépassement de capacité.
+« Threshold exceeded » n’est pas un message d’exploitation. La notification doit expliquer ce que le signal implique probablement : augmentation des erreurs, saturation imminente, traitement bloqué, dépendance externe indisponible, perte de redondance ou risque de dépassement de capacité.
 
 L’opérateur ne devrait pas avoir à reconstruire l’architecture du produit à partir d’un nom de métrique.
 
-### 5. Quelle est la première action sûre ?
+Elle doit aussi éviter les dimensions instables qui fragmentent artificiellement un même incident. Une alerte par instance éphémère peut produire cinquante pages pour une seule dégradation de capacité. Le bon niveau d’agrégation est celui auquel une équipe peut prendre une décision.
 
-Le runbook n’a pas besoin de résoudre tous les scénarios possibles.
+### 6. La décision guidée par un runbook
 
-Il doit permettre à une personne compétente, mais pas nécessairement experte du composant, de commencer correctement :
+Le runbook n’est pas une encyclopédie d’architecture. C’est une interface de décision sous contrainte, pour un opérateur qui connaît la plateforme sans forcément connaître ce composant précis.
 
-- vérifier l’impact réel ;
-- identifier le périmètre ;
-- exclure un faux positif ;
-- appliquer une mitigation sans aggraver la situation ;
-- escalader vers le bon propriétaire avec le bon contexte.
+Au minimum, il décrit :
+
+- le symptôme et son impact probable ;
+- les premières vérifications, dans l’ordre ;
+- les faux positifs connus ou situations normales proches ;
+- les actions réversibles autorisées ;
+- les conditions d’escalade ;
+- les éléments à conserver pour l’analyse après incident.
+
+Un runbook utile précise aussi ce qu’il ne faut pas faire. En situation de stress, une limite explicite protège autant qu’une commande de diagnostic.
 
 Une alerte qui ne permet aucune action est une notification, pas un outil d’exploitation.
 
@@ -131,6 +144,52 @@ Une alerte qui ne permet aucune action est une notification, pas un outil d’ex
 Les contrôles statiques restent utiles. Ils doivent simplement aller plus loin que `promtool check rules`.
 
 La syntaxe est le niveau zéro.
+
+Un test unitaire permet déjà de vérifier qu’une série donnée fait passer la règle en état `firing` au moment attendu. Par exemple, avec cette règle :
+
+```yaml
+# alerts.yml
+groups:
+  - name: availability
+    rules:
+      - alert: InstanceDown
+        expr: up == 0
+        for: 5m
+        labels:
+          severity: page
+        annotations:
+          summary: "Instance {{ $labels.instance }} indisponible"
+```
+
+Le scénario associé injecte dix minutes de signal à zéro et vérifie les labels et annotations produits :
+
+```yaml
+# alerts.test.yml
+rule_files:
+  - alerts.yml
+evaluation_interval: 1m
+tests:
+  - interval: 1m
+    input_series:
+      - series: 'up{job="api", instance="api-1"}'
+        values: "0x10"
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: InstanceDown
+        exp_alerts:
+          - exp_labels:
+              severity: page
+              job: api
+              instance: api-1
+            exp_annotations:
+              summary: "Instance api-1 indisponible"
+```
+
+```shell
+promtool test rules alerts.test.yml
+```
+
+Ce test ne prouve ni le routage ni la réception de la notification. Il bloque néanmoins une régression sur l’expression, la temporisation, les labels et les annotations avant le déploiement.
 
 ### Le signal doit exister
 
@@ -203,7 +262,7 @@ Un linter peut détecter les annotations absentes, génériques ou manifestement
 
 Ces contrôles ne garantissent pas que l’alerte fonctionnera. Ils garantissent au moins qu’elle n’est pas manifestement inutilisable avant même son déploiement.
 
-## Le seul vrai test reste le test de bout en bout
+## Le test de bout en bout complète les tests de règles
 
 À un moment, il faut déclencher l’alerte.
 
@@ -213,7 +272,7 @@ Le test doit parcourir la chaîne complète :
 
 phénomène réel ou signal synthétique → collecte → stockage → évaluation → Alertmanager → routage → notification → ouverture du runbook.
 
-Pas uniquement vérifier que l’expression retourne une valeur.
+Le test unitaire prouve le comportement déterministe de la règle. Le test de bout en bout vérifie ce qu’il ne couvre pas : chargement par le moteur actif, routage, livraison et utilisation du runbook.
 
 Pas uniquement appeler un webhook Teams à la main.
 
@@ -278,143 +337,39 @@ Un test de bout en bout est réalisé.
 
 La règle peut rejoindre un circuit d’astreinte uniquement lorsqu’elle a prouvé qu’elle détecte un problème important, avec suffisamment de précision pour justifier une interruption.
 
-Cette progression permet d’avancer sans attendre une plateforme parfaite, tout en évitant de transformer l’astreinte en environnement de test.
+### Étape 5 : réévaluer, et accepter de retirer
+
+Une règle promue à l’astreinte aujourd’hui peut devoir en sortir demain, parce que le service, le trafic ou l’organisation ont changé. Le déclassement fait partie du cycle au même titre que la promotion.
+
+Une règle qu’on ne peut jamais supprimer devient une dette institutionnelle : personne ne la conteste, tout le monde la subit.
+
+Ces quatre premiers niveaux évitent de transformer l’astreinte en environnement de test. Le cinquième évite d’y laisser des règles que plus personne ne défend.
 
 ## Le droit de se tromper doit faire partie du système
 
-Le contrat d’observabilité ne sera pas parfait au premier déploiement.
-
-Il ne peut pas l’être.
-
-Une plateforme complexe ne révèle pas tous ses comportements dans une spécification, un environnement de test ou une revue de code. Il faut la confronter au temps, à la charge réelle, aux incidents, aux changements d’architecture et aux usages des équipes.
+Le contrat d’observabilité ne sera pas parfait au premier déploiement. Une plateforme complexe ne révèle pas tous ses comportements dans une spécification ou une revue de code. Certains n’apparaissent qu’au pic d’activité, pendant une dégradation partielle, après un changement de dépendance, ou le jour où une autre équipe prend l’astreinte.
 
 Une règle que nous pensions pertinente produira parfois trop de bruit. Une autre déclenchera trop tard. Un seuil sera faux. Une agrégation masquera un problème. Un label supposé stable disparaîtra. Un runbook se révélera inutilisable sous pression.
 
-Ce ne sont pas nécessairement des échecs du programme d’observabilité.
+Ce ne sont pas des échecs du programme d’observabilité, à condition d’en tirer quelque chose de vérifiable :
 
-Ce sont les données qui permettent de l’améliorer.
+- une fausse alerte doit expliquer pourquoi le signal était trop sensible ;
+- une alerte manquée doit identifier le trou dans la couverture ;
+- une notification incompréhensible doit améliorer ses annotations ;
+- une escalade vers la mauvaise équipe doit corriger l’ownership et le routage ;
+- un runbook inutile doit être réécrit à partir de ce qui a réellement fonctionné pendant l’incident.
 
-Le véritable échec consiste à ne rien apprendre de ces situations, ou à maintenir une règle manifestement mauvaise simplement parce qu’elle a été validée, documentée et déployée.
-
-L’objectif n’est donc pas de réussir parfaitement dès le premier jour. L’objectif est de construire une boucle dans laquelle chaque erreur améliore le contrat suivant.
-
-**Déployer, observer, apprendre, corriger.**
-
-Puis recommencer.
-
-## Échouer pour apprendre, pas pour oublier
-
-La formule « fail fast » est souvent utilisée pour justifier le déploiement rapide de systèmes incomplets.
-
-Elle ne suffit pas.
-
-Échouer vite n’a aucune valeur si le système ne capture pas ce qui s’est passé, si personne ne revoit la règle et si les mêmes erreurs sont reproduites six mois plus tard.
-
-Le principe utile, c’est d’échouer de façon à apprendre quelque chose de vérifiable.
-
-Une fausse alerte doit permettre de comprendre pourquoi le signal était trop sensible.
-
-Une alerte manquée doit permettre d’identifier le trou dans la couverture.
-
-Une notification incompréhensible doit conduire à améliorer ses annotations.
-
-Une escalade vers la mauvaise équipe doit corriger l’ownership et le routage.
-
-Un runbook inutile doit être réécrit à partir de ce qui a réellement fonctionné pendant l’incident.
-
-L’erreur devient acceptable lorsqu’elle produit une amélioration vérifiable du système.
-
-Sans cette boucle, « fail fast » devient surtout une façon élégante de dire qu’on déploie vite des choses que personne ne maintient.
+C’est ce qui sépare une boucle d’apprentissage du simple droit à déployer vite des choses que personne ne maintient. Le véritable échec, c’est de garder une règle manifestement mauvaise parce qu’elle a été validée, documentée et déployée une fois.
 
 ## Commencer simple n’est pas un compromis honteux
 
-Une première version peut être volontairement rudimentaire :
+Une première version peut être volontairement rudimentaire : une métrique connue, une règle simple, un canal non critique, quelques annotations utiles, un runbook minimal, une équipe identifiée.
 
-- une métrique connue ;
-- une règle simple ;
-- un canal non critique ;
-- quelques annotations utiles ;
-- un runbook minimal ;
-- une équipe clairement identifiée.
+Elle suffit déjà à observer la fréquence du signal, à repérer les dimensions pertinentes et à vérifier si l’événement détecté mérite vraiment une intervention humaine.
 
-Cette version sera imparfaite. C’est normal.
-
-Elle permet déjà d’observer le comportement du signal, de comprendre sa fréquence, d’identifier les dimensions pertinentes et de vérifier si l’événement détecté mérite réellement une intervention humaine.
-
-À l’inverse, chercher à concevoir immédiatement le système d’alerting définitif produit souvent deux résultats :
-
-- rien n’est livré pendant des mois ;
-- une architecture théoriquement parfaite est déployée sans avoir appris du terrain.
-
-Une règle simple, exposée progressivement au réel et corrigée régulièrement, vaut mieux qu’une règle parfaite sur le papier qui n’a jamais rencontré la production.
-
-## L’observabilité s’apprend dans le temps
-
-Un système ne s’observe pas sur une capture instantanée.
-
-Il s’observe sur des jours, des semaines, des saisons de charge et plusieurs générations d’architecture.
-
-Certains comportements n’apparaissent que :
-
-- lors d’un pic d’activité ;
-- pendant une dégradation partielle ;
-- après une modification de dépendance ;
-- durant une maintenance ;
-- lorsque plusieurs incidents se combinent ;
-- lorsqu’une équipe différente prend l’astreinte ;
-- quand le produit change d’échelle.
-
-Il faut donc accepter qu’une règle soit créée, modifiée, désactivée, fusionnée avec une autre, puis parfois réintroduite sous une forme différente.
-
-On fait, on défait, on refait, on corrige. Ce n’est pas le signe d’une plateforme mal conçue : c’est la vie normale d’un système qu’on ajuste au fil du réel.
+Chercher à concevoir immédiatement le système d’alerting définitif produit plutôt l’inverse : rien n’est livré pendant des mois, puis une architecture parfaite sur le papier arrive en production sans avoir rien appris du terrain.
 
 Le danger commence lorsque l’on considère les règles comme des artefacts définitifs, que l’on ne touche plus parce qu’elles ont été validées une fois.
-
-## Une règle n’est jamais réellement « terminée »
-
-La définition du done ne doit pas signifier que la règle est achevée pour toujours.
-
-Elle signifie seulement qu’elle est suffisamment fiable pour entrer dans son prochain niveau d’exposition.
-
-Une règle peut être prête pour l’observation, sans être prête pour la notification.
-
-Elle peut être prête pour une notification d’équipe, sans être prête pour l’astreinte.
-
-Elle peut être prête pour l’astreinte aujourd’hui et devoir être retirée demain parce que le service, le trafic ou l’organisation ont changé.
-
-La maturité n’est donc pas un état binaire.
-
-C’est une progression :
-
-### Niveau 1 : hypothèse
-
-Nous pensons qu’un signal peut représenter un risque utile.
-
-Nous le collectons et nous l’observons.
-
-### Niveau 2 : apprentissage
-
-La règle est évaluée sans interruption opérationnelle.
-
-Nous mesurons son comportement, son bruit et sa capacité à détecter des événements réels.
-
-### Niveau 3 : action
-
-Le signal est suffisamment compris pour déclencher une action d’équipe.
-
-Le runbook et l’ownership ont été confrontés à des cas réels.
-
-### Niveau 4 : interruption
-
-Le signal est jugé assez important, fiable et actionnable pour réveiller quelqu’un.
-
-### Niveau 5 : réévaluation
-
-La règle est régulièrement remise en cause.
-
-Elle peut être ajustée, simplifiée, remplacée ou supprimée.
-
-Cette dernière étape est essentielle. Une règle qui ne peut jamais être supprimée devient une dette institutionnelle.
 
 ## La stabilité ne signifie pas l’immobilité
 
@@ -434,7 +389,7 @@ Le système continue à évoluer autour d’elle, mais son observabilité ne le 
 
 **Si l’observabilité n’évolue plus alors que le système change, elle n’est pas « terminée » : elle se déconnecte du réel.**
 
-## Une définition du done qui assume l’itération
+## Une définition du done
 
 Je considère une alerte prête pour une exploitation réelle lorsque :
 
@@ -459,30 +414,15 @@ Elle garantit que nous pouvons l’utiliser, apprendre de son comportement et la
 
 ## Moins d’alertes, mais des alertes vivantes
 
-Le but n’est pas d’alerter sur tout ce qui bouge.
+Le but n’est pas d’alerter sur tout ce qui bouge. Personne n’a besoin de 50 000 alertes, et personne ne devient plus fiable en ajoutant du bruit à une plateforme déjà complexe. Le but est de détecter les événements qui exigent une décision humaine, puis de fournir assez de contexte pour que cette décision soit rapide et sûre.
 
-Personne n’a besoin de 50 000 alertes. Personne ne veut passer sa journée à acquitter des symptômes sans impact. Personne ne devient plus fiable en ajoutant du bruit à une plateforme déjà complexe.
+La question dépasse l’alerting. Elle vaut pour les SLO, les dashboards d’astreinte, les recording rules, les tests de restauration et l’instrumentation des workloads éphémères. Partout où nous versionnons une intention dans Git, il reste à prouver qu’elle tient encore.
 
-Le but est de détecter les événements qui nécessitent réellement une décision humaine, puis de fournir assez de contexte pour que cette décision soit rapide et sûre.
+Une plateforme mature ne se reconnaît donc pas au volume de règles qu’elle héberge, mais au petit nombre de signaux auxquels les équipes font confiance, parce qu’ils ont survécu à plusieurs cycles de réalité.
 
-Mais ces alertes ne naîtront pas parfaites.
+## Sources officielles
 
-Elles deviendront fiables parce qu’elles auront été observées, testées, contestées, corrigées et parfois supprimées.
-
-Cette doctrine dépasse l’alerting.
-
-Elle s’applique aux SLO, aux dashboards d’astreinte, aux recording rules, aux tests de restauration, aux métriques des dépendances externes et à l’instrumentation des workloads éphémères.
-
-Partout où nous versionnons une intention dans Git, nous devons poser les mêmes questions :
-
-**avons-nous testé le contrat ?**
-
-**avons-nous appris de ses erreurs ?**
-
-**sommes-nous encore capables de le remettre en cause ?**
-
-Une plateforme mature ne se reconnaît pas au volume de règles qu’elle héberge.
-
-Elle se reconnaît au nombre réduit de signaux auxquels les équipes font confiance, non parce qu’ils ont été parfaitement conçus dès le départ, mais parce qu’ils ont survécu à plusieurs cycles de réalité.
-
-On les construit, on se trompe, on corrige, et on recommence tant que le système est vivant.
+- [Prometheus : tests unitaires des règles](https://prometheus.io/docs/prometheus/latest/configuration/unit_testing_rules/)
+- [Prometheus : règles d’enregistrement](https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/)
+- [Prometheus : API HTTP des règles](https://prometheus.io/docs/prometheus/latest/querying/api/#rules)
+- [Alertmanager : configuration du routage, du groupement et des inhibitions](https://prometheus.io/docs/alerting/latest/configuration/)

@@ -29,6 +29,20 @@ const legacyThinkingRedirects = Object.fromEntries(
     .map((entry) => [entry.from, entry.to])
 );
 
+/** Articles folded into another canonical piece: the old URL must 301, not 404. */
+const mergedArticles = {
+  "2026-07-13-de-la-metrique-au-runbook": "2026-07-06-observabilite-contrat-testable",
+};
+
+const mergedArticleRedirects = Object.fromEntries(
+  Object.entries(mergedArticles).flatMap(([from, to]) =>
+    [`/thinking/${from}`, `/${from}`].map((path) => [
+      path,
+      { status: 301, destination: `/thinking/${to}/` },
+    ])
+  )
+);
+
 /** URLs that must not appear in the sitemap (redirects, drafts, internal). */
 function isSitemapExcluded(page) {
   const path = page.replace(SITE_URL, "");
@@ -72,6 +86,7 @@ function isSitemapExcluded(page) {
   ) {
     return true;
   }
+  if (Object.hasOwn(mergedArticleRedirects, path.replace(/\/$/, ""))) return true;
   // Explicit legacy thinking redirects map
   for (const from of Object.keys(legacyThinkingRedirects)) {
     const normalizedFrom = from.endsWith("/") ? from : `${from}/`;
@@ -100,6 +115,7 @@ export default defineConfig({
     "/ecosystem/": { status: 301, destination: "/about/" },
     "/en/ecosystem": { status: 301, destination: "/en/about/" },
     "/en/ecosystem/": { status: 301, destination: "/en/about/" },
+    ...mergedArticleRedirects,
     ...legacyThinkingRedirects,
   },
   integrations: [
