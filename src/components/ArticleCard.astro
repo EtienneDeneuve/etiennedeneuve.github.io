@@ -5,8 +5,10 @@ import {
   getArticleLanguage,
   getArticlePath,
   getContentTypeLabel,
+  getEntryTags,
   getPillarLabel,
   getReadingTime,
+  slugifyTag,
   type ThinkingContentType,
   type ThinkingPillar,
 } from "../lib/thinking.ts";
@@ -24,9 +26,20 @@ const contentType = entry.data.contentType as ThinkingContentType;
 const readingTime = getReadingTime(entry);
 const readLabel = lang === "en" ? "Read" : "Lire";
 const prefix = lang === "en" ? "/en" : "";
+// Exposed so the static /thinking/ page can filter and sort client-side.
+const tagSlugs = getEntryTags(entry).map(slugifyTag).join(" ");
+const publishedAt = new Date(entry.data.pubDate).toISOString();
 ---
 
-<article class="surface-card interactive article-card">
+<article
+  class="surface-card interactive article-card"
+  data-pillar={pillar}
+  data-type={contentType}
+  data-lang={articleLang}
+  data-tags={tagSlugs}
+  data-date={publishedAt}
+  data-title={entry.data.title.toLocaleLowerCase(articleLang)}
+>
   <header class="card-header">
     <span class="badge badge-accent">{getContentTypeLabel(contentType, lang)}</span>
     <span class="badge">{articleLang.toUpperCase()}</span>

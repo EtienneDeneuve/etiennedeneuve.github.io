@@ -138,6 +138,8 @@ export function articleJsonLd(input: {
   dateModified?: Date | string;
   image?: string;
   draft?: boolean;
+  /** TechArticle for engineering content, Article for commentary. */
+  articleType?: "Article" | "TechArticle";
 }): JsonLdObject | null {
   if (input.draft) return null;
   const published =
@@ -149,7 +151,7 @@ export function articleJsonLd(input: {
     modifiedRaw instanceof Date ? modifiedRaw.toISOString() : new Date(modifiedRaw).toISOString();
 
   return {
-    "@type": "Article",
+    "@type": input.articleType ?? "Article",
     "@id": absoluteUrl(input.path),
     headline: input.title,
     description: input.description,

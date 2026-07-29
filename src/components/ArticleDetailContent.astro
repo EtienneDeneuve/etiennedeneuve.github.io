@@ -33,6 +33,14 @@ interface Props {
   lang: "fr" | "en";
 }
 
+/** Engineering content maps to TechArticle; commentary stays a plain Article. */
+const TECH_ARTICLE_TYPES = new Set<ThinkingContentType>([
+  "doctrine",
+  "technical-guide",
+  "architecture-decision",
+  "field-note",
+]);
+
 const { entry, lang } = Astro.props;
 const { Content, headings } = await render(entry);
 const prefix = lang === "en" ? "/en" : "";
@@ -84,6 +92,7 @@ const jsonLd = buildJsonLdGraph([
     dateModified: entry.data.lastModified ?? entry.data.updateDate,
     image: entry.data.img,
     draft: entry.data.draft,
+    articleType: TECH_ARTICLE_TYPES.has(contentType) ? "TechArticle" : "Article",
   }),
   breadcrumbJsonLd([
     { name: "Home", path: prefix || "/" },

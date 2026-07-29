@@ -3,7 +3,7 @@ title: Get-NextTrain !
 description: Découvrez comment utiliser Powershell pour interroger l'API SNCF et obtenir des informations sur les prochains trains dans votre gare locale. Facilitez-vous la vie avec l'automatisation des tâches liées aux transports en commun !
 slug: 2015/12/16/get-nexttrain
 tags:
-  - Powershell
+  - PowerShell
   - SNCF
   - API
   - Trains

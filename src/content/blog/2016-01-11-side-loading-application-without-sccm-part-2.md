@@ -11,7 +11,7 @@ tags:
   - Automatisation des tâches
   - Déploiement d'applications
   - Développement logiciel
-  - Powershell
+  - PowerShell
 ---
 
 Normalement, vous avez lu le premier article de cette petite série (partie 1 [ici :](2016/01/11/side-loading-application-without-sccm-part-1)>

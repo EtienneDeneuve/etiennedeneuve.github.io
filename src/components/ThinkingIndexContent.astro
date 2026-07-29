@@ -172,7 +172,7 @@ const jsonLd = buildJsonLdGraph([
 
     {
       featured.length > 0 && (
-        <section class="stack gap-4">
+        <section class="stack gap-4" data-featured-section>
           <h2>{labels.featured[lang]}</h2>
           <div class="cards-grid">
             {featured.map((entry) => (
@@ -186,11 +186,18 @@ const jsonLd = buildJsonLdGraph([
     <section class="stack gap-4">
       <header class="section-header">
         <h2>{labels.allArticles[lang]}</h2>
-        <p>{filtered.length} {labels.articlesCount[lang]}</p>
+        <p><span data-library-count>{filtered.length}</span> {labels.articlesCount[lang]}</p>
       </header>
-      <div class="cards-grid">
+      <div class="cards-grid" data-library-grid>
         {filtered.map((entry) => <ArticleCard entry={entry} lang={lang} />)}
       </div>
+      <p class="empty" data-library-empty hidden>
+        {
+          lang === "en"
+            ? "No article matches these filters."
+            : "Aucun article ne correspond à ces filtres."
+        }
+      </p>
     </section>
 
     {
@@ -215,7 +222,69 @@ const jsonLd = buildJsonLdGraph([
   </main>
 </BaseLayout>
 
+{
+  /* The site is statically built, so the GET filter form cannot be resolved
+    server-side. Reapply the query string here so shared URLs still work. */
+}
+<script>
+  const grid = document.querySelector<HTMLElement>("[data-library-grid]");
+  const countEl = document.querySelector<HTMLElement>("[data-library-count]");
+  const emptyEl = document.querySelector<HTMLElement>("[data-library-empty]");
+  const featuredSection = document.querySelector<HTMLElement>("[data-featured-section]");
+
+  if (grid) {
+    const params = new URLSearchParams(window.location.search);
+    const pillar = params.get("pillar");
+    const type = params.get("type");
+    const language = params.get("lang");
+    const tag = params.get("tag");
+    const sort = params.get("sort");
+
+    const cards = Array.from(grid.children).filter(
+      (node): node is HTMLElement => node instanceof HTMLElement
+    );
+
+    let visible = 0;
+    for (const card of cards) {
+      const tags = (card.dataset.tags ?? "").split(" ").filter(Boolean);
+      const matches =
+        (!pillar || card.dataset.pillar === pillar) &&
+        (!type || card.dataset.type === type) &&
+        (!language || card.dataset.lang === language) &&
+        (!tag || tags.includes(tag));
+      card.hidden = !matches;
+      if (matches) visible += 1;
+    }
+
+    if (sort && sort !== "featured") {
+      const compare = (a: HTMLElement, b: HTMLElement) => {
+        const dateA = a.dataset.date ?? "";
+        const dateB = b.dataset.date ?? "";
+        if (sort === "recent") return dateB.localeCompare(dateA);
+        if (sort === "oldest") return dateA.localeCompare(dateB);
+        return (a.dataset.title ?? "").localeCompare(b.dataset.title ?? "");
+      };
+      for (const card of [...cards].sort(compare)) grid.append(card);
+    }
+
+    const hasActiveFilters = Boolean(pillar || type || language || tag);
+    if (countEl) countEl.textContent = String(visible);
+    if (emptyEl) emptyEl.hidden = visible > 0;
+    if (featuredSection && hasActiveFilters) featuredSection.hidden = true;
+  }
+</script>
+
 <style>
+  .empty {
+    margin: 0;
+    color: var(--color-fg-muted);
+    font-size: var(--text-sm);
+  }
+  /* .surface-card and .stack set display:flex, which would defeat [hidden]. */
+  [data-library-grid] > :global([hidden]),
+  [data-featured-section][hidden] {
+    display: none;
+  }
   .hero {
     max-width: 40rem;
     padding-block: var(--space-4);
