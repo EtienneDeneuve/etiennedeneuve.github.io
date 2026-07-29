@@ -311,7 +311,13 @@ const jsonLd = buildJsonLdGraph([
   }
   .article-body {
     display: grid;
-    gap: 1.5rem;
+    gap: 1.25rem;
+  }
+  .article-body :global(.toc) {
+    order: 2;
+  }
+  .article-body .prose {
+    order: 1;
   }
   .article-body :global(.toc) {
     order: 2;
