@@ -1,5 +1,5 @@
 ---
-title: "Une alerte qui n’a jamais été testée n’existe pas"
+title: "De la métrique au runbook : construire des alertes réellement opérables"
 description: "Versionner du PromQL et du YAML ne prouve rien. Une alerte devient une capacité d’exploitation uniquement lorsque toute la chaîne a été testée."
 pubDate: 2026-07-28T09:00:00.000Z
 language: fr
