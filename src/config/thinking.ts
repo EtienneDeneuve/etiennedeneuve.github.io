@@ -37,7 +37,6 @@ export const thinkingConfig = {
   minTagArticles: 3,
   /** Editorial featured slugs (filename-based Astro slugs). */
   featuredSlugs: [
-    "2026-07-13-de-la-metrique-au-runbook",
     "2026-07-06-observabilite-contrat-testable",
     "2026-07-13-rendre-observables-agents-ci-ephemeres",
     "2026-07-08-gitops-separer-versions-infra-et-images",

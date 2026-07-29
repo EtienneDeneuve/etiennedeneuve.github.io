@@ -178,7 +178,7 @@ export const startHereConfig = {
       items: [
         {
           kind: "article",
-          id: "2026-07-13-de-la-metrique-au-runbook",
+          id: "2026-07-06-observabilite-contrat-testable",
           labelKey: "doctrine",
         },
         {
@@ -286,7 +286,7 @@ export const startHereConfig = {
       },
       items: [
         { kind: "project", id: "external-metrics-exporter" },
-        { kind: "article", id: "2026-07-13-de-la-metrique-au-runbook" },
+        { kind: "article", id: "2026-07-06-observabilite-contrat-testable" },
         { kind: "article", id: "2024-09-16-managed-identities" },
         { kind: "resource", id: "omnivya-hidden-costs-containers" },
         { kind: "article", id: "2023-07-28-megalinter-azure-devops" },
