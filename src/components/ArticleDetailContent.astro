@@ -254,7 +254,10 @@ const jsonLd = buildJsonLdGraph([
     font-size: var(--text-sm);
   }
   .article-header {
-    max-width: 68ch;
+    max-width: min(100%, calc(19rem + 3.5rem + var(--measure)));
+  }
+  .article-header h1 {
+    max-width: var(--measure-wide);
   }
   .badges {
     display: flex;
@@ -276,6 +279,7 @@ const jsonLd = buildJsonLdGraph([
   }
   .dek {
     margin: 0;
+    max-width: var(--measure);
     color: var(--color-fg-muted);
     font-size: var(--text-lg);
     line-height: 1.55;
@@ -307,7 +311,7 @@ const jsonLd = buildJsonLdGraph([
   }
   .article-body {
     display: grid;
-    gap: 1.25rem;
+    gap: 1.5rem;
   }
   .article-body :global(.toc) {
     order: 2;
@@ -317,9 +321,8 @@ const jsonLd = buildJsonLdGraph([
   }
   @media (min-width: 60em) {
     .article-body {
-      grid-template-columns: minmax(200px, 240px) minmax(0, 68ch);
-      column-gap: clamp(1.5rem, 2.5vw, 2.5rem);
-      justify-content: center;
+      grid-template-columns: minmax(17rem, 19rem) minmax(0, 1fr);
+      column-gap: clamp(2rem, 4vw, 3.5rem);
       align-items: start;
     }
     .article-body :global(.toc),
