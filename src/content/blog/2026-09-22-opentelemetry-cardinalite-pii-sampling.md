@@ -1,6 +1,6 @@
 ---
-title: "OpenTelemetry : cardinalité, PII et sampling, les pièges qui arrivent après"
-description: "Une bonne télémétrie peut devenir toxique si on ne maîtrise pas les dimensions, les données sensibles et l’échantillonnage. Retour terrain sur les erreurs qui coûtent cher."
+title: "OpenTelemetry : 400 000 bases, cardinalité et autres pièges de télémétrie"
+description: "Une dimension utile dans une trace peut devenir un désastre dans une métrique. Retour terrain sur la cardinalité, les PII et le sampling."
 pubDate: 2026-09-22T21:40:00.000Z
 language: fr
 contentType: field-note
@@ -26,318 +26,142 @@ relatedArticles:
   - 2026-09-22-opentelemetry-exploiter-la-plateforme
 ---
 
-> Série **OpenTelemetry en production**, 3/4. Le précédent : [instrumenter environ 200 services](/2026-09-22-opentelemetry-instrumenter-200-services). La suite : [exploiter réellement la plateforme](/2026-09-22-opentelemetry-exploiter-la-plateforme).
+> Série **OpenTelemetry en production**, 3/4. Le précédent : [instrumenter environ 200 services](/2026-09-22-opentelemetry-instrumenter-200-services). La suite : [exploiter la plateforme](/2026-09-22-opentelemetry-exploiter-la-plateforme).
 
-400 000 bases.
+On avait mis le nom de la base dans les traces C++.
 
-Et nous avions ajouté le nom de la base dans les traces.
+Sur le papier, c’était une bonne idée. Pour diagnostiquer un appel SQL, savoir quelle base est concernée aide beaucoup.
 
-Sur le moment, l’idée paraissait parfaitement logique.
+Le détail qui change tout : il y en a environ 400 000.
 
-Quand une application parle à autant de bases différentes, savoir laquelle est concernée par une opération est extrêmement utile pour le diagnostic.
+Et derrière les traces, Tempo générait aussi des métriques envoyées vers VictoriaMetrics.
 
-Le problème n’était pas la trace.
+C’est comme ça qu’une information utile dans une trace est devenue un très bon moyen de faire exploser la cardinalité.
 
-Le problème était ce que cette information allait devenir ensuite.
+## Une trace et une métrique n’ont pas le même contrat
 
-## Une dimension utile n’est pas forcément une bonne dimension partout
+Une trace peut contenir beaucoup de contexte. C’est même son intérêt.
 
-Tempo peut générer des métriques à partir des spans.
+Une métrique fonctionne autrement. Une série est définie par son nom et ses labels. Si un label peut prendre des centaines de milliers de valeurs, on crée énormément de séries.
 
-C’est très pratique.
+Le problème n’était donc pas "le nom de la base est une mauvaise donnée".
 
-Le metrics-generator peut notamment produire des métriques RED dérivées des traces, que l’on envoie ensuite vers un backend de métriques comme VictoriaMetrics.
+Le problème était de laisser cette donnée dynamique arriver jusqu’à la génération de métriques comme si elle avait la même valeur partout.
 
-Mais cela introduit une transformation fondamentale :
+C’est un piège assez classique avec les pipelines modernes : on pense au signal que l’on produit, pas toujours aux transformations qu’il subit ensuite.
 
-une information qui vivait dans une trace peut devenir une dimension de série temporelle.
+Un UUID de requête, un identifiant utilisateur, un nom de job généré ou une URL complète peuvent être très utiles dans une trace. Comme label de métrique, c’est une autre histoire.
 
-Et là, les règles changent.
+## La cardinalité se traite dans toute la chaîne
 
-Une trace est un événement riche.
+Dans notre cas, on a repris le traitement de l’information liée aux bases pour éviter qu’elle produise une dimension métrique non bornée.
 
-Une métrique est une série identifiée par un nom et un ensemble de labels.
+Je garde volontairement le détail d’implémentation pour une mise à jour, parce que je préfère revalider exactement la correction appliquée plutôt que raconter une version approximative.
 
-Si l’un de ces labels possède des centaines de milliers de valeurs différentes, la cardinalité explose.
+Le principe, lui, est simple : **une donnée n’a pas besoin d’avoir le même niveau de détail dans les traces, les logs et les métriques**.
 
-C’est exactement le genre de problème que nous avons rencontré.
+C’est probablement l’un des changements de modèle mental les plus utiles avec OpenTelemetry.
 
-L’information "nom de la base" était utile pour comprendre une trace particulière.
+On ne définit pas seulement un schéma de trace. On définit une donnée qui va potentiellement être enrichie, filtrée, transformée, échantillonnée et envoyée vers plusieurs backends.
 
-Elle était beaucoup moins sympathique lorsqu’elle se retrouvait impliquée dans la génération de métriques.
+Il faut regarder la chaîne entière.
 
-## Le pipeline transforme la donnée
+## Les IDs dynamiques sont suspects par défaut
 
-C’est probablement la leçon la plus importante de cet incident.
+À partir de cet incident, les attributs très dynamiques sont devenus beaucoup plus faciles à repérer.
 
-Quand on ajoute un attribut à une trace, il ne faut pas seulement se demander :
-
-> "Est-ce que cette information est utile ici ?"
-
-Il faut aussi se demander :
-
-> "Qu’est-ce que cette information peut devenir plus loin ?"
-
-Un identifiant utilisateur.
-
-Un UUID de requête.
-
-Un nom de job généré dynamiquement.
-
-Un chemin complet.
-
-Un nom de base parmi plusieurs centaines de milliers.
-
-Tous peuvent être parfaitement utiles dans une trace ou dans un log.
-
-Tous peuvent être catastrophiques comme label de métrique.
-
-La cardinalité n’est donc pas uniquement un sujet Prometheus.
-
-C’est un sujet de **modélisation de la télémétrie de bout en bout**.
-
-## La bonne réaction n’est pas toujours de supprimer l’information
-
-Lorsque ce genre de problème arrive, la réponse instinctive est souvent de supprimer complètement l’attribut.
-
-Ce n’est pas nécessairement le bon choix.
-
-Une donnée peut avoir beaucoup de valeur pour les traces tout en devant être exclue des métriques dérivées.
-
-L’objectif est donc de décider à quel niveau l’information reste pertinente.
-
-Dans notre cas, nous avons retravaillé la manière de traiter l’information liée aux bases pour éviter qu’elle génère une cardinalité non bornée dans la partie métrique.
-
-Le détail précis de cette correction dépend de la configuration du pipeline et mérite d’être documenté séparément.
-
-Mais la règle générale est déjà claire :
-
-**la richesse des traces ne doit pas être copiée naïvement dans le modèle de labels des métriques.**
-
-## Les identifiants dynamiques sont les suspects habituels
-
-Les bases n’étaient pas le seul sujet.
-
-Comme souvent, les identifiants qui changent constamment sont les premiers candidats aux problèmes de cardinalité.
-
-On retrouve notamment :
+Quelques candidats évidents :
 
 - identifiants de requête ;
-- identifiants utilisateurs ;
-- identifiants de job ;
+- utilisateurs ;
 - UUID ;
+- noms de jobs éphémères ;
+- chemins ou URLs contenant des IDs ;
 - noms de ressources générés ;
-- URLs complètes ;
-- noms de fichiers ou de traitements contenant des valeurs dynamiques.
+- identifiants de bases, fichiers ou traitements très nombreux.
 
-Le piège vient du fait que ces valeurs donnent souvent l’impression d’améliorer le diagnostic.
+Je ne dis pas qu’il faut les supprimer partout. Dans une trace, ils peuvent être essentiels.
 
-Et c’est vrai dans une trace individuelle.
+Je dis qu’il faut savoir où ils finissent.
 
-Mais une métrique n’a généralement pas besoin de savoir qu’une requête particulière a duré 170 ms.
+La différence entre "je peux retrouver cette requête" et "je crée une série pour chaque requête" est assez importante.
 
-Elle a besoin de savoir que le groupe de requêtes correspondant à une opération ou un service présente telle distribution de latence.
+## Enrichir les logs fait aussi remonter les PII
 
-La distinction paraît évidente lorsqu’elle est formulée ainsi.
+L’autre sujet qui arrive vite quand on améliore la corrélation, ce sont les données sensibles.
 
-Elle l’est beaucoup moins lorsque l’on construit progressivement une instrumentation sur plusieurs centaines de services.
+Pour relier logs et traces, on a modifié une bibliothèque commune et ajouté le contexte nécessaire. Très pratique pour le debug, mais ça augmente aussi la quantité d’information qui circule.
 
-## Les PII arrivent très vite dans les logs
+On a donc ajouté du filtrage à deux niveaux :
 
-La même migration a posé un autre problème : les données sensibles.
+- dans les bibliothèques communes quand on contrôle la production du log ;
+- dans la collecte, comme deuxième filet.
 
-Lorsque l’on améliore la corrélation entre logs et traces, on enrichit naturellement les événements.
+On filtre notamment des PII, des RIB et d’autres données sensibles avec des règles et des expressions régulières.
 
-Et plus on enrichit, plus on augmente la probabilité de transporter des données qu’on ne veut pas voir finir dans un backend d’observabilité.
+La regex n’est évidemment pas une politique de sécurité à elle seule. Elle ne devine pas qu’un texte libre contient une information personnelle, et elle ne connaît pas la sensibilité métier d’un champ interne.
 
-Nous avons donc introduit du filtrage pour les PII, les RIB et d’autres informations sensibles.
+Le meilleur filtre reste encore de ne pas produire la donnée quand elle n’est pas nécessaire.
 
-Le filtrage se fait à deux niveaux.
+Mais sur du brownfield, avoir un deuxième contrôle dans le pipeline évite quelques mauvaises surprises.
 
-D’abord dans les bibliothèques communes lorsque nous contrôlons la production du log.
+## Tout garder n’améliore pas forcément l’observabilité
 
-Ensuite dans la couche de collecte, comme seconde protection.
+Les traces posent ensuite une autre question : combien en garder ?
 
-Cette double approche est volontaire.
+En production, on échantillonne le trafic courant. Un ordre de grandeur autour de 10 % donne déjà beaucoup de matière sur une plateforme active.
 
-Le meilleur endroit pour empêcher une donnée sensible d’exister reste le code qui produit le log.
+Ce chiffre n’est pas une recommandation universelle. Dix pour cent d’un petit service et dix pour cent d’une plateforme très chargée ne représentent pas du tout le même volume.
 
-Mais dans un environnement brownfield, il est difficile de garantir que chaque chemin historique respecte immédiatement cette règle.
+L’idée importante est ailleurs : stocker 100 % des traces n’est pas automatiquement un signe de maturité.
 
-Le collecteur devient donc un filet supplémentaire.
+Ça augmente le réseau, le stockage, l’ingestion côté SaaS et la charge sur les backends. Si on finit par dégrader le pipeline ou limiter la rétention parce qu’on a voulu tout conserver, on n’a rien gagné.
 
-## Les expressions régulières sont utiles, mais ce n’est pas une politique de sécurité
+## Le cas "toutes les erreurs + 10 % du reste"
 
-Une partie du filtrage repose sur des expressions régulières.
+C’est la politique qu’on vise naturellement : garder les erreurs, puis un échantillon du trafic normal.
 
-C’est pratique pour certaines familles de données : formats de comptes bancaires, identifiants structurés ou motifs reconnaissables.
+Il faut juste être précis sur ce que la configuration garantit réellement.
 
-Mais il ne faut pas confondre cette protection avec une vraie gouvernance des données.
+Avec du head sampling probabiliste, la décision est prise au début de la trace. On ne sait pas forcément encore si le traitement finira en erreur. Un simple "10 %" ne peut donc pas garantir qu’on conservera 100 % des traces qui termineront en erreur.
 
-Une regex ne sait pas toujours reconnaître qu’un champ de texte libre contient une information personnelle.
+Pour obtenir cette propriété, il faut une décision plus tardive, typiquement du tail sampling, ou un mécanisme équivalent.
 
-Elle ne sait pas non plus que tel identifiant interne est considéré comme sensible dans un contexte particulier.
+Chez nous, le sampling est centralisé autour de l’instrumentation gérée par l’Operator. C’est pratique pour faire évoluer la politique sans modifier les services un par un. Mais centraliser un réglage ne change pas sa sémantique.
 
-Le filtrage technique doit donc compléter des règles plus simples :
+C’est un point que je préfère expliciter : il y a une différence entre la politique qu’on veut et celle que le pipeline garantit vraiment.
 
-- éviter de logger ce qui n’est pas nécessaire ;
-- préférer des champs explicitement connus ;
-- limiter les attributs ajoutés aux spans ;
-- documenter les informations autorisées ;
-- traiter le collecteur comme un contrôle supplémentaire, pas comme le seul garde-fou.
+## Trois budgets plutôt qu’un seul
 
-OpenTelemetry standardise très bien le transport.
+Depuis, je regarde la télémétrie avec trois budgets.
 
-Il ne décide pas à notre place ce que nous avons le droit de transporter.
+**Le volume** : combien de données peut-on transporter et stocker sans dégrader la plateforme ni rendre la facture absurde ?
 
-## Tout conserver n’est pas un objectif
+**La cardinalité** : combien de dimensions différentes peut-on créer avant que les backends commencent à souffrir ?
 
-Une fois la collecte fiabilisée, une autre tentation apparaît : conserver toutes les traces.
+**La sensibilité** : quelles données ont réellement le droit de sortir de l’application et d’être copiées dans les systèmes d’observabilité ?
 
-Techniquement, c’est séduisant.
+Ces trois budgets ne se recouvrent pas.
 
-On se dit que si une trace existe, elle pourrait peut-être servir un jour.
+Un champ peut être très peu volumineux et tuer la cardinalité. Un autre peut être peu cardinal mais contenir une PII. Un troisième peut être parfaitement sûr et simplement inutile.
 
-À l’échelle d’une plateforme importante, ce raisonnement devient vite coûteux.
+OpenTelemetry simplifie beaucoup le transport. Il ne dispense pas de modéliser les données.
 
-Le stockage augmente.
+## Le critère utile : est-ce que ce signal aide vraiment ?
 
-Le réseau augmente.
+Depuis cette migration, je me méfie davantage du "on l’a, donc on le garde".
 
-Les backends travaillent davantage.
+Une donnée d’observabilité a un coût de collecte, de stockage, de sécurité et de requête. Elle doit apporter quelque chose en face.
 
-Les requêtes deviennent plus lourdes.
+Le nom d’une base peut rester très utile dans une trace détaillée et ne jamais devenir un label de métrique. Une information personnelle peut ne jamais sortir du service. Une trace normale peut être échantillonnée sans perdre la compréhension générale du système.
 
-Le coût SaaS peut également augmenter très vite lorsqu’une partie des données est envoyée vers des solutions facturées à l’ingestion.
+C’est moins spectaculaire que "collect everything", mais beaucoup plus exploitable.
 
-L’objectif n’est donc pas de maximiser le volume.
-
-L’objectif est de conserver suffisamment de signal pour comprendre le système.
-
-## En production, 10 % peut déjà représenter énormément
-
-Dans notre cas, nous avons choisi d’échantillonner fortement le trafic courant en production.
-
-Un ordre de grandeur autour de 10 % du trafic normal apporte déjà beaucoup d’information sur une plateforme active.
-
-Ce ratio n’est pas une règle universelle.
-
-Sur un service qui reçoit dix requêtes par minute, 10 % peut être trop faible.
-
-Sur une plateforme qui en reçoit des milliers par seconde, cela peut déjà représenter énormément de données.
-
-Le bon ratio dépend du volume, de la diversité des parcours et de ce qu’on cherche à diagnostiquer.
-
-Le point important est surtout d’accepter que **100 % n’est pas automatiquement la meilleure qualité d’observabilité**.
-
-Un pipeline saturé par des données peu utiles observe moins bien qu’un pipeline correctement dimensionné avec un échantillon pertinent.
-
-## "Toutes les erreurs + 10 % du reste" demande une nuance importante
-
-Une politique très intuitive consiste à vouloir :
-
-- toutes les erreurs ;
-- environ 10 % du trafic normal.
-
-C’est une bonne intention.
-
-Mais sa mise en œuvre dépend fortement du moment où la décision de sampling est prise.
-
-Avec du head sampling, la décision est prise au début de la trace.
-
-À ce moment-là, on ne sait pas nécessairement encore si le traitement finira en erreur.
-
-Un simple sampler probabiliste configuré à 10 % ne peut donc pas garantir à lui seul que toutes les traces en erreur seront conservées.
-
-Pour garantir une politique réellement basée sur le résultat final de la trace, il faut prendre la décision plus tard, par exemple avec du tail sampling, ou utiliser une stratégie équivalente qui dispose d’assez d’information avant de décider.
-
-C’est un détail d’architecture important.
-
-Il y a une différence entre :
-
-**"notre intention est de conserver toutes les erreurs"**
-
-et :
-
-**"notre pipeline garantit que toutes les traces en erreur sont conservées".**
-
-Les deux phrases ne décrivent pas la même propriété.
-
-## Centraliser la politique reste utile
-
-Nous avons cherché à centraliser autant que possible la politique de sampling via l’instrumentation gérée autour de l’OpenTelemetry Operator.
-
-Cela permet d’éviter que chaque service porte sa propre valeur, son propre mécanisme et son propre cycle de modification.
-
-La centralisation simplifie énormément l’exploitation.
-
-Mais elle ne dispense pas de comprendre le type de sampling effectivement appliqué.
-
-Un paramètre centralisé mais mal compris reste un paramètre mal compris.
-
-Cette remarque vaut d’ailleurs pour toute la stack d’observabilité.
-
-L’unification de la configuration réduit la dispersion.
-
-Elle ne remplace pas le modèle mental.
-
-## Les trois budgets à surveiller
-
-Avec le recul, je trouve utile de raisonner avec trois budgets distincts.
-
-### Budget de volume
-
-Combien de données sommes-nous prêts à transporter et stocker ?
-
-Cela couvre le débit OTLP, les logs, les traces et les métriques dérivées.
-
-### Budget de cardinalité
-
-Combien de séries différentes pouvons-nous produire sans rendre le backend inefficace ou coûteux ?
-
-C’est ici que les identifiants dynamiques deviennent dangereux.
-
-### Budget de sensibilité
-
-Quelles informations sommes-nous prêts à faire circuler dans la chaîne d’observabilité ?
-
-Ce budget n’est pas financier. Il concerne le risque.
-
-Ces trois budgets se croisent constamment.
-
-Un champ peut être peu volumineux mais très cardinal.
-
-Un autre peut être peu cardinal mais contenir une PII.
-
-Un troisième peut être parfaitement sûr mais totalement inutile.
-
-La télémétrie doit donc être gouvernée comme n’importe quelle autre donnée de production.
-
-## Le bon objectif est une télémétrie utile, pas maximale
-
-Je retiens surtout ceci de cette phase.
-
-Plus d’observabilité n’est pas toujours mieux.
-
-Plus de traces, plus de labels et plus de logs peuvent au contraire rendre le système moins exploitable.
-
-Une plateforme mature sait aussi dire non à une donnée.
-
-Elle sait qu’un attribut peut rester dans une trace mais ne pas devenir une métrique.
-
-Elle sait qu’un log peut être utile sans contenir un identifiant personnel.
-
-Elle sait qu’un échantillon peut donner suffisamment de visibilité sans stocker chaque requête.
-
-Et surtout, elle comprend que ces choix doivent être faits avant que les backends commencent à souffrir.
-
-Parce que lorsque la cardinalité explose, le prochain sujet n’est plus la qualité des traces.
-
-Le prochain sujet devient la survie de la plateforme d’observabilité elle-même.
+Et une fois ces volumes sous contrôle, il reste encore à faire tourner correctement les backends qui les reçoivent.
 
 ## Suite
 
-[4/4 : OpenTelemetry est open source. Exploiter correctement la plateforme ne l’est pas](/2026-09-22-opentelemetry-exploiter-la-plateforme)
+[4/4 : OpenTelemetry en production : la stack open source qu’il faut quand même opérer](/2026-09-22-opentelemetry-exploiter-la-plateforme)
 
 ## Sources officielles
 
