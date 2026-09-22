@@ -9,6 +9,7 @@ import type { SeoLang } from "../config/seo.ts";
 interface Props {
   lang: SeoLang;
   title: string;
+  seoTitle?: string;
   description: string;
   entries: ThinkingArticle[];
   facetLabel: string;
@@ -16,7 +17,7 @@ interface Props {
   alternates?: { lang: SeoLang; href: string }[];
 }
 
-const { lang, title, description, entries, facetLabel, path, alternates } = Astro.props;
+const { lang, title, seoTitle, description, entries, facetLabel, path, alternates } = Astro.props;
 const prefix = lang === "en" ? "/en" : "";
 const sorted = sortArticles(entries, "featured");
 
@@ -43,7 +44,7 @@ const jsonLd = buildJsonLdGraph([
 ---
 
 <BaseLayout
-  title={title}
+  title={seoTitle ?? title}
   description={description}
   lang={lang}
   path={facetPath}
