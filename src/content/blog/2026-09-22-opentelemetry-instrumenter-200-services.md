@@ -28,7 +28,7 @@ relatedArticles:
 
 Une architecture propre sur un slide, c’est facile. La faire rentrer dans environ 200 services dont certains ont quinze ans, c’est autre chose.
 
-Il y avait plusieurs langages, des bibliothèques communes historiques et une couverture de tests correcte par endroits, moins rassurante ailleurs. Rien d’exceptionnel pour une application qui a beaucoup vécu.
+Il y avait plusieurs langages, des bibliothèques communes historiques et des tests corrects par endroits, plus légers ailleurs. L’application a quinze ans, je ne vais pas faire semblant d’être surpris.
 
 L’erreur aurait été de transformer la migration OpenTelemetry en refonte générale. On aurait gagné un beau programme de trois ans et probablement perdu l’objectif initial.
 
