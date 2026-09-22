@@ -1,6 +1,6 @@
 ---
-title: "Comment j’ai accompagné l’instrumentation OpenTelemetry d’environ 200 services"
-description: "Retour terrain sur une migration brownfield : task force, ateliers, assistants de code, conventions communes et validation progressive sans refonte générale."
+title: "OpenTelemetry sur 200 services : couvrir vite sans refaire quinze ans de code"
+description: "Sur une application brownfield, l’enjeu n’était pas de refaire l’instrumentation parfaite service par service, mais de donner aux équipes un cadre commun qu’elles pouvaient appliquer vite."
 pubDate: 2026-09-22T21:30:00.000Z
 language: fr
 contentType: field-note
@@ -26,247 +26,111 @@ relatedArticles:
 
 > Série **OpenTelemetry en production**, 2/4. Le début : [pourquoi j’ai proposé OpenTelemetry](/2026-09-22-opentelemetry-pourquoi-je-lai-propose). La suite : [cardinalité, PII et sampling](/2026-09-22-opentelemetry-cardinalite-pii-sampling).
 
-Sur un schéma d’architecture, instrumenter 200 services tient dans une flèche.
+Une architecture propre sur un slide, c’est facile. La faire rentrer dans environ 200 services dont certains ont quinze ans, c’est autre chose.
 
-Dans la vraie vie, une partie de ces services a quinze ans d’histoire.
+Il y avait plusieurs langages, des bibliothèques communes historiques et une couverture de tests correcte par endroits, moins rassurante ailleurs. Rien d’exceptionnel pour une application qui a beaucoup vécu.
 
-Il y a plusieurs langages, plusieurs générations de code, des bibliothèques communes qui n’ont pas toutes été conçues pour l’observabilité moderne, et une couverture de tests qui ressemble à celle de beaucoup d’applications historiques : suffisante pour avancer, mais pas assez pour prétendre qu’on peut modifier n’importe quoi sans précaution.
+L’erreur aurait été de transformer la migration OpenTelemetry en refonte générale. On aurait gagné un beau programme de trois ans et probablement perdu l’objectif initial.
 
-Le piège aurait été de transformer OpenTelemetry en grand programme de refonte.
+J’ai donc proposé de faire l’inverse : définir un socle suffisamment propre, aider les équipes à l’appliquer partout, puis enrichir les traces là où ça apporte vraiment quelque chose.
 
-Ce n’était ni nécessaire, ni réaliste.
+## Couverture d’abord
 
-Mon rôle a donc surtout consisté à construire un cadre qui permette aux équipes de faire évoluer l’instrumentation rapidement, sans leur demander de réécrire leurs services.
+Au premier passage, je voulais surtout vérifier quelques invariants :
 
-## Le premier objectif était la couverture
+- le service émet bien ses traces ;
+- le contexte se propage ;
+- les erreurs remontent ;
+- les appels HTTP et SQL sont visibles ;
+- les logs peuvent être corrélés avec la trace ;
+- l’instrumentation ne change pas le comportement du service.
 
-Dans un système brownfield, on peut facilement passer trois semaines à définir le modèle de traces parfait pour six services.
+Ce n’est pas très glamour, mais avec 200 services, ça donne déjà énormément de valeur.
 
-Pendant ce temps, les 194 autres continuent à produire peu ou pas de télémétrie exploitable.
+On peut toujours passer trois semaines à dessiner la taxonomie parfaite des spans d’un domaine métier. Pendant ce temps-là, le reste de l’application reste aveugle.
 
-J’ai donc poussé une logique assez simple : **obtenir une instrumentation cohérente sur l’ensemble du parc avant de chercher la sophistication partout**.
+Sur du brownfield, je préfère une couverture correcte et homogène, puis améliorer les endroits où les équipes ont réellement besoin de plus de contexte.
 
-Cela ne veut pas dire instrumenter n’importe comment.
+## Une task force avec la R&D
 
-Cela veut dire décider d’un socle minimum, le rendre reproductible, puis améliorer la qualité au fur et à mesure que les usages deviennent réels.
+On a monté une petite task force pour aider les équipes à avancer vite sans centraliser tout le travail chez quelques personnes.
 
-Le premier passage devait notamment répondre à des questions basiques :
+Concrètement : ateliers, exemples dans les différents langages, accompagnement sur les premières PR, déploiement en dev, vérification des signaux, puis corrections avec l’équipe concernée.
 
-- le service émet-il correctement ses traces ?
-- les identifiants de corrélation sont-ils présents ?
-- les erreurs sont-elles visibles ?
-- les appels externes et SQL sont-ils correctement représentés ?
-- les logs peuvent-ils être reliés au contexte de trace ?
-- le service se comporte-t-il exactement comme avant après instrumentation ?
+Le changement restait le plus petit possible. Si on pouvait ajouter l’instrumentation sans réorganiser le service, on ne réorganisait pas le service.
 
-Ce dernier point est essentiel.
+Sur une application ancienne, c’est un principe qui évite beaucoup de dérives : une migration d’observabilité n’est pas une excuse pour corriger en même temps tout ce qu’on n’aime pas dans le code.
 
-Une migration d’observabilité n’a aucune valeur si elle introduit des régressions dans le produit qu’elle est censée aider à comprendre.
+## Cursor et Claude ont vraiment aidé
 
-## Une task force plutôt qu’un document de 80 pages
+On a aussi préparé un skill et des instructions pour les assistants de code utilisés par les équipes.
 
-Nous avons mis en place une petite task force pour accompagner la R&D.
+Le but n’était pas de demander à Cursor ou Claude "mets OpenTelemetry là-dedans" et de prendre la réponse telle quelle. Ça aurait surtout donné 200 variantes.
 
-L’objectif n’était pas de devenir propriétaire de chaque service à la place des équipes.
+On leur donnait la manière dont **nous** voulions intégrer le SDK, les patterns à conserver et le type de changement acceptable.
 
-Il fallait plutôt réduire le coût de la migration pour elles.
+Ensuite, l’outil faisait très bien la partie répétitive : trouver le point d’initialisation, ajouter le SDK, propager le contexte, reprendre un pattern déjà validé.
 
-Nous avons donc travaillé avec plusieurs leviers en parallèle :
+La PR restait relue normalement, puis déployée en dev.
 
-- ateliers dédiés pour expliquer OpenTelemetry et les conventions retenues ;
-- exemples concrets dans les langages utilisés ;
-- aide directe sur les premières implémentations ;
-- revue des PR avec les équipes ;
-- validation en environnement de développement ;
-- consignes réutilisables dans les assistants de code.
+L’IA a accéléré l’exécution. Elle n’a pas remplacé la convention ni la validation.
 
-Ce dernier point a beaucoup accéléré le travail.
+## Les traces ont trouvé des problèmes très concrets
 
-## Utiliser Cursor ou Claude comme multiplicateur, pas comme architecte
+La partie C++ est probablement le meilleur exemple.
 
-Pour une migration de ce type, un assistant de code est particulièrement efficace sur les tâches répétitives.
+Une fois les traces en place, on a retrouvé des requêtes SQL mal gérées qui contribuaient à faire monter la RAM et le CPU. On a aussi vu des appels répétés qui auraient dû être cachés.
 
-Il peut retrouver les points d’initialisation, ajouter un SDK, injecter une configuration, propager un contexte ou reproduire un pattern déjà validé.
+Rien de très exotique. Justement.
 
-Mais je ne voulais surtout pas que chaque développeur demande simplement :
+Une métrique montre facilement qu’un service consomme trop. La trace donne le chemin qui explique pourquoi.
 
-> "Ajoute OpenTelemetry dans ce service."
+C’est aussi ce qui a fait que la R&D a assez vite accroché au sujet. On ne leur demandait plus d’instrumenter "pour l’observabilité". Ils pouvaient utiliser les traces pour comprendre des comportements qu’ils cherchaient déjà à expliquer.
 
-Cette consigne laisse trop de décisions ouvertes.
+## Les spans métier viennent après
 
-Nous avons plutôt préparé un skill ou un ensemble d’instructions décrivant **comment nous voulions qu’OpenTelemetry soit implanté dans ce code**.
+L’auto-instrumentation donne surtout une vision technique : HTTP, SQL, appels externes, erreurs.
 
-L’assistant devait suivre la convention décidée par les humains, pas en inventer une nouvelle à chaque dépôt.
+On a commencé à ajouter quelques spans métier avec les équipes lorsque ça apportait du sens, mais sans chercher à tout modéliser dès le départ.
 
-La différence est importante.
+Je préfère ce rythme-là.
 
-Un LLM est très bon pour industrialiser une convention.
+Quand les développeurs commencent à utiliser les traces, ils voient vite ce qui manque. C’est à ce moment qu’un span supplémentaire devient utile, parce qu’il répond à une vraie question.
 
-Il est beaucoup moins intéressant pour inventer 200 fois la convention.
+Ajouter des dizaines de spans "au cas où" avant même d’avoir un usage produit surtout du volume et des conventions que personne ne suit longtemps.
 
-## Réduire le changement au minimum utile
+## Corréler les logs sans tout réécrire
 
-L’application étant ancienne, nous avons aussi cherché à limiter la surface de modification.
+Pour les logs, on a patché une bibliothèque commune afin d’ajouter les éléments nécessaires à la corrélation avec les traces.
 
-Il n’était pas question de profiter de la migration OpenTelemetry pour reprendre chaque module, chaque abstraction ou chaque bibliothèque qui nous semblait perfectible.
+Ça évite de modifier chaque application à la main et surtout de laisser chaque équipe choisir son format.
 
-Ce genre de chantier finit rapidement par ne plus être un projet d’observabilité.
+Le gain pendant un debug est assez immédiat : on part d’une trace et on retrouve les logs du même traitement sans reconstruire le contexte à partir des timestamps, du pod ou d’un identifiant métier.
 
-Pour chaque service, la question était plutôt :
+Cette normalisation a aussi fait ressortir un sujet moins sympa : plus on enrichit les signaux, plus on risque d’y mettre des données qui n’ont rien à faire dans un backend d’observabilité.
 
-**quel est le plus petit changement propre qui permet d’obtenir les signaux attendus sans modifier le comportement fonctionnel ?**
+PII, RIB, identifiants trop dynamiques, noms de bases... c’est précisément là que la partie suivante devient intéressante.
 
-Dans certains cas, cela passe par le SDK OpenTelemetry.
+## Ce que je retiens de cette phase
 
-Dans d’autres, par l’auto-instrumentation.
+Pour une migration brownfield, je garderais la même méthode :
 
-Pour les logs, nous avons également modifié une bibliothèque commune afin d’ajouter les informations nécessaires à la corrélation, plutôt que de demander à chaque service de réinventer le même format.
+- décider les conventions une fois ;
+- rendre leur application simple ;
+- automatiser ce qui est répétitif ;
+- valider service par service ;
+- privilégier la couverture avant la finesse ;
+- ajouter du contexte métier quand un usage le justifie.
 
-Le résultat n’est pas une architecture académique parfaite.
+Le résultat n’est pas "200 services parfaitement instrumentés". Ce serait une formulation trop belle pour être vraie.
 
-C’est une migration qui peut réellement avancer.
+Le résultat utile, c’est un parc qui parle à peu près le même langage et des équipes capables d’améliorer l’instrumentation sans repartir de zéro à chaque fois.
 
-## PR par PR, service par service
-
-La validation n’avait rien de spectaculaire.
-
-Une modification est proposée.
-
-Elle est relue avec l’équipe.
-
-Elle est déployée en développement.
-
-On vérifie les traces, les logs, les métriques et surtout le comportement du service.
-
-Puis on corrige si nécessaire.
-
-Les tests automatiques restent importants, mais sur une application de quinze ans, prétendre qu’ils couvrent parfaitement chaque scénario serait peu crédible.
-
-Il faut donc compléter avec l’observation réelle du service instrumenté.
-
-Cette méthode a permis d’avancer sur environ 200 services en quelques semaines.
-
-Ce résultat ne vient pas d’une automatisation magique.
-
-Il vient surtout du fait que les décisions répétitives avaient été prises une fois, puis rendues faciles à appliquer.
-
-## Les premières traces ont immédiatement trouvé des choses intéressantes
-
-Même avant d’aller loin dans les spans métier, les traces techniques ont apporté de la valeur.
-
-La partie C++ en est un bon exemple.
-
-Nous avons retrouvé des requêtes SQL mal gérées qui participaient à des consommations mémoire et CPU anormales.
-
-Nous avons aussi identifié des appels répétés qui auraient dû bénéficier d’un cache.
-
-Ce ne sont pas des problèmes extraordinaires.
-
-C’est justement ce qui rend l’exemple utile.
-
-Dans une application ancienne, une grande partie des problèmes de performance vient rarement d’un mécanisme exotique. On retrouve des appels trop fréquents, des requêtes mal maîtrisées, des dépendances lentes ou une logique qui a grossi avec les années.
-
-Les métriques peuvent montrer qu’un service consomme trop.
-
-Une trace aide souvent à comprendre **où le temps et les ressources partent réellement**.
-
-## Ajouter des spans métier, mais sans bloquer la migration
-
-L’auto-instrumentation et les bibliothèques standards donnent d’abord une vision technique.
-
-On voit un appel HTTP, une requête SQL, une dépendance externe.
-
-C’est déjà utile, mais cela ne raconte pas toujours ce que l’application est en train de faire.
-
-Nous avons donc commencé à aider les équipes à ajouter quelques spans métier lorsque cela apportait du sens.
-
-Pas partout.
-
-Pas sur chaque fonction.
-
-Pas avec l’ambition immédiate de reconstruire un modèle fonctionnel complet dans les traces.
-
-L’objectif était plutôt d’apprendre aux équipes à reconnaître les moments où un span supplémentaire permet de mieux comprendre un traitement.
-
-Cette progression est volontaire.
-
-Si on exige dès la première PR une taxonomie métier complète, un modèle de noms parfait et une instrumentation manuelle très détaillée, la migration ralentit fortement.
-
-Je préfère généralement obtenir une couverture correcte, puis enrichir les zones où les traces sont réellement utilisées.
-
-L’usage révèle très vite les trous du modèle.
-
-## La corrélation logs-traces change aussi la manière de déboguer
-
-Une autre évolution importante a été la normalisation des logs.
-
-Nous avons adapté une bibliothèque commune pour injecter les éléments nécessaires à la corrélation avec les traces.
-
-L’intérêt n’est pas de rendre les logs plus "OpenTelemetry".
-
-L’intérêt est de pouvoir partir d’un symptôme visible dans une trace et retrouver immédiatement les événements produits par le service concerné, ou faire le chemin inverse depuis un log.
-
-Cette continuité réduit beaucoup les ruptures pendant un diagnostic.
-
-Sans corrélation, on passe son temps à reconstruire le contexte avec des timestamps, des noms de pods, des identifiants fonctionnels ou des recherches manuelles.
-
-Avec une corrélation propre, une partie de ce travail disparaît.
-
-Mais cette normalisation a aussi révélé un autre sujet : les données qu’on ne veut surtout pas propager.
-
-J’y reviendrai dans l’article suivant.
-
-## L’auto-instrumentation est un accélérateur, pas une stratégie complète
-
-L’OpenTelemetry Operator permet d’injecter automatiquement l’instrumentation sur Kubernetes.
-
-C’est très pratique pour homogénéiser certains paramètres et accélérer la couverture.
-
-Nous l’avons utilisé comme un levier parmi d’autres.
-
-Mais il faut garder une frontière claire entre :
-
-- obtenir rapidement des signaux techniques ;
-- construire une observabilité réellement utile à l’équipe.
-
-L’auto-instrumentation sait capturer beaucoup de choses.
-
-Elle ne sait pas décider seule quelles opérations métier méritent un span, quels attributs sont réellement stables, ni quelles informations risquent de devenir dangereuses plus loin dans le pipeline.
-
-Cette distinction devient importante dès que les volumes augmentent.
-
-Parce qu’une information qui paraît anodine dans une trace peut ensuite devenir un sérieux problème de cardinalité.
-
-## La règle que je retiens pour une migration brownfield
-
-Je résumerais la méthode ainsi :
-
-**standardiser assez pour avancer vite, mais pas au point de bloquer sur un modèle parfait.**
-
-Le cadre doit être ferme sur ce qui protège la plateforme :
-
-- initialisation cohérente ;
-- propagation du contexte ;
-- conventions minimales ;
-- corrélation ;
-- gestion des erreurs ;
-- données sensibles ;
-- validation avant production.
-
-Il peut rester progressif sur ce qui dépend fortement du métier :
-
-- finesse des spans ;
-- attributs fonctionnels ;
-- taxonomie complète ;
-- couverture détaillée des traitements historiques.
-
-C’est ce compromis qui permet à l’observabilité de devenir un travail d’équipe plutôt qu’une migration imposée par la plateforme.
-
-Et c’est également ce qui nous a permis de découvrir rapidement la prochaine difficulté : quand on commence à collecter beaucoup mieux, on découvre aussi qu’on peut très facilement collecter beaucoup trop.
+La difficulté suivante arrive rapidement : quand on collecte mieux, on peut aussi collecter beaucoup trop.
 
 ## Suite
 
-[3/4 : Cardinalité, PII et sampling : quand l’observabilité commence à se manger elle-même](/2026-09-22-opentelemetry-cardinalite-pii-sampling)
+[3/4 : OpenTelemetry, cardinalité, PII et sampling : les pièges qui arrivent après](/2026-09-22-opentelemetry-cardinalite-pii-sampling)
 
 ## Sources officielles
 
