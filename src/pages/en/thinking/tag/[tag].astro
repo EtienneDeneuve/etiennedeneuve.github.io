@@ -35,6 +35,7 @@ const { tag, entries } = Astro.props;
 <ThinkingFacetContent
   lang="en"
   title={tag.label}
+  seoTitle={`Tag: ${tag.label}`}
   description={`Articles tagged “${tag.label}” (${tag.count}).`}
   entries={entries}
   facetLabel={thinkingConfig.labels.browseTags.en}
