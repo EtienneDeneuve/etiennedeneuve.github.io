@@ -27,199 +27,148 @@ relatedArticles:
 
 > Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 1/5. La suite : [Apple Business pour enrôler, Entra pour décider quel poste construire](/2026-10-04-apple-business-entra-identite-workstation).
 
-Je voulais quelque chose d’assez banal : sortir un Mac de sa boîte, l’allumer, laisser l’utilisateur s’authentifier et obtenir quelques minutes plus tard un poste réellement prêt.
+Je voulais un truc assez simple : un Mac sort de sa boîte, l’utilisateur se connecte, et quelques minutes plus tard il a un poste prêt.
 
-Pas un Mac « enrôlé ».
+Pas « enrôlé ». Pas « presque prêt, il reste juste trois scripts à lancer et deux applications à installer ». Prêt.
 
-Pas un Mac avec trois applications installées et quinze scripts qui finiront peut-être par passer.
+Dit comme ça, ça ressemble à un sujet MDM. C’est d’ailleurs comme ça que je l’avais abordé au début. On pousse des packages, quelques profils, des scripts, on remet une couche pour les exceptions, puis on finit avec un système qui marche très bien tant qu’on ne cherche pas trop à comprendre dans quel état exact se trouve la machine.
 
-Un poste dont l’état est défini, reproductible et réappliquable.
+Le problème n’est pas que le MDM ne sait pas faire tout ça. C’est presque l’inverse : il sait suffisamment de choses pour qu’on soit tenté de tout lui confier.
 
-C’est précisément là que j’ai arrêté de considérer le provisioning comme un simple problème MDM.
+Et c’est là que ça commence à me gêner.
 
-## Un MDM sait imposer. Ce n’est pas forcément un bon moteur de composition
+## Le MDM n’avait pas besoin de devenir ma source de vérité
 
-On peut faire énormément de choses avec un MDM macOS.
+J’avais déjà une bonne partie de mes Mac gérée avec Nix et nix-darwin. Le shell, les outils, Home Manager, les rôles, les variantes par utilisateur : tout ça existait déjà dans un modèle déclaratif.
 
-Installer des applications, pousser des profils, exécuter des scripts, imposer des restrictions, configurer des services, gérer FileVault, les certificats et une bonne partie de la posture de sécurité.
+Recréer la même logique dans Apple Business aurait donné deux sources de vérité.
 
-La tentation est donc assez naturelle :
+D’un côté, Nix dit ce que doit contenir un poste. De l’autre, le MDM pousse progressivement des morceaux du même état avec ses propres règles, ses propres dépendances et son propre historique.
 
-~~~text
-MDM
-  -> installe les applications
-  -> pousse les préférences
-  -> lance les scripts
-  -> configure le shell
-  -> installe les outils
-  -> corrige les écarts
-  -> relance encore quelques scripts
-~~~
+Ça finit rarement bien.
 
-Ça fonctionne.
+J’ai donc gardé une règle très simple : **le MDM impose, Nix compose**.
 
-Puis le parc grandit, les rôles divergent, les scripts prennent des dépendances entre eux et une question finit par devenir pénible : **dans quel état exact est cette machine ?**
-
-J’avais déjà une grande partie de la configuration de mes Mac dans Nix. Continuer à reproduire cette logique dans Apple Business n’aurait fait que créer une seconde source de vérité.
-
-J’ai donc choisi une règle assez simple :
-
-> **Le MDM impose. Nix compose.**
-
-Apple Business doit être capable de prendre possession du Mac et de poser le socle nécessaire. Il n’a pas besoin de savoir quelle version de chaque CLI, quel shell, quel module Home Manager ou quel ensemble d’outils doit définir un poste technique.
+Apple Business reste responsable de ce qui doit être imposé de l’extérieur : l’enrôlement, le bootstrap, les configurations de sécurité, les packages indispensables. En revanche, je ne veux pas qu’il sache comment assembler un poste Tech, Direction ou Standard jusque dans le détail des outils utilisateur.
 
 <!-- SCREENSHOT 1
-Apple Business > Blueprint du Mac de test montrant uniquement les briques bootstrap importantes, idéalement Determinate Nix puis Omnivya Workstation Bootstrap.
+Apple Business > Blueprint du Mac de test montrant surtout Determinate Nix puis Omnivya Workstation Bootstrap.
 À masquer : serial number, URL complète du package, identifiants utilisateur.
 -->
 
-## Séparer les responsabilités m’a débloqué
+Ça peut paraître comme une nuance de vocabulaire. En pratique, ça change complètement la manière de concevoir le provisioning.
 
-Le modèle auquel je suis arrivé ressemble à ça :
+## Le hostname était devenu une mauvaise abstraction
 
-~~~mermaid
-flowchart TD
-    A[Apple Business] -->|enrollment + bootstrap| B[macOS]
-    C[Entra] -->|identity + App Role| D[Omnivya Setup]
-    B --> D
-    D -->|profile| E[Nix / nix-darwin]
-    E --> F[Workstation]
-~~~
+L’ancien modèle était très classique : j’avais des machines connues dans l’inventaire et une configuration par hostname.
 
-Chaque composant a une responsabilité que je peux expliquer en une phrase.
-
-**Apple Business** enrôle le Mac et installe le bootstrap.
-
-**Entra** dit qui est devant le Mac et quel type de workstation cette personne est autorisée à recevoir.
-
-**Omnivya Setup** orchestre le premier démarrage, les prérequis, l’authentification et les erreurs.
-
-**Nix et nix-darwin** décrivent l’état du poste.
-
-Ce découpage paraît presque évident une fois dessiné. Il ne l’était pas au départ.
-
-## Le changement important : ne plus partir du hostname
-
-Mon ancien modèle ressemblait beaucoup à ce qu’on retrouve dans les configurations de parc classiques :
+Ça ressemble à ça :
 
 ~~~text
 macbook-zine
-  -> user zine
-  -> role tech
-  -> modules tech
+  -> utilisateur zine
+  -> rôle tech
+  -> configuration tech
 ~~~
 
-Le hostname devenait implicitement l’identité de la machine et presque celle de la personne.
+Pour un petit parc, ce n’est pas absurde du tout. Le problème apparaît au moment où le hostname devient implicitement la clé qui relie la personne, la machine et son rôle.
 
-Ça tient tant qu’un utilisateur a exactement un Mac, que tous les appareils sont pré-déclarés et que le parc évolue lentement.
+Un utilisateur peut avoir deux Macs. Un Mac peut être remplacé. Une personne peut changer de rôle. Et surtout, je ne voulais pas devoir ouvrir une PR juste pour déclarer le hostname d’une machine avant qu’elle soit capable de se provisionner.
 
-Je voulais l’inverse.
+J’ai donc séparé les trois notions.
 
-Dans le repository, j’ai donc séparé l’inventaire des identités, l’inventaire des devices et la fonction qui construit une workstation.
+Le repository contient désormais les identités connues, les devices connus, et une fonction qui construit une workstation à partir de paramètres.
 
-Le cœur ressemble conceptuellement à ça :
+En gros :
 
 ~~~nix
 mkWorkstation {
   hostName = "...";
   userName = "...";
-  fullName = "...";
   email = "...";
   org = "omnivya";
   role = "tech";
 }
 ~~~
 
-La composition finale reste :
+Le résultat reste composé de modules communs, du rôle, de l’organisation, des éventuels overrides utilisateur et de quelques particularités device. Mais le premier boot n’a plus besoin que la machine existe déjà dans l’inventaire.
 
-~~~text
-common
-+ organisation
-+ role
-+ user overrides
-+ device overrides
+C’est beaucoup plus proche de ce que je voulais : l’inventaire décrit le parc connu, il ne bloque pas l’arrivée d’un nouveau poste.
+
+## Le découpage a fini par devenir assez évident
+
+Une fois ce problème posé correctement, les responsabilités se sont séparées presque toutes seules.
+
+~~~mermaid
+flowchart TD
+    A[Apple Business] -->|enrollment + bootstrap| B[macOS]
+    C[Entra] -->|identity + role| D[Omnivya Setup]
+    B --> D
+    D --> E[Nix / nix-darwin]
+    E --> F[Workstation]
 ~~~
 
-Mais un nouveau Mac n’a plus besoin d’une PR uniquement pour ajouter son hostname avant le premier démarrage.
+Apple Business prend possession de la machine et pousse le socle.
 
-C’est une petite différence de modèle qui change beaucoup de choses opérationnellement.
+Entra répond à la question « qui est devant ce Mac, et à quel type de poste cette personne a droit ? ».
 
-## Le bootstrap doit rester petit
+Une petite application macOS orchestre le premier login.
 
-J’ai également choisi de garder Determinate Nix séparé du package Omnivya.
+Nix construit et applique l’état du poste.
 
-Le Blueprint installe d’abord Determinate, puis un package Omnivya qui contient l’application d’onboarding, un helper privilégié, les LaunchAgents/LaunchDaemons nécessaires et éventuellement un snapshot de la configuration.
+Je préfère largement ce découpage à un gros workflow MDM qui essaie de tout savoir sur tout.
 
-Le package ne fait pas un énorme `nix switch` dans son `postinstall`.
+Il y a aussi un avantage très concret : quand quelque chose casse, on sait plus facilement où regarder. Si le package n’est pas arrivé, je regarde Apple Business. Si l’identité n’est pas bonne, je regarde Entra. Si la machine a reçu le bon profil mais pas les bons outils, je regarde Nix.
 
-Il pose les briques.
+Ça paraît évident après coup. Sur un écran MDM avec vingt étapes qui s’enchaînent, ça l’est beaucoup moins.
 
-Au premier vrai login graphique, l’application prend le relais.
+## Determinate reste séparé
 
-~~~text
-Setup Assistant
-    |
-    v
-Determinate Nix
-    |
-    v
-Omnivya Bootstrap.pkg
-    |
-    v
-Premier login Aqua
-    |
-    v
-Omnivya Setup.app
-    |
-    v
-Nix / nix-darwin
-~~~
+Autre choix que j’ai gardé assez strict : Determinate Nix est installé séparément du package Omnivya.
 
-J’y tiens parce qu’un installateur est un très mauvais endroit pour cacher dix minutes d’orchestration, une authentification interactive et des chemins de reprise.
+Je pourrais techniquement essayer d’embarquer plus de choses dans un énorme bootstrap. Je n’y vois pas beaucoup d’intérêt.
 
-## L’objectif n’est pas le « zero touch » absolu
+Determinate gère son installation, son daemon et son cycle de vie. Mon package installe l’application d’onboarding, le helper privilégié et ce qu’il faut pour démarrer le parcours au premier login.
 
-Le terme zero-touch est pratique, mais je ne cherche pas à supprimer toute interaction humaine.
+Le `postinstall` ne lance pas un gros `nix switch` caché en arrière-plan.
 
-Je veux supprimer les interactions **sans valeur**.
+Je veux que l’installateur reste un installateur.
 
-Choisir soi-même « Tech » ou « Direction » est une interaction sans valeur : Entra connaît déjà cette information.
+Le provisioning lourd arrive ensuite, dans une vraie session utilisateur, avec une interface, de l’état persistant, du retry et des diagnostics.
 
-Copier un PAT GitHub est une interaction sans valeur.
+C’est moins « magique », mais beaucoup plus contrôlable.
 
-Lancer manuellement cinq scripts dans le bon ordre est une interaction sans valeur.
+## Je ne cherche pas vraiment le zero-touch
 
-En revanche, demander à l’utilisateur de s’authentifier avec son compte professionnel est parfaitement légitime. C’est même une frontière de sécurité utile.
+On utilise facilement ce terme pour ce genre de sujet, mais ce n’est pas exactement mon objectif.
 
-Mon objectif ressemble donc davantage à ceci :
+Je ne cherche pas à supprimer toute interaction humaine. Je cherche à supprimer les interactions inutiles.
 
-~~~text
-Mac neuf
-  -> enrollment automatique
-  -> login utilisateur
-  -> identité validée
-  -> profil déterminé
-  -> configuration appliquée
-  -> poste prêt
-~~~
+Choisir soi-même son rôle dans une liste ? Inutile.
 
-Avec suffisamment d’état persistant pour reprendre si quelque chose casse au milieu.
+Copier un PAT GitHub ? Inutile.
 
-## Ce que je garde volontairement dans Apple Business
+Ouvrir un terminal pour lancer trois commandes dans le bon ordre ? Inutile.
 
-Cette séparation ne signifie pas que je cherche à remplacer Apple Business.
+S’authentifier avec son compte professionnel, en revanche, a du sens. C’est même une étape que je préfère garder explicite : elle marque clairement la frontière entre une machine enrôlée et une identité autorisée à recevoir un environnement donné.
 
-Au contraire.
+Le parcours que je vise est donc assez simple : le Mac s’enrôle, l’utilisateur se connecte, son identité détermine son profil, puis la configuration s’applique.
 
-Il reste très bien placé pour les choses qui doivent être imposées depuis l’extérieur du poste : enrollment, posture de sécurité, configurations MDM, bootstrap initial, packages critiques.
+Le point important est que chaque étape sache ce qu’elle fait et pourquoi elle le fait.
 
-Je ne veux simplement pas lui demander de devenir mon moteur de Platform Engineering pour macOS.
+## Apple Business reste très important dans le modèle
 
-Le poste est pour moi une autre plateforme à composer.
+Ce n’est pas une série « pourquoi j’ai remplacé mon MDM par Nix ».
 
-Et à partir du moment où j’ai posé ça, la question suivante est devenue plus intéressante : **si le MDM ne choisit pas la workstation, qui la choisit ?**
+Je n’ai justement aucune envie de réécrire un MDM.
 
-La réponse est venue assez naturellement d’Entra.
+Apple Business fait très bien la partie enrollment et contrôle du device. Je veux simplement éviter qu’il devienne aussi mon moteur de composition, mon inventaire applicatif, mon gestionnaire de shell, mon orchestrateur Nix et mon mécanisme de mise à jour.
+
+Le poste de travail est une plateforme. J’ai donc préféré lui appliquer les mêmes principes que ceux que j’utilise ailleurs : séparation des responsabilités, état déclaratif, identité explicite, versionnement et rollback.
+
+La question suivante était alors assez naturelle : si Apple Business ne choisit plus la workstation, qui la choisit ?
+
+Dans mon cas, la réponse était déjà dans Entra.
 
 ## Suite
 
@@ -228,6 +177,6 @@ La réponse est venue assez naturellement d’Entra.
 ## Sources officielles
 
 - [Apple Platform Deployment : Automated Device Enrollment](https://support.apple.com/guide/deployment/automated-device-enrollment-and-mdm-dep73069dd57/web)
-- [Apple Business : Built-in device management](https://support.apple.com/guide/business/welcome/web)
+- [Apple Business](https://support.apple.com/guide/business/welcome/web)
 - [Determinate Systems : Deploy Determinate with MDM](https://docs.determinate.systems/guides/mdm/)
 - [nix-darwin](https://github.com/nix-darwin/nix-darwin)
