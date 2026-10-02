@@ -27,136 +27,66 @@ relatedArticles:
 
 > Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 4/5. Le début : [pourquoi j’ai arrêté de traiter le provisioning Mac comme un problème MDM](/2026-10-03-provisioning-mac-pas-probleme-mdm). La suite : [ce qui casse quand on essaie vraiment](/2026-10-07-ce-qui-casse-provisioning-macos).
 
-Il y a un truc qui me gêne depuis longtemps dans la gestion des postes.
+Il y a un truc que je trouve bizarre dans la gestion des postes.
 
-Pour un service en production, personne n’accepterait sérieusement :
+Pour un service, une image ou une application en production, on veut savoir exactement quelle version tourne. On veut pouvoir retrouver le commit, reproduire le build et revenir en arrière si nécessaire.
 
-> Il tourne sur la dernière version de main que la machine a réussi à récupérer.
+Pour un laptop, on accepte encore très facilement « il a fait un git pull hier normalement ».
 
-On veut une version, un artefact, une provenance et un moyen de revenir en arrière.
+Je n’aime pas trop cette différence.
 
-Pour un laptop, on accepte pourtant assez facilement :
+Si le poste est une plateforme de travail importante, je veux savoir ce que j’ai déployé dessus.
 
-~~~text
-git pull
-script update
-latest
-quelques packages
-et normalement c’est bon
-~~~
+## J’ai commencé par le Bootstrap.pkg
 
-Je voulais arrêter ça aussi.
+Le premier truc facile à versionner était le package lui-même.
 
-## J’ai commencé par versionner le bootstrap
-
-Le package macOS qui installe Omnivya Setup possède déjà sa propre version.
-
-Le pipeline produit quelque chose du genre :
-
-~~~text
-OmnivyaWorkstationBootstrap-0.1.19-<commit>.pkg
-~~~
-
-et embarque un petit fichier de provenance avec :
-
-~~~json
-{
-  "packageVersion": "0.1.19",
-  "appVersion": "0.1.19",
-  "mdmSetupCommit": "...",
-  "buildDate": "...",
-  "snapshotEmbedded": true
-}
-~~~
-
-Ce n’est pas révolutionnaire.
-
-Mais ça répond déjà à une question essentielle pendant un incident :
-
-**qu’est-ce qui a réellement été installé sur ce Mac ?**
+Aujourd’hui, le build produit un artefact nommé avec sa version et le commit source, puis embarque un petit fichier de provenance. Quand je diagnostique un Mac, je peux donc retrouver la version du package, celle de l’app, la révision de `mdm-setup` embarquée et la date du build.
 
 <!-- SCREENSHOT 1
-Terminal ou Finder montrant le nom versionné du PKG + un extrait propre de provenance.json.
-Masquer les URLs SAS éventuelles et tout identifiant personnel.
+Terminal ou Finder montrant le nom versionné du PKG et un extrait propre de provenance.json.
+Masquer les URLs SAS éventuelles et les identifiants qui n’apportent rien.
 -->
 
-## SemVer plutôt que « stable » comme seule notion
+Ce n’est pas très sophistiqué, mais ça répond déjà à une question qui devient vite pénible sans ça : **qu’est-ce que cette machine a réellement reçu ?**
 
-Je veux utiliser SemVer pour la configuration workstation elle-même.
+## Je préfère SemVer à « stable »
 
-Par exemple :
+J’avais commencé à parler de channels `stable` et `pilot`, puis je me suis rendu compte que ça ne suffisait pas.
 
-~~~text
-2.6.1
-2.7.0-pilot.1
-2.7.0-rc.1
-2.7.0
-3.0.0
-~~~
+Un channel dit à qui je propose une release.
 
-La sémantique que je retiens est assez classique :
+Il ne dit pas ce qu’est cette release.
 
-**MAJOR** pour une migration incompatible ou une évolution qui demande un traitement spécifique.
+Je préfère donc donner une vraie version à la configuration workstation elle-même : `2.6.1`, `2.7.0-pilot.1`, `2.7.0`, etc.
 
-**MINOR** pour une nouvelle capacité compatible.
+Le channel reste utile pour décider qu’un petit groupe peut voir les prereleases alors que le reste du parc reste sur la dernière stable.
 
-**PATCH** pour une correction ou une mise à jour sans changement de modèle.
+Mais la release, elle, garde une identité propre.
 
-Un channel `stable` ou `pilot` reste utile, mais il répond à une autre question.
+Et je conserve évidemment le SHA exact derrière la version. SemVer est pratique pour parler entre humains ; le commit reste la provenance technique.
 
-~~~text
-SemVer  -> quelle release ?
-channel -> qui peut la voir ?
-~~~
+## Le pilote actuel n’est pas encore la cible finale
 
-Je préfère cette séparation à une branche `stable` qui change de contenu sans identité suffisamment forte.
+Pour aller vite, l’app sait aujourd’hui construire depuis le snapshot Nix embarqué dans le package.
 
-## Le SHA reste la vérité technique
+Sur un poste Tech, elle peut aussi faire le login GitHub, cloner `mdm-setup` et utiliser ce checkout.
 
-SemVer est très pratique pour les humains.
+C’était très pratique pour valider toute la chaîne sans construire un système de distribution complet dès le début.
 
-Pour la provenance, je garde également le commit exact.
+Je ne veux simplement pas garder ce modèle comme cible.
 
-~~~text
-version: 2.7.0
-tag: v2.7.0
-source commit: 8a71cb2...
-~~~
+GitHub est une très bonne source de développement. Je ne veux pas qu’il devienne une dépendance runtime pour tous les utilisateurs.
 
-Une release devient donc un couple lisible et traçable.
+Quelqu’un qui a un poste Direction n’a aucune raison d’avoir un compte GitHub juste pour récupérer Word, Edge, quelques réglages et son environnement de travail.
 
-C’est aussi utile pour afficher dans l’application :
+## Je veux donc builder les profils avant
 
-~~~text
-Workstation configuration
+La suite logique est de déplacer le build hors du poste.
 
-Current: 2.6.1
-Available: 2.7.0
-~~~
+Une release de `mdm-setup` construit les profils supportés, produit des artefacts immuables, les signe et les publie dans un stockage objet privé.
 
-sans perdre la possibilité de remonter au contenu exact.
-
-## Aujourd’hui, le pilote build encore localement
-
-Je préfère être précis sur l’état actuel.
-
-Mon pilote sait construire une workstation depuis le snapshot embarqué dans le Bootstrap.pkg. Pour les profils Tech, l’app peut aussi authentifier GitHub, cloner `mdm-setup` et préférer ce checkout pour la construction.
-
-Ça m’a permis de valider très vite toute la chaîne.
-
-Mais ce n’est pas le modèle de distribution que je veux garder à terme.
-
-GitHub est une excellente source de développement.
-
-Je ne veux pas qu’il devienne une dépendance runtime de tous mes utilisateurs.
-
-Une personne en Direction n’a aucune raison d’avoir un compte GitHub juste pour recevoir sa configuration de poste.
-
-## La prochaine étape : prébuilder les profils
-
-La cible que je mets en place est donc différente.
-
-À chaque release :
+Le Mac ne clone plus le repository pour savoir quoi devenir. Il récupère la release qui correspond à son profil.
 
 ~~~mermaid
 flowchart TD
@@ -172,122 +102,71 @@ flowchart TD
     H --> I[Nix store]
 ~~~
 
-Le repository reste la source.
+Pour la première version, je partirais probablement sur une closure exportée par profil.
 
-Le poste consomme un artefact.
+Si ça devient trop gros ou trop redondant, le même stockage peut évoluer vers un vrai binary cache Nix. Mais je préfère mesurer avant de construire tout de suite la version la plus élégante sur le papier.
 
-Pour commencer, je peux exporter une closure Nix complète par profil. Si les volumes deviennent trop importants, le même stockage peut évoluer vers un vrai binary cache Nix, avec déduplication des store paths.
+## Le stockage n’a pas besoin d’un secret dans l’app
 
-Je préfère commencer simple et mesurer.
+L’application vient déjà d’authentifier l’utilisateur avec Entra.
 
-## Entra devant le stockage
+Autant réutiliser cette identité pour lire le registry et les artefacts plutôt que d’embarquer une clé de stockage dans le binaire.
 
-Le profile registry est privé.
+Le rôle Entra détermine le profil autorisé. Le registry dit quelle version de ce profil est disponible. Le manifest pointe vers l’artefact exact.
 
-L’application vient déjà de faire une authentification Entra, donc le stockage peut être lu avec cette identité plutôt qu’avec une clé statique embarquée dans l’app.
+J’ajouterais malgré tout une signature sur les manifests.
 
-Le modèle devient :
+Le fait qu’un utilisateur puisse lire un objet dans le Blob ne veut pas dire que le helper doit accepter aveuglément son contenu.
 
-~~~text
-Entra
-  -> qui est l’utilisateur ?
-  -> quel profile ID est autorisé ?
+Ce sont deux sujets différents : l’accès au stockage et la confiance dans ce qu’on applique sur la machine.
 
-Registry
-  -> quelle version correspond à ce profile/channel ?
+## Je veux aussi connaître le coût disque avant de télécharger
 
-Artifact
-  -> quel contenu exact installer ?
-~~~
+C’est là que le sujet devient plus concret.
 
-Je veux également signer les manifests.
+Une closure Nix n’est pas forcément petite. Sur un Mac de 512 Go, télécharger plusieurs générations complètes sans stratégie de rétention peut devenir idiot assez vite.
 
-L’authentification au stockage dit **qui peut lire**.
+Le manifest doit donc contenir suffisamment d’informations pour que l’app sache avant le téléchargement si l’update est raisonnable : taille compressée, taille de closure, version minimum du bootstrap, version minimum de macOS, digest de l’artefact.
 
-La signature dit **ce que le poste accepte d’appliquer**.
+Pas besoin d’un protocole énorme. Juste assez pour éviter de découvrir à 95 % du téléchargement qu’il manque 20 Go.
 
-Ce n’est pas la même propriété de sécurité.
+## Et surtout, garder un vrai rollback
 
-## Un manifest plutôt qu’une URL magique
+Je veux toujours pouvoir revenir à la dernière génération connue comme bonne.
 
-Je veux que l’application résolve un manifest explicite, pas un objet nommé `latest.pkg` ou `latest.tar.zst`.
+La politique que j’ai retenue est donc assez simple : garder la version courante et la `previous-known-good`. Le reste peut devenir éligible au garbage collection une fois que la nouvelle version a été activée et validée.
 
-Conceptuellement :
+Je ne veux surtout pas lancer un GC agressif avant cette validation.
 
-~~~json
-{
-  "schemaVersion": 1,
-  "profile": "tech",
-  "version": "2.7.0",
-  "sourceCommit": "...",
-  "requires": {
-    "minBootstrapVersion": "1.2.0",
-    "minMacOS": "15.0"
-  },
-  "artifact": {
-    "sha256": "...",
-    "compressedBytes": 123456789,
-    "closureBytes": 2345678901
-  }
-}
-~~~
+Sinon, on transforme le mécanisme de rollback en décoration.
 
-Le détail exact pourra évoluer.
+C’est aussi pour ça que je préfère que l’application connaisse les versions appliquées et les store paths protégés plutôt que de laisser un cron Nix faire le ménage tout seul dans son coin.
 
-Ce qui compte est que l’app puisse répondre **avant** d’installer :
+## Au fond, ça ressemble beaucoup à une supply chain logicielle
 
-* est-ce une version autorisée ?
-* suis-je compatible ?
-* ai-je assez d’espace disque ?
-* puis-je revenir à la version précédente ?
+C’est probablement le point qui m’intéresse le plus dans tout ça.
 
-## Le rollback fait partie du contrat
+Je ne cherche pas à faire un « super MDM ». Je cherche surtout à traiter le poste comme un artefact que je peux fabriquer, identifier, vérifier, déployer et reprendre.
 
-Une workstation versionnée sans stratégie de rollback reste une bonne intention.
+La source reste dans Git.
 
-Je garde donc au minimum :
+Le build produit quelque chose de précis.
 
-~~~text
-current
-previous-known-good
-~~~
+Le stockage distribue.
 
-Après une mise à jour réussie :
+Entra autorise.
 
-~~~text
-nouvelle version       -> current
-ancienne version       -> previous-known-good
-ancienne previous      -> GC eligible
-~~~
+L’application orchestre.
 
-Cette règle a également une conséquence pratique : le garbage collection Nix ne peut pas être un cron aveugle.
+Nix applique.
 
-Sur un SSD de 512 Go, accumuler toutes les closures prébuildées finirait vite par être absurde.
+Et si ça casse, je sais quelle version j’essaie de poser et vers laquelle je peux revenir.
 
-L’application doit savoir ce qu’elle protège avant de nettoyer le reste.
+Ça me paraît beaucoup plus sain que « relance le script d’update et regarde si ça passe ».
 
-## Ce que j’essaie réellement de construire
+La théorie est assez jolie. Évidemment, le premier Mac réellement effacé m’a rapidement rappelé qu’entre le diagramme et la machine il y a `appstored`, PackageKit, des claims Entra incomplets, Homebrew qui n’existe pas et quelques autres détails sympathiques.
 
-Je ne cherche pas à inventer un nouveau MDM.
-
-Je cherche à appliquer à mes workstations des propriétés que je considère déjà normales ailleurs :
-
-~~~text
-source contrôlée
-release identifiée
-artefact immuable
-provenance
-compatibilité
-déploiement
-validation
-rollback
-~~~
-
-Ça ressemble beaucoup plus à une software supply chain qu’à une collection de scripts de poste.
-
-Et plus j’avance, plus cette analogie me paraît utile.
-
-Le dernier article est justement celui où la théorie rencontre un Mac fraîchement effacé, `appstored`, Homebrew, des claims Entra incomplets et un package qui ne contient pas ce qu’Apple attend.
+C’est la dernière partie.
 
 ## Suite
 
