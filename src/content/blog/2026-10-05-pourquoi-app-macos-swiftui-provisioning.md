@@ -28,257 +28,147 @@ relatedArticles:
 
 > Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 3/5. Le début : [pourquoi j’ai arrêté de traiter le provisioning Mac comme un problème MDM](/2026-10-03-provisioning-mac-pas-probleme-mdm). La suite : [je versionne mes postes de travail comme du logiciel](/2026-10-06-versionner-postes-semver-nix).
 
-Au départ, je pensais pouvoir régler le premier login avec quelques scripts.
+Au début, je pensais vraiment pouvoir gérer le premier login avec quelques scripts.
 
-Après tout, il fallait « seulement » vérifier Nix, récupérer l’utilisateur, faire une authentification, construire une configuration et lancer nix-darwin.
+Sur le papier, il fallait vérifier que Nix était là, récupérer l’utilisateur, faire une authentification, construire la config, lancer nix-darwin et terminé.
 
-Puis j’ai commencé à écrire la liste réelle :
+Évidemment, la vraie liste était un peu moins jolie.
 
-~~~text
-attendre une vraie session utilisateur
-vérifier que Determinate est prêt
-gérer une authentification Entra interactive
-résoudre le profil
-faire éventuellement un device flow GitHub
-construire Nix sous le bon UID
-activer en root
-afficher la progression
-reprendre après un crash
-retry sans tout recommencer
-rollback si l’activation casse
-exporter des diagnostics
-~~~
+Il fallait attendre une vraie session graphique, savoir si Determinate était réellement prêt, gérer Entra, éventuellement GitHub, construire Nix dans le bon contexte utilisateur, activer en root, reprendre après un crash, expliquer ce qui se passe à l’écran et surtout éviter qu’un retry relance n’importe quoi dans n’importe quel état.
 
-À ce stade, le script shell « simple » était en train de devenir une application sans interface, sans modèle d’état et avec des transitions implicites.
+À ce moment-là, continuer en shell aurait juste produit une application… sans interface et sans vraie machine à états.
 
-J’ai préféré assumer le problème.
+J’ai donc arrêté de lutter contre le problème et j’ai écrit une petite app macOS.
 
-J’ai écrit une petite app macOS.
+## SwiftUI était le choix le plus banal
 
-## Swift et SwiftUI, volontairement sans exotisme
+Le projet est volontairement classique : Swift 6, SwiftUI, Xcode et XcodeGen.
 
-Le projet est très classique :
+Je n’avais aucune envie de rajouter Electron ou une webview pour une application qui doit discuter avec macOS, Keychain, MSAL, launchd et un helper privilégié.
 
-~~~text
-Swift 6
-SwiftUI
-Xcode
-XcodeGen
-macOS 14+
-~~~
+L’app est petite et très liée au système. SwiftUI est largement suffisant.
 
-Je n’avais aucune raison de mettre Electron ou une webview au milieu.
-
-L’application est petite, profondément liée à macOS et doit dialoguer avec Keychain, MSAL, launchd et un helper privilégié.
-
-SwiftUI est très bien placé pour ça.
-
-Le projet reste buildable en ligne de commande avec `xcodebuild`. Xcode sert aux previews, au debug et à la signature, pas comme prérequis manuel au pipeline de release.
+Je garde aussi le build utilisable en ligne de commande avec `xcodebuild`. Xcode sert quand j’en ai besoin pour les previews, le debug ou la signature, mais je ne veux pas que la release dépende d’une série de clics dans l’IDE.
 
 <!-- SCREENSHOT 1
 Omnivya Setup.app sur l’écran de preflight "Checking this Mac before sign-in."
-Idéalement sur un Mac fraîchement enrôlé avec le fond/branding final.
+Idéalement sur un Mac fraîchement enrôlé avec le branding final.
 -->
 
-## La vraie valeur de l’app est la machine à états
+## Le vrai intérêt n’est pas l’interface
 
-L’interface est presque secondaire.
+L’interface pourrait être moche et le modèle resterait intéressant.
 
-Ce que je voulais surtout, c’était rendre le parcours explicite.
+Ce qui m’intéresse surtout, c’est que le parcours soit enfin explicite.
 
-Dans la première version, les phases ressemblent à ça :
+Il y a un état de preflight, un état d’authentification Entra, un profil résolu, éventuellement une étape GitHub, puis le provisioning, la validation et la fin.
 
-~~~text
-idle
-  -> preflight
-  -> entraAuth
-  -> roleResolved
-  -> githubAuth?
-  -> provisioning
-  -> validating
-  -> done
-~~~
+Un échec est lui aussi un état.
 
-Chaque transition est testable.
+Ça paraît trivial, mais ça change beaucoup de choses. Quand le Mac redémarre au milieu, quand l’app est fermée de force ou quand une activation Nix échoue, je peux décider précisément ce qui est rejouable et ce qui ne l’est pas.
 
-Un échec devient un état.
+Avant, ce genre de logique finit vite dans des fichiers marqueurs, quelques `if`, un `sleep 10` et beaucoup d’espoir.
 
-Un retry a une sémantique.
+Là, les transitions sont testées et le run garde des checkpoints.
 
-Le provisioning garde des checkpoints sur disque pour ne pas recommencer aveuglément après une fermeture forcée ou un reboot.
+## Je ne voulais pas faire tourner l’UI en root
 
-Cette propriété vaut largement les quelques centaines de lignes de Swift supplémentaires.
+Autre point assez vite évident : l’application graphique ne doit pas avoir les privilèges nécessaires pour modifier le système.
 
-Sans ça, une erreur au milieu d’un script finit souvent par produire deux questions pénibles :
-
-1. qu’est-ce qui a réellement été appliqué ?
-2. que puis-je relancer sans empirer la situation ?
-
-## Je sépare l’interface du privilège root
-
-L’app graphique ne tourne pas root.
-
-Elle ne devrait pas.
-
-J’ai donc séparé deux composants :
+J’ai donc séparé l’app et un helper privilégié.
 
 ~~~mermaid
 flowchart LR
-    A[Omnivya Setup.app] -->|typed XPC| B[Workstation Helper]
+    A[Omnivya Setup.app] -->|XPC| B[Workstation Helper]
     B --> C[Nix build]
     B --> D[nix-darwin activate]
     B --> E[rollback]
 ~~~
 
-Le protocole du helper est volontairement borné.
+Je ne voulais surtout pas d’un endpoint du genre `run(command)`.
 
-Il expose des opérations du type :
+Le helper expose un petit protocole avec des opérations connues : preflight, préparation du device, build, activation, validation, rollback, status.
 
-~~~text
-preflight
-prepareDevice
-buildConfiguration
-activateConfiguration
-validateConfiguration
-rollback
-status
-~~~
+Ça rend la frontière beaucoup plus claire. L’app demande une opération. Le helper décide comment la réaliser avec les privilèges nécessaires.
 
-Pas de commande générique « exécute ce shell ».
+C’est beaucoup plus sain qu’un shell root télécommandé depuis l’UI.
 
-Je veux pouvoir raisonner sur ce que l’application non privilégiée a le droit de demander.
+## Le contexte utilisateur compte vraiment avec Nix
 
-C’est aussi beaucoup plus simple à tester qu’un pseudo-shell root accessible par IPC.
+Le build et l’activation ne vivent pas exactement au même endroit.
 
-## Construire en utilisateur, activer en root
+Le build doit connaître le bon utilisateur, son home, Home Manager et éventuellement son checkout Git. L’activation du système, elle, a besoin de root.
 
-Nix ajoute une subtilité intéressante.
+Je fais donc construire dans le contexte utilisateur puis activer côté helper.
 
-Le build de la configuration dépend du contexte utilisateur, notamment pour Home Manager et le repository utilisé.
+Ça évite aussi de dépendre d’un prompt `sudo` qui apparaîtrait plus ou moins bien au milieu du premier login.
 
-L’activation du système, elle, a besoin de privilèges.
+Ce genre de détail n’est pas spectaculaire, mais c’est précisément ce qui rend le provisioning reproductible au lieu de marcher seulement sur mon Mac.
 
-Le découpage devient donc :
+## GitHub n’arrive que quand il sert
 
-~~~text
-user context
-  -> resolve sources
-  -> nix build
+Pour un profil Standard ou Direction, je n’ai aucune raison d’imposer GitHub.
 
-root helper
-  -> set system profile
-  -> activate
-  -> validate
-~~~
-
-Je préfère cette séparation à une application qui lance `sudo` et espère qu’un prompt apparaisse au bon moment.
-
-## GitHub est conditionnel
-
-Pour un profil Direction ou Standard, GitHub n’a rien à faire dans le chemin critique.
-
-Pour un profil Tech, mon implémentation actuelle peut lancer un Device Flow GitHub et cloner `mdm-setup` dans le workspace utilisateur.
-
-L’écran est donc conditionnel.
-
-~~~text
-Tech
-  -> Connect GitHub
-  -> device code
-  -> clone
-
-Direction / Standard
-  -> skip
-~~~
+Pour un profil Tech, mon implémentation actuelle peut lancer un Device Flow puis cloner `mdm-setup` dans le workspace utilisateur.
 
 <!-- SCREENSHOT 2
-Écran GitHub de Omnivya Setup avec le device code visible.
-Utiliser un code expiré ou généré pour la capture.
-Ne jamais publier un token, cookie ou URL contenant un secret.
+Écran GitHub de Omnivya Setup avec un device code expiré.
+Ne jamais publier de token, cookie ou URL contenant un secret.
 -->
 
-Ce point évoluera probablement encore : je ne veux pas que GitHub devienne une dépendance de distribution pour les profils qui n’en ont pas besoin, et je travaille justement à pousser davantage de releases prébuildées.
+C’est encore un point en mouvement.
 
-Mais pour un développeur qui doit de toute façon travailler avec les repositories, le Device Flow reste une expérience bien meilleure qu’un PAT copié dans un terminal.
+Je veux aller vers des releases prébuildées pour que GitHub ne serve plus de canal de distribution de la workstation. En revanche, pour un développeur qui va de toute façon travailler sur les repositories, le Device Flow reste une manière propre de faire l’onboarding sans lui demander de copier un PAT dans un terminal.
 
-## Le premier login est un environnement hostile
+## Le premier login est beaucoup moins stable qu’il en a l’air
 
-Le pilote m’a rappelé une chose : « le desktop est affiché » ne signifie pas « tout est prêt ».
+Le pilote m’a rappelé un truc assez simple : voir le desktop ne veut pas dire que la machine est prête.
 
-Le Setup Assistant peut se terminer alors que :
+Le Setup Assistant peut se terminer alors que Determinate n’est pas encore complètement opérationnel. Le Wi-Fi peut être connecté mais bloqué par un captive portal. Le helper peut ne pas être chargé. Une dépendance présente depuis des mois sur ma machine de dev peut ne pas exister du tout sur un Mac fraîchement effacé.
 
-* Determinate n’a pas fini de devenir réellement opérationnel ;
-* le réseau est connecté à un Wi-Fi derrière un captive portal ;
-* un LaunchDaemon n’est pas encore chargé ;
-* une dépendance attendue sur mon Mac de développement n’existe pas sur une installation propre.
+Du coup, le preflight doit tester l’état dont j’ai réellement besoin.
 
-Je durcis donc le preflight pour qu’il teste l’état dont j’ai réellement besoin, pas seulement l’existence d’un binaire.
+Je ne veux pas juste vérifier que `nix` existe. Je veux savoir que le daemon fonctionne.
 
-~~~text
-session utilisateur prête ?
-helper chargé ?
-daemon Nix sain ?
-WAN réellement utilisable ?
-puis seulement :
-auth Entra
-~~~
+Je ne veux pas juste savoir que macOS a une interface réseau. Je veux savoir que l’auth Entra a une chance de marcher.
 
-C’est exactement le genre de logique qui devient beaucoup plus saine dans une machine à états que dans une suite de `sleep 10`.
+Et seulement après, j’ouvre le parcours utilisateur.
 
-## Les logs font partie de l’UX
+Ça évite pas mal de faux problèmes d’authentification qui sont en réalité juste des problèmes de timing.
 
-Je ne voulais pas une barre de progression qui reste à 43 % pendant cinq minutes sans explication.
+## J’ai fini par afficher les logs Nix dans l’app
 
-L’application parse donc le flux de build Nix et affiche une progression, le package courant et une petite fenêtre de log.
+Je n’aime pas trop les barres de progression qui disent « préparation en cours » pendant dix minutes.
 
-En cas d’échec, l’utilisateur peut :
+Le build Nix fournit déjà beaucoup d’informations, donc autant les exploiter.
 
-* retry ;
-* exporter les diagnostics ;
-* rollback dans les cas pertinents.
+L’app affiche une progression, le package en cours et un bout du log. En cas d’échec, on peut retry, exporter les diagnostics et, quand ça a du sens, rollback.
 
 <!-- SCREENSHOT 3
 Écran "Preparing your workstation" avec le pourcentage Nix et quelques lignes de log.
-Choisir un moment où les noms de derivations sont parlants mais ne révèlent rien d’interne.
+Choisir un moment où les noms de derivations restent publiables.
 -->
 
 <!-- SCREENSHOT 4
 Écran d’erreur avec Try Again / Export Diagnostics / Rollback.
-Idéalement une erreur volontaire sur un Mac de test, pas une capture contenant des tokens ou chemins personnels sensibles.
+Provoquer volontairement une erreur propre sur le Mac de test.
 -->
 
-Pour moi, c’est aussi du Platform Engineering.
+Pour moi, ça fait complètement partie du sujet Platform Engineering.
 
-Le golden path n’est pas seulement le chemin où tout marche. C’est également le chemin qui explique correctement ce qui s’est passé quand quelque chose ne marche pas.
+Un golden path qui marche uniquement quand tout va bien n’est pas vraiment un golden path. Ce qui compte aussi, c’est ce qu’il raconte quand quelque chose casse.
 
-## Une app minuscule, une frontière utile
+## Finalement, l’app reste assez petite
 
-Le résultat n’a rien d’un produit grand public.
+Je ne suis pas en train de construire un produit MDM maison.
 
-C’est une petite application interne qui transforme un ensemble de dépendances système en parcours explicite.
+L’application sert surtout de colle entre des composants qui ont chacun leur rôle.
 
-Elle m’a surtout permis de poser des frontières :
+SwiftUI gère l’interaction. Entra l’identité. Le helper les privilèges. Nix l’état du poste. Apple Business le bootstrap.
 
-~~~text
-SwiftUI
-  -> interaction
+Une fois ce découpage posé, la suite est devenue assez logique.
 
-Entra
-  -> identité
-
-XPC helper
-  -> privilèges
-
-Nix
-  -> état
-
-Apple Business
-  -> bootstrap
-~~~
-
-Et une fois ces frontières posées, une autre question est devenue évidente.
-
-Pourquoi continuer à penser les mises à jour de workstation comme « récupérer la dernière version du repo » alors que tout le reste de mes systèmes utilise des releases ?
+Je versionne déjà mes services, mes images et mes artefacts. Pourquoi mes postes resteraient-ils sur « la dernière config Git qui a réussi à passer » ?
 
 ## Suite
 
