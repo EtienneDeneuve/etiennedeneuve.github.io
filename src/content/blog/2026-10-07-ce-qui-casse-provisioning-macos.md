@@ -29,43 +29,21 @@ relatedArticles:
 
 Le schéma était propre.
 
-~~~text
-Apple Business
-  -> Determinate
-  -> Bootstrap
-
-Premier login
-  -> Entra
-  -> profil
-  -> Nix
-  -> poste prêt
-~~~
+Apple Business installe Determinate puis mon Bootstrap.pkg. Au premier login, Entra identifie l’utilisateur, l’app résout le profil, Nix construit le poste et tout le monde est content.
 
 Puis j’ai effacé un Mac et j’ai essayé pour de vrai.
 
-C’est là que le sujet est devenu intéressant.
+Évidemment, c’est là que ça devient intéressant.
 
-## « Le profile est arrivé » ne veut pas dire « le package est installé »
+## Voir le package dans le profil ne veut pas dire qu’il est installé
 
-Première confusion facile avec le nouveau Built-in Management d’Apple Business : voir la déclaration du package côté Mac ne prouve pas que le package a fini son installation.
+Premier piège : côté Mac, je voyais bien les déclarations des packages arrivées depuis Apple Business.
 
-J’ai donc fini par regarder la chaîne réelle :
+J’aurais pu conclure que le problème était ailleurs.
 
-~~~text
-mdmclient
-   |
-   v
-appstored
-   |
-   v
-installd
-~~~
+En regardant les logs, la réalité était plus simple : `appstored` avait bien téléchargé mon package, puis l’installation s’était arrêtée immédiatement.
 
-Les logs racontent beaucoup plus de choses que l’interface.
-
-Sur une de mes premières tentatives, le téléchargement s’était parfaitement terminé.
-
-Puis :
+Le message était assez parlant :
 
 ~~~text
 Could not create PKProduct
@@ -80,238 +58,163 @@ Could not create PKProduct
 Garder 6 à 10 lignes maximum et masquer UUID/serial si nécessaire.
 -->
 
-Le problème n’avait rien à voir avec le Blueprint, le réseau ou le stockage.
+Le réseau marchait. Apple Business avait fait son travail. Le fichier avait été récupéré.
 
-Mon package était simplement du mauvais type.
+Mon package était juste mauvais.
 
-## pkgbuild n’était pas la fin de l’histoire
+## pkgbuild tout seul ne suffisait pas
 
 J’avais construit un component package avec `pkgbuild`.
 
-Il contenait bien le payload, les scripts et les métadonnées attendues par Installer.
+Il était parfaitement installable localement, donc au premier regard rien de choquant.
 
-Mais `appstored`, dans ce chemin de déploiement Apple Business, attendait un product archive avec un `Distribution` au niveau supérieur.
+Sauf que dans ce chemin de déploiement, `appstored` attendait un product archive avec un fichier `Distribution` au niveau supérieur.
 
-Le pipeline est donc devenu :
+J’ai donc changé le pipeline pour passer aussi par `productbuild`.
 
-~~~text
-xcodebuild
-  -> codesign app + helper
-  -> pkgbuild
-  -> productbuild
-  -> productsign
-  -> notarize
-  -> Blob
-  -> Apple Business
-~~~
-
-J’ai même ajouté un test au build qui expand le package final et refuse la release si `Distribution` n’existe pas.
-
-Parce que la meilleure manière de ne pas rediagnostiquer le même bug trois mois plus tard est de le transformer en invariant de pipeline.
+Depuis, le build vérifie lui-même le contenu du package final. Il l’expand et échoue si `Distribution` n’est pas là.
 
 <!-- SCREENSHOT 2
-Terminal :
-pkgutil --expand <pkg> /tmp/check
-find /tmp/check -maxdepth 2
-avec Distribution + le component pkg imbriqué.
-Très visuel, peu de texte.
+Terminal avec pkgutil --expand sur le PKG final, puis Distribution + le component pkg.
 -->
 
-## Un Mac neuf n’est pas mon Mac de développement
+C’est typiquement le genre de bug que je préfère transformer en test plutôt qu’en note dans un wiki.
 
-Le second rappel a été plus classique.
+Sinon, six mois plus tard, quelqu’un reconstruit le package légèrement différemment et on repart lire les logs `appstored`.
 
-Sur ma machine, certaines dépendances existaient déjà.
+## Le Mac propre m’a aussi montré toutes mes dépendances invisibles
 
-Sur un Mac qui vient de passer par Setup Assistant, non.
+Sur mon poste, Homebrew existe depuis longtemps.
 
-Homebrew en est un bon exemple.
+Sur un Mac fraîchement effacé, non.
 
-Une configuration nix-darwin qui active des casks peut très bien fonctionner depuis des mois sur mon poste et casser immédiatement sur une machine où `brew` n’existe simplement pas encore.
+Ça paraît évident dit comme ça. Ça l’est beaucoup moins quand une activation nix-darwin fonctionne depuis des mois chez toi et casse uniquement pendant un vrai enrollement ADE.
 
-Ma première réaction a été de bootstrapper Homebrew avant l’activation.
+Une partie de mes profils utilisait encore des casks Homebrew. L’activation arrivait donc sur un système où `brew` n’existait tout simplement pas.
 
-Puis le test m’a forcé à reposer la question : **est-ce que j’ai réellement besoin de Homebrew pour ce profil ?**
+J’ai d’abord ajouté le bootstrap nécessaire, puis j’ai repris le problème dans l’autre sens : est-ce que ces applications ont réellement besoin de passer par Homebrew ?
 
-Pour le Mac pilote concerné, j’ai finalement déplacé plusieurs applications vers Nix et réduit la dépendance à Homebrew.
+Pour le profil pilote, j’ai finalement déplacé plusieurs choses vers Nix et réduit cette dépendance.
 
-C’est exactement le type de correction que j’aime bien : le bug ne produit pas uniquement un `if` supplémentaire, il pousse le modèle dans une direction plus cohérente.
+Je préfère nettement cette correction à l’empilement d’un script supplémentaire juste parce que ma machine de développement avait masqué le problème.
 
-## Le bon rôle Entra ne suffisait pas
+## Entra fonctionnait, mais il me manquait quand même une information
 
-J’ai également eu un cas plus subtil.
+Autre bug plus subtil : le login Entra passait, l’App Role était correct et le bon profil workstation était choisi.
 
-L’utilisateur s’authentifiait correctement.
+Pourtant, certaines personnalisations utilisateur n’arrivaient pas.
 
-L’App Role était présent.
+Le problème venait de l’email.
 
-Le rôle workstation était donc correctement résolu.
+Le rôle ne dépend pas de l’email, et je veux que ça reste comme ça. En revanche, mon inventaire Nix utilise encore l’adresse pour rattacher certains modules personnels connus.
 
-Mais certains modules personnels ne se chargeaient pas.
+J’avais supposé que `preferred_username` serait toujours disponible.
 
-La raison était simplement que mon code utilisait aussi l’adresse email pour rattacher les overrides d’une identité connue, et que `preferred_username` n’était pas toujours présent comme je l’avais supposé.
+Ce n’était pas suffisamment robuste.
 
-J’ai dû rendre la récupération plus robuste :
+J’ai donc ajouté les fallbacks nécessaires et surtout rendu cette donnée obligatoire lorsque le build en a besoin. Si l’app ne sait pas correctement identifier l’utilisateur pour rattacher ses personnalisations, elle ne doit pas continuer silencieusement avec un poste à moitié bon.
 
-~~~text
-preferred_username
-  sinon email
-  sinon upn
-  sinon username MSAL
-~~~
+C’est un détail, mais il illustre bien la différence entre « l’auth marche » et « j’ai toutes les données nécessaires pour construire correctement la machine ».
 
-et surtout refuser de poursuivre une construction qui a besoin de cet email si je n’en possède aucun.
+## J’ai réussi à cloner la bonne config… puis à ne pas l’utiliser
 
-L’enseignement est moins « attention à preferred_username » que celui-ci :
+Celui-là m’a bien fait rire.
 
-> Une claim utile à l’UX n’est pas automatiquement un invariant de ton protocole.
+Sur un profil Tech, le Device Flow GitHub fonctionnait. Le repository `mdm-setup` était cloné dans le home utilisateur.
 
-Si une donnée devient obligatoire dans la construction, elle doit être validée explicitement.
+Et ensuite le moteur Nix continuait à construire depuis le snapshot embarqué dans le Bootstrap.pkg.
 
-## J’ai aussi construit la bonne configuration… depuis le mauvais endroit
+Donc tout le parcours GitHub était correct, le repo était bien là, mais les derniers changements n’étaient jamais utilisés.
 
-Autre bug assez savoureux : pour un profil Tech, l’application avait correctement authentifié GitHub et cloné `mdm-setup`.
+Le Mac construisait consciencieusement la mauvaise version.
 
-Puis le provisioning continuait à construire depuis le snapshot embarqué dans le Bootstrap.pkg.
+J’ai corrigé la résolution des sources pour préférer le checkout utilisateur lorsqu’il existe, puis retomber sur le snapshot du bootstrap en fallback.
 
-Le checkout Git contenait donc les dernières personnalisations, mais la machine appliquait une version plus ancienne.
+Ça marche pour le pilote, mais c’est justement le genre de situation qui m’a convaincu d’aller vers des releases explicites et prébuildées : je préfère qu’une version soit choisie volontairement plutôt que « la source la plus fraîche qu’on a trouvée quelque part sur le disque ».
 
-Tout « marchait ».
+## Et certaines apps n’étaient simplement pas là où je les cherchais
 
-Les bonnes applications n’arrivaient simplement jamais.
+Home Manager ajoute encore une petite surprise : certaines applications utilisateur arrivent dans `~/Applications/Home Manager Apps/`, pas dans `/Applications`.
 
-J’ai corrigé le moteur pour préférer explicitement le checkout utilisateur lorsqu’il existe, puis retomber sur le snapshot du package.
+Le provisioning disait success.
 
-~~~text
-checkout utilisateur
-  -> préféré
+Je regardais `/Applications`.
 
-snapshot embarqué
-  -> fallback bootstrap
-~~~
+Je ne voyais pas ce que j’attendais.
 
-C’est également une des raisons pour lesquelles je veux maintenant aller vers des releases explicites plutôt qu’un mélange implicite de « snapshot embarqué » et « repo éventuellement plus récent ».
+Ça ressemble à un échec alors que le système a fait exactement ce qu’on lui a demandé.
 
-## Les applications Home Manager ne sont pas toutes dans /Applications
+Depuis, je considère aussi ce genre d’information comme faisant partie des diagnostics. Si le bootstrap installe quelque chose dans un endroit peu évident, il doit être capable de l’expliquer.
 
-Encore un détail banal qui peut faire perdre du temps pendant un pilote.
+C’est beaucoup moins cher que de redécouvrir le comportement à chaque ticket.
 
-Certaines applications gérées par Home Manager arrivent dans :
+## « nix existe » n’est pas non plus synonyme de « Determinate est prêt »
 
-~~~text
-~/Applications/Home Manager Apps/
-~~~
+Autre race du premier login : le binaire peut être présent alors que l’environnement n’est pas encore complètement opérationnel.
 
-et pas dans :
+Au début, mon preflight était trop optimiste.
 
-~~~text
-/Applications
-~~~
+Je vérifiais en gros que Nix existait.
 
-Quand le provisioning annonce « success » et que quelqu’un regarde uniquement Launchpad ou `/Applications`, on peut conclure un peu vite que le build n’a rien installé.
+Maintenant je veux savoir que le daemon répond réellement et que le store est utilisable avant de lancer la suite.
 
-L’observabilité d’un bootstrap doit donc inclure l’endroit où il a mis les choses.
+Même chose pour le réseau : une interface Wi-Fi connectée derrière un captive portal n’est pas un accès Internet utilisable pour MSAL.
 
-Ce n’est pas glamour, mais c’est du support évité.
+Je préfère attendre proprement avant d’ouvrir Entra plutôt que de transformer un problème de réseau en faux incident d’authentification.
 
-## « nix existe » n’est pas la même chose que « Determinate est prêt »
+## Le pilote a aussi fait ressortir trois sujets à durcir
 
-Le premier login introduit aussi une race assez intéressante.
+Le premier concerne le helper privilégié. macOS donne à l’utilisateur de plus en plus de contrôle sur les éléments lancés en arrière-plan. Si ce helper est nécessaire au provisioning, je dois gérer proprement son autorisation via ServiceManagement et le payload MDM associé. Pas espérer que le bouton reste activé.
 
-Le Blueprint peut avoir livré Determinate et le binaire `nix` peut être présent alors que tout l’environnement n’est pas encore correctement initialisé.
+Le deuxième concerne justement le preflight du premier login : daemon Nix réellement sain, WAN réellement utilisable, puis seulement l’auth.
 
-Dans le pilote, je vérifie désormais plus précisément la santé attendue autour du daemon et du store.
+Le troisième concerne le disque.
 
-Je garde également Determinate comme package séparé.
+Si je distribue demain des closures Nix prébuildées, je ne veux pas transformer les SSD de 512 Go en archive historique du parc.
 
-Je ne veux pas l’embarquer dans mon Bootstrap.pkg : il possède son propre cycle d’installation et de maintenance.
+Je garderai la génération courante et la `previous-known-good`. Une génération plus ancienne ne mérite pas de rester uniquement « au cas où », surtout si le rollback est déjà assuré par la précédente.
 
-Le bootstrap Omnivya doit savoir constater « Nix n’est pas prêt », pas réimplémenter Determinate.
+Mais le GC ne doit arriver qu’après validation de la nouvelle génération. Sinon, on peut très facilement supprimer le seul rollback qui nous aurait été utile.
 
-## Les trois durcissements que je considère obligatoires avant généralisation
+## Finalement, aucun de ces bugs n’a changé l’architecture
 
-Les premiers runs m’ont également fait ajouter trois sujets au backlog.
+C’est probablement ce que je trouve le plus intéressant.
 
-Le premier est **ServiceManagement**.
+Apple Business avait bien livré la déclaration.
 
-Sur les versions récentes de macOS, un utilisateur peut contrôler certains éléments exécutés en arrière-plan. Un helper indispensable au provisioning doit donc être explicitement géré par le payload MDM adéquat, avec des identifiants et règles suffisamment précis.
+`appstored` avait bien téléchargé le package.
 
-Le second est le **réseau du premier login**.
+PackageKit refusait son format.
 
-~~~text
-Wi-Fi connecté
-!=
-Internet réellement utilisable
-~~~
+Entra avait bien authentifié l’utilisateur.
 
-Un captive portal ne doit pas lancer une boucle MSAL absurde.
+L’App Role était bon.
 
-Je veux donc un vrai preflight réseau avant l’authentification.
+Ma logique de personnalisation attendait une autre donnée.
 
-Le troisième est le **garbage collection Nix**.
+GitHub avait bien cloné le repository.
 
-Si je passe aux closures prébuildées décrites dans l’article précédent, un Mac de 512 Go ne doit pas conserver indéfiniment chaque génération téléchargée.
-
-La règle que je retiens est :
-
-~~~text
-current
-+ previous-known-good
-= protégés
-
-le reste
-= GC eligible
-~~~
-
-Pas avant validation de la nouvelle génération.
-
-## Le point commun de tous ces bugs
-
-Aucun de ces problèmes ne remet en cause le découpage Apple Business + Entra + Nix.
-
-Au contraire.
-
-Ils ont surtout révélé les frontières réelles entre les composants.
-
-~~~text
-Apple Business a bien livré la déclaration.
-appstored a bien téléchargé le package.
-PackageKit a refusé son format.
-
-Entra a bien authentifié l’utilisateur.
-L’App Role était correct.
-Ma logique de personnalisation attendait une claim différente.
-
-GitHub avait bien cloné le repo.
 Nix fonctionnait.
-Mon moteur avait choisi la mauvaise source.
-~~~
 
-C’est exactement pour ça que je préfère les architectures où chaque étape possède une responsabilité identifiable.
+Mon moteur avait simplement choisi la mauvaise source.
 
-Quand ça casse, je peux demander **quelle frontière a été franchie correctement et laquelle ne l’a pas été**.
+À chaque fois, le problème était assez localisé parce que les responsabilités étaient séparées.
 
-## Ce que je retiens du pilote
+C’est exactement ce que je voulais obtenir.
 
-Je garderais le même découpage.
+## Le vrai test reste un erase complet
 
-Mais je ne considérerais plus jamais un parcours de provisioning comme validé tant qu’il n’a pas passé plusieurs installations réellement propres.
+Après quelques itérations, j’ai arrêté de considérer un test local comme représentatif.
 
-Pas « j’ai supprimé deux fichiers et relancé ».
+Supprimer deux fichiers puis relancer l’app n’est pas un test de provisioning.
 
-Un vrai erase.
+Le vrai test, c’est un Mac effacé, Setup Assistant, un premier login propre, le réseau réel, aucune dépendance héritée de mon environnement de développement et un utilisateur qui ne connaît pas l’implémentation.
 
-Un vrai Setup Assistant.
+C’est là qu’on voit si le système provisionne vraiment un poste.
 
-Un vrai premier login.
+Ou s’il ne fait que reproduire celui de la personne qui l’a écrit.
 
-Un réseau imparfait.
-
-Un utilisateur qui n’a pas les outils du développeur qui a écrit le bootstrap.
-
-C’est là qu’on découvre si le système provisionne vraiment une workstation ou s’il reproduit simplement l’environnement de son auteur.
-
-Et c’est probablement le point le plus utile de toute cette série.
+Pour l’instant, c’est probablement la leçon la plus utile de tout le chantier.
 
 ## Sources officielles
 
