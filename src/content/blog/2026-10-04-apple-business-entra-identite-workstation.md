@@ -27,124 +27,59 @@ relatedArticles:
 
 > Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 2/5. Le début : [pourquoi j’ai arrêté de traiter le provisioning Mac comme un problème MDM](/2026-10-03-provisioning-mac-pas-probleme-mdm). La suite : [pourquoi j’ai fini par écrire une petite app macOS](/2026-10-05-pourquoi-app-macos-swiftui-provisioning).
 
-Une fois Apple Business limité à son rôle de bootstrap, il me restait une question : comment savoir quel poste construire ?
+Une fois Apple Business limité à son rôle de bootstrap, il restait une question assez basique : comment le Mac sait-il quel poste construire ?
 
-La réponse facile aurait été de regarder l’adresse mail.
+La première idée qui vient est de regarder l’adresse mail. C’est tentant parce que ça marche vite. On prend `alice@entreprise.fr`, on en déduit Alice, puis un rôle, puis une configuration.
 
-~~~text
-alice@entreprise.fr
-  -> alice
-  -> tech
-  -> macbook-alice
-~~~
+Je n’aimais pas trop.
 
-C’est simple, lisible et fragile.
+Une adresse mail est pratique pour afficher un nom, configurer Git ou rattacher quelques préférences. Ce n’est pas une bonne base pour décider de ce qu’un utilisateur a le droit d’installer sur son poste.
 
-Je ne voulais pas que le code du poste embarque une liste de personnes et décide de leurs droits à partir de leur UPN.
+Entra avait déjà cette information, donc autant l’utiliser.
 
-Entra avait déjà l’information dont j’avais besoin.
+## Je ne voulais surtout pas d’un écran « choisissez votre profil »
 
-## Je ne voulais pas d’un écran « choisissez votre profil »
+Ça aurait été la solution la plus simple côté UX et probablement la pire côté modèle.
 
-Le pire modèle aurait été de demander au premier login :
+Je ne veux pas que quelqu’un arrive au premier login et choisisse entre Standard, Direction ou Tech. Le profil n’est pas une préférence utilisateur, c’est une décision d’autorisation.
 
-~~~text
-Quel poste voulez-vous ?
+J’ai donc créé une application Entra dédiée à l’onboarding workstation et trois App Roles : `Workstation.Standard`, `Workstation.Direction` et `Workstation.Tech`.
 
-[ Standard ]
-[ Direction ]
-[ Tech ]
-~~~
+Côté Nix, ces rôles sont traduits vers mes profils `user`, `direction` et `tech`.
 
-L’utilisateur ne doit pas choisir son niveau d’accès.
-
-Ce choix appartient au système d’identité.
-
-J’ai donc créé une application Entra dédiée à l’onboarding workstation avec trois App Roles :
-
-~~~text
-Workstation.Standard
-Workstation.Direction
-Workstation.Tech
-~~~
-
-Ils correspondent ensuite à mes rôles Nix :
-
-~~~text
-Workstation.Standard   -> user
-Workstation.Direction  -> direction
-Workstation.Tech       -> tech
-~~~
-
-L’application macOS ne reçoit donc pas une personne à comparer à une table statique. Elle reçoit une identité authentifiée et un ensemble de claims signés.
+L’idée est très simple : l’application ne demande jamais « qu’est-ce que tu veux ? ». Elle demande à Entra « qui es-tu et qu’est-ce que tu as le droit d’avoir ? ».
 
 <!-- SCREENSHOT 1
 Entra > Enterprise applications > Omnivya Workstation > Users and groups.
-Montrer les trois App Roles avec quelques comptes de test.
+Montrer les App Roles avec quelques comptes de test.
 Masquer les emails complets, tenant ID, object IDs et toute donnée non utile.
 -->
 
-## L’UPN n’est pas mon identifiant d’autorisation
+## L’UPN reste utile, mais il ne décide pas du rôle
 
-Une adresse comme `prenom@entreprise.fr` est pratique pour l’UX et pour certaines personnalisations.
+Je garde évidemment l’UPN et l’email. Ils servent.
 
-Je ne veux pas en faire la clé d’autorisation.
+Dans mon cas, l’email me permet par exemple de rattacher quelques personnalisations connues dans l’inventaire Nix : un module Home Manager particulier, quelques outils personnels, ce genre de choses.
 
-L’identité canonique côté application est construite autour de l’objet Entra et du tenant.
+Mais ça arrive **après** la décision d’autorisation.
 
-L’UPN peut changer.
+Le rôle vient d’Entra. Les personnalisations viennent éventuellement de l’identité connue dans le repo.
 
-Le nom d’affichage peut changer.
+Cette séparation m’a d’ailleurs permis de voir un bug assez vite pendant le pilote : l’utilisateur était correctement authentifié, l’App Role était bon, mais le claim que j’utilisais pour récupérer l’email n’était pas toujours présent. Le poste recevait donc le bon profil général, mais certaines personnalisations ne s’attachaient pas.
 
-L’adresse mail peut changer.
+C’est un bon rappel : un claim pratique n’est pas forcément un invariant. Si j’en ai réellement besoin pour construire le poste, je dois le valider explicitement.
 
-L’objet Entra reste la meilleure ancre pour savoir qui s’est authentifié dans ce tenant.
+J’y reviens dans le dernier article parce que ce genre de détail est beaucoup plus intéressant que le schéma parfait sur un slide.
 
-C’est aussi pour ça que mon application refuse un utilisateur qui n’a aucun App Role attendu plutôt que de lui attribuer un profil par défaut.
+## Une identité n’est pas un device
 
-Pas de rôle, pas de workstation implicite.
+J’en ai profité pour casser un autre couplage historique : une personne n’est pas son Mac.
 
-## L’email reste utile, mais pour autre chose
+Avant, un hostname connu amenait presque naturellement vers un utilisateur, puis vers un rôle. Ça fonctionne jusqu’au jour où quelqu’un a deux machines, change de rôle ou remplace son Mac.
 
-Il y a une nuance intéressante dans mon implémentation actuelle.
+Le repository sépare maintenant les identités et les devices. Le runtime peut construire une workstation avec les informations récupérées au moment du provisioning, sans exiger qu’un nouveau hostname ait été ajouté dans Git la veille.
 
-Je n’utilise pas l’email pour choisir le rôle, mais je l’utilise encore pour rattacher certains overrides personnels connus dans l’inventaire Nix.
-
-Par exemple, une personne peut avoir un petit module Home Manager spécifique en plus du profil Tech commun.
-
-Le modèle est donc :
-
-~~~text
-Entra App Role
-    |
-    +--> autorise le profil workstation
-
-email / identité connue
-    |
-    +--> attache éventuellement des personnalisations légitimes
-~~~
-
-Ce sont deux responsabilités différentes.
-
-Cette distinction m’a d’ailleurs coûté un bug pendant le pilote : l’authentification Entra était correcte, le rôle était bon, mais le token ne fournissait pas toujours le champ d’email que j’attendais. Le profil général se construisait, mais les modules personnels ne se rattachaient pas.
-
-J’y reviens dans le dernier article de la série, parce que c’est exactement le type de détail qu’un beau schéma d’architecture ne montre jamais.
-
-## Une identité et un device ne sont pas la même chose
-
-La seconde décision a été de casser le lien historique entre personne et hostname.
-
-Dans le repository, les identités et les devices sont maintenant deux inventaires distincts.
-
-Une personne peut avoir deux Macs.
-
-Un Mac peut être remplacé.
-
-Le rôle peut évoluer sans que le device devienne une nouvelle identité.
-
-Et surtout, le premier provisioning n’a pas besoin qu’un développeur ait ajouté au préalable une configuration dédiée à chaque hostname.
-
-Le runtime peut appeler la même fonction de composition avec les paramètres obtenus pendant l’onboarding.
+C’est ce que fait `mkWorkstation`.
 
 ~~~mermaid
 flowchart LR
@@ -156,97 +91,60 @@ flowchart LR
     E --> F[nix-darwin system]
 ~~~
 
-C’est pour moi le vrai gain.
+Je garde bien sûr un inventaire des machines connues pour l’exploitation courante. Je ne veux simplement plus que cet inventaire soit un prérequis au premier boot.
 
-Je garde un inventaire des machines connues pour l’exploitation courante, mais l’inventaire n’est plus un prérequis au premier boot.
+## Pourquoi des App Roles plutôt que les groupes directement
 
-## Les groupes Entra restent derrière l’abstraction
+J’aurais pu lire les groupes Entra et écrire un mapping en dur.
 
-J’aurais pu lire directement les groupes Entra et écrire un mapping entre groupes et profils.
+Ça aurait marché.
 
-Je préfère utiliser des App Roles comme contrat entre l’identité et la workstation.
+Mais le nom d’un groupe appartient à l’organisation. Le rôle workstation appartient à l’application.
 
-Pourquoi ?
-
-Parce que le nom et la structure des groupes appartiennent à l’organisation.
-
-Le rôle workstation appartient à l’application.
-
-Si demain je renomme un groupe, je ne veux pas republier mon application macOS ni modifier le code Nix.
+Je préfère donc garder une couche d’indirection :
 
 ~~~text
 groupes Entra
-    |
-    v
-App Role Workstation.*
-    |
-    v
-profil Nix
+    -> App Role Workstation.*
+    -> profil Nix
 ~~~
 
-L’App Role me donne cette couche d’indirection.
+Si demain un groupe change de nom ou si l’organisation bouge, je peux adapter l’assignation côté Entra sans changer le code de l’application ni la logique Nix.
 
-## La politique multi-rôles doit être explicite
+C’est un petit détail d’architecture, mais j’aime bien ce genre de détails : ils évitent de faire fuiter l’organisation interne jusque dans le code du poste.
 
-Une autre chose que j’ai refusé de laisser au hasard : que faire si un utilisateur possède plusieurs rôles ?
+## Et si quelqu’un a plusieurs rôles ?
 
-Dans mon implémentation actuelle, la politique est déterministe.
+Il faut décider.
 
-On peut parfaitement préférer rejeter toute ambiguïté.
+Dans mon implémentation actuelle, la résolution est déterministe. On pourrait tout aussi bien choisir de rejeter toute ambiguïté.
 
-L’important est que cette règle soit volontaire, documentée et testée.
+Ce qui compte, c’est de ne pas laisser cette décision à l’ordre d’un tableau JSON ou au hasard du token.
 
-Une autorisation n’est pas un endroit où j’ai envie de dépendre de l’ordre d’un tableau JSON.
+L’autorisation doit être volontaire.
 
-## Ce que voit l’utilisateur
+## Ce que voit réellement l’utilisateur
 
-L’utilisateur ne voit finalement presque rien de tout ça.
+Presque rien.
 
-Il s’authentifie.
+Il s’authentifie, puis l’application affiche le profil détecté.
 
-L’application affiche ensuite quelque chose comme :
-
-~~~text
-Profile detected
-
-Omnivya · tech
-
-Next you’ll connect GitHub for developer access.
-~~~
-
-ou un profil non technique où GitHub n’est pas requis.
+Pour un poste Tech, elle indique que GitHub sera demandé ensuite. Pour un poste Direction ou Standard, elle indique que GitHub n’est pas nécessaire.
 
 <!-- SCREENSHOT 2
 Omnivya Setup.app sur l’écran "Profile detected".
 Faire deux captures si possible : une Tech et une Direction/Standard.
-C’est probablement le screenshot le plus parlant de l’article.
 -->
 
 Le rôle n’est pas modifiable.
 
-C’était exactement ce que je cherchais : rendre le parcours simple sans transformer la simplicité en faille d’autorisation.
+C’était exactement ce que je cherchais : le parcours reste très simple, mais la simplicité ne vient pas d’un gros bouton « faites-moi confiance ». Elle vient du fait que l’identité a déjà fait le travail.
 
-## Une frontière claire
+À ce stade, le modèle commençait à devenir propre : Apple Business sait que le Mac appartient au parc, Entra sait qui est devant, Nix sait ce que signifie le profil.
 
-À ce stade, j’avais trois responsabilités bien séparées :
+Il me restait encore à gérer tout ce qui se passe entre ces trois mondes au premier login.
 
-~~~text
-Apple Business
-  -> ce Mac appartient au parc
-
-Entra
-  -> cette personne est authentifiée
-  -> elle a droit à ce profil
-
-Nix
-  -> voilà ce que ce profil signifie techniquement
-~~~
-
-Il me manquait encore une chose.
-
-Tout ça nécessitait de gérer un premier login interactif, des erreurs réseau, un helper root, du retry, des diagnostics et plusieurs étapes qui ne devaient surtout pas finir dans un script shell de 900 lignes.
-
-C’est là que la petite app Swift a commencé à devenir une bonne idée.
+C’est là que j’ai arrêté de vouloir résoudre le problème avec des scripts.
 
 ## Suite
 
