@@ -25,7 +25,7 @@ relatedArticles:
   - 2026-10-31-ce-qui-casse-provisioning-macos
 ---
 
-> Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 2/5. Le début : [pourquoi j’ai arrêté de traiter le provisioning Mac comme un problème MDM](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/). La suite : [pourquoi j’ai fini par écrire une petite app macOS](/thinking/2026-10-17-pourquoi-app-macos-swiftui-provisioning/).
+> Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 2/5. Le début : [pourquoi j’ai arrêté de traiter le provisioning Mac comme un problème MDM](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/). La suite arrive la semaine prochaine.
 
 Une fois Apple Business limité à son rôle de bootstrap, il restait une question assez basique : comment le Mac sait-il quel poste construire ?
 
@@ -160,7 +160,7 @@ C’est là que j’ai arrêté de vouloir résoudre le problème avec des scrip
 
 ## Suite
 
-[3/5 : Pourquoi j’ai fini par écrire une petite app macOS pour provisionner mes postes](/thinking/2026-10-17-pourquoi-app-macos-swiftui-provisioning/)
+3/5 : **Pourquoi j’ai fini par écrire une petite app macOS pour provisionner mes postes** — publication la semaine prochaine.
 
 ## Sources officielles
 
