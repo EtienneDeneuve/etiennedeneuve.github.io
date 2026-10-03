@@ -54,13 +54,15 @@ Ce n’est pas très sophistiqué, mais ça répond déjà à une question qui d
 
 Mettre `2.7.0` dans un manifest ne sert pas à grand-chose si le Mac est incapable de me dire ce qu’il exécute vraiment.
 
-Je veux donc distinguer deux choses.
+J’ai donc commencé par rendre l’état observé concret avant même d’avoir terminé toute la mécanique SemVer distante.
 
-Il y a l’état **appliqué**, écrit par le helper au moment où une génération est activée et validée : version SemVer, commit source, profil, channel, top-level Nix store path, date d’application et previous-known-good.
+Le dashboard de fin collecte maintenant la version du Bootstrap.pkg et de l’app, le commit embarqué, macOS, le système Nix actif, la taille logique de la closure en nombre de store paths, les binaires exposés dans le PATH, Homebrew, l’état live du MDM et la santé Entra/GitHub/helper.
 
-Et il y a l’état **observé** : version de macOS, version du Bootstrap.pkg, version de l’app, version du helper/protocole, version Nix disponible, santé du daemon et génération système réellement pointée par le profil Nix.
+Ça donne quelque chose de beaucoup plus utile qu’un simple « provisioning succeeded ».
 
-Si les deux ne correspondent plus, j’ai du drift. Et ce drift doit être visible au lieu d’être découvert pendant le prochain incident.
+Je garde quand même la distinction entre ce qui est **observé** et ce qui est **déclaré**. Le prochain morceau consiste à persister explicitement la release workstation appliquée : SemVer, commit source, profil, channel, top-level Nix store path, date d’application et previous-known-good.
+
+C’est cette comparaison qui donnera ensuite un vrai drift détectable au lieu d’un incident découvert par hasard.
 
 Je pense aussi exposer exactement le même modèle en CLI :
 
@@ -72,9 +74,13 @@ omnivya-nix inventory
 
 avec une sortie JSON utilisable par l’app. Je n’ai pas envie d’avoir une logique de diagnostic différente entre le bouton SwiftUI et le terminal.
 
-Pour les logiciels installés, je ne veux pas afficher une liste de 800 store paths dans l’écran principal. Je préfère un inventaire de release généré au build, avec les outils réellement déclarés et leurs versions, puis un état observé pour les quelques briques qui échappent à Nix, notamment les casks Homebrew encore nécessaires.
+Pour les logiciels installés, je ne veux toujours pas afficher une liste de 800 store paths dans l’écran principal.
 
-Le détail complet reste exportable pour le support, mais l’écran normal doit surtout répondre à « quelle workstation est installée ici ? ».
+L’implémentation actuelle fait volontairement plus simple : nombre de paths dans la closure, nombre de binaires exposés, quelques exemples, nombre de formulae et casks Homebrew. Le snapshot complet est exportable en JSON pour le support.
+
+La suite sera de croiser ça avec l’inventaire de release généré au build pour répondre à une question plus intéressante : non seulement « qu’est-ce que je vois sur cette machine ? », mais aussi « est-ce bien ce que cette release était censée contenir ? ».
+
+C’est ce qui transformera progressivement le snapshot actuel en contrôle de conformité plutôt qu’en simple inventaire.
 
 <!-- SCREENSHOT 2
 Quand le status dashboard existe : vue app avec versions Bootstrap / Setup / Helper / Nix / config SemVer / SHA / active store path.
@@ -88,7 +94,7 @@ Je veux donc remonter un état très léger vers Grafana : version workstation, 
 
 Je ne veux surtout pas installer un collector complet sur chaque Mac juste pour ça.
 
-L’agent workstation sait déjà produire ces données. Il peut donc émettre directement de l’OTLP/HTTP vers un Alloy central.
+L’agent workstation existe maintenant réellement et écrit déjà son snapshot local toutes les six heures. La partie OTLP n’est pas encore branchée, mais c’est précisément l’endroit où elle viendra se connecter : émission directe en OTLP/HTTP vers un Alloy central.
 
 Le chemin que je retiens ressemble plutôt à ça :
 
@@ -132,6 +138,16 @@ Par contre, le jour où j’ai vingt, cinquante ou cent machines, ça change com
 À faire quand la télémétrie existe : dashboard Grafana fleet avec versions workstation, ADE/adoption, drift et health.
 Pas besoin de montrer les noms des utilisateurs.
 -->
+
+## Le Bootstrap est déjà une vraie release
+
+Au moment où j’écris ça, le Bootstrap lui-même est déjà arrivé à `0.1.31`.
+
+Chaque version est publiée sur un chemin Blob immuable, avec son SHA-256, son package signé et sa provenance. Je ne remplace jamais silencieusement un fichier derrière la même URL.
+
+Ça m’a forcé assez tôt à appliquer au poste les mêmes réflexes qu’à un artefact logiciel : une version donnée doit pointer vers un contenu donné.
+
+La configuration Nix doit maintenant suivre la même logique, mais avec son propre cycle SemVer. Je ne veux justement pas confondre « version du bootstrap » et « version de la workstation ».
 
 ## Je préfère SemVer à « stable »
 
