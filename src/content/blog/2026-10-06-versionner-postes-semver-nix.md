@@ -80,6 +80,59 @@ Le détail complet reste exportable pour le support, mais l’écran normal doit
 Quand le status dashboard existe : vue app avec versions Bootstrap / Setup / Helper / Nix / config SemVer / SHA / active store path.
 -->
 
+## Tant qu’à connaître cet état, autant le remonter
+
+À partir du moment où le poste sait dire précisément ce qu’il est, garder cette information uniquement en local serait un peu dommage.
+
+Je veux donc remonter un état très léger vers Grafana : version workstation, version du bootstrap, version de l’app et du helper, version Nix, profil, mode ADE ou adoption, drift éventuel, dernier apply, santé du daemon et quelques métriques utiles autour du disque ou des updates.
+
+Je ne veux surtout pas installer un collector complet sur chaque Mac juste pour ça.
+
+L’agent workstation sait déjà produire ces données. Il peut donc émettre directement de l’OTLP/HTTP vers un Alloy central.
+
+Le chemin que je retiens ressemble plutôt à ça :
+
+~~~text
+Omnivya Workstation Agent
+        |
+        | OTLP/HTTP
+        | Entra access token
+        v
+Tailscale
+        |
+        v
+auth gateway
+        |
+        v
+Grafana Alloy
+        |
+        +--> metrics
+        +--> logs
+        +--> traces
+        |
+        v
+Grafana
+~~~
+
+Tailscale garde le endpoint hors d’Internet et limite les machines qui peuvent le joindre. Entra reste la couche d’autorisation applicative.
+
+Je préfère garder les deux.
+
+Et surtout, Alloy reste au centre. Pas question d’installer Alloy sur tout le parc uniquement pour exporter quelques événements de workstation.
+
+Le gateway devant Alloy sert surtout à valider proprement le token Entra avant de laisser passer l’OTLP. Je préfère ça à bricoler un bearer token statique commun à toutes les machines.
+
+Une update pourrait alors devenir une vraie trace : preflight, résolution du profil, download, vérification de l’artefact, import Nix, activation et validation. Si ça casse, je peux partir du dashboard du parc et descendre jusqu’à l’étape exacte du run concerné.
+
+Ce n’est pas indispensable pour faire fonctionner le provisioning.
+
+Par contre, le jour où j’ai vingt, cinquante ou cent machines, ça change complètement la manière de répondre à « qui est encore en 2.6.1 ? », « quelles machines ont du drift ? » ou « pourquoi la dernière update casse uniquement sur trois Macs ? ».
+
+<!-- SCREENSHOT 3
+À faire quand la télémétrie existe : dashboard Grafana fleet avec versions workstation, ADE/adoption, drift et health.
+Pas besoin de montrer les noms des utilisateurs.
+-->
+
 ## Je préfère SemVer à « stable »
 
 J’avais commencé à parler de channels `stable` et `pilot`, puis je me suis rendu compte que ça ne suffisait pas.
