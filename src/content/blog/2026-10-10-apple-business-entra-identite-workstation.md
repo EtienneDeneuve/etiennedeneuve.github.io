@@ -49,10 +49,8 @@ Côté Nix, ces rôles sont traduits vers mes profils `user`, `direction` et `te
 
 L’idée est très simple : l’application ne demande jamais « qu’est-ce que tu veux ? ». Elle demande à Entra « qui es-tu et qu’est-ce que tu as le droit d’avoir ? ».
 
-<!-- SCREENSHOT 1
-Entra > Enterprise applications > Omnivya Workstation > Users and groups.
-Montrer les App Roles avec quelques comptes de test.
-Masquer les emails complets, tenant ID, object IDs et toute donnée non utile.
+<!-- ASSET READY: /assets/2026/10/workstation/entra-app-roles.webp
+Caption: Les rôles workstation sont un contrat explicite de l'application Entra, pas un choix proposé à l'utilisateur.
 -->
 
 ## L’UPN reste utile, mais il ne décide pas du rôle
@@ -143,9 +141,8 @@ Il s’authentifie, puis l’application affiche le profil détecté.
 
 Pour un poste Tech, elle indique que GitHub sera demandé ensuite. Pour un poste Direction ou Standard, elle indique que GitHub n’est pas nécessaire.
 
-<!-- SCREENSHOT 2
-Omnivya Setup.app sur l’écran "Profile detected".
-Faire deux captures si possible : une Tech et une Direction/Standard.
+<!-- ASSET READY: /assets/2026/10/workstation/profile-detected-local-adoption.webp
+Caption: L'utilisateur s'authentifie ; Setup affiche le profil résolu. Le rôle n'est jamais sélectionnable dans l'interface.
 -->
 
 Le rôle n’est pas modifiable.

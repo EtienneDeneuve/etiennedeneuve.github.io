@@ -50,10 +50,6 @@ L’app est petite et très liée au système. SwiftUI est largement suffisant.
 
 Je garde aussi le build utilisable en ligne de commande avec `xcodebuild`. Xcode sert quand j’en ai besoin pour les previews, le debug ou la signature, mais je ne veux pas que la release dépende d’une série de clics dans l’IDE.
 
-<!-- SCREENSHOT 1
-Omnivya Setup.app sur l’écran de preflight "Checking this Mac before sign-in."
-Idéalement sur un Mac fraîchement enrôlé avec le branding final.
--->
 
 ## Le vrai intérêt n’est pas l’interface
 
@@ -111,10 +107,6 @@ Pour un profil Standard ou Direction, je n’ai aucune raison d’imposer GitHub
 
 Pour un profil Tech, mon implémentation actuelle peut lancer un Device Flow puis cloner `mdm-setup` dans le workspace utilisateur.
 
-<!-- SCREENSHOT 2
-Écran GitHub de Omnivya Setup avec un device code expiré.
-Ne jamais publier de token, cookie ou URL contenant un secret.
--->
 
 C’est encore un point en mouvement.
 
@@ -132,10 +124,6 @@ Aujourd’hui l’app déroule une petite checklist : Determinate, Apple Command
 
 La partie réseau est devenue un vrai gate également. Je vérifie le path, un éventuel captive portal et la joignabilité de l’endpoint Microsoft avant de lancer MSAL, avec un retry borné. Ça évite de transformer un problème Wi-Fi en faux incident Entra.
 
-<!-- SCREENSHOT 3
-Preflight actuel avec la checklist Nix / Apple tools / Homebrew / Enrollment / Network / Config.
-C’est une meilleure capture que l’ancien spinner de preflight.
--->
 
 Ce n’est pas très spectaculaire techniquement, mais c’est nettement plus agréable à exploiter : l’utilisateur voit ce que la machine attend réellement au lieu de regarder une roue tourner.
 
@@ -149,9 +137,6 @@ Ce n’est pas le morceau le plus « architecture » du projet, mais ça compte 
 
 Et quand une étape casse, l’écran d’erreur affiche maintenant les checkpoints déjà validés et la prochaine étape que Retry va reprendre. Là aussi, la state machine devient visible pour l’utilisateur au lieu de rester un détail interne.
 
-<!-- SCREENSHOT 4
-Écran FailedView avec "Progress saved", les checkpoints terminés et le prochain step de reprise.
--->
 
 ## J’ai fini par afficher les logs Nix dans l’app
 
@@ -159,17 +144,15 @@ Je n’aime pas trop les barres de progression qui disent « préparation en cou
 
 Le build Nix fournit déjà beaucoup d’informations, donc autant les exploiter.
 
-L’app affiche une progression, le package en cours et un bout du log. En cas d’échec, on peut retry, exporter les diagnostics et, quand ça a du sens, rollback.
+L’app affiche une progression, les étapes Build / Install / Activate / Validate et un bout du log. C'est aussi ce qui m'intéressait avec une vraie UI : voir où la machine en est sans aller tailer trois fichiers depuis un autre terminal.
 
-<!-- SCREENSHOT 3
-Écran "Preparing your workstation" avec le pourcentage Nix et quelques lignes de log.
-Choisir un moment où les noms de derivations restent publiables.
+<!-- ASSET READY: /assets/2026/10/workstation/nix-provisioning-progress.webp
+Caption: Le provisioning Nix reste visible : étapes, progression et sortie du build sont dans le même parcours.
 -->
 
-<!-- SCREENSHOT 4
-Écran d’erreur avec Try Again / Export Diagnostics / Rollback.
-Provoquer volontairement une erreur propre sur le Mac de test.
--->
+En cas d’échec, on peut retry, exporter les diagnostics et, quand ça a du sens, rollback.
+
+
 
 Pour moi, ça fait complètement partie du sujet Platform Engineering.
 
@@ -249,10 +232,6 @@ Le dashboard de fin n’est plus seulement une idée. Il collecte déjà la prov
 
 Ce n’est pas encore un SBOM complet, et je ne veux pas le vendre comme tel. C’est plutôt un « neofetch de workstation » suffisamment précis pour savoir ce qu’on regarde.
 
-<!-- SCREENSHOT 6
-Done dashboard 0.1.31 : chips Entra / GitHub / Helper / MDM, profil, Bootstrap, macOS, Nix, packages, Brew et commit.
-C’est maintenant une vraie capture disponible, plus un mock.
--->
 
 Je ne mettrais pas pour autant la vérification distante dans le daemon root.
 
@@ -262,10 +241,6 @@ Le helper privilégié doit rester bête : lire l’état système, activer une 
 
 L’app devient alors moins un « wizard qu’on utilise une fois » qu’un petit panneau de contrôle de la workstation.
 
-<!-- SCREENSHOT 5
-À faire quand la vue Status existe : écran récapitulatif Bootstrap / app / Nix / profile / config SemVer / commit / previous-known-good.
-C’est probablement la meilleure capture pour montrer que le poste est réellement versionné.
--->
 
 ## Finalement, l’app reste assez petite
 

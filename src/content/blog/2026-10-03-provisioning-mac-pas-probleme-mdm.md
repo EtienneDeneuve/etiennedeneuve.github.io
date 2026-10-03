@@ -51,9 +51,8 @@ J’ai donc gardé une règle très simple : **le MDM impose, Nix compose**.
 
 Apple Business reste responsable de ce qui doit être imposé de l’extérieur : l’enrôlement, le bootstrap, les configurations de sécurité, les packages indispensables. En revanche, je ne veux pas qu’il sache comment assembler un poste Tech, Direction ou Standard jusque dans le détail des outils utilisateur.
 
-<!-- SCREENSHOT 1
-Apple Business > Blueprint du Mac de test montrant surtout Determinate Nix puis Omnivya Workstation Bootstrap.
-À masquer : serial number, URL complète du package, identifiants utilisateur.
+<!-- ASSET READY: /assets/2026/10/workstation/apple-business-blueprint.webp
+Caption: Dans Apple Business, le Blueprint ne contient volontairement que le socle : Determinate Nix puis Omnivya Workstation Bootstrap.
 -->
 
 Ça peut paraître comme une nuance de vocabulaire. En pratique, ça change complètement la manière de concevoir le provisioning.
@@ -201,9 +200,8 @@ C’est exactement ce que je voulais éviter : avoir un « nouveau parc propre �
 
 Et le jour où la machine est réellement effacée, elle repasse naturellement par le chemin Apple Business sans avoir besoin d’un autre modèle de profil.
 
-<!-- SCREENSHOT 2
-Omnivya Setup en mode Local adoption sur un Mac déjà utilisé, avec la page Review changes.
-Montrer ADE/Local adoption, Nix/Homebrew, espace disque et profil cible sans donnée personnelle.
+<!-- ASSET READY: /assets/2026/10/workstation/local-adoption-review.webp
+Caption: Sur un Mac déjà utilisé, Setup ne repart pas de zéro : il affiche l'état trouvé avant de faire converger la machine.
 -->
 
 ## Apple Business reste très important dans le modèle
