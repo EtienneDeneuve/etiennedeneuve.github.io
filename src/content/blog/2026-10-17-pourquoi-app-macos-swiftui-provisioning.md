@@ -26,7 +26,7 @@ relatedArticles:
   - 2026-10-31-ce-qui-casse-provisioning-macos
 ---
 
-> Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 3/5. Le début : [pourquoi j’ai arrêté de traiter le provisioning Mac comme un problème MDM](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/). La suite : [je versionne mes postes de travail comme du logiciel](/thinking/2026-10-24-versionner-postes-semver-nix/).
+> Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 3/5. Le début : [pourquoi j’ai arrêté de traiter le provisioning Mac comme un problème MDM](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/). La suite arrive la semaine prochaine.
 
 Au début, je pensais vraiment pouvoir gérer le premier login avec quelques scripts.
 
@@ -281,7 +281,7 @@ Je versionne déjà mes services, mes images et mes artefacts. Pourquoi mes post
 
 ## Suite
 
-[4/5 : Je versionne mes postes de travail comme du logiciel](/thinking/2026-10-24-versionner-postes-semver-nix/)
+4/5 : **Je versionne mes postes de travail comme du logiciel** — publication la semaine prochaine.
 
 ## Sources officielles
 
