@@ -94,9 +94,11 @@ Une partie de mes profils utilisait encore des casks Homebrew. L’activation ar
 
 J’ai d’abord ajouté le bootstrap nécessaire, puis j’ai repris le problème dans l’autre sens : est-ce que ces applications ont réellement besoin de passer par Homebrew ?
 
-Pour le profil pilote, j’ai finalement déplacé plusieurs choses vers Nix et réduit cette dépendance.
+Le compromis actuel est plus propre. Le preflight traite maintenant Homebrew comme une vraie dépendance : s’il manque, Setup le détecte et sait l’installer dans le contexte utilisateur. Si les Command Line Tools manquent, il demande d’abord leur installation au lieu de laisser Homebrew échouer plus loin.
 
-Je préfère nettement cette correction à l’empilement d’un script supplémentaire juste parce que ma machine de développement avait masqué le problème.
+En parallèle, j’ai déplacé ce qui avait du sens vers Nix. VS Code est par exemple revenu côté Nix alors qu’Edge et Office restent encore des casks dans le profil concerné.
+
+Je préfère nettement ça à l’empilement d’un script caché dans un `postinstall` juste parce que ma machine de développement avait masqué le problème.
 
 ## Entra fonctionnait, mais il me manquait quand même une information
 
@@ -160,21 +162,61 @@ Maintenant je veux savoir que le daemon répond réellement et que le store est 
 
 Même chose pour le réseau : une interface Wi-Fi connectée derrière un captive portal n’est pas un accès Internet utilisable pour MSAL.
 
-Je préfère attendre proprement avant d’ouvrir Entra plutôt que de transformer un problème de réseau en faux incident d’authentification.
+Cette partie est maintenant explicite dans le preflight. L’app attend un path utilisable, vérifie le captive portal puis teste réellement l’endpoint Microsoft avant d’ouvrir Entra. Si ça ne passe pas, elle attend et retry avec backoff au lieu d’empiler des fenêtres d’auth.
 
-## Le pilote a aussi fait ressortir trois sujets à durcir
+Je préfère largement ça à transformer un problème de réseau en faux incident d’identité.
 
-Le premier concerne le helper privilégié. macOS donne à l’utilisateur de plus en plus de contrôle sur les éléments lancés en arrière-plan. Si ce helper est nécessaire au provisioning, je dois gérer proprement son autorisation via ServiceManagement et le payload MDM associé. Pas espérer que le bouton reste activé.
+## macOS m’a aussi rappelé que root n’est pas tout-puissant
 
-Le deuxième concerne justement le preflight du premier login : daemon Nix réellement sain, WAN réellement utilisable, puis seulement l’auth.
+Un autre bug du pilote a été plus intéressant.
 
-Le troisième concerne le disque.
+L’activation nix-darwin devait modifier certains fichiers sous `/etc/pam.d` pour gérer le Touch ID sudo. Le helper tournait bien en root, et pourtant macOS répondait `Operation not permitted`.
+
+La cause n’était pas Nix. C’était macOS et ses protections de confidentialité.
+
+Le pilote est passé après avoir donné manuellement le Full Disk Access au helper. Pour le parc, je ne veux évidemment pas demander ça à chaque utilisateur, donc j’ai documenté le payload PPPC `SystemPolicyAllFiles` à pousser avant le bootstrap.
+
+Même logique pour les éléments de fond : le helper et l’agent ont maintenant leurs Labels dédiés et doivent être gérés via ServiceManagement / Managed Login Items pour éviter qu’un utilisateur puisse désactiver une brique nécessaire au fonctionnement du poste.
+
+Je limite aussi le scope. Le Full Disk Access va au helper qui écrit réellement dans le système, pas à Setup.app ni à l’agent utilisateur.
+
+Le cas du Touch ID m’a également poussé à le garder sur les profils Tech où il apporte quelque chose, plutôt que d’imposer cette modification à tout le monde.
+
+Au final, l’ordre du Blueprint est devenu beaucoup plus précis :
+
+~~~text
+Determinate
+  -> ServiceManagement
+  -> PPPC Full Disk Access
+  -> Omnivya Bootstrap
+~~~
+
+Ce sont exactement les détails qu’on ne voit pas dans le premier diagramme d’architecture, mais qui font la différence entre « ça marche sur mon Mac » et un déploiement réellement automatisable.
+
+## Le disque reste le prochain piège évident
 
 Si je distribue demain des closures Nix prébuildées, je ne veux pas transformer les SSD de 512 Go en archive historique du parc.
 
 Je garderai la génération courante et la `previous-known-good`. Une génération plus ancienne ne mérite pas de rester uniquement « au cas où », surtout si le rollback est déjà assuré par la précédente.
 
 Mais le GC ne doit arriver qu’après validation de la nouvelle génération. Sinon, on peut très facilement supprimer le seul rollback qui nous aurait été utile.
+
+## Une UI de recovery que je peux enfin montrer
+
+Au début, beaucoup de logique de reprise existait surtout dans le code.
+
+Elle est maintenant visible.
+
+Le preflight affiche ses gates, le provisioning montre les étapes Build / Install / Activate / Validate, et en cas d’échec l’app affiche les checkpoints déjà passés ainsi que l’endroit exact où Try Again va reprendre.
+
+Le Done screen est lui aussi devenu un vrai petit dashboard avec l’état Entra, GitHub, helper, MDM, bootstrap, macOS, Nix et Homebrew.
+
+<!-- SCREENSHOT 3
+FailedView actuel avec Progress saved + Next, ou Done dashboard 0.1.31.
+Les deux sont de bonnes captures de REX réel.
+-->
+
+Je trouve ça beaucoup plus intéressant qu’un simple écran vert « success ». Le système commence à pouvoir expliquer son propre état.
 
 ## Finalement, aucun de ces bugs n’a changé l’architecture
 
