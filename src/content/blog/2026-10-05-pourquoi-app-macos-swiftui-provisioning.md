@@ -124,17 +124,34 @@ Je veux aller vers des releases prébuildées pour que GitHub ne serve plus de c
 
 Le pilote m’a rappelé un truc assez simple : voir le desktop ne veut pas dire que la machine est prête.
 
-Le Setup Assistant peut se terminer alors que Determinate n’est pas encore complètement opérationnel. Le Wi-Fi peut être connecté mais bloqué par un captive portal. Le helper peut ne pas être chargé. Une dépendance présente depuis des mois sur ma machine de dev peut ne pas exister du tout sur un Mac fraîchement effacé.
+Le Setup Assistant peut se terminer alors que Determinate n’est pas encore complètement opérationnel. Le Wi-Fi peut être connecté mais bloqué par un captive portal. Le helper peut ne pas être chargé. Et sur un Mac propre, les Command Line Tools ou Homebrew peuvent tout simplement ne pas exister.
 
-Du coup, le preflight doit tester l’état dont j’ai réellement besoin.
+J’ai donc fini par rendre le preflight visible au lieu de cacher tout ça derrière un spinner.
 
-Je ne veux pas juste vérifier que `nix` existe. Je veux savoir que le daemon fonctionne.
+Aujourd’hui l’app déroule une petite checklist : Determinate, Apple Command Line Tools, Homebrew, enrollment ADE ou adoption locale, réseau, puis présence de la configuration. Si Homebrew manque, Setup sait l’installer dans le contexte utilisateur. Si les CLT manquent, il ouvre d’abord le mécanisme Apple prévu pour les installer.
 
-Je ne veux pas juste savoir que macOS a une interface réseau. Je veux savoir que l’auth Entra a une chance de marcher.
+La partie réseau est devenue un vrai gate également. Je vérifie le path, un éventuel captive portal et la joignabilité de l’endpoint Microsoft avant de lancer MSAL, avec un retry borné. Ça évite de transformer un problème Wi-Fi en faux incident Entra.
 
-Et seulement après, j’ouvre le parcours utilisateur.
+<!-- SCREENSHOT 3
+Preflight actuel avec la checklist Nix / Apple tools / Homebrew / Enrollment / Network / Config.
+C’est une meilleure capture que l’ancien spinner de preflight.
+-->
 
-Ça évite pas mal de faux problèmes d’authentification qui sont en réalité juste des problèmes de timing.
+Ce n’est pas très spectaculaire techniquement, mais c’est nettement plus agréable à exploiter : l’utilisateur voit ce que la machine attend réellement au lieu de regarder une roue tourner.
+
+## J’ai aussi arrêté de faire bouger toute la fenêtre
+
+Les premiers essais avaient un autre défaut très banal : à mesure que les écrans changeaient, les boutons et la progression pouvaient se retrouver trop bas ou faire varier la taille de la fenêtre.
+
+J’ai fini par traiter l’app comme un vrai assistant : header fixe, progression Welcome → Sign-in → Profile → Provision → Done, contenu central scrollable quand il le faut, actions toujours visibles dans le footer.
+
+Ce n’est pas le morceau le plus « architecture » du projet, mais ça compte énormément pendant un onboarding. Un bouton Retry qu’il faut retrouver en redimensionnant la fenêtre n’est pas vraiment un mécanisme de recovery.
+
+Et quand une étape casse, l’écran d’erreur affiche maintenant les checkpoints déjà validés et la prochaine étape que Retry va reprendre. Là aussi, la state machine devient visible pour l’utilisateur au lieu de rester un détail interne.
+
+<!-- SCREENSHOT 4
+Écran FailedView avec "Progress saved", les checkpoints terminés et le prochain step de reprise.
+-->
 
 ## J’ai fini par afficher les logs Nix dans l’app
 
@@ -213,10 +230,10 @@ Je veux arriver à quelque chose de ce genre dans l’app :
 ~~~text
 Omnivya Workstation
 
-Bootstrap      0.1.19
-Setup.app      0.1.19
-Helper         0.1.19 / protocol 2
-Nix            <version détectée>
+Bootstrap      0.1.31
+Setup.app      0.1.31
+Helper         connected / protocol 2
+Nix            <système actif>
 
 Profile        tech / stable
 Configuration  2.7.0
@@ -228,9 +245,18 @@ Last check     il y a 2 h
 Status         up to date
 ~~~
 
+Le dashboard de fin n’est plus seulement une idée. Il collecte déjà la provenance du bootstrap, macOS, le système Nix actif, le nombre de paths de la closure, les binaires exposés, les formulae/casks Homebrew, l’état live du MDM ainsi que la santé Entra, GitHub et du helper. Le tout peut aussi être exporté en JSON pour les diagnostics.
+
+Ce n’est pas encore un SBOM complet, et je ne veux pas le vendre comme tel. C’est plutôt un « neofetch de workstation » suffisamment précis pour savoir ce qu’on regarde.
+
+<!-- SCREENSHOT 6
+Done dashboard 0.1.31 : chips Entra / GitHub / Helper / MDM, profil, Bootstrap, macOS, Nix, packages, Brew et commit.
+C’est maintenant une vraie capture disponible, plus un mock.
+-->
+
 Je ne mettrais pas pour autant la vérification distante dans le daemon root.
 
-Le helper privilégié doit rester bête : lire l’état système, activer une génération, valider, rollback. Pour vérifier périodiquement le registry, un petit LaunchAgent utilisateur me paraît plus propre. Il peut se lancer à l’ouverture de session puis quelques fois par jour, réutiliser silencieusement la session Entra lorsqu’elle existe et simplement mettre à jour l’état affiché par l’app.
+Le helper privilégié doit rester bête : lire l’état système, activer une génération, valider, rollback. Pour vérifier périodiquement le registry, le LaunchAgent utilisateur que j’ai maintenant en place est beaucoup plus propre. Il tourne toutes les quelques heures, sans interaction, et pourra réutiliser silencieusement la session Entra lorsqu’elle existe pour mettre à jour l’état affiché par l’app.
 
 Ça évite surtout de donner des tokens utilisateur ou du trafic réseau à un process root qui n’en a pas besoin.
 
