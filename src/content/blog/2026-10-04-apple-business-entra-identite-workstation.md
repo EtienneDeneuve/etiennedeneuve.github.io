@@ -123,6 +123,18 @@ Ce qui compte, c’est de ne pas laisser cette décision à l’ordre d’un tab
 
 L’autorisation doit être volontaire.
 
+## Reprendre sans redemander de se connecter
+
+Un détail assez important est arrivé pendant les retries du pilote : authentifier correctement l’utilisateur une fois ne sert à rien si chaque relance ouvre à nouveau Microsoft, puis GitHub.
+
+MSAL essaie maintenant d’abord de récupérer silencieusement un token depuis son cache. Si la session est toujours valable, le parcours reprend sans nouvelle fenêtre. Même chose côté GitHub : le token conservé dans Keychain est réutilisé tant qu’il permet toujours d’accéder au repository attendu.
+
+Je garde volontairement une règle stricte pour le mode headless : l’agent de fond n’ouvre jamais une authentification interactive. S’il n’a pas les credentials nécessaires, il note l’état et attend le prochain passage dans l’app.
+
+Ça paraît être un détail d’UX, mais sur un workflow récupérable c’est assez fondamental. Un retry doit reprendre un état, pas rejouer tout l’onboarding comme si rien n’avait existé.
+
+Sur les Macs adoptés sans ADE, j’ai aussi gardé le hostname visible tel quel. L’identité utilisateur peut servir à dériver le nom logique utilisé par la configuration Nix sans renommer brutalement une machine qui a déjà une histoire.
+
 ## Ce que voit réellement l’utilisateur
 
 Presque rien.
