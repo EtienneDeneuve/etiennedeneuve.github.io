@@ -158,6 +158,49 @@ Pour moi, ça fait complètement partie du sujet Platform Engineering.
 
 Un golden path qui marche uniquement quand tout va bien n’est pas vraiment un golden path. Ce qui compte aussi, c’est ce qu’il raconte quand quelque chose casse.
 
+## L’app ne doit pas disparaître après le premier boot
+
+Au début je voyais surtout Omnivya Setup comme l’assistant du premier login.
+
+Plus j’avance, moins ça me paraît suffisant.
+
+Une fois le poste construit, j’ai encore besoin de répondre à des questions très simples : quelle version du Bootstrap.pkg est installée, quelle version de l’app tourne, quel Nix est réellement disponible, quelle configuration workstation est active, quel commit l’a produite et vers quoi je peux rollback.
+
+Une partie existe déjà. Le package embarque sa provenance et le helper expose déjà un appel `status`. Mais ce `status` est encore trop pauvre pour en faire un vrai état du poste.
+
+Je veux arriver à quelque chose de ce genre dans l’app :
+
+~~~text
+Omnivya Workstation
+
+Bootstrap      0.1.19
+Setup.app      0.1.19
+Helper         0.1.19 / protocol 2
+Nix            <version détectée>
+
+Profile        tech / stable
+Configuration  2.7.0
+Source         <commit>
+System         /nix/store/...
+Previous       2.6.1
+
+Last check     il y a 2 h
+Status         up to date
+~~~
+
+Je ne mettrais pas pour autant la vérification distante dans le daemon root.
+
+Le helper privilégié doit rester bête : lire l’état système, activer une génération, valider, rollback. Pour vérifier périodiquement le registry, un petit LaunchAgent utilisateur me paraît plus propre. Il peut se lancer à l’ouverture de session puis quelques fois par jour, réutiliser silencieusement la session Entra lorsqu’elle existe et simplement mettre à jour l’état affiché par l’app.
+
+Ça évite surtout de donner des tokens utilisateur ou du trafic réseau à un process root qui n’en a pas besoin.
+
+L’app devient alors moins un « wizard qu’on utilise une fois » qu’un petit panneau de contrôle de la workstation.
+
+<!-- SCREENSHOT 5
+À faire quand la vue Status existe : écran récapitulatif Bootstrap / app / Nix / profile / config SemVer / commit / previous-known-good.
+C’est probablement la meilleure capture pour montrer que le poste est réellement versionné.
+-->
+
 ## Finalement, l’app reste assez petite
 
 Je ne suis pas en train de construire un produit MDM maison.
