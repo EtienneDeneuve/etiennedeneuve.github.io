@@ -202,17 +202,31 @@ Mon moteur avait simplement choisi la mauvaise source.
 
 C’est exactement ce que je voulais obtenir.
 
-## Le vrai test reste un erase complet
+## Un erase complet reste indispensable, mais ce n’est pas le seul vrai test
 
 Après quelques itérations, j’ai arrêté de considérer un test local comme représentatif.
 
 Supprimer deux fichiers puis relancer l’app n’est pas un test de provisioning.
 
-Le vrai test, c’est un Mac effacé, Setup Assistant, un premier login propre, le réseau réel, aucune dépendance héritée de mon environnement de développement et un utilisateur qui ne connaît pas l’implémentation.
+Pour le chemin ADE, le vrai test reste un Mac effacé, Setup Assistant, un premier login propre, le réseau réel, aucune dépendance héritée de mon environnement de développement et un utilisateur qui ne connaît pas l’implémentation.
 
-C’est là qu’on voit si le système provisionne vraiment un poste.
+Mais l’inverse est vrai aussi.
 
-Ou s’il ne fait que reproduire celui de la personne qui l’a écrit.
+Je ne veux pas valider uniquement le cas confortable du disque vierge alors que plusieurs machines de l’entreprise existent déjà.
+
+Une machine brownfield est presque un meilleur test de convergence : Homebrew est déjà là, des fichiers utilisateur existent, Nix peut déjà avoir été installé, le hostname a une histoire et je n’ai pas le droit de résoudre un conflit en supprimant simplement ce qui me gêne.
+
+Le système doit donc réussir deux exercices différents.
+
+Sur un Mac neuf, il doit construire proprement le poste depuis zéro.
+
+Sur un Mac existant, il doit comprendre suffisamment ce qu’il trouve pour le faire converger sans casser les données ni prétendre qu’il est passé par ADE alors que ce n’est pas le cas.
+
+Dans les deux cas, je veux finir avec la même chose : un profil identifié, une version connue, un état observable et un chemin de rollback.
+
+C’est là qu’on voit si le système gère réellement des workstations.
+
+Ou s’il ne sait fonctionner que sur la machine de la personne qui l’a écrit.
 
 Pour l’instant, c’est probablement la leçon la plus utile de tout le chantier.
 
