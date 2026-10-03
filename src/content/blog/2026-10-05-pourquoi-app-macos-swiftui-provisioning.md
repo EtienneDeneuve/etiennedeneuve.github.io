@@ -158,6 +158,46 @@ Pour moi, ça fait complètement partie du sujet Platform Engineering.
 
 Un golden path qui marche uniquement quand tout va bien n’est pas vraiment un golden path. Ce qui compte aussi, c’est ce qu’il raconte quand quelque chose casse.
 
+## La même app doit aussi savoir reprendre un Mac déjà utilisé
+
+Ça m’évite également de créer un deuxième outil pour les machines qui existent déjà.
+
+Sur un Mac neuf, l’app sait qu’elle arrive juste après le bootstrap et peut dérouler son onboarding.
+
+Sur un Mac qui a déjà vécu, elle doit être un peu moins naïve.
+
+Avant de toucher quoi que ce soit, elle peut regarder ce qui existe déjà : Nix, Homebrew, une éventuelle génération nix-darwin, les versions du bootstrap, l’espace disque, les fichiers que Home Manager risque de reprendre et l’état de management du Mac.
+
+Le rôle Entra ne change pas. Le profil cible non plus.
+
+Ce qui change, c’est la manière d’y arriver.
+
+Je veux que ce premier apply « brownfield » montre ce qu’il va faire avant de le faire. Pas besoin de produire un diff de 4 000 lignes Nix, mais au moins dire clairement que la machine va rejoindre le profil Tech, quels composants importants vont être ajoutés, si un conflit a été détecté et si une dépendance existante demande une intervention.
+
+Ensuite seulement, elle converge vers le même état que celui qu’aurait produit une installation neuve.
+
+Ça donne finalement deux points d’entrée vers la même workstation :
+
+~~~text
+Mac neuf
+  -> ADE
+  -> Bootstrap
+  -> Setup
+
+Mac existant
+  -> Bootstrap manuel
+  -> audit local
+  -> Setup
+
+puis dans les deux cas
+  -> Entra
+  -> profil
+  -> Nix
+  -> même état versionné
+~~~
+
+Je préfère largement ça à maintenir un « vieux parc » à côté du nouveau pendant des mois.
+
 ## L’app ne doit pas disparaître après le premier boot
 
 Au début je voyais surtout Omnivya Setup comme l’assistant du premier login.
