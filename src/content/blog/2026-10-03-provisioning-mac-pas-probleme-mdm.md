@@ -195,7 +195,16 @@ ADE             pending next reinstall
 
 Je trouve cette distinction importante. « Conforme » et « enrôlé via ADE » ne décrivent pas la même chose.
 
+Entre-temps, ce chemin n’est d’ailleurs plus seulement une idée dans un schéma. L’app détecte maintenant si elle arrive depuis ADE ou sur une machine existante, collecte l’état local et affiche une vraie étape de review avant le premier apply. Une installation Nix non reconnue bloque volontairement la convergence au lieu d’être supprimée automatiquement. Homebrew existant est détecté, les backups Home Manager sont signalés et le mode de provisioning est enregistré dans l’état de la workstation.
+
+C’est exactement ce que je voulais éviter : avoir un « nouveau parc propre » et un « vieux parc qu’on ne touche surtout pas » pendant des mois.
+
 Et le jour où la machine est réellement effacée, elle repasse naturellement par le chemin Apple Business sans avoir besoin d’un autre modèle de profil.
+
+<!-- SCREENSHOT 2
+Omnivya Setup en mode Local adoption sur un Mac déjà utilisé, avec la page Review changes.
+Montrer ADE/Local adoption, Nix/Homebrew, espace disque et profil cible sans donnée personnelle.
+-->
 
 ## Apple Business reste très important dans le modèle
 
