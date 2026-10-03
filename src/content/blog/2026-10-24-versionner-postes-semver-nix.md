@@ -25,7 +25,7 @@ relatedArticles:
   - 2026-10-31-ce-qui-casse-provisioning-macos
 ---
 
-> Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 4/5. Le début : [pourquoi j’ai arrêté de traiter le provisioning Mac comme un problème MDM](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/). La suite : [ce qui casse quand on essaie vraiment](/thinking/2026-10-31-ce-qui-casse-provisioning-macos/).
+> Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 4/5. Le début : [pourquoi j’ai arrêté de traiter le provisioning Mac comme un problème MDM](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/). La suite arrive la semaine prochaine.
 
 Il y a un truc que je trouve bizarre dans la gestion des postes.
 
@@ -269,7 +269,7 @@ C’est la dernière partie.
 
 ## Suite
 
-[5/5 : Ce qui casse quand on essaie vraiment de provisionner un Mac de zéro](/thinking/2026-10-31-ce-qui-casse-provisioning-macos/)
+5/5 : **Ce qui casse quand on essaie vraiment de provisionner un Mac de zéro** — publication la semaine prochaine.
 
 ## Sources officielles
 
