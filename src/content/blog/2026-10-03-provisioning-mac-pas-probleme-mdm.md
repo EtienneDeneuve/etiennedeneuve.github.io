@@ -16,16 +16,16 @@ tags:
   - nix-darwin
   - Platform Engineering
 featured: true
-draft: true
+draft: false
 relatedProjects: []
 relatedArticles:
-  - 2026-10-04-apple-business-entra-identite-workstation
-  - 2026-10-05-pourquoi-app-macos-swiftui-provisioning
-  - 2026-10-06-versionner-postes-semver-nix
-  - 2026-10-07-ce-qui-casse-provisioning-macos
+  - 2026-10-10-apple-business-entra-identite-workstation
+  - 2026-10-17-pourquoi-app-macos-swiftui-provisioning
+  - 2026-10-24-versionner-postes-semver-nix
+  - 2026-10-31-ce-qui-casse-provisioning-macos
 ---
 
-> Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 1/5. La suite : [Apple Business pour enrôler, Entra pour décider quel poste construire](/2026-10-04-apple-business-entra-identite-workstation).
+> Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 1/5. La suite arrive la semaine prochaine.
 
 Je voulais un truc assez simple : un Mac sort de sa boîte, l’utilisateur se connecte, et quelques minutes plus tard il a un poste prêt.
 
@@ -222,7 +222,7 @@ Dans mon cas, la réponse était déjà dans Entra.
 
 ## Suite
 
-[2/5 : Apple Business pour enrôler, Entra pour décider quel poste construire](/2026-10-04-apple-business-entra-identite-workstation)
+2/5 : **Apple Business pour enrôler, Entra pour décider quel poste construire** — publication la semaine prochaine.
 
 ## Sources officielles
 

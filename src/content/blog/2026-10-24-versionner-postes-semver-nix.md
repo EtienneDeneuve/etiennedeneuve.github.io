@@ -1,7 +1,7 @@
 ---
 title: "Je versionne mes postes de travail comme du logiciel"
 description: "Un poste ne devrait pas être simplement « sur la dernière config Git ». J’ai commencé à traiter la workstation comme un artefact versionné : SemVer, provenance, rollback et bientôt profils Nix prébuildés."
-pubDate: 2026-10-06T07:30:00.000Z
+pubDate: 2026-10-24T07:30:00.000Z
 language: fr
 contentType: architecture-decision
 pillar: software-supply-chain
@@ -16,16 +16,16 @@ tags:
   - Azure Blob
   - Software Supply Chain
 featured: true
-draft: true
+draft: false
 relatedProjects: []
 relatedArticles:
   - 2026-10-03-provisioning-mac-pas-probleme-mdm
-  - 2026-10-04-apple-business-entra-identite-workstation
-  - 2026-10-05-pourquoi-app-macos-swiftui-provisioning
-  - 2026-10-07-ce-qui-casse-provisioning-macos
+  - 2026-10-10-apple-business-entra-identite-workstation
+  - 2026-10-17-pourquoi-app-macos-swiftui-provisioning
+  - 2026-10-31-ce-qui-casse-provisioning-macos
 ---
 
-> Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 4/5. Le début : [pourquoi j’ai arrêté de traiter le provisioning Mac comme un problème MDM](/2026-10-03-provisioning-mac-pas-probleme-mdm). La suite : [ce qui casse quand on essaie vraiment](/2026-10-07-ce-qui-casse-provisioning-macos).
+> Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 4/5. Le début : [pourquoi j’ai arrêté de traiter le provisioning Mac comme un problème MDM](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/). La suite arrive la semaine prochaine.
 
 Il y a un truc que je trouve bizarre dans la gestion des postes.
 
@@ -269,7 +269,7 @@ C’est la dernière partie.
 
 ## Suite
 
-[5/5 : Ce qui casse quand on essaie vraiment de provisionner un Mac de zéro](/2026-10-07-ce-qui-casse-provisioning-macos)
+5/5 : **Ce qui casse quand on essaie vraiment de provisionner un Mac de zéro** — publication la semaine prochaine.
 
 ## Sources officielles
 

@@ -1,7 +1,7 @@
 ---
 title: "Pourquoi j’ai fini par écrire une petite app macOS pour provisionner mes postes"
 description: "Le premier login mélange réseau, identité, privilèges root, Nix et reprise sur erreur. À un moment, continuer en shell était plus compliqué qu’écrire une petite app SwiftUI avec une vraie machine à états."
-pubDate: 2026-10-05T07:30:00.000Z
+pubDate: 2026-10-17T07:30:00.000Z
 language: fr
 contentType: field-note
 pillar: platform-engineering
@@ -17,16 +17,16 @@ tags:
   - XPC
   - Platform Engineering
 featured: true
-draft: true
+draft: false
 relatedProjects: []
 relatedArticles:
   - 2026-10-03-provisioning-mac-pas-probleme-mdm
-  - 2026-10-04-apple-business-entra-identite-workstation
-  - 2026-10-06-versionner-postes-semver-nix
-  - 2026-10-07-ce-qui-casse-provisioning-macos
+  - 2026-10-10-apple-business-entra-identite-workstation
+  - 2026-10-24-versionner-postes-semver-nix
+  - 2026-10-31-ce-qui-casse-provisioning-macos
 ---
 
-> Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 3/5. Le début : [pourquoi j’ai arrêté de traiter le provisioning Mac comme un problème MDM](/2026-10-03-provisioning-mac-pas-probleme-mdm). La suite : [je versionne mes postes de travail comme du logiciel](/2026-10-06-versionner-postes-semver-nix).
+> Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 3/5. Le début : [pourquoi j’ai arrêté de traiter le provisioning Mac comme un problème MDM](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/). La suite arrive la semaine prochaine.
 
 Au début, je pensais vraiment pouvoir gérer le premier login avec quelques scripts.
 
@@ -281,7 +281,7 @@ Je versionne déjà mes services, mes images et mes artefacts. Pourquoi mes post
 
 ## Suite
 
-[4/5 : Je versionne mes postes de travail comme du logiciel](/2026-10-06-versionner-postes-semver-nix)
+4/5 : **Je versionne mes postes de travail comme du logiciel** — publication la semaine prochaine.
 
 ## Sources officielles
 

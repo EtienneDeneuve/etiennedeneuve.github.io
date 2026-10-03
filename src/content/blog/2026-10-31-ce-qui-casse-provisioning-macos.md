@@ -1,7 +1,7 @@
 ---
 title: "Ce qui casse quand on essaie vraiment de provisionner un Mac de zéro"
 description: "Le schéma Apple Business + Entra + Nix était propre. Le premier Mac effacé m’a rappelé tout ce qu’un diagramme ne montre pas : format PKG, appstored, claims incomplets, Homebrew absent et mauvaise source Nix."
-pubDate: 2026-10-07T07:30:00.000Z
+pubDate: 2026-10-31T07:30:00.000Z
 language: fr
 contentType: field-note
 pillar: platform-engineering
@@ -16,16 +16,16 @@ tags:
   - Troubleshooting
   - Platform Engineering
 featured: true
-draft: true
+draft: false
 relatedProjects: []
 relatedArticles:
   - 2026-10-03-provisioning-mac-pas-probleme-mdm
-  - 2026-10-04-apple-business-entra-identite-workstation
-  - 2026-10-05-pourquoi-app-macos-swiftui-provisioning
-  - 2026-10-06-versionner-postes-semver-nix
+  - 2026-10-10-apple-business-entra-identite-workstation
+  - 2026-10-17-pourquoi-app-macos-swiftui-provisioning
+  - 2026-10-24-versionner-postes-semver-nix
 ---
 
-> Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 5/5. Le début : [pourquoi j’ai arrêté de traiter le provisioning Mac comme un problème MDM](/2026-10-03-provisioning-mac-pas-probleme-mdm).
+> Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 5/5. Le début : [pourquoi j’ai arrêté de traiter le provisioning Mac comme un problème MDM](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/).
 
 Le schéma était propre.
 

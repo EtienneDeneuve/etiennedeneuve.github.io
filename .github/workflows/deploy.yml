@@ -4,6 +4,9 @@ name: Deploy GitHub Pages
 on:
   push:
     branches: ["master", "main"]
+  schedule:
+    # Rebuild every Saturday after the 07:30 UTC scheduled article release.
+    - cron: "0 8 * * 6"
   workflow_dispatch:
 
 permissions:
