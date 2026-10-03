@@ -50,6 +50,36 @@ Masquer les URLs SAS éventuelles et les identifiants qui n’apportent rien.
 
 Ce n’est pas très sophistiqué, mais ça répond déjà à une question qui devient vite pénible sans ça : **qu’est-ce que cette machine a réellement reçu ?**
 
+## La version déclarée ne suffit pas, je veux l’état réellement observé
+
+Mettre `2.7.0` dans un manifest ne sert pas à grand-chose si le Mac est incapable de me dire ce qu’il exécute vraiment.
+
+Je veux donc distinguer deux choses.
+
+Il y a l’état **appliqué**, écrit par le helper au moment où une génération est activée et validée : version SemVer, commit source, profil, channel, top-level Nix store path, date d’application et previous-known-good.
+
+Et il y a l’état **observé** : version de macOS, version du Bootstrap.pkg, version de l’app, version du helper/protocole, version Nix disponible, santé du daemon et génération système réellement pointée par le profil Nix.
+
+Si les deux ne correspondent plus, j’ai du drift. Et ce drift doit être visible au lieu d’être découvert pendant le prochain incident.
+
+Je pense aussi exposer exactement le même modèle en CLI :
+
+~~~text
+omnivya-nix status
+omnivya-nix doctor
+omnivya-nix inventory
+~~~
+
+avec une sortie JSON utilisable par l’app. Je n’ai pas envie d’avoir une logique de diagnostic différente entre le bouton SwiftUI et le terminal.
+
+Pour les logiciels installés, je ne veux pas afficher une liste de 800 store paths dans l’écran principal. Je préfère un inventaire de release généré au build, avec les outils réellement déclarés et leurs versions, puis un état observé pour les quelques briques qui échappent à Nix, notamment les casks Homebrew encore nécessaires.
+
+Le détail complet reste exportable pour le support, mais l’écran normal doit surtout répondre à « quelle workstation est installée ici ? ».
+
+<!-- SCREENSHOT 2
+Quand le status dashboard existe : vue app avec versions Bootstrap / Setup / Helper / Nix / config SemVer / SHA / active store path.
+-->
+
 ## Je préfère SemVer à « stable »
 
 J’avais commencé à parler de channels `stable` et `pilot`, puis je me suis rendu compte que ça ne suffisait pas.
