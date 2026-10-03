@@ -156,6 +156,47 @@ Le parcours que je vise est donc assez simple : le Mac s’enrôle, l’utilisat
 
 Le point important est que chaque étape sache ce qu’elle fait et pourquoi elle le fait.
 
+## Et je ne vais pas attendre de reformater tout le parc
+
+Le chemin propre pour une machine neuve reste évident : erase, ADE, Apple Business, bootstrap, puis Nix.
+
+Mais j’ai déjà des Macs en service. Les laisser dans leur ancien état pendant six mois ou deux ans en attendant leur prochain formatage n’aurait aucun sens.
+
+Je veux donc que le même modèle sache aussi **adopter** une machine existante.
+
+Dans ce cas, Apple Business n’est simplement pas le point d’entrée. J’installe le même Bootstrap.pkg signé sur le Mac déjà utilisé, Omnivya Setup constate qu’il arrive sur une machine existante, fait un état des lieux, authentifie l’utilisateur et calcule ce qu’il faudrait changer pour rejoindre le profil attendu.
+
+La différence importante, c’est que je ne peux plus raisonner comme sur un disque vierge.
+
+S’il existe déjà une installation Nix que je ne reconnais pas, je ne la supprime pas. Si Homebrew est déjà là, je regarde ce que je peux réutiliser. Si Home Manager va écraser un fichier utilisateur, je veux le savoir avant l’activation. Et je ne renomme pas brutalement la machine juste pour la faire rentrer dans mon inventaire.
+
+Le premier passage devient donc davantage une convergence qu’un provisioning.
+
+~~~text
+Mac existant
+   -> Bootstrap.pkg
+   -> état des lieux
+   -> Entra
+   -> profil cible
+   -> review / dry-run
+   -> convergence
+   -> validation
+~~~
+
+Une fois cette convergence faite, je veux que le poste soit traité exactement comme les autres pour les versions, les updates, le rollback et les diagnostics.
+
+Il restera simplement une information visible : la workstation est conforme, mais le device n’est pas encore passé par ADE.
+
+~~~text
+Workstation     compliant
+Management      local adoption
+ADE             pending next reinstall
+~~~
+
+Je trouve cette distinction importante. « Conforme » et « enrôlé via ADE » ne décrivent pas la même chose.
+
+Et le jour où la machine est réellement effacée, elle repasse naturellement par le chemin Apple Business sans avoir besoin d’un autre modèle de profil.
+
 ## Apple Business reste très important dans le modèle
 
 Ce n’est pas une série « pourquoi j’ai remplacé mon MDM par Nix ».
