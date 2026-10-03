@@ -25,7 +25,7 @@ relatedArticles:
   - 2026-10-31-ce-qui-casse-provisioning-macos
 ---
 
-> Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 1/5. La suite : [Apple Business pour enrôler, Entra pour décider quel poste construire](/thinking/2026-10-10-apple-business-entra-identite-workstation/).
+> Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 1/5. La suite arrive la semaine prochaine.
 
 Je voulais un truc assez simple : un Mac sort de sa boîte, l’utilisateur se connecte, et quelques minutes plus tard il a un poste prêt.
 
@@ -222,7 +222,7 @@ Dans mon cas, la réponse était déjà dans Entra.
 
 ## Suite
 
-[2/5 : Apple Business pour enrôler, Entra pour décider quel poste construire](/thinking/2026-10-10-apple-business-entra-identite-workstation/)
+2/5 : **Apple Business pour enrôler, Entra pour décider quel poste construire** — publication la semaine prochaine.
 
 ## Sources officielles
 
