@@ -43,10 +43,6 @@ Le premier truc facile à versionner était le package lui-même.
 
 Aujourd’hui, le build produit un artefact nommé avec sa version et le commit source, puis embarque un petit fichier de provenance. Quand je diagnostique un Mac, je peux donc retrouver la version du package, celle de l’app, la révision de `mdm-setup` embarquée et la date du build.
 
-<!-- SCREENSHOT 1
-Terminal ou Finder montrant le nom versionné du PKG et un extrait propre de provenance.json.
-Masquer les URLs SAS éventuelles et les identifiants qui n’apportent rien.
--->
 
 Ce n’est pas très sophistiqué, mais ça répond déjà à une question qui devient vite pénible sans ça : **qu’est-ce que cette machine a réellement reçu ?**
 
@@ -59,6 +55,10 @@ J’ai donc commencé par rendre l’état observé concret avant même d’avoi
 Le dashboard de fin collecte maintenant la version du Bootstrap.pkg et de l’app, le commit embarqué, macOS, le système Nix actif, la taille logique de la closure en nombre de store paths, les binaires exposés dans le PATH, Homebrew, l’état live du MDM et la santé Entra/GitHub/helper.
 
 Ça donne quelque chose de beaucoup plus utile qu’un simple « provisioning succeeded ».
+
+<!-- ASSET READY: /assets/2026/10/workstation/workstation-done-dashboard.webp
+Caption: L'état observé est déjà visible localement : identité, mode de management, versions du bootstrap, macOS, système Nix, Homebrew et commit source.
+-->
 
 Je garde quand même la distinction entre ce qui est **observé** et ce qui est **déclaré**. Le prochain morceau consiste à persister explicitement la release workstation appliquée : SemVer, commit source, profil, channel, top-level Nix store path, date d’application et previous-known-good.
 
@@ -82,9 +82,6 @@ La suite sera de croiser ça avec l’inventaire de release généré au build p
 
 C’est ce qui transformera progressivement le snapshot actuel en contrôle de conformité plutôt qu’en simple inventaire.
 
-<!-- SCREENSHOT 2
-Quand le status dashboard existe : vue app avec versions Bootstrap / Setup / Helper / Nix / config SemVer / SHA / active store path.
--->
 
 ## Tant qu’à connaître cet état, autant le remonter
 
@@ -134,10 +131,8 @@ Ce n’est pas indispensable pour faire fonctionner le provisioning.
 
 Par contre, le jour où j’ai vingt, cinquante ou cent machines, ça change complètement la manière de répondre à « qui est encore en 2.6.1 ? », « quelles machines ont du drift ? » ou « pourquoi la dernière update casse uniquement sur trois Macs ? ».
 
-<!-- SCREENSHOT 3
-À faire quand la télémétrie existe : dashboard Grafana fleet avec versions workstation, ADE/adoption, drift et health.
-Pas besoin de montrer les noms des utilisateurs.
--->
+Je n’ai pas encore le dashboard Grafana à montrer au moment où j’écris ces lignes. Je préfère donc garder ici l’architecture cible et ajouter la capture quand la télémétrie sera réellement branchée, plutôt que fabriquer un joli dashboard qui n’existe pas encore.
+
 
 ## Le Bootstrap est déjà une vraie release
 
