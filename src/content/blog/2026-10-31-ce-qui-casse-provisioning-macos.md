@@ -228,6 +228,18 @@ J’ai donc dû gérer proprement le cas où le scope demande encore un consente
 
 Je préfère ce genre d’échec explicite à un container public ou un SAS long-lived caché dans l’app. Et le fallback embarqué permet de garder un chemin de provisioning même si le registry distant n’est pas disponible.
 
+## Et même l’observabilité peut devenir trop bavarde
+
+Le premier branchement OTEL marchait, mais j’ai rapidement vu un autre classique : il est très facile de produire beaucoup trop de télémétrie simplement parce qu’on peut le faire.
+
+Je ne voulais pas un span à chaque tick de l’agent, ni un événement pour chaque pourcentage de téléchargement.
+
+J’ai donc réduit le bruit : heartbeat et health côté métriques, événements structurés côté Loki, traces uniquement pour les opérations qui ont un vrai début et une vraie fin. La progression de téléchargement est échantillonnée, et les états très dynamiques ne sont pas transformés en labels Prometheus.
+
+Le dashboard est devenu beaucoup plus lisible après cette passe.
+
+C’est un détail qui m’amuse parce qu’il résume assez bien tout le projet : le problème n’est presque jamais de « réussir à collecter plus ». Le problème est de décider quelle information mérite réellement d’exister.
+
 ## Le disque reste le prochain piège évident
 
 Si je distribue demain des closures Nix prébuildées, je ne veux pas transformer les SSD de 512 Go en archive historique du parc.
