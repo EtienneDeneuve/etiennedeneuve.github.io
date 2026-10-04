@@ -162,9 +162,9 @@ Le build Nix fournit déjà beaucoup d’informations, donc autant les exploiter
 
 L’app affiche une progression, les étapes Build / Install / Activate / Validate et un bout du log. C'est aussi ce qui m'intéressait avec une vraie UI : voir où la machine en est sans aller tailer trois fichiers depuis un autre terminal.
 
-<!-- ASSET READY: /assets/2026/10/workstation/nix-provisioning-progress.webp
-Caption: Le provisioning Nix reste visible : étapes, progression et sortie du build sont dans le même parcours.
--->
+![Omnivya Setup téléchargeant une image workstation Nix préconstruite avec progression](/assets/2026/10/workstation/nix-provisioning-progress.webp)
+
+*Le provisioning reste visible : Setup télécharge la closure préconstruite, affiche le débit et la progression avant import et activation.*
 
 En cas d’échec, on peut retry, exporter les diagnostics et, quand ça a du sens, rollback.
 
@@ -239,23 +239,29 @@ omnivya.setup.run
 
 Le même `run_id` est réutilisé si Setup est relancé après un crash, donc la reprise du workflow reste corrélable dans Tempo au lieu de créer une deuxième histoire sans lien avec la première.
 
-## L’app ne doit pas disparaître après le premier boot
+![Trace Tempo du parcours Omnivya Setup avec preflight, Entra, rôle, GitHub et préparation](/assets/2026/10/workstation/tempo-setup-trace.webp)
+
+*Le parcours interactif est tracé de bout en bout : preflight, Entra, rôle, GitHub puis provisioning restent corrélés dans le même run.*
+
+## L’app ne disparaît plus après le premier boot
 
 Au début je voyais surtout Omnivya Setup comme l’assistant du premier login.
 
-Plus j’avance, moins ça me paraît suffisant.
+Ce n’est déjà plus vraiment le cas.
+
+Le package installe maintenant un LaunchAgent persistant. Tant que le provisioning n’est pas terminé, il garde le chemin interactif. Une fois la machine configurée, le même composant peut tourner en mode `--agent`, sans fenêtre et sans déclencher de login Entra ou GitHub interactif.
+
+Sur le pilote, je l’ai volontairement réglé à 15 minutes pour voir rapidement les changements dans Grafana. La cible normale reviendra plutôt vers quelques heures une fois la chaîne validée.
 
 Une fois le poste construit, j’ai encore besoin de répondre à des questions très simples : quelle version du Bootstrap.pkg est installée, quelle version de l’app tourne, quel Nix est réellement disponible, quelle configuration workstation est active, quel commit l’a produite et vers quoi je peux rollback.
 
-Une partie existe déjà. Le package embarque sa provenance et le helper expose déjà un appel `status`. Mais ce `status` est encore trop pauvre pour en faire un vrai état du poste.
-
-Je veux arriver à quelque chose de ce genre dans l’app :
+Le package embarque sa provenance, le helper expose son état et l’agent écrit maintenant un snapshot périodique. L’écran final rassemble déjà une bonne partie de ces informations :
 
 ~~~text
 Omnivya Workstation
 
-Bootstrap      0.1.31
-Setup.app      0.1.31
+Bootstrap      <version>
+Setup.app      <version>
 Helper         connected / protocol 2
 Nix            <système actif>
 
@@ -276,7 +282,7 @@ Ce n’est pas encore un SBOM complet, et je ne veux pas le vendre comme tel. C�
 
 Je ne mettrais pas pour autant la vérification distante dans le daemon root.
 
-Le helper privilégié doit rester bête : lire l’état système, activer une génération, valider, rollback. Pour vérifier périodiquement le registry, le LaunchAgent utilisateur que j’ai maintenant en place est beaucoup plus propre. Il tourne toutes les quelques heures, sans interaction, et pourra réutiliser silencieusement la session Entra lorsqu’elle existe pour mettre à jour l’état affiché par l’app.
+Le helper privilégié doit rester bête : lire l’état système, activer une génération, valider, rollback. La boucle périodique appartient au LaunchAgent utilisateur. Il collecte l’état, vérifie les sessions de manière non interactive, écrit son snapshot et émet la télémétrie du pilote, puis sort.
 
 Ça évite surtout de donner des tokens utilisateur ou du trafic réseau à un process root qui n’en a pas besoin.
 
