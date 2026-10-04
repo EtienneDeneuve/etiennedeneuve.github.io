@@ -51,9 +51,9 @@ J’ai donc gardé une règle très simple : **le MDM impose, Nix compose**.
 
 Apple Business reste responsable de ce qui doit être imposé de l’extérieur : l’enrôlement, le bootstrap, les configurations de sécurité, les packages indispensables. En revanche, je ne veux pas qu’il sache comment assembler un poste Tech, Direction ou Standard jusque dans le détail des outils utilisateur.
 
-<!-- ASSET READY: /assets/2026/10/workstation/apple-business-blueprint.webp
-Caption: Dans l'onglet Apps du Blueprint, il n'y a volontairement que Determinate Nix et Omnivya Workstation Bootstrap. Les permissions système restent dans une configuration séparée.
--->
+![Apple Business Blueprint montrant Determinate Nix et Omnivya Workstation Bootstrap](/assets/2026/10/workstation/apple-business-blueprint.webp)
+
+*Dans l’onglet Apps du Blueprint, il n’y a volontairement que Determinate Nix et Omnivya Workstation Bootstrap. Les permissions système restent dans une configuration séparée.*
 
 Depuis les premiers runs, j’ai quand même ajouté une troisième brique au Blueprint, mais pas une troisième couche de provisioning : un profil de configuration très étroit pour les privilèges dont macOS a réellement besoin. Il gère les Login Items du helper et de l’agent ainsi que le Full Disk Access du helper. L’ordre devient donc plutôt `Determinate → privilèges macOS → Bootstrap`.
 
@@ -209,9 +209,9 @@ C’est exactement ce que je voulais éviter : avoir un « nouveau parc propre �
 
 Et le jour où la machine est réellement effacée, elle repasse naturellement par le chemin Apple Business sans avoir besoin d’un autre modèle de profil.
 
-<!-- ASSET READY: /assets/2026/10/workstation/local-adoption-review.webp
-Caption: Sur un Mac déjà utilisé, Setup ne repart pas de zéro : il affiche l'état trouvé avant de faire converger la machine.
--->
+![Omnivya Setup en mode Local adoption avec revue des changements avant application](/assets/2026/10/workstation/local-adoption-review.webp)
+
+*Sur un Mac déjà utilisé, Setup ne repart pas de zéro : il affiche l’état trouvé avant de faire converger la machine.*
 
 ## Apple Business reste très important dans le modèle
 
