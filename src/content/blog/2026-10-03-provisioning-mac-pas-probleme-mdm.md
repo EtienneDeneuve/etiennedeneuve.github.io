@@ -104,24 +104,27 @@ Une fois ce problème posé correctement, les responsabilités se sont séparée
 
 ~~~mermaid
 flowchart TD
-    A[Apple Business] -->|enrollment + bootstrap| B[macOS]
-    C[Entra] -->|identity + role| D[Omnivya Setup]
+    A[Apple Business] -->|enrollment + Determinate + privileges + bootstrap| B[macOS]
+    C[Entra] -->|identity + App Role| D[Omnivya Setup]
+    C -->|Storage token| D
     B --> D
-    D --> E[Nix / nix-darwin]
-    E --> F[Workstation]
+    D -->|manifest + artefact| E[Private Blob registry]
+    E --> D
+    D -->|import or build + activate| F[Nix / nix-darwin]
+    F --> G[Workstation]
 ~~~
 
-Apple Business prend possession de la machine et pousse le socle.
+Apple Business prend possession de la machine et pousse le strict nécessaire : Determinate, les privilèges macOS dont le helper a réellement besoin, puis mon Bootstrap.pkg.
 
-Entra répond à la question « qui est devant ce Mac, et à quel type de poste cette personne a droit ? ».
+Entra répond d’abord à la question « qui est devant ce Mac, et à quel profil cette personne a droit ? ». Il sert maintenant aussi à obtenir un token Azure Storage pour lire le registry privé des profils.
 
-Une petite application macOS orchestre le premier login.
+Omnivya Setup fait la colle entre les deux. Il orchestre le premier login, résout le profil, récupère la release correspondante et pilote l’activation.
 
-Nix construit et applique l’état du poste.
+Et Nix reste responsable de l’état du poste. Selon ce que le registry contient, le Mac peut encore construire localement ou importer directement une closure prébuildée avant activation.
 
 Je préfère largement ce découpage à un gros workflow MDM qui essaie de tout savoir sur tout.
 
-Il y a aussi un avantage très concret : quand quelque chose casse, on sait plus facilement où regarder. Si le package n’est pas arrivé, je regarde Apple Business. Si l’identité n’est pas bonne, je regarde Entra. Si la machine a reçu le bon profil mais pas les bons outils, je regarde Nix.
+Il y a aussi un avantage très concret : quand quelque chose casse, on sait plus facilement où regarder. Si le package n’est pas arrivé, je regarde Apple Business. Si le rôle ou l’accès au registry ne passent pas, je regarde Entra. Si la closure est mauvaise ou l’activation échoue, je regarde Nix et le helper.
 
 Ça paraît évident après coup. Sur un écran MDM avec vingt étapes qui s’enchaînent, ça l’est beaucoup moins.
 
@@ -140,6 +143,8 @@ Je veux que l’installateur reste un installateur.
 Le provisioning lourd arrive ensuite, dans une vraie session utilisateur, avec une interface, de l’état persistant, du retry et des diagnostics.
 
 C’est moins « magique », mais beaucoup plus contrôlable.
+
+Il y a d’ailleurs une asymétrie volontaire entre les deux stockages : le Bootstrap.pkg doit être récupérable par Apple Business avant qu’un utilisateur existe sur la machine, alors que les profils workstation sont dans un container privé lu uniquement après l’auth Entra. Je préfère assumer ces deux contraintes plutôt que d’inventer un mécanisme d’auth commun qui ne correspond à aucun des deux moments du cycle de vie.
 
 ## Je ne cherche pas vraiment le zero-touch
 
