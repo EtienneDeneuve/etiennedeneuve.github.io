@@ -49,11 +49,9 @@ Côté Nix, ces rôles sont traduits vers mes profils `user`, `direction` et `te
 
 L’idée est très simple : l’application ne demande jamais « qu’est-ce que tu veux ? ». Elle demande à Entra « qui es-tu et qu’est-ce que tu as le droit d’avoir ? ».
 
-<!-- SCREENSHOT 1
-Entra > Enterprise applications > Omnivya Workstation > Users and groups.
-Montrer les App Roles avec quelques comptes de test.
-Masquer les emails complets, tenant ID, object IDs et toute donnée non utile.
--->
+![App Roles Entra Workstation Standard, Direction et Tech pour Omnivya Workstation](/assets/2026/10/workstation/entra-app-roles.webp)
+
+*Les rôles workstation sont un contrat explicite de l’application Entra, pas un choix proposé à l’utilisateur.*
 
 ## L’UPN reste utile, mais il ne décide pas du rôle
 
@@ -135,6 +133,30 @@ Je garde volontairement une règle stricte pour le mode headless : l’agent de 
 
 Sur les Macs adoptés sans ADE, j’ai aussi gardé le hostname visible tel quel. L’identité utilisateur peut servir à dériver le nom logique utilisé par la configuration Nix sans renommer brutalement une machine qui a déjà une histoire.
 
+## La même identité sert maintenant à lire le profil privé
+
+Entra ne sert plus uniquement à choisir le rôle.
+
+Une fois l’utilisateur authentifié, Setup demande aussi un token Azure Storage pour accéder au registry privé des profils workstation. Il n’y a pas de SAS embarqué dans l’app et le container n’est pas public.
+
+Le découpage est assez simple : l’App Role répond à « quel profil as-tu le droit de recevoir ? », puis le token Storage et le RBAC répondent à « as-tu le droit de lire les artefacts de ce registry ? ».
+
+~~~text
+Entra login
+   -> App Role
+   -> profile ID
+
+Entra Storage token
+   -> private Blob
+   -> channel
+   -> manifest
+   -> profile.json / artefact
+~~~
+
+Ça me plaît beaucoup plus qu’une clé statique cachée dans le bundle. Et si le token Storage ou le RBAC ne passe pas, Setup ne rend pas le container public pour autant : il retombe sur le baseline embarqué dans le Bootstrap.
+
+Le pilote utilise encore un manifest non signé pendant que je termine la partie Ed25519. L’accès privé est donc déjà réel ; la vérification cryptographique du manifest est le prochain verrou à fermer.
+
 ## Ce que voit réellement l’utilisateur
 
 Presque rien.
@@ -143,10 +165,9 @@ Il s’authentifie, puis l’application affiche le profil détecté.
 
 Pour un poste Tech, elle indique que GitHub sera demandé ensuite. Pour un poste Direction ou Standard, elle indique que GitHub n’est pas nécessaire.
 
-<!-- SCREENSHOT 2
-Omnivya Setup.app sur l’écran "Profile detected".
-Faire deux captures si possible : une Tech et une Direction/Standard.
--->
+![Omnivya Setup affichant le profil Tech détecté et le mode Local adoption](/assets/2026/10/workstation/profile-detected-local-adoption.webp)
+
+*L’utilisateur s’authentifie ; Setup affiche le profil résolu. Le rôle n’est jamais sélectionnable dans l’interface.*
 
 Le rôle n’est pas modifiable.
 

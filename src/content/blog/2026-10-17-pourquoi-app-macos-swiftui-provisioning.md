@@ -50,10 +50,6 @@ L’app est petite et très liée au système. SwiftUI est largement suffisant.
 
 Je garde aussi le build utilisable en ligne de commande avec `xcodebuild`. Xcode sert quand j’en ai besoin pour les previews, le debug ou la signature, mais je ne veux pas que la release dépende d’une série de clics dans l’IDE.
 
-<!-- SCREENSHOT 1
-Omnivya Setup.app sur l’écran de preflight "Checking this Mac before sign-in."
-Idéalement sur un Mac fraîchement enrôlé avec le branding final.
--->
 
 ## Le vrai intérêt n’est pas l’interface
 
@@ -99,9 +95,23 @@ Le build et l’activation ne vivent pas exactement au même endroit.
 
 Le build doit connaître le bon utilisateur, son home, Home Manager et éventuellement son checkout Git. L’activation du système, elle, a besoin de root.
 
-Je fais donc construire dans le contexte utilisateur puis activer côté helper.
+Au début, je faisais donc systématiquement construire dans le contexte utilisateur puis activer côté helper.
 
-Ça évite aussi de dépendre d’un prompt `sudo` qui apparaîtrait plus ou moins bien au milieu du premier login.
+Depuis, le moteur sait aussi prendre un autre chemin : si le registry Entra fournit une closure Nix prébuildée et vérifiée, Setup la matérialise dans son cache, puis le helper l’importe directement dans le store avant activation. Si l’artefact n’existe pas encore, je garde le chemin de build local comme fallback.
+
+~~~text
+registry artefact disponible
+   -> download
+   -> SHA-256
+   -> nix-store --import
+   -> activate
+
+sinon
+   -> nix build local
+   -> activate
+~~~
+
+Ça évite aussi de dépendre d’un prompt `sudo` qui apparaîtrait plus ou moins bien au milieu du premier login. Et surtout, la state machine ne change pas : seule l’implémentation du step de provisioning évolue.
 
 Ce genre de détail n’est pas spectaculaire, mais c’est précisément ce qui rend le provisioning reproductible au lieu de marcher seulement sur mon Mac.
 
@@ -111,14 +121,12 @@ Pour un profil Standard ou Direction, je n’ai aucune raison d’imposer GitHub
 
 Pour un profil Tech, mon implémentation actuelle peut lancer un Device Flow puis cloner `mdm-setup` dans le workspace utilisateur.
 
-<!-- SCREENSHOT 2
-Écran GitHub de Omnivya Setup avec un device code expiré.
-Ne jamais publier de token, cookie ou URL contenant un secret.
--->
 
-C’est encore un point en mouvement.
+Ce point a commencé à bouger depuis les premiers runs.
 
-Je veux aller vers des releases prébuildées pour que GitHub ne serve plus de canal de distribution de la workstation. En revanche, pour un développeur qui va de toute façon travailler sur les repositories, le Device Flow reste une manière propre de faire l’onboarding sans lui demander de copier un PAT dans un terminal.
+Le registry privé est maintenant câblé, et le helper sait importer une closure prébuildée lorsqu’elle est disponible. GitHub n’a donc plus besoin d’être le mécanisme de distribution de la workstation.
+
+Je le garde encore pour le profil Tech parce qu’un développeur va de toute façon travailler avec les repositories. Le Device Flow reste alors une vraie étape d’onboarding développeur, pas une dépendance artificielle imposée à tous les postes.
 
 ## Le premier login est beaucoup moins stable qu’il en a l’air
 
@@ -132,10 +140,6 @@ Aujourd’hui l’app déroule une petite checklist : Determinate, Apple Command
 
 La partie réseau est devenue un vrai gate également. Je vérifie le path, un éventuel captive portal et la joignabilité de l’endpoint Microsoft avant de lancer MSAL, avec un retry borné. Ça évite de transformer un problème Wi-Fi en faux incident Entra.
 
-<!-- SCREENSHOT 3
-Preflight actuel avec la checklist Nix / Apple tools / Homebrew / Enrollment / Network / Config.
-C’est une meilleure capture que l’ancien spinner de preflight.
--->
 
 Ce n’est pas très spectaculaire techniquement, mais c’est nettement plus agréable à exploiter : l’utilisateur voit ce que la machine attend réellement au lieu de regarder une roue tourner.
 
@@ -149,9 +153,6 @@ Ce n’est pas le morceau le plus « architecture » du projet, mais ça compte 
 
 Et quand une étape casse, l’écran d’erreur affiche maintenant les checkpoints déjà validés et la prochaine étape que Retry va reprendre. Là aussi, la state machine devient visible pour l’utilisateur au lieu de rester un détail interne.
 
-<!-- SCREENSHOT 4
-Écran FailedView avec "Progress saved", les checkpoints terminés et le prochain step de reprise.
--->
 
 ## J’ai fini par afficher les logs Nix dans l’app
 
@@ -159,17 +160,15 @@ Je n’aime pas trop les barres de progression qui disent « préparation en cou
 
 Le build Nix fournit déjà beaucoup d’informations, donc autant les exploiter.
 
-L’app affiche une progression, le package en cours et un bout du log. En cas d’échec, on peut retry, exporter les diagnostics et, quand ça a du sens, rollback.
+L’app affiche une progression, les étapes Build / Install / Activate / Validate et un bout du log. C'est aussi ce qui m'intéressait avec une vraie UI : voir où la machine en est sans aller tailer trois fichiers depuis un autre terminal.
 
-<!-- SCREENSHOT 3
-Écran "Preparing your workstation" avec le pourcentage Nix et quelques lignes de log.
-Choisir un moment où les noms de derivations restent publiables.
--->
+![Omnivya Setup téléchargeant une image workstation Nix préconstruite avec progression](/assets/2026/10/workstation/nix-provisioning-progress.webp)
 
-<!-- SCREENSHOT 4
-Écran d’erreur avec Try Again / Export Diagnostics / Rollback.
-Provoquer volontairement une erreur propre sur le Mac de test.
--->
+*Le provisioning reste visible : Setup télécharge la closure préconstruite, affiche le débit et la progression avant import et activation.*
+
+En cas d’échec, on peut retry, exporter les diagnostics et, quand ça a du sens, rollback.
+
+
 
 Pour moi, ça fait complètement partie du sujet Platform Engineering.
 
@@ -215,23 +214,54 @@ puis dans les deux cas
 
 Je préfère largement ça à maintenir un « vieux parc » à côté du nouveau pendant des mois.
 
-## L’app ne doit pas disparaître après le premier boot
+## J’ai fini par instrumenter le parcours lui-même
+
+Comme la state machine était déjà explicite, l’instrumentation OpenTelemetry est devenue assez naturelle.
+
+Le Setup interactif émet maintenant une trace end-to-end pour un run complet, avec les phases principales comme spans : preflight, Entra, résolution du rôle, GitHub, provisioning et validation. À l’intérieur du provisioning, je distingue aussi le build local, le download registry, l’import de closure et l’activation.
+
+Je ne voulais pas transformer chaque tick de progression en span. Les checkpoints et la progression de téléchargement sont donc des events sur les spans ouverts, et les logs partent comme des wide events JSON vers Loki.
+
+Ça donne quelque chose de beaucoup plus lisible qu’un déluge de spans minuscules.
+
+~~~text
+omnivya.setup.run
+  -> preflight
+  -> entra
+  -> role
+  -> github
+  -> provisioning
+       -> registry.download
+       -> registry.import
+       -> nix.activate
+  -> validate
+~~~
+
+Le même `run_id` est réutilisé si Setup est relancé après un crash, donc la reprise du workflow reste corrélable dans Tempo au lieu de créer une deuxième histoire sans lien avec la première.
+
+![Trace Tempo du parcours Omnivya Setup avec preflight, Entra, rôle, GitHub et préparation](/assets/2026/10/workstation/tempo-setup-trace.webp)
+
+*Le parcours interactif est tracé de bout en bout : preflight, Entra, rôle, GitHub puis provisioning restent corrélés dans le même run.*
+
+## L’app ne disparaît plus après le premier boot
 
 Au début je voyais surtout Omnivya Setup comme l’assistant du premier login.
 
-Plus j’avance, moins ça me paraît suffisant.
+Ce n’est déjà plus vraiment le cas.
+
+Le package installe maintenant un LaunchAgent persistant. Tant que le provisioning n’est pas terminé, il garde le chemin interactif. Une fois la machine configurée, le même composant peut tourner en mode `--agent`, sans fenêtre et sans déclencher de login Entra ou GitHub interactif.
+
+Sur le pilote, je l’ai volontairement réglé à 15 minutes pour voir rapidement les changements dans Grafana. La cible normale reviendra plutôt vers quelques heures une fois la chaîne validée.
 
 Une fois le poste construit, j’ai encore besoin de répondre à des questions très simples : quelle version du Bootstrap.pkg est installée, quelle version de l’app tourne, quel Nix est réellement disponible, quelle configuration workstation est active, quel commit l’a produite et vers quoi je peux rollback.
 
-Une partie existe déjà. Le package embarque sa provenance et le helper expose déjà un appel `status`. Mais ce `status` est encore trop pauvre pour en faire un vrai état du poste.
-
-Je veux arriver à quelque chose de ce genre dans l’app :
+Le package embarque sa provenance, le helper expose son état et l’agent écrit maintenant un snapshot périodique. L’écran final rassemble déjà une bonne partie de ces informations :
 
 ~~~text
 Omnivya Workstation
 
-Bootstrap      0.1.31
-Setup.app      0.1.31
+Bootstrap      <version>
+Setup.app      <version>
 Helper         connected / protocol 2
 Nix            <système actif>
 
@@ -249,23 +279,15 @@ Le dashboard de fin n’est plus seulement une idée. Il collecte déjà la prov
 
 Ce n’est pas encore un SBOM complet, et je ne veux pas le vendre comme tel. C’est plutôt un « neofetch de workstation » suffisamment précis pour savoir ce qu’on regarde.
 
-<!-- SCREENSHOT 6
-Done dashboard 0.1.31 : chips Entra / GitHub / Helper / MDM, profil, Bootstrap, macOS, Nix, packages, Brew et commit.
-C’est maintenant une vraie capture disponible, plus un mock.
--->
 
 Je ne mettrais pas pour autant la vérification distante dans le daemon root.
 
-Le helper privilégié doit rester bête : lire l’état système, activer une génération, valider, rollback. Pour vérifier périodiquement le registry, le LaunchAgent utilisateur que j’ai maintenant en place est beaucoup plus propre. Il tourne toutes les quelques heures, sans interaction, et pourra réutiliser silencieusement la session Entra lorsqu’elle existe pour mettre à jour l’état affiché par l’app.
+Le helper privilégié doit rester bête : lire l’état système, activer une génération, valider, rollback. La boucle périodique appartient au LaunchAgent utilisateur. Il collecte l’état, vérifie les sessions de manière non interactive, écrit son snapshot et émet la télémétrie du pilote, puis sort.
 
 Ça évite surtout de donner des tokens utilisateur ou du trafic réseau à un process root qui n’en a pas besoin.
 
 L’app devient alors moins un « wizard qu’on utilise une fois » qu’un petit panneau de contrôle de la workstation.
 
-<!-- SCREENSHOT 5
-À faire quand la vue Status existe : écran récapitulatif Bootstrap / app / Nix / profile / config SemVer / commit / previous-known-good.
-C’est probablement la meilleure capture pour montrer que le poste est réellement versionné.
--->
 
 ## Finalement, l’app reste assez petite
 

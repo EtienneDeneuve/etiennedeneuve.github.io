@@ -193,6 +193,57 @@ Determinate
 
 Ce sont exactement les détails qu’on ne voit pas dans le premier diagramme d’architecture, mais qui font la différence entre « ça marche sur mon Mac » et un déploiement réellement automatisable.
 
+## Même `nix-store --export` m’a fait perdre un peu de temps
+
+Quand j’ai commencé à produire les closures pour le registry, je pensais que la partie export serait presque triviale.
+
+Le classique :
+
+~~~text
+nix-store -qR "$TOPLEVEL" | nix-store --export
+~~~
+
+m’a pourtant donné un résultat vide avec mon installation Determinate.
+
+Le problème venait du comportement du `nix-store` fourni dans cet environnement : les paths passés sur stdin n’étaient pas consommés comme je l’attendais.
+
+J’ai fini par passer les store paths comme arguments, par lots :
+
+~~~text
+nix-store -qR "$TOPLEVEL" \
+  | xargs -n 50 nix-store --export
+~~~
+
+Ce n’est pas un grand problème d’architecture. C’est exactement le genre de petit détail qui te fait perdre une heure alors que tout le modèle autour est correct.
+
+Le fix est maintenant directement dans le script de release. Et ça m’a encore renforcé dans l’idée que le pipeline doit produire lui-même les closures, les hashes et les manifests. Je ne veux pas demander à chaque Mac de redécouvrir ces subtilités.
+
+## Un registry privé ajoute aussi ses propres échecs
+
+Le premier accès au Blob m’a rappelé une autre chose : « l’utilisateur est connecté à Entra » ne veut pas dire « il a automatiquement un token valable pour Azure Storage ».
+
+Setup doit obtenir un second token MSAL pour la ressource Storage, et le compte doit avoir le RBAC `Storage Blob Data Reader` sur le container privé.
+
+J’ai donc dû gérer proprement le cas où le scope demande encore un consentement, où le RBAC n’est pas présent ou où le Blob répond 401/403.
+
+Je préfère ce genre d’échec explicite à un container public ou un SAS long-lived caché dans l’app. Et le fallback embarqué permet de garder un chemin de provisioning même si le registry distant n’est pas disponible.
+
+## Et même l’observabilité peut devenir trop bavarde
+
+Le premier branchement OTEL marchait, mais j’ai rapidement vu un autre classique : il est très facile de produire beaucoup trop de télémétrie simplement parce qu’on peut le faire.
+
+Je ne voulais pas un span à chaque tick de l’agent, ni un événement pour chaque pourcentage de téléchargement.
+
+J’ai donc réduit le bruit : heartbeat et health côté métriques, événements structurés côté Loki, traces uniquement pour les opérations qui ont un vrai début et une vraie fin. La progression de téléchargement est échantillonnée, et les états très dynamiques ne sont pas transformés en labels Prometheus.
+
+Le dashboard est devenu beaucoup plus lisible après cette passe.
+
+![Logs structurés Loki de Omnivya Setup montrant un échec de provisioning zstd](/assets/2026/10/workstation/loki-setup-error.webp)
+
+*Quand le parcours casse, le même run reste exploitable dans Loki : code, run_id, version du package et erreur de provisioning sont structurés.*
+
+C’est un détail qui m’amuse parce qu’il résume assez bien tout le projet : le problème n’est presque jamais de « réussir à collecter plus ». Le problème est de décider quelle information mérite réellement d’exister.
+
 ## Le disque reste le prochain piège évident
 
 Si je distribue demain des closures Nix prébuildées, je ne veux pas transformer les SSD de 512 Go en archive historique du parc.
@@ -211,10 +262,6 @@ Le preflight affiche ses gates, le provisioning montre les étapes Build / Insta
 
 Le Done screen est lui aussi devenu un vrai petit dashboard avec l’état Entra, GitHub, helper, MDM, bootstrap, macOS, Nix et Homebrew.
 
-<!-- SCREENSHOT 3
-FailedView actuel avec Progress saved + Next, ou Done dashboard 0.1.31.
-Les deux sont de bonnes captures de REX réel.
--->
 
 Je trouve ça beaucoup plus intéressant qu’un simple écran vert « success ». Le système commence à pouvoir expliquer son propre état.
 
