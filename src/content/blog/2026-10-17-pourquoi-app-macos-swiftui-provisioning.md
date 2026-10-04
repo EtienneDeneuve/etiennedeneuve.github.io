@@ -214,6 +214,31 @@ puis dans les deux cas
 
 Je préfère largement ça à maintenir un « vieux parc » à côté du nouveau pendant des mois.
 
+## J’ai fini par instrumenter le parcours lui-même
+
+Comme la state machine était déjà explicite, l’instrumentation OpenTelemetry est devenue assez naturelle.
+
+Le Setup interactif émet maintenant une trace end-to-end pour un run complet, avec les phases principales comme spans : preflight, Entra, résolution du rôle, GitHub, provisioning et validation. À l’intérieur du provisioning, je distingue aussi le build local, le download registry, l’import de closure et l’activation.
+
+Je ne voulais pas transformer chaque tick de progression en span. Les checkpoints et la progression de téléchargement sont donc des events sur les spans ouverts, et les logs partent comme des wide events JSON vers Loki.
+
+Ça donne quelque chose de beaucoup plus lisible qu’un déluge de spans minuscules.
+
+~~~text
+omnivya.setup.run
+  -> preflight
+  -> entra
+  -> role
+  -> github
+  -> provisioning
+       -> registry.download
+       -> registry.import
+       -> nix.activate
+  -> validate
+~~~
+
+Le même `run_id` est réutilisé si Setup est relancé après un crash, donc la reprise du workflow reste corrélable dans Tempo au lieu de créer une deuxième histoire sans lien avec la première.
+
 ## L’app ne doit pas disparaître après le premier boot
 
 Au début je voyais surtout Omnivya Setup comme l’assistant du premier login.
