@@ -1,6 +1,6 @@
 ---
 title: "Je versionne mes postes de travail comme du logiciel"
-description: "Un poste ne devrait pas être simplement « sur la dernière config Git ». J’ai commencé à traiter la workstation comme un artefact versionné : SemVer, provenance, rollback et bientôt profils Nix prébuildés."
+description: "Un poste ne devrait pas être simplement « sur la dernière config Git ». Je traite maintenant la workstation comme un artefact versionné : registry privé, SemVer, provenance, closures Nix et rollback."
 pubDate: 2026-10-24T07:30:00.000Z
 language: fr
 contentType: architecture-decision
@@ -60,9 +60,11 @@ Le dashboard de fin collecte maintenant la version du Bootstrap.pkg et de l’ap
 Caption: L'état observé est déjà visible localement : identité, mode de management, versions du bootstrap, macOS, système Nix, Homebrew et commit source.
 -->
 
-Je garde quand même la distinction entre ce qui est **observé** et ce qui est **déclaré**. Le prochain morceau consiste à persister explicitement la release workstation appliquée : SemVer, commit source, profil, channel, top-level Nix store path, date d’application et previous-known-good.
+Je garde quand même la distinction entre ce qui est **observé** et ce qui est **déclaré**.
 
-C’est cette comparaison qui donnera ensuite un vrai drift détectable au lieu d’un incident découvert par hasard.
+Depuis les premiers essais, la partie déclarée a commencé à exister pour de vrai : Setup résout maintenant un channel, une version, un manifest et un `profile.json` depuis le registry privé. Ces informations sont attachées au run de provisioning et mises en cache localement.
+
+Il me reste encore à aller jusqu’au bout du modèle `current / previous-known-good` et du drift automatique, mais je ne suis plus seulement en train de dessiner le format sur un tableau blanc.
 
 Je pense aussi exposer exactement le même modèle en CLI :
 
@@ -136,7 +138,7 @@ Je n’ai pas encore le dashboard Grafana à montrer au moment où j’écris ce
 
 ## Le Bootstrap est déjà une vraie release
 
-Au moment où j’écris ça, le Bootstrap lui-même est déjà arrivé à `0.1.31`.
+Au moment où j’écris ça, le Bootstrap lui-même est déjà arrivé à `0.1.31`, pendant que le registry workstation a commencé son propre cycle en `0.1.0`.
 
 Chaque version est publiée sur un chemin Blob immuable, avec son SHA-256, son package signé et sa provenance. Je ne remplace jamais silencieusement un fichier derrière la même URL.
 
@@ -160,59 +162,81 @@ Mais la release, elle, garde une identité propre.
 
 Et je conserve évidemment le SHA exact derrière la version. SemVer est pratique pour parler entre humains ; le commit reste la provenance technique.
 
-## Le pilote actuel n’est pas encore la cible finale
+## Le registry privé tourne maintenant
 
-Pour aller vite, l’app sait aujourd’hui construire depuis le snapshot Nix embarqué dans le package.
+Pour aller vite, le premier pilote construisait depuis le snapshot Nix embarqué dans le package, ou depuis le checkout Git sur les postes Tech.
 
-Sur un poste Tech, elle peut aussi faire le login GitHub, cloner `mdm-setup` et utiliser ce checkout.
+C’était utile pour valider la chaîne, mais je ne voulais pas en faire le modèle de distribution.
 
-C’était très pratique pour valider toute la chaîne sans construire un système de distribution complet dès le début.
+Depuis, j’ai branché un vrai registry de profils dans Azure Blob. Le container est privé et Setup y accède avec un token Entra dédié à Azure Storage. Pas de SAS dans l’application, pas de lecture anonyme.
 
-Je ne veux simplement pas garder ce modèle comme cible.
+Le layout reste volontairement simple :
 
-GitHub est une très bonne source de développement. Je ne veux pas qu’il devienne une dépendance runtime pour tous les utilisateurs.
+~~~text
+workstation-profiles/
+  channels/
+    pilot/
+      tech.json
+      direction.json
+      standard.json
 
-Quelqu’un qui a un poste Direction n’a aucune raison d’avoir un compte GitHub juste pour récupérer Word, Edge, quelques réglages et son environnement de travail.
-
-## Je veux donc builder les profils avant
-
-La suite logique est de déplacer le build hors du poste.
-
-Une release de `mdm-setup` construit les profils supportés, produit des artefacts immuables, les signe et les publie dans un stockage objet privé.
-
-Le Mac ne clone plus le repository pour savoir quoi devenir. Il récupère la release qui correspond à son profil.
-
-~~~mermaid
-flowchart TD
-    A[Git tag v2.7.0] --> B[Release builder]
-    B --> C[Standard]
-    B --> D[Direction]
-    B --> E[Tech]
-    C --> F[Signed artifacts]
-    D --> F
-    E --> F
-    F --> G[Private object storage]
-    G --> H[Omnivya Setup]
-    H --> I[Nix store]
+  releases/
+    0.1.0/
+      tech/
+        manifest.json
+        aarch64-darwin/
+          profile.json
+          closure.nar.zst
 ~~~
 
-Pour la première version, je partirais probablement sur une closure exportée par profil.
+Le channel pointer dit quelle version regarder. Le manifest décrit les artefacts. Le `profile.json` contient le rôle, le store path et quelques métadonnées nécessaires à l’activation.
 
-Si ça devient trop gros ou trop redondant, le même stockage peut évoluer vers un vrai binary cache Nix. Mais je préfère mesurer avant de construire tout de suite la version la plus élégante sur le papier.
+Le canal pilote `0.1.0` est déjà publié et résolu par l’app après l’auth Entra.
 
-## Le stockage n’a pas besoin d’un secret dans l’app
+## Le Mac peut maintenant consommer une closure prébuildée
 
-L’application vient déjà d’authentifier l’utilisateur avec Entra.
+Le chemin d’import est lui aussi câblé.
 
-Autant réutiliser cette identité pour lire le registry et les artefacts plutôt que d’embarquer une clé de stockage dans le binaire.
+Quand une release contient réellement `closure.nar.zst`, Setup la télécharge dans son cache, vérifie son SHA-256, puis transmet au helper le chemin de la closure et le store path attendu.
 
-Le rôle Entra détermine le profil autorisé. Le registry dit quelle version de ce profil est disponible. Le manifest pointe vers l’artefact exact.
+Le helper fait alors :
 
-J’ajouterais malgré tout une signature sur les manifests.
+~~~text
+closure.nar.zst
+   -> zstd
+   -> nix-store --import
+   -> set profile
+   -> activate
+   -> validate
+~~~
 
-Le fait qu’un utilisateur puisse lire un objet dans le Blob ne veut pas dire que le helper doit accepter aveuglément son contenu.
+Si le registry ne contient pas encore la closure, le moteur garde le build local comme fallback. Ça me permet de migrer progressivement sans casser le pilote.
 
-Ce sont deux sujets différents : l’accès au stockage et la confiance dans ce qu’on applique sur la machine.
+Au moment où j’écris ces lignes, le registry live contient déjà les manifests et les `profile.json`. Le chemin export/import NAR est implémenté, mais je suis encore en train de valider la publication des closures réelles sur le canal pilote.
+
+Je préfère écrire ça comme ça plutôt que de faire croire que toute la supply chain est terminée.
+
+## Entra remplace la clé statique
+
+L’application vient déjà d’authentifier l’utilisateur.
+
+Je réutilise donc cette identité pour demander un token Azure Storage et lire le container privé avec du RBAC. Le rôle workstation et le droit de lire le Blob restent deux contrôles distincts.
+
+C’est exactement ce que je voulais : Git reste la source, Azure distribue les releases, mais aucun secret de stockage n’est embarqué dans le Mac.
+
+Il reste un point de sécurité que je n’ai volontairement pas masqué : le pilote accepte encore des manifests non signés. Le verifier Ed25519 existe comme squelette, mais l’enforcement n’est pas encore activé.
+
+Le prochain état cible est donc bien :
+
+~~~text
+Entra/RBAC
+   -> qui peut lire
+
+Ed25519
+   -> quel manifest le helper accepte d’appliquer
+~~~
+
+Deux problèmes différents, deux contrôles différents.
 
 ## Je veux aussi connaître le coût disque avant de télécharger
 
