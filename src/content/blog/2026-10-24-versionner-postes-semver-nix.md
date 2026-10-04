@@ -87,53 +87,44 @@ C’est ce qui transformera progressivement le snapshot actuel en contrôle de c
 
 ## Tant qu’à connaître cet état, autant le remonter
 
-À partir du moment où le poste sait dire précisément ce qu’il est, garder cette information uniquement en local serait un peu dommage.
+À partir du moment où le poste sait dire précisément ce qu’il est, garder cette information uniquement en local devenait un peu dommage.
 
-Je veux donc remonter un état très léger vers Grafana : version workstation, version du bootstrap, version de l’app et du helper, version Nix, profil, mode ADE ou adoption, drift éventuel, dernier apply, santé du daemon et quelques métriques utiles autour du disque ou des updates.
+J’ai donc branché un premier pipeline OpenTelemetry pour le pilote.
 
-Je ne veux surtout pas installer un collector complet sur chaque Mac juste pour ça.
+Et je n’ai toujours pas installé Alloy sur tous les Macs.
 
-L’agent workstation existe maintenant réellement et écrit déjà son snapshot local toutes les six heures. La partie OTLP n’est pas encore branchée, mais c’est précisément l’endroit où elle viendra se connecter : émission directe en OTLP/HTTP vers un Alloy central.
-
-Le chemin que je retiens ressemble plutôt à ça :
+L’agent que j’avais déjà écrit émet directement de l’OTLP/HTTP. Sur mon Mac, un collector central reçoit les signaux et les route vers Prometheus, Loki et Tempo, puis Grafana affiche l’état du parc.
 
 ~~~text
 Omnivya Workstation Agent
         |
         | OTLP/HTTP
-        | Entra access token
         v
-Tailscale
+OTel Collector
         |
-        v
-auth gateway
-        |
-        v
-Grafana Alloy
-        |
-        +--> metrics
-        +--> logs
-        +--> traces
+        +--> Prometheus
+        +--> Loki
+        +--> Tempo
         |
         v
 Grafana
 ~~~
 
-Tailscale garde le endpoint hors d’Internet et limite les machines qui peuvent le joindre. Entra reste la couche d’autorisation applicative.
+Pour le moment, c’est volontairement un lab : le collector tourne sur mon Mac et les machines pilotes le rejoignent sur le LAN ou Tailscale. Je garde l’auth Entra devant le collector pour l’étape suivante, quand je sortirai de ce setup local.
 
-Je préfère garder les deux.
+Le point intéressant est surtout que l’instrumentation existe déjà côté endpoint. Changer le backend plus tard ne doit pas demander de réécrire l’app.
 
-Et surtout, Alloy reste au centre. Pas question d’installer Alloy sur tout le parc uniquement pour exporter quelques événements de workstation.
+L’agent remonte aujourd’hui un heartbeat, la santé du helper et de XPC, l’état Entra et GitHub, le mode d’enrollment et quelques informations d’inventaire. Le Setup interactif envoie de son côté ses traces end-to-end, ses logs structurés et la progression du téléchargement des artefacts registry.
 
-Le gateway devant Alloy sert surtout à valider proprement le token Entra avant de laisser passer l’OTLP. Je préfère ça à bricoler un bearer token statique commun à toutes les machines.
+J’ai aussi fait une passe pour éviter les métriques à forte cardinalité. Les états dynamiques restent dans des wide-event logs JSON ; les métriques Prometheus gardent des labels stables, principalement le host et les quelques dimensions réellement utiles.
 
-Une update pourrait alors devenir une vraie trace : preflight, résolution du profil, download, vérification de l’artefact, import Nix, activation et validation. Si ça casse, je peux partir du dashboard du parc et descendre jusqu’à l’étape exacte du run concerné.
+<!-- ASSET READY: /assets/2026/10/workstation/grafana-workstation-agent.webp
+Caption: Le premier dashboard Grafana du pilote : santé de l'agent, helper/XPC, sessions Entra/GitHub, mode d'enrollment et logs de tick.
+-->
 
-Ce n’est pas indispensable pour faire fonctionner le provisioning.
+Le dashboard n’est évidemment pas encore une console de fleet management complète, mais il répond déjà à des questions simples : est-ce que l’agent tourne, est-ce que le helper répond, est-ce que les credentials sont encore valides, est-ce que le Mac est en adoption locale ou enrôlé, et quand l’agent a parlé pour la dernière fois.
 
-Par contre, le jour où j’ai vingt, cinquante ou cent machines, ça change complètement la manière de répondre à « qui est encore en 2.6.1 ? », « quelles machines ont du drift ? » ou « pourquoi la dernière update casse uniquement sur trois Macs ? ».
-
-Je n’ai pas encore le dashboard Grafana à montrer au moment où j’écris ces lignes. Je préfère donc garder ici l’architecture cible et ajouter la capture quand la télémétrie sera réellement branchée, plutôt que fabriquer un joli dashboard qui n’existe pas encore.
+Le plus drôle est que j’étais parti d’une petite app de provisioning « pour le fun », et que je commence doucement à avoir un control plane de workstation sans l’avoir vraiment cherché.
 
 
 ## Le Bootstrap est déjà une vraie release
