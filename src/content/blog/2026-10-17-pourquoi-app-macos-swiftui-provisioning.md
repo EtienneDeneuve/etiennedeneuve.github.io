@@ -95,9 +95,23 @@ Le build et l’activation ne vivent pas exactement au même endroit.
 
 Le build doit connaître le bon utilisateur, son home, Home Manager et éventuellement son checkout Git. L’activation du système, elle, a besoin de root.
 
-Je fais donc construire dans le contexte utilisateur puis activer côté helper.
+Au début, je faisais donc systématiquement construire dans le contexte utilisateur puis activer côté helper.
 
-Ça évite aussi de dépendre d’un prompt `sudo` qui apparaîtrait plus ou moins bien au milieu du premier login.
+Depuis, le moteur sait aussi prendre un autre chemin : si le registry Entra fournit une closure Nix prébuildée et vérifiée, Setup la matérialise dans son cache, puis le helper l’importe directement dans le store avant activation. Si l’artefact n’existe pas encore, je garde le chemin de build local comme fallback.
+
+~~~text
+registry artefact disponible
+   -> download
+   -> SHA-256
+   -> nix-store --import
+   -> activate
+
+sinon
+   -> nix build local
+   -> activate
+~~~
+
+Ça évite aussi de dépendre d’un prompt `sudo` qui apparaîtrait plus ou moins bien au milieu du premier login. Et surtout, la state machine ne change pas : seule l’implémentation du step de provisioning évolue.
 
 Ce genre de détail n’est pas spectaculaire, mais c’est précisément ce qui rend le provisioning reproductible au lieu de marcher seulement sur mon Mac.
 
@@ -108,9 +122,11 @@ Pour un profil Standard ou Direction, je n’ai aucune raison d’imposer GitHub
 Pour un profil Tech, mon implémentation actuelle peut lancer un Device Flow puis cloner `mdm-setup` dans le workspace utilisateur.
 
 
-C’est encore un point en mouvement.
+Ce point a commencé à bouger depuis les premiers runs.
 
-Je veux aller vers des releases prébuildées pour que GitHub ne serve plus de canal de distribution de la workstation. En revanche, pour un développeur qui va de toute façon travailler sur les repositories, le Device Flow reste une manière propre de faire l’onboarding sans lui demander de copier un PAT dans un terminal.
+Le registry privé est maintenant câblé, et le helper sait importer une closure prébuildée lorsqu’elle est disponible. GitHub n’a donc plus besoin d’être le mécanisme de distribution de la workstation.
+
+Je le garde encore pour le profil Tech parce qu’un développeur va de toute façon travailler avec les repositories. Le Device Flow reste alors une vraie étape d’onboarding développeur, pas une dépendance artificielle imposée à tous les postes.
 
 ## Le premier login est beaucoup moins stable qu’il en a l’air
 
