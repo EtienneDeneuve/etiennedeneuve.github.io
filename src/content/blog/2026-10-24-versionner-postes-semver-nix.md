@@ -56,9 +56,9 @@ Le dashboard de fin collecte maintenant la version du Bootstrap.pkg et de l’ap
 
 Ça donne quelque chose de beaucoup plus utile qu’un simple « provisioning succeeded ».
 
-<!-- ASSET READY: /assets/2026/10/workstation/workstation-done-dashboard.webp
-Caption: L'état observé est déjà visible localement : identité, mode de management, versions du bootstrap, macOS, système Nix, Homebrew et commit source.
--->
+![Dashboard final Omnivya Workstation avec versions, profil, Nix, Homebrew et état des services](/assets/2026/10/workstation/workstation-done-dashboard.webp)
+
+*L’état observé est visible localement : identité, mode de management, versions du bootstrap, macOS, système Nix, Homebrew et commit source.*
 
 Je garde quand même la distinction entre ce qui est **observé** et ce qui est **déclaré**.
 
@@ -118,9 +118,9 @@ L’agent remonte aujourd’hui un heartbeat, la santé du helper et de XPC, l�
 
 J’ai aussi fait une passe pour éviter les métriques à forte cardinalité. Les états dynamiques restent dans des wide-event logs JSON ; les métriques Prometheus gardent des labels stables, principalement le host et les quelques dimensions réellement utiles.
 
-<!-- ASSET READY: /assets/2026/10/workstation/grafana-workstation-agent.webp
-Caption: Le premier dashboard Grafana du pilote : santé de l'agent, helper/XPC, sessions Entra/GitHub, mode d'enrollment et logs de tick.
--->
+![Dashboard Grafana Omnivya Workstation Agent avec santé de l’agent, helper, XPC, Entra et GitHub](/assets/2026/10/workstation/grafana-workstation-agent.webp)
+
+*Le premier dashboard Grafana du pilote : santé de l’agent, helper/XPC, sessions Entra/GitHub, mode d’enrollment et logs de tick.*
 
 Le dashboard n’est évidemment pas encore une console de fleet management complète, mais il répond déjà à des questions simples : est-ce que l’agent tourne, est-ce que le helper répond, est-ce que les credentials sont encore valides, est-ce que le Mac est en adoption locale ou enrôlé, et quand l’agent a parlé pour la dernière fois.
 
@@ -129,7 +129,7 @@ Le plus drôle est que j’étais parti d’une petite app de provisioning « po
 
 ## Le Bootstrap est déjà une vraie release
 
-Au moment où j’écris ça, le Bootstrap lui-même est déjà arrivé à `0.1.31`, pendant que le registry workstation a commencé son propre cycle en `0.1.0`.
+Au moment où j’écris ça, le Bootstrap lui-même est déjà arrivé à `0.1.45`, pendant que le registry workstation a commencé son propre cycle en `0.1.0`.
 
 Chaque version est publiée sur un chemin Blob immuable, avec son SHA-256, son package signé et sa provenance. Je ne remplace jamais silencieusement un fichier derrière la même URL.
 
