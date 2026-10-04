@@ -133,6 +133,30 @@ Je garde volontairement une règle stricte pour le mode headless : l’agent de 
 
 Sur les Macs adoptés sans ADE, j’ai aussi gardé le hostname visible tel quel. L’identité utilisateur peut servir à dériver le nom logique utilisé par la configuration Nix sans renommer brutalement une machine qui a déjà une histoire.
 
+## La même identité sert maintenant à lire le profil privé
+
+Entra ne sert plus uniquement à choisir le rôle.
+
+Une fois l’utilisateur authentifié, Setup demande aussi un token Azure Storage pour accéder au registry privé des profils workstation. Il n’y a pas de SAS embarqué dans l’app et le container n’est pas public.
+
+Le découpage est assez simple : l’App Role répond à « quel profil as-tu le droit de recevoir ? », puis le token Storage et le RBAC répondent à « as-tu le droit de lire les artefacts de ce registry ? ».
+
+~~~text
+Entra login
+   -> App Role
+   -> profile ID
+
+Entra Storage token
+   -> private Blob
+   -> channel
+   -> manifest
+   -> profile.json / artefact
+~~~
+
+Ça me plaît beaucoup plus qu’une clé statique cachée dans le bundle. Et si le token Storage ou le RBAC ne passe pas, Setup ne rend pas le container public pour autant : il retombe sur le baseline embarqué dans le Bootstrap.
+
+Le pilote utilise encore un manifest non signé pendant que je termine la partie Ed25519. L’accès privé est donc déjà réel ; la vérification cryptographique du manifest est le prochain verrou à fermer.
+
 ## Ce que voit réellement l’utilisateur
 
 Presque rien.
