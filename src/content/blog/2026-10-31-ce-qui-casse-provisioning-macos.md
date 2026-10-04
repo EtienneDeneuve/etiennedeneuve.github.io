@@ -193,6 +193,40 @@ Determinate
 
 Ce sont exactement les détails qu’on ne voit pas dans le premier diagramme d’architecture, mais qui font la différence entre « ça marche sur mon Mac » et un déploiement réellement automatisable.
 
+## Même `nix-store --export` m’a fait perdre un peu de temps
+
+Quand j’ai commencé à produire les closures pour le registry, je pensais que la partie export serait presque triviale.
+
+Le classique :
+
+~~~text
+nix-store -qR "$TOPLEVEL" | nix-store --export
+~~~
+
+m’a pourtant donné un résultat vide avec mon installation Determinate.
+
+Le problème venait du comportement du `nix-store` fourni dans cet environnement : les paths passés sur stdin n’étaient pas consommés comme je l’attendais.
+
+J’ai fini par passer les store paths comme arguments, par lots :
+
+~~~text
+nix-store -qR "$TOPLEVEL"   | xargs -n 50 nix-store --export
+~~~
+
+Ce n’est pas un grand problème d’architecture. C’est exactement le genre de petit détail qui te fait perdre une heure alors que tout le modèle autour est correct.
+
+Et ça m’a encore renforcé dans l’idée que le pipeline de release doit produire lui-même les closures, les hashs et les manifests. Je ne veux pas demander à chaque Mac de redécouvrir ces subtilités.
+
+## Un registry privé ajoute aussi ses propres échecs
+
+Le premier accès au Blob m’a rappelé une autre chose : « l’utilisateur est connecté à Entra » ne veut pas dire « il a automatiquement un token valable pour Azure Storage ».
+
+Setup doit obtenir un second token MSAL pour la ressource Storage, et le compte doit avoir le RBAC `Storage Blob Data Reader` sur le container privé.
+
+J’ai donc dû gérer proprement le cas où le scope demande encore un consentement, où le RBAC n’est pas présent ou où le Blob répond 401/403.
+
+Je préfère ce genre d’échec explicite à un container public ou un SAS long-lived caché dans l’app. Et le fallback embarqué permet de garder un chemin de provisioning même si le registry distant n’est pas disponible.
+
 ## Le disque reste le prochain piège évident
 
 Si je distribue demain des closures Nix prébuildées, je ne veux pas transformer les SSD de 512 Go en archive historique du parc.
