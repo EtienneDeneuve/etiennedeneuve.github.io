@@ -210,12 +210,13 @@ Le problème venait du comportement du `nix-store` fourni dans cet environnement
 J’ai fini par passer les store paths comme arguments, par lots :
 
 ~~~text
-nix-store -qR "$TOPLEVEL"   | xargs -n 50 nix-store --export
+nix-store -qR "$TOPLEVEL" \
+  | xargs -n 50 nix-store --export
 ~~~
 
 Ce n’est pas un grand problème d’architecture. C’est exactement le genre de petit détail qui te fait perdre une heure alors que tout le modèle autour est correct.
 
-Et ça m’a encore renforcé dans l’idée que le pipeline de release doit produire lui-même les closures, les hashs et les manifests. Je ne veux pas demander à chaque Mac de redécouvrir ces subtilités.
+Le fix est maintenant directement dans le script de release. Et ça m’a encore renforcé dans l’idée que le pipeline doit produire lui-même les closures, les hashes et les manifests. Je ne veux pas demander à chaque Mac de redécouvrir ces subtilités.
 
 ## Un registry privé ajoute aussi ses propres échecs
 
