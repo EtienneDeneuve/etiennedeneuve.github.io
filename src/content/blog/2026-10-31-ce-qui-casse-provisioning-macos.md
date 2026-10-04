@@ -238,6 +238,10 @@ J’ai donc réduit le bruit : heartbeat et health côté métriques, événemen
 
 Le dashboard est devenu beaucoup plus lisible après cette passe.
 
+![Logs structurés Loki de Omnivya Setup montrant un échec de provisioning zstd](/assets/2026/10/workstation/loki-setup-error.webp)
+
+*Quand le parcours casse, le même run reste exploitable dans Loki : code, run_id, version du package et erreur de provisioning sont structurés.*
+
 C’est un détail qui m’amuse parce qu’il résume assez bien tout le projet : le problème n’est presque jamais de « réussir à collecter plus ». Le problème est de décider quelle information mérite réellement d’exister.
 
 ## Le disque reste le prochain piège évident
@@ -258,10 +262,6 @@ Le preflight affiche ses gates, le provisioning montre les étapes Build / Insta
 
 Le Done screen est lui aussi devenu un vrai petit dashboard avec l’état Entra, GitHub, helper, MDM, bootstrap, macOS, Nix et Homebrew.
 
-<!-- SCREENSHOT 3
-FailedView actuel avec Progress saved + Next, ou Done dashboard 0.1.31.
-Les deux sont de bonnes captures de REX réel.
--->
 
 Je trouve ça beaucoup plus intéressant qu’un simple écran vert « success ». Le système commence à pouvoir expliquer son propre état.
 
