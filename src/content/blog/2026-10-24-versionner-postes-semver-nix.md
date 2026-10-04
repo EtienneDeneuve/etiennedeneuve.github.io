@@ -212,9 +212,9 @@ closure.nar.zst
 
 Si le registry ne contient pas encore la closure, le moteur garde le build local comme fallback. Ça me permet de migrer progressivement sans casser le pilote.
 
-Au moment où j’écris ces lignes, le registry live contient déjà les manifests et les `profile.json`. Le chemin export/import NAR est implémenté, mais je suis encore en train de valider la publication des closures réelles sur le canal pilote.
+Au moment où j’écris ces lignes, le registry live contient déjà les manifests et les `profile.json`. Le chemin export/import NAR est implémenté, et j’ai justement dû corriger le script de publication parce que le `nix-store --export` de Determinate ne consommait pas mes paths sur stdin comme je l’avais supposé. L’export passe maintenant les store paths comme arguments avant compression en zstd.
 
-Je préfère écrire ça comme ça plutôt que de faire croire que toute la supply chain est terminée.
+Je suis encore en train de valider la première publication complète des closures sur le canal pilote. Je préfère écrire ça comme ça plutôt que de faire croire que toute la supply chain est terminée.
 
 ## Entra remplace la clé statique
 
