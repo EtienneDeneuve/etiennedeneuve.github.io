@@ -12,6 +12,7 @@ img: /assets/stock-3.jpg
 img_alt: nice abstract image
 lastModified: 2024-10-05T12:00:00.000Z
 updateDate: 2024-10-05T12:00:00.000Z
+draft: true
 ---
 
 ## Je n'aime pas Canvas
