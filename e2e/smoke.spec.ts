@@ -7,7 +7,7 @@ const criticalPaths = [
   "/work/",
   "/projects/",
   "/speaking/",
-  "/thinking/2024-10-05-automatisation-carousel-linkedin/",
+  "/thinking/2026-09-22-opentelemetry-pourquoi-je-lai-propose/",
 ];
 
 for (const path of criticalPaths) {
