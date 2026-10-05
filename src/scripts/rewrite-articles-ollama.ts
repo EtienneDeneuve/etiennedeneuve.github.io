@@ -1,31 +1,31 @@
 #!/usr/bin/env bun
 /**
- * Local LLM pipeline (MLX preferred, Ollama fallback): triage / annotate / rewrite
- * legacy blog posts into Thinking voice. Never writes into src/content/blog/.
+ * Local pipeline: Kev triage + MLX/Ollama annotate/rewrite for legacy blog posts.
+ * Never writes into src/content/blog/.
  *
  * Usage:
  *   bun run rewrite:articles -- status
  *   bun run rewrite:articles -- triage [--limit N] [--slug X] [--before YYYY-MM-DD]
+ *   bun run rewrite:articles -- benchmark [--gold path] [--threshold 0.5]
  *   bun run rewrite:articles -- rewrite [--slug X] [--limit N] [--force]
  *   bun run rewrite:articles -- annotate --slug X [--force]
  *
  * Env:
+ *   TRIAGE_BACKEND           kev | mlx | ollama   (default kev)
+ *   KEV_BASE_URL             default http://127.0.0.1:8009
+ *   KEV_MODEL                default jaredpalmer/kev-4b (label only; server loads weights)
  *   REWRITE_BACKEND          mlx | ollama   (default mlx)
  *   MLX_BASE_URL             default http://127.0.0.1:18080/v1
  *   TRIAGE_MODEL / REWRITE_MODEL
  *     mlx defaults:
- *       mlx-community/Qwen3.5-35B-A3B-OptiQ-4bit (triage+rewrite)
+ *       mlx-community/Qwen3.5-35B-A3B-OptiQ-4bit (LLM triage fallback + rewrite)
  *     ollama fallbacks:
- *       qwen3.5:9b / qwen3.5:35b-a3b
+ *       qwen2.5:14b
  *   OLLAMA_HOST              default http://127.0.0.1:11434
  *   WORKLOG_ROOT             default ~/Worklog
  *
- * Prefer devenv scripts: mlx-serve | rewrite-status | rewrite-triage | rewrite-draft
- *
- * Or serve MLX MoE directly:
- *   uvx --from mlx-lm mlx_lm.server \
- *     --model mlx-community/Qwen3.5-35B-A3B-OptiQ-4bit --port 18080
- * For triage+rewrite on one server, TRIAGE_MODEL defaults to the same OptiQ id.
+ * Prefer devenv scripts:
+ *   kev-bootstrap | kev-serve | mlx-serve | rewrite-status | rewrite-triage | rewrite-draft
  */
 
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
@@ -33,22 +33,38 @@ import { homedir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import matter from "gray-matter";
+import {
+  assessBlogQuality,
+  formatQualityForKevState,
+  hardArchiveDecision,
+  type BlogQuality,
+} from "./lib/blog-quality.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, "../..");
 const blogDir = join(rootDir, "src/content/blog");
 const briefPath = join(rootDir, "docs/editorial-rewrite-prompt.md");
 
-type Backend = "mlx" | "ollama";
+type RewriteBackend = "mlx" | "ollama";
+type TriageBackend = "kev" | "mlx" | "ollama";
 
-const BACKEND: Backend =
+function parseTriageBackend(raw: string | undefined): TriageBackend {
+  const v = (raw ?? "kev").toLowerCase();
+  if (v === "mlx" || v === "ollama" || v === "kev") return v;
+  return "kev";
+}
+
+const TRIAGE_BACKEND: TriageBackend = parseTriageBackend(process.env.TRIAGE_BACKEND);
+const BACKEND: RewriteBackend =
   (process.env.REWRITE_BACKEND ?? "mlx").toLowerCase() === "ollama" ? "ollama" : "mlx";
 const MLX_BASE_URL = (process.env.MLX_BASE_URL ?? "http://127.0.0.1:18080/v1").replace(/\/$/, "");
 const OLLAMA_HOST = (process.env.OLLAMA_HOST ?? "http://127.0.0.1:11434").replace(/\/$/, "");
+const KEV_BASE_URL = (process.env.KEV_BASE_URL ?? "http://127.0.0.1:8009").replace(/\/$/, "");
+const KEV_MODEL = process.env.KEV_MODEL ?? "jaredpalmer/kev-4b";
 
 const DEFAULT_REWRITE =
   BACKEND === "mlx" ? "mlx-community/Qwen3.5-35B-A3B-OptiQ-4bit" : "qwen2.5:14b";
-/** Same MoE by default so one mlx_lm.server covers triage + rewrite. Override with 9B for speed. */
+/** LLM triage fallback when TRIAGE_BACKEND is mlx/ollama. */
 const DEFAULT_TRIAGE = BACKEND === "mlx" ? DEFAULT_REWRITE : "qwen2.5:14b";
 
 const TRIAGE_MODEL = process.env.TRIAGE_MODEL ?? process.env.OLLAMA_TRIAGE_MODEL ?? DEFAULT_TRIAGE;
@@ -138,8 +154,22 @@ function parseArgs(argv: string[]) {
     force: has("--force"),
     dryRun: has("--dry-run"),
     model: get("--model"),
+    gold: get("--gold") ?? join(rootDir, "evals/triage-gold-v1.json"),
+    threshold: get("--threshold") ? Number(get("--threshold")) : 0.5,
   };
 }
+
+type GoldLabel = {
+  slug: string;
+  decision: Decision;
+  note?: string;
+};
+
+type GoldFile = {
+  version: number;
+  name: string;
+  labels: GoldLabel[];
+};
 
 function ensureDirs() {
   for (const dir of [rewritesRoot, draftsDir, triageDir]) {
@@ -239,6 +269,20 @@ function selectArticles(
   return list;
 }
 
+async function kevReady(): Promise<void> {
+  try {
+    const res = await fetch(`${KEV_BASE_URL}/v1/models`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  } catch (err) {
+    throw new Error(
+      `Kev server unreachable at ${KEV_BASE_URL}.
+From devenv: kev-bootstrap && kev-serve
+Or: TRIAGE_BACKEND=mlx with mlx-serve
+(${String(err)})`
+    );
+  }
+}
+
 async function llmReady(): Promise<void> {
   if (BACKEND === "mlx") {
     try {
@@ -265,6 +309,252 @@ Or fall back: REWRITE_BACKEND=ollama && ollama pull qwen3.5:35b-a3b
       `Ollama unreachable at ${OLLAMA_HOST}. Start with: ollama serve\n(${String(err)})`
     );
   }
+}
+
+async function triageReady(): Promise<void> {
+  if (TRIAGE_BACKEND === "kev") {
+    await kevReady();
+    return;
+  }
+  await llmReady();
+}
+
+type KevChoiceAnswer = {
+  type?: string;
+  choice?: string;
+  confidence?: number;
+  probabilities?: Record<string, number>;
+};
+
+type KevNoulAnswer = {
+  type?: string;
+  noul?: number;
+};
+
+type KevSystemOneResponse = {
+  model?: string;
+  answers?: {
+    decision?: KevChoiceAnswer;
+    pillar?: KevChoiceAnswer;
+    contentType?: KevChoiceAnswer;
+    is_dead_tutorial?: KevNoulAnswer;
+    has_doctrine_judgment?: KevNoulAnswer;
+    deserves_dense_note?: KevNoulAnswer;
+  };
+};
+
+const PILLAR_CRITERIA: Record<(typeof PILLARS)[number], string> = {
+  "systems-and-risk": "Risk, security posture, Zero Trust, governance of complex systems",
+  "platform-engineering": "Platform, GitOps, workstations, developer platforms, Nix, MDM",
+  "cloud-and-infrastructure": "Cloud providers, IaC, networking, ops tooling, Azure/AWS",
+  "software-supply-chain": "Scanning, SBOM, vulnerabilities, secure delivery of software",
+  observability: "OpenTelemetry, metrics, logs, traces, monitoring contracts",
+  "product-and-markets": "Products, markets, frameworks, web tooling, ISV journeys",
+  "technical-leadership": "Leadership, MVP, community, career, speaking, mentoring",
+};
+
+const CONTENT_TYPE_CRITERIA: Record<(typeof CONTENT_TYPES)[number], string> = {
+  doctrine: "Principles and lasting judgment about how systems should be built",
+  "field-note": "Concrete field experience, what broke, what was learned",
+  "architecture-decision": "A decision with trade-offs and consequences",
+  "technical-guide": "How-to, tutorial, step-by-step tooling instructions",
+  opinion: "Personal stance without a full architecture frame",
+  "case-analysis": "Analysis of a vendor, product, or case study",
+};
+
+function buildKevState(article: ArticleMeta, quality?: BlogQuality): string {
+  const source = readFileSync(article.path, "utf8");
+  const { content } = matter(source);
+  const body = content.trim().slice(0, 7000);
+  const year = article.year ?? "unknown";
+  const q = quality ?? assessBlogQuality(article);
+  return [
+    `slug: ${article.slug}`,
+    `title: ${article.title}`,
+    `description: ${article.description || "(none)"}`,
+    `pubDate: ${article.pubDate ?? year}`,
+    `year: ${year}`,
+    `wordCount: ${article.wordCount}`,
+    `tags: ${article.tags.join(", ") || "(none)"}`,
+    `draft: ${article.draft}`,
+    `existingPillar: ${article.pillar ?? "(none)"}`,
+    `existingContentType: ${article.contentType ?? "(none)"}`,
+    `context: Legacy post under review for a 2026 doctrine hub. Year=${year}.`,
+    formatQualityForKevState(q),
+    "",
+    "--- body ---",
+    body,
+  ].join("\n");
+}
+
+async function postKevSystemOne(
+  state: string,
+  questions: Record<string, unknown>
+): Promise<KevSystemOneResponse> {
+  const res = await fetch(`${KEV_BASE_URL}/v1/systemone`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      state,
+      model: "kev-latest",
+      questions,
+    }),
+  });
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`Kev systemone failed (${res.status}): ${body.slice(0, 500)}`);
+  }
+  return (await res.json()) as KevSystemOneResponse;
+}
+
+async function triageOneKev(article: ArticleMeta): Promise<TriageResult> {
+  const quality = assessBlogQuality(article);
+  const hard = hardArchiveDecision(quality);
+  if (hard) {
+    return {
+      decision: "archive",
+      pillar: quality.doctrineTopicHit
+        ? normalizePillar(article.pillar ?? "systems-and-risk")
+        : article.pillar && (PILLARS as readonly string[]).includes(article.pillar)
+          ? article.pillar
+          : quality.looksLikePersonal
+            ? "technical-leadership"
+            : "cloud-and-infrastructure",
+      contentType: quality.looksLikeHowTo ? "technical-guide" : "opinion",
+      angle: `Hard archive · ${hard.reason}`,
+      rationale: `Mechanical/quality rule: ${hard.reason}. ${quality.summaryLine}`,
+      confidence: hard.confidence,
+      model: `rules+${KEV_MODEL}`,
+      at: new Date().toISOString(),
+    };
+  }
+
+  const state = buildKevState(article, quality);
+  const json = await postKevSystemOne(state, {
+    decision: {
+      type: "choice",
+      instructions: [
+        "Editorial triage for etienne.deneuve.xyz, a doctrine/proof hub for CTO, platform and SRE leads.",
+        "Use the qualitySummary / qualityFlags / mechanicalHints lines as strong priors.",
+        "If deadStack=true and howTo=true on an old post, prefer archive.",
+        "If offTopic=true without doctrineTopic, prefer archive.",
+        "Pick exactly one action. Prefer annotate over rewrite unless has lasting architecture trade-off.",
+        "rewrite is rare.",
+      ].join(" "),
+      criteria: {
+        archive: [
+          "Do not invest. Toy scripts, personal announcements, dead products (SCCM, Vorlon, OMS-only, old Windows admin), printer/gadget tips,",
+          "broken link farms, or off-topic surveys (web frameworks, LinkedIn carousels) with no lasting systems judgment.",
+          "Also archive step-by-step tutorials whose stack or UI no longer exists and that teach no reusable principle.",
+        ].join(" "),
+        annotate: [
+          "Keep the body. Add only a short 2026 note.",
+          "Use when a technical idea is still roughly true (Git for ops, docs-as-code, Ansible/Azure, Terraform basics, MegaLinter, Zero Trust overview)",
+          "but the packaging is outdated and the piece is NOT a core doctrine decision for the current positioning.",
+          "Historical how-tos that still teach a useful practice belong here, not in rewrite.",
+        ].join(" "),
+        rewrite: [
+          "Invest in a denser 2026 note (300-450 words of judgment), still keeping the original body lightly copyedited.",
+          "Only if the article already argues a lasting trade-off on identity, RBAC, platform engineering, GitOps, observability contracts,",
+          "or systems risk that still shapes how CTOs should decide today.",
+          "Do not pick rewrite merely because the topic is cloud, Terraform, or Azure.",
+        ].join(" "),
+      },
+    },
+    is_dead_tutorial: {
+      type: "noul",
+      instructions:
+        "Is this primarily an outdated how-to on a dead or obsolete stack with little reusable doctrine?",
+    },
+    has_doctrine_judgment: {
+      type: "noul",
+      instructions:
+        "Does the article already argue a lasting architecture or identity/platform trade-off useful to a CTO today (not just steps to click)?",
+    },
+    pillar: {
+      type: "choice",
+      instructions: "Which Thinking pillar best fits this article?",
+      criteria: PILLAR_CRITERIA,
+    },
+    contentType: {
+      type: "choice",
+      instructions: "Which Thinking content type best fits this article?",
+      criteria: CONTENT_TYPE_CRITERIA,
+    },
+  });
+
+  let decision = normalizeDecision(String(json.answers?.decision?.choice ?? ""));
+  const pillar = normalizePillar(String(json.answers?.pillar?.choice ?? ""));
+  const contentType = normalizeContentType(String(json.answers?.contentType?.choice ?? ""));
+  let confidence = Math.min(
+    1,
+    Math.max(0, Number(json.answers?.decision?.confidence ?? 0.5))
+  );
+  const deadP = Number(json.answers?.is_dead_tutorial?.noul ?? 0);
+  const doctrineP = Number(json.answers?.has_doctrine_judgment?.noul ?? 0);
+
+  // Post-process with Kev quality nouls + mechanical priors.
+  if (deadP >= 0.55 && doctrineP < 0.45 && !quality.salvageableTopicHit && decision !== "archive") {
+    decision = "archive";
+    confidence = Math.max(confidence, deadP);
+  } else if (decision === "archive" && (doctrineP >= 0.65 || quality.salvageableTopicHit) && deadP < 0.4) {
+    decision = "annotate";
+    confidence = Math.max(confidence, Math.max(doctrineP, 0.55));
+  } else if (
+    decision === "archive" &&
+    quality.salvageableTopicHit &&
+    !quality.deadStackHit &&
+    confidence < 0.7
+  ) {
+    decision = "annotate";
+    confidence = Math.max(confidence, 0.55);
+  }
+
+  if (decision === "annotate" && (doctrineP >= 0.45 || quality.doctrineTopicHit || quality.salvageableTopicHit)) {
+    const pass2 = await postKevSystemOne(state, {
+      deserves_dense_note: {
+        type: "noul",
+        instructions: [
+          "Should this get a denser 2026 doctrine note (rewrite) rather than a short annotate?",
+          "Yes only if it already contains lasting judgment on identity, RBAC, platform, GitOps, observability, or systems risk.",
+          "No for ordinary how-tos even if still somewhat useful.",
+        ].join(" "),
+      },
+    });
+    const dense = Number(pass2.answers?.deserves_dense_note?.noul ?? 0);
+    const denseCut = quality.doctrineTopicHit ? 0.4 : 0.55;
+    if (dense >= denseCut) {
+      decision = "rewrite";
+      confidence = Math.max(confidence, dense);
+    }
+  }
+
+  // Mechanical off-topic / dead how-to override when Kev is unsure.
+  if (
+    decision !== "archive" &&
+    confidence < 0.45 &&
+    !quality.salvageableTopicHit &&
+    !quality.doctrineTopicHit &&
+    ((quality.deadStackHit && quality.looksLikeHowTo) || quality.looksLikeOffTopic)
+  ) {
+    decision = "archive";
+    confidence = Math.max(confidence, 0.7);
+  }
+
+  const probs = json.answers?.decision?.probabilities;
+  const topProb =
+    probs && typeof probs[decision] === "number" ? probs[decision] : confidence;
+
+  return {
+    decision,
+    pillar,
+    contentType,
+    angle: `Kev ${decision} · ${pillar} · ${contentType}`,
+    rationale: `Kev triage: ${decision} (p=${topProb.toFixed(2)}, conf=${confidence.toFixed(2)}, dead=${deadP.toFixed(2)}, doctrine=${doctrineP.toFixed(2)}). ${quality.summaryLine}`,
+    confidence,
+    model: json.model ?? KEV_MODEL,
+    at: new Date().toISOString(),
+  };
 }
 
 async function chatLlm(model: string, system: string, user: string): Promise<string> {
@@ -344,7 +634,7 @@ function normalizeContentType(raw: string): string {
   return "technical-guide";
 }
 
-async function triageOne(
+async function triageOneLlm(
   article: ArticleMeta,
   brief: string,
   model: string
@@ -385,6 +675,17 @@ ${source.slice(0, 14000)}
     model,
     at: new Date().toISOString(),
   };
+}
+
+async function triageOne(
+  article: ArticleMeta,
+  brief: string,
+  model: string
+): Promise<TriageResult> {
+  if (TRIAGE_BACKEND === "kev") {
+    return triageOneKev(article);
+  }
+  return triageOneLlm(article, brief, model);
 }
 
 function sanitizeVoice(text: string): string {
@@ -631,10 +932,18 @@ function cmdStatus(all: ArticleMeta[], state: StateFile, before: string) {
 
   console.log(`Worklog rewrites: ${rewritesRoot}`);
   console.log(`State: ${statePath}`);
+  if (TRIAGE_BACKEND === "kev") {
+    console.log(`Triage backend: kev @ ${KEV_BASE_URL} (model=${KEV_MODEL})`);
+  } else if (TRIAGE_BACKEND === "ollama") {
+    console.log(`Triage backend: ollama @ ${OLLAMA_HOST} (model=${TRIAGE_MODEL})`);
+  } else {
+    console.log(`Triage backend: mlx @ ${MLX_BASE_URL} (model=${TRIAGE_MODEL})`);
+  }
   console.log(
-    BACKEND === "mlx" ? `Backend: mlx @ ${MLX_BASE_URL}` : `Backend: ollama @ ${OLLAMA_HOST}`
+    BACKEND === "mlx"
+      ? `Rewrite backend: mlx @ ${MLX_BASE_URL} (model=${REWRITE_MODEL})`
+      : `Rewrite backend: ollama @ ${OLLAMA_HOST} (model=${REWRITE_MODEL})`
   );
-  console.log(`Models: triage=${TRIAGE_MODEL}  rewrite=${REWRITE_MODEL}`);
   console.log(`Cutoff --before ${before}`);
   console.log(
     `Blog total: ${all.length}  |  legacy: ${legacy.length}  |  modern: ${modern.length}`
@@ -659,8 +968,8 @@ async function cmdTriage(
   state: StateFile,
   opts: { force: boolean; dryRun: boolean; model: string }
 ) {
-  if (!opts.dryRun) await llmReady();
-  const brief = loadBrief();
+  if (!opts.dryRun) await triageReady();
+  const brief = TRIAGE_BACKEND === "kev" ? "" : loadBrief();
   let done = 0;
   for (const article of articles) {
     const existing = state.articles[article.slug];
@@ -745,6 +1054,227 @@ async function cmdDraft(
   console.log(`Review under ${draftsDir} — never auto-published.`);
 }
 
+async function cmdBenchmark(
+  all: ArticleMeta[],
+  opts: { gold: string; threshold: number; model: string; dryRun: boolean }
+) {
+  if (!existsSync(opts.gold)) {
+    throw new Error(`Gold file not found: ${opts.gold}`);
+  }
+  const gold = JSON.parse(readFileSync(opts.gold, "utf8")) as GoldFile;
+  if (!Array.isArray(gold.labels) || gold.labels.length === 0) {
+    throw new Error(`Gold file has no labels: ${opts.gold}`);
+  }
+
+  const bySlug = new Map(all.map((a) => [a.slug, a]));
+  const decisions: Decision[] = ["archive", "annotate", "rewrite"];
+  const confusion: Record<Decision, Record<Decision, number>> = {
+    archive: { archive: 0, annotate: 0, rewrite: 0 },
+    annotate: { archive: 0, annotate: 0, rewrite: 0 },
+    rewrite: { archive: 0, annotate: 0, rewrite: 0 },
+  };
+
+  type Row = {
+    slug: string;
+    gold: Decision;
+    pred: Decision;
+    confidence: number;
+    ok: boolean;
+    auto: boolean;
+    pillar: string;
+    note?: string;
+  };
+  const rows: Row[] = [];
+
+  if (!opts.dryRun) await triageReady();
+  const brief = TRIAGE_BACKEND === "kev" ? "" : loadBrief();
+
+  console.log(
+    `Benchmark ${gold.name ?? "gold"} · ${gold.labels.length} labels · backend=${TRIAGE_BACKEND}` +
+      (TRIAGE_BACKEND === "kev" ? ` @ ${KEV_BASE_URL}` : ` model=${opts.model}`)
+  );
+  console.log(`Confidence threshold for auto-apply: ${opts.threshold}`);
+  console.log("");
+
+  for (const label of gold.labels) {
+    const article = bySlug.get(label.slug);
+    if (!article) {
+      console.warn(`skip (missing article): ${label.slug}`);
+      continue;
+    }
+    const expected = normalizeDecision(label.decision);
+    console.log(`bench: ${label.slug} (gold=${expected}) …`);
+    if (opts.dryRun) continue;
+
+    const result = await triageOne(article, brief, opts.model);
+    const ok = result.decision === expected;
+    const auto = result.confidence >= opts.threshold;
+    confusion[expected][result.decision] += 1;
+    rows.push({
+      slug: label.slug,
+      gold: expected,
+      pred: result.decision,
+      confidence: result.confidence,
+      ok,
+      auto,
+      pillar: result.pillar,
+      note: label.note,
+    });
+    console.log(
+      `  → pred=${result.decision} conf=${result.confidence.toFixed(2)} ${ok ? "OK" : "MISS"}` +
+        (auto ? "" : " [below-threshold]")
+    );
+  }
+
+  if (opts.dryRun) {
+    console.log("Dry run — no model calls.");
+    return;
+  }
+
+  const n = rows.length;
+  const correct = rows.filter((r) => r.ok).length;
+  const autoRows = rows.filter((r) => r.auto);
+  const autoCorrect = autoRows.filter((r) => r.ok).length;
+  const autoWrong = autoRows.filter((r) => !r.ok).length;
+  const meanConf =
+    n === 0 ? 0 : rows.reduce((s, r) => s + r.confidence, 0) / n;
+  const meanConfOk =
+    correct === 0
+      ? 0
+      : rows.filter((r) => r.ok).reduce((s, r) => s + r.confidence, 0) / correct;
+  const meanConfMiss =
+    n - correct === 0
+      ? 0
+      : rows.filter((r) => !r.ok).reduce((s, r) => s + r.confidence, 0) / (n - correct);
+
+  console.log("");
+  console.log("=== Summary ===");
+  console.log(`Accuracy: ${correct}/${n} = ${n ? ((100 * correct) / n).toFixed(1) : "0.0"}%`);
+  console.log(
+    `Auto@${opts.threshold}: ${autoRows.length}/${n} · correct ${autoCorrect} · wrong ${autoWrong}` +
+      (autoRows.length
+        ? ` · precision ${((100 * autoCorrect) / autoRows.length).toFixed(1)}%`
+        : "")
+  );
+  console.log(
+    `Mean confidence: all=${meanConf.toFixed(2)} ok=${meanConfOk.toFixed(2)} miss=${meanConfMiss.toFixed(2)}`
+  );
+
+  console.log("");
+  console.log("Confusion (rows=gold, cols=pred):");
+  console.log(`           ${decisions.map((d) => d.padEnd(10)).join("")}`);
+  for (const g of decisions) {
+    const cells = decisions.map((p) => String(confusion[g][p]).padEnd(10)).join("");
+    console.log(`${g.padEnd(11)}${cells}`);
+  }
+
+  const misses = rows.filter((r) => !r.ok);
+  if (misses.length > 0) {
+    console.log("");
+    console.log("Misses:");
+    for (const m of misses) {
+      console.log(
+        `  - ${m.slug}: gold=${m.gold} pred=${m.pred} conf=${m.confidence.toFixed(2)} · ${m.note ?? ""}`
+      );
+    }
+  }
+
+  const outDir = join(rewritesRoot, "benchmarks");
+  if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true });
+  const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+  const outPath = join(outDir, `${gold.name ?? "gold"}-${stamp}.json`);
+  writeFileSync(
+    outPath,
+    `${JSON.stringify(
+      {
+        gold: opts.gold,
+        backend: TRIAGE_BACKEND,
+        kevBaseUrl: TRIAGE_BACKEND === "kev" ? KEV_BASE_URL : undefined,
+        model: TRIAGE_BACKEND === "kev" ? KEV_MODEL : opts.model,
+        threshold: opts.threshold,
+        at: new Date().toISOString(),
+        n,
+        correct,
+        accuracy: n ? correct / n : 0,
+        auto: {
+          threshold: opts.threshold,
+          n: autoRows.length,
+          correct: autoCorrect,
+          wrong: autoWrong,
+          precision: autoRows.length ? autoCorrect / autoRows.length : null,
+        },
+        meanConfidence: { all: meanConf, ok: meanConfOk, miss: meanConfMiss },
+        confusion,
+        rows,
+      },
+      null,
+      2
+    )}\n`,
+    "utf8"
+  );
+  console.log("");
+  console.log(`Wrote ${outPath}`);
+}
+
+function cmdQuality(all: ArticleMeta[], opts: { limit?: number; before: string }) {
+  const selected = selectArticles(all, {
+    before: opts.before,
+    limit: opts.limit,
+  });
+  const rows = selected.map((a) => {
+    const q = assessBlogQuality(a);
+    const hard = hardArchiveDecision(q);
+    return { article: a, q, hard };
+  });
+
+  rows.sort((a, b) => b.q.messScore + b.q.aiVoiceScore - (a.q.messScore + a.q.aiVoiceScore));
+
+  console.log(`Quality inventory · ${rows.length} posts (--before ${opts.before})`);
+  console.log("");
+  for (const { article, q, hard } of rows) {
+    const hardTag = hard ? ` HARD_ARCHIVE(${hard.confidence.toFixed(2)}:${hard.reason})` : "";
+    console.log(
+      `${article.slug}  mess=${q.messScore} ai=${q.aiVoiceScore}  ${q.summaryLine}${hardTag}`
+    );
+  }
+
+  const hardN = rows.filter((r) => r.hard).length;
+  const highAi = rows.filter((r) => r.q.aiVoiceScore >= 6).length;
+  const dead = rows.filter((r) => r.q.deadStackHit).length;
+  console.log("");
+  console.log(
+    `Summary: hardArchive=${hardN}  highAiVoice(>=6)=${highAi}  deadStack=${dead}`
+  );
+
+  const outDir = join(rewritesRoot, "quality");
+  if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true });
+  const outPath = join(outDir, `blog-quality-${new Date().toISOString().slice(0, 10)}.json`);
+  writeFileSync(
+    outPath,
+    `${JSON.stringify(
+      {
+        at: new Date().toISOString(),
+        before: opts.before,
+        n: rows.length,
+        hardArchive: hardN,
+        highAiVoice: highAi,
+        deadStack: dead,
+        rows: rows.map(({ article, q, hard }) => ({
+          slug: article.slug,
+          year: article.year,
+          title: article.title,
+          ...q,
+          hardArchive: hard,
+        })),
+      },
+      null,
+      2
+    )}\n`,
+    "utf8"
+  );
+  console.log(`Wrote ${outPath}`);
+}
+
 async function main() {
   const opts = parseArgs(process.argv);
   ensureDirs();
@@ -756,9 +1286,26 @@ async function main() {
     return;
   }
 
+  if (opts.command === "quality") {
+    cmdQuality(all, { limit: opts.limit, before: opts.before });
+    return;
+  }
+
+  if (opts.command === "benchmark") {
+    await cmdBenchmark(all, {
+      gold: opts.gold,
+      threshold: opts.threshold,
+      model: opts.model ?? TRIAGE_MODEL,
+      dryRun: opts.dryRun,
+    });
+    return;
+  }
+
   if (opts.command === "triage") {
     const selected = selectArticles(all, opts);
-    console.log(`Triage ${selected.length} article(s) with ${opts.model ?? TRIAGE_MODEL}`);
+    const triageLabel =
+      TRIAGE_BACKEND === "kev" ? `kev:${KEV_MODEL}` : `${TRIAGE_BACKEND}:${opts.model ?? TRIAGE_MODEL}`;
+    console.log(`Triage ${selected.length} article(s) with ${triageLabel}`);
     await cmdTriage(selected, state, {
       force: opts.force,
       dryRun: opts.dryRun,
@@ -825,8 +1372,8 @@ async function main() {
   }
 
   console.error(`Unknown command: ${opts.command}
-Commands: status | triage | rewrite | annotate
-Flags: --slug --limit --before --force --dry-run --model`);
+Commands: status | quality | triage | benchmark | rewrite | annotate
+Flags: --slug --limit --before --force --dry-run --model --gold --threshold`);
   process.exit(1);
 }
 
