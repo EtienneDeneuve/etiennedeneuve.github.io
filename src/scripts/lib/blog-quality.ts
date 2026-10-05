@@ -55,8 +55,7 @@ const SALVAGEABLE_TOPIC_RE =
 const HOW_TO_RE =
   /\b(how to|comment (faire|on fait)|étape|step[\s-]by[\s-]step|tutoriel|tutorial|installer|install |suivez|vous devez installer)\b/i;
 
-const PERSONAL_RE =
-  /\b(mvp !|je suis désormais mvp|mon premier|merci à tous|itcast)\b/i;
+const PERSONAL_RE = /\b(mvp !|je suis désormais mvp|mon premier|merci à tous|itcast)\b/i;
 
 const OFF_TOPIC_RE =
   /\b(carousel linkedin|linkedin carousel|automatiser la génération des carousels|svelte,?\s*astro|frameworks? web|get-nexttrain|niveau d['']encre|imprimantes? hp)\b/i;
@@ -65,7 +64,11 @@ const OFF_TOPIC_RE =
 const AI_VOICE_RULES: Array<{ id: string; severity: QualitySeverity; re: RegExp }> = [
   { id: "em-dash", severity: "high", re: /\u2014/ },
   { id: "fr-pas-seulement", severity: "high", re: /pas seulement[^.]{0,80}(mais aussi|c['']est)/i },
-  { id: "fr-il-est-important", severity: "high", re: /\bil est (important|essentiel|crucial) de (noter|souligner|rappeler|comprendre)\b/i },
+  {
+    id: "fr-il-est-important",
+    severity: "high",
+    re: /\bil est (important|essentiel|crucial) de (noter|souligner|rappeler|comprendre)\b/i,
+  },
   { id: "fr-dans-un-monde", severity: "high", re: /\bdans un monde (où|en (pleine|constante))\b/i },
   { id: "fr-holistique", severity: "high", re: /\bholistique\b/i },
   { id: "fr-synergie", severity: "high", re: /\bsynergie(s)?\b/i },
@@ -133,11 +136,19 @@ export function assessBlogQuality(article: ArticleLike): BlogQuality {
 
   const deadStackHit = DEAD_STACK_RE.test(haystack);
   if (deadStackHit) {
-    flags.push({ id: "dead-stack-marker", severity: "high", detail: "dead/legacy stack marker in text" });
+    flags.push({
+      id: "dead-stack-marker",
+      severity: "high",
+      detail: "dead/legacy stack marker in text",
+    });
   }
   const doctrineTopicHit = DOCTRINE_TOPIC_RE.test(haystack);
   if (doctrineTopicHit) {
-    flags.push({ id: "doctrine-topic", severity: "low", detail: "matches current doctrine topics" });
+    flags.push({
+      id: "doctrine-topic",
+      severity: "low",
+      detail: "matches current doctrine topics",
+    });
   }
   const salvageableTopicHit = SALVAGEABLE_TOPIC_RE.test(haystack);
   if (salvageableTopicHit) {
@@ -149,7 +160,11 @@ export function assessBlogQuality(article: ArticleLike): BlogQuality {
   }
   const looksLikePersonal = PERSONAL_RE.test(haystack) || /\/mvp$|-mvp$/i.test(article.slug);
   if (looksLikePersonal) {
-    flags.push({ id: "personal-announcement", severity: "high", detail: "personal/announcement shape" });
+    flags.push({
+      id: "personal-announcement",
+      severity: "high",
+      detail: "personal/announcement shape",
+    });
   }
   const looksLikeOffTopic = OFF_TOPIC_RE.test(haystack);
   if (looksLikeOffTopic && !doctrineTopicHit && !salvageableTopicHit) {

@@ -486,10 +486,7 @@ async function triageOneKev(article: ArticleMeta): Promise<TriageResult> {
   let decision = normalizeDecision(String(json.answers?.decision?.choice ?? ""));
   const pillar = normalizePillar(String(json.answers?.pillar?.choice ?? ""));
   const contentType = normalizeContentType(String(json.answers?.contentType?.choice ?? ""));
-  let confidence = Math.min(
-    1,
-    Math.max(0, Number(json.answers?.decision?.confidence ?? 0.5))
-  );
+  let confidence = Math.min(1, Math.max(0, Number(json.answers?.decision?.confidence ?? 0.5)));
   const deadP = Number(json.answers?.is_dead_tutorial?.noul ?? 0);
   const doctrineP = Number(json.answers?.has_doctrine_judgment?.noul ?? 0);
 
@@ -497,7 +494,11 @@ async function triageOneKev(article: ArticleMeta): Promise<TriageResult> {
   if (deadP >= 0.55 && doctrineP < 0.45 && !quality.salvageableTopicHit && decision !== "archive") {
     decision = "archive";
     confidence = Math.max(confidence, deadP);
-  } else if (decision === "archive" && (doctrineP >= 0.65 || quality.salvageableTopicHit) && deadP < 0.4) {
+  } else if (
+    decision === "archive" &&
+    (doctrineP >= 0.65 || quality.salvageableTopicHit) &&
+    deadP < 0.4
+  ) {
     decision = "annotate";
     confidence = Math.max(confidence, Math.max(doctrineP, 0.55));
   } else if (
@@ -510,7 +511,10 @@ async function triageOneKev(article: ArticleMeta): Promise<TriageResult> {
     confidence = Math.max(confidence, 0.55);
   }
 
-  if (decision === "annotate" && (doctrineP >= 0.45 || quality.doctrineTopicHit || quality.salvageableTopicHit)) {
+  if (
+    decision === "annotate" &&
+    (doctrineP >= 0.45 || quality.doctrineTopicHit || quality.salvageableTopicHit)
+  ) {
     const pass2 = await postKevSystemOne(state, {
       deserves_dense_note: {
         type: "noul",
@@ -542,8 +546,7 @@ async function triageOneKev(article: ArticleMeta): Promise<TriageResult> {
   }
 
   const probs = json.answers?.decision?.probabilities;
-  const topProb =
-    probs && typeof probs[decision] === "number" ? probs[decision] : confidence;
+  const topProb = probs && typeof probs[decision] === "number" ? probs[decision] : confidence;
 
   return {
     decision,
@@ -1136,12 +1139,9 @@ async function cmdBenchmark(
   const autoRows = rows.filter((r) => r.auto);
   const autoCorrect = autoRows.filter((r) => r.ok).length;
   const autoWrong = autoRows.filter((r) => !r.ok).length;
-  const meanConf =
-    n === 0 ? 0 : rows.reduce((s, r) => s + r.confidence, 0) / n;
+  const meanConf = n === 0 ? 0 : rows.reduce((s, r) => s + r.confidence, 0) / n;
   const meanConfOk =
-    correct === 0
-      ? 0
-      : rows.filter((r) => r.ok).reduce((s, r) => s + r.confidence, 0) / correct;
+    correct === 0 ? 0 : rows.filter((r) => r.ok).reduce((s, r) => s + r.confidence, 0) / correct;
   const meanConfMiss =
     n - correct === 0
       ? 0
@@ -1152,9 +1152,7 @@ async function cmdBenchmark(
   console.log(`Accuracy: ${correct}/${n} = ${n ? ((100 * correct) / n).toFixed(1) : "0.0"}%`);
   console.log(
     `Auto@${opts.threshold}: ${autoRows.length}/${n} · correct ${autoCorrect} · wrong ${autoWrong}` +
-      (autoRows.length
-        ? ` · precision ${((100 * autoCorrect) / autoRows.length).toFixed(1)}%`
-        : "")
+      (autoRows.length ? ` · precision ${((100 * autoCorrect) / autoRows.length).toFixed(1)}%` : "")
   );
   console.log(
     `Mean confidence: all=${meanConf.toFixed(2)} ok=${meanConfOk.toFixed(2)} miss=${meanConfMiss.toFixed(2)}`
@@ -1242,9 +1240,7 @@ function cmdQuality(all: ArticleMeta[], opts: { limit?: number; before: string }
   const highAi = rows.filter((r) => r.q.aiVoiceScore >= 6).length;
   const dead = rows.filter((r) => r.q.deadStackHit).length;
   console.log("");
-  console.log(
-    `Summary: hardArchive=${hardN}  highAiVoice(>=6)=${highAi}  deadStack=${dead}`
-  );
+  console.log(`Summary: hardArchive=${hardN}  highAiVoice(>=6)=${highAi}  deadStack=${dead}`);
 
   const outDir = join(rewritesRoot, "quality");
   if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true });
@@ -1304,7 +1300,9 @@ async function main() {
   if (opts.command === "triage") {
     const selected = selectArticles(all, opts);
     const triageLabel =
-      TRIAGE_BACKEND === "kev" ? `kev:${KEV_MODEL}` : `${TRIAGE_BACKEND}:${opts.model ?? TRIAGE_MODEL}`;
+      TRIAGE_BACKEND === "kev"
+        ? `kev:${KEV_MODEL}`
+        : `${TRIAGE_BACKEND}:${opts.model ?? TRIAGE_MODEL}`;
     console.log(`Triage ${selected.length} article(s) with ${triageLabel}`);
     await cmdTriage(selected, state, {
       force: opts.force,

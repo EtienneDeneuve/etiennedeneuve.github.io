@@ -34,11 +34,11 @@ Checkout Kev hors repo : `~/.cache/etienne-site/kev` (`KEV_ROOT` pour override).
 
 `TRIAGE_BACKEND=kev` (défaut devenv). Chaque article envoie un `POST /v1/systemone` avec :
 
-| Question      | Type     | Rôle                                      |
-| ------------- | -------- | ----------------------------------------- |
-| `decision`    | `choice` | archive / annotate / rewrite              |
-| `pillar`      | `choice` | enums Thinking                            |
-| `contentType` | `choice` | enums Thinking                            |
+| Question      | Type     | Rôle                         |
+| ------------- | -------- | ---------------------------- |
+| `decision`    | `choice` | archive / annotate / rewrite |
+| `pillar`      | `choice` | enums Thinking               |
+| `contentType` | `choice` | enums Thinking               |
 
 Angle / rationale sont synthétiques (pas de prose libre Kev). Sortie inchangée sous `~/Worklog/content/rewrites/`.
 
@@ -59,10 +59,10 @@ uvx --from mlx-lm mlx_lm.server \
   --port 18080
 ```
 
-| Rôle              | Modèle                                         | ~RAM                  |
-| ----------------- | ---------------------------------------------- | --------------------- |
-| Triage (défaut)   | `jaredpalmer/kev-4b` via `kev-serve`           | ~adapter + Qwen3.5-4B |
-| Réécriture drafts | `mlx-community/Qwen3.5-35B-A3B-OptiQ-4bit`     | ~20–24 Go (3B actifs) |
+| Rôle              | Modèle                                     | ~RAM                  |
+| ----------------- | ------------------------------------------ | --------------------- |
+| Triage (défaut)   | `jaredpalmer/kev-4b` via `kev-serve`       | ~adapter + Qwen3.5-4B |
+| Réécriture drafts | `mlx-community/Qwen3.5-35B-A3B-OptiQ-4bit` | ~20–24 Go (3B actifs) |
 
 ### Fallback Ollama (triage LLM + drafts)
 
