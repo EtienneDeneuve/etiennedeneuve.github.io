@@ -23,10 +23,34 @@ const thinkingRedirects = existsSync(thinkingRedirectsPath)
   ? JSON.parse(readFileSync(thinkingRedirectsPath, "utf8"))
   : { redirects: [] };
 
+const blogContentDir = join(__dirname, "src/content/blog");
+const articlesContentDir = join(__dirname, "src/content/articles");
+
+/** True when the markdown source for a thinking redirect is draft: true. */
+function isDraftSourceFile(sourceFile) {
+  if (!sourceFile || typeof sourceFile !== "string") return false;
+  const candidates = [join(blogContentDir, sourceFile), join(articlesContentDir, sourceFile)];
+  for (const path of candidates) {
+    if (!existsSync(path)) continue;
+    const raw = readFileSync(path, "utf8");
+    const fmMatch = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+    if (!fmMatch) continue;
+    if (/^draft:\s*true\s*$/m.test(fmMatch[1])) return true;
+  }
+  return false;
+}
+
+/**
+ * Legacy WordPress /thinking date URLs → canonical.
+ * Drafted articles have no canonical page: send them to the thinking index.
+ */
 const legacyThinkingRedirects = Object.fromEntries(
   (thinkingRedirects.redirects ?? [])
     .filter((entry) => entry.reason?.startsWith("legacy-slug"))
-    .map((entry) => [entry.from, entry.to])
+    .map((entry) => {
+      const destination = isDraftSourceFile(entry.sourceFile) ? "/thinking/" : entry.to;
+      return [entry.from, destination];
+    })
 );
 
 /** Articles folded into another canonical piece: the old URL must 301, not 404. */
