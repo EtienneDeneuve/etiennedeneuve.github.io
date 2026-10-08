@@ -19,9 +19,9 @@ featured: true
 draft: false
 relatedProjects: []
 relatedArticles:
-  - 2026-10-10-apple-business-entra-identite-workstation
-  - 2026-10-17-pourquoi-app-macos-swiftui-provisioning
-  - 2026-10-24-versionner-postes-semver-nix
+  - 2026-10-14-apple-business-entra-identite-workstation
+  - 2026-10-21-pourquoi-app-macos-swiftui-provisioning
+  - 2026-10-28-versionner-postes-semver-nix
   - 2026-10-31-ce-qui-casse-provisioning-macos
 ---
 
