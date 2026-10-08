@@ -28,23 +28,25 @@ relatedArticles:
   - 2026-10-24-versionner-postes-semver-nix
 ---
 
-> Série **Quand l'IA accélère le code, la CI doit suivre**, 3/6. Le début : [l'IA écrit plus vite, notre CI devait suivre](/thinking/2026-11-07-ia-accelere-code-ci-doit-suivre/).
+> Série **Quand l’IA accélère le code, la CI doit suivre**, 3/6. Le début : [pourquoi nous avons commencé à déplacer les validations](/thinking/2026-11-07-ia-accelere-code-ci-doit-suivre/).
 
-Déplacer les tests en local n'était pas le choix qui me gênait le plus.
+Une fois les tests revenus sur les Mac, il restait une question un peu gênante.
 
-Ce qui m'intéressait, c'était la suite : **comment faire en sorte que GitHub refuse un changement qui n'a pas passé les contrôles attendus, alors que ces contrôles ne tournent plus systématiquement sur un runner GitHub ?**
+Sur GitHub, qu’est-ce qui empêche quelqu’un de merger une PR alors qu’il n’a rien validé ?
 
-Je ne voulais pas d'un simple message dans la PR disant « testé chez moi ». Et je ne voulais pas non plus que le fait d'utiliser un agent IA change les règles.
+Je ne voulais pas remplacer un workflow qui lançait des tests par un message dans la description de la PR disant « ça passe chez moi ». Même si le message vient d’un agent avec beaucoup d’assurance.
 
-## Le SHA doit être une donnée de premier ordre
+L’idée était de garder les règles GitHub, sans lui demander de recalculer systématiquement tout ce que le poste vient de vérifier.
 
-Imaginons un commit A. Je lance les tests et ils passent.
+## D’abord, arrêter de parler d’un résultat sans parler du commit
 
-L'agent corrige ensuite deux fichiers, crée un commit B, puis pousse la branche.
+J’ai commencé par le SHA.
 
-Si je réutilise naïvement le résultat de A pour B, ma chaîne de validation n'a plus beaucoup de valeur.
+Supposons que les tests passent sur un commit A. L’agent corrige un détail, fait un nouveau commit B et pousse. Si la validation de A reste valable pour B, il y a un trou dans le modèle.
 
-Nous avons donc attaché la preuve locale au SHA exact de la révision testée. Ce résultat contient un état, les contrôles exécutés et le type de validation. Un test léger et une validation PR-ready sont deux choses différentes.
+La commande de validation écrit donc un résultat local qui indique le commit testé, les contrôles effectués et le niveau de validation. Un pre-commit qui vérifie trois fichiers ne produit pas la même preuve qu’une validation PR-ready avec PostgreSQL et les tests d’intégration.
+
+Un exemple simplifié du contrat :
 
 ~~~json
 {
@@ -52,112 +54,86 @@ Nous avons donc attaché la preuve locale au SHA exact de la révision testée. 
   "gate": "pr-ready",
   "status": "success",
   "checks": [
-    "backend-unit",
+    "go-unit",
     "frontend-typecheck",
-    "db-integration"
+    "postgres-integration"
   ]
 }
 ~~~
 
-*Exemple simplifié de structure, pas un schéma contractuel ni un résultat de production.*
+Ce n’est pas le schéma JSON exact de notre implémentation. Il montre surtout les informations dont le publisher a besoin pour ne pas confondre deux révisions ou deux niveaux de contrôle.
 
-Si le SHA change, le résultat précédent ne doit plus autoriser le merge. Un rebase, un amend ou un nouveau commit imposent une nouvelle preuve.
+Après un amend ou un rebase, le SHA change. Le résultat précédent ne convient plus. La validation doit être rejouée sur la nouvelle révision.
 
-Cela ne garantit pas que les tests ont vraiment été exécutés. Mais cela évite déjà de mélanger un succès ancien avec une révision nouvelle.
+## GitHub n’a pas besoin de lancer le test pour bloquer le merge
 
-## GitHub reste le point de décision
-
-Le flux que nous avons retenu sépare le calcul et la publication.
+Nous avons utilisé une GitHub App pour publier un commit status et un ruleset qui exige ce contexte.
 
 ~~~mermaid
 sequenceDiagram
-    participant D as Poste / agent
-    participant G as Git
-    participant A as GitHub App
-    participant H as GitHub
-    D->>D: Validation PR-ready
-    D->>D: Écriture de la preuve exact-SHA
-    D->>G: Push du commit
-    G->>H: Envoi de la révision
-    D->>A: Demande de publication du statut
-    A->>H: Status lié au SHA
-    H->>H: Evaluation du ruleset
+    participant P as Poste
+    participant G as GitHub
+    P->>P: ci:validate sur SHA A
+    P->>P: Résultat local pour SHA A
+    P->>G: git push
+    P->>G: GitHub App publie le status de A
+    G->>G: Ruleset vérifie le contexte
 ~~~
 
-L'idée est que le code peut être validé sur le poste, mais que le merge reste soumis à une politique centralisée : revues, règles de branche et statut requis.
+Le contexte peut s’appeler, par exemple, \`engineering/local-ci\`. Ce nom est volontairement générique.
 
-L'agent, quel qu'il soit, n'est pas l'autorité de merge.
+GitHub connaît la révision, le résultat publié et l’application qui en est à l’origine. Il peut alors empêcher le merge si le statut attendu manque ou échoue.
 
-## Pourquoi ne pas publier avec les credentials habituels ?
+J’ai préféré une App dédiée plutôt que de faire publier les résultats avec les credentials Git personnels. Ça permet de limiter la source du statut autorisée par le ruleset.
 
-J'ai préféré utiliser une GitHub App dédiée plutôt que les credentials Git personnels d'un développeur.
+Cela suppose évidemment de vérifier aussi les bypass. Une règle qu’on peut contourner avec les bons privilèges reste une règle contournable. Autant savoir précisément par qui.
 
-Elle permet de distinguer l'identité qui publie les résultats de celle qui pousse le code. Le ruleset peut exiger un contexte de statut, par exemple \`engineering/local-ci\`, et restreindre la source à l'application autorisée.
+## Le pre-push arrive trop tôt
 
-Le nom du contexte ici est illustratif. L'intérêt est le contrat, pas la chaîne de caractères.
+C’est le détail qui nous a occupés davantage que prévu.
 
-Mais cette séparation a une conséquence : il faut provisionner l'identité du publisher sur les machines autorisées.
+Quand le hook pre-push démarre, Git n’a pas encore envoyé le commit. Si le publisher interroge l’API GitHub à ce moment-là, la révision peut ne pas exister côté distant.
 
-Dans notre cas, l'App lit les credentials dans le Keychain macOS, avec une clé privée distribuée depuis Azure Key Vault. Ce chemin doit être documenté, testable sur un Mac neuf et correctement géré lors des rotations.
+Le flux devient donc : validation, push, puis publication du statut une fois le commit disponible.
 
-On retrouve ici un sujet que j'abordais dans [l'article sur Entra et l'identité de la workstation](/thinking/2026-10-10-apple-business-entra-identite-workstation/) : une machine peut être techniquement prête, mais ne pas avoir les autorisations nécessaires pour participer au workflow attendu.
+Sauf qu’un push peut être rejeté. Il peut se terminer pendant une coupure réseau. Deux pushes peuvent également se suivre rapidement.
 
-Ce sont deux états différents, et les messages d'erreur doivent le dire clairement.
+Nous avons séparé le calcul de la publication pour ne pas avoir à relancer toute la suite en cas d’échec réseau. Il faut ensuite que le publisher vérifie la révision réellement disponible sur le dépôt distant, et pas uniquement que le processus Git s’est arrêté.
 
-## Le détail qui casse facilement : quand publier ?
+C’est une partie que je n’ai pas envie de déclarer terminée simplement parce que trois pushes se sont bien passés. Les cas d’échec et de concurrence sont précisément ceux qu’il faut rejouer.
 
-Un commit local n'existe pas forcément encore côté GitHub.
+Le bon comportement en cas de doute est assez simple : pas de statut de succès, donc pas de merge par le chemin normal.
 
-Dans le parcours habituel, il faut donc valider, pousser, puis publier le statut une fois le commit accessible à l'API.
+## Une nouvelle machine peut tester, mais pas publier
 
-Dit comme ça, ça paraît trivial. Mais un hook pre-push tourne **avant** que Git ait terminé l'envoi. Il ne peut pas simplement supposer que la révision est déjà visible à distance.
+Sur un Mac que j’utilise depuis des mois, les credentials nécessaires sont déjà là.
 
-Nous avons séparé les deux étapes et travaillé sur une synchronisation après le push.
+Sur un poste fraîchement installé, c’est une autre histoire. Nous avons eu le cas d’une validation locale correcte, suivie d’une publication impossible parce qu’il manquait les éléments de la GitHub App dans le Keychain.
 
-C'est aussi là que commencent les scénarios moins agréables : un push rejeté, une coupure WAN, deux pushes successifs, une publication qui arrive en retard.
+Nous stockons les credentials côté macOS et utilisons Azure Key Vault pour distribuer la clé privée aux postes autorisés. La synchronisation et la rotation doivent faire partie de l’onboarding, pas d’une manipulation connue uniquement de la personne qui a créé l’App.
 
-Attendre que le processus Git ait disparu n'atteste pas de la réussite du push. Il faut également vérifier que le SHA ciblé existe sur le remote prévu et que les erreurs de publication restent visibles et récupérables.
+C’est exactement le lien avec [la séparation identité / poste de ma série Entra](/thinking/2026-10-10-apple-business-entra-identite-workstation/). Avoir un environnement prêt ne veut pas dire que le poste dispose automatiquement de tous les droits nécessaires.
 
-Je ne considère pas un simple script « qui marche une fois » comme une validation de ces cas.
+Le message d’erreur doit permettre de faire la différence entre un test qui échoue et un statut qui ne peut pas être publié.
 
-## Ce que la GitHub App ne prouve pas
+## Et il y a une limite qu’il faut assumer
 
-C'est le compromis qu'il faut expliquer, surtout lorsqu'on présente cette architecture à une équipe sécurité.
+Le fait que le status vienne d’une GitHub App ne prouve pas que le Mac a réellement exécuté les tests.
 
-Une GitHub App peut garantir quelle identité a publié un statut. Le SHA garantit sur quelle révision porte ce statut.
+L’App identifie celui qui publie. Le SHA indique le commit visé. Avec une clé de publication distribuée sur les postes, quelqu’un qui contrôle entièrement l’une de ces machines peut potentiellement fabriquer un résultat.
 
-**Cela ne prouve pas que le poste a exécuté honnêtement les tests.**
+Azure Key Vault permet de contrôler qui récupère la clé. Il ne transforme pas le Mac en runner attesté.
 
-Si un développeur contrôle intégralement son Mac et détient de quoi signer une publication, il peut potentiellement fabriquer un résultat de succès. Un poste compromis peut représenter le même risque.
+Pour une équipe dont le modèle de menace impose de résister à un contributeur malveillant, je garderais une validation indépendante sur les changements concernés. Même chose pour un build dont la provenance doit être attestée.
 
-Azure Key Vault contrôle la distribution de la clé. Il ne transforme pas un laptop en environnement d'exécution attesté.
+Ce choix a donc ses limites. Il me convient davantage qu’une architecture qui promettrait du « zero trust » tout en donnant une clé de publication à chaque laptop sans en parler.
 
-Dans une organisation qui exige une séparation indépendante entre auteur du changement et validateur, je conserverais donc un contrôle distant sur les propriétés concernées. Il peut s'agir de tests sensibles, d'un build signé ou de mécanismes d'attestation adaptés au modèle de menace.
+À la fin, ce que nous voulions est assez précis : garder le confort des tests locaux, conserver la discipline du merge et savoir où la confiance s’arrête.
 
-La distinction est importante : **la reproductibilité de l'environnement et la confiance dans l'exécution sont deux questions différentes**.
+Il restait encore à éviter de lancer toute la suite sur chaque changement. C’est le sujet du quatrième article.
 
-## Et le bypass ?
-
-On peut avoir le meilleur required check du monde et laisser des comptes privilégiés contourner le ruleset.
-
-La gouvernance ne se résume pas à écrire \`required: true\` dans une interface. Il faut examiner les exemptions, les droits de publication, les permissions du GitHub App et le comportement en cas de statut manquant.
-
-Sur un poste non provisionné ou en cas de panne réseau, l'échec acceptable est que le merge reste bloqué, pas que le système suppose que les tests sont passés.
-
-## Ce que nous cherchions à obtenir
-
-Je voulais que la validation quotidienne soit proche du développeur, y compris lorsqu'un agent produit les changements.
-
-Je voulais également que GitHub reste responsable de dire « cette révision satisfait les conditions d'intégration ».
-
-Et je voulais que les limites soient explicites : c'est un modèle adapté à des équipes de confiance, pas un substitut universel à une CI distante indépendante.
-
-## Suite
-
-4/6 : **Tout tester à chaque changement ? Pas nécessairement.** Nous allons regarder comment sélectionner les contrôles utiles sans laisser un changement transversal passer entre les mailles du filet.
-
-## Sources
+## Sources officielles
 
 - [GitHub : commit statuses](https://docs.github.com/en/rest/commits/statuses)
-- [GitHub : règles de protection](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)
-- [GitHub : authentification des GitHub Apps](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app)
+- [GitHub : rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets)
+- [GitHub : GitHub Apps](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app)
