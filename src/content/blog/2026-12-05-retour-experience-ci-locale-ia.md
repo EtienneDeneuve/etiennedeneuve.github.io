@@ -1,6 +1,6 @@
 ---
-title: "Développer à la vitesse de l’IA, livrer avec la rigueur de l’ingénierie."
-description: "Retour d’expérience sur la CI locale : mesures, onboarding, limites de confiance et continuité du poste à la production."
+title: "Développer à la vitesse de l'IA, livrer avec la rigueur de l'ingénierie."
+description: "Retour d'expérience sur le déplacement des validations en local : onboarding, statuts GitHub, confiance, cutover et erreurs que je chercherais à éviter."
 pubDate: 2026-12-05T07:30:00.000Z
 language: fr
 contentType: architecture-decision
@@ -10,11 +10,11 @@ audience:
   - engineering-leads
   - engineers
 tags:
-  - CI/CD
   - AI Engineering
-  - Platform Engineering
-  - devenv
+  - CI/CD
   - GitHub
+  - Nix
+  - Platform Engineering
 featured: false
 draft: true
 relatedProjects: []
@@ -23,61 +23,116 @@ relatedArticles:
   - 2026-11-14-deplacer-ci-sur-mac-devenv
   - 2026-11-21-github-garde-dernier-mot-ci-locale
   - 2026-11-28-tester-changement-sans-tout-relancer
+  - 2026-12-12-mesurer-impact-ci-locale
   - 2026-10-03-provisioning-mac-pas-probleme-mdm
   - 2026-10-24-versionner-postes-semver-nix
 ---
 
-> Série **Quand l’IA accélère le code, la CI doit suivre**, 5/5. Le début : [l’IA écrit plus vite, notre CI devait suivre](/thinking/2026-11-07-ia-accelere-code-ci-doit-suivre/).
+> Série **Quand l'IA accélère le code, la CI doit suivre**, 5/6. Le début : [l'IA écrit plus vite, notre CI devait suivre](/thinking/2026-11-07-ia-accelere-code-ci-doit-suivre/).
 
-Au départ, je voulais éviter d’attendre un runner distant pour découvrir une erreur que mon Mac pouvait déjà voir.
+Quand nous avons commencé, je pensais surtout résoudre un problème de feedback : nous écrivions du code plus vite, notamment avec les agents IA, et une partie des vérifications attendait encore le démarrage d'un runner distant.
 
-Le chantier a fini par toucher devenv, les hooks Git, PostgreSQL, Rust, les statuts GitHub et les permissions de l’App.
+Nous avons fini par toucher les hooks, la gestion des environnements, PostgreSQL, la publication de statuts GitHub, les droits des applications et le cycle de release.
 
-Avec le recul, c’est logique. **Déplacer le calcul oblige à clarifier où se situe la confiance.**
+Avec le recul, ce n'est pas très surprenant.
 
-## Ce qui a réellement changé
+**Déplacer le calcul ne suffit pas. Il faut aussi déplacer les habitudes, sans déplacer le problème sur le poste de quelqu'un d'autre.**
 
-Les vérifications font désormais partie du développement, avec les mêmes commandes pour nous et pour les agents IA.
+## La première réussite : ne plus attendre un push pour apprendre
 
-GitHub reste l’autorité de merge. Les builds de release et les contrôles qui exigent un environnement indépendant sont un autre sujet.
+Le résultat le plus visible, ce n'est pas un nombre de workflows supprimés.
 
-L’intérêt n’est pas d’avoir supprimé tel fichier YAML. C’est d’avoir séparé trois responsabilités qu’on mélangeait : produire du code, vérifier un changement, autoriser son intégration.
+C'est la possibilité de lancer les contrôles dans l'environnement où le changement vient d'être produit.
 
-## Les chiffres, mais pas les promesses
+Un agent modifie une requête SQL : on vérifie le contrat de la base. Un développeur corrige une erreur de type : le typecheck peut répondre avant qu'il ouvre une PR.
 
-Nous avons mesuré les tests unitaires Nova. Le job GitHub Actions historique prenait en moyenne environ 6 min 10 s. Sur un benchmark ciblé, un runner GitHub simplifié prenait 4 min 32 s à froid et 1 min 36 s à chaud ; la commande locale prenait 121,25 s à froid et 38,63 s à chaud.
+Les scripts sont dans le repository. Je peux les lire, les lancer et les reproduire. Et lorsqu'une validation échoue, il n'est plus nécessaire de commencer par télécharger un log d'un runner extérieur.
 
-Ces mesures ne couvrent pas exactement la même enveloppe. Il serait trompeur d’en déduire un gain global de productivité.
+Ce n'est pas forcément spectaculaire sur un diagramme d'architecture. C'est en revanche une différence très concrète dans la manière de travailler.
 
-Il nous faut également une mesure consolidée des runner-minutes avant et après cutover, sur des périodes comparables, pour annoncer une économie mensuelle vérifiable.
+## Nous avons sous-estimé le rôle du poste
 
-## Le meilleur test, c’est souvent le Mac du collègue
+La partie devenv fonctionnait sur une machine déjà configurée.
 
-Sur ma machine, tout semblait relativement simple. Sur un nouveau poste, le publisher GitHub App pouvait manquer de credentials dans le Keychain.
+Puis un collègue arrive avec un Mac neuf.
 
-Les tests pouvaient être verts, mais GitHub n’avait pas le statut requis pour le merge.
+L'environnement Nix démarre, les outils sont présents, les tests passent... mais le statut GitHub n'est pas publié parce que le publisher ne trouve pas ses credentials dans Keychain.
 
-Nous avons documenté un chemin Azure Key Vault, sans considérer que cela ferme automatiquement tous les sujets d’onboarding, de rotation et de gestion des erreurs.
+La machine est prête à compiler, pas encore prête à participer à tout le workflow de contribution.
 
-C’est pour cela que je relie cette série à [notre travail sur Apple Business et Nix](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/) et au [versionnement des workstations](/thinking/2026-10-24-versionner-postes-semver-nix/). Un poste de développement n’est pas indépendant de la plateforme qu’il utilise.
+C'est une distinction que j'avais déjà rencontrée pendant [le provisioning Apple Business / Entra / Nix](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/). Un poste enrôlé n'est pas forcément un poste opérationnel. Un poste qui possède les outils n'a pas nécessairement les droits.
 
-## Ce que je ne généraliserais pas
+Nous avons documenté la récupération des credentials depuis Azure Key Vault. Il reste à rendre l'approvisionnement et la rotation plus simples à exécuter et à vérifier.
 
-Une CI locale n’a pas toutes les garanties d’un runner distant sous contrôle indépendant. Un statut exact-SHA n’est pas une attestation d’exécution.
+J'aurais dû inclure un poste vierge dans la matrice de validation dès le début.
 
-Si une organisation exige de résister à un contributeur malveillant ou à un poste compromis, il faut conserver les contrôles hors du poste qui répondent à ce besoin.
+## Une publication de statut est une petite machine à états
 
-Et il reste à éprouver les chemins désagréables : push refusé, coupure réseau, publications concurrentes, rotation des clés. Le fait qu’un script soit mergé ne suffit pas à prouver qu’il est industrialisé.
+Autre découverte assez prévisible : on se rend vite compte que le push ne se résume pas à « l'appel Git est terminé ».
 
-## Du poste jusqu’à la production
+Le commit doit exister sur GitHub avant d'y publier un statut. Si le push est rejeté, le publisher doit le savoir. Si le réseau est coupé, il faut pouvoir réessayer sans recalculer tous les tests.
 
-Nous avions commencé par l’identité et l’environnement du Mac. Nous avons ensuite déplacé les contrôles plus près du code. La suite logique, ce sont les artefacts, leur provenance, le déploiement et l’état réellement observé.
+Et si deux révisions sont poussées rapidement, on ne veut pas que le résultat de la première soit publié sur la seconde.
 
-L’IA accélère la production des changements. Elle ne dispense pas de construire une plateforme capable de les vérifier et de les livrer proprement.
+Je préfère un statut manquant, qui bloque le merge, à un succès publié sur le mauvais commit.
 
-Je trouve ce sujet nettement plus intéressant que de savoir combien coûte une minute de runner.
+Notre implémentation a progressé sur cette séparation calcul/publication, mais les cas de push refusé, de concurrence et d'erreur réseau méritent encore une campagne de validation dédiée avant de déclarer le mécanisme industrialisé.
+
+Ce sont ces scénarios qui décident de la solidité du modèle, pas la jolie démonstration où tout fonctionne au premier essai.
+
+## La confiance ne se déplace pas aussi facilement que les tests
+
+Nous avons gardé GitHub comme autorité de merge, avec un statut lié au SHA exact et une identité dédiée pour la publication.
+
+C'est utile pour structurer la gouvernance.
+
+Mais il faut conserver une distinction que je trouve souvent absente des discussions sur la CI locale : **un statut ne prouve pas à lui seul l'exécution des tests**.
+
+Si la clé de publication existe sur le poste et que quelqu'un contrôle ce poste, cette personne peut potentiellement produire un résultat trompeur.
+
+Cela ne veut pas dire que la CI locale n'a pas de valeur. Cela veut dire qu'elle répond à un modèle de confiance précis. Pour des exigences de séparation indépendante ou des artefacts sensibles, il faut conserver les contrôles distants nécessaires.
+
+Je préfère une architecture dont cette limite est assumée à un discours « zero trust » qui oublie le développeur, sa machine et son accès au publisher.
+
+## Un autre piège : déclarer le cutover terminé trop tôt
+
+Déplacer les tests avant de supprimer les anciens workflows est plutôt sain.
+
+On peut comparer les deux chemins, observer les divergences, vérifier que les suites sont équivalentes et seulement ensuite retirer les jobs devenus redondants.
+
+Mais cette phase de transition a tendance à durer si elle n'est pas pilotée. On risque alors de cumuler les coûts des deux systèmes sans obtenir les bénéfices attendus.
+
+Nous avons dû consolider les contrôles locaux, ajuster les déclencheurs par surface et nettoyer progressivement les workflows historiques.
+
+Ce n'est pas parce que quelques PR passent que toutes les propriétés de l'ancien dispositif sont couvertes. Les cas limites, l'onboarding et la mesure réelle du coût doivent faire partie des critères de clôture.
+
+## Ce que je referais dans un autre projet
+
+Je commencerais par définir le contrat de validation : quels contrôles sont requis avant un merge, lesquels sont spécifiques à une release, et lesquels doivent s'exécuter dans un environnement indépendant.
+
+Ensuite, je chercherais à reproduire ces contrôles localement avec les outils déjà présents, sans ajouter immédiatement un orchestrateur.
+
+Je définirais aussi dès le début une matrice d'échec : code cassé, service absent, SHA modifié, push rejeté, publication impossible, credentials manquants, poste neuf.
+
+Et surtout, je mesurerais la baseline avant de toucher aux workflows : runner-minutes, temps de feedback, nombre de tentatives et temps de travail réellement perdu.
+
+Sans baseline, il est beaucoup trop facile de raconter après coup que le nouveau système est meilleur.
+
+## Du poste à la production
+
+Ce projet complète [notre travail sur les workstations versionnées](/thinking/2026-10-24-versionner-postes-semver-nix/).
+
+Il y a une continuité assez naturelle : identité, environnement reproductible, validation du code, décision d'intégration, artefact livré et état réellement observé.
+
+L'IA ne change pas ces responsabilités. Elle accélère simplement le rythme auquel leurs défauts deviennent visibles.
+
+## Suite
+
+6/6 : **Moins de runners, quel gain réel ? Mesurer la CI locale.**
+
+Je vais séparer ce que nous avons effectivement mesuré de ce qu'il reste à mesurer, puis regarder les dollars, le délai de feedback et l'expérience développeur. Sans transformer un benchmark sur une seule commande en un ROI d'entreprise.
 
 ## Sources
 
-- [devenv](https://devenv.sh/)
+- [devenv : documentation](https://devenv.sh/)
 - [GitHub : rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets)
