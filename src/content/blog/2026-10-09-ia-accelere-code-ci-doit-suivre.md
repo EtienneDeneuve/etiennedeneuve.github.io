@@ -16,7 +16,7 @@ tags:
   - Developer Experience
   - GitHub
 featured: false
-draft: true
+draft: false
 relatedProjects: []
 relatedArticles:
   - 2026-10-16-deplacer-ci-sur-mac-devenv
