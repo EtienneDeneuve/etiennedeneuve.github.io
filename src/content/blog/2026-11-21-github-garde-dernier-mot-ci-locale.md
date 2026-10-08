@@ -54,7 +54,16 @@ Après un amend ou un rebase, le SHA change. Le résultat précédent ne convien
 
 Nous avons utilisé une GitHub App pour publier un commit status et un ruleset qui exige ce contexte.
 
-Sur les PR, nous exigeons deux contrôles distincts : la validation du code et un statut E2E. GitHub vérifie que ces statuts sont présents sur la révision proposée avant de permettre le merge. Le résultat reste lisible par toute personne qui ouvre la PR.
+Sur une PR réelle, on voit les deux contrôles locaux marqués `Required`, avec un statut vert sur le commit exact. GitHub affiche ensuite le bouton de merge. Pas besoin de montrer le script du publisher pour expliquer ce qui se passe.
+
+<!-- IMAGE À INTÉGRER APRÈS IMPORT DES ASSETS ANONYMISÉS :
+     Fichier préparé : ci-required-checks-anonymized.webp
+     Alt : « GitHub : validation locale et E2E exact-SHA requis, PR prête à merger »
+     Légende : « Deux contrôles produits en local, deux checks requis sur GitHub. »
+     Les noms internes sont masqués ; ne pas ajouter la capture originale au dépôt public.
+-->
+
+La capture démontre que la politique de merge existe et fonctionne sur cette PR. Elle ne prouve pas, à elle seule, la réalité de l'exécution locale.
 
 J’ai préféré une App dédiée plutôt que de faire publier les résultats avec les credentials Git personnels. Ça permet de limiter la source du statut autorisée par le ruleset.
 
@@ -82,7 +91,7 @@ Sur un Mac que j’utilise depuis des mois, les credentials nécessaires sont d�
 
 Sur un poste fraîchement installé, c’est une autre histoire. Nous avons eu le cas d’une validation locale correcte, suivie d’une publication impossible parce qu’il manquait les éléments de la GitHub App dans le Keychain.
 
-Nous stockons les credentials côté macOS et utilisons Azure Key Vault pour distribuer la clé privée aux postes autorisés. La synchronisation et la rotation doivent faire partie de l’onboarding, pas d’une manipulation connue uniquement de la personne qui a créé l’App.
+Sur nos postes, cette publication repose sur une identité dédiée dont l’accès doit être provisionné et maintenu. Un nouveau Mac capable de compiler n’a pas nécessairement encore les droits pour publier le statut. La rotation des accès fait donc aussi partie du sujet.
 
 C’est exactement le lien avec [la séparation identité / poste de ma série Entra](/thinking/2026-10-10-apple-business-entra-identite-workstation/). Avoir un environnement prêt ne veut pas dire que le poste dispose automatiquement de tous les droits nécessaires.
 
@@ -94,7 +103,7 @@ Le fait que le status vienne d’une GitHub App ne prouve pas que le Mac a réel
 
 L’App identifie celui qui publie. Le SHA indique le commit visé. Avec une clé de publication distribuée sur les postes, quelqu’un qui contrôle entièrement l’une de ces machines peut potentiellement fabriquer un résultat.
 
-Azure Key Vault permet de contrôler qui récupère la clé. Il ne transforme pas le Mac en runner attesté.
+Gérer les accès à cette identité ne transforme pas le Mac en runner attesté.
 
 Pour une équipe dont le modèle de menace impose de résister à un contributeur malveillant, je garderais une validation indépendante sur les changements concernés. Même chose pour un build dont la provenance doit être attestée.
 
