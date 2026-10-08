@@ -46,22 +46,7 @@ Supposons que les tests passent sur un commit A. L’agent corrige un détail, f
 
 La commande de validation écrit donc un résultat local qui indique le commit testé, les contrôles effectués et le niveau de validation. Un pre-commit qui vérifie trois fichiers ne produit pas la même preuve qu’une validation PR-ready avec PostgreSQL et les tests d’intégration.
 
-Un exemple simplifié du contrat :
-
-~~~json
-{
-  "sha": "sha-complet-du-commit",
-  "gate": "pr-ready",
-  "status": "success",
-  "checks": [
-    "go-unit",
-    "frontend-typecheck",
-    "postgres-integration"
-  ]
-}
-~~~
-
-Ce n’est pas le schéma JSON exact de notre implémentation. Il montre surtout les informations dont le publisher a besoin pour ne pas confondre deux révisions ou deux niveaux de contrôle.
+La preuve produite par la validation locale doit porter la révision testée et le niveau de vérification atteint. Une passe rapide de formatage et une validation complète avec PostgreSQL ne sont pas interchangeables. Ce contrat est vérifié avant de publier un statut de merge.
 
 Après un amend ou un rebase, le SHA change. Le résultat précédent ne convient plus. La validation doit être rejouée sur la nouvelle révision.
 
