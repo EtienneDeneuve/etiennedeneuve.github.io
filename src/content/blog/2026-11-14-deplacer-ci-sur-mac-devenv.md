@@ -42,7 +42,7 @@ J’ai parlé dans [la série sur Apple Business, Entra et Nix](/thinking/2026-1
 
 Apple Business s’occupe de l’enrôlement et des prérequis. Entra donne une identité et des droits. Nix compose le poste.
 
-Pour les projets, nous utilisons devenv. Il décrit la toolchain, les services et les commandes nécessaires dans le repository. L’environnement de travail ne dépend donc pas d’une petite checklist que chacun suivrait plus ou moins bien.
+Sur le projet interne qui nous a servi de pilote, nous avions déjà devenv. Il décrit la toolchain, les services et les commandes nécessaires dans le repository. L’environnement de travail ne dépend donc pas d’une petite checklist que chacun suivrait plus ou moins bien.
 
 Ce n’est pas nouveau. Le changement, c’est d’avoir décidé que cet environnement pouvait aussi porter une grande partie des validations.
 
@@ -116,6 +116,8 @@ C’est une différence que je voulais garder très nette.
 Les postes ne sont pas inscrits comme runners self-hosted. GitHub ne les utilise pas pour exécuter arbitrairement les jobs du repository. Les validations sont déclenchées localement, dans le contexte du développeur, avec les outils du projet.
 
 Nous n’avons donc pas créé de ferme CI à exploiter, ni de dépendance à un contrôleur supplémentaire.
+
+C’est aussi ce qui nous intéresse pour la suite. Le dispositif tourne aujourd’hui sur un projet interne ; le socle Nix, devenv et les hooks doit pouvoir être repris sur les autres repositories, chacun avec ses propres suites. On n’a pas encore fait cette généralisation.
 
 Et je n’essaie pas de faire croire qu’un résultat macOS remplace tous les tests Linux. S’il faut valider une propriété spécifique au runtime Linux, construire une image ou signer un artefact dans un environnement contrôlé, le calcul reste à faire ailleurs.
 
