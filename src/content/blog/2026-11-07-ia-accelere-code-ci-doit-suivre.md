@@ -28,89 +28,91 @@ relatedArticles:
   - 2026-10-24-versionner-postes-semver-nix
 ---
 
-> Série **Quand l'IA accélère le code, la CI doit suivre**, 1/6. Un retour d'expérience sur notre manière de rapprocher les vérifications du développement, quel que soit l'agent utilisé.
+> Série **Quand l’IA accélère le code, la CI doit suivre**, 1/6. Le premier article d’un retour d’expérience sur notre façon de valider le code depuis que les agents ont changé le rythme des développements.
 
-J'ai commencé à voir le problème lorsque les agents de développement ont changé notre manière d'itérer.
+Il y a un truc assez curieux avec les agents IA.
 
-Avant, entre deux changements un peu conséquents, il se passait naturellement du temps. On écrivait, on relisait, on corrigeait, puis on poussait. Avec un agent capable de modifier un backend, son frontend et quelques tests dans la même séquence, cette cadence n'a plus beaucoup de sens.
+On peut leur faire modifier un handler Go, l’interface Vue qui va avec et quelques tests en quelques minutes. Et derrière, on attend parfois qu’un runner réinstalle les outils pour découvrir une erreur TypeScript qu’on aurait pu voir sur le Mac.
 
-Je ne dis pas que le code est meilleur. Je dis qu'il arrive plus vite.
+Au début, ça ne m’avait pas spécialement dérangé. C’est comme ça que fonctionnait notre CI, elle faisait son travail. Mais à mesure qu’on a utilisé davantage d’agents, l’écart entre le temps nécessaire pour produire un changement et celui nécessaire pour obtenir un retour est devenu difficile à ignorer.
 
-Et à un moment je me suis demandé : **si la production de code accélère autant, pourquoi attendons-nous toujours la fin du push pour apprendre qu'un typecheck ne passe pas ?**
+Je ne vais pas prétendre qu’un agent fait en dix minutes le travail de trois ingénieurs. Il produit des modifications rapidement, c’est déjà suffisamment différent pour nous obliger à revoir certains réflexes.
 
-## Ce n'était pas vraiment un problème de GitHub Actions
+## On avait surtout mis trop de choses après le push
 
-Notre CI distante faisait son travail. Elle installait les outils, exécutait les tests, démarrait PostgreSQL, vérifiait les migrations. Le problème venait plutôt de l'endroit où nous avions placé ces vérifications.
+Sur l’un de nos projets, nous avons un backend Go, du Vue, PostgreSQL, une partie Rust et plusieurs applications dans le même repository.
 
-Imaginons une modification très banale. Un agent modifie une API et son consommateur frontend. On pousse. Le runner démarre, restaure ses caches, prépare le projet, puis découvre une erreur TypeScript. On revient dans l'éditeur, on corrige et on recommence.
+Les workflows GitHub Actions vérifiaient les bonnes choses : tests unitaires, intégration, typecheck, migrations, contrôles Rust. Mais chaque suite embarquait aussi une partie de la préparation de l’environnement, avec son téléchargement d’outils et ses caches.
 
-Rien d'anormal dans ce scénario. Sauf que nous avions déjà la même toolchain sur le poste de développement.
+Lorsqu’on a commencé à regarder les consommations GitHub Actions, on a retrouvé des contrôles redondants et du setup répété. C’était un bon point de départ pour l’audit.
 
-À partir de là, chaque aller-retour distant pour une erreur reproductible localement m'a semblé de moins en moins pertinent.
+Sauf que le premier irritant n’était même pas la facture.
 
-Le coût des runners a rendu la situation visible. Mais je ne voulais pas construire une architecture simplement pour économiser quelques dollars. Je voulais **réduire le temps entre un changement et un résultat de validation fiable**.
+Prenons une erreur de type dans une modification frontend. Il faut qu’elle soit détectée, évidemment. Mais est-ce qu’on a vraiment besoin de pousser une branche et de démarrer un environnement distant pour la découvrir ?
 
-## Les agents ont accéléré une tension qui existait déjà
+Même question pour un test Go, une migration qui ne se rejoue pas ou un formatage Rust.
 
-Le problème ne dépend pas de l'assistant utilisé. Qu'il s'agisse d'un agent intégré à l'éditeur, d'un outil en ligne de commande ou d'un système qui prépare des branches de manière autonome, la question reste identique.
+À ce stade, j’avais davantage envie de raccourcir la boucle de correction que de supprimer des jobs pour le plaisir.
 
-Quel contrat doit respecter le code avant d'être proposé à l'intégration ?
+## L’agent n’a pas besoin d’une CI spéciale
 
-Je ne veux pas que ce contrat soit caché dans un prompt. Un agent peut oublier une consigne. Il peut décider qu'un test semble inutile. Il peut même annoncer une tâche terminée parce qu'une petite sous-partie de la suite est verte.
+Je me méfie un peu des règles de qualité qu’on ajoute dans les prompts.
 
-Un humain peut faire exactement les mêmes erreurs, d'ailleurs.
+On peut demander à un agent de lancer tous les tests, de relire ses changements et de ne jamais déclarer une tâche terminée trop tôt. Très bien. Mais ce n’est pas un contrat suffisant.
 
-Nous avons donc cherché à rendre la validation indépendante de celui qui produit le changement. Les commandes et les conditions de réussite appartiennent au repository. L'agent n'a pas une CI simplifiée ; le développeur n'a pas un parcours parallèle.
+Un agent peut oublier une commande. Un développeur aussi.
 
-L'IA change la vitesse de production. Elle ne change pas la définition d'un résultat acceptable.
+Nous avons donc gardé la validation hors de la conversation avec l’outil. Elle vit dans le repository, sous forme de scripts versionnés. Peu importe que le changement vienne d’un agent en terminal, d’un IDE, ou d’une personne qui écrit son code normalement.
 
-## Nous avions déjà un avantage : les postes étaient traités comme une plateforme
+L’agent peut exécuter les mêmes commandes que nous. Et s’il ne les exécute pas, les hooks et les règles d’intégration doivent continuer à jouer leur rôle.
 
-Dans une [première série, j'expliquais pourquoi j'avais arrêté de traiter le provisioning Mac comme un simple problème MDM](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/).
+Ça évite une situation que je n’avais vraiment pas envie de créer : un parcours rapide pour l’IA, avec quelques tests sélectionnés au hasard, et un parcours sérieux pour les autres.
 
-Le découpage était assez clair : Apple Business pour prendre en charge le poste et imposer les prérequis, Entra pour l'identité et les droits, Nix pour construire l'environnement attendu.
+## Le travail sur les Mac nous avait déjà donné une partie de la réponse
 
-J'avais aussi commencé à [versionner les configurations des postes comme du logiciel](/thinking/2026-10-24-versionner-postes-semver-nix/), plutôt que de me contenter d'un ensemble de packages installés à un instant donné.
+Dans [la série sur Apple Business, Entra et Nix](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/), j’expliquais pourquoi j’avais séparé l’enrôlement, l’identité et la configuration du poste.
 
-Ce travail n'avait pas été fait pour la CI. Mais il nous donnait déjà une base : des outils versionnés, des environnements reproductibles et une façon cohérente d'installer ce dont un repository a besoin.
+L’objectif était d’avoir des Macs dont on connaît les outils et l’état, sans demander à chacun de reconstituer manuellement son environnement.
 
-Je me suis donc posé la question inverse de celle qu'on pose habituellement : pourquoi faudrait-il reconstruire systématiquement à distance ce que le poste sait déjà exécuter ?
+J’ai ensuite poussé cette logique jusqu’au [versionnement des workstations](/thinking/2026-10-24-versionner-postes-semver-nix/).
 
-## Nous avons séparé trois responsabilités
+Ce sont deux sujets que je n’avais pas lancés pour la CI. Mais quand nous avons voulu rapprocher les contrôles du développeur, l’environnement était déjà là.
 
-La cible tient en trois étapes.
+Nix nous permettait de retrouver les dépendances attendues. devenv ajoutait les services et les commandes du projet. Il ne restait pas à inventer un runner local : il fallait surtout utiliser correctement ce qui existait.
+
+## Ce que nous avons déplacé
+
+Le découpage retenu est assez simple.
 
 ~~~mermaid
 flowchart LR
-    A[Code humain ou agent] --> B[Validation locale]
-    B --> C[Statut du commit]
-    C --> D[Politique de merge GitHub]
-    D --> E[Build et livraison]
+    A[Code humain ou agent] --> B[Checks locaux]
+    B --> C[Preuve liée au SHA]
+    C --> D[GitHub]
+    D --> E[Merge selon les règles]
 ~~~
 
-Le poste exécute les contrôles qui peuvent être reproduits localement. Une preuve structurée rattache le résultat au commit exact. GitHub conserve le pouvoir de refuser le merge si le statut attendu manque ou échoue.
+Le pre-commit reste rapide. La validation PR-ready peut démarrer les services nécessaires et faire tourner les suites pertinentes. Son résultat est associé au commit exact.
 
-Les builds d'artefacts et les contrôles qui ont besoin d'une exécution indépendante ne disparaissent pas. Ils ne répondent simplement pas à la même question.
+GitHub conserve les règles de merge. Les builds de release, la fabrication des images et les contrôles qui ont besoin d’un environnement indépendant restent distincts.
 
-J'aime bien ce découpage parce qu'il évite de confondre la vitesse du feedback avec l'autorisation d'intégrer un changement.
+Je ne cherchais pas à sortir GitHub de la chaîne. Je voulais arrêter de lui demander de refaire systématiquement un travail déjà reproductible sur le poste.
 
-## Ce qu'il serait dangereux de conclure
+## Il y a quand même une limite assez importante
 
-Il y a une limite importante : **un résultat local n'est pas une attestation indépendante**.
+Un résultat de tests produit sur un Mac n’a pas les mêmes garanties qu’un résultat produit sur un runner indépendant.
 
-Une toolchain reproductible permet de refaire le calcul. Un statut attaché à un SHA permet de désigner la révision. Mais si une personne contrôle son poste et l'identité qui publie le statut, ces mécanismes ne prouvent pas qu'elle a honnêtement exécuté les tests.
+Le SHA permet de savoir quel commit est censé avoir été testé. Une GitHub App permet de contrôler qui publie le statut. Aucun des deux ne prouve qu’une personne qui maîtrise entièrement son poste a honnêtement exécuté les tests.
 
-Dans une organisation où le modèle de menace inclut un contributeur malveillant ou un poste compromis, je conserverais les contrôles indépendants nécessaires.
+Cette frontière de confiance fait partie du choix d’architecture. Si l’organisation doit résister à un contributeur malveillant ou à un poste compromis, elle a besoin de contrôles indépendants adaptés.
 
-Nous cherchions d'abord à rendre les vérifications systématiques dans notre boucle quotidienne, sans laisser la CI distante devenir le goulot de chaque itération.
+Dans notre cas, nous voulions d’abord des vérifications reproductibles, exécutées régulièrement, avec GitHub qui continue de refuser les changements dépourvus du statut attendu.
 
-Ce n'est pas une révolution de GitHub Actions. C'est une décision sur **où exécuter quoi, et à qui faire confiance pour quel résultat**.
+La partie difficile n’était finalement pas d’installer les outils. C’était de trouver le bon découpage entre le poste, le repository et GitHub.
 
-## Suite
+C’est ce que je détaille dans le deuxième article, avec devenv, les hooks et PostgreSQL local.
 
-Dans le deuxième article, je rentre dans la mise en œuvre : Nix, devenv, hooks Git et PostgreSQL local. Et surtout, pourquoi nous avons volontairement évité de créer une nouvelle plateforme de CI à entretenir.
+## Sources officielles
 
-## Sources
-
-- [devenv : documentation officielle](https://devenv.sh/)
-- [GitHub : comprendre les rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets)
+- [devenv](https://devenv.sh/)
+- [GitHub : rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets)
