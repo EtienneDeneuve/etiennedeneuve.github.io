@@ -54,20 +54,7 @@ Après un amend ou un rebase, le SHA change. Le résultat précédent ne convien
 
 Nous avons utilisé une GitHub App pour publier un commit status et un ruleset qui exige ce contexte.
 
-~~~mermaid
-sequenceDiagram
-    participant P as Poste
-    participant G as GitHub
-    P->>P: ci:validate sur SHA A
-    P->>P: Résultat local pour SHA A
-    P->>G: git push
-    P->>G: GitHub App publie le status de A
-    G->>G: Ruleset vérifie le contexte
-~~~
-
-Le contexte peut s’appeler, par exemple, \`engineering/local-ci\`. Ce nom est volontairement générique.
-
-GitHub connaît la révision, le résultat publié et l’application qui en est à l’origine. Il peut alors empêcher le merge si le statut attendu manque ou échoue.
+Sur les PR, nous exigeons deux contrôles distincts : la validation du code et un statut E2E. GitHub vérifie que ces statuts sont présents sur la révision proposée avant de permettre le merge. Le résultat reste lisible par toute personne qui ouvre la PR.
 
 J’ai préféré une App dédiée plutôt que de faire publier les résultats avec les credentials Git personnels. Ça permet de limiter la source du statut autorisée par le ruleset.
 
