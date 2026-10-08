@@ -16,7 +16,7 @@ tags:
   - Nix
   - Platform Engineering
 featured: false
-draft: true
+draft: false
 relatedProjects: []
 relatedArticles:
   - 2026-10-09-ia-accelere-code-ci-doit-suivre
