@@ -28,175 +28,127 @@ relatedArticles:
   - 2026-10-24-versionner-postes-semver-nix
 ---
 
-> Série **Quand l'IA accélère le code, la CI doit suivre**, 6/6. Le début : [pourquoi nous avons rapproché la CI du développement](/thinking/2026-11-07-ia-accelere-code-ci-doit-suivre/). Cet épisode sépare les mesures observées des scénarios économiques.
+> Série **Quand l’IA accélère le code, la CI doit suivre**, 6/6. Le début : [pourquoi nous avons commencé à déplacer les validations](/thinking/2026-11-07-ia-accelere-code-ci-doit-suivre/).
 
-Dans les cinq premiers articles, j'ai expliqué pourquoi nous avions rapproché les contrôles du développement assisté par IA, comment nous avions utilisé Nix et devenv, puis comment GitHub restait le point de contrôle avant le merge.
+Il y a un truc qu’on fait facilement après avoir modifié une CI : on prend le job qui était lent, on montre que la commande tourne maintenant plus vite sur son Mac, puis on annonce un pourcentage d’amélioration.
 
-Reste une question assez normale lorsqu'on décide de changer une chaîne d'ingénierie : **est-ce que tout ça améliore vraiment quelque chose ?**
+J’ai failli faire exactement ça.
 
-Pas sur un schéma. Pas parce qu'un script s'exécute plus vite dans un terminal. Dans les chiffres, sur une période suffisamment représentative.
+Sauf qu’en regardant les chiffres d’un peu plus près, on comparait parfois le temps complet d’un job distant avec le temps d’une seule commande locale. Et le gain financier ne racontait pas du tout la même histoire que le gain de feedback.
 
-J'ai voulu regarder trois dimensions séparément : la consommation GitHub Actions, l'expérience du développeur et la fiabilité du processus.
+Pour finir cette série, je préfère regarder ce que nous avons réellement mesuré, et ce qu’il nous manque encore.
 
-Et il y a une petite surprise : le coût des runners n'est pas nécessairement le KPI le plus intéressant.
+## Nous avions une photographie de départ
 
-## Les mesures dont nous disposons réellement
+Avant de retirer les workflows historiques, nous avons collecté leur activité sur un repository applicatif.
 
-Nous avons d'abord audité l'activité d'un repository applicatif, sans publier son nom.
+La fenêtre d’audit allait du 7 au 25 septembre 2026. Elle contenait **561 exécutions de workflows, 635 jobs et 2 964 minutes de durée cumulée des jobs**.
 
-Sur une fenêtre du 7 au 25 septembre 2026, la collecte recensait **561 exécutions de workflows, 635 jobs et 2 964 minutes de durée agrégée des jobs**.
+C’est un premier ordre de grandeur utile. On voit les jobs récurrents, les déclenchements en double, les exécutions annulées, la préparation des outils et les validations réellement exécutées.
 
-Ce n'est pas une facture mensuelle. La fenêtre n'est pas un cycle de facturation complet, les workflows n'ont pas tous le même rôle et les durées agrégées ne sont pas automatiquement des minutes facturées après arrondi et déduction des quotas.
+Mais 2 964 minutes de jobs ne veulent pas dire 2 964 minutes facturées. La période ne correspond pas à un mois entier, les runners peuvent avoir des tarifs différents et GitHub applique ses propres règles de facturation.
 
-En revanche, c'était une bonne photographie pour identifier ce qui tournait, à quelle fréquence et pourquoi.
+Il aurait été assez facile de multiplier ce nombre par un tarif et d’annoncer une économie. Ça aurait surtout donné un chiffre incorrect.
 
-Nous avons également comparé une commande représentative de tests unitaires Go.
+## Le benchmark intéressant était beaucoup plus petit
 
-| Mesure | Temps observé | Ce que le chiffre représente |
-| --- | ---: | --- |
-| CI historique | 6 min 10 s en moyenne ; p95 à 9 min 48 s | Job complet sur GitHub Actions, sur la fenêtre d'audit |
-| Runner GitHub simplifié, froid | 4 min 32 s | Exécution dédiée à la comparaison |
-| Runner GitHub simplifié, chaud | 1 min 36 s | Même parcours, cache réutilisé |
-| Test local, froid | 121,25 s | Exécution locale de la commande de tests |
-| Test local, chaud | 38,63 s | Même commande avec cache de compilation réutilisé |
+Nous avons isolé une commande de tests Go représentative et comparé plusieurs exécutions.
 
-La différence est intéressante. Mais je ne vais pas annoncer « la CI est 2,5 fois plus rapide » sur cette base.
+| Exécution | Mesure |
+| --- | ---: |
+| Ancien job GitHub Actions complet | 6 min 10 s en moyenne, p95 à 9 min 48 s |
+| Runner GitHub simplifié, cache froid | 4 min 32 s |
+| Runner GitHub simplifié, cache chaud | 1 min 36 s |
+| Commande locale, cache froid | 121,25 s |
+| Commande locale, cache chaud | 38,63 s |
 
-Les deux exécutions simplifiées ont été conçues pour comparer la même commande métier, mais leurs enveloppes ne sont pas strictement équivalentes : le job GitHub comprend ses étapes de démarrage et l'état des caches diffère, notamment pour les modules Go.
+Ces valeurs viennent de notre audit et des essais ciblés du 2 octobre 2026.
 
-La seule affirmation solide est plus modeste : **sur cette expérience, le feedback local chaud de la commande choisie est arrivé en moins de 40 secondes**. Ce n'est pas encore le temps de validation complet d'une PR.
+Il faut faire attention à ce qu’on lit. La moyenne historique porte sur le job entier, avec ses préparations et d’autres vérifications. Les essais simplifiés visaient la même commande métier, mais l’environnement, le démarrage et les caches n’étaient pas identiques.
 
-## Les dollars : partir de la facture, pas des impressions
+**Ce que je retiens, c’est que la commande choisie donnait un résultat local à chaud en moins de quarante secondes.** Ce n’est pas le temps complet de validation d’une PR, ni une preuve que tous les changements se valident à cette vitesse.
 
-Au moment de la rédaction, la grille publique GitHub indique **0,006 USD par minute pour un runner standard Linux x64 à deux cœurs** et **0,062 USD par minute pour un runner macOS standard**. Les prix, les tailles et les règles de facturation doivent être revérifiés avant publication et comparés à la facture réelle de l'organisation.
+Sur le poste, ces quelques secondes changent quand même la manière d’itérer. On corrige pendant que le contexte est encore frais, plutôt que de revenir sur un problème après un cycle distant.
 
-GitHub arrondit notamment le temps consommé **par job** à la minute supérieure. Sur les repositories privés, le montant effectivement facturé dépend également des minutes incluses dans le plan et de l'ensemble des autres usages de l'organisation.
+Mais je veux une mesure de ce comportement sur plusieurs semaines avant d’en tirer une conclusion générale.
 
-Autrement dit, cette formule est utile pour simuler une consommation brute, pas pour deviner une facture :
+## Et en dollars, ça donne quoi ?
 
-~~~text
-Coût brut estimé
-  = somme, par classe de runner, des minutes facturables
-    multipliées par le tarif applicable
+C’est là que le sujet devient amusant.
 
-Coût réellement facturé
-  = coût brut ajusté des minutes incluses,
-    du plan, des règles de facturation
-    et des autres postes de consommation
-~~~
+Au 8 octobre 2026, les tarifs publics de GitHub indiquent **0,006 USD par minute pour un runner Linux x64 standard à deux cœurs** et **0,062 USD pour un runner macOS standard**. GitHub arrondit la durée de chaque job à la minute supérieure. Il faut ensuite tenir compte des minutes incluses dans le plan, des autres usages et du stockage.
 
-Il faut aussi tenir compte des previews, des releases, des caches et du stockage d'artefacts. Déplacer les tests unitaires en local ne supprime pas les builds d'images.
+Un ordre de grandeur : cent PR qui économiseraient chacune dix minutes sur un runner Linux standard représentent **6 USD de consommation brute** avant quotas.
 
-Prenons un exemple fictif, volontairement simple.
+Ce n’est pas une économie observée chez nous. C’est simplement le tarif appliqué à une hypothèse facile à vérifier.
 
-| Hypothèse | Ancien modèle | Nouveau modèle |
-| --- | ---: | ---: |
-| PR par mois | 150 | 150 |
-| Minutes de runners Linux pour les validations PR | 15 / PR | 3 / PR |
-| Minutes Linux brutes | 2 250 | 450 |
-| Coût brut à 0,006 USD/min | 13,50 USD | 2,70 USD |
+Et, présenté comme ça, on comprend tout de suite que les runners Linux standard ne sont pas nécessairement le meilleur argument économique pour justifier des semaines de travail.
 
-*Scénario illustratif, pas une observation de nos factures et pas une estimation des dépenses totales.*
+Avec des runners plus coûteux, davantage de jobs ou des workflows qui reconstruisent sans cesse la même chose, la facture peut devenir plus significative. C’est le profil réel des exécutions qui décide, pas la démonstration sur une PR.
 
-Dans cet exemple, on économise 1 800 minutes de runners et **10,80 USD de coût brut de calcul**, avant quotas inclus.
+Le calcul sérieux doit partir de la consommation *facturable* par type de runner et de la facture GitHub avant et après, sans mélanger les tests PR avec les builds, les previews et les releases qui continuent de tourner.
 
-Ça peut sembler dérisoire lorsqu'on parle d'une transformation de la chaîne de développement.
+## Le temps développeur est plus difficile à mesurer
 
-Et justement : si quelqu'un me vendait ce projet uniquement avec cette économie, je lui demanderais pourquoi on passe autant de temps dessus.
+Une minute de CI économisée n’est pas automatiquement une minute de travail humain récupérée.
 
-Le calcul peut devenir très différent avec davantage de jobs, des runners macOS ou des machines plus importantes. Mais il faut le prouver avec le mix réel de jobs et les montants réellement facturés.
+Pendant qu’un job tourne, un développeur peut relire autre chose. Un agent peut continuer à travailler. À l’inverse, un échec qui arrive trop tard peut casser complètement une session de travail.
 
-## Ce qui coûte parfois davantage : l'attente humaine
+Ce que je voudrais mesurer, c’est le temps entre une modification et **le premier résultat exploitable**, puis la part de ce délai pendant laquelle quelqu’un attendait réellement.
 
-L'autre dimension est le temps de feedback.
+Je regarderais la médiane et le p90, pas le meilleur passage avec un cache chaud.
 
-Un agent peut continuer à produire du code pendant qu'un job tourne. Un développeur peut ouvrir un autre sujet. Donc **une minute de runner n'est pas une minute de développeur perdue**.
+J’aimerais aussi comparer le nombre de corrections qui partent en PR avec une erreur détectable localement. C’est un indicateur plus intéressant qu’un simple nombre de tests exécutés.
 
-Il faut mesurer les attentes qui bloquent réellement la suite du travail.
+Si les erreurs sont corrigées avant le push et que les PR arrivent plus souvent directement dans un état valide, on aura gagné quelque chose dans le flux de travail.
 
-Exemple purement hypothétique : 150 PR dans un mois, 3 minutes de feedback bloquant évitées par PR, dont seulement la moitié était effectivement du temps d'attente humain.
+Mais ce gain ne s’exprime pas automatiquement en euros de salaire économisés. Au mieux, on peut parler de capacité retrouvée, à condition de la mesurer sérieusement.
 
-~~~text
-150 PR × 3 min × 50 %
-    = 225 min de temps bloquant potentiellement évité
-    = 3 h 45
-~~~
+## Les indicateurs que je garderais
 
-À un coût de capacité illustratif de 80 USD par heure, cela représente **300 USD de capacité valorisée**, pas 300 USD de trésorerie économisée. Personne n'a diminué automatiquement la masse salariale parce qu'un test tourne sur un Mac.
+Je me limiterais à quelques chiffres que l’équipe peut réellement exploiter.
 
-Et cette estimation doit être ramenée au temps supplémentaire passé à maintenir l'environnement local, à résoudre les problèmes de hooks et à provisionner les postes.
+| Sujet | Mesure à suivre |
+| --- | --- |
+| Feedback | Médiane et p90 du délai entre changement et premier résultat exploitable |
+| Intégration | Délai entre ouverture de PR et état réellement mergeable |
+| GitHub Actions | Minutes facturées et coût par type de runner, séparés entre PR, preview et release |
+| Qualité | Contrôles requis exécutés par surface et échecs échappant à la validation locale |
+| Publisher | Statuts publiés sur le bon SHA, erreurs et délais de publication |
+| Onboarding | Temps nécessaire sur un Mac neuf pour produire une PR mergeable |
+| Friction | Relances, corrections après push et attentes bloquantes observées |
 
-C'est exactement pour cela que je préfère mesurer le blocage réel plutôt que le temps théorique d'un pipeline.
+Il faut également distinguer les types de changements. Une PR de documentation, une migration PostgreSQL et un changement Rust ne devraient pas avoir le même profil de validation.
 
-## Les KPI que je garderais
+Je n’agrégerais pas tout ça dans un score unique de « developer productivity ». On perdrait précisément les problèmes qu’on cherche à comprendre.
 
-Je ne construirais pas un tableau de bord avec cinquante métriques. Quelques indicateurs reliés à de vraies décisions suffisent.
+## La comparaison avant / après n’est pas encore terminée
 
-| Dimension | Indicateur | Pourquoi il compte |
-| --- | --- | --- |
-| Feedback | Médiane et p90 du changement au premier résultat exploitable | Vérifie que la boucle est devenue plus courte, pas seulement le meilleur cas |
-| Flow | Délai PR ouverte → prête au merge | Montre si les contrôles ralentissent encore l'intégration |
-| Friction | Relances et corrections par PR | Distingue les erreurs détectées tôt des validations qui se répètent |
-| Coûts | Minutes facturées par type de runner et par surface | Permet d'isoler les jobs déplacés des builds conservés |
-| Fiabilité | Taux de publication du statut sur le bon SHA | Détecte un publisher fragile ou une preuve périmée |
-| Couverture | Contrôles requis réellement exécutés par type de changement | Évite d'acheter de la vitesse au prix d'un trou de validation |
-| Onboarding | Temps d'un Mac neuf jusqu'à une PR réellement mergeable | Évalue le processus complet, pas seulement \`devenv shell\` |
-| Ressenti | Temps d'attente bloquant déclaré ou observé | Mesure la différence dans le travail quotidien |
+Nous avons une baseline et quelques benchmarks précis.
 
-Je regarderais ces KPI par cohortes : backend, frontend, migrations, changements transversaux, documentation. Une médiane globale peut cacher des régressions importantes sur les changements SQL ou Rust.
+Il nous manque une fenêtre post-cutover stabilisée, avec le même périmètre et la même définition des indicateurs. Je prendrais quatre semaines comparables avant et après, en séparant les builds et les tests, puis je vérifierais que le volume et la nature des PR n’ont pas trop changé.
 
-Je garderais également les échecs de publication séparés des échecs de tests. Ce sont deux problèmes opérationnels différents.
+Il faudrait aussi suivre le temps passé à entretenir les environnements locaux. Un Mac qui compile localement consomme des ressources. Les caches prennent de la place, PostgreSQL peut gêner un autre service et l’onboarding demande du support.
 
-## Comment je comparerais avant et après
+La facture GitHub ne raconte pas cette partie-là.
 
-Je prendrais deux périodes comparables, par exemple quatre semaines avant et quatre semaines après la fin effective du cutover.
+Enfin, je garderais un œil sur les échecs de publication du statut. Une validation rapide qui bloque régulièrement les merges parce que la GitHub App ne publie pas correctement n’a pas amélioré l’expérience.
 
-Je figerais la définition des indicateurs au préalable, en distinguant les jobs PR, les previews, les releases et les benchmarks lancés manuellement.
+## Ce que j’en retiens pour le moment
 
-Puis je calculerais :
+Nous avons démontré qu’une partie des contrôles pouvait revenir sur le poste avec un feedback plus court sur les scénarios mesurés.
 
-~~~text
-Variation des minutes GitHub
-  = (minutes après - minutes avant)
-    / minutes avant
+Nous avons aussi réduit la dépendance aux workflows distants pour des vérifications répétitives, tout en gardant GitHub comme point de décision avant le merge.
 
-Variation du délai de feedback
-  = (p50 ou p90 après - p50 ou p90 avant)
-    / valeur avant
+Il reste à consolider les résultats à l’échelle d’un cycle complet et à terminer les cas limites du publisher. Je ne vais donc pas annoncer un ROI global ni une économie mensuelle définitive.
 
-Taux de publication correct
-  = statuts publiés sur le SHA attendu
-    / validations PR-ready publiables
-~~~
+Le plus intéressant, pour moi, est ailleurs : nous avons commencé par vouloir accélérer une boucle de validation et nous avons fini par relier le provisioning du poste, l’environnement projet, le commit testé et sa décision d’intégration.
 
-Il faudrait aussi noter les facteurs de confusion : volume de PR, taille des changements, nombre de développeurs, évolution de la suite de tests, proportion de cache chaud et éventuels incidents GitHub.
+C’est assez proche de ce que je cherchais déjà en [versionnant nos postes de travail comme du logiciel](/thinking/2026-10-24-versionner-postes-semver-nix/).
 
-Un changement de méthode ne doit pas être crédité d'une amélioration provoquée par un repository devenu temporairement plus calme.
+Et si la prochaine mesure montre que certaines validations doivent retourner sur un runner distant, ce ne sera pas un échec. On saura au moins pourquoi on les exécute là-bas.
 
-## Trois garde-fous avant d'annoncer un résultat
-
-Premièrement, le coût local existe. Batterie, CPU, disque, cache, charge sur les Mac, maintenance des environnements et support d'onboarding sont des ressources réelles, même si GitHub ne les facture pas.
-
-Deuxièmement, le résultat de qualité ne doit pas se dégrader. Si les tests deviennent plus rapides parce qu'on en exécute moins que prévu, on n'a rien optimisé.
-
-Troisièmement, le modèle de confiance reste explicite. Un statut GitHub App publié depuis un laptop n'est pas une attestation d'exécution indépendante.
-
-La mesure doit donc couvrir le **temps, le coût et le niveau de garantie**, pas uniquement les lignes de facture.
-
-## Mon bilan à ce stade
-
-Nous avons des éléments mesurés, et ils montrent qu'une partie du feedback peut effectivement être rapprochée du développement.
-
-Nous avons aussi identifié des difficultés réelles : provisionnement des credentials sur les nouveaux postes, publication après push, contrôle des surfaces affectées et nécessité de comparer les suites avant d'éteindre l'ancienne CI.
-
-En revanche, je n'ai pas encore un bilan post-cutover consolidé qui permettrait d'affirmer un ROI global ou un pourcentage d'économie mensuelle observé.
-
-Je préfère l'écrire ainsi. Le bon indicateur, ce n'est pas le pourcentage le plus spectaculaire. C'est celui qu'on pourra retrouver dans les logs, la facture et le quotidien de l'équipe.
-
-Et le point de départ reste [la même réflexion que pour nos postes versionnés](/thinking/2026-10-24-versionner-postes-semver-nix/) : savoir ce qu'on a réellement déployé, exécuté et observé, plutôt que se satisfaire d'une configuration qui semble correcte.
-
-## Sources
+## Sources officielles
 
 - [GitHub : prix des runners Actions](https://docs.github.com/en/billing/reference/actions-runner-pricing)
-- [GitHub : fonctionnement de la facturation Actions](https://docs.github.com/en/billing/concepts/product-billing/github-actions)
-- [GitHub : visualisation de l'utilisation Actions](https://docs.github.com/en/billing/how-tos/products/view-productlicense-use)
+- [GitHub : facturation GitHub Actions](https://docs.github.com/en/billing/concepts/product-billing/github-actions)
