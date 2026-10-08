@@ -1,7 +1,7 @@
 ---
 title: "Je versionne mes postes de travail comme du logiciel"
 description: "Un poste ne devrait pas être simplement « sur la dernière config Git ». Je traite maintenant la workstation comme un artefact versionné : registry privé, SemVer, provenance, closures Nix et rollback."
-pubDate: 2026-10-24T07:30:00.000Z
+pubDate: 2026-10-28T07:30:00.000Z
 language: fr
 contentType: architecture-decision
 pillar: software-supply-chain
@@ -20,9 +20,9 @@ draft: false
 relatedProjects: []
 relatedArticles:
   - 2026-10-03-provisioning-mac-pas-probleme-mdm
-  - 2026-10-10-apple-business-entra-identite-workstation
-  - 2026-10-17-pourquoi-app-macos-swiftui-provisioning
-  - 2026-10-31-ce-qui-casse-provisioning-macos
+  - 2026-10-14-apple-business-entra-identite-workstation
+  - 2026-10-21-pourquoi-app-macos-swiftui-provisioning
+  - 2026-11-04-ce-qui-casse-provisioning-macos
 ---
 
 > Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 4/5. Le début : [pourquoi j’ai arrêté de traiter le provisioning Mac comme un problème MDM](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/). La suite arrive la semaine prochaine.

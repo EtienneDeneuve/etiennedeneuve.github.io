@@ -1,7 +1,7 @@
 ---
 title: "Apple Business pour enrôler, Entra pour décider quel poste construire"
 description: "Je ne voulais ni mapper des adresses mail à des profils dans un script, ni demander à l’utilisateur quel poste il voulait. J’ai utilisé Entra et des App Roles pour faire de l’identité une entrée du provisioning."
-pubDate: 2026-10-10T07:30:00.000Z
+pubDate: 2026-10-14T07:30:00.000Z
 language: fr
 contentType: architecture-decision
 pillar: platform-engineering
@@ -20,9 +20,9 @@ draft: false
 relatedProjects: []
 relatedArticles:
   - 2026-10-03-provisioning-mac-pas-probleme-mdm
-  - 2026-10-17-pourquoi-app-macos-swiftui-provisioning
-  - 2026-10-24-versionner-postes-semver-nix
-  - 2026-10-31-ce-qui-casse-provisioning-macos
+  - 2026-10-21-pourquoi-app-macos-swiftui-provisioning
+  - 2026-10-28-versionner-postes-semver-nix
+  - 2026-11-04-ce-qui-casse-provisioning-macos
 ---
 
 > Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 2/5. Le début : [pourquoi j’ai arrêté de traiter le provisioning Mac comme un problème MDM](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/). La suite arrive la semaine prochaine.
