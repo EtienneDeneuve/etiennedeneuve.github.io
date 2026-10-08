@@ -40,7 +40,7 @@ Pour finir cette série, je préfère regarder ce que nous avons réellement mes
 
 ## Nous avions une photographie de départ
 
-Avant de retirer les workflows historiques, nous avons collecté leur activité sur un repository applicatif.
+Avant de retirer les workflows historiques, nous avons collecté l’activité d’un de nos projets internes, celui sur lequel nous avons déployé cette approche en premier.
 
 La fenêtre d’audit allait du 7 au 25 septembre 2026. Elle contenait **561 exécutions de workflows, 635 jobs et 2 964 minutes de durée cumulée des jobs**.
 
@@ -136,11 +136,13 @@ Enfin, je garderais un œil sur les échecs de publication du statut. Une valida
 
 ## Ce que j’en retiens pour le moment
 
-Nous avons démontré qu’une partie des contrôles pouvait revenir sur le poste avec un feedback plus court sur les scénarios mesurés.
+Sur ce premier projet, nous avons démontré qu’une partie des contrôles pouvait revenir sur le poste avec un feedback plus court sur les scénarios mesurés.
 
 Nous avons aussi réduit la dépendance aux workflows distants pour des vérifications répétitives, tout en gardant GitHub comme point de décision avant le merge.
 
-Il reste à consolider les résultats à l’échelle d’un cycle complet et à terminer les cas limites du publisher. Je ne vais donc pas annoncer un ROI global ni une économie mensuelle définitive.
+Il reste à consolider les résultats à l’échelle d’un cycle complet et à terminer les cas limites du publisher. Et surtout, nous n’avons pas encore déployé le modèle sur tous nos repositories : c’est la suite du chantier, pas un résultat que l’on peut déjà chiffrer.
+
+Je ne vais donc pas annoncer un ROI global ni une économie mensuelle définitive.
 
 Le plus intéressant, pour moi, est ailleurs : nous avons commencé par vouloir accélérer une boucle de validation et nous avons fini par relier le provisioning du poste, l’environnement projet, le commit testé et sa décision d’intégration.
 
