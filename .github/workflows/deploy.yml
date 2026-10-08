@@ -5,7 +5,8 @@ on:
   push:
     branches: ["master", "main"]
   schedule:
-    # Rebuild every Saturday after the 07:30 UTC scheduled article release.
+    # Rebuild after scheduled Friday CI and Saturday workstation articles (07:30 UTC).
+    - cron: "0 8 * * 5"
     - cron: "0 8 * * 6"
   workflow_dispatch:
 
