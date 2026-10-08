@@ -199,4 +199,4 @@ Et le point de départ reste [la même réflexion que pour nos postes versionné
 
 - [GitHub : prix des runners Actions](https://docs.github.com/en/billing/reference/actions-runner-pricing)
 - [GitHub : fonctionnement de la facturation Actions](https://docs.github.com/en/billing/concepts/product-billing/github-actions)
-- [GitHub : visualisation de l'utilisation Actions](https://docs.github.com/en/billing/managing-billing-for-your-products/managing-billing-for-github-actions/viewing-your-github-actions-usage)
+- [GitHub : visualisation de l'utilisation Actions](https://docs.github.com/en/billing/how-tos/products/view-productlicense-use)
