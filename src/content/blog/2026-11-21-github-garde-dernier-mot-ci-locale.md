@@ -54,7 +54,7 @@ Après un amend ou un rebase, le SHA change. Le résultat précédent ne convien
 
 Nous avons utilisé une GitHub App pour publier un commit status et un ruleset qui exige ce contexte.
 
-Sur une PR réelle, on voit les deux contrôles locaux marqués `Required`, avec un statut vert sur le commit exact. GitHub affiche ensuite le bouton de merge. Pas besoin de montrer le script du publisher pour expliquer ce qui se passe.
+Sur une PR de notre projet interne pilote, on voit les deux contrôles locaux marqués `Required`, avec un statut vert sur le commit exact. GitHub affiche ensuite le bouton de merge. C’est ce fonctionnement que nous voulons retrouver, à terme, sur l’ensemble de nos repositories. Pas besoin de montrer le script du publisher pour expliquer ce qui se passe.
 
 <!-- IMAGE À INTÉGRER APRÈS IMPORT DES ASSETS ANONYMISÉS :
      Fichier préparé : ci-required-checks-anonymized.webp
@@ -109,7 +109,7 @@ Pour une équipe dont le modèle de menace impose de résister à un contributeu
 
 Ce choix a donc ses limites. Il me convient davantage qu’une architecture qui promettrait du « zero trust » tout en donnant une clé de publication à chaque laptop sans en parler.
 
-À la fin, ce que nous voulions est assez précis : garder le confort des tests locaux, conserver la discipline du merge et savoir où la confiance s’arrête.
+Sur ce premier projet, nous avons pu faire fonctionner cette séparation entre validation locale et décision GitHub. Il reste à l’adapter aux autres dépôts, avec leurs exigences de sécurité et leurs contrôles propres. Le déploiement à l’échelle de nos repositories est encore devant nous.
 
 Il restait encore à éviter de lancer toute la suite sur chaque changement. C’est le sujet du quatrième article.
 
