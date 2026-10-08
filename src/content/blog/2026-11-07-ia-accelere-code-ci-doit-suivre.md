@@ -1,6 +1,6 @@
 ---
-title: "L’IA écrit plus vite. Notre CI devait suivre."
-description: "Le changement de rythme apporté par Cursor nous a amenés à revoir nos contrôles sans renoncer à la gouvernance."
+title: "L'IA écrit plus vite. Notre CI devait suivre."
+description: "L'accélération du développement assisté par IA nous a amenés à déplacer des validations sur les postes, sans abandonner la gouvernance GitHub."
 pubDate: 2026-11-07T07:30:00.000Z
 language: fr
 contentType: architecture-decision
@@ -10,10 +10,10 @@ audience:
   - engineering-leads
   - engineers
 tags:
-  - CI/CD
   - AI Engineering
+  - CI/CD
   - Platform Engineering
-  - devenv
+  - Developer Experience
   - GitHub
 featured: false
 draft: true
@@ -23,57 +23,94 @@ relatedArticles:
   - 2026-11-21-github-garde-dernier-mot-ci-locale
   - 2026-11-28-tester-changement-sans-tout-relancer
   - 2026-12-05-retour-experience-ci-locale-ia
+  - 2026-12-12-mesurer-impact-ci-locale
   - 2026-10-03-provisioning-mac-pas-probleme-mdm
   - 2026-10-24-versionner-postes-semver-nix
 ---
 
-> Série **Quand l’IA accélère le code, la CI doit suivre**, 1/5. Un retour d’expérience sur notre façon de valider le code assisté par IA.
+> Série **Quand l'IA accélère le code, la CI doit suivre**, 1/6. Un retour d'expérience sur notre manière de rapprocher les vérifications du développement, quel que soit l'agent utilisé.
 
-J’ai commencé à utiliser Cursor pour une tâche, puis deux, puis des changements de plus en plus larges. Le code arrive plus vite. Ça ne veut pas dire qu’il est meilleur. Ça veut dire qu’on peut produire en quelques minutes ce qu’on écrivait auparavant en beaucoup plus longtemps.
+J'ai commencé à voir le problème lorsque les agents de développement ont changé notre manière d'itérer.
 
-Et je me suis posé une question assez simple : **est-ce que notre manière de valider les changements suit encore ?**
+Avant, entre deux changements un peu conséquents, il se passait naturellement du temps. On écrivait, on relisait, on corrigeait, puis on poussait. Avec un agent capable de modifier un backend, son frontend et quelques tests dans la même séquence, cette cadence n'a plus beaucoup de sens.
 
-## Le goulot s’était déplacé
+Je ne dis pas que le code est meilleur. Je dis qu'il arrive plus vite.
 
-Notre CI historique fonctionnait. GitHub Actions lançait les tests, reconstruisait l’environnement, faisait tourner PostgreSQL et les contrôles statiques. Sauf que, lorsque les agents commencent à itérer rapidement, la boucle devient assez étrange : modifier le code, pousser, attendre qu’un runner démarre, regarder une erreur qu’on aurait pu détecter sur le Mac, recommencer.
+Et à un moment je me suis demandé : **si la production de code accélère autant, pourquoi attendons-nous toujours la fin du push pour apprendre qu'un typecheck ne passe pas ?**
 
-Ce n’est pas un reproche à GitHub Actions. Nous lui demandions de faire à distance ce que notre environnement de développement savait déjà faire.
+## Ce n'était pas vraiment un problème de GitHub Actions
 
-Le coût des runners était un signal supplémentaire, pas le point de départ de la réflexion. Mon problème était de maintenir des contrôles systématiques alors que le rythme des modifications accélérait.
+Notre CI distante faisait son travail. Elle installait les outils, exécutait les tests, démarrait PostgreSQL, vérifiait les migrations. Le problème venait plutôt de l'endroit où nous avions placé ces vérifications.
 
-## Un agent IA n’a pas de passe-droit
+Imaginons une modification très banale. Un agent modifie une API et son consommateur frontend. On pousse. Le runner démarre, restaure ses caches, prépare le projet, puis découvre une erreur TypeScript. On revient dans l'éditeur, on corrige et on recommence.
 
-Un agent peut écrire des tests. Il peut aussi oublier un scénario, exécuter uniquement la partie confortable et annoncer que tout est terminé.
+Rien d'anormal dans ce scénario. Sauf que nous avions déjà la même toolchain sur le poste de développement.
 
-Je ne veux donc pas que la qualité dépende de la qualité du prompt. Les règles doivent vivre dans le repository, hors de la conversation avec l’agent.
+À partir de là, chaque aller-retour distant pour une erreur reproductible localement m'a semblé de moins en moins pertinent.
 
-Même code, mêmes commandes, mêmes conditions d’intégration, que la modification vienne d’un développeur ou de Cursor.
+Le coût des runners a rendu la situation visible. Mais je ne voulais pas construire une architecture simplement pour économiser quelques dollars. Je voulais **réduire le temps entre un changement et un résultat de validation fiable**.
 
-## Nous avions déjà préparé le terrain
+## Les agents ont accéléré une tension qui existait déjà
 
-J’ai raconté dans [ma série sur le provisioning Mac](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/) pourquoi nous avions séparé Apple Business, Entra et Nix.
+Le problème ne dépend pas de l'assistant utilisé. Qu'il s'agisse d'un agent intégré à l'éditeur, d'un outil en ligne de commande ou d'un système qui prépare des branches de manière autonome, la question reste identique.
 
-À partir du moment où le poste est reproductible, pourquoi reconstruire une seconde toolchain complète à chaque push ? Nous avons conservé une plateforme de développement versionnée et rapproché les validations de celui qui produit le changement.
+Quel contrat doit respecter le code avant d'être proposé à l'intégration ?
+
+Je ne veux pas que ce contrat soit caché dans un prompt. Un agent peut oublier une consigne. Il peut décider qu'un test semble inutile. Il peut même annoncer une tâche terminée parce qu'une petite sous-partie de la suite est verte.
+
+Un humain peut faire exactement les mêmes erreurs, d'ailleurs.
+
+Nous avons donc cherché à rendre la validation indépendante de celui qui produit le changement. Les commandes et les conditions de réussite appartiennent au repository. L'agent n'a pas une CI simplifiée ; le développeur n'a pas un parcours parallèle.
+
+L'IA change la vitesse de production. Elle ne change pas la définition d'un résultat acceptable.
+
+## Nous avions déjà un avantage : les postes étaient traités comme une plateforme
+
+Dans une [première série, j'expliquais pourquoi j'avais arrêté de traiter le provisioning Mac comme un simple problème MDM](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/).
+
+Le découpage était assez clair : Apple Business pour prendre en charge le poste et imposer les prérequis, Entra pour l'identité et les droits, Nix pour construire l'environnement attendu.
+
+J'avais aussi commencé à [versionner les configurations des postes comme du logiciel](/thinking/2026-10-24-versionner-postes-semver-nix/), plutôt que de me contenter d'un ensemble de packages installés à un instant donné.
+
+Ce travail n'avait pas été fait pour la CI. Mais il nous donnait déjà une base : des outils versionnés, des environnements reproductibles et une façon cohérente d'installer ce dont un repository a besoin.
+
+Je me suis donc posé la question inverse de celle qu'on pose habituellement : pourquoi faudrait-il reconstruire systématiquement à distance ce que le poste sait déjà exécuter ?
+
+## Nous avons séparé trois responsabilités
+
+La cible tient en trois étapes.
 
 ~~~mermaid
 flowchart LR
-    A[Developpeur ou agent] --> B[Checks locaux]
-    B --> C[Preuve exact-SHA]
-    C --> D[GitHub ruleset]
-    D --> E[Merge]
+    A[Code humain ou agent] --> B[Validation locale]
+    B --> C[Statut du commit]
+    C --> D[Politique de merge GitHub]
+    D --> E[Build et livraison]
 ~~~
 
-## Ce que je ne prétends pas
+Le poste exécute les contrôles qui peuvent être reproduits localement. Une preuve structurée rattache le résultat au commit exact. GitHub conserve le pouvoir de refuser le merge si le statut attendu manque ou échoue.
 
-Une validation locale n’est pas une attestation indépendante. Un développeur qui maîtrise entièrement son poste peut potentiellement produire un résultat trompeur. Si le modèle de menace exige une vérification hors du poste, il faut conserver un contrôle distant.
+Les builds d'artefacts et les contrôles qui ont besoin d'une exécution indépendante ne disparaissent pas. Ils ne répondent simplement pas à la même question.
 
-L’objectif était d’accélérer le feedback et de rendre les contrôles difficiles à oublier, pas d’inventer une nouvelle garantie cryptographique.
+J'aime bien ce découpage parce qu'il évite de confondre la vitesse du feedback avec l'autorisation d'intégrer un changement.
+
+## Ce qu'il serait dangereux de conclure
+
+Il y a une limite importante : **un résultat local n'est pas une attestation indépendante**.
+
+Une toolchain reproductible permet de refaire le calcul. Un statut attaché à un SHA permet de désigner la révision. Mais si une personne contrôle son poste et l'identité qui publie le statut, ces mécanismes ne prouvent pas qu'elle a honnêtement exécuté les tests.
+
+Dans une organisation où le modèle de menace inclut un contributeur malveillant ou un poste compromis, je conserverais les contrôles indépendants nécessaires.
+
+Nous cherchions d'abord à rendre les vérifications systématiques dans notre boucle quotidienne, sans laisser la CI distante devenir le goulot de chaque itération.
+
+Ce n'est pas une révolution de GitHub Actions. C'est une décision sur **où exécuter quoi, et à qui faire confiance pour quel résultat**.
 
 ## Suite
 
-2/5 : nous avons déplacé la CI sur nos Mac, pas nos exigences.
+Dans le deuxième article, je rentre dans la mise en œuvre : Nix, devenv, hooks Git et PostgreSQL local. Et surtout, pourquoi nous avons volontairement évité de créer une nouvelle plateforme de CI à entretenir.
 
 ## Sources
 
-- [devenv](https://devenv.sh/)
-- [GitHub : rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets)
+- [devenv : documentation officielle](https://devenv.sh/)
+- [GitHub : comprendre les rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets)
