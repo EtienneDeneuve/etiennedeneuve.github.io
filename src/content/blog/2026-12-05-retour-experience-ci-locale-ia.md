@@ -48,7 +48,7 @@ Le problème n’était ni PostgreSQL, ni Go, ni un hook mal installé. Le publi
 
 C’est assez typique de ce genre de chantier : on pense avoir réglé l’environnement de développement, puis on découvre qu’il manque une pièce du parcours complet.
 
-Nous avons documenté la récupération de la clé depuis Azure Key Vault et son installation dans le Keychain. Mais demander à quelqu’un de suivre une série de commandes pour provisionner le publisher reste une dette d’onboarding.
+Nous avons documenté l’onboarding de l’identité de publication. Mais un poste neuf qui doit encore passer par une procédure manuelle pour pouvoir merger sa première PR, ce n’est pas terminé.
 
 À terme, je veux que ce parcours puisse être repris et diagnostiqué proprement, y compris lors d’une rotation de clé.
 
@@ -78,7 +78,7 @@ Je préfère qu’une publication échoue clairement et bloque le merge plutôt 
 
 ## La transition a aussi son coût
 
-Pendant un moment, nous avions à la fois la validation locale et les anciens workflows GitHub Actions.
+Pendant un moment, nous avions à la fois les validations locales et les anciens workflows GitHub Actions.
 
 C’est volontaire : pour retirer un job, je veux d’abord vérifier que son équivalent local couvre réellement les mêmes propriétés.
 
@@ -90,7 +90,7 @@ C’est beaucoup plus facile à corriger lorsque l’ancien job existe encore.
 
 En revanche, cette phase « en parallèle » ne doit pas devenir un état permanent. Sinon on paie les exécutions distantes tout en exécutant les mêmes validations sur les Macs.
 
-Nous avons donc retiré progressivement les jobs redondants, tout en conservant les workflows qui ont une utilité spécifique : builds, releases et contrôles distants nécessaires.
+Nous avons donc retiré progressivement les jobs redondants, tout en conservant ceux dont l’exécution distante apporte une vraie garantie. Le contrôle E2E, lui, est maintenant un statut requis sur les PR, exécuté localement lorsque le changement le nécessite.
 
 Je garde aussi une réserve sur la clôture du chantier : les derniers écarts du cutover, les scénarios du publisher et la mesure du résultat global doivent être validés avant d’afficher « terminé » partout.
 
