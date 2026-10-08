@@ -40,7 +40,9 @@ Je ne vais pas prétendre qu’un agent fait en dix minutes le travail de trois 
 
 ## On avait surtout mis trop de choses après le push
 
-Sur l’un de nos projets, nous avons un backend Go, du Vue, PostgreSQL, une partie Rust et plusieurs applications dans le même repository.
+C’est sur un de nos projets internes que nous avons mis ce modèle en place. Le repository mélange du Go, du Vue, PostgreSQL, une partie Rust et plusieurs applications : suffisamment de cas différents pour ne pas se contenter d’un POC sur trois fichiers.
+
+Pour le moment, ce fonctionnement est déployé sur ce projet-là. Nous avons bien l’intention de le généraliser progressivement à l’ensemble de nos repositories, mais ce n’est pas encore fait. Il faudra reprendre les contrôles de chacun, pas simplement copier des hooks d’un dépôt à l’autre.
 
 Les workflows GitHub Actions vérifiaient les bonnes choses : tests unitaires, intégration, typecheck, migrations, contrôles Rust. Mais chaque suite embarquait aussi une partie de la préparation de l’environnement, avec son téléchargement d’outils et ses caches.
 
