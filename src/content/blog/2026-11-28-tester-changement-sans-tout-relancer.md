@@ -32,7 +32,7 @@ relatedArticles:
 
 Une fois la CI en local, nous avons retrouvé un problème qu’on connaissait déjà avec les runners : il suffit d’un petit changement pour relancer beaucoup trop de choses.
 
-Sur un repository qui contient du Go, du Vue, PostgreSQL et une partie Rust, tout vérifier après chaque modification peut devenir assez pénible.
+Sur le projet interne où nous avons commencé, le repository contient du Go, du Vue, PostgreSQL et une partie Rust. Tout vérifier après chaque modification peut devenir assez pénible.
 
 Mais si on commence à supprimer des tests un peu au hasard pour gagner du temps, on a raté l’objectif initial.
 
@@ -148,6 +148,8 @@ Nous aurions pu ajouter une ferme de runners, un système de cache partagé et u
 Il y a des contextes où ce serait pertinent. Ici, nous avions déjà Nix, devenv, des scripts versionnés et GitHub pour le merge.
 
 J’avais surtout envie de garder quelque chose qu’un développeur puisse comprendre en lisant quelques fichiers du repository.
+
+À terme, nous voulons appliquer la même logique à tous nos dépôts. Le principe se réutilise ; la carte des dépendances et les contrôles, eux, devront être reconstruits pour chacun. C’est une des raisons pour lesquelles je préfère un contrat lisible à un énorme orchestrateur opaque.
 
 La sélection des tests devient alors un contrat dont on peut discuter et vérifier les exceptions. Et quand elle n’est pas sûre, elle doit pouvoir lancer davantage de contrôles.
 
