@@ -30,7 +30,7 @@ relatedArticles:
 
 > Série **Quand l’IA accélère le code, la CI doit suivre**, 5/6. Le début : [pourquoi nous avons commencé à déplacer les validations](/thinking/2026-11-07-ia-accelere-code-ci-doit-suivre/).
 
-Le schéma était assez propre.
+Sur le projet interne qui nous a servi de premier terrain d’essai, le schéma était assez propre.
 
 Un Mac préparé avec Nix, devenv pour l’environnement du projet, quelques scripts de validation, un résultat attaché au SHA et GitHub qui continue de décider du merge.
 
@@ -124,7 +124,9 @@ On retrouve un peu le même problème ici : nous voulons savoir quel commit a é
 
 L’accélération liée aux agents IA rend ces questions plus fréquentes. Elle n’a pas changé leur nature.
 
-Il me reste une question importante : est-ce que la nouvelle façon de travailler apporte un bénéfice mesurable au-delà du confort dans le terminal ?
+Nous voulons maintenant étendre ce fonctionnement à l’ensemble de nos repositories, mais il reste du travail : certains dépôts n’ont pas les mêmes suites, les mêmes langages ni les mêmes exigences de publication. Je ne vais pas raconter qu’on a déjà déployé une CI locale homogène partout.
+
+Il me reste aussi une question importante : est-ce que la nouvelle façon de travailler apporte un bénéfice mesurable au-delà du confort dans le terminal ?
 
 J’ai gardé ça pour le dernier article. Avec les chiffres qu’on a, ceux qui nous manquent et les comparaisons que je refuse de faire.
 
