@@ -28,129 +28,124 @@ relatedArticles:
   - 2026-10-24-versionner-postes-semver-nix
 ---
 
-> Série **Quand l'IA accélère le code, la CI doit suivre**, 4/6. Le début : [l'IA écrit plus vite, notre CI devait suivre](/thinking/2026-11-07-ia-accelere-code-ci-doit-suivre/).
+> Série **Quand l’IA accélère le code, la CI doit suivre**, 4/6. Le début : [pourquoi nous avons commencé à déplacer les validations](/thinking/2026-11-07-ia-accelere-code-ci-doit-suivre/).
 
-Nous avions un premier résultat intéressant : la validation se lançait sur nos postes et GitHub conservait son rôle de gate de merge.
+Une fois la CI en local, nous avons retrouvé un problème qu’on connaissait déjà avec les runners : il suffit d’un petit changement pour relancer beaucoup trop de choses.
 
-Mais un problème assez prévisible est apparu : déplacer les tests en local ne sert pas à grand-chose si chaque modification déclenche une heure de calcul.
+Sur un repository qui contient du Go, du Vue, PostgreSQL et une partie Rust, tout vérifier après chaque modification peut devenir assez pénible.
 
-Et avec des agents IA qui modifient rapidement plusieurs parties du code, le risque est même d'empirer l'expérience développeur.
+Mais si on commence à supprimer des tests un peu au hasard pour gagner du temps, on a raté l’objectif initial.
 
-Je voulais donc **faire moins de calcul inutile, sans tester moins de choses importantes**.
+## Un changement dans un dossier ne concerne pas forcément ce dossier
 
-Ce n'est pas exactement la même demande.
+La première idée est évidente : on regarde les fichiers modifiés et on choisit la suite correspondante.
 
-## Le piège du filtre par répertoire
+\`apps/backend/\` déclenche les tests Go. \`apps/frontend/\` déclenche les tests frontend. Le code Rust déclenche Clippy et les tests natifs.
 
-Au début, c'est tentant d'écrire quelques conditions Bash.
+Ça marche pour les cas simples.
 
-Si le diff touche le backend, exécuter Go. Si le diff touche le frontend, lancer le typecheck. Si le diff touche le module Rust, exécuter sa suite.
+Puis une modification arrive dans une bibliothèque partagée. Ou dans une migration PostgreSQL utilisée par deux applications. Ou dans le script qui détermine lui-même les tests à lancer.
 
-Pour des changements isolés, ça fonctionne.
+Avec un filtrage uniquement basé sur les répertoires, tout ça peut passer entre les mailles.
 
-Sauf qu'un monorepo contient aussi des dépendances transversales. Une bibliothèque Go partagée peut être utilisée par plusieurs applications. Une migration PostgreSQL peut changer le comportement d'un service dont aucun fichier n'a été modifié. Une évolution du script qui sélectionne les tests doit pouvoir déclencher ses propres vérifications.
+J’ai donc préféré raisonner à partir des consommateurs du changement. Si un contrat partagé bouge, il faut vérifier les applications qui en dépendent, même si leur code n’a pas changé.
 
-Une sélection de tests trop naïve donne une chose assez dangereuse : une validation verte qui ne signifie pas ce qu'on croit.
+Ça donne quelque chose de ce genre :
 
-## Partir des conséquences plutôt que des chemins
-
-Nous avons commencé à raisonner en surfaces affectées.
-
-Voici un exemple représentatif, volontairement simplifié.
-
-| Changement | Contrôles concernés |
+| Modification | Ce qu’on vérifie |
 | --- | --- |
-| Backend Go | Gardes statiques, tests unitaires, intégration si nécessaire |
-| Frontend | Typecheck, tests applicables, build de validation si utile |
-| Bibliothèque partagée | Toutes les surfaces consommatrices pertinentes |
-| Migrations PostgreSQL | DDL, replay, sqlc, compatibilité, intégration |
-| Module Rust | Format, Clippy, tests natifs |
-| Scripts CI ou toolchain | Contrat CI, tests de sélection et contrôles transversaux |
-| Documentation seule | Contrôles rapides, pas toute la suite métier |
+| Backend Go | Statique, unitaires, intégration concernée |
+| Vue / frontend | Typecheck et tests du frontend |
+| Bibliothèque partagée | Consommateurs concernés, même hors du dossier modifié |
+| SQL / migrations | Lint, replay, compatibilité, sqlc, intégration |
+| Rust | Format, Clippy, tests applicables |
+| Outillage CI | Tests du contrat CI et déclenchement conservateur |
+| Documentation seule | Contrôles rapides, pas de base PostgreSQL par principe |
 
-Le principe est simple : les fichiers modifiés constituent un signal d'entrée, pas une preuve d'indépendance.
+Ce tableau ne remplace évidemment pas les dépendances réelles du repository. C’est une manière de rendre les décisions lisibles.
 
-Pour les dépendances partagées, je préfère lancer un peu trop de tests plutôt que de déclarer un changement « sans impact » sur la base d'une mauvaise règle.
+## Le détail que j’avais sous-estimé : comparer avec quoi ?
 
-## Le merge-base est une vraie dépendance
+Il faut identifier le diff. Et c’est souvent là que les scripts « affected » deviennent moins simples qu’ils en ont l’air.
 
-Une implémentation affected-aware compare habituellement la branche à une référence.
+Si la PR contient cinq commits et qu’on compare uniquement \`HEAD\` à \`HEAD~1\`, on ne voit que le dernier.
 
-Mais il faut décider *laquelle*. Le dernier commit ? La branche de base ? Le merge-base entre la branche et son parent ?
+Ce qui m’intéresse, c’est le changement proposé à l’intégration. On travaille donc par rapport à la branche de base et au merge-base approprié.
 
-Sur une PR contenant six commits, comparer uniquement avec \`HEAD~1\` peut oublier les changements des cinq premiers. Un clone peu profond peut aussi ne pas avoir l'historique nécessaire pour trouver le merge-base.
-
-Il faut traiter explicitement ces cas. Si le point de comparaison manque, je préfère une validation plus large ou un échec explicite à un « rien n'a changé ».
-
-C'est moins élégant sur le terminal. C'est beaucoup plus sain pour la signification du résultat.
-
-## Les migrations ont forcé le modèle à devenir sérieux
-
-Notre backend utilise PostgreSQL et du code généré depuis les requêtes SQL.
-
-Faire passer un linter sur les migrations était loin d'être suffisant.
-
-Nous avons donc ajouté des contrôles qui répondent à plusieurs questions différentes.
-
-Est-ce que toutes les migrations se rejouent correctement sur une base vierge ? Le schéma obtenu correspond-il à celui que sqlc consomme ? Le code généré est-il toujours synchronisé ? Les anciennes migrations ont-elles été modifiées après leur intégration ?
-
-Et surtout : que se passe-t-il lorsqu'on applique la nouvelle migration sur une base déjà peuplée ?
-
-~~~text
-Base N-1 avec données représentatives
-    -> migrations candidates
-    -> assertions de schéma et de données
-    -> compatibilité du code ancien et nouveau
+~~~bash
+base="$(git merge-base origin/main HEAD)"
+git diff --name-only "$base" HEAD
 ~~~
 
-Un replay sur base vide peut réussir alors qu'une colonne \`NOT NULL\`, une contrainte ou un backfill casse en production.
+*Exemple de principe. Dans un vrai script, il faut gérer la branche cible et l’absence de merge-base.*
 
-Nous avons aussi dû penser aux rolling deployments. Une nouvelle version du code peut cohabiter quelques minutes avec la précédente. Si la migration rend immédiatement les anciens pods incompatibles, le problème ne vient pas de Kubernetes.
+Il faut notamment penser au checkout peu profond, à une branche de base pas à jour, ou à l’absence d’historique local. Si je ne sais pas calculer le diff correctement, je préfère échouer ou élargir les tests plutôt que de conclure que rien n’a changé.
 
-Ces tests ne sont pas tous déclenchés pour un changement de documentation, évidemment. Mais lorsqu'une migration change, ils deviennent des contrôles obligatoires.
+C’est un choix un peu moins confortable quand on regarde uniquement la durée des contrôles. Mais un statut vert produit par un diff incomplet n’a pas beaucoup d’intérêt.
 
-## Les contrôles ne sont pas forcément tous bloquants au même moment
+## PostgreSQL nous a obligés à aller plus loin
 
-Je distingue trois niveaux.
+C’est probablement la partie où nous avons passé le plus de temps à clarifier ce qu’on voulait vraiment tester.
 
-Le pre-commit donne un feedback très rapide. La validation PR-ready couvre ce qui doit être vérifié avant une intégration. Les tests de parcours complets, avec navigateur et services, appartiennent plutôt à un gate pré-release.
+Au début, on vérifiait déjà la syntaxe et certaines règles DDL. Mais une migration bien écrite n’est pas forcément une migration compatible avec le système en fonctionnement.
 
-La distinction évite de relancer Playwright et tous les scénarios bout en bout pour une correction d'import.
+Nous avons ajouté plusieurs vérifications : rejouer l’historique sur une base propre, vérifier le schéma réellement obtenu, contrôler sa cohérence avec les requêtes sqlc et empêcher la réécriture silencieuse de migrations déjà intégrées.
 
-Elle ne permet pas pour autant de qualifier un E2E comme « optionnel » : il est obligatoire au bon stade, avant la livraison de la version concernée.
+Puis il a fallu regarder l’upgrade sur données existantes.
 
-Je garde également les builds d'images et la publication des artefacts à part. Valider un commit et fabriquer un artefact de production sont deux propriétés distinctes.
+Un \`ADD COLUMN ... NOT NULL\` mal préparé peut casser sur une base peuplée alors qu’il ne pose aucun problème dans un test qui recrée tout depuis zéro. Même chose pour un backfill, une contrainte validée trop tôt ou un index créé au mauvais moment.
 
-## Tester la logique qui choisit les tests
+Nous avons commencé à tester cette situation avec des données synthétiques représentatives.
 
-Une fois qu'on a automatisé la sélection des suites, le sélecteur devient une pièce sensible.
+~~~text
+Base N-1 déjà peuplée
+  -> nouvelles migrations
+  -> vérification des contraintes et des données
+  -> requêtes des versions compatibles
+~~~
 
-Je veux pouvoir injecter des changements factices et vérifier les décisions attendues : une modification de migration déclenche les gardes DB ; une bibliothèque partagée couvre les consommateurs ; une documentation isolée ne démarre pas PostgreSQL ; un changement de script CI force une vérification plus large.
+Il reste un autre piège avec les rolling deployments : pendant le déploiement, l’ancien et le nouveau code peuvent servir des requêtes simultanément. On ne peut pas supposer que toutes les applications basculent à la même seconde.
 
-Ces tests peuvent être très simples. L'important est qu'ils existent et qu'ils échouent lorsqu'un nouveau chemin échappe à la cartographie.
+Ce n’est pas un sujet spécifique à la CI locale. Mais puisqu’on rapatriait ces vérifications, autant arrêter de se contenter d’un \`migrate up\` vert.
 
-Un autre garde-fou consiste à comparer temporairement la validation locale avec la CI historique avant de supprimer les jobs distants. Si les deux exécutent des suites différentes, leur résultat vert ne démontre pas l'équivalence.
+## Tout ne se valide pas au même moment
 
-C'est moins spectaculaire que d'annoncer « affected-aware ». Mais c'est ce qui permet d'en faire autre chose qu'un pari.
+Je ne voulais pas non plus transformer le pre-push en campagne E2E complète.
 
-## Pourquoi nous n'avons pas ajouté une nouvelle infrastructure CI
+Le pre-commit reste court. La validation PR-ready lance les contrôles pertinents pour l’intégration. Les parcours Godog et Playwright sont traités à l’étape pré-release, avec les services et le navigateur nécessaires.
 
-J'ai envisagé l'option classique : créer des runners dédiés, un cache distant, un ordonnanceur et un service qui distribue les tâches.
+Ce n’est pas un moyen d’ignorer les E2E. Si la release exige ces scénarios, elle ne part pas tant qu’ils ne sont pas passés.
 
-Ça peut avoir du sens à une autre échelle.
+Les images de production et les builds d’artefacts conservent eux aussi leurs propres contrôles. Un test local sur macOS ne remplace pas la vérification du contenu d’une image Linux.
 
-Mais notre objectif était précisément de réduire l'infrastructure à exploiter. Nous avions déjà Nix, devenv, des scripts versionnés et GitHub pour la politique de merge.
+## Il faut tester les règles de sélection elles-mêmes
 
-Je n'avais pas envie de gagner trois minutes sur un runner en échange d'une nouvelle plateforme à maintenir.
+La partie que je trouve la moins visible est peut-être la plus importante.
 
-## Suite
+Lorsqu’on ajoute un nouveau dossier ou une dépendance transversale, qui vérifie que le bon test sera choisi ?
 
-5/6 : **Ce que le déplacement de la CI nous a réellement appris.** On parlera des difficultés de déploiement, du poste neuf et de ce qui reste à fiabiliser.
+On peut écrire des tests très simples avec des listes de fichiers fictives. Une migration doit déclencher les contrôles DB. Une bibliothèque partagée doit toucher ses consommateurs. Un changement de documentation ne devrait pas démarrer PostgreSQL.
 
-Puis un sixième article regardera les résultats sous un autre angle : dollars, temps de feedback et expérience développeur, sans transformer des hypothèses en gains acquis.
+Et si on modifie un script CI, mieux vaut relancer une validation plus large plutôt que permettre au script de s’auto-déclarer sans impact.
 
-## Sources
+Pendant la migration, nous avons aussi comparé les suites locales avec les anciens jobs GitHub Actions. Ce n’était pas suffisant de voir deux statuts verts : il fallait regarder si les mêmes contrôles étaient réellement exécutés.
 
-- [PostgreSQL : documentation](https://www.postgresql.org/docs/current/)
-- [sqlc : documentation](https://docs.sqlc.dev/)
-- [Playwright : documentation](https://playwright.dev/)
+J’aurais préféré découvrir ce genre d’écart dans la revue du script plutôt qu’après avoir supprimé le workflow historique.
+
+## Pas besoin d’un nouveau contrôleur pour ça
+
+Nous aurions pu ajouter une ferme de runners, un système de cache partagé et un orchestrateur de tâches.
+
+Il y a des contextes où ce serait pertinent. Ici, nous avions déjà Nix, devenv, des scripts versionnés et GitHub pour le merge.
+
+J’avais surtout envie de garder quelque chose qu’un développeur puisse comprendre en lisant quelques fichiers du repository.
+
+La sélection des tests devient alors un contrat dont on peut discuter et vérifier les exceptions. Et quand elle n’est pas sûre, elle doit pouvoir lancer davantage de contrôles.
+
+Dans le prochain épisode, je reviens sur les détails qui ont compliqué le déploiement sur les postes, notamment le publisher GitHub. Le dernier article sera réservé aux mesures, parce qu’une validation plus agréable dans mon terminal ne suffit pas à prouver qu’on a réellement gagné du temps.
+
+## Sources officielles
+
+- [PostgreSQL](https://www.postgresql.org/docs/current/)
+- [sqlc](https://docs.sqlc.dev/)
+- [Playwright](https://playwright.dev/)
