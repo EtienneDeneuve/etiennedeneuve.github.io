@@ -28,49 +28,44 @@ relatedArticles:
   - 2026-10-24-versionner-postes-semver-nix
 ---
 
-> Série **Quand l'IA accélère le code, la CI doit suivre**, 2/6. Le début : [l'IA écrit plus vite, notre CI devait suivre](/thinking/2026-11-07-ia-accelere-code-ci-doit-suivre/).
+> Série **Quand l’IA accélère le code, la CI doit suivre**, 2/6. Le début : [pourquoi nous avons commencé à déplacer les validations](/thinking/2026-11-07-ia-accelere-code-ci-doit-suivre/).
 
-Dans le premier article, j'expliquais pourquoi l'accélération du développement assisté par IA nous avait amenés à déplacer une partie des validations.
+Faire tourner les tests sur un Mac, ce n’est pas compliqué.
 
-Sur le papier, c'est assez simple : on lance les tests avant de pousser. En pratique, si chaque développeur doit installer douze outils, récupérer trois variables d'environnement et se souvenir de six commandes, on vient simplement de déplacer le problème.
+Faire en sorte qu’un autre développeur, sur un Mac fraîchement installé, obtienne le même résultat sans passer une journée à réparer son environnement, c’est une autre histoire.
 
-Je ne voulais pas d'une CI locale qui fonctionne uniquement sur mon Mac.
+Je voulais éviter le classique « chez moi ça marche », appliqué cette fois à la CI.
 
-## La bonne abstraction n'était pas un nouveau runner
+## Le poste savait déjà presque tout faire
 
-Nous avions déjà travaillé sur [le provisioning des Mac avec Apple Business, Entra et Nix](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/). Je racontais aussi [pourquoi je versionne les postes comme du logiciel](/thinking/2026-10-24-versionner-postes-semver-nix/).
+J’ai parlé dans [la série sur Apple Business, Entra et Nix](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/) de notre choix de ne pas faire porter tout le provisioning au MDM.
 
-La distinction importante : le poste fournit un environnement de travail conforme, mais il ne connaît pas les dépendances de chaque application.
+Apple Business s’occupe de l’enrôlement et des prérequis. Entra donne une identité et des droits. Nix compose le poste.
 
-Le repository doit rester responsable de son propre contrat technique : version de Go, environnement JavaScript, outils SQL, PostgreSQL, binaires de lint, scripts de vérification.
+Pour les projets, nous utilisons devenv. Il décrit la toolchain, les services et les commandes nécessaires dans le repository. L’environnement de travail ne dépend donc pas d’une petite checklist que chacun suivrait plus ou moins bien.
 
-C'est là que devenv devient intéressant. Nix fournit des dépendances reproductibles ; devenv assemble les services et les commandes nécessaires au projet.
-
-Le modèle reste lisible :
+Ce n’est pas nouveau. Le changement, c’est d’avoir décidé que cet environnement pouvait aussi porter une grande partie des validations.
 
 ~~~text
-Apple Business / Entra / Nix
-    -> poste prêt à travailler
+Nix sur le Mac
+  -> outils du poste
 
-repository + devenv
-    -> toolchain et services du projet
+devenv dans le repository
+  -> outils et services du projet
 
-scripts versionnés
-    -> règles de validation
-
-GitHub
-    -> décision d'intégration
+scripts de validation versionnés
+  -> ce qu'on vérifie réellement
 ~~~
 
-Aucun de ces éléments ne devrait avoir à deviner le travail des autres.
+Je préfère que ces responsabilités soient séparées. Quand un outil manque, on sait où le déclarer. Quand un test est incorrect, ce n’est pas le provisioning du Mac qu’il faut modifier.
 
-## Je ne voulais pas trois gestionnaires de hooks
+## Pourquoi je n’ai pas ajouté un nouveau système de hooks
 
-Nous utilisions déjà prek avec notre outillage commun.
+Nous avions déjà prek, intégré à notre outillage commun.
 
-Ajouter Husky ou Lefthook uniquement pour vérifier quelques fichiers aurait été facile. Mais il aurait ensuite fallu expliquer quel outil installe les hooks, lequel les répare et lequel gagne lorsqu'ils se contredisent.
+J’aurais pu ajouter Husky ou Lefthook au repository et y écrire toute la logique de contrôle. Ça aurait sans doute fonctionné. Mais nous aurions eu deux façons d’installer des hooks et plusieurs endroits où chercher lorsqu’ils ne tournent plus.
 
-Nous avons gardé un seul mécanisme et mis les véritables contrôles dans des scripts du repository.
+Nous avons gardé prek et des scripts Bash versionnés, utilisables sans Git.
 
 ~~~bash
 devenv shell -- check:commit
@@ -78,77 +73,64 @@ devenv shell -- check:push
 devenv shell -- ci:validate
 ~~~
 
-Un point important : ces commandes sont des interfaces explicites. Je peux les lancer depuis mon terminal. Un agent peut appeler les mêmes commandes. Et si un hook échoue, je peux reproduire le problème sans simuler un commit Git.
+Il y a volontairement trois commandes.
 
-Le hook sert à ne pas oublier. Il ne doit pas cacher la logique.
+\`check:commit\` doit rester presque instantané. Il détecte les conflits laissés dans les fichiers, les erreurs de format et quelques problèmes de syntaxe. Pas de base PostgreSQL, pas de compilation complète.
 
-## Tous les contrôles n'ont pas besoin du même rythme
+\`check:push\` est un contrôle plus large qu’on peut lancer à la main. Il reste distinct de la validation complète.
 
-J'ai séparé deux familles.
+\`ci:validate\` correspond à la validation PR-ready. C’est elle qui doit produire le résultat publiable pour le commit testé. Le hook pre-push peut l’appeler lors d’un \`git push\`, mais on peut aussi l’exécuter explicitement pour diagnostiquer un échec.
 
-Le pre-commit doit répondre rapidement. On y met les marqueurs de conflit, la syntaxe, le formatage et quelques gardes statiques à faible coût. Je n'ai aucune envie de démarrer PostgreSQL parce que quelqu'un vient d'éditer un commentaire.
+Ça évite un piège assez bête : considérer que parce que le formatage est passé, le changement est prêt à merger.
 
-La validation PR-ready peut être plus exigeante. Elle exécute, selon les surfaces affectées, les tests Go, le typecheck du frontend, les gardes de migrations, les tests d'intégration ou les tests Rust.
+## Une vraie base de données locale
 
-Un troisième niveau existe pour les parcours bout en bout avant release.
+La partie la plus utile à ramener sur les postes a été PostgreSQL.
 
-~~~mermaid
-flowchart TD
-    A[Modification] --> B[Pre-commit rapide]
-    B --> C[Validation PR-ready]
-    C --> D[Merge autorisé par GitHub]
-    D --> E[Validation pré-release]
-    E --> F[Build et livraison]
-~~~
+Sur notre projet, il ne suffisait pas de compiler le code Go. Nous avions besoin de vérifier les migrations, la compatibilité des requêtes et les tests d’intégration avec une base.
 
-Ces étapes ne sont pas interchangeables. Une sortie verte de \`check:commit\` ne doit pas pouvoir être publiée comme preuve que \`ci:validate\` est passé.
+devenv sait démarrer le service. Ensuite, les scripts attendent qu’il soit prêt et préparent des bases de test isolées.
 
-## Un vrai service PostgreSQL sur le poste
+Quelques détails qui comptent davantage que le diagramme : repartir d’une base vide avant un replay, ne pas laisser une fixture polluer les tests suivants, faire échouer la validation lorsque PostgreSQL est absent plutôt que sauter silencieusement l’intégration.
 
-La partie la moins évidente était l'intégration.
+Nous avons également ajouté des contrôles d’upgrade sur une base peuplée. Une migration qui marche dans une base vierge n’est pas forcément capable de passer sur une base utilisée depuis deux ans.
 
-Dans un de nos repositories, il faut tester le backend contre une vraie base PostgreSQL. Nous avons donc intégré le service dans l'environnement local plutôt que de conserver un runner distant uniquement pour obtenir une base temporaire.
+C’est le genre de sujet que j’ai davantage envie de découvrir avant de pousser qu’après avoir déployé.
 
-Cela implique des choses très concrètes : choisir un port stable, attendre que le service réponde, utiliser des bases dédiées, rejouer les migrations, isoler les fixtures et repartir d'un état connu.
+## Il fallait aussi penser aux agents
 
-J'ai aussi voulu séparer les migrations sur base vide du chemin d'upgrade sur base peuplée. Ce n'est pas le même test.
+Le choix de scripts versionnés a été assez pratique de ce côté-là.
 
-Le choix n'est pas gratuit. Les Mac doivent avoir assez de mémoire, le service doit pouvoir démarrer et les messages d'erreur doivent expliquer quoi réparer. Mais les développeurs voient les problèmes d'intégration avant de pousser, et pas dix minutes après.
+Un agent capable de lancer des commandes, depuis un IDE ou un terminal, peut exécuter les mêmes validations qu’un développeur. Il lit le résultat, corrige et relance.
 
-## Où intervient l'agent IA ?
+Je ne lui ai pas créé une commande « agent-ci » avec une suite plus courte et trois exceptions.
 
-N'importe quel agent capable d'exécuter des commandes dans le repository peut utiliser ce contrat : outil de terminal, extension d'éditeur ou agent lancé dans un environnement automatisé.
+Et les hooks restent utiles même lorsque l’agent oublie les tests. Ils ne remplacent pas la politique de merge, mais ils rendent le chemin habituel plus difficile à oublier.
 
-Je ne lui demande pas de connaître notre CI par magie. Je lui donne une interface stable, versionnée et documentée.
+Sur un dépôt dont les commits arrivent souvent, c’est un détail qui finit par compter.
 
-Par exemple, après avoir changé une migration, il peut lancer \`ci:validate\` et lire une erreur de compatibilité SQL. Il corrige, relance, puis propose la modification.
+## Le Mac ne devient pas un runner GitHub
 
-Ce que je ne veux pas, c'est un agent qui fabrique un script alternatif pour aller plus vite, puis conclut « terminé » après avoir exécuté seulement la moitié des vérifications.
+C’est une différence que je voulais garder très nette.
 
-Le garde-fou Git et la politique de merge restent donc nécessaires, y compris lorsque l'agent travaille sans nous demander confirmation à chaque étape.
+Les postes ne sont pas inscrits comme runners self-hosted. GitHub ne les utilise pas pour exécuter arbitrairement les jobs du repository. Les validations sont déclenchées localement, dans le contexte du développeur, avec les outils du projet.
 
-## Reproductible ne veut pas dire identique partout
+Nous n’avons donc pas créé de ferme CI à exploiter, ni de dépendance à un contrôleur supplémentaire.
 
-Notre environnement de développement est principalement macOS. Cela ne reproduit pas nécessairement une compilation Linux, un comportement spécifique de conteneur ou une signature d'artefact en environnement contrôlé.
+Et je n’essaie pas de faire croire qu’un résultat macOS remplace tous les tests Linux. S’il faut valider une propriété spécifique au runtime Linux, construire une image ou signer un artefact dans un environnement contrôlé, le calcul reste à faire ailleurs.
 
-Je ne chercherais pas à faire passer un test macOS pour une garantie Linux. Les contrôles natifs et la chaîne de build peuvent conserver une exécution indépendante lorsque la propriété vérifiée l'exige.
+## Le test qui manque toujours au premier passage
 
-Le bon découpage n'est pas « tout en local ». C'est **tout ce qui gagne à être vérifié localement, sans faire disparaître les garanties nécessaires ailleurs**.
+Un développeur qui a installé tous les outils depuis des mois est un assez mauvais test de reproductibilité.
 
-## Le test le plus utile : un poste neuf
+Je veux voir ce que ça donne sur un Mac neuf : devenv entre-t-il correctement ? Le service PostgreSQL démarre-t-il ? Les hooks sont-ils présents ? Les erreurs indiquent-elles comment réparer l’environnement ?
 
-Une CI locale qui fonctionne sur la machine de l'architecte ne vaut pas grand-chose.
+Et, comme nous l’avons découvert ensuite, il faut aller encore un peu plus loin : réussir les tests ne suffit pas si le poste ne possède pas l’identité nécessaire pour publier le résultat sur GitHub.
 
-Il faut vérifier un poste nouvellement provisionné, une entrée dans devenv à froid, une base PostgreSQL absente, un hook à réinstaller et une erreur réseau au moment de la publication.
+Je reviens sur cette partie dans le prochain article. Elle est moins confortable que \`devenv shell\`, mais beaucoup plus intéressante pour comprendre où se situe la confiance.
 
-C'est aussi pour cela que le travail MDM et Nix était directement lié à ce chantier : la fiabilité des contrôles commence par celle de l'environnement qui les exécute.
-
-## Suite
-
-3/6 : **Les tests tournent en local. GitHub garde le dernier mot.** On passe de l'exécution à la confiance : quel commit a été testé, qui publie le statut et quelles garanties GitHub peut réellement apporter.
-
-## Sources
+## Sources officielles
 
 - [devenv : Git hooks](https://devenv.sh/git-hooks/)
-- [Nix : documentation](https://nixos.org/learn/)
-- [prek : documentation](https://prek.j178.dev/)
+- [Nix](https://nixos.org/learn/)
+- [prek](https://prek.j178.dev/)
