@@ -112,9 +112,9 @@ Ce n’est pas un sujet spécifique à la CI locale. Mais puisqu’on rapatriait
 
 Je ne voulais pas non plus transformer le pre-push en campagne E2E complète.
 
-Le pre-commit reste court. La validation PR-ready lance les contrôles pertinents pour l’intégration. Les parcours Godog et Playwright sont traités à l’étape pré-release, avec les services et le navigateur nécessaires.
+Le pre-commit reste court. La validation PR-ready lance les contrôles pertinents pour l’intégration. Pour l’E2E, nous avons maintenant un statut distinct, exigé par GitHub sur les PR. Il peut être satisfait de deux façons : les parcours complets passent localement lorsque le changement touche les surfaces applicatives concernées, ou le contrôle est explicitement marqué « non requis » pour un diff qui n’en a pas besoin.
 
-Ce n’est pas un moyen d’ignorer les E2E. Si la release exige ces scénarios, elle ne part pas tant qu’ils ne sont pas passés.
+Ce deuxième cas n’est pas un E2E exécuté avec succès : c’est une décision de sélection des tests, liée elle aussi au SHA du commit. Elle doit être conservatrice lorsqu’on ne sait pas déterminer correctement ce qui a changé. La release garde par ailleurs ses propres critères de validation.
 
 Les images de production et les builds d’artefacts conservent eux aussi leurs propres contrôles. Un test local sur macOS ne remplace pas la vérification du contenu d’une image Linux.
 
