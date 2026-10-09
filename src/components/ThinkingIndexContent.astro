@@ -186,7 +186,10 @@ const jsonLd = buildJsonLdGraph([
     <section class="stack gap-4">
       <header class="section-header">
         <h2>{labels.allArticles[lang]}</h2>
-        <p><span data-library-count aria-live="polite">{filtered.length}</span> {labels.articlesCount[lang]}</p>
+        <p>
+          <span data-library-count aria-live="polite">{filtered.length}</span>
+          {labels.articlesCount[lang]}
+        </p>
       </header>
       <div class="cards-grid" data-library-grid>
         {filtered.map((entry) => <ArticleCard entry={entry} lang={lang} />)}
