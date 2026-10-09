@@ -13,7 +13,7 @@
     "preview": "bunx astro preview",
     "astro": "bunx astro",
     "format": "bunx prettier --write .",
-    "format:check": "bunx prettier --write e2e/thinking-filters.spec.ts src/components/ThinkingIndexContent.astro src/scripts/tests/test-publication-day.ts && git diff -- e2e/thinking-filters.spec.ts src/components/ThinkingIndexContent.astro src/scripts/tests/test-publication-day.ts && exit 1",
+    "format:check": "bunx prettier --check .",
     "lint": "bunx eslint \"src/**/*.{astro,ts,tsx,js,mjs}\"",
     "check": "bun src/scripts/astro-check-ci.mjs",
     "validate:collections": "bun src/scripts/validate-collections.mjs",
