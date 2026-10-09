@@ -5,11 +5,12 @@ on:
   push:
     branches: ["master", "main"]
   schedule:
-    # Rebuild after Wednesday workstation and Friday CI releases (07:30 UTC).
-    # Keep Saturday for the final previously scheduled workstation episode.
-    - cron: "0 8 * * 3"
-    - cron: "0 8 * * 5"
-    - cron: "0 8 * * 6"
+    # Publication follows the Europe/Paris calendar date, not a UTC clock time.
+    # 06:00 UTC = 08:00 CEST / 07:00 CET, allowing French morning sharing.
+    # Keep Saturday for the final workstation episode; GitHub may delay cron runs.
+    - cron: "0 6 * * 3"
+    - cron: "0 6 * * 5"
+    - cron: "0 6 * * 6"
   workflow_dispatch:
 
 permissions:
