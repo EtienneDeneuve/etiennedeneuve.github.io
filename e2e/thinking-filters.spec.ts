@@ -59,4 +59,50 @@ test.describe("/thinking/ filters", () => {
     expect(dates.length).toBeGreaterThan(1);
     expect(dates).toEqual([...dates].sort());
   });
+  test("query parameters are reflected in visible form selections", async ({ page }) => {
+    await page.goto("/thinking/?pillar=observability&sort=oldest");
+    await expect(page.locator('select[name="pillar"]')).toHaveValue("observability");
+    await expect(page.locator('select[name="sort"]')).toHaveValue("oldest");
+
+    const cards = page.locator("[data-library-grid] > article:visible");
+    await expect(cards).not.toHaveCount(0);
+    for (const card of await cards.all()) {
+      await expect(card).toHaveAttribute("data-pillar", "observability");
+    }
+  });
+
+  test("changing a filter updates the static library without another navigation", async ({ page }) => {
+    await page.goto("/thinking/");
+    const allCards = page.locator("[data-library-grid] > article");
+    const originalTitles = await allCards.evaluateAll((nodes) =>
+      nodes.map((node) => (node as HTMLElement).dataset.title ?? "")
+    );
+
+    await page.locator('select[name="pillar"]').selectOption("observability");
+    await expect(page).toHaveURL(/pillar=observability/);
+    const visible = page.locator("[data-library-grid] > article:visible");
+    await expect(visible).not.toHaveCount(0);
+    for (const card of await visible.all()) {
+      await expect(card).toHaveAttribute("data-pillar", "observability");
+    }
+    await expect(page.locator("[data-library-count]")).toHaveText(
+      String(await visible.count())
+    );
+
+    // Changing sort twice must restore the original featured order.
+    await page.locator('select[name="pillar"]').selectOption("");
+    await page.locator('select[name="sort"]').selectOption("oldest");
+    const ascendingDates = await allCards.evaluateAll((nodes) =>
+      nodes.map((node) => (node as HTMLElement).dataset.date ?? "")
+    );
+    expect(ascendingDates).toEqual([...ascendingDates].sort());
+
+    await page.locator('select[name="sort"]').selectOption("featured");
+    const restoredTitles = await allCards.evaluateAll((nodes) =>
+      nodes.map((node) => (node as HTMLElement).dataset.title ?? "")
+    );
+    expect(restoredTitles).toEqual(originalTitles);
+    await expect(page).toHaveURL("/thinking/");
+  });
+
 });
