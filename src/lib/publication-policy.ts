@@ -226,7 +226,26 @@ export function isPublishableDraft(entry: { data: { draft?: boolean } }): boolea
   return !entry.data.draft;
 }
 
-/** Hide scheduled posts until pubDate (static builds use build-time "now"). */
+/**
+ * Scheduled posts are published by French editorial calendar day, not by a
+ * precise UTC instant. Static pages are still generated only at build time.
+ * Always rebuild after midnight in Europe/Paris to release a new day's posts.
+ */
+const publicationDayFormatter = new Intl.DateTimeFormat("en-GB", {
+  timeZone: "Europe/Paris",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+});
+
+function publicationDayInParis(date: Date): string {
+  const parts = publicationDayFormatter.formatToParts(date);
+  const year = parts.find((part) => part.type === "year")?.value;
+  const month = parts.find((part) => part.type === "month")?.value;
+  const day = parts.find((part) => part.type === "day")?.value;
+  return `${year}-${month}-${day}`;
+}
+
 export function isReleasedByPubDate(
   entry: { data: { draft?: boolean; pubDate?: Date | string | number } },
   now: Date = new Date()
@@ -235,8 +254,8 @@ export function isReleasedByPubDate(
   const raw = entry.data.pubDate;
   if (raw == null) return true;
   const pub = raw instanceof Date ? raw : new Date(raw);
-  if (Number.isNaN(pub.getTime())) return true;
-  return pub.getTime() <= now.getTime();
+  if (Number.isNaN(pub.getTime())) return false;
+  return publicationDayInParis(pub) <= publicationDayInParis(now);
 }
 
 export function getPublishableEntries<T extends { data: { draft?: boolean } }>(entries: T[]): T[] {

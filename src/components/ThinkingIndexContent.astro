@@ -186,7 +186,10 @@ const jsonLd = buildJsonLdGraph([
     <section class="stack gap-4">
       <header class="section-header">
         <h2>{labels.allArticles[lang]}</h2>
-        <p><span data-library-count>{filtered.length}</span> {labels.articlesCount[lang]}</p>
+        <p>
+          <span data-library-count aria-live="polite">{filtered.length}</span>
+          {labels.articlesCount[lang]}
+        </p>
       </header>
       <div class="cards-grid" data-library-grid>
         {filtered.map((entry) => <ArticleCard entry={entry} lang={lang} />)}
@@ -227,50 +230,102 @@ const jsonLd = buildJsonLdGraph([
     server-side. Reapply the query string here so shared URLs still work. */
 }
 <script>
+  const form = document.querySelector<HTMLFormElement>("form.filters");
   const grid = document.querySelector<HTMLElement>("[data-library-grid]");
   const countEl = document.querySelector<HTMLElement>("[data-library-count]");
   const emptyEl = document.querySelector<HTMLElement>("[data-library-empty]");
   const featuredSection = document.querySelector<HTMLElement>("[data-featured-section]");
 
-  if (grid) {
-    const params = new URLSearchParams(window.location.search);
-    const pillar = params.get("pillar");
-    const type = params.get("type");
-    const language = params.get("lang");
-    const tag = params.get("tag");
-    const sort = params.get("sort");
-
+  if (form && grid) {
     const cards = Array.from(grid.children).filter(
       (node): node is HTMLElement => node instanceof HTMLElement
     );
+    // The HTML order is the server-rendered "featured" order.
+    const fields = ["pillar", "type", "lang", "sort", "tag"] as const;
 
-    let visible = 0;
-    for (const card of cards) {
-      const tags = (card.dataset.tags ?? "").split(" ").filter(Boolean);
-      const matches =
-        (!pillar || card.dataset.pillar === pillar) &&
-        (!type || card.dataset.type === type) &&
-        (!language || card.dataset.lang === language) &&
-        (!tag || tags.includes(tag));
-      card.hidden = !matches;
-      if (matches) visible += 1;
+    function getSelect(name: (typeof fields)[number]): HTMLSelectElement | null {
+      const field = form!.elements.namedItem(name);
+      return field instanceof HTMLSelectElement ? field : null;
     }
 
-    if (sort && sort !== "featured") {
-      const compare = (a: HTMLElement, b: HTMLElement) => {
-        const dateA = a.dataset.date ?? "";
-        const dateB = b.dataset.date ?? "";
-        if (sort === "recent") return dateB.localeCompare(dateA);
-        if (sort === "oldest") return dateA.localeCompare(dateB);
-        return (a.dataset.title ?? "").localeCompare(b.dataset.title ?? "");
-      };
-      for (const card of [...cards].sort(compare)) grid.append(card);
+    function readFilters(): URLSearchParams {
+      const params = new URLSearchParams();
+      for (const name of fields) {
+        const value = getSelect(name)?.value ?? "";
+        if (value && !(name === "sort" && value === "featured")) {
+          params.set(name, value);
+        }
+      }
+      return params;
     }
 
-    const hasActiveFilters = Boolean(pillar || type || language || tag);
-    if (countEl) countEl.textContent = String(visible);
-    if (emptyEl) emptyEl.hidden = visible > 0;
-    if (featuredSection && hasActiveFilters) featuredSection.hidden = true;
+    function applyFilters(): void {
+      const params = readFilters();
+      const pillar = params.get("pillar");
+      const type = params.get("type");
+      const language = params.get("lang");
+      const tag = params.get("tag");
+      const sort = params.get("sort");
+
+      let visible = 0;
+      for (const card of cards) {
+        const tags = (card.dataset.tags ?? "").split(" ").filter(Boolean);
+        const matches =
+          (!pillar || card.dataset.pillar === pillar) &&
+          (!type || card.dataset.type === type) &&
+          (!language || card.dataset.lang === language) &&
+          (!tag || tags.includes(tag));
+        card.hidden = !matches;
+        if (matches) visible += 1;
+      }
+
+      const sortedCards = [...cards];
+      if (sort && sort !== "featured") {
+        sortedCards.sort((a, b) => {
+          const dateA = a.dataset.date ?? "";
+          const dateB = b.dataset.date ?? "";
+          if (sort === "recent") return dateB.localeCompare(dateA);
+          if (sort === "oldest") return dateA.localeCompare(dateB);
+          return (a.dataset.title ?? "").localeCompare(b.dataset.title ?? "");
+        });
+      }
+      // Reapply all sort orders, including the original featured order.
+      for (const card of sortedCards) grid!.append(card);
+
+      const hasActiveFilters = Boolean(pillar || type || language || tag);
+      if (countEl) countEl.textContent = String(visible);
+      if (emptyEl) emptyEl.hidden = visible > 0;
+      if (featuredSection) featuredSection.hidden = hasActiveFilters;
+    }
+
+    function syncFormFromUrl(): void {
+      const params = new URLSearchParams(window.location.search);
+      for (const name of fields) {
+        const select = getSelect(name);
+        if (!select) continue;
+        select.value = params.get(name) ?? (name === "sort" ? "featured" : "");
+        if (select.selectedIndex === -1) {
+          select.value = name === "sort" ? "featured" : "";
+        }
+      }
+      applyFilters();
+    }
+
+    function updateFromForm(): void {
+      const query = readFilters().toString();
+      const nextUrl = `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`;
+      window.history.replaceState(window.history.state, "", nextUrl);
+      applyFilters();
+    }
+
+    // Filter and sort immediately; no reload or server-side query support needed.
+    form.addEventListener("change", updateFromForm);
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      updateFromForm();
+    });
+    window.addEventListener("popstate", syncFormFromUrl);
+    syncFormFromUrl();
   }
 </script>
 
