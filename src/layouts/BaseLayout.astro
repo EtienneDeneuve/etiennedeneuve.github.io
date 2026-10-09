@@ -5,6 +5,7 @@ import Footer from "../components/Footer.astro";
 import CustomStyles from "../components/CustomStyles.astro";
 import CustomScripts from "../components/CustomScripts.astro";
 import Analytics from "../components/Analytics.astro";
+import ExternalLinkAttribution from "../components/ExternalLinkAttribution.astro";
 import JsonLd from "../components/JsonLd.astro";
 import ScrollReveal from "../components/ScrollReveal.astro";
 import type { SeoLang, SeoOgType } from "../config/seo.ts";
@@ -73,6 +74,7 @@ const {
       <slot />
       <Footer />
     </div>
+    <ExternalLinkAttribution />
     <CustomScripts />
     <CustomStyles />
     <Analytics />

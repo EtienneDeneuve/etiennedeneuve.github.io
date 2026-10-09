@@ -1,0 +1,60 @@
+<!--
+  cspell:ignore goog
+
+  Attribute outbound links consistently without asking every author to remember
+  UTM parameters. This runs after the page markup has been rendered.
+
+  Use data-no-utm on an anchor when an external URL must remain byte-for-byte
+  unchanged. Signed AWS, Google Cloud and Azure SAS URLs are skipped
+  automatically because appending a query parameter can invalidate them.
+-->
+<script>
+  const UTM_SOURCE = "etienne.deneuve.xyz";
+  const INTERNAL_HOSTS = new Set([
+    window.location.hostname,
+    "etienne.deneuve.xyz",
+    "www.etienne.deneuve.xyz",
+  ]);
+  const SIGNATURE_PARAMS = ["sig", "signature", "x-amz-signature", "x-goog-signature"];
+
+  function attribute(anchor: HTMLAnchorElement) {
+    if (anchor.hasAttribute("data-no-utm")) return;
+
+    const rawHref = anchor.getAttribute("href");
+    if (!rawHref) return;
+
+    let url: URL;
+    try {
+      url = new URL(rawHref, document.baseURI);
+    } catch {
+      return;
+    }
+
+    if (!["http:", "https:"].includes(url.protocol)) return;
+    if (INTERNAL_HOSTS.has(url.hostname)) return;
+
+    const queryKeys = [...url.searchParams.keys()].map((key) => key.toLowerCase());
+    if (SIGNATURE_PARAMS.some((key) => queryKeys.includes(key))) return;
+
+    url.searchParams.set("utm_source", UTM_SOURCE);
+    anchor.href = url.toString();
+  }
+
+  function attributeTree(root: ParentNode) {
+    if (root instanceof HTMLAnchorElement) attribute(root);
+    for (const anchor of root.querySelectorAll<HTMLAnchorElement>("a[href]")) attribute(anchor);
+  }
+
+  attributeTree(document);
+
+  // Cookie banners and future interactive islands may add links after this
+  // script runs. Keep the same attribution rule for those nodes.
+  const observer = new MutationObserver((records) => {
+    for (const record of records) {
+      for (const node of record.addedNodes) {
+        if (node instanceof Element) attributeTree(node);
+      }
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+</script>
