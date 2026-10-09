@@ -71,7 +71,9 @@ test.describe("/thinking/ filters", () => {
     }
   });
 
-  test("changing a filter updates the static library without another navigation", async ({ page }) => {
+  test("changing a filter updates the static library without another navigation", async ({
+    page,
+  }) => {
     await page.goto("/thinking/");
     const allCards = page.locator("[data-library-grid] > article");
     const originalTitles = await allCards.evaluateAll((nodes) =>
@@ -85,9 +87,7 @@ test.describe("/thinking/ filters", () => {
     for (const card of await visible.all()) {
       await expect(card).toHaveAttribute("data-pillar", "observability");
     }
-    await expect(page.locator("[data-library-count]")).toHaveText(
-      String(await visible.count())
-    );
+    await expect(page.locator("[data-library-count]")).toHaveText(String(await visible.count()));
 
     // Changing sort twice must restore the original featured order.
     await page.locator('select[name="pillar"]').selectOption("");
@@ -104,5 +104,4 @@ test.describe("/thinking/ filters", () => {
     expect(restoredTitles).toEqual(originalTitles);
     await expect(page).toHaveURL("/thinking/");
   });
-
 });
