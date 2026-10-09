@@ -73,6 +73,9 @@ const entries = [
   { id: "future-ci", data: { draft: false, pubDate: "2026-10-16T07:30:00.000Z" } },
   { id: "hidden-draft", data: { draft: true, pubDate: "2026-10-03T07:30:00.000Z" } },
 ];
-assert.deepEqual(getReleasedArticles(entries, now).map((entry) => entry.id), ["current-ci"]);
+assert.deepEqual(
+  getReleasedArticles(entries, now).map((entry) => entry.id),
+  ["current-ci"]
+);
 
 console.log(`Publication-day checks passed: ${cases.length + 1}`);
