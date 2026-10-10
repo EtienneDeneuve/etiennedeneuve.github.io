@@ -131,7 +131,7 @@ const editorial = {
     preferName: "Omnivya",
     do: {
       fr: [
-        "Présenter Omnivya comme hub / marque ombrelle du groupe.",
+        "Présenter Omnivya comme hub / cadre commun du groupe.",
         "Renvoyer le détail commercial vers omnivya.fr.",
       ],
       en: [
@@ -246,8 +246,8 @@ export const ecosystemEntities: Record<EcosystemEntityId, EcosystemEntity> = {
       en: "Omnivya is the shared frame: neither consulting-only nor execution-only. The public Omnivya brand was introduced in June–July 2025. Commercial detail stays on omnivya.fr.",
     },
     historicalPhrase: {
-      fr: "Marque ombrelle introduite en juin–juillet 2025, pas un simple renommage de Simplifi’ED.",
-      en: "Umbrella brand introduced in June–July 2025, not a simple rename of Simplifi’ED.",
+      fr: "Cadre commun du groupe introduit en juin–juillet 2025, pas un simple renommage de Simplifi’ED.",
+      en: "Group-wide frame introduced in June–July 2025, not a simple rename of Simplifi’ED.",
     },
     geo: "europe_africa",
     historicalNames: [],
