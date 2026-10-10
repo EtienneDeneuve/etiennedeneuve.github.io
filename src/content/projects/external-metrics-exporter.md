@@ -9,8 +9,8 @@ role: "Auteur et mainteneur"
 role_en: "Author and maintainer"
 problem: "Les équipes déploient sur Kubernetes sans visibilité fiable sur les dépendances externes ni signaux comparables entre fournisseurs."
 problem_en: "Teams deploy on Kubernetes without reliable visibility on external dependencies or comparable signals across vendors."
-context: "Composant d’observabilité plateforme — découverte automatique, contrat Prometheus, neutralité fournisseur."
-context_en: "Platform observability component — automatic discovery, Prometheus contract, vendor neutrality."
+context: "Composant d’observabilité plateforme : découverte automatique, contrat Prometheus, neutralité fournisseur."
+context_en: "Platform observability component: automatic discovery, Prometheus contract, vendor neutrality."
 decisions:
   - "Découvrir les dépendances externes depuis les workloads, pas depuis des inventaires manuels"
   - "Exposer un contrat Prometheus neutre vis-à-vis des fournisseurs"
@@ -33,8 +33,8 @@ whatExists:
 whatExists_en:
   - "Public repository Simplifi-ED/external-metrics-exporter"
   - "Prometheus / Kubernetes integration"
-currentState: "Production — composant publié sous l’organisation GitHub historique Simplifi-ED."
-currentState_en: "Production — published under the historical Simplifi-ED GitHub org."
+currentState: "Production. Composant publié sous l’organisation GitHub historique Simplifi-ED."
+currentState_en: "Production. Published under the historical Simplifi-ED GitHub org."
 limitations:
   - "Pas de métriques d’adoption (stars, downloads) présentées comme argument principal"
   - "Pas de promesse de couverture fournisseur exhaustive sans documentation à jour"
@@ -51,7 +51,7 @@ relatedArticles:
   - "2024-09-16-managed-identities"
   - "2023-07-28-megalinter-azure-devops"
 proofs:
-  - label: "GitHub — Simplifi-ED/external-metrics-exporter"
+  - label: "GitHub: Simplifi-ED/external-metrics-exporter"
     url: "https://github.com/Simplifi-ED/external-metrics-exporter"
     description: "Repository public et documentation."
 proofLinks:
@@ -66,8 +66,8 @@ verified: true
 featured: true
 draft: false
 displayOrder: 1
-ecosystemRole: "open source — observabilité"
-ecosystemRole_en: "open source — observability"
+ecosystemRole: "open source, observabilité"
+ecosystemRole_en: "open source, observability"
 ---
 
 External Metrics Exporter rend visibles les dépendances externes des workloads Kubernetes.

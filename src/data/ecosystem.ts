@@ -160,8 +160,8 @@ export const ecosystemEntities: Record<EcosystemEntityId, EcosystemEntity> = {
     brandPosture: "not_a_brand",
     legalPosture: "not_applicable",
     shortDescription: {
-      fr: "Cofondateur et CTO d’Omnivya Expert — doctrine et preuves.",
-      en: "Co-founder and CTO of Omnivya Expert — doctrine and proof.",
+      fr: "Cofondateur et CTO d’Omnivya Expert. Doctrine et preuves.",
+      en: "Co-founder and CTO of Omnivya Expert. Doctrine and proof.",
     },
     metaDescription: {
       fr: "Etienne Deneuve, Platform Reliability Architect : cofondateur et CTO d’Omnivya Expert. Ce site publie doctrine, décisions et preuves.",
@@ -208,8 +208,8 @@ export const ecosystemEntities: Record<EcosystemEntityId, EcosystemEntity> = {
       en: "Taous, co-founder and leader of Omnivya and Omnivya Expert: she leads the group and consulting/engineering services, with Etienne as CTO.",
     },
     longDescription: {
-      fr: "Cofondatrice avec Etienne. Dirige Omnivya et Omnivya Expert — services et projets open source associés. Etienne est CTO.",
-      en: "Co-founder with Etienne. Leads Omnivya and Omnivya Expert — services and related open-source projects. Etienne is CTO.",
+      fr: "Cofondatrice avec Etienne. Dirige Omnivya et Omnivya Expert : services et projets open source associés. Etienne est CTO.",
+      en: "Co-founder with Etienne. Leads Omnivya and Omnivya Expert: services and related open-source projects. Etienne is CTO.",
     },
     geo: "personal",
     historicalNames: [],
@@ -246,8 +246,8 @@ export const ecosystemEntities: Record<EcosystemEntityId, EcosystemEntity> = {
       en: "Omnivya is the shared frame: neither consulting-only nor execution-only. The public Omnivya brand was introduced in June–July 2025. Commercial detail stays on omnivya.fr.",
     },
     historicalPhrase: {
-      fr: "Marque ombrelle introduite en juin–juillet 2025 — pas un simple renommage de Simplifi’ED.",
-      en: "Umbrella brand introduced in June–July 2025 — not a simple rename of Simplifi’ED.",
+      fr: "Marque ombrelle introduite en juin–juillet 2025, pas un simple renommage de Simplifi’ED.",
+      en: "Umbrella brand introduced in June–July 2025, not a simple rename of Simplifi’ED.",
     },
     geo: "europe_africa",
     historicalNames: [],
@@ -269,12 +269,12 @@ export const ecosystemEntities: Record<EcosystemEntityId, EcosystemEntity> = {
       en: "Omnivya Expert consulting, engineering and delivery across Europe and Africa.",
     },
     metaDescription: {
-      fr: "Omnivya Expert porte le conseil, les services, l’ingénierie et la delivery en Europe et en Afrique — anciennement Simplifi’ED (2020).",
-      en: "Omnivya Expert carries consulting, services, engineering and delivery across Europe and Africa — formerly Simplifi’ED (founded 2020).",
+      fr: "Omnivya Expert porte le conseil, les services, l’ingénierie et la delivery en Europe et en Afrique, anciennement Simplifi’ED (2020).",
+      en: "Omnivya Expert carries consulting, services, engineering and delivery across Europe and Africa, formerly Simplifi’ED (founded 2020).",
     },
     longDescription: {
-      fr: "Omnivya Expert regroupe les activités de services historiquement portées sous Simplifi’ED. Capacité delivery en Algérie depuis 2022. Périmètre : Europe et Afrique — jamais une seule zone.",
-      en: "Omnivya Expert gathers services historically carried under Simplifi’ED. Delivery capacity in Algeria since 2022. Scope: Europe and Africa — never a single region only.",
+      fr: "Omnivya Expert regroupe les activités de services historiquement portées sous Simplifi’ED. Capacité delivery en Algérie depuis 2022. Périmètre : Europe et Afrique, jamais une seule zone.",
+      en: "Omnivya Expert gathers services historically carried under Simplifi’ED. Delivery capacity in Algeria since 2022. Scope: Europe and Africa, never a single region only.",
     },
     historicalPhrase: {
       fr: "Regroupe aujourd’hui ce qui était porté sous Simplifi’ED ; capacité Algérie depuis 2022.",
@@ -433,12 +433,12 @@ export const ecosystemEntities: Record<EcosystemEntityId, EcosystemEntity> = {
       en: "Public components from Omnivya Expert’s real-world engineering problems.",
     },
     metaDescription: {
-      fr: "Projets open source publiés à partir de problèmes rencontrés en ingénierie et delivery Omnivya Expert — preuves publiques, pas une marque commerciale séparée.",
-      en: "Open-source components published from problems met in Omnivya Expert engineering and delivery — public proof, not a separate commercial brand.",
+      fr: "Projets open source publiés à partir de problèmes rencontrés en ingénierie et delivery Omnivya Expert. Preuves publiques, pas une marque commerciale séparée.",
+      en: "Open-source components published from problems met in Omnivya Expert engineering and delivery. Public proof, not a separate commercial brand.",
     },
     longDescription: {
       fr: "Composants et outils publiés, souvent sous l’organisation GitHub historique Simplifi-ED, développés à partir de problèmes rencontrés en conseil ou delivery. Ce sont des preuves publiques d’Omnivya Expert, pas une marque produit séparée.",
-      en: "Published components and tools, often under the historical Simplifi-ED GitHub org, built from problems met in consulting or delivery. Public proof of Omnivya Expert — not a separate product brand.",
+      en: "Published components and tools, often under the historical Simplifi-ED GitHub org, built from problems met in consulting or delivery. Public proof of Omnivya Expert, not a separate product brand.",
     },
     historicalPhrase: {
       fr: "Souvent publiés sous l’org GitHub legacy Simplifi-ED.",

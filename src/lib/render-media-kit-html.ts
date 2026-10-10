@@ -82,7 +82,7 @@ export function renderMediaKitHtml(lang: MediaKitLang = "fr"): string {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${escapeHtml(labels.title)} — ${escapeHtml(siteConfig.identity.name)}</title>
+  <title>${escapeHtml(labels.title)} | ${escapeHtml(siteConfig.identity.name)}</title>
   <style>
     @media print {
       @page { margin: 2cm; size: A4; }
@@ -207,7 +207,7 @@ export function renderMediaKitHtml(lang: MediaKitLang = "fr"): string {
 
   <div class="footer">
     <p>${escapeHtml(labels.footer)}</p>
-    <p>${generatedAt} — ${speakingUrl}</p>
+    <p>${generatedAt} · ${speakingUrl}</p>
   </div>
 </body>
 </html>`;
