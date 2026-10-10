@@ -19,7 +19,7 @@ export async function getStaticPaths() {
   const seen = new Set<string>();
 
   for (const entry of articles) {
-    // EN articles live only under /en/thinking/ — never FR chrome + EN body.
+    // EN articles live only under /en/thinking/; never FR chrome + EN body.
     if (getArticleLanguage(entry) !== "fr") continue;
     const canonical = getCanonicalSlug(entry);
     if (!seen.has(canonical)) {

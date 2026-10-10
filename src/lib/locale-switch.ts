@@ -33,7 +33,7 @@ export function withLocalePrefix(barePath: string, lang: UiLang): string {
 
 /**
  * Paths that have a real bilingual page pair (same content, different chrome).
- * Article detail URLs are NOT listed — without a translationKey sibling they fall back to Thinking index.
+ * Article detail URLs are NOT listed; without a translationKey sibling they fall back to Thinking index.
  */
 const BILINGUAL_EXACT = new Set([
   "/",
