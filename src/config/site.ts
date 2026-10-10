@@ -127,12 +127,8 @@ export const siteConfig = {
 } as const;
 
 /** Public Omnivya qualification URL with referral UTMs. */
-export function omnivyaContactUrl(
-  lang: "fr" | "en",
-  content = "cta"
-): string {
-  const base =
-    lang === "en" ? siteConfig.omnivya.contactPageEn : siteConfig.omnivya.contactPageFr;
+export function omnivyaContactUrl(lang: "fr" | "en", content = "cta"): string {
+  const base = lang === "en" ? siteConfig.omnivya.contactPageEn : siteConfig.omnivya.contactPageFr;
   const url = new URL(base);
   url.searchParams.set("utm_source", "etienne_deneuve");
   url.searchParams.set("utm_medium", "referral");
