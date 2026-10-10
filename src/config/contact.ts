@@ -1,4 +1,4 @@
-import { siteConfig } from "./site.ts";
+import { omnivyaContactUrl, siteConfig } from "./site.ts";
 
 export type Localized = { fr: string; en: string };
 
@@ -38,7 +38,9 @@ export const contactConfig = {
       fr: "Action principale pour une mission : qualification sur omnivya.fr.",
       en: "Primary action for a mission: qualification on omnivya.fr.",
     } as Localized,
+    /** Prefer contactHref(lang) — kept for callers that still read .href */
     href: siteConfig.omnivya.contactPageFr,
+    hrefFor: (lang: "fr" | "en") => omnivyaContactUrl(lang, "contact-page"),
   },
   labels: {
     includeInEmail: {

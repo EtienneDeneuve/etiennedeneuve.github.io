@@ -170,19 +170,23 @@ const jsonLd = buildJsonLdGraph([
                     <dt>{labels.related}</dt>
                     <dd>
                       <ul class="related-links">
-                        {topic.links.map((link) => (
-                          <li>
-                            <a
-                              href={
-                                link.href.startsWith("http") || link.href.startsWith("/thinking/")
-                                  ? link.href
-                                  : `${prefix}${link.href}`
-                              }
-                            >
-                              {link.label[lang]}
-                            </a>
-                          </li>
-                        ))}
+                        {topic.links.map((link) => {
+                          let href = link.href;
+                          if (lang === "en" && href.includes("www.omnivya.fr/fr/contact/")) {
+                            href = href.replace(
+                              "www.omnivya.fr/fr/contact/",
+                              "www.omnivya.fr/contact/"
+                            );
+                          }
+                          if (!(href.startsWith("http") || href.startsWith("/thinking/"))) {
+                            href = `${prefix}${href}`;
+                          }
+                          return (
+                            <li>
+                              <a href={href}>{link.label[lang]}</a>
+                            </li>
+                          );
+                        })}
                       </ul>
                     </dd>
                   </div>
