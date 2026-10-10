@@ -122,7 +122,13 @@ const jsonLd = buildJsonLdGraph([
       <h2>{config.omnivya.title[lang]}</h2>
       {config.omnivya.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
       <p>
-        <a href={siteConfig.omnivya.website} target="_blank" rel="noopener noreferrer">
+        <a
+          href={lang === "en"
+            ? "https://www.omnivya.fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=about&utm_content=omnivya-link"
+            : "https://www.omnivya.fr/fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=about&utm_content=omnivya-link"}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           {labels.omnivyaLink[lang]}
         </a>
       </p>

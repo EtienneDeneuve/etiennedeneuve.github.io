@@ -288,14 +288,20 @@ export const workConfig = {
         { kind: "article", id: "2024-09-16-managed-identities" },
       ],
       cta: {
-        label: { fr: "Parler delivery Omnivya Expert", en: "Discuss Omnivya Expert delivery" },
+        label: { fr: "Parler delivery Omnivya", en: "Discuss Omnivya delivery" },
         subject: {
-          fr: "Demande mission build Omnivya Expert",
-          en: "Omnivya Expert build mission request",
+          fr: "Demande mission build Omnivya",
+          en: "Omnivya build mission request",
         },
         secondaryLink: {
-          fr: { label: "Voir Omnivya Expert", href: "https://www.omnivya.fr" },
-          en: { label: "View Omnivya Expert", href: "https://www.omnivya.fr" },
+          fr: {
+            label: "Voir Omnivya",
+            href: "https://www.omnivya.fr/fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=work&utm_content=build-mode",
+          },
+          en: {
+            label: "View Omnivya",
+            href: "https://www.omnivya.fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=work&utm_content=build-mode",
+          },
         },
       },
     },

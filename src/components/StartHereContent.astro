@@ -69,7 +69,7 @@ const learningPaths = config.learningPaths
   .filter((path) => path.items.length > 0);
 
 const viewProjectLabel = lang === "en" ? "View project" : "Voir le projet";
-const openOmnivyaLabel = lang === "en" ? "Open Omnivya Expert" : "Voir Omnivya Expert";
+const openOmnivyaLabel = lang === "en" ? "Open Omnivya" : "Voir Omnivya";
 
 const startHerePath = `${prefix}/start-here/`;
 const jsonLd = buildJsonLdGraph([
@@ -216,7 +216,13 @@ const jsonLd = buildJsonLdGraph([
       <h2>{config.sections.omnivyaRole.title[lang]}</h2>
       {config.sections.omnivyaRole.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
       <p>
-        <a href={siteConfig.omnivya.website} target="_blank" rel="noopener noreferrer">
+        <a
+          href={lang === "en"
+            ? "https://www.omnivya.fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=start-here&utm_content=omnivya-link"
+            : "https://www.omnivya.fr/fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=start-here&utm_content=omnivya-link"}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           {openOmnivyaLabel} →
         </a>
       </p>

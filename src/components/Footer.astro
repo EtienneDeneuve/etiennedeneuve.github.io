@@ -1,5 +1,5 @@
 ---
-import { siteConfig } from "../config/site.ts";
+import { omnivyaContactUrl, siteConfig } from "../config/site.ts";
 import { navigationConfig } from "../config/navigation.ts";
 import { analyticsAttrs } from "../lib/analytics.ts";
 
@@ -8,6 +8,7 @@ const locale =
   pathname.startsWith("/en/") || pathname === "/en" || pathname === "/en/" ? "en" : "fr";
 const secondary = navigationConfig.secondary[locale];
 const legal = navigationConfig.legal[locale];
+const omnivyaHref = omnivyaContactUrl(locale, "footer");
 ---
 
 <footer class="wrapper">
@@ -48,6 +49,18 @@ const legal = navigationConfig.legal[locale];
         </a>
       ))
     }
+    <a
+      href={omnivyaHref}
+      rel="noopener noreferrer"
+      target="_blank"
+      {...analyticsAttrs("cta_booking", {
+        surface: "footer",
+        intent: "qualification",
+        lang: locale,
+      })}
+    >
+      {siteConfig.omnivya.publicName}
+    </a>
     <a href={siteConfig.social.linkedin}>LinkedIn</a>
     <a
       href={siteConfig.social.github}

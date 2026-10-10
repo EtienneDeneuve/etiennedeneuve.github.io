@@ -26,10 +26,17 @@ export const siteConfig = {
     timezone: "Europe/Paris",
   },
   omnivya: {
+    /** Legal / schema operating entity — not the public marketing brand. */
     name: "Omnivya Expert",
+    /** Public brand for CTAs, kickers, footer (see brand-architecture). */
+    publicName: "Omnivya",
     website: "https://www.omnivya.fr",
     email: "etienne@omnivya.fr",
-    contactPage: "https://www.omnivya.fr",
+    /** Qualification entry (prefer over bare homepage). */
+    contactPageFr: "https://www.omnivya.fr/fr/contact/",
+    contactPageEn: "https://www.omnivya.fr/contact/",
+    /** @deprecated use contactPageFr / contactPageEn */
+    contactPage: "https://www.omnivya.fr/fr/contact/",
   },
   social: {
     x: "https://twitter.com/EtienneDinfo",
@@ -58,11 +65,11 @@ export const siteConfig = {
   primaryCtas: {
     discussMission: {
       label: "Discuter d'un contexte SI complexe",
-      href: "mailto:etienne@omnivya.fr?subject=Discussion%20mission%20plateforme",
+      href: "https://www.omnivya.fr/fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=site&utm_content=primary-cta",
     },
     omnivyaExecution: {
-      label: "Voir Omnivya Expert",
-      href: "https://www.omnivya.fr",
+      label: "Voir Omnivya",
+      href: "https://www.omnivya.fr/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=site&utm_content=primary-cta",
     },
   },
   analytics: {
@@ -108,22 +115,34 @@ export const siteConfig = {
     name: "Omnivya Expert",
     email: "etienne@omnivya.fr",
     bookingEmail: "etienne@omnivya.fr",
-    bookingUrl: "https://www.omnivya.fr",
+    bookingUrl: "https://www.omnivya.fr/fr/contact/",
     website: "www.omnivya.fr",
     operatingEntity: "Omnivya Expert",
   },
   contact: {
     personalEmail: "etienne@omnivya.fr",
-    businessBookingUrl: "https://www.omnivya.fr",
+    businessBookingUrl: "https://www.omnivya.fr/fr/contact/",
     businessEmail: "etienne@omnivya.fr",
   },
 } as const;
+
+/** Public Omnivya qualification URL with referral UTMs. */
+export function omnivyaContactUrl(lang: "fr" | "en", content = "cta"): string {
+  const base = lang === "en" ? siteConfig.omnivya.contactPageEn : siteConfig.omnivya.contactPageFr;
+  const url = new URL(base);
+  url.searchParams.set("utm_source", "etienne_deneuve");
+  url.searchParams.set("utm_medium", "referral");
+  url.searchParams.set("utm_campaign", "site");
+  url.searchParams.set("utm_content", content);
+  return url.toString();
+}
 
 export const getBrandText = {
   primary: () => siteConfig.identity.name,
   siteTitle: (suffix?: string) =>
     suffix ? `${suffix} | ${siteConfig.identity.name}` : siteConfig.identity.name,
-  footerCta: () => `Vous voulez travailler avec ${siteConfig.omnivya.name} ?`,
+  footerCta: () => `Vous voulez travailler avec ${siteConfig.omnivya.publicName} ?`,
   contactCta: () => "Vous voulez travailler avec moi ?",
   operatingEntity: () => siteConfig.omnivya.name,
+  publicBrand: () => siteConfig.omnivya.publicName,
 } as const;

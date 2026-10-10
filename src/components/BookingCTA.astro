@@ -1,6 +1,6 @@
 ---
 import ConversionCTA from "./ConversionCTA.astro";
-import { siteConfig } from "../config/site.ts";
+import { omnivyaContactUrl } from "../config/site.ts";
 import { contactConfig } from "../config/contact.ts";
 
 interface Props {
@@ -16,7 +16,7 @@ const {
 } = Astro.props;
 
 const mailtoHref = contactConfig.buildMailto(bookingSubject);
-const calendarHref = siteConfig.omnivya.contactPage;
+const calendarHref = omnivyaContactUrl(lang, surface);
 ---
 
 <ConversionCTA

@@ -34,7 +34,10 @@ const [articles, projects, resources] = await Promise.all([
 ]);
 
 const collections = { articles, projects, resources };
-const calendarUrl = siteConfig.omnivya.contactPage;
+const calendarUrl =
+  lang === "en"
+    ? "https://www.omnivya.fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=work&utm_content=calendar"
+    : "https://www.omnivya.fr/fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=work&utm_content=calendar";
 const emailBase = siteConfig.omnivya.email;
 
 const modes = config.modes.map((mode) => ({

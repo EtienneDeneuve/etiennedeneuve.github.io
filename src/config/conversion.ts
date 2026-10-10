@@ -32,19 +32,19 @@ export const conversionConfig = {
     },
     omnivya: {
       label: {
-        fr: "Voir Omnivya Expert",
-        en: "View Omnivya Expert",
+        fr: "Voir Omnivya",
+        en: "View Omnivya",
       },
-      href: "https://www.omnivya.fr",
+      href: "https://www.omnivya.fr/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=site&utm_content=conversion-omnivya",
       event: "cta_project_open" as ConversionEvent,
       intent: "ecosystem",
     },
     booking: {
       label: {
-        fr: "Calendrier Omnivya Expert",
-        en: "Omnivya Expert calendar",
+        fr: "Contacter Omnivya",
+        en: "Contact Omnivya",
       },
-      href: "https://www.omnivya.fr",
+      href: "https://www.omnivya.fr/fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=site&utm_content=conversion-contact",
       event: "cta_booking" as ConversionEvent,
       intent: "booking",
     },
