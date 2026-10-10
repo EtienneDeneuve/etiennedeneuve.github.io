@@ -295,11 +295,11 @@ export const workConfig = {
         },
         secondaryLink: {
           fr: {
-            label: "Voir Omnivya",
+            label: "Contacter Omnivya",
             href: "https://www.omnivya.fr/fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=work&utm_content=build-mode",
           },
           en: {
-            label: "View Omnivya",
+            label: "Contact Omnivya",
             href: "https://www.omnivya.fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=work&utm_content=build-mode",
           },
         },

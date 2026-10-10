@@ -32,19 +32,25 @@ export const conversionConfig = {
     },
     omnivya: {
       label: {
-        fr: "Voir Omnivya",
-        en: "View Omnivya",
+        fr: "Contacter Omnivya",
+        en: "Contact Omnivya",
       },
-      href: "https://www.omnivya.fr/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=site&utm_content=conversion-omnivya",
-      event: "cta_project_open" as ConversionEvent,
-      intent: "ecosystem",
+      href: {
+        fr: "https://www.omnivya.fr/fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=site&utm_content=conversion-omnivya",
+        en: "https://www.omnivya.fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=site&utm_content=conversion-omnivya",
+      },
+      event: "cta_booking" as ConversionEvent,
+      intent: "qualification",
     },
     booking: {
       label: {
         fr: "Contacter Omnivya",
         en: "Contact Omnivya",
       },
-      href: "https://www.omnivya.fr/fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=site&utm_content=conversion-contact",
+      href: {
+        fr: "https://www.omnivya.fr/fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=site&utm_content=conversion-contact",
+        en: "https://www.omnivya.fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=site&utm_content=conversion-contact",
+      },
       event: "cta_booking" as ConversionEvent,
       intent: "booking",
     },

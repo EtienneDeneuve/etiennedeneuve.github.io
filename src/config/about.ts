@@ -227,6 +227,6 @@ export const aboutConfig = {
     openSource: { fr: "Open source", en: "Open source" } as Localized,
     startHere: { fr: "Start Here", en: "Start Here" } as Localized,
     emailCta: { fr: "Envoyer un email", en: "Send an email" } as Localized,
-    omnivyaLink: { fr: "Voir Omnivya", en: "View Omnivya" } as Localized,
+    omnivyaLink: { fr: "Contacter Omnivya", en: "Contact Omnivya" } as Localized,
   },
 } as const;

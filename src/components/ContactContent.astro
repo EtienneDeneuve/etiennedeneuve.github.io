@@ -92,7 +92,7 @@ const jsonLd = buildJsonLdGraph([
       <h2>{config.calendar.label[lang]}</h2>
       <p>{config.calendar.note[lang]}</p>
       <ConversionCTA
-        href={config.calendar.href}
+        href={config.calendar.hrefFor(lang)}
         event="cta_booking"
         props={{ surface: "contact", lang }}
         variant="secondary"

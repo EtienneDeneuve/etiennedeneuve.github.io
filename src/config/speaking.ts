@@ -260,8 +260,8 @@ export const speakingTopics: SpeakingTopic[] = [
         href: "/work/",
       },
       {
-        label: { fr: "Omnivya Expert", en: "Omnivya Expert" },
-        href: "https://www.omnivya.fr",
+        label: { fr: "Contacter Omnivya", en: "Contact Omnivya" },
+        href: "https://www.omnivya.fr/fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=speaking&utm_content=platform-product",
       },
     ],
     displayOrder: 4,
@@ -300,8 +300,8 @@ export const speakingTopics: SpeakingTopic[] = [
         href: "/about/",
       },
       {
-        label: { fr: "Omnivya Expert", en: "Omnivya Expert" },
-        href: "https://www.omnivya.fr",
+        label: { fr: "Contacter Omnivya", en: "Contact Omnivya" },
+        href: "https://www.omnivya.fr/fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=speaking&utm_content=constrained-markets",
       },
     ],
     displayOrder: 5,
