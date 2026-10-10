@@ -30,7 +30,7 @@ export const thinkingConfig = {
     } as Localized,
     intro: {
       fr: "Articles classés par pilier et type de contenu : la récence n'est pas le seul critère de navigation.",
-      en: "Articles organized by pillar and content type : recency is not the only navigation criterion.",
+      en: "Most notes are still published in French. The English chrome stays English; use the language filter to list EN-only pieces when they exist — this is not a fake English library.",
     } as Localized,
   },
   /** Minimum publishable articles sharing a tag before generating a tag page. */

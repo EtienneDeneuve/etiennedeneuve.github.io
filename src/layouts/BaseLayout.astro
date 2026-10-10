@@ -9,6 +9,7 @@ import JsonLd from "../components/JsonLd.astro";
 import ScrollReveal from "../components/ScrollReveal.astro";
 import type { SeoLang, SeoOgType } from "../config/seo.ts";
 import type { JsonLdObject } from "../lib/json-ld.ts";
+import { resolveLocaleSwitchPath } from "../lib/locale-switch.ts";
 
 interface Props {
   title?: string;
@@ -45,6 +46,14 @@ const {
   brandTitle,
   jsonLd = null,
 } = Astro.props;
+
+const otherLang: SeoLang = lang === "en" ? "fr" : "en";
+const translationHref = alternates.find((alt) => alt.lang === otherLang)?.href ?? null;
+const localeSwitchHref = resolveLocaleSwitchPath(
+  path ?? Astro.url.pathname,
+  otherLang,
+  translationHref
+);
 ---
 
 <html lang={lang} transition:animate="none" prefix="og: https://ogp.me/ns#">
@@ -69,7 +78,7 @@ const {
   </head>
   <body>
     <div class="stack backgrounds">
-      <Nav />
+      <Nav localeSwitchHref={localeSwitchHref} />
       <slot />
       <Footer />
     </div>

@@ -32,6 +32,7 @@ const copy =
         proofAll: "Tous les projets",
         thinkingTitle: "Notes",
         thinkingAll: "Tout lire",
+        thinkingEmpty: "",
         pathsTitle: "Par où commencer",
         paths: [
           { href: `${base}/start-here/`, label: "Start Here", desc: "Cadrer un SI complexe" },
@@ -54,6 +55,8 @@ const copy =
         proofAll: "All projects",
         thinkingTitle: "Thinking",
         thinkingAll: "Index",
+        thinkingEmpty:
+          "English notes are not published yet. The Thinking index lists the French library with English navigation — no pretend English homepage feed.",
         pathsTitle: "Where to begin",
         paths: [
           { href: `${base}/start-here/`, label: "Start Here", desc: "Frame a complex estate" },
@@ -159,23 +162,27 @@ const articleLang = (entry: HomeThinkingItem["entry"]) =>
       <h2 id="atelier-thinking">{copy.thinkingTitle}</h2>
       <a class="btn-text" href={`${base}/thinking/`}>{copy.thinkingAll}</a>
     </div>
-    <ul class="atelier-feed">
-      {
-        selectedThinking.map((item) =>
-          item.entry ? (
-            <li>
-              <a href={getArticlePath(getCanonicalSlug(item.entry), articleLang(item.entry))}>
-                <time datetime={item.entry.data.pubDate.toISOString()}>
-                  {dateFmt.format(item.entry.data.pubDate)}
-                </time>
-                <span class="atelier-meta">{item.label}</span>
-                <h3>{item.entry.data.title}</h3>
-              </a>
-            </li>
-          ) : null
-        )
-      }
-    </ul>
+    {
+      selectedThinking.length === 0 ? (
+        <p class="atelier-empty">{copy.thinkingEmpty}</p>
+      ) : (
+        <ul class="atelier-feed">
+          {selectedThinking.map((item) =>
+            item.entry ? (
+              <li>
+                <a href={getArticlePath(getCanonicalSlug(item.entry), articleLang(item.entry))}>
+                  <time datetime={item.entry.data.pubDate.toISOString()}>
+                    {dateFmt.format(item.entry.data.pubDate)}
+                  </time>
+                  <span class="atelier-meta">{item.label}</span>
+                  <h3>{item.entry.data.title}</h3>
+                </a>
+              </li>
+            ) : null
+          )}
+        </ul>
+      )
+    }
   </section>
 
   <section class="atelier-section" aria-labelledby="atelier-paths">
@@ -493,6 +500,13 @@ const articleLang = (entry: HomeThinkingItem["entry"]) =>
     .atelier-proof__grid .atelier-card {
       height: 100%;
     }
+  }
+
+  .atelier-empty {
+    margin: 0;
+    padding: var(--space-4) 0;
+    color: var(--color-fg-muted);
+    max-width: 42rem;
   }
 
   .atelier-feed {
