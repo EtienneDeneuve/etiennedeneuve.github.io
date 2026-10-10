@@ -34,8 +34,7 @@ const hasActiveFilters = Boolean(
 );
 
 const allArticles = await getAllThinkingArticles();
-// Index lists the full library in both locales (almost all articles are FR today).
-// Language filter in the form still lets visitors narrow to FR/EN.
+// Both indexes list the full library; EN UI can show FR bodies. Language filter narrows.
 const filtered = sortArticles(filterArticles(allArticles, filters), sort);
 const featured = hasActiveFilters ? [] : getFeaturedArticles(allArticles);
 const qualifyingTags = getQualifyingTags(allArticles);

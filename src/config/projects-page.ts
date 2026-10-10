@@ -25,8 +25,8 @@ export const projectsPageConfig = {
     },
     eyebrow: { fr: "Portfolio technique", en: "Technical portfolio" },
     intro: {
-      fr: "Projets techniques, open source et de recherche appliquée. Chaque entrée décrit un problème, une approche, des technologies et un statut vérifiable — sans success story ni métriques inventées.",
-      en: "Technical, open-source and applied-research projects. Each entry describes a problem, an approach, technologies and a verifiable status — no success story or invented metrics.",
+      fr: "Projets techniques, open source et de recherche appliquée. Chaque entrée décrit un problème, une approche, des technologies et un statut vérifiable, sans success story ni métriques inventées.",
+      en: "Technical, open-source and applied-research projects. Each entry describes a problem, an approach, technologies and a verifiable status, without success stories or invented metrics.",
     },
   },
   labels: {

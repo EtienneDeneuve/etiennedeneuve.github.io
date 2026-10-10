@@ -382,6 +382,53 @@ function main() {
     }
   }
 
+  // Bilingual SEO guards (#146)
+  const enHome = join(distDir, "en", "index.html");
+  if (existsSync(enHome)) {
+    const enHomeHtml = readFileSync(enHome, "utf8");
+    if (!/class=["'][^"']*lang-switch/i.test(enHomeHtml)) {
+      fail("en/index.html: missing language switcher");
+    }
+    const hasEmptyThinking = /No English notes yet/i.test(enHomeHtml);
+    const hasThinkingFeed = /atelier-feed/i.test(enHomeHtml);
+    if (!hasEmptyThinking && !hasThinkingFeed) {
+      fail("en/index.html: missing Thinking section (empty state or EN feed)");
+    }
+    if (!hasEmptyThinking && hasThinkingFeed) {
+      // When EN articles exist, feed is OK; when they do not, empty copy is required.
+      // Detect FR fallback: empty copy must appear if feed links go to FR /thinking/ only.
+      const frArticleOnEnHome = /href=["']\/thinking\/[^"']+["']/i.test(enHomeHtml);
+      if (frArticleOnEnHome) {
+        fail("en/index.html: FR article cards on EN home (forbidden fallback)");
+      }
+    }
+  } else {
+    fail("en/index.html missing from dist");
+  }
+
+  const frHome = join(distDir, "index.html");
+  if (existsSync(frHome) && !/class=["'][^"']*lang-switch/i.test(readFileSync(frHome, "utf8"))) {
+    fail("index.html: missing language switcher");
+  }
+
+  // EN articles must not be rendered under FR /thinking/ with html lang=fr
+  for (const file of walk(distDir, [], new Set([".html"]))) {
+    const rel = relative(distDir, file).replace(/\\/g, "/");
+    if (!rel.startsWith("thinking/") || rel.startsWith("thinking/rss/")) continue;
+    if (rel === "thinking/index.html") continue;
+    if (rel.includes("/type/") || rel.includes("/pillar/") || rel.includes("/tag/")) continue;
+    const html = readFileSync(file, "utf8");
+    if (isAstroRedirectPage(html)) continue;
+    const langMatch = html.match(/<html[^>]*\slang=["']([^"']+)["']/i);
+    const htmlLang = langMatch?.[1] ?? "";
+    if (htmlLang === "fr") {
+      const contentLangBadge = html.match(/badge muted[^>]*>\s*EN\s*</i);
+      if (contentLangBadge) {
+        fail(`${rel}: EN article rendered under FR /thinking/ route`);
+      }
+    }
+  }
+
   if (errors.length > 0) {
     console.error(`test-seo-dist: ${errors.length} failure(s)`);
     for (const error of errors) {

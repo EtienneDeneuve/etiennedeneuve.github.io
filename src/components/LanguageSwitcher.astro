@@ -1,0 +1,65 @@
+---
+import type { UiLang } from "../lib/locale-switch.ts";
+
+interface Props {
+  lang: UiLang;
+  otherHref: string;
+}
+
+const { lang, otherHref } = Astro.props;
+const otherLang: UiLang = lang === "en" ? "fr" : "en";
+const labels = {
+  fr: { current: "Français", other: "English", short: "FR" },
+  en: { current: "English", other: "Français", short: "EN" },
+} as const;
+---
+
+<nav class="lang-switch" aria-label={lang === "en" ? "Language" : "Langue"}>
+  <span class="lang-switch__current" aria-current="true" lang={lang}>
+    {labels[lang].short}
+    <span class="sr-only">{labels[lang].current}</span>
+  </span>
+  <span class="lang-switch__sep" aria-hidden="true">/</span>
+  <a class="lang-switch__link" href={otherHref} lang={otherLang} hreflang={otherLang}>
+    {labels[otherLang].short}
+    <span class="sr-only">{labels[otherLang].other}</span>
+  </a>
+</nav>
+
+<style>
+  .lang-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    line-height: 1;
+  }
+
+  .lang-switch__current {
+    color: var(--color-fg);
+    font-weight: 700;
+  }
+
+  .lang-switch__sep {
+    color: var(--color-fg-muted);
+  }
+
+  .lang-switch__link {
+    color: var(--color-fg-muted);
+    text-decoration: none;
+    min-height: var(--touch-min);
+    min-width: 2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lang-switch__link:hover,
+  .lang-switch__link:focus-visible {
+    color: var(--color-fg);
+    text-decoration: underline;
+    outline: none;
+  }
+</style>

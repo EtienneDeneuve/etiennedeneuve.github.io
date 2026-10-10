@@ -94,7 +94,7 @@ export function profilePageJsonLd(path = "/about/"): JsonLdObject {
     "@type": "ProfilePage",
     "@id": absoluteUrl(path),
     url: absoluteUrl(path),
-    name: `${seoConfig.person.name} — About`,
+    name: `${seoConfig.person.name}: About`,
     mainEntity: { "@id": ecosystemNodeId("etienne") },
     isPartOf: { "@id": ecosystemNodeId("website") },
   };
