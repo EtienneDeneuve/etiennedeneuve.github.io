@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import CallToAction from "./CallToAction.astro";
-import { siteConfig } from "../config/site.ts";
+import { omnivyaContactUrl, siteConfig } from "../config/site.ts";
 import { projectField } from "../lib/projects-i18n.ts";
 import { getArticlePath, getArticleLanguage, getCanonicalSlug } from "../lib/thinking.ts";
 import type { HomeThinkingItem } from "../lib/home-thinking.ts";
@@ -26,7 +26,7 @@ const copy =
         lede: "Notes d’architecture, décisions publiques et preuves vérifiables, pour les équipes qui pilotent un SI sous contraintes réelles.",
         ctaPrimary: "Commencer ici",
         ctaProof: "Voir les projets",
-        ctaMail: "Écrire",
+        ctaMission: "Cadrer une mission",
         scopeLabel: "Domaines",
         proofTitle: "Réalisations",
         proofAll: "Tous les projets",
@@ -48,7 +48,7 @@ const copy =
         lede: "Architecture notes, public decisions and verifiable proof, for teams steering an estate under real constraints.",
         ctaPrimary: "Start here",
         ctaProof: "See the evidence",
-        ctaMail: "Write",
+        ctaMission: "Frame a mission",
         scopeLabel: "Domains",
         proofTitle: "Evidence",
         proofAll: "All projects",
@@ -86,8 +86,11 @@ const articleLang = (entry: HomeThinkingItem["entry"]) =>
         <span aria-hidden="true"> · </span>
         {copy.via}
         {" "}
-        <a href={siteConfig.omnivya.website} rel="noopener noreferrer" target="_blank"
-          >{siteConfig.omnivya.name}</a
+        <a
+          href={omnivyaContactUrl(lang, "home-kicker")}
+          rel="noopener noreferrer"
+          target="_blank"
+          >{siteConfig.omnivya.publicName}</a
         >
       </p>
       <p class="atelier-name">{siteConfig.identity.name}</p>
@@ -104,7 +107,15 @@ const articleLang = (entry: HomeThinkingItem["entry"]) =>
           {copy.ctaPrimary}
         </CallToAction>
         <a class="btn-secondary" href={`${base}/projects/`}>{copy.ctaProof}</a>
-        <a class="btn-text" href={`mailto:${siteConfig.omnivya.email}`}>{copy.ctaMail}</a>
+        <a
+          class="btn-text"
+          href={omnivyaContactUrl(lang, "home-hero")}
+          rel="noopener noreferrer"
+          target="_blank"
+          data-analytics-event="cta_booking"
+          data-analytics-props={JSON.stringify({ surface: "home", lang, intent: "qualification" })}
+          >{copy.ctaMission}</a
+        >
       </div>
       <div class="atelier-scope">
         <span class="atelier-scope__label">{copy.scopeLabel}</span>
