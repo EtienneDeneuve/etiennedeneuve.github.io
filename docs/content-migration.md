@@ -32,23 +32,26 @@ Introduire les nouvelles collections (`articles`, `projects`, `caseStudies`, `ap
 
 3. Déplacer progressivement les fichiers vers `src/content/articles/` lorsque le frontmatter est revu.
 
-## Réécriture éditoriale (MLX MoE local)
+## Réécriture éditoriale (Kev triage + MLX drafts)
 
-Pour repositionner les posts legacy vers la voix Thinking **sans tokens cloud** (défaut : Qwen3.5-35B-A3B OptiQ via `mlx_lm.server`) :
+Pour repositionner les posts legacy vers la voix Thinking **sans tokens cloud** :
+
+- triage : Kev (`kev-bootstrap` / `kev-serve`)
+- drafts : Qwen3.5-35B-A3B OptiQ via `mlx_lm.server`
 
 voir [`article-rewrite.md`](./article-rewrite.md) et le brief [`editorial-rewrite-prompt.md`](./editorial-rewrite-prompt.md).
 
 ```bash
 # via devenv (recommandé)
-direnv allow && mlx-serve
+direnv allow
+kev-bootstrap && kev-serve   # triage
+# autre terminal :
+mlx-serve                    # drafts seulement
+rewrite-triage -- --before 2026-01-01 --limit 5
+rewrite-draft -- --limit 1
 
-# ou sans devenv
-uvx --from mlx-lm mlx_lm.server \
-  --model mlx-community/Qwen3.5-35B-A3B-OptiQ-4bit \
-  --port 18080
-bun run rewrite:articles:status
-bun run rewrite:articles:triage -- --limit 5
-bun run rewrite:articles:rewrite -- --limit 1
+# fallback triage LLM
+TRIAGE_BACKEND=mlx rewrite-triage -- --limit 5
 ```
 
 Les drafts sortent sous `~/Worklog/content/rewrites/` — jamais directement dans `src/content/blog/`.

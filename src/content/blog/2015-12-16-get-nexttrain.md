@@ -17,6 +17,7 @@ pubDate: 2015-12-16 13:44:50
 updateDate: 2024-02-12 11:16:00
 img: /assets/stock-1.jpg
 img_alt: nice abstract image
+draft: true
 ---
 
 ## Jouons avec l'API SNCF et Powershell

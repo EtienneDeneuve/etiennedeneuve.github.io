@@ -6,6 +6,7 @@ slug: 2017/03/14/azure-et-le-backup-dun-mac
 pubDate: 2017-03-14 22:29:37
 img: /assets/stock-3.jpg
 img_alt: "nice abstract image"
+draft: true
 ---
 
 Un petit article "Quick &amp; very very dirty" qui est soyons honnêtes complètement inutile.

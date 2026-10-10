@@ -11,7 +11,7 @@ module.exports = {
         "http://127.0.0.1:4321/work/",
         "http://127.0.0.1:4321/projects/",
         "http://127.0.0.1:4321/speaking/",
-        "http://127.0.0.1:4321/thinking/2024-10-05-automatisation-carousel-linkedin/",
+        "http://127.0.0.1:4321/thinking/2026-09-22-opentelemetry-pourquoi-je-lai-propose/",
       ],
       startServerCommand: "bunx astro preview --host 127.0.0.1 --port 4321",
       startServerReadyPattern: "Local",

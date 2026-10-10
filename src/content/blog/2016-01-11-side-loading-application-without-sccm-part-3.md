@@ -12,6 +12,7 @@ slug: 2016/01/11/side-loading-application-without-sccm-part-3
 pubDate: 2016-01-11 19:57:23
 img: /assets/stock-4.jpg
 img_alt: "image abstraite intéressante"
+draft: true
 ---
 
 Si vous avez suivi les parties précédentes de cette série, vous êtes prêt à approfondir l'automatisation du déploiement d'applications sans SCCM. Dans cette troisième partie, nous nous concentrons sur un script PowerShell essentiel pour le chargement latéral d'applications Appx.
