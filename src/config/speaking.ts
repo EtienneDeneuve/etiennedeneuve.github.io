@@ -1,3 +1,5 @@
+import { messagingConfig } from "./messaging.ts";
+
 export type SpeakingFormat =
   "keynote" | "conference" | "panel" | "workshop" | "executive-briefing" | "podcast";
 
@@ -397,10 +399,7 @@ export const mediaKitConfig = {
     width: 640,
     height: 854,
   },
-  shortBio: {
-    fr: "Etienne Deneuve est Platform Reliability Architect et CTO d’Omnivya, basé près de Paris. Via Omnivya Expert, il conçoit et sécurise des plateformes cloud et Kubernetes (observabilité OpenTelemetry, FinOps, DevSecOps et platform engineering) pour des organisations en finance, luxe et santé numérique. Il publie sur etienne.deneuve.xyz.",
-    en: "Etienne Deneuve is a Platform Reliability Architect and CTO of Omnivya, based near Paris. Through Omnivya Expert, he designs and secures cloud and Kubernetes platforms (OpenTelemetry, FinOps, DevSecOps, and platform engineering) for organisations in finance, luxury, and public digital health. He writes at etienne.deneuve.xyz.",
-  },
+  shortBio: messagingConfig.etienne.shortBio,
   longBio: {
     fr: [
       "Depuis plus de quinze ans, Etienne Deneuve construit et modernise des infrastructures, d'abord en exploitation et avant-vente, puis en mission via des ESN et éditeurs (Cellenza, Dell Technologies). Cofondateur d’Omnivya avec Taous, qui dirige Omnivya et Omnivya Expert ; il en est le CTO. Omnivya Expert porte les missions de conseil et de delivery structurées.",
