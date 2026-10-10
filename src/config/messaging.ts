@@ -24,9 +24,9 @@ export const messagingConfig = {
         fr: "Doctrine, cartes de système et arbitrages documentés pour piloter un SI sous contraintes.",
         en: "Doctrine, system maps and documented trade-offs for steering an estate under constraints.",
       } as Localized,
-      rssi: {
+      security: {
         fr: "Prioriser selon l’exposition et l’impact, pas selon le volume d’alertes.",
-        en: "Prioritise by exposure and impact, not by alert volume.",
+        en: "Prioritize by exposure and impact, not by alert volume.",
       } as Localized,
     },
     pitch: {
