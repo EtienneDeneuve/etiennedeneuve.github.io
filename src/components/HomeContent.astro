@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import CallToAction from "./CallToAction.astro";
 import { omnivyaContactUrl, siteConfig } from "../config/site.ts";
+import { messagingConfig } from "../config/messaging.ts";
 import { projectField } from "../lib/projects-i18n.ts";
 import { getArticlePath, getArticleLanguage, getCanonicalSlug } from "../lib/thinking.ts";
 import type { HomeThinkingItem } from "../lib/home-thinking.ts";
@@ -22,7 +23,7 @@ const copy =
     ? {
         role: siteConfig.professionalRole.title,
         via: "Missions via",
-        headline: "Rendre les plateformes cloud lisibles, fiables et gouvernables.",
+        headline: messagingConfig.etienne.positioning.fr,
         lede: "Notes d’architecture, décisions publiques et preuves vérifiables, pour les équipes qui pilotent un SI sous contraintes réelles.",
         ctaPrimary: "Commencer ici",
         ctaProof: "Voir les projets",
@@ -45,7 +46,7 @@ const copy =
     : {
         role: siteConfig.professionalRole.title,
         via: "Delivery via",
-        headline: "Make cloud platforms readable, reliable and governable.",
+        headline: messagingConfig.etienne.positioning.en,
         lede: "Architecture notes, public decisions and verifiable proof, for teams steering an estate under real constraints.",
         ctaPrimary: "Start here",
         ctaProof: "See the evidence",
