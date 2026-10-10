@@ -389,7 +389,7 @@ function main() {
     if (!/class=["'][^"']*lang-switch/i.test(enHomeHtml)) {
       fail("en/index.html: missing language switcher");
     }
-    const hasEmptyThinking = /English notes are not published yet/i.test(enHomeHtml);
+    const hasEmptyThinking = /No English notes yet/i.test(enHomeHtml);
     const hasThinkingFeed = /atelier-feed/i.test(enHomeHtml);
     if (!hasEmptyThinking && !hasThinkingFeed) {
       fail("en/index.html: missing Thinking section (empty state or EN feed)");
