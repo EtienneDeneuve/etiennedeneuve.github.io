@@ -25,7 +25,8 @@ Une page = une question :
 3. **About + Contact** — resserrer / réduire. ✅
 4. **Projects** — hiérarchie fiche + index ; OS hors About. ✅
 5. **Speaking + Resources** — réalisations d’abord ; `/resources/all` → `/resources`. ✅
-6. **Media kit + 404** — sync CTO ; 404 court. ✅ (HTML régénéré ; PDF à régénérer si Chromium Playwright dispo)
+6. **Media kit + 404** — sync CTO ; 404 court. ✅  
+   Vérif. 2026-10-11 : `bun src/scripts/generate-media-kit.ts` → HTML + PDF ; HTML contient « CTO conseil », pas « Platform Reliability ».
 
 ## Règles
 
