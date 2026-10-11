@@ -80,7 +80,7 @@ export const workConfig = {
       },
       decision: {
         fr: "Arbitrer ce qui doit être stabilisé, simplifié ou volontairement non traité.",
-        en: "Decide what must be stabilised, simplified or deliberately left alone.",
+        en: "Decide what must be stabilized, simplified or deliberately left alone.",
       },
       outcome: {
         fr: "Des critères pour récupérer de la capacité sans ajouter une couche d’outil ou de process.",

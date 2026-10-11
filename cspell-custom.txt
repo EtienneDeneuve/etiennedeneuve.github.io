@@ -4,6 +4,8 @@
 # Brand names and proper nouns
 Omnivya
 omnivya
+TechSpresso
+techspresso
 SimplifiED
 Simplifi'ed
 Deneuve
