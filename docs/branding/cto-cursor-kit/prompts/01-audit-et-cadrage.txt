@@ -1,0 +1,19 @@
+Lis le dossier docs/branding/cto-cursor-kit, en particulier SPECIFICATION.txt,
+content.fr.json et les deux références. Nous implémentons le design validé du
+site personnel d’Étienne Deneuve, CTO conseil. Ne réinvente pas le positionnement.
+
+Étape 1 seulement : inspecte le dépôt avant toute modification de l’interface.
+Lis les instructions applicables (AGENTS.md, conventions, design system).
+Identifie la stack réelle, la page d’accueil, les composants partagés, les
+styles, les fontes, les actifs, les routes Interventions/Réalisations/Notes,
+la destination contact, le footer et les fonctions existantes à préserver.
+Vérifie les dimensions et le format de la photo originale.
+
+Rends un plan court : fichiers concernés, composants à réutiliser, mapping
+des liens, moyens de lancer et vérifier le site, écarts entre l’existant et
+le brief. Le brief fixe les breakpoints ; ne les déduis pas de la capture.
+Pas de nouvelle stack. Pas d’implémentation dans cette étape.
+Distingue les choix réversibles que tu peux faire des informations absentes.
+Si un lien manque, relève-le ; ne fabrique ni adresse ni destination.
+Termine avec les points à reporter au prompt 02.
+

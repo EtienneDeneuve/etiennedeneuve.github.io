@@ -1,0 +1,19 @@
+Étape 2 : reprends l’audit et relis SPECIFICATION.txt.
+Implémente les tokens, la structure sémantique et les contenus canoniques.
+Réutilise la stack, les conventions et composants pertinents du dépôt.
+
+Construis SiteHeader, HeroSection (HeroCopy puis PortraitFigure),
+ScopeStrip, ApproachSection #approche, TechnicalDepthBand.
+Conserve le footer et les fonctions existantes hors périmètre.
+Charge les textes depuis content.fr.json ou adapte-les à la structure de
+contenu du projet sans les réécrire.
+Un seul arbre DOM pour desktop et mobile. Pas de duplication complète.
+
+Installe couleurs, grille max 1440, espacements, typographie, styles de liens,
+boutons et focus. Ne cherche pas encore le pixel-perfect.
+Aucune dépendance lourde. Les destinations proviennent du mapping de l’audit.
+La seule photo autorisée est references/portrait-original.jpeg, jamais
+le portrait reconstruit de la maquette.
+Pas de publication. Exécute les checks pertinents du dépôt et rapporte
+les fichiers modifiés et les éventuels points réellement bloquants.
+

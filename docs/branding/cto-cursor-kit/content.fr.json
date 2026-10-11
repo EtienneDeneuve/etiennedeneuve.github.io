@@ -1,0 +1,63 @@
+{
+  "identity": {
+    "name": "Étienne Deneuve",
+    "role": "CTO conseil",
+    "monogram": "ÉD"
+  },
+  "navigation": [
+    "Approche",
+    "Interventions",
+    "Réalisations",
+    "Notes"
+  ],
+  "headerCta": "Échanger",
+  "hero": {
+    "eyebrow": "Conseil aux directions et aux équipes",
+    "titleFirst": "Stratégie, organisation",
+    "titleAccent": "& transformation.",
+    "lead": "Relier les enjeux de l’entreprise, les équipes et la technologie.",
+    "body": "Comprendre les causes, éclairer les arbitrages et accompagner les transformations, avec une lecture fine des organisations et des systèmes.",
+    "primaryCta": "Échanger sur vos enjeux",
+    "secondaryCta": "Découvrir mon approche"
+  },
+  "domains": [
+    "Stratégie & gouvernance",
+    "Organisation & responsabilités",
+    "Architecture & logiciel",
+    "Production & qualité de service"
+  ],
+  "approach": {
+    "eyebrow": "Une lecture transverse",
+    "titleFirst": "Comprendre les causes.",
+    "titleSecond": "Choisir le bon levier.",
+    "intro": "Chaque situation appelle sa réponse : clarifier une décision, faire évoluer l’organisation ou adapter les systèmes.",
+    "steps": [
+      {
+        "number": "01",
+        "title": "Comprendre la situation",
+        "body": "Écouter les équipes et distinguer les causes humaines, organisationnelles et techniques."
+      },
+      {
+        "number": "02",
+        "title": "Éclairer les choix",
+        "body": "Rendre les options, les responsabilités et les conséquences explicites."
+      },
+      {
+        "number": "03",
+        "title": "Accompagner la trajectoire",
+        "body": "Guider les équipes, challenger les choix et ajuster les orientations."
+      }
+    ]
+  },
+  "technicalDepth": {
+    "title": "La profondeur technique, au service du discernement.",
+    "body": "Du logiciel à la production, comprendre le terrain pour mieux conseiller.",
+    "cta": "Réalisations & retours d’expérience"
+  },
+  "portrait": {
+    "alt": "Portrait d’Étienne Deneuve",
+    "captionName": "Étienne Deneuve",
+    "captionRole": "CTO conseil"
+  }
+}
+

@@ -1,0 +1,35 @@
+KIT CURSOR — ÉTIENNE DENEUVE / CTO CONSEIL
+Version du 11 octobre 2026
+
+OBJECTIF
+Implémenter dans le dépôt existant une page conforme à la direction artistique
+validée et au positionnement de conseil. Ce kit est une spécification et une
+séquence de travail : aucun code du site existant n’a été inspecté ou modifié.
+
+UTILISATION
+1. Décompresser ce dossier dans docs/branding/cto-cursor-kit du dépôt.
+2. Donner à Cursor prompts/01-audit-et-cadrage.txt avec le dossier en contexte.
+3. Exécuter les prompts 02 à 06 dans l’ordre, un prompt par étape.
+4. Cursor lit SPECIFICATION.txt et content.fr.json à chaque étape utile.
+5. La livraison attendue est une modification locale vérifiée ; ni déploiement,
+   ni merge, ni publication ne font partie de cette demande.
+
+HIÉRARCHIE DES RÉFÉRENCES
+- Les instructions applicables du dépôt et les contraintes de sécurité restent
+  applicables. Signaler un conflit réel avec le brief.
+- SPECIFICATION.txt fait autorité pour les comportements et les contraintes.
+- content.fr.json fait autorité pour les textes.
+- references/maquette-validee.png fait référence pour la composition/couleur.
+- references/portrait-original.jpeg est la seule source autorisée du portrait.
+  Le portrait présent dans la maquette est une reconstruction générée :
+  il ne doit jamais être extrait pour devenir la photo du site.
+
+IMPORTANT
+La maquette montre un desktop et un mobile côte à côte. Il s’agit de deux
+viewports d’une même page, pas de deux images à afficher sur le site.
+Le cadre de téléphone et le fond extérieur de présentation ne font pas partie
+de l’interface. Le bas de la capture mobile est une coupure de capture :
+tous les blocs restent accessibles en défilant.
+Les tailles du brief sont des décisions d’implémentation proposées ; elles
+ne sont ni une mesure exacte de la maquette ni une description du dépôt actuel.
+

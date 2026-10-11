@@ -14,20 +14,20 @@ export const startHereConfig = {
   meta: {
     title: { fr: "Start Here", en: "Start Here" } as Localized<string>,
     description: {
-      fr: "Méthode, domaines et preuves publiques pour faire évoluer des plateformes et des SI complexes sous contraintes réelles.",
-      en: "Method, domains and public proof for evolving complex platforms and IT estates under real constraints.",
+      fr: "Point d’entrée CTO conseil : comment je lis une situation, quels leviers j’emploie, et quelles preuves je publie.",
+      en: "Advisory CTO entry point: how I read a situation, which levers I use, and which proofs I publish.",
     } as Localized<string>,
     eyebrow: {
       fr: "Point d’entrée",
       en: "Entry point",
     } as Localized<string>,
     intro: {
-      fr: "Architecte, CTO et conseiller technique sur le cloud, Kubernetes, le Platform Engineering, l’observabilité, le DevSecOps et l’architecture de systèmes complexes.",
-      en: "Architect, CTO and technical advisor on cloud, Kubernetes, Platform Engineering, observability, DevSecOps and complex systems architecture.",
+      fr: "CTO conseil : comprendre les causes humaines, organisationnelles et techniques, éclairer les arbitrages, accompagner les transformations — sans promesse d’exécution magique.",
+      en: "Advisory CTO: understand human, organisational and technical causes, clarify trade-offs, support transformations — without a magic delivery promise.",
     } as Localized<string>,
     lead: {
-      fr: "Si votre SI est difficile à lire, risqué à faire évoluer ou noyé sous les outils, voici comment je travaille, ce que je traite, et les preuves que je publie.",
-      en: "If your estate is hard to read, risky to change, or buried under tools, here is how I work, what I take on, and the proof I publish.",
+      fr: "Si la décision bloque parce que les causes sont mélangées — équipes, gouvernance, systèmes — voici comment je travaille, ce que je traite, et les preuves que je publie.",
+      en: "If decisions stall because causes are entangled — teams, governance, systems — here is how I work, what I take on, and the proof I publish.",
     } as Localized<string>,
   },
   sections: {

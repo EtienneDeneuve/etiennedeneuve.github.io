@@ -1,9 +1,15 @@
 <style is:inline is:global>
-  /* Swiss Signal: flat paper/ink, no photo collage */
+  /* Default page surface — paper. Home overrides to graphite so the
+     stack never shows ivory below the last dark band / footer. */
   .backgrounds {
     min-height: 100%;
     isolation: isolate;
     background-color: var(--color-bg);
+  }
+
+  body:has(.home),
+  body:has(.home) .backgrounds {
+    background-color: var(--graphite, #111416);
   }
 
   @media (forced-colors: active) {

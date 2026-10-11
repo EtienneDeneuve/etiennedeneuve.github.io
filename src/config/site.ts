@@ -13,12 +13,13 @@ export const siteConfig = {
   identity: {
     firstName: "Etienne",
     lastName: "Deneuve",
-    name: "Etienne Deneuve",
+    name: "Étienne Deneuve",
     brandName: "Etienne Deneuve",
   },
   professionalRole: {
-    title: "Platform Reliability Architect",
-    subtitle: "Cloud Native, Kubernetes, DevSecOps, FinOps, GreenOps, Platform Engineering",
+    title: "CTO conseil",
+    subtitle:
+      "Stratégie, organisation & transformation — leviers humains, organisationnels et techniques",
   },
   location: {
     label: "France (remote-first, Europe)",
@@ -95,12 +96,11 @@ export const siteConfig = {
 
   // Legacy aliases kept for compatibility with existing components/pages.
   author: {
-    name: "Etienne Deneuve",
+    name: "Étienne Deneuve",
     fullName: "Etienne Deneuve",
     siteName: "Etienne Deneuve",
-    tagline:
-      "Platform Reliability Architect - Cloud Native, Kubernetes, DevSecOps, FinOps, GreenOps",
-    jobTitle: "Platform Reliability Architect",
+    tagline: "CTO conseil — stratégie, organisation & transformation",
+    jobTitle: "CTO conseil",
     location: "France (remote-first, Europe)",
   },
   site: {

@@ -1,0 +1,21 @@
+Étape 3 : réalise le desktop selon SPECIFICATION.txt, parties 4 à 11,
+en comparant visuellement avec references/maquette-validee.png.
+Conserve strictement les textes et le positionnement de CTO conseil.
+
+Hero deux colonnes dès 1024 ; navigation complète seulement dès 1200.
+Texte à gauche, vraie photo à droite, CTA cuivre sur graphite.
+Bande domaines 4 colonnes. Approche ivoire, étapes 3 colonnes.
+Bande technique graphite avec lien à droite quand l’espace le permet.
+Aligne tous les contenus sur la même grille.
+
+Photo : conserve les pixels/traits de l’original ; sa forme déjà circulaire
+est acceptable. Utilise object-fit:contain dans un panneau adapté. Pas de
+portrait généré, pas d’extension artificielle, pas de nouveau décor.
+N’impose pas la composition photographique fictive de la capture.
+
+Vérifie en navigateur à 1024, 1200 et 1440 px. Aucun titre sur le visage,
+aucun mot coupé ni dépassement. Documente les écarts nécessaires liés à
+la vraie photo et à la fonte disponible. Fournis les captures si l’outillage
+le permet. Si tu ne peux pas ouvrir le navigateur, indique cette limite
+plutôt que d’affirmer une validation visuelle.
+

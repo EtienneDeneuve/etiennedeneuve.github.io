@@ -25,16 +25,16 @@ export const workConfig = {
   meta: {
     title: { fr: "Work", en: "Work" },
     description: {
-      fr: "Conseil, architecture et delivery technique : Diagnose, Decide, Build. Systèmes complexes, cloud, Kubernetes, observabilité, DevSecOps.",
-      en: "Consulting, architecture and technical delivery: Diagnose, Decide, Build. Complex systems, cloud, Kubernetes, observability, DevSecOps.",
+      fr: "Modes d’intervention de CTO conseil : comprendre les causes, éclairer les arbitrages, accompagner la trajectoire — sans catalogue ESN.",
+      en: "Advisory CTO intervention modes: understand causes, clarify trade-offs, support the trajectory — not a staff-aug catalog.",
     },
     eyebrow: {
       fr: "Modes d’intervention",
       en: "Intervention modes",
     },
     intro: {
-      fr: "Je n’interviens pas comme un catalogue de prestations. Chaque mission commence par clarifier le mode adapté : comprendre le système, trancher une décision d’architecture, accompagner un CTO, ou construire via Omnivya Expert.",
-      en: "I do not operate as a service catalog. Every engagement starts by clarifying the right mode: understand the system, make an architecture decision, advise a CTO, or build via Omnivya Expert.",
+      fr: "Je n’interviens pas comme un catalogue de prestations. Chaque mission commence par clarifier le levier adapté : organisation, humain ou technique — comprendre, trancher, accompagner, ou exécuter via Omnivya Expert quand le périmètre l’exige.",
+      en: "I do not operate as a service catalog. Every engagement starts by clarifying the right lever: organisation, people or technology — understand, decide, support, or execute via Omnivya Expert when the scope requires it.",
     },
   },
   modes: [
