@@ -31,6 +31,7 @@ const featuredSlugs = new Set(projects.map((p) => p.id));
 const otherRepos = getSortedGitHubProjects(lang).filter(
   (repo) => !repo.relatedProjectSlug || !featuredSlugs.has(repo.relatedProjectSlug)
 );
+const labels = config.labels;
 
 const jsonLd = buildJsonLdGraph([
   personJsonLd(),
@@ -55,15 +56,6 @@ const jsonLd = buildJsonLdGraph([
     })
   ),
 ]);
-
-const copy = {
-  featured: { fr: "Mis en avant", en: "Featured" },
-  other: { fr: "Autres contributions", en: "Other contributions" },
-  empty: {
-    fr: "Aucun projet publié pour le moment.",
-    en: "No published project yet.",
-  },
-};
 ---
 
 <BaseLayout
@@ -85,7 +77,7 @@ const copy = {
     </section>
 
     <section class="stack gap-4" aria-labelledby="featured-title">
-      <h2 id="featured-title">{copy.featured[lang]}</h2>
+      <h2 id="featured-title">{labels.featured[lang]}</h2>
       {
         projects.length > 0 ? (
           <div class="grid-auto">
@@ -94,7 +86,7 @@ const copy = {
             ))}
           </div>
         ) : (
-          <p class="muted">{copy.empty[lang]}</p>
+          <p class="muted">{labels.empty[lang]}</p>
         )
       }
     </section>
@@ -102,7 +94,7 @@ const copy = {
     {
       otherRepos.length > 0 && (
         <section class="stack gap-4" aria-labelledby="other-title">
-          <h2 id="other-title">{copy.other[lang]}</h2>
+          <h2 id="other-title">{labels.other[lang]}</h2>
           <ul class="contrib-list">
             {otherRepos.map((repo) => (
               <li>

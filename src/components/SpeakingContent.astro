@@ -29,21 +29,9 @@ const appearances = allAppearances
   .filter((entry) => !entry.data.draft)
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-const labels = {
-  audience: lang === "en" ? "Audience" : "Audience",
-  shortBio: lang === "en" ? "Short bio" : "Bio courte",
-  downloadPhoto: lang === "en" ? "Download photo" : "Télécharger la photo",
-  languages: lang === "en" ? "Languages" : "Langues",
-  contact: lang === "en" ? "Contact" : "Contact",
-  downloadHtml: lang === "en" ? "Full media kit (HTML)" : "Media kit complet (HTML)",
-  downloadPdf: lang === "en" ? "Download PDF" : "Télécharger le PDF",
-  emailCta: lang === "en" ? "Send an email" : "Envoyer un email",
-  proofEvent: lang === "en" ? "Event page" : "Page événement",
-  proofVideo: lang === "en" ? "Video" : "Vidéo",
-  proofSlides: lang === "en" ? "Slides" : "Slides",
-  proofPodcast: lang === "en" ? "Podcast" : "Podcast",
-  proofArticle: lang === "en" ? "Article" : "Article",
-};
+const labels = Object.fromEntries(
+  Object.entries(config.labels).map(([key, value]) => [key, value[lang]])
+) as Record<keyof typeof config.labels, string>;
 
 function localizedAppearanceField(
   entry: (typeof appearances)[number],
@@ -162,7 +150,7 @@ const jsonLd = buildJsonLdGraph([
 
     <section class="stack gap-4" id="topics">
       <header class="stack gap-2">
-        <h2>{lang === "en" ? "Current themes" : "Thèmes actuels"}</h2>
+        <h2>{config.meta.topicsTitle[lang]}</h2>
         <p class="intro">{config.meta.topicsIntro[lang]}</p>
       </header>
       <ul class="topics-compact">

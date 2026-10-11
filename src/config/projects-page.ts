@@ -30,6 +30,12 @@ export const projectsPageConfig = {
     },
   },
   labels: {
+    featured: { fr: "Mis en avant", en: "Featured" },
+    other: { fr: "Autres contributions", en: "Other contributions" },
+    empty: {
+      fr: "Aucun projet publié pour le moment.",
+      en: "No published project yet.",
+    },
     problem: { fr: "Problème rencontré", en: "Problem faced" },
     approach: { fr: "Approche", en: "Approach" },
     technologies: { fr: "Technologies", en: "Technologies" },

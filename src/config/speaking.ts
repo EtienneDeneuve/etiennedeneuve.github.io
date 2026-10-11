@@ -88,6 +88,10 @@ export const speakingPageConfig = {
       fr: "D’abord ce qui a été fait et peut être vérifié. Ensuite les thèmes sur lesquels j’interviens aujourd’hui.",
       en: "First what was done and can be verified. Then the themes I speak on today.",
     },
+    topicsTitle: {
+      fr: "Thèmes actuels",
+      en: "Current themes",
+    },
     topicsIntro: {
       fr: "Quelques thèmes actuels. Chaque intervention s’adapte au contexte et au format.",
       en: "A few current themes. Each talk adapts to context and format.",
@@ -98,8 +102,8 @@ export const speakingPageConfig = {
     },
     mediaKitTitle: { fr: "Kit média", en: "Media kit" },
     mediaKitIntro: {
-      fr: "Bio courte, portrait et contact pour organisateurs — mêmes sources que le HTML téléchargeable.",
-      en: "Short bio, headshot and contact for organizers — same sources as the downloadable HTML.",
+      fr: "Bio courte, portrait et contact pour organisateurs.",
+      en: "Short bio, headshot and contact for organizers.",
     },
     ctaTitle: {
       fr: "Proposer une intervention",
@@ -109,6 +113,21 @@ export const speakingPageConfig = {
       fr: "Décrivez l’événement, l’audience et le sujet. Un email suffit.",
       en: "Describe the event, audience and topic. Email is enough.",
     },
+  },
+  labels: {
+    audience: { fr: "Audience", en: "Audience" },
+    shortBio: { fr: "Bio courte", en: "Short bio" },
+    downloadPhoto: { fr: "Télécharger la photo", en: "Download photo" },
+    languages: { fr: "Langues", en: "Languages" },
+    contact: { fr: "Contact", en: "Contact" },
+    downloadHtml: { fr: "Media kit complet (HTML)", en: "Full media kit (HTML)" },
+    downloadPdf: { fr: "Télécharger le PDF", en: "Download PDF" },
+    emailCta: { fr: "Envoyer un email", en: "Send an email" },
+    proofEvent: { fr: "Page événement", en: "Event page" },
+    proofVideo: { fr: "Vidéo", en: "Video" },
+    proofSlides: { fr: "Slides", en: "Slides" },
+    proofPodcast: { fr: "Podcast", en: "Podcast" },
+    proofArticle: { fr: "Article", en: "Article" },
   },
   cta: {
     emailSubject: {
