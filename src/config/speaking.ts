@@ -79,33 +79,55 @@ export const speakingFormats: Array<{
 
 export const speakingPageConfig = {
   meta: {
-    title: { fr: "Speaking", en: "Speaking" },
+    title: { fr: "Conférences & médias", en: "Talks & media" },
     description: {
-      fr: "Talks et notes de CTO conseil : comprendre les causes, gouverner les arbitrages, accompagner les transformations.",
-      en: "Advisory CTO talks and notes: understand causes, govern trade-offs, support transformations.",
+      fr: "Interventions documentées, thèmes actuels et kit média pour organisateurs.",
+      en: "Documented appearances, current themes and media kit for organizers.",
     },
     positioning: {
-      fr: "Je parle de comment distinguer les leviers humains, organisationnels et techniques avant de trancher. Pas une checklist de buzzwords.",
-      en: "I speak about separating human, organisational and technical levers before deciding. Not a buzzword checklist.",
+      fr: "Interventions passées, thèmes actuels et kit pour organisateurs.",
+      en: "Past appearances, current themes and organizer kit.",
+    },
+    topicsTitle: {
+      fr: "Thèmes actuels",
+      en: "Current themes",
     },
     topicsIntro: {
-      fr: "Sujets documentés ici. Chaque talk s'adapte au contexte, à l'audience et au format, sans durée imposée par défaut.",
-      en: "Topics documented here. Each talk adapts to context, audience, and format, with no default fixed duration.",
+      fr: "Quelques thèmes actuels. Chaque intervention s’adapte au contexte et au format.",
+      en: "A few current themes. Each talk adapts to context and format.",
     },
-    appearancesTitle: { fr: "Apparitions documentées", en: "Documented appearances" },
-    mediaKitTitle: { fr: "Media kit", en: "Media kit" },
+    appearancesTitle: {
+      fr: "Interventions documentées",
+      en: "Documented appearances",
+    },
+    mediaKitTitle: { fr: "Kit média", en: "Media kit" },
     mediaKitIntro: {
-      fr: "Ressources pour organisateurs et médias, alignées sur le PDF téléchargeable.",
-      en: "Resources for organizers and media, aligned with the downloadable PDF.",
+      fr: "Bio courte, portrait et contact pour organisateurs.",
+      en: "Short bio, headshot and contact for organizers.",
     },
     ctaTitle: {
-      fr: "Proposer un talk",
+      fr: "Proposer une intervention",
       en: "Propose a talk",
     },
     ctaBody: {
-      fr: "Décrivez l'événement, l'audience et le sujet visé. Je réponds avec un format adapté ou une alternative documentée.",
-      en: "Describe the event, audience, and target topic. I respond with a suitable format or a documented alternative.",
+      fr: "Décrivez l’événement, l’audience et le sujet. Un email suffit.",
+      en: "Describe the event, audience and topic. Email is enough.",
     },
+  },
+  labels: {
+    audience: { fr: "Audience", en: "Audience" },
+    shortBio: { fr: "Bio courte", en: "Short bio" },
+    downloadPhoto: { fr: "Télécharger la photo", en: "Download photo" },
+    languages: { fr: "Langues", en: "Languages" },
+    contact: { fr: "Contact", en: "Contact" },
+    downloadHtml: { fr: "Media kit complet (HTML)", en: "Full media kit (HTML)" },
+    downloadPdf: { fr: "Télécharger le PDF", en: "Download PDF" },
+    emailCta: { fr: "Envoyer un email", en: "Send an email" },
+    proofEvent: { fr: "Page événement", en: "Event page" },
+    proofVideo: { fr: "Vidéo", en: "Video" },
+    proofSlides: { fr: "Slides", en: "Slides" },
+    proofPodcast: { fr: "Podcast", en: "Podcast" },
+    proofArticle: { fr: "Article", en: "Article" },
   },
   cta: {
     emailSubject: {
@@ -146,8 +168,8 @@ export const speakingTopics: SpeakingTopic[] = [
     languages: ["fr", "en"],
     links: [
       {
-        label: { fr: "Start Here : cartographie", en: "Start Here : mapping" },
-        href: "/start-here/",
+        label: { fr: "Accompagnement", en: "Advisory" },
+        href: "/work/",
       },
       {
         label: { fr: "Thinking: identités managées", en: "Thinking: managed identities" },
@@ -343,7 +365,7 @@ export const speakingTopics: SpeakingTopic[] = [
       },
       {
         label: { fr: "Open source", en: "Open source" },
-        href: "/projects/#open-source",
+        href: "/projects/",
       },
     ],
     displayOrder: 6,
@@ -382,8 +404,8 @@ export const speakingTopics: SpeakingTopic[] = [
         href: "/thinking/",
       },
       {
-        label: { fr: "Work : Diagnose", en: "Work : Diagnose" },
-        href: "/work/#diagnose",
+        label: { fr: "Accompagnement", en: "Advisory" },
+        href: "/work/",
       },
     ],
     displayOrder: 7,

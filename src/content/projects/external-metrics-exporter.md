@@ -36,11 +36,11 @@ whatExists_en:
 currentState: "Production. Composant publié sous l’organisation GitHub historique Simplifi-ED."
 currentState_en: "Production. Published under the historical Simplifi-ED GitHub org."
 limitations:
-  - "Pas de métriques d’adoption (stars, downloads) présentées comme argument principal"
-  - "Pas de promesse de couverture fournisseur exhaustive sans documentation à jour"
+  - "Couverture fournisseur limitée aux connecteurs documentés et maintenus"
+  - "La découverte dépend de la qualité des annotations et des accès cluster"
 limitations_en:
-  - "No adoption metrics (stars, downloads) presented as main argument"
-  - "No promise of exhaustive vendor coverage without up-to-date documentation"
+  - "Vendor coverage limited to documented and maintained connectors"
+  - "Discovery depends on annotation quality and cluster access"
 learnings:
   - "L’observabilité utile commence par les dépendances externes ignorées"
   - "Un contrat neutre évite le lock-in de la gouvernance plateforme"

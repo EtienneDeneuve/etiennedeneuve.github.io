@@ -1,6 +1,5 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import CallToAction from "../components/CallToAction.astro";
 import { notFoundConfig } from "../config/not-found.ts";
 
 const copy = notFoundConfig.fr;
@@ -21,8 +20,7 @@ const copy = notFoundConfig.fr;
       <p class="lede">{copy.lede}</p>
     </header>
 
-    <nav class="stack gap-3" aria-label={copy.navLabel}>
-      <p class="subtle">{copy.goTo}</p>
+    <nav aria-label={copy.navLabel}>
       <ul class="links">
         {
           copy.links.map((link) => (
@@ -33,18 +31,12 @@ const copy = notFoundConfig.fr;
         }
       </ul>
     </nav>
-
-    <div class="actions">
-      <CallToAction href="/start-here/">{copy.ctaPrimary}</CallToAction>
-      <a class="btn-secondary" href="/thinking/">{copy.ctaSecondary}</a>
-      <a class="btn-text" href="/contact/">{copy.ctaContact}</a>
-    </div>
   </main>
 </BaseLayout>
 
 <style>
   .not-found {
-    max-width: 40rem;
+    max-width: 36rem;
     padding-block: var(--space-12);
   }
 

@@ -2,11 +2,13 @@ import { expect, test } from "@playwright/test";
 
 const criticalPaths = [
   "/",
-  "/start-here/",
   "/thinking/",
   "/work/",
   "/projects/",
   "/speaking/",
+  "/contact/",
+  "/about/",
+  "/resources/",
   "/thinking/2024-10-05-automatisation-carousel-linkedin/",
 ];
 

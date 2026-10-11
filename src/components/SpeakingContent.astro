@@ -1,14 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import BookingCTA from "../components/BookingCTA.astro";
-import {
-  getFormatLabel,
-  getSortedSpeakingTopics,
-  mediaKitConfig,
-  speakingFormats,
-  speakingPageConfig,
-} from "../config/speaking.ts";
+import { getSortedSpeakingTopics, mediaKitConfig, speakingPageConfig } from "../config/speaking.ts";
 import { siteConfig } from "../config/site.ts";
 import {
   breadcrumbJsonLd,
@@ -32,29 +25,9 @@ const appearances = allAppearances
   .filter((entry) => !entry.data.draft)
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-const labels = {
-  problem: lang === "en" ? "Problem addressed" : "Problème traité",
-  audience: lang === "en" ? "Audience" : "Audience",
-  learnings: lang === "en" ? "Three takeaways" : "Trois enseignements",
-  formats: lang === "en" ? "Possible formats" : "Formats possibles",
-  languages: lang === "en" ? "Languages" : "Langues",
-  related: lang === "en" ? "Related content" : "Contenus associés",
-  shortBio: lang === "en" ? "Short bio" : "Bio courte",
-  longBio: lang === "en" ? "Long bio" : "Bio longue",
-  photo: lang === "en" ? "Headshot" : "Photographie",
-  downloadPhoto: lang === "en" ? "Download photo" : "Télécharger la photo",
-  themes: lang === "en" ? "Themes" : "Thèmes",
-  links: lang === "en" ? "Links" : "Liens",
-  contact: lang === "en" ? "Contact" : "Contact",
-  downloadHtml: lang === "en" ? "Full media kit (HTML)" : "Media kit complet (HTML)",
-  downloadPdf: lang === "en" ? "Download PDF" : "Télécharger le PDF",
-  emailCta: lang === "en" ? "Send an email" : "Envoyer un email",
-  proofEvent: lang === "en" ? "Event page" : "Page événement",
-  proofVideo: lang === "en" ? "Video" : "Vidéo",
-  proofSlides: lang === "en" ? "Slides" : "Slides",
-  proofPodcast: lang === "en" ? "Podcast" : "Podcast",
-  proofArticle: lang === "en" ? "Article" : "Article",
-};
+const labels = Object.fromEntries(
+  Object.entries(config.labels).map(([key, value]) => [key, value[lang]])
+) as Record<keyof typeof config.labels, string>;
 
 function localizedAppearanceField(
   entry: (typeof appearances)[number],
@@ -124,94 +97,6 @@ const jsonLd = buildJsonLdGraph([
       <p class="lead">{config.meta.positioning[lang]}</p>
     </section>
 
-    <section class="stack gap-4" id="topics">
-      <header class="stack gap-2">
-        <h2>{lang === "en" ? "Topics" : "Sujets"}</h2>
-        <p class="intro">{config.meta.topicsIntro[lang]}</p>
-      </header>
-      <div class="topics-list stack gap-4">
-        {
-          topics.map((topic) => (
-            <article class="topic-card">
-              <h3>{topic.title[lang]}</h3>
-              <dl class="topic-meta">
-                <div>
-                  <dt>{labels.problem}</dt>
-                  <dd>{topic.problem[lang]}</dd>
-                </div>
-                <div>
-                  <dt>{labels.audience}</dt>
-                  <dd>{topic.audience[lang]}</dd>
-                </div>
-                <div>
-                  <dt>{labels.learnings}</dt>
-                  <dd>
-                    <ul>
-                      {topic.learnings[lang].map((item) => (
-                        <li>{item}</li>
-                      ))}
-                    </ul>
-                  </dd>
-                </div>
-                <div>
-                  <dt>{labels.formats}</dt>
-                  <dd class="pill-row">
-                    {topic.formats.map((format) => (
-                      <span class="pill">{getFormatLabel(format, lang)}</span>
-                    ))}
-                  </dd>
-                </div>
-                <div>
-                  <dt>{labels.languages}</dt>
-                  <dd>{topic.languages.map((code) => code.toUpperCase()).join(" · ")}</dd>
-                </div>
-                {topic.links.length > 0 && (
-                  <div>
-                    <dt>{labels.related}</dt>
-                    <dd>
-                      <ul class="related-links">
-                        {topic.links.map((link) => {
-                          let href = link.href;
-                          if (lang === "en" && href.includes("www.omnivya.fr/fr/contact/")) {
-                            href = href.replace(
-                              "www.omnivya.fr/fr/contact/",
-                              "www.omnivya.fr/contact/"
-                            );
-                          }
-                          if (!(href.startsWith("http") || href.startsWith("/thinking/"))) {
-                            href = `${prefix}${href}`;
-                          }
-                          return (
-                            <li>
-                              <a href={href}>{link.label[lang]}</a>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </dd>
-                  </div>
-                )}
-              </dl>
-            </article>
-          ))
-        }
-      </div>
-    </section>
-
-    <section class="stack gap-4" id="formats">
-      <h2>{lang === "en" ? "Formats" : "Formats"}</h2>
-      <div class="formats-grid">
-        {
-          speakingFormats.map((format) => (
-            <article class="format-card">
-              <h3>{format.label[lang]}</h3>
-              <p>{format.description[lang]}</p>
-            </article>
-          ))
-        }
-      </div>
-    </section>
-
     {
       appearances.length > 0 && (
         <section class="stack gap-4" id="appearances">
@@ -259,6 +144,26 @@ const jsonLd = buildJsonLdGraph([
       )
     }
 
+    <section class="stack gap-4" id="topics">
+      <header class="stack gap-2">
+        <h2>{config.meta.topicsTitle[lang]}</h2>
+        <p class="intro">{config.meta.topicsIntro[lang]}</p>
+      </header>
+      <ul class="topics-compact">
+        {
+          topics.map((topic) => (
+            <li>
+              <h3>{topic.title[lang]}</h3>
+              <p>{topic.problem[lang]}</p>
+              <p class="topic-audience">
+                {labels.audience}: {topic.audience[lang]}
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
     <section class="stack gap-4" id="media-kit">
       <header class="stack gap-2">
         <h2>{config.meta.mediaKitTitle[lang]}</h2>
@@ -289,32 +194,8 @@ const jsonLd = buildJsonLdGraph([
             <p>{mediaKitConfig.shortBio[lang]}</p>
           </div>
           <div>
-            <h3>{labels.longBio}</h3>
-            {mediaKitConfig.longBio[lang].map((paragraph) => <p>{paragraph}</p>)}
-          </div>
-          <div>
-            <h3>{labels.themes}</h3>
-            <ul>
-              {topics.map((topic) => <li>{topic.title[lang]}</li>)}
-            </ul>
-          </div>
-          <div>
             <h3>{labels.languages}</h3>
             <p>{mediaKitConfig.languages[lang]}</p>
-          </div>
-          <div>
-            <h3>{labels.links}</h3>
-            <ul class="social-links">
-              <li>
-                <a href={siteConfig.seo.siteUrl}>{siteConfig.seo.siteUrl}</a>
-              </li>
-              <li>
-                <a href={siteConfig.social.linkedin}>LinkedIn</a>
-              </li>
-              <li>
-                <a href={siteConfig.social.github}>GitHub</a>
-              </li>
-            </ul>
           </div>
           <div>
             <h3>{labels.contact}</h3>
@@ -338,11 +219,11 @@ const jsonLd = buildJsonLdGraph([
       <h2>{config.meta.ctaTitle[lang]}</h2>
       <p>{config.meta.ctaBody[lang]}</p>
       <div class="actions">
-        <BookingCTA lang={lang} bookingSubject={emailSubject} surface="speaking">
-          {lang === "en" ? "Book a call" : "Réserver un appel"}
-        </BookingCTA>
-        <a class="btn-secondary" href={mailtoLink}>
+        <a class="btn-primary" href={mailtoLink}>
           {labels.emailCta}
+        </a>
+        <a class="btn-secondary" href={`${prefix}/contact/`}>
+          {labels.contact}
         </a>
       </div>
     </section>
@@ -364,86 +245,27 @@ const jsonLd = buildJsonLdGraph([
     color: var(--color-fg-muted);
     max-width: 72ch;
   }
-  .topic-card {
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: 1.25rem;
-    background: var(--color-bg-elevated);
-  }
-  .topic-card h3 {
-    margin: 0 0 0.75rem;
-    font-size: var(--text-lg);
-  }
-  .topic-meta {
-    display: grid;
-    gap: 0.75rem;
+  .topics-compact {
+    list-style: none;
     margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-5);
+    max-width: 48rem;
   }
-  @media (min-width: 50em) {
-    .topic-meta {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+  .topics-compact h3 {
+    margin: 0 0 var(--space-1);
+    font-size: var(--text-md);
   }
-  .topic-meta dt {
-    font-size: var(--text-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    color: var(--color-fg-subtle);
-    margin-bottom: 0.15rem;
-  }
-  .topic-meta dd {
+  .topics-compact p {
     margin: 0;
     color: var(--color-fg-muted);
     line-height: 1.5;
   }
-  .topic-meta ul,
-  .bio-block ul {
-    margin: 0;
-    padding-left: 1.1rem;
-  }
-  .pill-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-  }
-  .pill {
-    font-size: var(--text-xs);
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: 0.15rem 0.55rem;
-    color: var(--color-fg-muted);
-  }
-  .related-links {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  .related-links a {
-    color: var(--color-fg);
-  }
-  .formats-grid {
-    display: grid;
-    gap: 1rem;
-  }
-  @media (min-width: 50em) {
-    .formats-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-  .format-card {
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: 1rem;
-    background: var(--color-bg-elevated);
-  }
-  .format-card h3 {
-    margin: 0 0 0.35rem;
-    font-size: var(--text-md);
-  }
-  .format-card p {
-    margin: 0;
-    color: var(--color-fg-muted);
+  .topic-audience {
+    margin-top: var(--space-1) !important;
     font-size: var(--text-sm);
+    color: var(--color-fg-subtle) !important;
   }
   .appearance-card {
     border: var(--border-width) solid var(--color-border);

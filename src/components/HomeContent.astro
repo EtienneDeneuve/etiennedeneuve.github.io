@@ -202,7 +202,12 @@ const titleLine2 = ampSplit ? `& ${ampSplit[2].trim()}` : "";
     --home-pad: var(--page-gutter, clamp(1.5rem, 4vw, 4rem));
     --home-bg: var(--graphite, #111416);
     --home-bg-soft: var(--graphite-soft, #1b1e20);
-    --home-light: var(--paper, #f3efe7);
+    /* Composition ivory — never follow theme --paper (dark mode flips it). */
+    --home-ivory: #f3efe7;
+    --home-ivory-ink: #151819;
+    --home-ivory-muted: #454a4d;
+    --home-ivory-border: rgba(21, 24, 25, 0.14);
+    --home-light: var(--home-ivory);
     --home-copper: var(--copper-on-dark, #f0aa78);
     --home-copper-bright: #f5c49a;
     --home-copper-light: var(--copper-on-light, #a54822);
@@ -220,8 +225,12 @@ const titleLine2 = ampSplit ? `& ${ampSplit[2].trim()}` : "";
   }
 
   .home-band--light {
-    background: var(--home-light);
-    color: var(--ink, #151819);
+    background: var(--home-ivory);
+    color: var(--home-ivory-ink);
+  }
+
+  .home-band--light :focus-visible {
+    outline-color: var(--home-copper-light);
   }
 
   .home-shell {
@@ -496,7 +505,7 @@ const titleLine2 = ampSplit ? `& ${ampSplit[2].trim()}` : "";
     font-size: 0.95rem;
     font-weight: 700;
     line-height: 1.25;
-    color: var(--ink, #151819);
+    color: var(--home-ivory-ink);
     /* Beat global h2 clamp that blew the fold + Safari metrics. */
     font-family: var(--home-sans);
     letter-spacing: 0;
@@ -506,7 +515,7 @@ const titleLine2 = ampSplit ? `& ${ampSplit[2].trim()}` : "";
     margin: 0;
     font-size: 0.88rem;
     line-height: 1.4;
-    color: var(--ink-muted, #454a4d);
+    color: var(--home-ivory-muted);
   }
 
   .home-approach__more {

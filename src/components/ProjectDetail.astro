@@ -31,10 +31,13 @@ const statusLabel = projectsPageConfig.statusLabels[entry.data.status]?.[lang] ?
 const name = projectField(entry, "name", lang) || entry.data.name;
 const summary = projectField(entry, "summary", lang) || entry.data.summary;
 const technologies = entry.data.technologies ?? [];
-const approachItems = [
-  ...projectList(entry, "principles", lang),
-  ...projectList(entry, "decisions", lang),
-];
+const decisions = projectList(entry, "decisions", lang);
+const principles = projectList(entry, "principles", lang);
+const whatExists = projectList(entry, "whatExists", lang);
+const limitations = projectList(entry, "limitations", lang);
+const learnings = projectList(entry, "learnings", lang);
+const role = projectField(entry, "role", lang);
+const context = projectField(entry, "context", lang);
 const publicHref = projectEntityHref(entry);
 
 const articles = await getCollection("blog");
@@ -106,14 +109,30 @@ const jsonLd = buildJsonLdGraph([
     <section class="stack gap-2">
       <h2>{labels.problem}</h2>
       <p>{projectField(entry, "problem", lang)}</p>
+      {
+        context && (
+          <p class="muted">
+            <strong>{labels.context}.</strong> {context}
+          </p>
+        )
+      }
     </section>
 
     {
-      approachItems.length > 0 && (
+      role && (
         <section class="stack gap-2">
-          <h2>{labels.approach}</h2>
+          <h2>{labels.role}</h2>
+          <p>{role}</p>
+        </section>
+      )
+    }
+
+    {
+      (decisions.length > 0 || principles.length > 0) && (
+        <section class="stack gap-2">
+          <h2>{labels.decisions}</h2>
           <ul class="list">
-            {approachItems.map((item) => (
+            {[...decisions, ...principles].map((item) => (
               <li>{item}</li>
             ))}
           </ul>
@@ -122,32 +141,52 @@ const jsonLd = buildJsonLdGraph([
     }
 
     {
-      technologies.length > 0 && (
+      (whatExists.length > 0 || technologies.length > 0) && (
         <section class="stack gap-2">
-          <h2>{labels.technologies}</h2>
-          <ul class="tech">
-            {technologies.map((tech) => (
-              <li>{tech}</li>
+          <h2>{labels.whatExists}</h2>
+          {whatExists.length > 0 && (
+            <ul class="list">
+              {whatExists.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          )}
+          {technologies.length > 0 && (
+            <ul class="tech">
+              {technologies.map((tech) => (
+                <li>{tech}</li>
+              ))}
+            </ul>
+          )}
+        </section>
+      )
+    }
+
+    {
+      limitations.length > 0 && (
+        <section class="stack gap-2">
+          <h2>{labels.limitations}</h2>
+          <ul class="list">
+            {limitations.map((item) => (
+              <li>{item}</li>
             ))}
           </ul>
         </section>
       )
     }
 
-    <section class="stack gap-2">
-      <h2>{labels.status}</h2>
-      <p>
-        <strong>{statusLabel}</strong>
-        {
-          projectField(entry, "currentState", lang) && (
-            <>
-              {": "}
-              {projectField(entry, "currentState", lang)}
-            </>
-          )
-        }
-      </p>
-    </section>
+    {
+      learnings.length > 0 && (
+        <section class="stack gap-2">
+          <h2>{labels.learnings}</h2>
+          <ul class="list">
+            {learnings.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
 
     {
       proofs.length > 0 && (
@@ -217,6 +256,10 @@ const jsonLd = buildJsonLdGraph([
   .hero {
     max-width: 72ch;
   }
+  .muted {
+    color: var(--color-fg-muted);
+    font-size: var(--text-sm);
+  }
   .list {
     margin: 0;
     padding-left: 1.25rem;
@@ -226,7 +269,7 @@ const jsonLd = buildJsonLdGraph([
   }
   .tech {
     list-style: none;
-    margin: 0;
+    margin: var(--space-3) 0 0;
     padding: 0;
     display: flex;
     flex-wrap: wrap;

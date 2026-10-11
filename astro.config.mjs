@@ -75,6 +75,23 @@ function isSitemapExcluded(page) {
     path.startsWith("/blog/") ||
     path === "/offers" ||
     path.startsWith("/offers/") ||
+    path === "/start-here" ||
+    path.startsWith("/start-here/") ||
+    path === "/en/start-here" ||
+    path.startsWith("/en/start-here/") ||
+    path === "/resources/all" ||
+    path.startsWith("/resources/all/") ||
+    path === "/en/resources/all" ||
+    path.startsWith("/en/resources/all/") ||
+    // Former resource transit detail pages (now redirects)
+    path === "/resources/DevSecOps" ||
+    path.startsWith("/resources/DevSecOps/") ||
+    path === "/resources/TechSpresso" ||
+    path.startsWith("/resources/TechSpresso/") ||
+    path === "/resources/omnivya-hidden-costs-containers" ||
+    path.startsWith("/resources/omnivya-hidden-costs-containers/") ||
+    path === "/resources/omnivya-hidden-face-of-iac" ||
+    path.startsWith("/resources/omnivya-hidden-face-of-iac/") ||
     path === "/case-studies" ||
     path.startsWith("/case-studies/") ||
     path === "/en/blog" ||
@@ -123,6 +140,22 @@ export default defineConfig({
     "/blog": "/thinking/",
     "/blog/page/:page": "/thinking/",
     "/offers": "/work/",
+    "/start-here": "/",
+    "/start-here/": "/",
+    "/en/start-here": "/en/",
+    "/en/start-here/": "/en/",
+    "/resources/all": "/resources/",
+    "/resources/all/": "/resources/",
+    "/en/resources/all": "/en/resources/",
+    "/en/resources/all/": "/en/resources/",
+    "/resources/DevSecOps": "/resources/#DevSecOps",
+    "/resources/DevSecOps/": "/resources/#DevSecOps",
+    "/resources/TechSpresso": "/resources/",
+    "/resources/TechSpresso/": "/resources/",
+    "/resources/omnivya-hidden-costs-containers": "/resources/#omnivya-hidden-costs-containers",
+    "/resources/omnivya-hidden-costs-containers/": "/resources/#omnivya-hidden-costs-containers",
+    "/resources/omnivya-hidden-face-of-iac": "/resources/#omnivya-hidden-face-of-iac",
+    "/resources/omnivya-hidden-face-of-iac/": "/resources/#omnivya-hidden-face-of-iac",
     "/case-studies": "/work/case-studies/",
     "/case-studies/:slug": "/work/case-studies/:slug/",
     "/en/blog": "/en/thinking/",

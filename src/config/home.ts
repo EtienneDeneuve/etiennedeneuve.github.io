@@ -69,8 +69,8 @@ export const homeConfig: { fr: HomeLocaleCopy; en: HomeLocaleCopy } = {
           body: "Guider les équipes, challenger les choix et ajuster les orientations.",
         },
       ],
-      completeLabel: "Voir l’approche complète",
-      completePath: "/start-here/",
+      completeLabel: "Voir l’accompagnement",
+      completePath: "/work/",
     },
     technicalDepth: {
       title: "La profondeur technique, au service du discernement.",
@@ -119,8 +119,8 @@ export const homeConfig: { fr: HomeLocaleCopy; en: HomeLocaleCopy } = {
           body: "Guide teams, challenge choices and adjust direction.",
         },
       ],
-      completeLabel: "See the full approach",
-      completePath: "/start-here/",
+      completeLabel: "See advisory",
+      completePath: "/work/",
     },
     technicalDepth: {
       title: "Technical depth, in service of discernment.",

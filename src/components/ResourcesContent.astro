@@ -1,0 +1,133 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { resourcesPageConfig } from "../config/resources-page.ts";
+import {
+  breadcrumbJsonLd,
+  buildJsonLdGraph,
+  collectionPageJsonLd,
+  personJsonLd,
+} from "../lib/json-ld.ts";
+
+interface Props {
+  lang: "fr" | "en";
+}
+
+const { lang } = Astro.props;
+const config = resourcesPageConfig;
+const prefix = lang === "en" ? "/en" : "";
+const path = `${prefix}/resources/`;
+
+const byId = new Map((await getCollection("resources")).map((entry) => [entry.id, entry]));
+const items = config.order
+  .map((id) => byId.get(id))
+  .filter((entry): entry is NonNullable<typeof entry> => Boolean(entry));
+
+function titleOf(entry: (typeof items)[number]): string {
+  if (lang === "en" && entry.data.title_en) return entry.data.title_en;
+  return entry.data.title;
+}
+
+function noteOf(entry: (typeof items)[number]): string {
+  if (lang === "en" && entry.data.whyItMatters_en) return entry.data.whyItMatters_en;
+  return entry.data.whyItMatters || entry.data.summary || entry.data.description;
+}
+
+function localizeHref(href: string): string {
+  if (href.startsWith("http") || lang === "fr") return href;
+  if (href.startsWith("/en/")) return href;
+  if (href.startsWith("/")) return `/en${href}`;
+  return href;
+}
+
+const jsonLd = buildJsonLdGraph([
+  personJsonLd(),
+  collectionPageJsonLd({
+    name: config.meta.title[lang],
+    description: config.meta.description[lang],
+    path,
+    lang,
+  }),
+  breadcrumbJsonLd([
+    { name: "Home", path: prefix || "/" },
+    { name: config.meta.title[lang], path },
+  ]),
+]);
+---
+
+<BaseLayout
+  title={config.meta.title[lang]}
+  description={config.meta.description[lang]}
+  lang={lang}
+  path={path}
+  alternates={[
+    { lang: "fr", href: "/resources/" },
+    { lang: "en", href: "/en/resources/" },
+  ]}
+  jsonLd={jsonLd}
+>
+  <main class="wrapper resources stack gap-10">
+    <header class="page-hero stack gap-3">
+      <h1>{config.meta.title[lang]}</h1>
+      <p class="lede">{config.meta.intro[lang]}</p>
+    </header>
+
+    <ul class="list">
+      {
+        items.map((entry) => (
+          <li class="item" id={entry.id}>
+            <h2>{titleOf(entry)}</h2>
+            <p>{noteOf(entry)}</p>
+            {entry.data.indexLinks.length > 0 && (
+              <p class="links">
+                {entry.data.indexLinks.map((link, i) => {
+                  const href = localizeHref(link.href);
+                  const label = lang === "en" && link.label_en ? link.label_en : link.label;
+                  return (
+                    <>
+                      {i > 0 && " · "}
+                      <a
+                        href={href}
+                        target={href.startsWith("http") ? "_blank" : undefined}
+                        rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      >
+                        {label}
+                      </a>
+                    </>
+                  );
+                })}
+              </p>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+</BaseLayout>
+
+<style>
+  .resources {
+    max-width: 40rem;
+    padding-block: var(--space-10) var(--space-16);
+  }
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-8);
+  }
+  .item h2 {
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-lg);
+  }
+  .item p {
+    margin: 0;
+    color: var(--color-fg-muted);
+    line-height: 1.55;
+  }
+  .links {
+    margin-top: var(--space-3) !important;
+    font-size: var(--text-sm);
+  }
+</style>

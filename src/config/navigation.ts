@@ -1,37 +1,38 @@
 const primaryFr = [
   { label: "Approche", href: "/#approche" },
-  { label: "Interventions", href: "/work/" },
+  { label: "Accompagnement", href: "/work/" },
   { label: "Réalisations", href: "/projects/" },
   { label: "Publications", href: "/thinking/" },
 ];
 
 const primaryEn = [
   { label: "Approach", href: "/en/#approche" },
-  { label: "Work", href: "/en/work/" },
+  { label: "Advisory", href: "/en/work/" },
   { label: "Projects", href: "/en/projects/" },
   { label: "Publications", href: "/en/thinking/" },
 ];
 
-/** Explore row in the graphite footer (not duplicated as primary nav). */
+/**
+ * Footer explore — no Start Here (folded into home), no empty case studies.
+ * Resources stay footer-only (compact library).
+ */
 const footerExploreFr = [
-  { label: "Commencer ici", href: "/start-here/" },
-  { label: "Speaking", href: "/speaking/" },
   { label: "À propos", href: "/about/" },
-  { label: "Case studies", href: "/work/case-studies/" },
-  { label: "Publications", href: "/thinking/" },
+  { label: "Accompagnement", href: "/work/" },
   { label: "Réalisations", href: "/projects/" },
-  { label: "Interventions", href: "/work/" },
+  { label: "Conférences & médias", href: "/speaking/" },
+  { label: "Publications", href: "/thinking/" },
+  { label: "Ressources", href: "/resources/" },
   { label: "Contact", href: "/contact/" },
 ];
 
 const footerExploreEn = [
-  { label: "Start Here", href: "/en/start-here/" },
-  { label: "Speaking", href: "/en/speaking/" },
   { label: "About", href: "/en/about/" },
-  { label: "Case studies", href: "/en/work/case-studies/" },
-  { label: "Publications", href: "/en/thinking/" },
+  { label: "Advisory", href: "/en/work/" },
   { label: "Projects", href: "/en/projects/" },
-  { label: "Work", href: "/en/work/" },
+  { label: "Talks & media", href: "/en/speaking/" },
+  { label: "Publications", href: "/en/thinking/" },
+  { label: "Resources", href: "/en/resources/" },
   { label: "Contact", href: "/en/contact/" },
 ];
 
@@ -40,30 +41,23 @@ export const navigationConfig = {
     fr: primaryFr,
     en: primaryEn,
   },
-  /** @deprecated Prefer footerExplore — kept for compat with any leftover imports. */
+  /** @deprecated Prefer footerExplore */
   secondary: {
     fr: footerExploreFr,
     en: footerExploreEn,
   },
-  /** Explore links — middle row of the graphite footer. */
   footerExplore: {
     fr: footerExploreFr,
     en: footerExploreEn,
   },
-  /** @deprecated Use footerExplore. */
+  /** @deprecated Prefer footerExplore */
   footerCompact: {
     fr: footerExploreFr,
     en: footerExploreEn,
   },
   legal: {
-    fr: [
-      { label: "Mentions utiles", href: "/about/" },
-      { label: "Media Kit", href: "/media-kit.html" },
-    ],
-    en: [
-      { label: "Legal notes", href: "/en/about/" },
-      { label: "Media Kit", href: "/media-kit.html" },
-    ],
+    fr: [{ label: "Media Kit", href: "/media-kit.html" }],
+    en: [{ label: "Media Kit", href: "/media-kit.html" }],
   },
   cta: {
     fr: { label: "Écrire", href: "/contact/" },
