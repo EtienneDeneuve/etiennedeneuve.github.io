@@ -57,7 +57,7 @@ test.describe("home hero reception (#171)", () => {
       await assertPortraitReserved(page);
       await assertHeroCta(page, lang);
       await expect(page.locator(".home-cta")).toContainText(
-        lang === "fr" ? /Échanger|enjeux/i : /Discuss|stakes/i,
+        lang === "fr" ? /Échanger|enjeux/i : /Discuss|stakes/i
       );
     });
   }
