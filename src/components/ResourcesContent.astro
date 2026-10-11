@@ -82,8 +82,7 @@ const jsonLd = buildJsonLdGraph([
               <p class="links">
                 {entry.data.indexLinks.map((link, i) => {
                   const href = localizeHref(link.href);
-                  const label =
-                    lang === "en" && link.label_en ? link.label_en : link.label;
+                  const label = lang === "en" && link.label_en ? link.label_en : link.label;
                   return (
                     <>
                       {i > 0 && " · "}

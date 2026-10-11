@@ -143,7 +143,10 @@ export const workConfig = {
     },
   ] satisfies WorkSituation[],
   method: {
-    title: { fr: "Ce que l’accompagnement change", en: "What advisory support changes" } as Localized<string>,
+    title: {
+      fr: "Ce que l’accompagnement change",
+      en: "What advisory support changes",
+    } as Localized<string>,
     steps: [
       {
         number: "01",
@@ -163,7 +166,10 @@ export const workConfig = {
       },
       {
         number: "03",
-        title: { fr: "Tenir la suite sans confisquer le contrôle", en: "Hold the follow-through without seizing control" },
+        title: {
+          fr: "Tenir la suite sans confisquer le contrôle",
+          en: "Hold the follow-through without seizing control",
+        },
         body: {
           fr: "Challenger et ajuster avec les leads ; le management reste chez vous.",
           en: "Challenge and adjust with leads; management stays with you.",
@@ -185,7 +191,10 @@ export const workConfig = {
     omnivyaLabel: { fr: "Omnivya", en: "Omnivya" } as Localized<string>,
   },
   labels: {
-    situationsTitle: { fr: "Situations où j’interviens", en: "Situations I work on" } as Localized<string>,
+    situationsTitle: {
+      fr: "Situations où j’interviens",
+      en: "Situations I work on",
+    } as Localized<string>,
     examines: { fr: "Ce que j’examine", en: "What I examine" } as Localized<string>,
     decision: { fr: "Décision accompagnée", en: "Decision supported" } as Localized<string>,
     outcome: { fr: "Résultat attendu", en: "Expected outcome" } as Localized<string>,

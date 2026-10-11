@@ -152,10 +152,8 @@ export default defineConfig({
     "/resources/DevSecOps/": "/resources/#DevSecOps",
     "/resources/TechSpresso": "/speaking/#techspresso",
     "/resources/TechSpresso/": "/speaking/#techspresso",
-    "/resources/omnivya-hidden-costs-containers":
-      "/resources/#omnivya-hidden-costs-containers",
-    "/resources/omnivya-hidden-costs-containers/":
-      "/resources/#omnivya-hidden-costs-containers",
+    "/resources/omnivya-hidden-costs-containers": "/resources/#omnivya-hidden-costs-containers",
+    "/resources/omnivya-hidden-costs-containers/": "/resources/#omnivya-hidden-costs-containers",
     "/resources/omnivya-hidden-face-of-iac": "/resources/#omnivya-hidden-face-of-iac",
     "/resources/omnivya-hidden-face-of-iac/": "/resources/#omnivya-hidden-face-of-iac",
     "/case-studies": "/work/case-studies/",

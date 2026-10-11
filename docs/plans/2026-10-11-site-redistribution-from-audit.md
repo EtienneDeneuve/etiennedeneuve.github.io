@@ -9,14 +9,14 @@
 
 Une page = une question :
 
-| Question | Page |
-|---|---|
-| Orientation initiale | `/` (seule) |
-| Qui tu es | `/about` |
-| Quand te solliciter | `/work` (« Accompagnement ») |
-| Ce que tu as réalisé | `/projects` |
-| Où tu interviens | `/speaking` |
-| Comment te contacter | `/contact` |
+| Question             | Page                         |
+| -------------------- | ---------------------------- |
+| Orientation initiale | `/` (seule)                  |
+| Qui tu es            | `/about`                     |
+| Quand te solliciter  | `/work` (« Accompagnement ») |
+| Ce que tu as réalisé | `/projects`                  |
+| Où tu interviens     | `/speaking`                  |
+| Comment te contacter | `/contact`                   |
 
 ## Lots
 

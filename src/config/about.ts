@@ -125,7 +125,10 @@ export const aboutConfig = {
   },
   links: {
     title: { fr: "Ailleurs sur le site", en: "Elsewhere on the site" } as Localized,
-    work: { fr: "Accompagnement — quand me solliciter", en: "Advisory — when to engage me" } as Localized,
+    work: {
+      fr: "Accompagnement — quand me solliciter",
+      en: "Advisory — when to engage me",
+    } as Localized,
     projects: { fr: "Projets", en: "Projects" } as Localized,
     speaking: { fr: "Conférences & médias", en: "Talks & media" } as Localized,
     thinking: { fr: "Thinking", en: "Thinking" } as Localized,
