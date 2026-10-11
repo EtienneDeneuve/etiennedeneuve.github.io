@@ -18,20 +18,15 @@ export const resourcesPageConfig = {
     } as Localized,
   },
   /** Collection entry ids in display order. */
-  order: [
-    "omnivya-hidden-costs-containers",
-    "omnivya-hidden-face-of-iac",
-    "DevSecOps",
-    "TechSpresso",
-  ] as const,
+  order: ["omnivya-hidden-costs-containers", "omnivya-hidden-face-of-iac", "DevSecOps"] as const,
   /**
-   * Former transit detail URLs → useful destinations (index section or Speaking).
-   * Keep in sync with astro.config redirects + sitemap exclusions.
+   * Former transit detail URLs → useful destinations.
+   * TechSpresso removed: old URL redirects to the compact resources index.
    */
   transitRedirects: {
     "omnivya-hidden-costs-containers": "/resources/#omnivya-hidden-costs-containers",
     "omnivya-hidden-face-of-iac": "/resources/#omnivya-hidden-face-of-iac",
     DevSecOps: "/resources/#DevSecOps",
-    TechSpresso: "/speaking/#techspresso",
+    TechSpresso: "/resources/",
   } as const,
 } as const;

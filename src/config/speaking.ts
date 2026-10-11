@@ -100,10 +100,6 @@ export const speakingPageConfig = {
       fr: "Interventions documentées",
       en: "Documented appearances",
     },
-    mediaParticipationsTitle: {
-      fr: "Participations médias",
-      en: "Media participations",
-    },
     mediaKitTitle: { fr: "Kit média", en: "Media kit" },
     mediaKitIntro: {
       fr: "Bio courte, portrait et contact pour organisateurs.",
@@ -118,8 +114,6 @@ export const speakingPageConfig = {
       en: "Describe the event, audience and topic. Email is enough.",
     },
   },
-  /** Resource collection ids shown under media participations (canonical source). */
-  mediaResourceIds: ["TechSpresso"] as const,
   labels: {
     audience: { fr: "Audience", en: "Audience" },
     shortBio: { fr: "Bio courte", en: "Short bio" },

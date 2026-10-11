@@ -25,21 +25,9 @@ const appearances = allAppearances
   .filter((entry) => !entry.data.draft)
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-const resourcesById = new Map((await getCollection("resources")).map((entry) => [entry.id, entry]));
-const mediaParticipations = config.mediaResourceIds
-  .map((id) => resourcesById.get(id))
-  .filter((entry): entry is NonNullable<typeof entry> => Boolean(entry));
-
 const labels = Object.fromEntries(
   Object.entries(config.labels).map(([key, value]) => [key, value[lang]])
 ) as Record<keyof typeof config.labels, string>;
-
-function localizeHref(href: string): string {
-  if (href.startsWith("http") || lang === "fr") return href;
-  if (href.startsWith("/en/")) return href;
-  if (href.startsWith("/")) return `/en${href}`;
-  return href;
-}
 
 function localizedAppearanceField(
   entry: (typeof appearances)[number],
@@ -151,51 +139,6 @@ const jsonLd = buildJsonLdGraph([
                 </div>
               </article>
             ))}
-          </div>
-        </section>
-      )
-    }
-
-    {
-      mediaParticipations.length > 0 && (
-        <section
-          class="stack gap-4"
-          id="media-participations"
-          aria-labelledby="media-participations-title"
-        >
-          <h2 id="media-participations-title">{config.meta.mediaParticipationsTitle[lang]}</h2>
-          <div class="appearances-list stack gap-3">
-            {mediaParticipations.map((entry) => {
-              const title =
-                lang === "en" && entry.data.title_en ? entry.data.title_en : entry.data.title;
-              const body =
-                (lang === "en" && entry.data.summary_en
-                  ? entry.data.summary_en
-                  : entry.data.summary) || entry.data.description;
-              return (
-                <article class="appearance-card" id={entry.id.toLowerCase()}>
-                  <header>
-                    <h3>{title}</h3>
-                    <p class="appearance-meta">{body}</p>
-                  </header>
-                  {entry.data.indexLinks.length > 0 && (
-                    <div class="proof-links">
-                      {entry.data.indexLinks
-                        .filter((link) => !link.href.startsWith("/speaking"))
-                        .map((link) => (
-                          <a
-                            href={localizeHref(link.href)}
-                            target={link.href.startsWith("http") ? "_blank" : undefined}
-                            rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                          >
-                            {lang === "en" && link.label_en ? link.label_en : link.label}
-                          </a>
-                        ))}
-                    </div>
-                  )}
-                </article>
-              );
-            })}
           </div>
         </section>
       )
@@ -323,87 +266,6 @@ const jsonLd = buildJsonLdGraph([
     margin-top: var(--space-1) !important;
     font-size: var(--text-sm);
     color: var(--color-fg-subtle) !important;
-  }
-  .topic-card {
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: 1.25rem;
-    background: var(--color-bg-elevated);
-  }
-  .topic-card h3 {
-    margin: 0 0 0.75rem;
-    font-size: var(--text-lg);
-  }
-  .topic-meta {
-    display: grid;
-    gap: 0.75rem;
-    margin: 0;
-  }
-  @media (min-width: 50em) {
-    .topic-meta {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-  .topic-meta dt {
-    font-size: var(--text-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    color: var(--color-fg-subtle);
-    margin-bottom: 0.15rem;
-  }
-  .topic-meta dd {
-    margin: 0;
-    color: var(--color-fg-muted);
-    line-height: 1.5;
-  }
-  .topic-meta ul,
-  .bio-block ul {
-    margin: 0;
-    padding-left: 1.1rem;
-  }
-  .pill-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-  }
-  .pill {
-    font-size: var(--text-xs);
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: 0.15rem 0.55rem;
-    color: var(--color-fg-muted);
-  }
-  .related-links {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  .related-links a {
-    color: var(--color-fg);
-  }
-  .formats-grid {
-    display: grid;
-    gap: 1rem;
-  }
-  @media (min-width: 50em) {
-    .formats-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-  .format-card {
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: 1rem;
-    background: var(--color-bg-elevated);
-  }
-  .format-card h3 {
-    margin: 0 0 0.35rem;
-    font-size: var(--text-md);
-  }
-  .format-card p {
-    margin: 0;
-    color: var(--color-fg-muted);
-    font-size: var(--text-sm);
   }
   .appearance-card {
     border: var(--border-width) solid var(--color-border);

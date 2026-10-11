@@ -3,7 +3,7 @@ import { resourcesPageConfig } from "../../config/resources-page.ts";
 
 /**
  * Former per-resource transit pages: 301 to the compact index section
- * (or Speaking for TechSpresso). Content stays in the collection for the index.
+ * (or /resources/ when the entry was retired). Collection content feeds the index.
  */
 export function getStaticPaths() {
   return Object.keys(resourcesPageConfig.transitRedirects).map((slug) => ({
