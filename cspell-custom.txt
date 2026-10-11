@@ -26,6 +26,7 @@ whatsapp
 linkedin
 
 # Technical tools and services
+opentelemetry
 grafana
 finops
 linkcheck

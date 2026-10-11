@@ -4,6 +4,8 @@
  * build runner timezone or the hour in pubDate.
  */
 import assert from "node:assert/strict";
+import type { CollectionEntry } from "astro:content";
+import { orderHomeThinking, selectHomeThinking } from "../../lib/home-thinking.ts";
 import { getReleasedArticles, isReleasedByPubDate } from "../../lib/publication-policy.ts";
 
 const cases = [
@@ -79,3 +81,59 @@ assert.deepEqual(
 );
 
 console.log(`Publication-day checks passed: ${cases.length + 1}`);
+
+// Spotlight selection tests: released OTel 2/4 leads during the Monday campaign,
+// disappears after the Wednesday rebuild, and never creates a duplicate card.
+const homeEntry = (id: string, contentType: string, pubDate: string) =>
+  ({
+    id,
+    data: { draft: false, contentType, pubDate: new Date(pubDate) },
+  }) as unknown as CollectionEntry<"blog">;
+
+const homeCandidates = [
+  homeEntry("recent-ci", "field-note", "2026-10-09T07:30:00.000Z"),
+  homeEntry("mac-part-two", "architecture-decision", "2026-10-14T07:30:00.000Z"),
+  homeEntry(
+    "2026-09-22-opentelemetry-instrumenter-200-services",
+    "field-note",
+    "2026-09-22T21:30:00.000Z"
+  ),
+  homeEntry("doctrine", "doctrine", "2026-07-01T10:00:00.000Z"),
+];
+
+const monday = new Date("2026-10-12T08:00:00.000Z");
+const mondayArticles = getReleasedArticles(homeCandidates, monday);
+const mondayCards = orderHomeThinking(selectHomeThinking(mondayArticles, "fr", monday));
+assert.equal(mondayCards[0].entry.id, "2026-09-22-opentelemetry-instrumenter-200-services");
+assert.equal(mondayCards[0].spotlight, true);
+assert.equal(new Set(mondayCards.map(({ entry }) => entry.id)).size, mondayCards.length);
+assert.equal(
+  mondayCards.some(({ entry }) => entry.id === "mac-part-two"),
+  false
+);
+
+const wednesday = new Date("2026-10-14T06:00:00.000Z");
+const wednesdayCards = orderHomeThinking(
+  selectHomeThinking(getReleasedArticles(homeCandidates, wednesday), "fr", wednesday)
+);
+assert.equal(
+  wednesdayCards.some((item) => item.spotlight),
+  false
+);
+assert.equal(wednesdayCards[0].entry.id, "mac-part-two");
+
+const mondayEnglish = selectHomeThinking(mondayArticles, "en", monday);
+assert.equal(
+  mondayEnglish.some((item) => item.spotlight),
+  false
+);
+const noOtelCards = selectHomeThinking(
+  mondayArticles.filter((entry) => !entry.id.includes("opentelemetry-instrumenter")),
+  "fr",
+  monday
+);
+assert.equal(
+  noOtelCards.some((item) => item.spotlight),
+  false
+);
+console.log("Spotlight selection tests passed: 6");

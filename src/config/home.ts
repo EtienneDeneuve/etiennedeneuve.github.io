@@ -1,15 +1,18 @@
 /**
  * Home-only UI copy. Shared identity / role / positioning live in site.ts
  * and messaging.ts — reference them from the component, do not duplicate here.
- * FR source of truth for approach / technicalDepth: docs/branding/cto-cursor-kit/content.fr.json
+ * Current positioning and editorial contract: cash-factory-backlog #173.
+ * The older cto-cursor-kit documents are historical reference, not live copy.
  */
 
 export type HomeLocaleCopy = {
   eyebrow: string;
+  headlineAccent: string;
   tagline: string;
   lede: string;
   ctaMission: string;
   ctaMissionExternalHint: string;
+  ctaContext: string;
   domains: readonly string[];
   approach: {
     eyebrow: string;
@@ -35,48 +38,52 @@ export type HomeLocaleCopy = {
 
 export const homeConfig: { fr: HomeLocaleCopy; en: HomeLocaleCopy } = {
   fr: {
-    eyebrow: "Conseil aux directions et aux équipes",
-    tagline: "Relier les enjeux de l’entreprise, les équipes et la technologie.",
-    lede: "Comprendre les causes, éclairer les arbitrages et accompagner les transformations, avec une lecture fine des organisations et des systèmes.",
-    ctaMission: "Échanger sur vos enjeux",
+    eyebrow: "Direction technique · Ingénierie · Transmission",
+    headlineAccent: "La technique vaut ce qu’elle change.",
+    tagline:
+      "Du management au code, une même exigence : faire avancer les équipes et leurs systèmes.",
+    lede: "Je dirige des équipes et je reste impliqué dans le code, les plateformes et la production. Je pars du problème, confronte les options et change de méthode lorsque les habitudes freinent le résultat. Sans sacrifier la qualité, la sécurité ni la maintenabilité.",
+    ctaMission: "Échanger avec moi via Omnivya",
     ctaMissionExternalHint: "↗",
+    ctaContext:
+      "Pour les missions, j’interviens via Omnivya, que j’ai cofondée avec Taous et dont je suis CTO.",
     domains: [
-      "Stratégie & gouvernance",
-      "Organisation & responsabilités",
-      "Architecture & logiciel",
-      "Production & qualité de service",
+      "Diriger et faire progresser les équipes",
+      "Réduire les frictions du delivery",
+      "Du code aux plateformes Cloud",
+      "Former, animer, transmettre",
     ],
     approach: {
-      eyebrow: "Une lecture transverse",
-      titleFirst: "Comprendre les causes.",
-      titleSecond: "Choisir le bon levier.",
+      eyebrow: "Ma manière de travailler",
+      titleFirst: "Comprendre ce qui bloque.",
+      titleSecond: "Aller jusqu’à l’exécution.",
       intro:
-        "Chaque situation appelle sa réponse : clarifier une décision, faire évoluer l’organisation ou adapter les systèmes.",
+        "Une question guide le travail : qu’est-ce qui doit réellement changer ? La réponse peut être humaine, organisationnelle ou technique. Souvent les trois.",
       steps: [
         {
           number: "01",
-          title: "Comprendre la situation",
-          body: "Écouter les équipes et distinguer les causes humaines, organisationnelles et techniques.",
+          title: "Cadrer le problème",
+          body: "Identifier le résultat attendu, les contraintes et les points de friction.",
         },
         {
           number: "02",
-          title: "Éclairer les choix",
-          body: "Rendre les options, les responsabilités et les conséquences explicites.",
+          title: "Comparer les options",
+          body: "Retenir ce qui répond au besoin, même lorsque cela remet en cause les pratiques établies.",
         },
         {
           number: "03",
-          title: "Accompagner la trajectoire",
-          body: "Guider les équipes, challenger les choix et ajuster les orientations.",
+          title: "Faire la preuve",
+          body: "Exécuter avec les équipes, maintenir les contrôles et vérifier les effets.",
         },
       ],
       completeLabel: "Voir l’accompagnement",
       completePath: "/work/",
     },
     technicalDepth: {
-      title: "La profondeur technique, au service du discernement.",
-      body: "Du logiciel à la production, comprendre le terrain pour mieux conseiller.",
-      cta: "Réalisations & retours d’expérience",
-      ctaPath: "/projects/",
+      title: "Environ 200 services. Quinze ans de code.",
+      body: "Pour déployer OpenTelemetry, nous avons préféré un socle commun à une refonte générale. Avec la R&D : conventions, ateliers, petites PR et vérification des traces. Ce retour terrain explique aussi ce que nous n’avons pas cherché à faire.",
+      cta: "Lire le retour d’expérience OpenTelemetry",
+      ctaPath: "/thinking/2026-09-22-opentelemetry-instrumenter-200-services/",
     },
     publicationsTitle: "Publications",
     publicationsAll: "Tout lire",
@@ -85,48 +92,51 @@ export const homeConfig: { fr: HomeLocaleCopy; en: HomeLocaleCopy } = {
     portraitAlt: "Portrait d’Étienne Deneuve",
   },
   en: {
-    eyebrow: "Advisory for leadership and teams",
-    tagline: "Connect business stakes, teams and technology.",
-    lede: "Understand root causes, clarify trade-offs and support transformations, with a precise reading of organisations and systems.",
-    ctaMission: "Discuss your stakes",
+    eyebrow: "Technology leadership · Engineering · Teaching",
+    headlineAccent: "Technology must earn its place.",
+    tagline: "From leading teams to shipping software, the test is what actually improves.",
+    lede: "I lead teams and stay involved in the code, platforms and production systems. I start with the problem, examine the alternatives and change the approach when established practices get in the way. Quality, security and maintainability are not negotiable.",
+    ctaMission: "Get in touch through Omnivya",
     ctaMissionExternalHint: "↗",
+    ctaContext:
+      "For professional engagements, I work through Omnivya, which I co-founded with Taous and where I serve as CTO.",
     domains: [
-      "Strategy & governance",
-      "Organisation & accountabilities",
-      "Architecture & software",
-      "Production & service quality",
+      "Lead and develop engineering teams",
+      "Remove friction from delivery",
+      "From software to cloud platforms",
+      "Speak, teach and run workshops",
     ],
     approach: {
-      eyebrow: "A cross-cutting reading",
-      titleFirst: "Understand the causes.",
-      titleSecond: "Choose the right lever.",
+      eyebrow: "How I work",
+      titleFirst: "Understand what is holding things back.",
+      titleSecond: "Follow through on delivery.",
       intro:
-        "Each situation calls for its own response: clarify a decision, evolve the organisation, or adapt the systems.",
+        "One question comes first: what actually needs to change? The answer may involve people, the organisation or technology. Often all three.",
       steps: [
         {
           number: "01",
-          title: "Understand the situation",
-          body: "Listen to teams and separate human, organisational and technical causes.",
+          title: "Define the problem",
+          body: "Make the intended result, constraints and sources of friction explicit.",
         },
         {
           number: "02",
-          title: "Clarify the choices",
-          body: "Make options, accountabilities and consequences explicit.",
+          title: "Examine the options",
+          body: "Choose what fits, even when it challenges established practices.",
         },
         {
           number: "03",
-          title: "Support the trajectory",
-          body: "Guide teams, challenge choices and adjust direction.",
+          title: "Prove the change",
+          body: "Deliver with the teams, keep the safeguards and verify what changed.",
         },
       ],
       completeLabel: "See advisory",
       completePath: "/work/",
     },
     technicalDepth: {
-      title: "Technical depth, in service of discernment.",
-      body: "From software to production — understand the ground to advise better.",
-      cta: "Projects & experience reports",
-      ctaPath: "/en/projects/",
+      title: "Around 200 services. Fifteen years of code.",
+      body: "For the OpenTelemetry rollout, we chose a shared baseline over a broad rewrite. Working with R&D meant common conventions, workshops, focused PRs and checking what the traces actually showed.",
+      cta: "Read the OpenTelemetry field report (FR)",
+      ctaPath: "/thinking/2026-09-22-opentelemetry-instrumenter-200-services/",
     },
     publicationsTitle: "Publications",
     publicationsAll: "Read all",

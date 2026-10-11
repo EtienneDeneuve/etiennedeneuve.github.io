@@ -17,9 +17,9 @@ export const siteConfig = {
     brandName: "Etienne Deneuve",
   },
   professionalRole: {
-    title: "CTO conseil",
+    title: "CTO expert",
     subtitle:
-      "Stratégie, organisation & transformation — leviers humains, organisationnels et techniques",
+      "Management, productivité et ingénierie — du code au Cloud et à l’IA, selon l’objectif",
   },
   location: {
     label: "France (remote-first, Europe)",
@@ -53,7 +53,7 @@ export const siteConfig = {
     siteUrl: "https://etienne.deneuve.xyz",
     title: "Etienne Deneuve",
     description:
-      "Architecture notes, platform decisions and field write-ups on Kubernetes, cloud platforms, systems risk, and software delivery.",
+      "CTO expert: engineering leadership, productivity and hands-on work from software to cloud and AI. Practical decisions, experiments and field notes.",
     locale: "fr_FR",
     defaultLanguage: "fr",
     defaultOgImage: "https://etienne.deneuve.xyz/assets/og-default.jpg",
@@ -65,7 +65,7 @@ export const siteConfig = {
   },
   primaryCtas: {
     discussMission: {
-      label: "Discuter d'un contexte SI complexe",
+      label: "Discuter d’un objectif concret",
       href: "https://www.omnivya.fr/fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=site&utm_content=primary-cta",
     },
     omnivyaExecution: {
@@ -83,7 +83,7 @@ export const siteConfig = {
   },
   availability: {
     status: "selective",
-    message: "Disponible pour missions a forte complexite technique et organisationnelle.",
+    message: "Disponible pour missions cadrées sur un objectif et des livrables concrets.",
   },
   copyright: {
     startYear: copyrightStartYear,
@@ -99,15 +99,15 @@ export const siteConfig = {
     name: "Étienne Deneuve",
     fullName: "Etienne Deneuve",
     siteName: "Etienne Deneuve",
-    tagline: "CTO conseil — stratégie, organisation & transformation",
-    jobTitle: "CTO conseil",
+    tagline: "CTO expert — la technique vaut ce qu’elle change",
+    jobTitle: "CTO expert",
     location: "France (remote-first, Europe)",
   },
   site: {
     url: "https://etienne.deneuve.xyz",
     title: "Etienne Deneuve",
     description:
-      "Architecture notes, platform decisions and field write-ups on Kubernetes, cloud platforms, systems risk, and software delivery.",
+      "CTO expert: engineering leadership, productivity and hands-on work from software to cloud and AI. Practical decisions, experiments and field notes.",
     locale: "fr_FR",
     defaultOgImage: "https://etienne.deneuve.xyz/assets/og-default.jpg",
   },
