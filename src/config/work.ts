@@ -1,6 +1,6 @@
 /**
  * /work — Accompagnement (advisory CTO).
- * Situations first; not a Diagnose/Decide/Build service catalog.
+ * Observable visitor situations first; Omnivya is secondary.
  */
 
 type Localized<T> = { fr: T; en: T };
@@ -8,126 +8,187 @@ type Localized<T> = { fr: T; en: T };
 export type WorkSituation = {
   id: string;
   title: Localized<string>;
-  body: Localized<string>;
+  /** What the visitor observes */
+  signal: Localized<string>;
+  /** What Etienne examines */
+  examines: Localized<string>;
+  /** Decision the engagement supports */
+  decision: Localized<string>;
+  /** Concrete outcome expected */
+  outcome: Localized<string>;
+  /** Optional existing on-site reference (not invented cases) */
+  related?: { label: Localized<string>; href: string };
 };
 
 export const workConfig = {
   meta: {
     title: { fr: "Accompagnement", en: "Advisory" } as Localized<string>,
     description: {
-      fr: "Quand faire appel à un CTO conseil : clarifier les causes, éclairer les arbitrages et accompagner la trajectoire — missions via Omnivya.",
-      en: "When to bring in an advisory CTO: clarify causes, illuminate trade-offs and support the trajectory — missions through Omnivya.",
+      fr: "Accompagnement CTO conseil : quand les livraisons ralentissent, l’exploitation absorbe la capacité ou un arbitrage reste bloqué.",
+      en: "Advisory CTO support: when delivery slows, operations absorb capacity, or a trade-off stays stuck.",
     } as Localized<string>,
     eyebrow: {
       fr: "CTO conseil",
       en: "Advisory CTO",
     } as Localized<string>,
     intro: {
-      fr: "Vous n’avez pas besoin d’un catalogue de prestations. Vous avez besoin de savoir si je peux vous aider sur votre situation — et sous quelle forme.",
-      en: "You do not need a service catalog. You need to know whether I can help with your situation — and in what form.",
+      fr: "Si l’une de ces situations vous ressemble, on peut clarifier ce qu’il faut regarder, quelle décision sécuriser et ce que l’accompagnement change concrètement.",
+      en: "If one of these situations sounds familiar, we can clarify what to look at, which decision to secure and what advisory support changes in practice.",
     } as Localized<string>,
   },
   situations: [
     {
+      id: "delivery-slowdown",
+      title: {
+        fr: "Les livraisons ralentissent ou n’aboutissent plus",
+        en: "Delivery slows or stops landing",
+      },
+      signal: {
+        fr: "Les fonctionnalités prévues ne sortent plus au rythme attendu, malgré des équipes occupées.",
+        en: "Planned features no longer ship at the expected pace, even though teams stay busy.",
+      },
+      examines: {
+        fr: "Je regarde priorités, interfaces entre équipes, dépendances techniques et freins d’organisation — pas seulement la stack.",
+        en: "I look at priorities, team interfaces, technical dependencies and organisational friction — not only the stack.",
+      },
+      decision: {
+        fr: "Décider où concentrer l’effort pour débloquer le flux, et ce qu’il faut arrêter de faire.",
+        en: "Decide where to focus effort to unblock flow, and what to stop doing.",
+      },
+      outcome: {
+        fr: "Une lecture partagée des causes et un ordre de décisions actionnable par la direction et les leads.",
+        en: "A shared reading of causes and a decision order leadership and leads can act on.",
+      },
+      related: {
+        label: { fr: "Publications", en: "Publications" },
+        href: "/thinking/",
+      },
+    },
+    {
+      id: "ops-absorbs-capacity",
+      title: {
+        fr: "Incidents et exploitation absorbent la capacité",
+        en: "Incidents and operations absorb capacity",
+      },
+      signal: {
+        fr: "La plateforme ou la prod monopolise les équipes : peu de place pour avancer, beaucoup de temps à contenir.",
+        en: "The platform or production monopolises teams: little room to advance, much time spent containing.",
+      },
+      examines: {
+        fr: "Je distingue charge d’exploitation, dette invisible, signaux utiles et responsabilités floues entre équipes.",
+        en: "I separate operational load, invisible debt, useful signals and blurry accountabilities across teams.",
+      },
+      decision: {
+        fr: "Arbitrer ce qui doit être stabilisé, simplifié ou volontairement non traité.",
+        en: "Decide what must be stabilised, simplified or deliberately left alone.",
+      },
+      outcome: {
+        fr: "Des critères pour récupérer de la capacité sans ajouter une couche d’outil ou de process.",
+        en: "Criteria to reclaim capacity without adding another tool or process layer.",
+      },
+      related: {
+        label: { fr: "External Metrics Exporter", en: "External Metrics Exporter" },
+        href: "/projects/external-metrics-exporter/",
+      },
+    },
+    {
       id: "decision-blocked",
       title: {
-        fr: "Une décision est bloquée",
-        en: "A decision is stuck",
+        fr: "Un arbitrage reste bloqué",
+        en: "A trade-off stays stuck",
       },
-      body: {
-        fr: "Options floues, responsabilités floues, ou peur de trancher. Je rends les options, les conséquences et les responsabilités explicites pour que la direction puisse choisir.",
-        en: "Blurry options, blurry accountabilities, or fear of deciding. I make options, consequences and accountabilities explicit so leadership can choose.",
+      signal: {
+        fr: "Options, responsabilités ou peurs de trancher empêchent une décision qui engage coût, sécurité ou trajectoire.",
+        en: "Options, accountabilities or fear of deciding block a choice that commits cost, security or trajectory.",
       },
-    },
-    {
-      id: "org-system-mix",
-      title: {
-        fr: "Organisation, équipes et systèmes sont mélangés",
-        en: "Organisation, teams and systems are entangled",
+      examines: {
+        fr: "Je rends explicites options, conséquences et responsabilités — côté équipes, organisation et technique.",
+        en: "I make options, consequences and accountabilities explicit — across teams, organisation and technique.",
       },
-      body: {
-        fr: "On parle d’outil alors que le levier est humain ou organisationnel — ou l’inverse. Je distingue les causes avant de proposer un levier.",
-        en: "People talk tools when the lever is human or organisational — or the reverse. I separate causes before proposing a lever.",
+      decision: {
+        fr: "Permettre à la direction de choisir avec une carte claire, pas un catalogue d’avis.",
+        en: "Enable leadership to choose with a clear map, not a catalog of opinions.",
       },
-    },
-    {
-      id: "trajectory",
-      title: {
-        fr: "Une trajectoire doit être tenue",
-        en: "A trajectory must be held",
-      },
-      body: {
-        fr: "Après le diagnostic ou la décision, les équipes ont besoin d’un regard extérieur qui challenge sans confisquer le contrôle. J’accompagne, je ne remplace pas le management.",
-        en: "After diagnosis or decision, teams need an outside view that challenges without seizing control. I support; I do not replace management.",
+      outcome: {
+        fr: "Une décision documentée : choix retenu, alternatives écartées, critères de suivi.",
+        en: "A documented decision: chosen path, rejected alternatives, follow-up criteria.",
       },
     },
     {
-      id: "execution-needed",
+      id: "unreadability",
       title: {
-        fr: "Il faut exécuter un périmètre borné",
-        en: "A bounded scope must be executed",
+        fr: "Responsabilités et dépendances sont devenues illisibles",
+        en: "Accountabilities and dependencies have become unreadable",
       },
-      body: {
-        fr: "Quand le diagnostic est clair et que la delivery technique est nécessaire, la mission passe par Omnivya Expert — cadre, durée et livrables explicites.",
-        en: "When the diagnosis is clear and technical delivery is required, the mission goes through Omnivya Expert — explicit frame, duration and deliverables.",
+      signal: {
+        fr: "Personne ne partage la même carte du système ; la complexité augmente plus vite que la capacité à décider.",
+        en: "No one shares the same system map; complexity grows faster than the ability to decide.",
+      },
+      examines: {
+        fr: "Je cartographie dépendances, frontières de responsabilité et points où le système n’est plus gouvernable.",
+        en: "I map dependencies, responsibility boundaries and points where the system is no longer governable.",
+      },
+      decision: {
+        fr: "Décider ce qu’il faut rendre lisible en premier pour pouvoir agir sans augmenter la dette.",
+        en: "Decide what must become readable first so action is possible without growing debt.",
+      },
+      outcome: {
+        fr: "Une représentation partagée et des leviers ordonnés — humains, organisationnels et techniques.",
+        en: "A shared representation and ordered levers — human, organisational and technical.",
+      },
+      related: {
+        label: { fr: "Conférences & médias", en: "Talks & media" },
+        href: "/speaking/",
       },
     },
   ] satisfies WorkSituation[],
   method: {
-    title: { fr: "Comment j’interviens", en: "How I work" } as Localized<string>,
+    title: { fr: "Ce que l’accompagnement change", en: "What advisory support changes" } as Localized<string>,
     steps: [
       {
         number: "01",
-        title: { fr: "Comprendre la situation", en: "Understand the situation" },
+        title: { fr: "Lire la situation telle qu’elle est", en: "Read the situation as it is" },
         body: {
-          fr: "Écouter les équipes et distinguer causes humaines, organisationnelles et techniques.",
+          fr: "Écouter les équipes et séparer causes humaines, organisationnelles et techniques.",
           en: "Listen to teams and separate human, organisational and technical causes.",
         },
       },
       {
         number: "02",
-        title: { fr: "Éclairer les choix", en: "Clarify the choices" },
+        title: { fr: "Rendre la décision possible", en: "Make the decision possible" },
         body: {
-          fr: "Rendre options, responsabilités et conséquences explicites.",
-          en: "Make options, accountabilities and consequences explicit.",
+          fr: "Options, responsabilités et conséquences explicites pour trancher.",
+          en: "Explicit options, accountabilities and consequences so a choice can be made.",
         },
       },
       {
         number: "03",
-        title: { fr: "Accompagner la trajectoire", en: "Support the trajectory" },
+        title: { fr: "Tenir la suite sans confisquer le contrôle", en: "Hold the follow-through without seizing control" },
         body: {
-          fr: "Guider, challenger et ajuster — sans staffing ni promesse magique.",
-          en: "Guide, challenge and adjust — no staff-aug, no magic promise.",
+          fr: "Challenger et ajuster avec les leads ; le management reste chez vous.",
+          en: "Challenge and adjust with leads; management stays with you.",
         },
       },
     ],
   },
-  boundaries: {
-    title: { fr: "Ce que je ne fais pas", en: "What I do not do" } as Localized<string>,
-    items: {
-      fr: [
-        "Staff augmentation sans cadre de décision",
-        "Promesses d’uptime ou de gains chiffrés non sourcés",
-        "Remplacer le management ou porter l’exécution hors Omnivya Expert",
-      ],
-      en: [
-        "Staff augmentation without a decision frame",
-        "Unsourced uptime or savings promises",
-        "Replace management or carry execution outside Omnivya Expert",
-      ],
-    } as Localized<string[]>,
-  },
+  omnivyaNote: {
+    fr: "Quand une mission structurée est pertinente après cet échange, elle peut être cadrée via Omnivya.",
+    en: "When a structured mission fits after that conversation, it can be framed through Omnivya.",
+  } as Localized<string>,
   cta: {
     title: { fr: "Échanger", en: "Talk" } as Localized<string>,
     body: {
-      fr: "Décrivez la situation en quelques lignes. Si une mission structurée est pertinente, on la cadre via Omnivya.",
-      en: "Describe the situation in a few lines. If a structured mission fits, we frame it through Omnivya.",
+      fr: "Décrivez la situation en quelques lignes.",
+      en: "Describe the situation in a few lines.",
     } as Localized<string>,
     contactLabel: { fr: "Contacter", en: "Contact" } as Localized<string>,
-    omnivyaLabel: { fr: "Mission via Omnivya", en: "Mission via Omnivya" } as Localized<string>,
+    omnivyaLabel: { fr: "Omnivya", en: "Omnivya" } as Localized<string>,
   },
   labels: {
-    speakingLink: { fr: "Conférences & médias", en: "Talks & media" } as Localized<string>,
-    situationsTitle: { fr: "Quand me solliciter", en: "When to engage me" } as Localized<string>,
+    situationsTitle: { fr: "Situations où j’interviens", en: "Situations I work on" } as Localized<string>,
+    examines: { fr: "Ce que j’examine", en: "What I examine" } as Localized<string>,
+    decision: { fr: "Décision accompagnée", en: "Decision supported" } as Localized<string>,
+    outcome: { fr: "Résultat attendu", en: "Expected outcome" } as Localized<string>,
+    related: { fr: "Repère", en: "Reference" } as Localized<string>,
   },
 } as const;
