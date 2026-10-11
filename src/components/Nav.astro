@@ -34,9 +34,6 @@ const isActive = (href: string) => {
 };
 
 const linkEvent = (href: string) => {
-  if (href.includes("start-here")) {
-    return analyticsAttrs("cta_start_here", { surface: "nav", lang: locale });
-  }
   if (href.includes("speaking")) {
     return analyticsAttrs("cta_speaking", { surface: "nav", lang: locale });
   }
@@ -118,13 +115,17 @@ const linkEvent = (href: string) => {
 
       menu.hidden = true;
 
-      /** @param {boolean} expand */
-      const setExpanded = (expand) => {
+      /** @param {boolean} expand @param {{ focusMenu?: boolean }} [opts] */
+      const setExpanded = (expand, opts = {}) => {
         btn.setAttribute("aria-expanded", expand ? "true" : "false");
         menu.hidden = !expand;
+        if (expand && opts.focusMenu) {
+          const firstLink = menu.querySelector("a, button");
+          if (firstLink instanceof HTMLElement) firstLink.focus();
+        }
       };
 
-      btn.addEventListener("click", () => setExpanded(menu.hidden));
+      btn.addEventListener("click", () => setExpanded(menu.hidden, { focusMenu: true }));
 
       document.addEventListener("keydown", (event) => {
         if (event.key === "Escape" && btn.getAttribute("aria-expanded") === "true") {
@@ -141,7 +142,6 @@ const linkEvent = (href: string) => {
 
       /** @param {MediaQueryListEvent | MediaQueryList} e */
       const handleViewports = (e) => {
-        setExpanded(e.matches);
         btn.hidden = e.matches;
         if (e.matches) {
           menu.hidden = false;
