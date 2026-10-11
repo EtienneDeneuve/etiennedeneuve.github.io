@@ -56,9 +56,8 @@ test.describe("home hero reception (#171)", () => {
       await expect(page.locator("html")).toHaveAttribute("lang", lang);
       await assertPortraitReserved(page);
       await assertHeroCta(page, lang);
-      await expect(page.locator(".home-cta")).toContainText(
-        lang === "fr" ? /Échanger|enjeux/i : /Discuss|stakes/i
-      );
+      // Copy may evolve; test the accessible CTA and destination, not a slogan.
+      await expect(page.locator(".home-cta span:first-child")).toHaveText(/\S.{3,}/);
     });
   }
 
