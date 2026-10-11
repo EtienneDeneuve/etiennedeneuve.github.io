@@ -24,4 +24,14 @@ export const resourcesPageConfig = {
     "DevSecOps",
     "TechSpresso",
   ] as const,
+  /**
+   * Former transit detail URLs → useful destinations (index section or Speaking).
+   * Keep in sync with astro.config redirects + sitemap exclusions.
+   */
+  transitRedirects: {
+    "omnivya-hidden-costs-containers": "/resources/#omnivya-hidden-costs-containers",
+    "omnivya-hidden-face-of-iac": "/resources/#omnivya-hidden-face-of-iac",
+    DevSecOps: "/resources/#DevSecOps",
+    TechSpresso: "/speaking/#techspresso",
+  } as const,
 } as const;
