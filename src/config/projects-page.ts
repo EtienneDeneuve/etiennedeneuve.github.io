@@ -25,8 +25,8 @@ export const projectsPageConfig = {
     },
     eyebrow: { fr: "Portfolio technique", en: "Technical portfolio" },
     intro: {
-      fr: "Quelques projets détaillés, puis une liste compacte d’autres contributions publiques. Priorité aux choix et au rôle, pas au catalogue technique.",
-      en: "A few detailed projects, then a compact list of other public contributions. Priority to choices and role, not a technical catalog.",
+      fr: "Quelques projets détaillés, puis une liste compacte d’autres contributions publiques.",
+      en: "A few detailed projects, then a compact list of other public contributions.",
     },
   },
   labels: {

@@ -10,19 +10,19 @@ export const contactConfig = {
   meta: {
     title: { fr: "Contact", en: "Contact" } as Localized,
     description: {
-      fr: "Échanger directement : mission via Omnivya, ou email pour tout autre sujet.",
-      en: "Reach out directly: mission via Omnivya, or email for anything else.",
+      fr: "Décrivez votre situation en quelques lignes : mission via Omnivya, ou email pour tout autre sujet.",
+      en: "Describe your situation in a few lines: mission via Omnivya, or email for anything else.",
     } as Localized,
     intro: {
-      fr: "Deux chemins suffisent. Pas de formulaire à plusieurs intentions.",
-      en: "Two paths are enough. No multi-intent form.",
+      fr: "Décrivez votre situation en quelques lignes.",
+      en: "Describe your situation in a few lines.",
     } as Localized,
   },
   mission: {
     title: { fr: "Mission ou accompagnement", en: "Mission or advisory" } as Localized,
     body: {
-      fr: "Pour qualifier une situation et cadrer une mission, le canal est Omnivya.",
-      en: "To qualify a situation and frame a mission, the channel is Omnivya.",
+      fr: "Pour une mission ou un accompagnement structuré, contactez Omnivya.",
+      en: "For a structured mission or advisory engagement, contact Omnivya.",
     } as Localized,
     cta: {
       fr: "Contacter Omnivya",

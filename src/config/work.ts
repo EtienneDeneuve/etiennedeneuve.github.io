@@ -172,8 +172,8 @@ export const workConfig = {
     ],
   },
   omnivyaNote: {
-    fr: "Quand une mission structurée est pertinente après cet échange, elle peut être cadrée via Omnivya.",
-    en: "When a structured mission fits after that conversation, it can be framed through Omnivya.",
+    fr: "Pour une mission structurée, voir aussi Omnivya.",
+    en: "For a structured mission, see also Omnivya.",
   } as Localized<string>,
   cta: {
     title: { fr: "Échanger", en: "Talk" } as Localized<string>,

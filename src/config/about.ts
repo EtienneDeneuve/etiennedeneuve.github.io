@@ -52,10 +52,10 @@ export const aboutConfig = {
     title: { fr: "Responsabilités", en: "Responsibilities" } as Localized,
     paragraphs: {
       fr: [
-        "Chez Omnivya : architecture, plateforme, sécurité et produits techniques. Omnivya Expert porte le conseil et la delivery structurés. Ce site publie le raisonnement et les preuves ; ce n’est pas le canal commercial.",
+        "Chez Omnivya : architecture, plateforme, sécurité et produits techniques. Omnivya Expert porte les missions de conseil et de delivery structurées.",
       ],
       en: [
-        "At Omnivya: architecture, platform, security and technical products. Omnivya Expert carries structured consulting and delivery. This site publishes reasoning and proof; it is not the commercial channel.",
+        "At Omnivya: architecture, platform, security and technical products. Omnivya Expert carries structured consulting and delivery missions.",
       ],
     },
   },

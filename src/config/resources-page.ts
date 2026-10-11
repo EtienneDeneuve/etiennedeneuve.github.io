@@ -13,8 +13,8 @@ export const resourcesPageConfig = {
       en: "Omnivya white papers, recommendations and useful links.",
     } as Localized,
     intro: {
-      fr: "Quelques lectures utiles, avec le pourquoi. Les liens vont directement à la source.",
-      en: "A few useful readings, with the why. Links go straight to the source.",
+      fr: "Quelques lectures utiles, avec le pourquoi.",
+      en: "A few useful readings, with the why.",
     } as Localized,
   },
   /** Collection entry ids in display order. */

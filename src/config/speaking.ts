@@ -85,8 +85,8 @@ export const speakingPageConfig = {
       en: "Documented appearances, current themes and media kit for organizers.",
     },
     positioning: {
-      fr: "D’abord ce qui a été fait et peut être vérifié. Ensuite les thèmes sur lesquels j’interviens aujourd’hui.",
-      en: "First what was done and can be verified. Then the themes I speak on today.",
+      fr: "Interventions passées, thèmes actuels et kit pour organisateurs.",
+      en: "Past appearances, current themes and organizer kit.",
     },
     topicsTitle: {
       fr: "Thèmes actuels",
