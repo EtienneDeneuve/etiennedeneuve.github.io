@@ -350,7 +350,9 @@ const resourcesCollection = defineCollection({
     normalizeResource,
     z.object({
       title: z.string(),
+      title_en: z.string().optional(),
       description: z.string(),
+      description_en: z.string().optional(),
       resourceKind: z.enum([
         "produced-by-etienne",
         "open-source-project",
@@ -371,9 +373,21 @@ const resourcesCollection = defineCollection({
       img: z.string().url().optional(),
       img_alt: z.string().default(""),
       summary: z.string().optional(),
+      summary_en: z.string().optional(),
       whyItMatters: z.string().optional(),
+      whyItMatters_en: z.string().optional(),
       whenToUse: z.string().optional(),
       timeToConsume: z.string().optional(),
+      /** Direct links shown on the compact /resources index (canonical source). */
+      indexLinks: z
+        .array(
+          z.object({
+            label: z.string(),
+            label_en: z.string().optional(),
+            href: z.string(),
+          })
+        )
+        .default([]),
     })
   ),
 });
