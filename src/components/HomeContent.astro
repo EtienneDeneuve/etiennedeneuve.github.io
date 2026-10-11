@@ -3,7 +3,7 @@ import { omnivyaContactUrl } from "../config/site.ts";
 import { messagingConfig } from "../config/messaging.ts";
 import { homeConfig } from "../config/home.ts";
 import { getArticlePath, getArticleLanguage, getCanonicalSlug } from "../lib/thinking.ts";
-import type { HomeThinkingItem } from "../lib/home-thinking.ts";
+import { orderHomeThinking, type HomeThinkingItem } from "../lib/home-thinking.ts";
 
 interface Props {
   lang: "fr" | "en";
@@ -25,18 +25,12 @@ const dateFmt = new Intl.DateTimeFormat(lang === "fr" ? "fr-FR" : "en-GB", {
 const articleLang = (entry: HomeThinkingItem["entry"]) =>
   lang === "en" ? getArticleLanguage(entry) : "fr";
 
-const pubs = selectedThinking
-  .filter((item) => item.entry)
-  .slice(0, 4)
-  .sort((a, b) => b.entry.data.pubDate.valueOf() - a.entry.data.pubDate.valueOf());
+const pubs = orderHomeThinking(selectedThinking);
 
 const featured = pubs[0];
 const rest = pubs.slice(1);
 
-/** Kit: line1 "Stratégie, organisation" / line2 "& transformation." (accented). */
-const ampSplit = headline.match(/^(.*?)\s*&\s*(.*)$/);
-const titleLine1 = ampSplit ? ampSplit[1].trim() : headline;
-const titleLine2 = ampSplit ? `& ${ampSplit[2].trim()}` : "";
+// Make the role and the editorial promise distinct, regardless of punctuation.
 ---
 
 <style is:global>
@@ -51,12 +45,8 @@ const titleLine2 = ampSplit ? `& ${ampSplit[2].trim()}` : "";
       <div class="home-hero__present">
         <p class="home-eyebrow">{copy.eyebrow}</p>
         <h1 id="home-title" class="home-title">
-          <span class="home-title__line">{titleLine1}</span>
-          {
-            titleLine2 && (
-              <span class="home-title__line home-title__line--accent">{titleLine2}</span>
-            )
-          }
+          <span class="home-title__line">{headline}</span>
+          <span class="home-title__line home-title__line--accent">{copy.headlineAccent}</span>
         </h1>
         <p class="home-tagline">{copy.tagline}</p>
 
@@ -73,21 +63,24 @@ const titleLine2 = ampSplit ? `& ${ampSplit[2].trim()}` : "";
           </figure>
           <div class="home-intro__copy">
             <p class="home-lede">{copy.lede}</p>
-            <a
-              class="home-cta"
-              href={omnivyaContactUrl(lang, "home-hero")}
-              rel="noopener noreferrer"
-              target="_blank"
-              data-analytics-event="cta_booking"
-              data-analytics-props={JSON.stringify({
-                surface: "home",
-                lang,
-                intent: "qualification",
-              })}
-            >
-              <span>{copy.ctaMission}</span>
-              <span aria-hidden="true">{copy.ctaMissionExternalHint}</span>
-            </a>
+            <div class="home-contact">
+              <a
+                class="home-cta"
+                href={omnivyaContactUrl(lang, "home-hero")}
+                rel="noopener noreferrer"
+                target="_blank"
+                data-analytics-event="cta_booking"
+                data-analytics-props={JSON.stringify({
+                  surface: "home",
+                  lang,
+                  intent: "qualification",
+                })}
+              >
+                <span>{copy.ctaMission}</span>
+                <span aria-hidden="true">{copy.ctaMissionExternalHint}</span>
+              </a>
+              <p class="home-cta-context">{copy.ctaContext}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -112,6 +105,9 @@ const titleLine2 = ampSplit ? `& ${ampSplit[2].trim()}` : "";
                       articleLang(featured.entry)
                     )}
                   >
+                    {featured.spotlight && (
+                      <span class="home-pubs__series">À la une · OpenTelemetry 2/4</span>
+                    )}
                     <time datetime={featured.entry.data.pubDate.toISOString()}>
                       {dateFmt.format(featured.entry.data.pubDate)}
                     </time>
@@ -325,6 +321,20 @@ const titleLine2 = ampSplit ? `& ${ampSplit[2].trim()}` : "";
     color: var(--home-muted);
   }
 
+  .home-contact {
+    display: grid;
+    justify-items: start;
+    gap: 0.4rem;
+  }
+
+  .home-cta-context {
+    margin: 0;
+    max-width: 42ch;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: var(--home-muted);
+  }
+
   .home-cta {
     display: inline-flex;
     align-items: center;
@@ -389,6 +399,15 @@ const titleLine2 = ampSplit ? `& ${ampSplit[2].trim()}` : "";
     text-decoration: none;
     color: inherit;
     border-bottom: 1px solid var(--home-border);
+  }
+
+  .home-pubs__series {
+    color: var(--home-copper);
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
   }
 
   .home-pubs__featured time,

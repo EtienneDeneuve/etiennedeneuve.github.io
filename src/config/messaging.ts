@@ -8,44 +8,44 @@ export type Localized = { fr: string; en: string };
 export const messagingConfig = {
   etienne: {
     positioning: {
-      fr: "Stratégie, organisation & transformation.",
-      en: "Strategy, organisation & transformation.",
+      fr: "CTO expert.",
+      en: "Hands-on CTO.",
     } as Localized,
     promise: {
-      fr: "Aider à décider sous contraintes réelles — humaines, organisationnelles et techniques — avec doctrine publique et preuves vérifiables.",
-      en: "Help decide under real constraints — human, organisational and technical — with public doctrine and verifiable proof.",
+      fr: "Diriger les équipes, maîtriser les systèmes et améliorer ce qui compte. Les décisions techniques ont une valeur lorsqu’elles changent réellement la situation.",
+      en: "Lead teams, understand the systems and improve what matters. Technology decisions earn their value through real-world impact.",
     } as Localized,
     audiences: {
       dg: {
-        fr: "Je clarifie les causes et le risque pour que la direction tranche sans dépendre d’un jargon opaque.",
-        en: "I make causes and risk legible so leadership can decide without opaque jargon.",
+        fr: "J’identifie ce qui freine les équipes et les systèmes, clarifie les options puis accompagne les décisions jusque dans leur mise en œuvre.",
+        en: "I identify what holds teams and systems back, make the options clear and see decisions through to delivery.",
       } as Localized,
       cto: {
-        fr: "Doctrine, arbitrages documentés et leviers distincts (organisation, humain, technique) pour piloter sous contraintes.",
-        en: "Doctrine, documented trade-offs and distinct levers (organisation, people, technology) for steering under constraints.",
+        fr: "Je travaille sur l’organisation, le code et la plateforme ensemble lorsque le problème l’exige. Pas de refonte par principe ni de technologie imposée.",
+        en: "I work across teams, software and platforms when the problem calls for it. No default rewrite and no tool imposed for its own sake.",
       } as Localized,
       security: {
-        fr: "Prioriser selon l’exposition et l’impact, pas selon le volume d’alertes.",
-        en: "Prioritize by exposure and impact, not by alert volume.",
+        fr: "Je pars des dépendances et des conséquences réelles, plutôt que du nombre d’alertes ou de contrôles affichés.",
+        en: "I focus on real dependencies and consequences, not the volume of alerts or controls on a dashboard.",
       } as Localized,
     },
     pitch: {
       sec10: {
-        fr: "J’aide les directions et les CTO à trancher quand l’organisation, les équipes et la tech se mélangent. Doctrine et preuves sur mon site ; missions via Omnivya.",
-        en: "I help leadership and CTOs decide when organisation, people and technology are entangled. Doctrine and proof on my site; missions through Omnivya.",
+        fr: "Je dirige des équipes et je reste sur le terrain technique. J’interviens là où les pratiques, le code ou les plateformes empêchent d’avancer.",
+        en: "I lead teams and stay close to the technology. I work where existing practices, software or platforms are holding delivery back.",
       } as Localized,
       sec30: {
-        fr: "Je suis CTO conseil et CTO d’Omnivya. Je publie comment distinguer les causes humaines, organisationnelles et techniques, puis sécuriser la décision. Taous dirige Omnivya ; Omnivya Expert porte les missions bornées. Pas de staffing, pas de promesse magique : diagnostiquer, décider, accompagner.",
-        en: "I am an advisory CTO and CTO of Omnivya. I publish how to separate human, organisational and technical causes, then secure the decision. Taous leads Omnivya; Omnivya Expert carries bounded missions. No staff-aug, no magic promise: diagnose, decide, support.",
+        fr: "Je suis CTO expert et j’ai cofondé Omnivya avec Taous. Je dirige des équipes, j’interviens dans le code et les plateformes, et je m’attaque à ce qui freine réellement le travail. Quand une pratique a fait son temps, je la remets en question, j’éprouve une alternative et je vérifie ses limites. Je documente ce travail sur mon blog ; les missions sont menées via Omnivya.",
+        en: "I am a hands-on CTO and co-founded Omnivya with Taous. I lead teams, work in the code and on platforms, and tackle what genuinely gets in the way of delivery. When established practices fall short, I challenge them, test alternatives and examine the limits. I write about that work here; engagements run through Omnivya.",
       } as Localized,
       sec90: {
-        fr: "Les organisations que je vois ont rarement un manque d’outils. Elles manquent d’une carte partagée, de critères de décision et d’un chemin qui ne confisque pas le contrôle. Sur etienne.deneuve.xyz je documente le raisonnement. Quand il faut une mission, Omnivya cadre le diagnostic et Omnivya Expert intervient dans un périmètre borné. On dit non au hors-scope et aux outcomes inventés.",
-        en: "The organisations I see rarely lack tools. They lack a shared map, decision criteria and a path that does not seize control. At etienne.deneuve.xyz I document the reasoning. When a mission is needed, Omnivya frames the diagnosis and Omnivya Expert works in a bounded scope. We refuse out-of-scope work and invented outcomes.",
+        fr: "Une bonne décision technique doit tenir face au terrain. Sur une application de quinze ans, nous avons choisi de déployer un socle OpenTelemetry commun sur un périmètre d’environ 200 services plutôt que de lancer une refonte générale. Sur nos projets, nous rapprochons les validations CI du développeur sans affaiblir les contrôles GitHub. Ce sont des réponses différentes à des problèmes différents. Ce qui ne change pas : comprendre les contraintes, travailler avec les équipes, limiter les risques, vérifier les effets et transmettre ce que nous apprenons. Je suis CTO expert et cofondateur d’Omnivya avec Taous, qui en assure la direction. J’écris ces retours de terrain sur etienne.deneuve.xyz.",
+        en: "Technical decisions have to survive contact with production. For a fifteen-year-old application, we chose a common OpenTelemetry baseline across a scope of roughly 200 services instead of a broad rewrite. On our projects, we bring CI checks closer to developers without weakening GitHub's merge controls. Different problems call for different answers. What remains constant is understanding constraints, working with teams, managing risks, checking the effects and sharing what we learn. I am a hands-on CTO and co-founder of Omnivya with Taous, who leads the business. I publish the field notes on etienne.deneuve.xyz.",
       } as Localized,
     },
     shortBio: {
-      fr: "Etienne Deneuve est CTO conseil et CTO d’Omnivya, près de Paris. Il aide directions et équipes à comprendre les causes, éclairer les arbitrages et accompagner les transformations. Les missions structurées passent par Omnivya Expert. Il publie sur etienne.deneuve.xyz.",
-      en: "Etienne Deneuve is an advisory CTO and CTO of Omnivya, near Paris. He helps leadership and teams understand causes, clarify trade-offs and support transformations. Structured missions run through Omnivya Expert. He publishes at etienne.deneuve.xyz.",
+      fr: "Étienne Deneuve est CTO expert, cofondateur et CTO d’Omnivya. Il dirige des équipes et intervient du code aux plateformes Cloud, avec une attention particulière à l’efficacité de l’ingénierie. Il partage ses retours d’expérience dans des articles, conférences, ateliers et formations.",
+      en: "Étienne Deneuve is a hands-on CTO and co-founder of Omnivya. He leads teams and works from software to cloud platforms, with a focus on effective engineering delivery. He shares his field experience through writing, speaking, workshops and training.",
     } as Localized,
   },
   omnivya: {
