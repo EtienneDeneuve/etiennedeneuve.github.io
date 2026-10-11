@@ -11,6 +11,7 @@ pubDate: 2016-01-11 17:20:38
 updateDate: 2024-02-12 11:16:00
 img: /assets/stock-2.jpg
 img_alt: nice abstract image
+draft: true
 ---
 
 Je publie ma méthode pour installer des applications `sideload` sur Windows 8 et versions ultérieures. J'ai cherché sur Internet et n'ai rien trouvé pour installer ces applications sur des ordinateurs dans une entreprise qui n'a pas SCCM. J'ai écrit un script PowerShell qui fera le travail, mais je veux partager la manière dont je l'ai construit, au lieu de le partager sans aucune explication. Ce billet de blog est le premier d'une série visant à passer d'une tâche longue et peu intéressante à une tâche presque entièrement automatisée. Vous devrez avoir makeappx et signtool sur l'ordinateur pour exécuter le script ou effectuer le processus manuellement. Il est préférable de réaliser le processus une fois avant de lancer le script. Il est plus facile de déboguer quelque chose que l'on connaît (oui ! ;)).

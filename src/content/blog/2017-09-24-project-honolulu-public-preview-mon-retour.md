@@ -7,8 +7,9 @@ slug: 2017/09/24/project-honolulu-public-preview-mon-retour
 tags: ["test"]
 img: /assets/stock-2.jpg
 img_alt: "nice abstract image"
-published: true
+published: false
 pubDate: 2017-09-24 19:12:41
+draft: true
 ---
 
 ## Intro

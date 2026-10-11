@@ -9,8 +9,9 @@ tags: [""]
 img: /assets/stock-2.jpg
 img_alt: "nice abstract image"
 slug: 2017/09/29/mon-premier-itcast
-published: true
+published: false
 pubDate: 2017-09-29 16:32:41
+draft: true
 ---
 
 Bonjour !

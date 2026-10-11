@@ -10,6 +10,7 @@ img: /assets/stock-3.jpg
 img_alt: nice abstract image
 lastModified: 2025-12-17T12:00:00.000Z
 updateDate: 2025-12-17T12:00:00.000Z
+draft: true
 ---
 
 ## Analyse technique avec exemples simples (Azure & GitHub)

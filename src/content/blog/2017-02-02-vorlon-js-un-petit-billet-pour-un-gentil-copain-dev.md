@@ -7,6 +7,7 @@ slug: 2017/02/02/vorlon-js-un-petit-billet-pour-un-gentil-copain-dev
 pubDate: 2017-02-02 23:21:19
 img: /assets/stock-2.jpg
 img_alt: "nice abstract image"
+draft: true
 ---
 
 J'ai un copain dev' (pas qu'un) mais ce dernier m'a demandé il y a quelques jours:

@@ -7,6 +7,7 @@ slug: 2017/02/02/agent-oms-sur-linux-dans-azure
 pubDate: 2017-02-02 19:29:38
 img: /assets/stock-4.jpg
 img_alt: "nice abstract image"
+draft: true
 ---
 
 Si vous utilisez déjà OMS vous avec des linux dans Azure, vous avez peut être eu le même soucis que moi et Pascal Saulière. A savoir le log de l'agent OMS qui grossit et prends toute la place dispo (le cochon!)

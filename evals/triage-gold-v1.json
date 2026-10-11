@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "name": "triage-gold-v1",
+  "description": "Editorial gold labels for legacy blog triage (archive | annotate | rewrite). Criteria from docs/editorial-rewrite-prompt.md.",
+  "labels": [
+    {
+      "slug": "2015-12-16-get-nexttrain",
+      "decision": "archive",
+      "note": "Toy PowerShell, zero doctrine value"
+    },
+    {
+      "slug": "2016-01-15-get-ink-level-from-hp-printers-in-powershell",
+      "decision": "archive",
+      "note": "Dead printer tutorial"
+    },
+    {
+      "slug": "2016-01-11-side-loading-application-without-sccm-part-1",
+      "decision": "archive",
+      "note": "SCCM-era how-to, stack dead"
+    },
+    {
+      "slug": "2016-01-11-side-loading-application-without-sccm-part-2",
+      "decision": "archive",
+      "note": "SCCM-era how-to, stack dead"
+    },
+    {
+      "slug": "2016-01-11-side-loading-application-without-sccm-part-3",
+      "decision": "archive",
+      "note": "SCCM-era how-to, stack dead"
+    },
+    {
+      "slug": "2017-02-02-vorlon-js-un-petit-billet-pour-un-gentil-copain-dev",
+      "decision": "archive",
+      "note": "Dead project shout-out"
+    },
+    {
+      "slug": "2017-10-01-mvp",
+      "decision": "archive",
+      "note": "Personal announcement"
+    },
+    {
+      "slug": "2017-09-29-mon-premier-itcast",
+      "decision": "archive",
+      "note": "Personal / event note"
+    },
+    {
+      "slug": "2024-10-05-automatisation-carousel-linkedin",
+      "decision": "archive",
+      "note": "Side tooling, not doctrine hub"
+    },
+    {
+      "slug": "2025-12-17-les-nouveaux-frameworks-web",
+      "decision": "archive",
+      "note": "Generic frameworks survey, off positioning"
+    },
+    {
+      "slug": "2017-01-26-utiliser-ansible-et-azure-oui-cest-possible",
+      "decision": "annotate",
+      "note": "Cloud+IaC idea still true, packaging old"
+    },
+    {
+      "slug": "2018-04-06-terraform-providers-datasource",
+      "decision": "annotate",
+      "note": "Terraform judgment still useful as note"
+    },
+    {
+      "slug": "2018-06-23-git-pour-ops-par-un-ops",
+      "decision": "annotate",
+      "note": "Ops+git still true, packaging old"
+    },
+    {
+      "slug": "2018-06-26-documentation-as-code",
+      "decision": "annotate",
+      "note": "Idea still true"
+    },
+    {
+      "slug": "2020-02-25-terraform-azurerm-2",
+      "decision": "annotate",
+      "note": "Provider transition note, historical value with 2026 context"
+    },
+    {
+      "slug": "2023-07-28-megalinter-azure-devops",
+      "decision": "annotate",
+      "note": "Supply-chain/linting practice still relevant"
+    },
+    {
+      "slug": "2024-02-11-zero-trust-overview",
+      "decision": "annotate",
+      "note": "ZT idea still true; packaging weak, note enough"
+    },
+    {
+      "slug": "2020-02-07-infra-testing-easy-path",
+      "decision": "rewrite",
+      "note": "IaC testing doctrine — deserves denser 2026 note"
+    },
+    {
+      "slug": "2020-06-19-anf-rbac",
+      "decision": "rewrite",
+      "note": "Identity/RBAC judgment, still core"
+    },
+    {
+      "slug": "2024-09-16-managed-identities",
+      "decision": "rewrite",
+      "note": "Identity platform doctrine, core pillar"
+    },
+    {
+      "slug": "2024-02-14-zero-trust-open-source",
+      "decision": "rewrite",
+      "note": "ZT + open source still strategic for positioning"
+    }
+  ]
+}

@@ -1,9 +1,10 @@
-# Réécriture locale des articles legacy (MLX / Ollama)
+# Réécriture locale des articles legacy (Kev + MLX / Ollama)
 
 Pipeline pour repositionner les anciens posts `src/content/blog/` vers la voix Thinking **sans tokens cloud** et **sans écraser** les sources.
 
-Les drafts combinent **note Relecture 2026** (LLM) + **article d'origine** (copyedit léger ortho/format, titre et slug immuables).  
-Le frontmatter Thinking est **assemblé par le script** (pas par le modèle).
+- **Triage** (défaut) : [Kev](https://github.com/jaredpalmer/kev) — décisions `archive` / `annotate` / `rewrite` calibrées
+- **Drafts** : note Relecture 2026 (MLX Qwen) + corps d’origine (copyedit léger) ; titre et slug immuables
+- Frontmatter Thinking **assemblé par le script** (pas par le modèle)
 
 ## Devenv (Nix)
 
@@ -11,9 +12,15 @@ Le frontmatter Thinking est **assemblé par le script** (pas par le modèle).
 cd /path/to/etiennedeneuve.github.io
 direnv allow          # ou: devenv shell
 site-doctor
-mlx-serve             # terminal 1 — uvx + mlx-lm
-rewrite-status        # terminal 2
-rewrite-triage -- --limit 5
+
+kev-bootstrap         # clone + uv sync (une fois)
+kev-serve             # terminal 1 — triage System One :8009
+mlx-serve             # terminal 2 — drafts seulement :18080
+
+rewrite-status
+rewrite-quality -- --before 2026-01-01   # mess / AI-voice / hard-archive hints
+rewrite-benchmark          # score vs evals/triage-gold-v1.json (needs kev-serve)
+rewrite-triage -- --before 2026-01-01 --limit 5
 rewrite-draft -- --limit 1
 ```
 
@@ -21,7 +28,29 @@ Fichiers : `devenv.nix`, `devenv.yaml` (nixpkgs via **FlakeHub weekly** / CDN De
 
 > `cachix/devenv-nixpkgs` tire quand même `NixOS/nixpkgs` en sous-input → gros tarball GitHub. FlakeHub évite ça.
 
-## Prérequis MLX (sans devenv)
+Checkout Kev hors repo : `~/.cache/etienne-site/kev` (`KEV_ROOT` pour override).
+
+## Triage Kev
+
+`TRIAGE_BACKEND=kev` (défaut devenv). Chaque article envoie un `POST /v1/systemone` avec :
+
+| Question      | Type     | Rôle                         |
+| ------------- | -------- | ---------------------------- |
+| `decision`    | `choice` | archive / annotate / rewrite |
+| `pillar`      | `choice` | enums Thinking               |
+| `contentType` | `choice` | enums Thinking               |
+
+Angle / rationale sont synthétiques (pas de prose libre Kev). Sortie inchangée sous `~/Worklog/content/rewrites/`.
+
+Fallback LLM triage :
+
+```bash
+TRIAGE_BACKEND=mlx rewrite-triage -- --limit 5
+# ou
+TRIAGE_BACKEND=ollama REWRITE_BACKEND=ollama rewrite-triage -- --limit 5
+```
+
+## Prérequis MLX (drafts, sans devenv)
 
 ```bash
 # Serveur OpenAI-compatible — uvx, pas pip
@@ -30,27 +59,17 @@ uvx --from mlx-lm mlx_lm.server \
   --port 18080
 ```
 
-| Rôle                         | Modèle MLX                                 | ~RAM                  |
-| ---------------------------- | ------------------------------------------ | --------------------- |
-| Triage + réécriture (défaut) | `mlx-community/Qwen3.5-35B-A3B-OptiQ-4bit` | ~20–24 Go (3B actifs) |
-| Triage rapide (optionnel)    | `mlx-community/Qwen3.5-9B-4bit`            | ~7 Go                 |
+| Rôle              | Modèle                                     | ~RAM                  |
+| ----------------- | ------------------------------------------ | --------------------- |
+| Triage (défaut)   | `jaredpalmer/kev-4b` via `kev-serve`       | ~adapter + Qwen3.5-4B |
+| Réécriture drafts | `mlx-community/Qwen3.5-35B-A3B-OptiQ-4bit` | ~20–24 Go (3B actifs) |
 
-Un seul serveur suffit avec le défaut OptiQ. Pour un triage 9B en parallèle :
-
-```bash
-uvx --from mlx-lm mlx_lm.server \
-  --model mlx-community/Qwen3.5-9B-4bit \
-  --port 18081
-MLX_BASE_URL=http://127.0.0.1:18081/v1 TRIAGE_MODEL=mlx-community/Qwen3.5-9B-4bit \
-  bun run rewrite:articles:triage
-```
-
-### Fallback Ollama
+### Fallback Ollama (triage LLM + drafts)
 
 ```bash
 ollama pull qwen3.5:9b
 ollama pull qwen3.5:35b-a3b
-REWRITE_BACKEND=ollama bun run rewrite:articles:status
+TRIAGE_BACKEND=ollama REWRITE_BACKEND=ollama bun run rewrite:articles:status
 ```
 
 ## Commandes
@@ -68,9 +87,9 @@ bun run rewrite:articles -- annotate --slug …
 # --before 2020-01-01  --force  --dry-run  --model <id>
 ```
 
-Env : `REWRITE_BACKEND`, `MLX_BASE_URL`, `TRIAGE_MODEL`, `REWRITE_MODEL`, `OLLAMA_HOST`, `WORKLOG_ROOT`.
+Env : `TRIAGE_BACKEND`, `KEV_BASE_URL`, `KEV_MODEL`, `REWRITE_BACKEND`, `MLX_BASE_URL`, `TRIAGE_MODEL`, `REWRITE_MODEL`, `OLLAMA_HOST`, `WORKLOG_ROOT`.
 
-Brief éditorial : [`editorial-rewrite-prompt.md`](./editorial-rewrite-prompt.md).
+Brief éditorial (drafts LLM) : [`editorial-rewrite-prompt.md`](./editorial-rewrite-prompt.md).
 
 ## Fichiers produits
 

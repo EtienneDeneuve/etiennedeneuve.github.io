@@ -6,6 +6,7 @@ slug: 2016/01/15/get-ink-level-from-hp-printers-in-powershell
 pubDate: 2016-01-15 09:58:06
 img: /assets/stock-1.jpg
 img_alt: "nice abstract image"
+draft: true
 ---
 
 J'ai découvert une méthode pour obtenir des détails sur les cartouches d'encre des imprimantes HP d'entrée de gamme !
