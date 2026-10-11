@@ -1,7 +1,6 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import OpenSourceSection from "../components/OpenSourceSection.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import { isPortfolioProject, projectsPageConfig } from "../config/projects-page.ts";
 import { getPublishableEntries } from "../lib/publication-policy.ts";
@@ -28,7 +27,10 @@ const projects = sortProjects(
   getPublishableEntries(await getCollection("projects")).filter(isPortfolioProject)
 );
 
-const githubProjects = getSortedGitHubProjects(lang);
+const featuredSlugs = new Set(projects.map((p) => p.id));
+const otherRepos = getSortedGitHubProjects(lang).filter(
+  (repo) => !repo.relatedProjectSlug || !featuredSlugs.has(repo.relatedProjectSlug)
+);
 
 const jsonLd = buildJsonLdGraph([
   personJsonLd(),
@@ -42,7 +44,7 @@ const jsonLd = buildJsonLdGraph([
     { name: "Home", path: prefix || "/" },
     { name: config.meta.title[lang], path: projectsPath },
   ]),
-  ...githubProjects.map((repo) =>
+  ...otherRepos.map((repo) =>
     softwareSourceCodeJsonLd({
       name: repo.name[lang],
       description: repo.problem[lang],
@@ -53,6 +55,15 @@ const jsonLd = buildJsonLdGraph([
     })
   ),
 ]);
+
+const copy = {
+  featured: { fr: "Mis en avant", en: "Featured" },
+  other: { fr: "Autres contributions", en: "Other contributions" },
+  empty: {
+    fr: "Aucun projet publié pour le moment.",
+    en: "No published project yet.",
+  },
+};
 ---
 
 <BaseLayout
@@ -73,10 +84,8 @@ const jsonLd = buildJsonLdGraph([
       <p class="lede">{config.meta.intro[lang]}</p>
     </section>
 
-    <section class="stack gap-4">
-      <h2 class="section-title">
-        {lang === "en" ? "Technical projects" : "Projets techniques"}
-      </h2>
+    <section class="stack gap-4" aria-labelledby="featured-title">
+      <h2 id="featured-title">{copy.featured[lang]}</h2>
       {
         projects.length > 0 ? (
           <div class="grid-auto">
@@ -85,24 +94,53 @@ const jsonLd = buildJsonLdGraph([
             ))}
           </div>
         ) : (
-          <p class="muted">
-            {lang === "en"
-              ? "No published technical project entry is available yet."
-              : "Aucune entrée de projet technique publiée n’est encore disponible."}
-          </p>
+          <p class="muted">{copy.empty[lang]}</p>
         )
       }
     </section>
 
-    <OpenSourceSection lang={lang} />
+    {
+      otherRepos.length > 0 && (
+        <section class="stack gap-4" aria-labelledby="other-title">
+          <h2 id="other-title">{copy.other[lang]}</h2>
+          <ul class="contrib-list">
+            {otherRepos.map((repo) => (
+              <li>
+                <a href={repo.htmlUrl} target="_blank" rel="noopener noreferrer">
+                  {repo.name[lang]}
+                </a>
+                <span class="meta"> — {repo.problem[lang]}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
   </main>
 </BaseLayout>
 
 <style>
-  .section-title {
-    margin: 0;
-  }
   .muted {
     color: var(--color-fg-subtle);
+  }
+  .contrib-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-3);
+    max-width: 48rem;
+  }
+  .contrib-list a {
+    font-weight: 600;
+    color: var(--color-fg);
+    text-decoration: none;
+  }
+  .contrib-list a:hover {
+    text-decoration: underline;
+  }
+  .meta {
+    color: var(--color-fg-muted);
+    font-size: var(--text-sm);
   }
 </style>

@@ -1,11 +1,7 @@
 ---
-import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import OpenSourceSection from "../components/OpenSourceSection.astro";
 import { aboutConfig } from "../config/about.ts";
-import { isPortfolioProject, projectsPageConfig } from "../config/projects-page.ts";
 import { siteConfig } from "../config/site.ts";
-import { getPublishableEntries } from "../lib/publication-policy.ts";
 import {
   buildJsonLdGraph,
   personJsonLd,
@@ -24,18 +20,7 @@ const prefix = lang === "en" ? "/en" : "";
 const aboutPath = `${prefix}/about/`;
 const config = aboutConfig;
 const labels = config.labels;
-
-const projects = getPublishableEntries(await getCollection("projects"))
-  .filter((entry) => entry.data.verified && isPortfolioProject(entry))
-  .sort((a, b) => (a.data.displayOrder ?? 99) - (b.data.displayOrder ?? 99));
-
-const appearances = getPublishableEntries(await getCollection("appearances")).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-);
-
-const emailSubject =
-  lang === "en" ? "Discussion : complex system" : "Discussion : système complexe";
-const mailto = `mailto:${siteConfig.omnivya.email}?subject=${encodeURIComponent(emailSubject)}`;
+const links = config.links;
 
 const omnivyaExpertNode: JsonLdObject = {
   "@type": "Organization",
@@ -71,18 +56,23 @@ const jsonLd = buildJsonLdGraph([
       <p class="eyebrow">{siteConfig.professionalRole.title}</p>
       <h1>{config.meta.title[lang]}</h1>
       <p class="lede">{config.meta.lead[lang]}</p>
-      <ul class="unity" aria-label={config.unity.title[lang]}>
-        {config.unity.items.map((item) => <li>{item[lang]}</li>)}
-      </ul>
     </header>
 
     <section class="stack gap-3" id="today">
       <h2>{config.today.title[lang]}</h2>
       {config.today.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
       <p>
-        <a href={`${prefix}/start-here/`}>{labels.startHere[lang]}</a>
+        <a href={`${prefix}/work/`}>{labels.work[lang]}</a>
         {" · "}
-        <a href={`${prefix}/work/`}>{lang === "en" ? "Work" : "Work"}</a>
+        <a
+          href={lang === "en"
+            ? "https://www.omnivya.fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=about&utm_content=omnivya-link"
+            : "https://www.omnivya.fr/fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=about&utm_content=omnivya-link"}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {labels.omnivyaLink[lang]}
+        </a>
       </p>
     </section>
 
@@ -113,110 +103,21 @@ const jsonLd = buildJsonLdGraph([
       </ol>
     </section>
 
-    <section class="stack gap-3" id="twenty-years">
-      <h2>{config.twentyYears.title[lang]}</h2>
-      {config.twentyYears.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
+    <section class="stack gap-3" id="responsibilities">
+      <h2>{config.responsibilities.title[lang]}</h2>
+      {config.responsibilities.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
     </section>
 
-    <section class="stack gap-3" id="omnivya">
-      <h2>{config.omnivya.title[lang]}</h2>
-      {config.omnivya.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
-      <p>
-        <a
-          href={lang === "en"
-            ? "https://www.omnivya.fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=about&utm_content=omnivya-link"
-            : "https://www.omnivya.fr/fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=about&utm_content=omnivya-link"}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {labels.omnivyaLink[lang]}
-        </a>
-      </p>
-    </section>
-
-    <section class="stack gap-3" id="doctrine">
-      <h2>{config.doctrine.title[lang]}</h2>
-      <ul class="principles">
-        {config.doctrine.principles[lang].map((item) => <li>{item}</li>)}
+    <nav class="elsewhere stack gap-3" aria-labelledby="elsewhere-heading">
+      <h2 id="elsewhere-heading">{links.title[lang]}</h2>
+      <ul>
+        <li><a href={`${prefix}/work/`}>{links.work[lang]}</a></li>
+        <li><a href={`${prefix}/projects/`}>{links.projects[lang]}</a></li>
+        <li><a href={`${prefix}/speaking/`}>{links.speaking[lang]}</a></li>
+        <li><a href={`${prefix}/thinking/`}>{links.thinking[lang]}</a></li>
+        <li><a href={`${prefix}/contact/`}>{links.contact[lang]}</a></li>
       </ul>
-      <p>
-        <a href={`${prefix}/thinking/`}>{labels.thinking[lang]}</a>
-      </p>
-    </section>
-
-    <section class="stack gap-3" id="refuse">
-      <h2>{config.refuse.title[lang]}</h2>
-      <ul class="refuse-list">
-        {config.refuse.items[lang].map((item) => <li>{item}</li>)}
-      </ul>
-    </section>
-
-    <section class="stack gap-4" id="contributions">
-      <h2>{labels.contributions[lang]}</h2>
-
-      {
-        projects.length > 0 && (
-          <div class="stack gap-2">
-            <h3>{labels.projects[lang]}</h3>
-            <ul class="contrib-list">
-              {projects.map((project) => (
-                <li>
-                  <a href={`${prefix}/projects/${project.id}/`}>{project.data.name}</a>
-                  <span class="contrib-meta"> : {project.data.summary}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )
-      }
-
-      {
-        appearances.length > 0 && (
-          <div class="stack gap-2">
-            <h3>{labels.speaking[lang]}</h3>
-            <ul class="contrib-list">
-              {appearances.map((entry) => (
-                <li>
-                  <a href={`${prefix}/speaking/#appearances`}>
-                    {entry.data.title} : {entry.data.event}
-                  </a>
-                  <span class="contrib-meta">
-                    {" "}
-                    (
-                    {entry.data.date.toLocaleDateString(lang === "en" ? "en-GB" : "fr-FR", {
-                      year: "numeric",
-                    })}
-                    )
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <p>
-              <a href={`${prefix}/speaking/`}>{labels.speaking[lang]}</a>
-            </p>
-          </div>
-        )
-      }
-
-      <OpenSourceSection lang={lang} />
-    </section>
-
-    <section class="stack gap-3 contact" id="contact">
-      <h2>{config.contact.title[lang]}</h2>
-      {config.contact.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
-      <p>
-        <a class="cta" href={mailto}>{labels.emailCta[lang]}</a>
-        {" · "}
-        <a href={`mailto:${siteConfig.omnivya.email}`}>{siteConfig.omnivya.email}</a>
-      </p>
-      <p class="social">
-        <a href={siteConfig.social.linkedin} target="_blank" rel="noopener noreferrer">
-          LinkedIn
-        </a>
-        {" · "}
-        <a href={siteConfig.social.github} target="_blank" rel="noopener noreferrer"> GitHub </a>
-      </p>
-    </section>
+    </nav>
   </main>
 </BaseLayout>
 
@@ -234,51 +135,13 @@ const jsonLd = buildJsonLdGraph([
     color: var(--color-fg-muted);
     line-height: 1.65;
   }
-  .unity {
+  .elsewhere ul {
     list-style: none;
+    margin: 0;
     padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 0.35rem;
-  }
-  .unity li {
-    padding-left: 1rem;
-    position: relative;
-    color: var(--color-fg-muted);
-  }
-  .unity li::before {
-    content: "·";
-    position: absolute;
-    left: 0;
-    color: var(--color-fg-subtle);
-  }
-  .principles,
-  .refuse-list,
-  .contrib-list {
-    margin: 0;
-    padding-left: 1.15rem;
     display: grid;
     gap: 0.45rem;
-    color: var(--color-fg-muted);
   }
-  .contrib-meta {
-    color: var(--color-fg-subtle);
-    font-size: var(--text-sm);
-  }
-  .contact .cta {
-    display: inline-block;
-    margin-top: 0.25rem;
-    padding: 0.45rem 0.9rem;
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-md);
-    color: var(--color-fg);
-    text-decoration: none;
-    font-size: var(--text-sm);
-  }
-  .social {
-    font-size: var(--text-sm);
-  }
-
   .timeline {
     list-style: decimal;
     margin: 0;
@@ -332,12 +195,6 @@ const jsonLd = buildJsonLdGraph([
       font-size: var(--text-sm);
       font-weight: 600;
       text-transform: uppercase;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .timeline-item::before {
-      transition: none;
     }
   }
 </style>

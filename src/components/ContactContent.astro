@@ -16,9 +16,9 @@ interface Props {
 
 const { lang } = Astro.props;
 const config = contactConfig;
-const labels = config.labels;
 const prefix = lang === "en" ? "/en" : "";
 const contactPath = `${prefix}/contact/`;
+const mailto = config.buildMailto(config.other.subject[lang]);
 
 const jsonLd = buildJsonLdGraph([
   personJsonLd(),
@@ -51,112 +51,58 @@ const jsonLd = buildJsonLdGraph([
       <h1>{config.meta.title[lang]}</h1>
       <p class="lede">{config.meta.intro[lang]}</p>
       <p class="subtle">
-        {labels.emailAddress[lang]}:{" "}
-        <a href={`mailto:${siteConfig.omnivya.email}`}>{siteConfig.omnivya.email}</a>
+        <a href={`mailto:${config.email}`}>{config.email}</a>
       </p>
     </header>
 
-    <section class="intents stack gap-4" aria-label={config.meta.title[lang]}>
-      {
-        config.intents.map((intent) => {
-          const subject = intent.emailSubject[lang];
-          const href = config.buildMailto(subject);
-          return (
-            <article class="intent" id={intent.id}>
-              <header class="stack gap-2">
-                <h2>{intent.title[lang]}</h2>
-                <p>{intent.summary[lang]}</p>
-              </header>
-              <div class="fields stack gap-2">
-                <h3>{labels.includeInEmail[lang]}</h3>
-                <ul>
-                  {intent.fields.map((field) => (
-                    <li>{field[lang]}</li>
-                  ))}
-                </ul>
-              </div>
-              <ConversionCTA
-                href={href}
-                event="cta_contact_email"
-                props={{ intent: intent.eventIntent, surface: "contact", lang }}
-              >
-                {labels.writeEmail[lang]}
-              </ConversionCTA>
-            </article>
-          );
-        })
-      }
-    </section>
-
-    <section class="calendar stack gap-3" id="calendar">
-      <h2>{config.calendar.label[lang]}</h2>
-      <p>{config.calendar.note[lang]}</p>
+    <section class="path stack gap-3" id="mission">
+      <h2>{config.mission.title[lang]}</h2>
+      <p>{config.mission.body[lang]}</p>
       <ConversionCTA
-        href={config.calendar.hrefFor(lang)}
+        href={config.mission.hrefFor(lang)}
         event="cta_booking"
-        props={{ surface: "contact", lang }}
-        variant="secondary"
+        props={{ surface: "contact", intent: "mission", lang }}
+        variant="primary"
         external
       >
-        {config.calendar.label[lang]}
+        {config.mission.cta[lang]}
       </ConversionCTA>
+    </section>
+
+    <section class="path stack gap-3" id="other">
+      <h2>{config.other.title[lang]}</h2>
+      <p>{config.other.body[lang]}</p>
+      <ConversionCTA
+        href={mailto}
+        event="cta_contact_email"
+        props={{ surface: "contact", intent: "other", lang }}
+      >
+        {config.other.cta[lang]}
+      </ConversionCTA>
+      <p class="subtle">
+        <a href={siteConfig.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        {" · "}
+        <a href={siteConfig.social.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+      </p>
     </section>
   </main>
 </BaseLayout>
 
 <style>
   .contact {
-    max-width: 72ch;
+    max-width: 40rem;
   }
-  .intro {
-    margin: 0;
-    color: var(--color-fg-muted);
-    line-height: 1.6;
-    font-size: var(--text-lg);
-  }
-  .address {
-    margin: 0;
-    color: var(--color-fg-subtle);
-    font-size: var(--text-sm);
-  }
-  .intent {
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: 1.15rem 1.25rem;
-    background: var(--color-bg-elevated);
-    display: grid;
-    gap: 0.85rem;
-  }
-  .intent h2 {
-    margin: 0;
-    font-size: var(--text-lg);
-  }
-  .intent p {
+  .path p {
     margin: 0;
     color: var(--color-fg-muted);
     line-height: 1.55;
   }
-  .fields h3 {
-    margin: 0;
-    font-size: var(--text-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--color-fg-subtle);
-  }
-  .fields ul {
-    margin: 0;
-    padding-left: 1.1rem;
-    color: var(--color-fg-muted);
-    display: grid;
-    gap: 0.3rem;
-  }
-  .calendar {
+  .path {
     border-top: var(--border-width) solid var(--color-border);
-    padding-top: 1.5rem;
+    padding-top: var(--space-6);
   }
-  .calendar p {
-    margin: 0;
-    color: var(--color-fg-subtle);
+  .subtle {
     font-size: var(--text-sm);
+    color: var(--color-fg-subtle);
   }
 </style>

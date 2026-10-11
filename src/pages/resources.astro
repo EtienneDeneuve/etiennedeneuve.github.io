@@ -1,248 +1,99 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import CallToAction from "../components/CallToAction.astro";
-import Grid from "../components/Grid.astro";
-import Hero from "../components/Hero.astro";
-import Icon from "../components/Icon.astro";
-import Pill from "../components/Pill.astro";
-import ResourcesPreview from "../components/ResourcesPreview.astro";
-import { getBrandText } from "../config/site.ts";
+import { resourcesPageConfig } from "../config/resources-page.ts";
+import {
+  breadcrumbJsonLd,
+  buildJsonLdGraph,
+  collectionPageJsonLd,
+  personJsonLd,
+} from "../lib/json-ld.ts";
 
-// Charger les ressources depuis la collection
-const allResources = await getCollection("resources");
+const lang = "fr" as const;
+const config = resourcesPageConfig;
+const path = "/resources/";
 
-// Grouper par topic
-const resourcesByTopic = new Map<string, CollectionEntry<"resources">[]>();
-allResources.forEach((resource) => {
-  const topic = resource.data.topic || "Other";
-  if (!resourcesByTopic.has(topic)) {
-    resourcesByTopic.set(topic, []);
-  }
-  resourcesByTopic.get(topic)!.push(resource);
-});
-
-// Trier par date de review récente (pour "Recently reviewed")
-const recentlyReviewed = allResources
-  .sort((a, b) => b.data.lastReviewed.valueOf() - a.data.lastReviewed.valueOf())
-  .slice(0, 3);
+const jsonLd = buildJsonLdGraph([
+  personJsonLd(),
+  collectionPageJsonLd({
+    name: config.meta.title[lang],
+    description: config.meta.description[lang],
+    path,
+    lang,
+  }),
+  breadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: config.meta.title[lang], path },
+  ]),
+]);
 ---
 
 <BaseLayout
-  title={getBrandText.siteTitle("Resources")}
-  description="Découvrez une collection de ressources utiles pour enrichir vos connaissances."
+  title={config.meta.title[lang]}
+  description={config.meta.description[lang]}
+  lang={lang}
+  path={path}
+  alternates={[
+    { lang: "fr", href: "/resources/" },
+    { lang: "en", href: "/en/resources/" },
+  ]}
+  jsonLd={jsonLd}
 >
-  <div class="stack gap-20 lg:gap-48">
-    <div class="wrapper stack gap-20 lg:gap-20">
-      <header class="hero">
-        <Hero
-          title="Mes Ressources Favorites"
-          tagline="Voici une collection de ressources que je trouve intéressantes et utiles pour l'apprentissage et le développement."
-          align="start"
-        >
-          <div class="roles">
-            <Pill><Icon icon="rocket-launch" size="1.33em" /> Guides</Pill>
-            <Pill><Icon icon="list" size="1.33em" /> Liens Utiles</Pill>
-            <Pill><Icon icon="heart" size="1.33em" /> Favoris</Pill>
-          </div>
-        </Hero>
-      </header>
-    </div>
+  <main class="wrapper resources stack gap-10">
+    <header class="page-hero stack gap-3">
+      <h1>{config.meta.title[lang]}</h1>
+      <p class="lede">{config.meta.intro[lang]}</p>
+    </header>
 
-    <main class="wrapper stack gap-20 lg:gap-48">
+    <ul class="list">
       {
-        recentlyReviewed.length > 0 && (
-          <section class="section with-background">
-            <header class="section-header stack gap-2 lg:gap-4">
-              <h3>Récemment Révisées</h3>
-              <p>Ressources mises à jour récemment pour garantir leur pertinence.</p>
-            </header>
-            <div class="gallery">
-              <Grid variant="offset">
-                {recentlyReviewed.map((resource) => (
-                  <li>
-                    <ResourcesPreview resource={resource} />
-                  </li>
-                ))}
-              </Grid>
-            </div>
-          </section>
-        )
-      }
-
-      {
-        Array.from(resourcesByTopic.entries()).map(([topic, resources]) => (
-          <section class="section with-background">
-            <header class="section-header stack gap-2 lg:gap-4">
-              <h3>{topic}</h3>
-              <p>
-                {resources.length} ressource{resources.length > 1 ? "s" : ""}
-              </p>
-            </header>
-            <div class="gallery">
-              <Grid variant="offset">
-                {resources.map((resource) => (
-                  <li>
-                    <ResourcesPreview resource={resource} />
-                  </li>
-                ))}
-              </Grid>
-            </div>
-          </section>
+        config.items.map((item) => (
+          <li class="item">
+            <h2>{item.title[lang]}</h2>
+            <p>{item.note[lang]}</p>
+            <p class="links">
+              {item.links.map((link, i) => (
+                <>
+                  {i > 0 && " · "}
+                  <a
+                    href={link.href}
+                    target={link.href.startsWith("http") ? "_blank" : undefined}
+                    rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                  >
+                    {link.label[lang]}
+                  </a>
+                </>
+              ))}
+            </p>
+          </li>
         ))
       }
-
-      <div class="cta">
-        <CallToAction href="/resources/all">
-          Voir toutes les ressources
-          <Icon icon="arrow-right" size="1.2em" />
-        </CallToAction>
-      </div>
-    </main>
-  </div>
+    </ul>
+  </main>
 </BaseLayout>
 
 <style>
-  .hero {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
+  .resources {
+    max-width: 40rem;
+    padding-block: var(--space-10) var(--space-16);
   }
-
-  .roles {
-    display: none;
-  }
-
-  .hero img {
-    aspect-ratio: 5 / 4;
-    object-fit: cover;
-    object-position: top;
-    border-radius: var(--radius-md);
-    /* no shadow */
-  }
-
-  @media (min-width: 50em) {
-    .hero {
-      display: grid;
-      grid-template-columns: 6fr 4fr;
-      padding-inline: 2.5rem;
-      gap: 3.75rem;
-    }
-
-    .roles {
-      margin-top: 0.5rem;
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .hero img {
-      aspect-ratio: 3 / 4;
-      border-radius: 4.5rem;
-      object-fit: cover;
-    }
-  }
-
-  /* ====================================================== */
-
-  .section {
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: grid;
-    gap: 2rem;
+    gap: var(--space-8);
   }
-
-  .with-background {
-    position: relative;
+  .item h2 {
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-lg);
   }
-
-  .with-background::before {
-    --hero-bg: var(--bg-image-subtle-2);
-
-    content: "";
-    position: absolute;
-    pointer-events: none;
-    left: 50%;
-    width: 100vw;
-    aspect-ratio: calc(2.25 / var(--bg-scale));
-    top: 0;
-    transform: translateY(-75%) translateX(-50%);
-    background:
-      url("/assets/backgrounds/noise.png") top center/220px repeat,
-      var(--hero-bg) center center / var(--bg-gradient-size) no-repeat,
-      var(--gray-999);
-    background-blend-mode: overlay, normal, normal, normal;
-    mix-blend-mode: var(--bg-blend-mode);
-    z-index: -1;
-  }
-
-  .with-background.bg-variant::before {
-    --hero-bg: var(--bg-image-subtle-1);
-  }
-
-  .section-header {
-    justify-self: center;
-    text-align: center;
-    max-width: 50ch;
-    font-size: var(--text-md);
+  .item p {
+    margin: 0;
     color: var(--color-fg-muted);
+    line-height: 1.55;
   }
-
-  .section-header h3 {
-    font-size: var(--text-2xl);
-  }
-
-  @media (min-width: 50em) {
-    .section {
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-areas: "header header header header" "gallery gallery gallery gallery";
-      gap: 5rem;
-    }
-
-    .section.with-cta {
-      grid-template-areas: "header header header cta" "gallery gallery gallery gallery";
-    }
-
-    .section-header {
-      grid-area: header;
-      font-size: var(--text-lg);
-    }
-
-    .section-header h3 {
-      font-size: var(--text-4xl);
-    }
-
-    .with-cta .section-header {
-      justify-self: flex-start;
-      text-align: left;
-    }
-
-    .gallery {
-      grid-area: gallery;
-    }
-
-    .cta {
-      grid-area: cta;
-    }
-  }
-
-  /* ====================================================== */
-
-  .mention-card {
-    display: flex;
-    height: 7rem;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-md);
-    color: var(--color-fg-muted);
-    background: var(--color-bg-elevated);
-    /* no shadow */
-  }
-
-  @media (min-width: 50em) {
-    .mention-card {
-      border-radius: var(--radius-md);
-      height: 9.5rem;
-    }
+  .links {
+    margin-top: var(--space-3) !important;
+    font-size: var(--text-sm);
   }
 </style>

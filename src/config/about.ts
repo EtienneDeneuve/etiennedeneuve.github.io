@@ -6,157 +6,64 @@ export type AboutTimelineItem = {
   body: Localized;
 };
 
+/**
+ * /about — person, path, responsibilities.
+ * Method and service framing live on /work and /thinking.
+ */
 export const aboutConfig = {
   meta: {
     title: { fr: "About", en: "About" } as Localized,
     description: {
-      fr: "Parcours et manière de travailler d’Etienne Deneuve, CTO conseil : stratégie, organisation et transformation, avec une lecture des leviers humains, organisationnels et techniques.",
-      en: "Background and working approach of Etienne Deneuve, advisory CTO: strategy, organisation and transformation, reading human, organisational and technical levers.",
+      fr: "Parcours et responsabilités d’Etienne Deneuve, CTO conseil et CTO d’Omnivya.",
+      en: "Background and responsibilities of Etienne Deneuve, advisory CTO and CTO of Omnivya.",
     } as Localized,
     lead: {
-      fr: "Cinq constantes depuis le terrain : comprendre les causes, distinguer les leviers, sécuriser les décisions, accompagner sans confisquer le contrôle, confronter les idées à la réalité.",
-      en: "Five constants from the field: understand causes, separate levers, secure decisions, support without seizing control, confront ideas with reality.",
+      fr: "Du terrain opérationnel à la direction technique : élargir le périmètre des décisions, pas collectionner les titres.",
+      en: "From operational fieldwork to technical leadership: widening the scope of decisions, not stacking titles.",
     } as Localized,
   },
-  unity: {
-    title: { fr: "Ce qui ne change pas", en: "What stays constant" } as Localized,
-    items: [
-      {
-        fr: "Comprendre les causes",
-        en: "Understand causes",
-      },
-      {
-        fr: "Distinguer les leviers",
-        en: "Separate the levers",
-      },
-      {
-        fr: "Sécuriser les décisions",
-        en: "Secure decisions",
-      },
-      {
-        fr: "Accompagner sans confisquer",
-        en: "Support without seizing control",
-      },
-      {
-        fr: "Confronter les idées au terrain",
-        en: "Confront ideas with the field",
-      },
-    ] as Localized[],
-  },
   today: {
-    title: { fr: "Ce que je fais aujourd’hui", en: "What I do today" } as Localized,
+    title: { fr: "Aujourd’hui", en: "Today" } as Localized,
     paragraphs: {
       fr: [
-        "J’aide directions et équipes à comprendre les causes, éclairer les arbitrages et accompagner les transformations. La profondeur technique sert le discernement ; elle n’est pas une promesse d’exécution.",
-        "Je suis CTO conseil et CTO d’Omnivya. Avec Taous, nous cofondons Omnivya : elle dirige Omnivya et Omnivya Expert ; je suis CTO. Les missions nécessitant une capacité de delivery structurée sont portées par Omnivya Expert. Ce site publie mes principes, les preuves et le raisonnement ; ce n’est pas un catalogue commercial.",
+        "Je suis CTO conseil et CTO d’Omnivya. J’aide directions et équipes à comprendre les causes, éclairer les arbitrages et tenir une trajectoire — sans confisquer le contrôle.",
+        "Avec Taous, nous cofondons Omnivya : elle dirige Omnivya et Omnivya Expert ; je suis CTO. Les missions qui nécessitent une capacité de delivery structurée sont portées par Omnivya Expert.",
       ],
       en: [
-        "I help leadership and teams understand causes, clarify trade-offs and support transformations. Technical depth serves discernment; it is not a promise of delivery.",
-        "I am an advisory CTO and CTO of Omnivya. With Taous, we co-found Omnivya: she leads Omnivya and Omnivya Expert; I am CTO. Missions that need structured delivery capacity are carried by Omnivya Expert. This site publishes my principles, proof and reasoning; it is not a commercial catalog.",
+        "I am an advisory CTO and CTO of Omnivya. I help leadership and teams understand causes, clarify trade-offs and hold a trajectory — without seizing control.",
+        "With Taous, we co-found Omnivya: she leads Omnivya and Omnivya Expert; I am CTO. Missions that need structured delivery capacity are carried by Omnivya Expert.",
       ],
     },
   },
   path: {
-    title: { fr: "Comment j’en suis arrivé là", en: "How I got here" } as Localized,
+    title: { fr: "Parcours", en: "Path" } as Localized,
     paragraphs: {
       fr: [
-        "La carrière a commencé en 2006. Le parcours va du terrain opérationnel, dont le support ADSL, à l’architecture et à la direction technique. Les titres se sont empilés ; surtout, le périmètre s’est élargi : du composant au système, de l’incident à la décision irréversible.",
-        "Cloud, infrastructure, plateforme, DevSecOps et architecture se sont empilés sur la même question : comment un système reste-t-il lisible, opérable et gouvernable quand la complexité augmente ?",
-      ],
-      en: [
-        "The career started in 2006. The path runs from operational fieldwork, including ADSL support, to architecture and technical leadership. Titles stacked; more importantly, scope widened: from component to system, from incident to irreversible decision.",
-        "Cloud, infrastructure, platform, DevSecOps and architecture stacked on the same question: how does a system stay readable, operable and governable as complexity grows?",
-      ],
-    },
-  },
-  twentyYears: {
-    title: {
-      fr: "Ce que vingt ans de terrain ont changé",
-      en: "What twenty years in the field changed",
-    } as Localized,
-    paragraphs: {
-      fr: [
+        "La carrière a commencé en 2006 par l’opérationnel et le support, dont le terrain ADSL. Puis infrastructure, cloud, plateforme, DevSecOps et architecture : du composant au système, de l’incident à la décision irréversible.",
         "Vingt ans de terrain ont déplacé le centre de gravité : moins d’outils à collectionner, plus de décisions à sécuriser. La technique reste nécessaire ; elle ne suffit plus comme seule réponse.",
-        "Les systèmes que j’accompagne ne manquent rarement d’outils. Ils manquent de carte partagée, de critères de décision et de la possibilité d’agir sans augmenter la dette invisible.",
-        "Concevoir, aujourd’hui, signifie d’abord rendre le système compréhensible, puis seulement automatiser ou industrialiser davantage.",
       ],
       en: [
+        "The career started in 2006 in operations and support, including ADSL fieldwork. Then infrastructure, cloud, platform, DevSecOps and architecture: from component to system, from incident to irreversible decision.",
         "Twenty years in the field shifted the center of gravity: fewer tools to collect, more decisions to secure. Technique remains necessary; it is no longer enough as the only answer.",
-        "The systems I work with rarely lack tools. They lack a shared map, decision criteria and the ability to act without growing invisible debt.",
-        "Designing, today, means first making the system understandable, and only then automating or industrializing further.",
       ],
     },
   },
-  omnivya: {
-    title: {
-      fr: "Omnivya",
-      en: "Omnivya",
-    } as Localized,
+  responsibilities: {
+    title: { fr: "Responsabilités", en: "Responsibilities" } as Localized,
     paragraphs: {
       fr: [
-        "Omnivya est cofondée avec Taous, qui dirige Omnivya et Omnivya Expert. J’en suis le CTO : architecture, plateforme, sécurité et produits techniques.",
-        "Omnivya Expert porte les missions de conseil et de delivery structurées. Ce site publie le raisonnement ; Omnivya Expert porte l’exécution. Les deux restent séparés à dessein.",
+        "Chez Omnivya : architecture, plateforme, sécurité et produits techniques. Omnivya Expert porte le conseil et la delivery structurés. Ce site publie le raisonnement et les preuves ; ce n’est pas le canal commercial.",
       ],
       en: [
-        "Omnivya is co-founded with Taous, who leads Omnivya and Omnivya Expert. I am the CTO: architecture, platform, security and technical products.",
-        "Omnivya Expert carries structured consulting and delivery missions. This site publishes the reasoning; Omnivya Expert carries execution. The two stay deliberately separate.",
-      ],
-    },
-  },
-  doctrine: {
-    title: { fr: "Ma façon de travailler", en: "How I work" } as Localized,
-    principles: {
-      fr: [
-        "Comprendre avant d’automatiser : cartographier le système et ses contraintes réelles.",
-        "Modéliser les dépendances et le risque, pas seulement les composants techniques.",
-        "Réduire la charge cognitive : chaque artefact doit aider une décision concrète.",
-        "Documenter les choix irréversibles et les alternatives écartées.",
-        "Construire pour les contraintes réelles : techniques, réglementaires et organisationnelles.",
-      ],
-      en: [
-        "Understand before automating: map the system and its real constraints.",
-        "Model dependencies and risk, not just technical components.",
-        "Reduce cognitive load: every artifact must support a concrete decision.",
-        "Document irreversible choices and rejected alternatives.",
-        "Build for real constraints: technical, regulatory and organizational.",
-      ],
-    },
-  },
-  refuse: {
-    title: { fr: "Ce que je refuse de faire", en: "What I refuse to do" } as Localized,
-    items: {
-      fr: [
-        "Vendre un catalogue d’outils sans cadre de décision.",
-        "Publier des métriques client non vérifiées ou des preuves fictives.",
-        "Confondre volume d’alertes et sécurité réelle.",
-        "Créer une plateforme interne qui ajoute de la bureaucratie sans réduire la charge cognitive.",
-        "Promettre une transformation sans cartographier le système existant.",
-      ],
-      en: [
-        "Sell a tool catalog without a decision frame.",
-        "Publish unverified client metrics or fictional proof.",
-        "Confuse alert volume with real security.",
-        "Create an internal platform that adds bureaucracy without reducing cognitive load.",
-        "Promise a transformation without mapping the existing system.",
-      ],
-    },
-  },
-  contact: {
-    title: { fr: "Contact", en: "Contact" } as Localized,
-    paragraphs: {
-      fr: [
-        "Pour discuter d’un système complexe, d’une intervention ou d’un contexte plateforme : un email qualifié suffit. Décrivez le contexte, les contraintes et la décision à sécuriser.",
-      ],
-      en: [
-        "To discuss a complex system, an intervention or a platform context: a qualified email is enough. Describe the context, constraints and the decision to secure.",
+        "At Omnivya: architecture, platform, security and technical products. Omnivya Expert carries structured consulting and delivery. This site publishes reasoning and proof; it is not the commercial channel.",
       ],
     },
   },
   timeline: {
     title: { fr: "Chronologie", en: "Timeline" } as Localized,
     intro: {
-      fr: "Repères progressifs, lisibles sans style avancé. Ce n’est pas un CV exhaustif.",
-      en: "Progressive markers, readable without advanced styling. This is not an exhaustive CV.",
+      fr: "Repères, pas un CV exhaustif.",
+      en: "Markers, not an exhaustive CV.",
     } as Localized,
     items: [
       {
@@ -166,8 +73,8 @@ export const aboutConfig = {
           en: "Start of field career",
         },
         body: {
-          fr: "Entrée par l’opérationnel et le support, dont le terrain ADSL, au contact direct des pannes et des utilisateurs.",
-          en: "Entry through operations and support, including ADSL fieldwork, in direct contact with failures and users.",
+          fr: "Opérationnel et support, dont le terrain ADSL, au contact des pannes et des utilisateurs.",
+          en: "Operations and support, including ADSL fieldwork, in contact with failures and users.",
         },
       },
       {
@@ -177,8 +84,8 @@ export const aboutConfig = {
           en: "Infrastructure and systems",
         },
         body: {
-          fr: "Élargissement vers l’administration, l’infrastructure et la préparation des environnements, du composant au périmètre système.",
-          en: "Expansion into administration, infrastructure and environment preparation, from component to system scope.",
+          fr: "Administration, infrastructure et préparation des environnements, du composant au périmètre système.",
+          en: "Administration, infrastructure and environment preparation, from component to system scope.",
         },
       },
       {
@@ -195,12 +102,12 @@ export const aboutConfig = {
       {
         period: "2020",
         title: {
-          fr: "Activité de conseil et d’ingénierie",
-          en: "Consulting and engineering activity",
+          fr: "Conseil et ingénierie",
+          en: "Consulting and engineering",
         },
         body: {
-          fr: "Démarrage de l’activité entrepreneuriale de conseil et d’ingénierie. Rôle de CTO sur l’architecture, les plateformes et la delivery technique.",
-          en: "Start of the entrepreneurial consulting and engineering activity. CTO role on architecture, platforms and technical delivery.",
+          fr: "Activité entrepreneuriale de conseil et d’ingénierie. Rôle de CTO sur l’architecture, les plateformes et la delivery technique.",
+          en: "Entrepreneurial consulting and engineering. CTO role on architecture, platforms and technical delivery.",
         },
       },
       {
@@ -210,23 +117,22 @@ export const aboutConfig = {
           en: "Omnivya and Omnivya Expert",
         },
         body: {
-          fr: "Omnivya structure le cadre entrepreneurial et professionnel. Omnivya Expert porte les missions de conseil et de delivery structurées.",
-          en: "Omnivya structures the entrepreneurial and professional frame. Omnivya Expert carries structured consulting and delivery missions.",
+          fr: "Omnivya structure le cadre. Omnivya Expert porte les missions de conseil et de delivery structurées.",
+          en: "Omnivya structures the frame. Omnivya Expert carries structured consulting and delivery missions.",
         },
       },
     ] satisfies AboutTimelineItem[],
   },
-  labels: {
-    contributions: {
-      fr: "Contributions, prises de parole et projets",
-      en: "Contributions, speaking and projects",
-    } as Localized,
+  links: {
+    title: { fr: "Ailleurs sur le site", en: "Elsewhere on the site" } as Localized,
+    work: { fr: "Accompagnement — quand me solliciter", en: "Advisory — when to engage me" } as Localized,
     projects: { fr: "Projets", en: "Projects" } as Localized,
-    speaking: { fr: "Speaking", en: "Speaking" } as Localized,
+    speaking: { fr: "Conférences & médias", en: "Talks & media" } as Localized,
     thinking: { fr: "Thinking", en: "Thinking" } as Localized,
-    openSource: { fr: "Open source", en: "Open source" } as Localized,
-    startHere: { fr: "Start Here", en: "Start Here" } as Localized,
-    emailCta: { fr: "Envoyer un email", en: "Send an email" } as Localized,
-    omnivyaLink: { fr: "Contacter Omnivya", en: "Contact Omnivya" } as Localized,
+    contact: { fr: "Contact", en: "Contact" } as Localized,
+  },
+  labels: {
+    work: { fr: "Accompagnement", en: "Advisory" } as Localized,
+    omnivyaLink: { fr: "Omnivya", en: "Omnivya" } as Localized,
   },
 } as const;

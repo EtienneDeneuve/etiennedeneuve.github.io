@@ -17,6 +17,7 @@ const {
 
 const mailtoHref = contactConfig.buildMailto(bookingSubject);
 const calendarHref = omnivyaContactUrl(lang, surface);
+const omnivyaLabel = contactConfig.mission.cta[lang];
 ---
 
 <ConversionCTA
@@ -24,7 +25,7 @@ const calendarHref = omnivyaContactUrl(lang, surface);
   event="cta_contact_email"
   props={{ intent: "booking", surface, lang }}
   secondaryHref={calendarHref}
-  secondaryLabel={contactConfig.calendar.label[lang]}
+  secondaryLabel={omnivyaLabel}
   secondaryEvent="cta_booking"
   secondaryProps={{ surface, lang }}
 >

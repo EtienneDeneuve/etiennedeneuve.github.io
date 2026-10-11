@@ -1,12 +1,9 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import BookingCTA from "../components/BookingCTA.astro";
 import {
-  getFormatLabel,
   getSortedSpeakingTopics,
   mediaKitConfig,
-  speakingFormats,
   speakingPageConfig,
 } from "../config/speaking.ts";
 import { siteConfig } from "../config/site.ts";
@@ -33,18 +30,10 @@ const appearances = allAppearances
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
 const labels = {
-  problem: lang === "en" ? "Problem addressed" : "Problème traité",
   audience: lang === "en" ? "Audience" : "Audience",
-  learnings: lang === "en" ? "Three takeaways" : "Trois enseignements",
-  formats: lang === "en" ? "Possible formats" : "Formats possibles",
-  languages: lang === "en" ? "Languages" : "Langues",
-  related: lang === "en" ? "Related content" : "Contenus associés",
   shortBio: lang === "en" ? "Short bio" : "Bio courte",
-  longBio: lang === "en" ? "Long bio" : "Bio longue",
-  photo: lang === "en" ? "Headshot" : "Photographie",
   downloadPhoto: lang === "en" ? "Download photo" : "Télécharger la photo",
-  themes: lang === "en" ? "Themes" : "Thèmes",
-  links: lang === "en" ? "Links" : "Liens",
+  languages: lang === "en" ? "Languages" : "Langues",
   contact: lang === "en" ? "Contact" : "Contact",
   downloadHtml: lang === "en" ? "Full media kit (HTML)" : "Media kit complet (HTML)",
   downloadPdf: lang === "en" ? "Download PDF" : "Télécharger le PDF",
@@ -124,94 +113,6 @@ const jsonLd = buildJsonLdGraph([
       <p class="lead">{config.meta.positioning[lang]}</p>
     </section>
 
-    <section class="stack gap-4" id="topics">
-      <header class="stack gap-2">
-        <h2>{lang === "en" ? "Topics" : "Sujets"}</h2>
-        <p class="intro">{config.meta.topicsIntro[lang]}</p>
-      </header>
-      <div class="topics-list stack gap-4">
-        {
-          topics.map((topic) => (
-            <article class="topic-card">
-              <h3>{topic.title[lang]}</h3>
-              <dl class="topic-meta">
-                <div>
-                  <dt>{labels.problem}</dt>
-                  <dd>{topic.problem[lang]}</dd>
-                </div>
-                <div>
-                  <dt>{labels.audience}</dt>
-                  <dd>{topic.audience[lang]}</dd>
-                </div>
-                <div>
-                  <dt>{labels.learnings}</dt>
-                  <dd>
-                    <ul>
-                      {topic.learnings[lang].map((item) => (
-                        <li>{item}</li>
-                      ))}
-                    </ul>
-                  </dd>
-                </div>
-                <div>
-                  <dt>{labels.formats}</dt>
-                  <dd class="pill-row">
-                    {topic.formats.map((format) => (
-                      <span class="pill">{getFormatLabel(format, lang)}</span>
-                    ))}
-                  </dd>
-                </div>
-                <div>
-                  <dt>{labels.languages}</dt>
-                  <dd>{topic.languages.map((code) => code.toUpperCase()).join(" · ")}</dd>
-                </div>
-                {topic.links.length > 0 && (
-                  <div>
-                    <dt>{labels.related}</dt>
-                    <dd>
-                      <ul class="related-links">
-                        {topic.links.map((link) => {
-                          let href = link.href;
-                          if (lang === "en" && href.includes("www.omnivya.fr/fr/contact/")) {
-                            href = href.replace(
-                              "www.omnivya.fr/fr/contact/",
-                              "www.omnivya.fr/contact/"
-                            );
-                          }
-                          if (!(href.startsWith("http") || href.startsWith("/thinking/"))) {
-                            href = `${prefix}${href}`;
-                          }
-                          return (
-                            <li>
-                              <a href={href}>{link.label[lang]}</a>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </dd>
-                  </div>
-                )}
-              </dl>
-            </article>
-          ))
-        }
-      </div>
-    </section>
-
-    <section class="stack gap-4" id="formats">
-      <h2>{lang === "en" ? "Formats" : "Formats"}</h2>
-      <div class="formats-grid">
-        {
-          speakingFormats.map((format) => (
-            <article class="format-card">
-              <h3>{format.label[lang]}</h3>
-              <p>{format.description[lang]}</p>
-            </article>
-          ))
-        }
-      </div>
-    </section>
-
     {
       appearances.length > 0 && (
         <section class="stack gap-4" id="appearances">
@@ -259,6 +160,26 @@ const jsonLd = buildJsonLdGraph([
       )
     }
 
+    <section class="stack gap-4" id="topics">
+      <header class="stack gap-2">
+        <h2>{lang === "en" ? "Current themes" : "Thèmes actuels"}</h2>
+        <p class="intro">{config.meta.topicsIntro[lang]}</p>
+      </header>
+      <ul class="topics-compact">
+        {
+          topics.map((topic) => (
+            <li>
+              <h3>{topic.title[lang]}</h3>
+              <p>{topic.problem[lang]}</p>
+              <p class="topic-audience">
+                {labels.audience}: {topic.audience[lang]}
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
     <section class="stack gap-4" id="media-kit">
       <header class="stack gap-2">
         <h2>{config.meta.mediaKitTitle[lang]}</h2>
@@ -289,32 +210,8 @@ const jsonLd = buildJsonLdGraph([
             <p>{mediaKitConfig.shortBio[lang]}</p>
           </div>
           <div>
-            <h3>{labels.longBio}</h3>
-            {mediaKitConfig.longBio[lang].map((paragraph) => <p>{paragraph}</p>)}
-          </div>
-          <div>
-            <h3>{labels.themes}</h3>
-            <ul>
-              {topics.map((topic) => <li>{topic.title[lang]}</li>)}
-            </ul>
-          </div>
-          <div>
             <h3>{labels.languages}</h3>
             <p>{mediaKitConfig.languages[lang]}</p>
-          </div>
-          <div>
-            <h3>{labels.links}</h3>
-            <ul class="social-links">
-              <li>
-                <a href={siteConfig.seo.siteUrl}>{siteConfig.seo.siteUrl}</a>
-              </li>
-              <li>
-                <a href={siteConfig.social.linkedin}>LinkedIn</a>
-              </li>
-              <li>
-                <a href={siteConfig.social.github}>GitHub</a>
-              </li>
-            </ul>
           </div>
           <div>
             <h3>{labels.contact}</h3>
@@ -338,11 +235,11 @@ const jsonLd = buildJsonLdGraph([
       <h2>{config.meta.ctaTitle[lang]}</h2>
       <p>{config.meta.ctaBody[lang]}</p>
       <div class="actions">
-        <BookingCTA lang={lang} bookingSubject={emailSubject} surface="speaking">
-          {lang === "en" ? "Book a call" : "Réserver un appel"}
-        </BookingCTA>
-        <a class="btn-secondary" href={mailtoLink}>
+        <a class="btn-primary" href={mailtoLink}>
           {labels.emailCta}
+        </a>
+        <a class="btn-secondary" href={`${prefix}/contact/`}>
+          {labels.contact}
         </a>
       </div>
     </section>
@@ -363,6 +260,28 @@ const jsonLd = buildJsonLdGraph([
     margin: 0;
     color: var(--color-fg-muted);
     max-width: 72ch;
+  }
+  .topics-compact {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-5);
+    max-width: 48rem;
+  }
+  .topics-compact h3 {
+    margin: 0 0 var(--space-1);
+    font-size: var(--text-md);
+  }
+  .topics-compact p {
+    margin: 0;
+    color: var(--color-fg-muted);
+    line-height: 1.5;
+  }
+  .topic-audience {
+    margin-top: var(--space-1) !important;
+    font-size: var(--text-sm);
+    color: var(--color-fg-subtle) !important;
   }
   .topic-card {
     border: var(--border-width) solid var(--color-border);
