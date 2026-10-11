@@ -101,6 +101,24 @@ function isSitemapExcluded(page) {
 export default defineConfig({
   site: SITE_URL,
   base: "",
+  // devenv/.devenv/profile → nix store ships circular SDK symlinks (ncursesw/…).
+  // Vite's watcher follows them and surfaces ELOOP as an UnhandledRejection overlay.
+  vite: {
+    server: {
+      watch: {
+        ignored: [
+          "**/.devenv/**",
+          "**/.direnv/**",
+          "**/node_modules/**",
+          "**/.git/**",
+          "**/dist/**",
+        ],
+      },
+      fs: {
+        deny: [".devenv", ".direnv", "/nix/store"],
+      },
+    },
+  },
   redirects: {
     "/blog": "/thinking/",
     "/blog/page/:page": "/thinking/",

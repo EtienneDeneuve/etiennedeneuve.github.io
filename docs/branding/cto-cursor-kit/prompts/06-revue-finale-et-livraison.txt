@@ -1,0 +1,20 @@
+Étape 6 : effectue la revue finale du travail, sans refonte supplémentaire.
+Utilise la checklist section 14 de SPECIFICATION.txt. Compare aux références.
+La photo originale et les textes canoniques priment sur les approximations
+du visuel généré.
+
+Inspecte à 320, 390, 768, 1024, 1199, 1200 et 1440 px.
+Garde des captures complètes 390/768/1440, ainsi que des vues du header et
+du hero aux seuils si un défaut y apparaît. Ne mesure pas la conformité
+à la taille de l’image du téléphone : compare les blocs et leurs comportements.
+Vérifie les contenus complets en défilant.
+
+Exécute build/lint/types/tests pertinents déjà prévus par le dépôt.
+Corrige les écarts constatés, puis arrête les vérifications une fois les
+risques concrets résolus. Pas de migration, nettoyage ou test hors périmètre.
+
+Livre une synthèse : fichiers modifiés, choix responsive, vrais liens,
+contrôles effectués, limites restantes, emplacement des captures.
+Distingue échec existant et régression introduite si nécessaire.
+Ne publie pas, ne déploie pas et ne merge pas automatiquement.
+

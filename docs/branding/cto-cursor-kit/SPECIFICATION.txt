@@ -1,0 +1,322 @@
+SPÉCIFICATION D’IMPLÉMENTATION — CTO CONSEIL
+Version 1 — 11 octobre 2026
+
+1. POSITIONNEMENT ET PÉRIMÈTRE
+
+Étienne Deneuve — CTO conseil.
+Titre : « Stratégie, organisation & transformation. »
+Rôle : conseil aux directions et aux équipes, compréhension des causes,
+arbitrages, orientations, accompagnement. Aucune promesse d’implémentation,
+d’exploitation déléguée ou de prise en charge de l’exécution.
+
+Principe implicite : chaque problème appelle une réponse adaptée à sa nature.
+Écouter et distinguer les causes humaines, organisationnelles et techniques.
+Une technologie n’est pas la réponse automatique à une difficulté d’équipe
+ou de gouvernance. Conserver cette distinction dans les textes et les exemples.
+
+Étendue : stratégie/gouvernance ; organisation/responsabilités ;
+architecture/logiciel ; production/qualité de service.
+Les deux derniers domaines sont des périmètres de conseil, pas des offres
+de développement ou de support externalisé.
+
+Reproduire la page visible dans la maquette validée et raccorder les vraies
+destinations existantes. Le site peut conserver des sections après celles
+montrées ; ne pas supprimer automatiquement son blog ou son footer.
+Pas de réécriture du site complet ni de migration de stack.
+
+2. SOURCES ET NON-NÉGOCIABLES
+
+Textes : content.fr.json, sans réécriture marketing.
+Image de référence : references/maquette-validee.png.
+Vraie photo : references/portrait-original.jpeg.
+La maquette générée contient des approximations ; le brief prime.
+Ne pas transformer la capture en fond de page ou en image cliquable.
+Le texte doit rester du vrai HTML sélectionnable, accessible, indexable.
+
+Interdits : visage généré, avatar, faux résultats, faux logos clients,
+nouvelles dates, témoignages inventés, faux liens, badges ajoutés,
+slogan « Un CTO à bord », promesse « Maîtrise de l’exécution ».
+Conserver les fonctionnalités existantes pertinentes même si la capture
+ne montre pas tous leurs contrôles ; leur emplacement se décide après audit.
+
+3. ARBRE DES BLOCS ET ORDRE DE LECTURE
+
+SiteHeader
+main
+  HeroSection
+    HeroCopy : surtitre, h1, accroche, paragraphe, deux liens d’action
+    PortraitFigure : photo originale + légende
+  ScopeStrip : liste de quatre domaines
+  ApproachSection (#approche)
+    SectionIntro : surtitre, h2, paragraphe
+    ApproachSteps : liste ordonnée de trois étapes (h3 + texte)
+    TrajectoryDecoration : motif purement décoratif
+  TechnicalDepthBand : titre, phrase et lien vers réalisations
+SiteFooter existant ou section contact réelle existante
+
+Un seul arbre de contenu pour tous les viewports.
+L’ordre DOM est déjà l’ordre mobile : texte du hero puis portrait.
+Éviter deux copies complètes desktop/mobile ou des textes cachés redondants.
+Un seul h1. Les blocs de premier niveau utilisent h2, les étapes h3.
+Les noms de composants sont logiques ; respecter les conventions du dépôt.
+
+4. TOKENS DE DESIGN — CIBLES D’IMPLÉMENTATION
+
+Couleurs :
+  background-dark : #111416
+  background-dark-soft : #1B1E20
+  background-light : #F3EFE7
+  text-on-dark : #F7F3EC
+  text-muted-on-dark : #CDD0CF
+  text-on-light : #151819
+  text-muted-on-light : #454A4D
+  copper-on-dark / CTA-fill : #F0AA78
+  copper-on-light : #A54822
+  border-on-dark : rgba(243,239,231,.16)
+  border-on-light : rgba(21,24,25,.20)
+
+Ne pas réutiliser le cuivre clair pour du petit texte sur ivoire.
+Vérifier les contrastes réels, y compris hover/focus, avec l’outil du dépôt.
+
+Typographie :
+  H1 et H2 : sans sérif contemporaine, graisse 600–650 si disponible.
+  Corps : sans sérif, graisse 400.
+  Utiliser en priorité une fonte locale du dépôt proche du visuel.
+  À défaut, system-ui comme fallback honnête. Ne pas charger un fournisseur
+  de fontes tiers ni ajouter une dépendance sans nécessité.
+  Monogramme ÉD : actif existant ; à défaut texte réel avec sérif système.
+  Ne pas prétendre avoir identifié la police exacte de l’image.
+  Surtitres : 11–12 px, line-height 1.5, letter-spacing .18em.
+  Corps desktop : 17–18 px / 1.5 ; mobile : 16 px / 1.5.
+  Contrôles : 14–16 px ; légendes : 13–14 px.
+  Éviter les polices 9–10 px suggérées par la réduction de la maquette.
+
+Grille :
+  Max-width contenu : 1440 px ; centré.
+  Marges latérales : 20 px (<768), 32 px (768–1023), 48 px (1024–1279),
+  64 px (>=1280). À 320 px, 16 px autorisés.
+  Fonds de sections plein viewport ; texte aligné sur la même grille.
+  Espacements : multiples de 4/8 ; priorité à 16, 24, 32, 48, 64.
+  Boutons : min-height 48 px, padding horizontal 22–24 px,
+  rayon 4–6 px ; pas de grosses pilules.
+  Les dimensions sont des cibles ; privilégier la lisibilité et l’absence
+  de débordement lorsque le contenu, la fonte ou le zoom changent.
+
+5. RESPONSIVE — RÈGLES GLOBALES
+
+Mobile : moins de 768 px.
+Tablette : 768 à 1023 px.
+Desktop : à partir de 1024 px.
+Navigation desktop complète : seulement à partir de 1200 px.
+Ce seuil séparé évite de comprimer le header à 1024/1100 px.
+
+Récapitulatif :
+Bloc                 Mobile           Tablette          Desktop
+Header               identité+menu    identité+menu     nav dès 1200
+Hero                 pile             pile              2 colonnes
+Portrait             sous les CTA     sous les CTA      droite du texte
+Domaines             grille 2x2       grille 2x2        4 colonnes
+Approche             3 étapes empilées 3 empilées        3 colonnes
+Bande technique      pile             pile              texte+lien
+Second CTA hero      visible          visible           visible
+
+Règle centrale : ne pas masquer un contenu simplement pour tenir dans la
+capture de téléphone. Une page mobile peut et doit défiler.
+Pas de hauteur 100vh imposée, pas de texte coupé, pas de scrollbar horizontale.
+Les sections grandissent avec les textes et le zoom.
+
+6. BLOC A — HEADER
+
+Desktop >=1200 :
+identité à gauche, navigation centrale, CTA « Échanger » à droite.
+Hauteur visuelle cible 80–88 px, flexible si nécessaire.
+Identité : ÉD + nom + rôle sous le nom.
+Fond graphite, ligne de séparation très fine.
+Pas de header sticky initialement : évite de consommer le viewport mobile.
+Si le dépôt possède déjà un sticky requis, conserver seulement après vérification
+qu’il ne masque pas les ancres ni les éléments au focus.
+
+Sous 1200 :
+identité et bouton menu. Hauteur cible 72–80 px.
+Nom à 16–18 px, rôle 12–13 px ; pas de réduction illisible.
+La navigation devient un panneau dépliant sous le header, dans le flux,
+avec les quatre liens et l’action contact.
+Menu fermé par défaut. Le bouton a aria-expanded et aria-controls.
+Un clic/tap ouvre ou ferme. Échap ferme et rend le focus au bouton.
+Un clic sur une destination ferme le panneau. Le contenu fermé n’est
+ni visible, ni focusable. Ce panneau non modal ne piège pas le focus.
+Au passage >=1200, réinitialiser l’état ouvert et retirer le panneau mobile.
+Ne pas dessiner une barre système iPhone dans la page.
+
+7. BLOC B — HERO
+
+Desktop :
+grille : minmax(0, 1.15fr) minmax(0, .85fr), environ 58/42 visuellement.
+Texte à gauche, portrait à droite. Min-width:0 sur les enfants.
+Fond graphite. Pas de carte autour du texte.
+Padding vertical cible 48–64 px. Hauteur dépend du contenu, jamais fixe.
+Le portrait peut s’étendre jusqu’au bord droit de la surface interne.
+Ne pas positionner en absolu le texte principal sur la photo.
+
+H1 :
+deux spans : « Stratégie, organisation » (ivoire) et « & transformation. »
+(cuivre), second span block.
+Desktop : taille fluide ~48 à 72 px ; line-height 1.03–1.08 ;
+letter-spacing autour de -.035em.
+Le premier span se répartit naturellement sur une ou deux lignes.
+Le mot « transformation » reste intact.
+Ne pas forcer une ligne de 17 caractères à rentrer dans une colonne trop petite.
+Ne pas utiliser des <br> basés sur une seule largeur.
+À 1024 px, autoriser quatre lignes plutôt qu’un chevauchement du portrait.
+
+Tablette et mobile :
+texte puis portrait en pile. Padding texte 32–40 px en haut, 24–32 en bas.
+H1 mobile : base clamp(30px, 8vw, 40px), line-height 1.06 ;
+à 320/360 px, « & » peut se retrouver sur la ligne précédente, mais le mot
+« transformation » ne doit pas casser au milieu.
+Tablette : H1 48–56 px, selon espace réel.
+Texte max-width ~62ch sur large, largeur disponible sur mobile.
+
+CTA :
+desktop/tablette : bouton principal puis lien secondaire sur une ligne
+si l’espace suffit ; flex-wrap autorisé.
+Mobile : bouton principal pleine largeur et secondaire dessous,
+aligné à gauche avec sa propre zone tactile d’au moins 44 px.
+Le CTA secondaire ne disparaît pas même si la maquette le montre peu.
+Aucun effet indispensable au survol.
+
+8. BLOC C — PORTRAIT ORIGINAL
+
+La photo fournie est dans un disque sur un fond anthracite. Elle n’est pas
+une photo rectangulaire sur fond transparent. Ne pas inventer les coins,
+des épaules, un bureau, un décor de ville ou un autre visage.
+
+Implémentation de référence :
+utiliser le fichier original avec object-fit: contain, rendu sans déformation,
+dans un panneau graphite compatible avec le fond de la photo.
+Le cadrage circulaire/ovale de l’original est accepté.
+Une intégration exactement identique au portrait généré de la maquette n’est
+pas possible sans changer l’image : priorité absolue à la vraie photo.
+Ne pas retoucher le visage, enlever les lunettes ou régénérer le portrait.
+Le fichier livré fait autorité ; vérifier ses dimensions réelles dans le repo.
+
+Desktop : panneau largeur de sa colonne, min-height indicatif 400 px,
+dimension déterminée par la grille ; aligner le portrait vers le bas.
+Mobile : panneau pleine largeur, ratio cible 4/3 ; image contain,
+hauteur automatique, pas d’écrasement. Tablette : hauteur max visuelle 440 px
+et largeur pleine grille, avec image centrée.
+Légende « Étienne Deneuve / CTO conseil » dans une bande sobre sous la photo ;
+si surimpression, fond opaque discret et jamais sur le visage.
+Alt : « Portrait d’Étienne Deneuve ».
+Attributs width/height explicites pour éviter les sauts de mise en page.
+Même fichier source et même visage sur tous les breakpoints.
+Dérivés WebP/AVIF possibles par pipeline d’image standard, sans recadrage
+destructif ni changement de l’image. Ne pas ajouter d’outil génératif.
+
+9. BLOC D — DOMAINES
+
+Liste statique de quatre domaines, pas des boutons sans destination.
+Desktop : 4 colonnes égales, séparateurs verticaux, fond graphite.
+Padding vertical 24–28 px. Texte 14–16 px.
+Mobile/tablette : 2 colonnes, 2 rangées, gap 16–24 px, retours à la ligne.
+Séparateurs discrets adaptés à la grille, pas de carrousel horizontal,
+pas de défilement latéral obligatoire, aucune catégorie cachée.
+À très petit viewport ou gros zoom, accepter 1 colonne pour conserver
+la lecture. Les séparateurs ne sont jamais du contenu vocalisé.
+
+10. BLOC E — APPROCHE
+
+Fond ivoire ; texte foncé. Padding vertical : desktop 56–64 px,
+mobile 36–40 px. Alignements identiques au hero.
+Surtitre puis h2 puis paragraphe introductif.
+H2 : desktop 40–48 px, mobile 30–34 px, line-height 1.1.
+Les deux phrases du titre peuvent être deux spans block.
+Introduction max-width 90ch, line-height >=1.45.
+
+Étapes :
+liste ordonnée sémantique (ol/li), affichage 01/02/03 en cuivre foncé.
+Desktop : 3 colonnes égales, gap 24–32 px ; bordure verticale entre colonnes.
+Tablette/mobile : 3 étapes successives, numéro dans une petite colonne de
+36–40 px puis titre et paragraphe. Bordures horizontales entre les étapes.
+Aucune étape masquée, pas d’accordéon et pas de carte interactive.
+Titres 18–20 px ; paragraphes 16 px ; pas de hauteur fixe.
+Chaque description doit tenir librement, sans line-clamp.
+
+Décoration :
+quelques lignes cuivre/graphite à la fin de la section, purement décoratives.
+SVG simple, aria-hidden=true, focusable=false ; pas de canvas/WebGL.
+Hauteur max 48–64 px desktop, 24–32 mobile ; réduire la complexité sur mobile.
+Pas de valeur, donnée ou relation métier implicite.
+Statique par défaut. Toute animation optionnelle reste désactivée avec
+prefers-reduced-motion et ne bloque aucune interaction.
+
+11. BLOC F — BANDE TECHNIQUE ET CONTINUITÉ
+
+Fond graphite. Titre ivoire « La profondeur technique, au service du discernement. »
+et phrase en gris clair. Pas un deuxième grand hero.
+Desktop : texte à gauche, lien à droite, flex-wrap si manque de place.
+Mobile/tablette : titre puis phrase puis lien. Padding 24–32 px.
+Lien vers une vraie route/section de réalisations identifiée dans le dépôt.
+La capture ne constitue pas un footer complet : préserver le footer existant,
+mentions légales, accès contact et contenus utiles.
+
+12. NAVIGATION ET INTERACTIONS
+
+Les contrôles de navigation sont des <a>, les boutons d’interface de vrais
+<button>. Ne pas mettre de bouton sur un <div>.
+« Approche » et « Découvrir mon approche » -> #approche.
+« Interventions », « Réalisations », « Notes » -> routes/ancres existantes
+identifiées lors de l’audit. Ne pas renommer/casser les routes publiques.
+Les actions « Échanger » / « Échanger sur vos enjeux » -> même vraie destination
+de contact existante. Ne pas inventer d’e-mail ni de lien de calendrier.
+Si la destination manque, la noter comme point à résoudre et ne pas créer
+un lien href="#" ou un formulaire factice.
+Si un formulaire existe, conserver sa logique, validation et traitement.
+
+États : hover sobre, focus-visible contrasté (outline 2 px + offset),
+active perceptible. Focus accessible sur fond clair ET sombre.
+Cibles tactiles >=44x44 px, pas de dépendance hover.
+Liens externes : respecter conventions du dépôt, libellé explicite,
+pas d’ouverture d’onglet imposée sans raison.
+Ancres : navigation native ; smooth scroll facultatif avec respect reduced-motion.
+Navigation clavier complète et ordre logique identique au DOM.
+
+13. ACCESSIBILITÉ, CONTENU ET PERFORMANCE
+
+Ajouter/conserver un lien d’évitement vers main.
+lang="fr", un seul h1, régions header/main/footer et navigation nommée.
+Contraste cible WCAG AA : 4.5:1 texte courant, 3:1 grands textes et UI
+lorsque applicable ; mesurer plutôt que déduire des codes hex.
+Zoom à 200 %, aucune disparition ni chevauchement.
+À une largeur CSS de 320 px, pas de débordement horizontal.
+Les effets décoratifs ne capturent pas les événements et n’entrent pas
+dans l’arbre d’accessibilité.
+Vérifier la position du visage sur tous les viewports.
+Conserver SEO, URL, contenus et mécanismes existants hors périmètre.
+Images : tailles adaptées, dimensions explicites, pas de duplication des
+sources téléchargées inutilement. Ne pas lazy-loader aveuglément une image
+qui est l’élément principal au-dessus de la ligne de flottaison.
+Pas de bibliothèque d’animation, carrousel, nouveau framework ou dépendance
+graphique uniquement pour reproduire cette composition.
+
+14. CRITÈRES D’ACCEPTATION
+
+[ ] Header et hero graphite/cuivre ; approche ivoire ; bande finale graphite.
+[ ] Exactitude des contenus de content.fr.json.
+[ ] « CTO conseil » partout où la fonction est présentée.
+[ ] Aucune promesse d’exécution ou d’implémentation.
+[ ] Même visage et vraie photo originale sur desktop/mobile.
+[ ] Aucun portrait extrait de la maquette générée.
+[ ] Texte vivant et accessible ; aucune capture utilisée comme page.
+[ ] 320, 390, 768, 1024, 1199, 1200, 1440 px vérifiés.
+[ ] 1024 : hero à deux colonnes mais menu compact.
+[ ] 1199 ->1200 : bascule header sans débordement ni menu résiduel.
+[ ] 390 : hero texte, CTA, portrait, domaines, méthode, bande finale dans cet ordre.
+[ ] Tous les domaines et toutes les étapes restent présents sur mobile.
+[ ] Pas de ligne/texte coupé ni de défilement horizontal.
+[ ] Menu clavier/tactile, Échap, focus et navigation fonctionnels.
+[ ] CTA contact et autres destinations réelles testés.
+[ ] Contrastes, reduced-motion et zoom contrôlés.
+[ ] Vérifications natives du dépôt exécutées, écarts documentés.
+[ ] Aucune publication ou modification hors périmètre.
+

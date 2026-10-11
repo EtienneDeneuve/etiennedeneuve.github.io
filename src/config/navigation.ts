@@ -1,21 +1,38 @@
 const primaryFr = [
-  { label: "Home", href: "/" },
-  { label: "Start Here", href: "/start-here/" },
-  { label: "Thinking", href: "/thinking/" },
-  { label: "Work", href: "/work/" },
-  { label: "Projects", href: "/projects/" },
-  { label: "Speaking", href: "/speaking/" },
-  { label: "About", href: "/about/" },
+  { label: "Approche", href: "/#approche" },
+  { label: "Interventions", href: "/work/" },
+  { label: "Réalisations", href: "/projects/" },
+  { label: "Publications", href: "/thinking/" },
 ];
 
 const primaryEn = [
-  { label: "Home", href: "/en/" },
-  { label: "Start Here", href: "/en/start-here/" },
-  { label: "Thinking", href: "/en/thinking/" },
+  { label: "Approach", href: "/en/#approche" },
   { label: "Work", href: "/en/work/" },
   { label: "Projects", href: "/en/projects/" },
+  { label: "Publications", href: "/en/thinking/" },
+];
+
+/** Explore row in the graphite footer (not duplicated as primary nav). */
+const footerExploreFr = [
+  { label: "Commencer ici", href: "/start-here/" },
+  { label: "Speaking", href: "/speaking/" },
+  { label: "À propos", href: "/about/" },
+  { label: "Case studies", href: "/work/case-studies/" },
+  { label: "Publications", href: "/thinking/" },
+  { label: "Réalisations", href: "/projects/" },
+  { label: "Interventions", href: "/work/" },
+  { label: "Contact", href: "/contact/" },
+];
+
+const footerExploreEn = [
+  { label: "Start Here", href: "/en/start-here/" },
   { label: "Speaking", href: "/en/speaking/" },
   { label: "About", href: "/en/about/" },
+  { label: "Case studies", href: "/en/work/case-studies/" },
+  { label: "Publications", href: "/en/thinking/" },
+  { label: "Projects", href: "/en/projects/" },
+  { label: "Work", href: "/en/work/" },
+  { label: "Contact", href: "/en/contact/" },
 ];
 
 export const navigationConfig = {
@@ -23,17 +40,20 @@ export const navigationConfig = {
     fr: primaryFr,
     en: primaryEn,
   },
+  /** @deprecated Prefer footerExplore — kept for compat with any leftover imports. */
   secondary: {
-    fr: [
-      { label: "Contact", href: "/contact/" },
-      { label: "Case Studies", href: "/work/case-studies/" },
-      { label: "RSS", href: "/rss.xml" },
-    ],
-    en: [
-      { label: "Contact", href: "/en/contact/" },
-      { label: "Case Studies", href: "/en/work/case-studies/" },
-      { label: "RSS", href: "/rss.xml" },
-    ],
+    fr: footerExploreFr,
+    en: footerExploreEn,
+  },
+  /** Explore links — middle row of the graphite footer. */
+  footerExplore: {
+    fr: footerExploreFr,
+    en: footerExploreEn,
+  },
+  /** @deprecated Use footerExplore. */
+  footerCompact: {
+    fr: footerExploreFr,
+    en: footerExploreEn,
   },
   legal: {
     fr: [
@@ -46,8 +66,8 @@ export const navigationConfig = {
     ],
   },
   cta: {
-    fr: { label: "Parler d’un système complexe", href: "/contact/" },
-    en: { label: "Discuss a complex system", href: "/en/contact/" },
+    fr: { label: "Écrire", href: "/contact/" },
+    en: { label: "Write", href: "/en/contact/" },
   },
   rss: "/rss.xml",
 } as const;

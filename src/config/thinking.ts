@@ -110,6 +110,7 @@ export const thinkingConfig = {
     translation: { fr: "Traduction", en: "Translation" },
     rss: { fr: "Flux RSS", en: "RSS feed" },
     rssByPillar: { fr: "RSS par pilier", en: "RSS by pillar" },
+    browse: { fr: "Explorer", en: "Browse" },
     browsePillars: { fr: "Par pilier", en: "By pillar" },
     browseTypes: { fr: "Par type", en: "By type" },
     browseTags: { fr: "Par tag", en: "By tag" },

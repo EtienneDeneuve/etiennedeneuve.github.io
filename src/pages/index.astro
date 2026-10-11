@@ -1,38 +1,25 @@
 ---
-import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import HomeContent from "../components/HomeContent.astro";
 import { siteConfig } from "../config/site.ts";
+import { messagingConfig } from "../config/messaging.ts";
 import { buildJsonLdGraph, websiteJsonLd } from "../lib/json-ld.ts";
 import { coreIdentityNodes } from "../lib/ecosystem-json-ld.ts";
-import { getReleasedArticles } from "../lib/publication-policy.ts";
+import { getAllThinkingArticles, articlesForLocale } from "../lib/thinking.ts";
 import { selectHomeThinking } from "../lib/home-thinking.ts";
 
 const homeJsonLd = buildJsonLdGraph([...coreIdentityNodes("fr"), websiteJsonLd()]);
 
-const allArticles = getReleasedArticles(await getCollection("blog"))
-  .filter((entry) => (entry.data.language ?? "fr") === "fr")
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-
+const allArticles = articlesForLocale(await getAllThinkingArticles(), "fr").sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
 const selectedThinking = selectHomeThinking(allArticles, "fr");
-
-const allProjects = (await getCollection("projects")).filter(
-  (project) => !project.data.draft && project.data.verified
-);
-
-const priorityNames = ["External Metrics Exporter"];
-const priorityProjects = priorityNames
-  .map((name) => allProjects.find((project) => project.data.name === name))
-  .filter((project): project is (typeof allProjects)[number] => Boolean(project));
-const featuredOthers = allProjects.filter(
-  (project) => project.data.featured && !priorityNames.includes(project.data.name)
-);
-const proofProjects = [...priorityProjects, ...featuredOthers];
+const description = messagingConfig.etienne.promise.fr;
 ---
 
 <BaseLayout
   title={siteConfig.identity.name}
-  description="Doctrine, décisions et preuves publiques pour piloter un SI sous contraintes réelles."
+  description={description}
   lang="fr"
   path="/"
   brandTitle={false}
@@ -43,5 +30,5 @@ const proofProjects = [...priorityProjects, ...featuredOthers];
   ]}
   jsonLd={homeJsonLd}
 >
-  <HomeContent lang="fr" proofProjects={proofProjects} selectedThinking={selectedThinking} />
+  <HomeContent lang="fr" selectedThinking={selectedThinking} />
 </BaseLayout>

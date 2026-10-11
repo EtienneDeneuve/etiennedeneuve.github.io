@@ -10,32 +10,32 @@ export const aboutConfig = {
   meta: {
     title: { fr: "About", en: "About" } as Localized,
     description: {
-      fr: "Parcours, expertise et manière de travailler d’Etienne Deneuve : architecture, cloud, Kubernetes, plateformes, observabilité et gouvernance technique.",
-      en: "Background, expertise and working approach of Etienne Deneuve: architecture, cloud, Kubernetes, platforms, observability and technical governance.",
+      fr: "Parcours et manière de travailler d’Etienne Deneuve, CTO conseil : stratégie, organisation et transformation, avec une lecture des leviers humains, organisationnels et techniques.",
+      en: "Background and working approach of Etienne Deneuve, advisory CTO: strategy, organisation and transformation, reading human, organisational and technical levers.",
     } as Localized,
     lead: {
-      fr: "Cinq constantes depuis le terrain : comprendre les systèmes, réduire la complexité, sécuriser les décisions, construire ce qui manque, confronter les idées à la réalité.",
-      en: "Five constants from the field: understand systems, reduce complexity, secure decisions, build what is missing, confront ideas with reality.",
+      fr: "Cinq constantes depuis le terrain : comprendre les causes, distinguer les leviers, sécuriser les décisions, accompagner sans confisquer le contrôle, confronter les idées à la réalité.",
+      en: "Five constants from the field: understand causes, separate levers, secure decisions, support without seizing control, confront ideas with reality.",
     } as Localized,
   },
   unity: {
     title: { fr: "Ce qui ne change pas", en: "What stays constant" } as Localized,
     items: [
       {
-        fr: "Comprendre les systèmes",
-        en: "Understand systems",
+        fr: "Comprendre les causes",
+        en: "Understand causes",
       },
       {
-        fr: "Réduire la complexité",
-        en: "Reduce complexity",
+        fr: "Distinguer les leviers",
+        en: "Separate the levers",
       },
       {
         fr: "Sécuriser les décisions",
         en: "Secure decisions",
       },
       {
-        fr: "Construire ce qui manque",
-        en: "Build what is missing",
+        fr: "Accompagner sans confisquer",
+        en: "Support without seizing control",
       },
       {
         fr: "Confronter les idées au terrain",
@@ -47,12 +47,12 @@ export const aboutConfig = {
     title: { fr: "Ce que je fais aujourd’hui", en: "What I do today" } as Localized,
     paragraphs: {
       fr: [
-        "Je conçois, sécurise et rends gouvernables des systèmes numériques complexes : plateformes cloud, Kubernetes, DevSecOps, observabilité et architecture de décision.",
-        "Je suis Platform Reliability Architect et CTO. Avec Taous, nous cofondons Omnivya : elle dirige Omnivya et Omnivya Expert ; je suis CTO. Les missions nécessitant une capacité de delivery structurée sont portées par Omnivya Expert. Ce site publie mes principes, les preuves et le raisonnement ; ce n’est pas un catalogue commercial.",
+        "J’aide directions et équipes à comprendre les causes, éclairer les arbitrages et accompagner les transformations. La profondeur technique sert le discernement ; elle n’est pas une promesse d’exécution.",
+        "Je suis CTO conseil et CTO d’Omnivya. Avec Taous, nous cofondons Omnivya : elle dirige Omnivya et Omnivya Expert ; je suis CTO. Les missions nécessitant une capacité de delivery structurée sont portées par Omnivya Expert. Ce site publie mes principes, les preuves et le raisonnement ; ce n’est pas un catalogue commercial.",
       ],
       en: [
-        "I design, secure and make complex digital systems governable: cloud platforms, Kubernetes, DevSecOps, observability and decision architecture.",
-        "I am a Platform Reliability Architect and CTO. With Taous, we co-found Omnivya: she leads Omnivya and Omnivya Expert; I am CTO. Missions that need structured delivery capacity are carried by Omnivya Expert. This site publishes my principles, proof and reasoning; it is not a commercial catalog.",
+        "I help leadership and teams understand causes, clarify trade-offs and support transformations. Technical depth serves discernment; it is not a promise of delivery.",
+        "I am an advisory CTO and CTO of Omnivya. With Taous, we co-found Omnivya: she leads Omnivya and Omnivya Expert; I am CTO. Missions that need structured delivery capacity are carried by Omnivya Expert. This site publishes my principles, proof and reasoning; it is not a commercial catalog.",
       ],
     },
   },

@@ -1,17 +1,25 @@
 /* ==========================================================================
-   Atelier — Etienne Deneuve
-   Premium refined: stone + ink + gold, Cormorant display, Outfit UI
+   CTO conseil — Etienne Deneuve
+   Graphite / ivory / copper, Outfit UI
    ========================================================================== */
 
 :root {
   color-scheme: light;
-  /* ——— Ink / paper primitives (Luxury / Premium) ——— */
-  --ink: #0c0a09;
-  --ink-muted: #44403c;
-  --ink-subtle: #78716c;
-  --paper: #fafaf9;
-  --paper-elevated: #ffffff;
-  --paper-muted: #f5f5f4;
+  /* ——— Kit / maquette tokens (SPECIFICATION.txt) ——— */
+  --ink: #151819;
+  --ink-muted: #454a4d;
+  --ink-subtle: #6b7073;
+  --paper: #f3efe7;
+  --paper-elevated: #faf8f3;
+  --paper-muted: #e8e3d8;
+  --graphite: #111416;
+  --graphite-soft: #1b1e20;
+  --copper-on-dark: #f0aa78;
+  --copper-on-light: #a54822;
+  --text-on-dark: #f7f3ec;
+  --text-muted-on-dark: #cdd0cf;
+  --border-on-dark: rgba(243, 239, 231, 0.16);
+  --border-on-light: rgba(21, 24, 25, 0.2);
 
   /* Legacy gray aliases → map to ink scale (compat for components) */
   --gray-0: var(--ink);
@@ -29,10 +37,11 @@
   --gray-999_40: hsla(var(--gray-999-basis), 0.4);
   --gray-999: var(--paper-elevated);
 
-  /* ——— Accent (premium gold — not teal Shine, not cobalt SaaS) ——— */
-  --accent-regular: #a16207;
-  --accent-dark: #854d0e;
-  --accent-light: #ca8a04;
+  /* ——— Accent (copper) ——— */
+  --accent-regular: var(--copper-on-light);
+  --accent-dark: #84381a;
+  --accent-light: #c45a2e;
+  --accent-on-dark: var(--copper-on-dark);
   --accent-overlay: color-mix(in srgb, var(--accent-regular) 14%, transparent);
   --accent-subtle-overlay: color-mix(in srgb, var(--accent-regular) 8%, transparent);
   --accent-text-over: #ffffff;
@@ -45,11 +54,11 @@
   --color-fg: var(--ink);
   --color-fg-muted: var(--ink-muted);
   --color-fg-subtle: var(--ink-subtle);
-  --color-border: #d6d3d1;
-  --color-border-strong: #a8a29e;
+  --color-border: rgba(21, 24, 25, 0.2);
+  --color-border-strong: rgba(21, 24, 25, 0.35);
   --color-focus: var(--accent-regular);
   --color-success: #0f7a4c;
-  --color-warning: #a16207;
+  --color-warning: #a54822;
   --color-danger: #b42318;
   --color-info: var(--accent-regular);
 
@@ -72,8 +81,8 @@
   --border-width: 1px;
   --border-width-strong: 2px;
   --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 14px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
   --radius-pill: 999px;
 
   /* ——— Soft depth (premium, not flat ops) ——— */
@@ -120,14 +129,19 @@
   --font-system: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --font-body: "Outfit", var(--font-system);
-  --font-brand: "Cormorant", Georgia, "Times New Roman", serif;
-  --font-display: "Cormorant", Georgia, "Times New Roman", serif;
+  --font-brand: "Outfit", var(--font-system);
+  /* Display = Outfit (kit H1). Serif mark uses --font-serif. */
+  --font-display: "Outfit", var(--font-system);
+  --font-serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
 
   /* ——— Reading widths ——— */
   --measure: 68ch;
   --measure-narrow: 52ch;
   --measure-wide: 80ch;
   --wrapper-max: 72rem;
+  /* Shared horizontal gutter: nav, home shells, footer (Safari-stable). */
+  --page-gutter: clamp(1.5rem, 4vw, 4rem);
+  --page-max: 90rem;
   --grid-gap: 1rem;
   --base-unit: 0.5rem;
 
@@ -147,12 +161,20 @@
 
 :root.theme-dark {
   color-scheme: dark;
-  --ink: #f5f2eb;
-  --ink-muted: #c4bdb3;
-  --ink-subtle: #9a9288;
-  --paper: #141210;
-  --paper-elevated: #24201c;
-  --paper-muted: #1c1916;
+  --ink: #f7f3ec;
+  --ink-muted: #cdd0cf;
+  --ink-subtle: #9aa0a3;
+  --paper: #111416;
+  --paper-elevated: #1b1e20;
+  --paper-muted: #16191b;
+  --graphite: #111416;
+  --graphite-soft: #1b1e20;
+  --copper-on-dark: #f0aa78;
+  --copper-on-light: #f0aa78;
+  --text-on-dark: #f7f3ec;
+  --text-muted-on-dark: #cdd0cf;
+  --border-on-dark: rgba(243, 239, 231, 0.16);
+  --border-on-light: rgba(243, 239, 231, 0.16);
 
   --gray-0: var(--ink);
   --gray-50: #f5f2eb;
@@ -168,12 +190,13 @@
   --gray-999-basis: 30, 8%, 8%;
   --gray-999: var(--paper);
 
-  --accent-regular: #d4a017;
-  --accent-dark: #e8b84a;
-  --accent-light: #b8860b;
+  --accent-regular: #f0aa78;
+  --accent-dark: #f5c49a;
+  --accent-light: #d4895a;
+  --accent-on-dark: #f0aa78;
   --accent-overlay: color-mix(in srgb, var(--accent-regular) 20%, transparent);
   --accent-subtle-overlay: color-mix(in srgb, var(--accent-regular) 12%, transparent);
-  --accent-text-over: #141210;
+  --accent-text-over: #111416;
   --link-color: var(--accent-regular);
 
   --color-bg: var(--paper);
@@ -182,11 +205,11 @@
   --color-fg: var(--ink);
   --color-fg-muted: var(--ink-muted);
   --color-fg-subtle: var(--ink-subtle);
-  --color-border: #3d3935;
-  --color-border-strong: #7a736a;
+  --color-border: rgba(243, 239, 231, 0.16);
+  --color-border-strong: rgba(243, 239, 231, 0.28);
   --color-focus: var(--accent-regular);
   --color-success: #3dd68c;
-  --color-warning: #d4a017;
+  --color-warning: #f0aa78;
   --color-danger: #f97066;
   --color-info: var(--accent-regular);
 
@@ -208,6 +231,10 @@
 /* ==========================================================================
    Base
    ========================================================================== */
+
+html {
+  scrollbar-gutter: stable;
+}
 
 html,
 body {

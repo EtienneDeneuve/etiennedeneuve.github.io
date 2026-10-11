@@ -81,12 +81,12 @@ export const speakingPageConfig = {
   meta: {
     title: { fr: "Speaking", en: "Speaking" },
     description: {
-      fr: "Talks et notes sur la compréhension, la gouvernance et la transformation des systèmes numériques complexes.",
-      en: "Talks and notes on understanding, governing, and transforming complex digital systems.",
+      fr: "Talks et notes de CTO conseil : comprendre les causes, gouverner les arbitrages, accompagner les transformations.",
+      en: "Advisory CTO talks and notes: understand causes, govern trade-offs, support transformations.",
     },
     positioning: {
-      fr: "Sur ce blog, je parle de comment comprendre, gouverner et transformer les systèmes numériques complexes. Pas une checklist de buzzwords.",
-      en: "On this blog, I write and speak about how to understand, govern, and transform complex digital systems. Not a buzzword checklist.",
+      fr: "Je parle de comment distinguer les leviers humains, organisationnels et techniques avant de trancher. Pas une checklist de buzzwords.",
+      en: "I speak about separating human, organisational and technical levers before deciding. Not a buzzword checklist.",
     },
     topicsIntro: {
       fr: "Sujets documentés ici. Chaque talk s'adapte au contexte, à l'audience et au format, sans durée imposée par défaut.",

@@ -4,6 +4,7 @@ import {
   formatArticleDate,
   getArticleLanguage,
   getArticlePath,
+  getCanonicalSlug,
   getContentTypeLabel,
   getEntryTags,
   getPillarLabel,
@@ -20,12 +21,11 @@ interface Props {
 
 const { entry, lang } = Astro.props;
 const articleLang = getArticleLanguage(entry);
-const href = getArticlePath(entry.id, articleLang);
+const href = getArticlePath(getCanonicalSlug(entry), articleLang);
 const pillar = entry.data.pillar as ThinkingPillar;
 const contentType = entry.data.contentType as ThinkingContentType;
 const readingTime = getReadingTime(entry);
 const readLabel = lang === "en" ? "Read" : "Lire";
-const prefix = lang === "en" ? "/en" : "";
 // Exposed so the static /thinking/ page can filter and sort client-side.
 const tagSlugs = getEntryTags(entry).map(slugifyTag).join(" ");
 const publishedAt = new Date(entry.data.pubDate).toISOString();
@@ -40,38 +40,49 @@ const publishedAt = new Date(entry.data.pubDate).toISOString();
   data-date={publishedAt}
   data-title={entry.data.title.toLocaleLowerCase(articleLang)}
 >
-  <header class="card-header">
-    <span class="badge badge-accent">{getContentTypeLabel(contentType, lang)}</span>
-    <span class="badge">{articleLang.toUpperCase()}</span>
-  </header>
-  <h3><a href={href}>{entry.data.title}</a></h3>
-  {entry.data.description && <p class="description">{entry.data.description}</p>}
-  <dl class="meta">
-    <div>
-      <dt>{lang === "en" ? "Published" : "Publié"}</dt>
-      <dd>{formatArticleDate(entry.data.pubDate, lang)}</dd>
-    </div>
-    {
-      readingTime && (
-        <div>
-          <dt>{lang === "en" ? "Reading" : "Lecture"}</dt>
-          <dd>{readingTime}</dd>
-        </div>
-      )
-    }
-    <div>
-      <dt>{lang === "en" ? "Pillar" : "Pilier"}</dt>
-      <dd>
-        <a href={`${prefix}/thinking/pillar/${pillar}/`}>{getPillarLabel(pillar, lang)}</a>
-      </dd>
-    </div>
-  </dl>
-  <a class="read-link" href={href}>{readLabel} →</a>
+  <a class="article-card__hit" href={href}>
+    <header class="card-header">
+      <span class="badge badge-accent">{getContentTypeLabel(contentType, lang)}</span>
+      <span class="badge">{articleLang.toUpperCase()}</span>
+    </header>
+    <h3>{entry.data.title}</h3>
+    {entry.data.description && <p class="description">{entry.data.description}</p>}
+    <dl class="meta">
+      <div>
+        <dt>{lang === "en" ? "Published" : "Publié"}</dt>
+        <dd>{formatArticleDate(entry.data.pubDate, lang)}</dd>
+      </div>
+      {
+        readingTime && (
+          <div>
+            <dt>{lang === "en" ? "Reading" : "Lecture"}</dt>
+            <dd>{readingTime}</dd>
+          </div>
+        )
+      }
+      <div>
+        <dt>{lang === "en" ? "Pillar" : "Pilier"}</dt>
+        <dd>{getPillarLabel(pillar, lang)}</dd>
+      </div>
+    </dl>
+    <span class="read-link">{readLabel} →</span>
+  </a>
 </article>
 
 <style>
   .article-card {
     height: 100%;
+  }
+  .article-card__hit {
+    display: grid;
+    gap: var(--space-3);
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+  }
+  .article-card__hit:hover h3,
+  .article-card__hit:focus-visible h3 {
+    color: var(--accent-regular);
   }
   .card-header {
     display: flex;
@@ -82,13 +93,7 @@ const publishedAt = new Date(entry.data.pubDate).toISOString();
     margin: 0;
     font-size: var(--text-lg);
     line-height: var(--leading-snug);
-  }
-  .article-card h3 a {
     color: var(--color-fg);
-    text-decoration: none;
-  }
-  .article-card h3 a:hover {
-    text-decoration: underline;
   }
   .description {
     margin: 0;
@@ -112,7 +117,9 @@ const publishedAt = new Date(entry.data.pubDate).toISOString();
     margin: 0.1rem 0 0;
     color: var(--color-fg-muted);
   }
-  .meta a {
-    color: var(--color-fg-muted);
+  .read-link {
+    color: var(--accent-regular);
+    font-size: var(--text-sm);
+    font-weight: 600;
   }
 </style>

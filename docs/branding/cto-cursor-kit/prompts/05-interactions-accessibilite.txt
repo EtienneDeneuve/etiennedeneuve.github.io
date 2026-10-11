@@ -1,0 +1,20 @@
+Étape 5 : fiabilise les interactions et l’accessibilité de la page.
+Ne modifie ni le positionnement ni les textes.
+
+Relis les sections 12 et 13 du brief. Teste tous les vrais liens et le contact.
+« Approche » et CTA secondaire vont à #approche ; les autres destinations
+doivent correspondre au dépôt. Aucun href="#" factice, faux formulaire,
+e-mail inventé ou CTA sans effet.
+
+Vérifie clavier, focus-visible clair/sombre, Échap et réouverture du menu,
+absence d’éléments fermés focusables, ordre du focus, lien d’évitement,
+hiérarchie h1/h2/h3, alt portrait, zones tactiles, contraste mesuré, zoom 200%.
+Respecte prefers-reduced-motion ; les lignes décoratives sont des SVG
+aria-hidden non interactifs, sans bibliothèque d’animation.
+Vérifie dimensions des images et absence de déplacement visible au chargement.
+Préserve les mécanismes SEO et tracking déjà présents sans en ajouter.
+
+Utilise les outils et tests existants. Ajoute seulement un test ciblé si un
+comportement important non couvert le justifie ; aucun test qui recopie le CSS.
+Signale clairement ce qui a été vérifié et ce qui reste inaccessible.
+

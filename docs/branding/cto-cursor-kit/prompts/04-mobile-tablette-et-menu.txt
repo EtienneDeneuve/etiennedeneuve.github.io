@@ -1,0 +1,22 @@
+Étape 4 : réalise le responsive sans changer le desktop validé.
+Relis les sections 5 à 12 de SPECIFICATION.txt.
+
+Sous 1024 : hero en pile, texte/CTA puis portrait.
+Sous 768 : H1 fluide 30–40 px, corps 16 px, marges 20 px (16 à 320),
+bouton principal pleine largeur, lien secondaire visible sous le bouton.
+Photo originale contain dans panneau 4/3, aucune déformation.
+Domaines en 2x2 et éventuellement 1 colonne au gros zoom.
+Approche : trois étapes empilées avec numéros à gauche.
+Bande technique : texte, puis lien. Rien ne disparaît en bas de la capture.
+
+Sous 1200 : menu compact avec panneau dépliant dans le flux.
+Implémente bouton accessible, aria-expanded/controls, Échap, fermeture
+au clic de lien et réinitialisation au retour desktop. Pas de focus trap
+dans ce panneau non modal. Pas de header sticky ajouté.
+
+Vérifie 320, 390, 768, 1024, 1199 et 1200 px ; vérifie aussi entre les tailles.
+Contrôle particulièrement le mot « transformation », les libellés longs et
+l’absence de débordement horizontal. Le layout doit rester fluide, sans
+hauteur figée copiée du téléphone de la maquette. Montre des captures réelles
+390 et 768 si possible et corrige les écarts avant de terminer.
+

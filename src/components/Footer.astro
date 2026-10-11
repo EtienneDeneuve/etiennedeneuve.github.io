@@ -6,132 +6,165 @@ import { analyticsAttrs } from "../lib/analytics.ts";
 const pathname = Astro.url.pathname;
 const locale =
   pathname.startsWith("/en/") || pathname === "/en" || pathname === "/en/" ? "en" : "fr";
-const secondary = navigationConfig.secondary[locale];
+const explore = navigationConfig.footerExplore[locale];
 const legal = navigationConfig.legal[locale];
+const role = siteConfig.professionalRole.title;
 const omnivyaHref = omnivyaContactUrl(locale, "footer");
+const email = siteConfig.omnivya.email;
+
+const linkAttrs = (href: string) => {
+  if (href.includes("rss")) return analyticsAttrs("cta_rss", { surface: "footer", lang: locale });
+  if (href.includes("contact") || href.startsWith("mailto:")) {
+    return analyticsAttrs("cta_contact_email", {
+      surface: "footer",
+      intent: "qualification",
+      lang: locale,
+    });
+  }
+  return {};
+};
 ---
 
-<footer class="wrapper">
-  <div class="identity">
-    <strong>{siteConfig.identity.name}</strong>
-    <p class="role">{siteConfig.professionalRole.title}</p>
-    <p class="domains">{siteConfig.professionalRole.subtitle}</p>
-    <p>
+<footer class="site-footer">
+  <div class="site-footer__shell">
+    <div class="site-footer__brand-row">
+      <p class="site-footer__brand">
+        <span class="site-footer__mono" aria-hidden="true">ÉD</span>
+        <span aria-hidden="true">·</span>
+        <span>{siteConfig.identity.name}</span>
+        <span aria-hidden="true">·</span>
+        <span>{role}</span>
+      </p>
+      <a class="site-footer__email" href={`mailto:${email}`} {...linkAttrs(`mailto:${email}`)}>
+        {email}
+      </a>
+    </div>
+
+    <nav
+      class="site-footer__nav site-footer__nav--explore"
+      aria-label={locale === "en" ? "Explore" : "Explorer"}
+    >
+      {
+        explore.map((item) => (
+          <a href={item.href} {...linkAttrs(item.href)}>
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <nav
+      class="site-footer__nav site-footer__nav--utility"
+      aria-label={locale === "en" ? "Utilities" : "Utilitaires"}
+    >
+      {legal.map((item) => <a href={item.href}>{item.label}</a>)}
+      <a href={navigationConfig.rss} {...linkAttrs(navigationConfig.rss)}> RSS </a>
       <a
-        href={`mailto:${siteConfig.omnivya.email}`}
-        {...analyticsAttrs("cta_contact_email", {
+        href={omnivyaHref}
+        rel="noopener noreferrer"
+        target="_blank"
+        {...analyticsAttrs("cta_booking", {
           surface: "footer",
           intent: "qualification",
           lang: locale,
         })}
       >
-        {siteConfig.omnivya.email}
+        {siteConfig.omnivya.publicName}
       </a>
-    </p>
-  </div>
+      <a href={siteConfig.social.linkedin}>LinkedIn</a>
+      <a
+        href={siteConfig.social.github}
+        {...analyticsAttrs("cta_github", { surface: "footer", lang: locale })}
+      >
+        GitHub
+      </a>
+      <a href={siteConfig.social.x}>X</a>
+    </nav>
 
-  <div class="links">
-    {
-      secondary.map((item) => (
-        <a
-          href={item.href}
-          {...(item.href.includes("rss")
-            ? analyticsAttrs("cta_rss", { surface: "footer", lang: locale })
-            : item.href.includes("contact")
-              ? analyticsAttrs("cta_contact_email", {
-                  surface: "footer",
-                  intent: "qualification",
-                  lang: locale,
-                })
-              : {})}
-        >
-          {item.label}
-        </a>
-      ))
-    }
-    <a
-      href={omnivyaHref}
-      rel="noopener noreferrer"
-      target="_blank"
-      {...analyticsAttrs("cta_booking", {
-        surface: "footer",
-        intent: "qualification",
-        lang: locale,
-      })}
-    >
-      {siteConfig.omnivya.publicName}
-    </a>
-    <a href={siteConfig.social.linkedin}>LinkedIn</a>
-    <a
-      href={siteConfig.social.github}
-      {...analyticsAttrs("cta_github", { surface: "footer", lang: locale })}
-    >
-      GitHub
-    </a>
-    <a href={siteConfig.social.x}>X</a>
-    {legal.map((item) => <a href={item.href}>{item.label}</a>)}
+    <p class="site-footer__copy">{siteConfig.copyright.notice}</p>
   </div>
-
-  <small>{siteConfig.copyright.notice}</small>
 </footer>
 
 <style>
-  footer {
+  .site-footer {
+    /* Full-bleed bar — gutter lives on the shell, same as nav/home (Safari). */
+    background: var(--graphite, #111416);
+    color: var(--text-on-dark, #f7f3ec);
+    border-top: 1px solid var(--border-on-dark, rgba(243, 239, 231, 0.16));
+    padding-block: 1rem 1.15rem;
+    box-sizing: border-box;
+  }
+
+  .site-footer__shell {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: var(--page-max, 90rem);
+    margin-inline: auto;
+    padding-inline: var(--page-gutter, clamp(1.5rem, 4vw, 4rem));
     display: grid;
-    gap: var(--space-5);
-    margin-top: auto;
-    padding: var(--space-10) var(--space-6) var(--space-8);
-    text-align: left;
-    color: var(--color-fg-subtle);
-    font-size: var(--text-sm);
-    border-top: var(--border-width-strong) solid var(--color-fg);
+    gap: 0.65rem;
   }
 
-  footer a {
-    color: var(--color-fg-muted);
-    text-decoration: none;
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
-    transition: color var(--motion-fast);
-  }
-
-  footer a:hover,
-  footer a:focus-visible {
-    color: var(--accent-regular);
-  }
-
-  .identity strong {
-    color: var(--color-fg);
-    font-family: var(--font-display);
-    font-size: var(--text-lg);
-    font-weight: 600;
-  }
-
-  .role {
-    margin: var(--space-2) 0 0;
-    color: var(--color-fg-muted);
-    font-size: var(--text-sm);
-  }
-
-  .domains {
-    margin: var(--space-1) 0 var(--space-3);
-    max-width: 40rem;
-    color: var(--color-fg-subtle);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: 0.02em;
-  }
-
-  .links {
+  .site-footer__brand-row {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-4);
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem 1.5rem;
   }
 
-  small {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
+  .site-footer__brand {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem;
+    font-size: 0.92rem;
+    color: var(--text-muted-on-dark, #cdd0cf);
+  }
+
+  .site-footer__mono {
+    font-family: var(--font-serif, "Cormorant Garamond", Georgia, "Times New Roman", serif);
+    font-weight: 600;
+    color: var(--copper-on-dark, #f0aa78);
+  }
+
+  .site-footer__email {
+    color: var(--text-muted-on-dark, #cdd0cf);
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+
+  .site-footer__email:hover,
+  .site-footer__email:focus-visible {
+    color: var(--copper-on-dark, #f0aa78);
+  }
+
+  .site-footer__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem 1.1rem;
+  }
+
+  .site-footer__nav a {
+    color: var(--text-muted-on-dark, #cdd0cf);
+    text-decoration: none;
+    font-size: 0.88rem;
+  }
+
+  .site-footer__nav--utility a {
+    font-size: 0.82rem;
+    color: #9aa0a3;
+  }
+
+  .site-footer__nav a:hover,
+  .site-footer__nav a:focus-visible {
+    color: var(--copper-on-dark, #f0aa78);
+  }
+
+  .site-footer__copy {
+    margin: 0.25rem 0 0;
+    font-size: 0.75rem;
+    color: #7a736a;
   }
 </style>
