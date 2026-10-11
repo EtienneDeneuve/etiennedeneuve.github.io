@@ -164,8 +164,8 @@ export const ecosystemEntities: Record<EcosystemEntityId, EcosystemEntity> = {
       en: "Co-founder and CTO of Omnivya Expert. Doctrine and proof.",
     },
     metaDescription: {
-      fr: "Etienne Deneuve, CTO conseil : cofondateur et CTO d’Omnivya Expert. Ce site publie doctrine, décisions et preuves.",
-      en: "Etienne Deneuve, advisory CTO: co-founder and CTO of Omnivya Expert. This site publishes doctrine, decisions and proof.",
+      fr: "Etienne Deneuve, CTO conseil : stratégie, organisation et transformation. Cofondateur et CTO d’Omnivya Expert — doctrine, décisions et preuves.",
+      en: "Etienne Deneuve, advisory CTO: strategy, organisation and transformation. Co-founder and CTO of Omnivya Expert — doctrine, decisions and proof.",
     },
     longDescription: {
       fr: "CTO conseil. Cofondateur avec Taous ; CTO d’Omnivya Expert. Ce site documente son raisonnement et ses preuves publiques.",
