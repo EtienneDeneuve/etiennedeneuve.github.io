@@ -4,12 +4,7 @@
     "role": "CTO conseil",
     "monogram": "ÉD"
   },
-  "navigation": [
-    "Approche",
-    "Interventions",
-    "Réalisations",
-    "Notes"
-  ],
+  "navigation": ["Approche", "Interventions", "Réalisations", "Notes"],
   "headerCta": "Échanger",
   "hero": {
     "eyebrow": "Conseil aux directions et aux équipes",
@@ -60,4 +55,3 @@
     "captionRole": "CTO conseil"
   }
 }
-

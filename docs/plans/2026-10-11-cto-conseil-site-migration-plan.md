@@ -271,8 +271,8 @@ L0 (clos) → L1 audit → L2 content → L3 socle → L4 home → L5 thinking �
 - Happy: home FR/EN tirent copy depuis configs ; alias `homeConfig[lang]` OK.
 - Edge: empty EN publications explicite.
 - Integration: CTA lecture / exploration / contact inchangés en destination.
-**Depends on:** U2.
-**Status:** in progress — home/messaging/site/nav/404 faits ; about, speaking, start-here, `ecosystem.ts` restent.
+  **Depends on:** U2.
+  **Status:** in progress — home/messaging/site/nav/404 faits ; about, speaking, start-here, `ecosystem.ts` restent.
 
 ### U4. L3 — Socle visuel partagé
 
