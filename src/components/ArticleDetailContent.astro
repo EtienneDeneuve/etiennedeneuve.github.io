@@ -45,6 +45,10 @@ const { Content, headings } = await render(entry);
 const prefix = lang === "en" ? "/en" : "";
 const labels = thinkingConfig.labels;
 const author = thinkingConfig.author;
+const omnivyaBridge = thinkingConfig.omnivyaBridge;
+const contactAside = thinkingConfig.contactAside;
+const linkedinHref = siteConfig.social.linkedin;
+const contactHref = `${prefix}/contact/`;
 const articleLang = getArticleLanguage(entry);
 const indexHref = `${prefix}/thinking/`;
 const articlePath = getArticlePath(getCanonicalSlug(entry), articleLang);
@@ -278,37 +282,71 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
             </div>
           </div>
 
-          {
-            cta && (
-              <div class="article-cta stack gap-3" id="article-cta" data-article-cta-full>
-                <p>
-                  <strong>{cta.question[lang]}</strong>
-                </p>
-                <p>{cta.value[lang]}</p>
-                <p>
-                  <a
-                    class="btn-primary"
-                    href={omnivyaContactUrl(lang, cta.utmContent)}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                    data-analytics-event="cta_booking"
-                    data-analytics-props={JSON.stringify({
-                      surface: "thinking-article",
-                      lang,
-                      intent: "qualification",
-                      article: getCanonicalSlug(entry),
-                    })}
-                  >
-                    {cta.primaryLabel[lang]}
-                    <span aria-hidden="true"> ↗</span>
-                  </a>{" "}
-                  <a class="btn-text" href={`${prefix}/work/`}>
-                    {cta.secondaryLabel[lang]} →
-                  </a>
-                </p>
-              </div>
-            )
-          }
+          <div class="article-cta stack gap-3" id="article-cta" data-article-cta-full>
+            {
+              cta && (
+                <>
+                  <p>
+                    <strong>{cta.question[lang]}</strong>
+                  </p>
+                  <p>{cta.value[lang]}</p>
+                  <p>
+                    <a
+                      class="btn-primary"
+                      href={omnivyaContactUrl(lang, cta.utmContent)}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                      data-analytics-event="cta_booking"
+                      data-analytics-props={JSON.stringify({
+                        surface: "thinking-article",
+                        lang,
+                        intent: "qualification",
+                        article: getCanonicalSlug(entry),
+                      })}
+                    >
+                      {cta.primaryLabel[lang]}
+                      <span aria-hidden="true"> ↗</span>
+                    </a>{" "}
+                    <a class="btn-text" href={`${prefix}/work/`}>
+                      {cta.secondaryLabel[lang]} →
+                    </a>
+                  </p>
+                </>
+              )
+            }
+            <p class="article-cta__bridge">{omnivyaBridge[lang]}</p>
+            <p class="article-cta__aside">
+              {contactAside[lang]}{" "}
+              <a
+                href={contactHref}
+                data-analytics-event="cta_contact_email"
+                data-analytics-props={JSON.stringify({
+                  surface: "thinking-article",
+                  lang,
+                  intent: "conversation",
+                  article: getCanonicalSlug(entry),
+                })}
+              >
+                {labels.contactPage[lang]}
+              </a>
+              {" · "}
+              <a
+                href={linkedinHref}
+                rel="noopener noreferrer"
+                target="_blank"
+                data-analytics-event="cta_linkedin"
+                data-analytics-props={JSON.stringify({
+                  surface: "thinking-article",
+                  lang,
+                  intent: "conversation",
+                  article: getCanonicalSlug(entry),
+                })}
+              >
+                {labels.linkedin[lang]}
+                <span aria-hidden="true"> ↗</span>
+              </a>
+            </p>
+          </div>
 
           {
             showContinueBlock ? (
@@ -381,32 +419,6 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
       </div>
     </section>
 
-    {
-      cta && (
-        <div class="article-sticky" data-article-cta-sticky hidden>
-          <div class="page-shell article-sticky__row">
-            <p>{cta.question[lang]}</p>
-            <a
-              class="btn-primary"
-              href={omnivyaContactUrl(lang, cta.utmContent)}
-              rel="noopener noreferrer"
-              target="_blank"
-              data-analytics-event="cta_booking"
-              data-analytics-props={JSON.stringify({
-                surface: "thinking-article-sticky",
-                lang,
-                intent: "qualification",
-                article: getCanonicalSlug(entry),
-              })}
-            >
-              {cta.primaryLabel[lang]}
-              <span aria-hidden="true"> ↗</span>
-            </a>
-          </div>
-        </div>
-      )
-    }
-
     <button
       type="button"
       class="article-top"
@@ -437,8 +449,6 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
       const progress = root.querySelector("[data-article-progress]");
       const bar = root.querySelector("[data-article-progress-bar]");
       const topBtn = root.querySelector("[data-article-top]");
-      const sticky = root.querySelector("[data-article-cta-sticky]");
-      const fullCta = root.querySelector("[data-article-cta-full]");
       const prose = root.querySelector(".article-prose");
 
       const updateProgress = () => {
@@ -458,25 +468,6 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
         }
       };
 
-      let ctaInView = false;
-      const syncSticky = () => {
-        if (!(sticky instanceof HTMLElement)) return;
-        sticky.hidden = !(pageScrollY() > 280 && !ctaInView);
-        root.classList.toggle("article--cta-docked", ctaInView);
-      };
-
-      let io: IntersectionObserver | undefined;
-      if (sticky instanceof HTMLElement && fullCta instanceof HTMLElement) {
-        io = new IntersectionObserver(
-          ([entry]) => {
-            ctaInView = Boolean(entry?.isIntersecting);
-            syncSticky();
-          },
-          { root: null, threshold: 0.35 }
-        );
-        io.observe(fullCta);
-      }
-
       const onTopClick = () => {
         window.scrollTo({
           top: 0,
@@ -487,17 +478,13 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
         topBtn.addEventListener("click", onTopClick);
       }
 
-      const onScroll = () => {
-        updateProgress();
-        syncSticky();
-      };
+      const onScroll = () => updateProgress();
       onScroll();
       window.addEventListener("scroll", onScroll, { passive: true });
       document.body.addEventListener("scroll", onScroll, { passive: true });
       window.addEventListener("resize", onScroll);
 
       articleReadingCleanup = () => {
-        io?.disconnect();
         window.removeEventListener("scroll", onScroll);
         document.body.removeEventListener("scroll", onScroll);
         window.removeEventListener("resize", onScroll);
@@ -533,10 +520,6 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
     background: var(--bg-dark);
     color: var(--ink-on-dark);
   }
-  .article:not(.article--cta-docked):has([data-article-cta-sticky]:not([hidden])) {
-    padding-bottom: 3.25rem;
-  }
-
   .article :global(.eyebrow) {
     margin-bottom: 0.55rem;
     color: var(--copper-on-dark);
@@ -808,50 +791,26 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
     color: var(--copper-on-ivory);
   }
 
-  .article-sticky {
-    position: fixed;
-    inset-inline: 0;
-    bottom: 0;
-    z-index: 35;
-    border-top: 1px solid var(--ivory-border);
-    background: color-mix(in srgb, var(--ivory) 92%, #fff);
-    backdrop-filter: blur(10px);
-  }
-  .article-sticky[hidden] {
-    display: none;
-  }
-  .article-sticky__row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem 1.25rem;
-    min-height: 3rem;
-    padding-block: 0.45rem;
-  }
-  .article-sticky__row p {
+  .article-cta__bridge,
+  .article-cta__aside {
     margin: 0;
-    min-width: 0;
-    color: var(--ivory-ink);
-    font-size: 0.88rem;
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    color: var(--ivory-muted);
   }
-  .article-sticky :global(.btn-primary) {
-    flex: 0 0 auto;
-    min-height: 2.15rem;
-    padding: 0 0.9rem;
-    background: var(--copper-on-ivory);
-    border-color: var(--copper-on-ivory);
-    color: #fff;
-    font-size: 0.82rem;
+  .article-cta__aside a {
+    color: var(--copper-on-ivory);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .article-cta__aside a:hover {
+    text-decoration: underline;
   }
 
   .article-top {
     position: fixed;
     right: max(1rem, calc((100vw - min(100vw, var(--page-max))) / 2 + var(--page-gutter)));
-    bottom: 4.5rem;
+    bottom: 1.25rem;
     z-index: 36;
     width: 2.5rem;
     height: 2.5rem;
@@ -875,23 +834,13 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
     outline: 2px solid var(--copper-on-dark);
     outline-offset: 2px;
   }
-  .article.article--cta-docked .article-top {
-    bottom: 1.25rem;
-  }
-
   @media (max-width: 50em) {
     .article-open h1 {
       max-width: none;
     }
-    .article-sticky__row p {
-      display: none;
-    }
-    .article-sticky__row {
-      justify-content: flex-end;
-    }
     .article-top {
       right: 1rem;
-      bottom: 4.25rem;
+      bottom: 1rem;
       width: 2.75rem;
       height: 2.75rem;
     }

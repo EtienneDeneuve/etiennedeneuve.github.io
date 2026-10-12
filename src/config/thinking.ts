@@ -41,24 +41,37 @@ export const thinkingConfig = {
   meta: {
     title: { fr: "Publications", en: "Writing" } as Localized,
     description: {
-      fr: "Décisions et retours de terrain : architecture, plateforme, observabilité et CI.",
-      en: "Decisions and field notes: architecture, platform, observability, and CI.",
+      fr: "Retours de terrain : équipes, delivery, architecture, plateforme, observabilité et CI.",
+      en: "Field notes: teams, delivery, architecture, platform, observability, and CI.",
     } as Localized,
+    /** Canonical line: cash-factory-backlog #173 / PR #121 — CTO expert. */
     intro: {
-      fr: "Notes d’un CTO conseil — à relire, pas à cataloguer.",
-      en: "Notes from a consulting CTO — written to be re-read, not catalogued.",
+      fr: "Notes d’un CTO expert — équipes, delivery, technique et transmission. À relire, pas à cataloguer.",
+      en: "Notes from a hands-on CTO — teams, delivery, technology and teaching. Written to be re-read, not catalogued.",
     } as Localized,
   },
   author: {
     name: "Étienne Deneuve",
-    role: { fr: "CTO conseil", en: "Consulting CTO" } as Localized,
+    role: { fr: "CTO expert", en: "Hands-on CTO" } as Localized,
     portraitSrc: "/assets/portrait-cto-conseil.jpeg",
-    /** Aligned with messagingConfig.etienne.pitch.sec10 (short article signature). */
+    /** Four dimensions from #173: teams, delivery, technical depth, transmission. */
     signOff: {
-      fr: "J’aide directions et CTO à trancher quand organisation, équipes et tech se mélangent.",
-      en: "I help leadership and CTOs decide when organisation, people and technology are entangled.",
+      fr: "Je dirige des équipes, je reste dans le code et les plateformes, et je vérifie ce qui change vraiment le delivery. J’anime aussi ateliers, interventions et formations.",
+      en: "I lead teams, stay in the code and on platforms, and check what actually improves delivery. I also run workshops, talks and training.",
     } as Localized,
   },
+  /**
+   * One factual bridge so Omnivya is not read as a third-party vendor (#175).
+   * Shown next to end-of-article CTAs only — not a floating sales dock.
+   */
+  omnivyaBridge: {
+    fr: "Omnivya est l’entreprise que j’ai cofondée avec Taous, et dont je suis CTO. Les missions structurées y passent.",
+    en: "Omnivya is the company I co-founded with Taous, and where I serve as CTO. Structured engagements run through it.",
+  } as Localized,
+  contactAside: {
+    fr: "Pour une question ou un échange sans brief commercial :",
+    en: "For a question or a conversation without a sales brief:",
+  } as Localized,
   /** Minimum publishable articles sharing a tag before generating a tag page. */
   minTagArticles: 3,
   /** Opening shelf size on /thinking (1 lead + N side). */
@@ -137,11 +150,11 @@ export const thinkingConfig = {
         en: "Clarify promotion channels, compatibility contracts, and rollback limits before freezing the process.",
       },
       primaryLabel: {
-        fr: "Échanger sur cet arbitrage via Omnivya",
-        en: "Discuss this trade-off via Omnivya",
+        fr: "En parler via Omnivya",
+        en: "Talk it through via Omnivya",
       },
       secondaryLabel: {
-        fr: "Voir mon accompagnement",
+        fr: "Voir comment j’interviens",
         en: "See how I work with teams",
       },
       utmContent: "thinking-gitops",
@@ -156,11 +169,11 @@ export const thinkingConfig = {
         en: "Set a realistic OpenTelemetry frame: coverage, cardinality, and what you still have to operate.",
       },
       primaryLabel: {
-        fr: "Échanger sur cet arbitrage via Omnivya",
-        en: "Discuss this trade-off via Omnivya",
+        fr: "En parler via Omnivya",
+        en: "Talk it through via Omnivya",
       },
       secondaryLabel: {
-        fr: "Voir mon accompagnement",
+        fr: "Voir comment j’interviens",
         en: "See how I work with teams",
       },
       utmContent: "thinking-otel-cover",
@@ -267,6 +280,8 @@ export const thinkingConfig = {
     backToLibrary: { fr: "Toutes les publications", en: "All writing" },
     about: { fr: "À propos", en: "About" },
     work: { fr: "Accompagnement", en: "Advisory" },
+    contactPage: { fr: "M’écrire", en: "Get in touch" },
+    linkedin: { fr: "LinkedIn", en: "LinkedIn" },
     seriesPart: { fr: "Série", en: "Series" },
     publishedCount: { fr: "publié", en: "published" },
     publishedCountPlural: { fr: "publiés", en: "published" },

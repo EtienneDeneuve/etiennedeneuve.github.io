@@ -32,6 +32,10 @@ test.describe("article reading UI (ClientRouter lifecycle)", () => {
     await page.goto(ARTICLE_A, { waitUntil: "networkidle" });
     await expectReadingChrome(page);
     await expect(page.locator("h1")).toContainText(/provisioning Mac/i);
+    await expect(page.locator("[data-article-cta-sticky]")).toHaveCount(0);
+    await expect(page.locator(".article-byline")).toContainText(/CTO expert/i);
+    await expect(page.locator(".article-cta__bridge")).toContainText(/Omnivya/i);
+    await expect(page.locator(".article-cta__aside a[href='/contact/']")).toBeVisible();
 
     // Soft navigations through ClientRouter (clicks, not page.goto between articles).
     await page.locator('a[href="/thinking/"]').first().click();
