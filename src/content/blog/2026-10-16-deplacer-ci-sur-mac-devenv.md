@@ -29,8 +29,6 @@ relatedArticles:
   - 2026-10-24-versionner-postes-semver-nix
 ---
 
-> Série **Quand l’IA accélère le code, la CI doit suivre**, 2/6. Le début : [pourquoi nous avons commencé à déplacer les validations](/thinking/2026-10-09-ia-accelere-code-ci-doit-suivre/).
-
 Faire tourner les tests sur un Mac, ce n’est pas compliqué.
 
 Faire en sorte qu’un autre développeur, sur un Mac fraîchement installé, obtienne le même résultat sans passer une journée à réparer son environnement, c’est une autre histoire.

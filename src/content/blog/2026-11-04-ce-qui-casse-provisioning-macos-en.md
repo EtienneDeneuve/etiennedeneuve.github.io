@@ -26,8 +26,6 @@ relatedArticles:
   - 2026-10-28-versionner-postes-semver-nix-en
 ---
 
-> Series **Nix, Entra and Apple Business: the split that finally felt clean**, 5/5. Start here: [why I stopped treating Mac provisioning as an MDM problem](/en/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm-en/).
-
 The diagram was clean.
 
 Apple Business installs Determinate, then my Bootstrap.pkg. At first login, Entra identifies the user, the app resolves the profile, Nix builds the workstation, and everyone is happy.
@@ -243,7 +241,6 @@ It’s now visible.
 Preflight shows its gates, provisioning shows the Build / Install / Activate / Validate steps, and on failure the app shows the checkpoints already passed as well as the exact place where Try Again will resume.
 
 The Done screen has also become a real little dashboard with Entra, GitHub, helper, MDM, bootstrap, macOS, Nix, and Homebrew state.
-
 
 I find that much more interesting than a simple green “success” screen. The system is starting to be able to explain its own state.
 

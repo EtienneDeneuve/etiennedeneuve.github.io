@@ -25,8 +25,6 @@ relatedArticles:
   - 2026-09-22-opentelemetry-exploiter-la-plateforme
 ---
 
-> Série **OpenTelemetry en production**, 2/4. Le début : [pourquoi j’ai proposé OpenTelemetry](/2026-09-22-opentelemetry-pourquoi-je-lai-propose). La suite : [cardinalité, PII et sampling](/2026-09-22-opentelemetry-cardinalite-pii-sampling).
-
 Une architecture propre sur un slide, c’est facile. La faire rentrer dans environ 200 services dont certains ont quinze ans, c’est autre chose.
 
 Il y avait plusieurs langages, des bibliothèques communes historiques et des tests corrects par endroits, plus légers ailleurs. L’application a quinze ans, je ne vais pas faire semblant d’être surpris.
@@ -128,10 +126,6 @@ Le résultat n’est pas "200 services parfaitement instrumentés". Ce serait un
 Le résultat utile, c’est un parc qui parle à peu près le même langage et des équipes capables d’améliorer l’instrumentation sans repartir de zéro à chaque fois.
 
 La difficulté suivante arrive rapidement : quand on collecte mieux, on peut aussi collecter beaucoup trop.
-
-## Suite
-
-[3/4 : OpenTelemetry, cardinalité, PII et sampling : les pièges qui arrivent après](/2026-09-22-opentelemetry-cardinalite-pii-sampling)
 
 ## Sources officielles
 

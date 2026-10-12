@@ -29,8 +29,6 @@ relatedArticles:
   - 2026-10-24-versionner-postes-semver-nix
 ---
 
-> Série **Quand l’IA accélère le code, la CI doit suivre**, 5/6. Le début : [pourquoi nous avons commencé à déplacer les validations](/thinking/2026-10-09-ia-accelere-code-ci-doit-suivre/).
-
 Sur le projet interne qui nous a servi de premier terrain d’essai, le schéma était assez propre.
 
 Un Mac préparé avec Nix, devenv pour l’environnement du projet, quelques scripts de validation, un résultat attaché au SHA et GitHub qui continue de décider du merge.

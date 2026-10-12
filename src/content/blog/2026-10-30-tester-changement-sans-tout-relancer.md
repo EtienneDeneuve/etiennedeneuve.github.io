@@ -29,8 +29,6 @@ relatedArticles:
   - 2026-10-24-versionner-postes-semver-nix
 ---
 
-> Série **Quand l’IA accélère le code, la CI doit suivre**, 4/6. Le début : [pourquoi nous avons commencé à déplacer les validations](/thinking/2026-10-09-ia-accelere-code-ci-doit-suivre/).
-
 Une fois la CI en local, nous avons retrouvé un problème qu’on connaissait déjà avec les runners : il suffit d’un petit changement pour relancer beaucoup trop de choses.
 
 Sur le projet interne où nous avons commencé, le repository contient du Go, du Vue, PostgreSQL et une partie Rust. Tout vérifier après chaque modification peut devenir assez pénible.

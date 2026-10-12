@@ -27,8 +27,6 @@ relatedArticles:
   - 2026-11-04-ce-qui-casse-provisioning-macos-en
 ---
 
-> Series **Nix, Entra and Apple Business: the split that finally felt clean**, 3/5. Start here: [why I stopped treating Mac provisioning as an MDM problem](/en/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm-en/). The rest of the series lands next week.
-
 At first, I really thought I could handle first login with a few scripts.
 
 On paper, you had to check that Nix was there, recover the user, do an authentication, build the config, launch nix-darwin, and done.
@@ -50,7 +48,6 @@ I had no desire to add Electron or a webview for an application that has to talk
 The app is small and tightly tied to the system. SwiftUI is more than enough.
 
 I also keep the build usable from the command line with `xcodebuild`. Xcode is there when I need it for previews, debugging, or signing, but I don’t want the release to depend on a series of clicks in the IDE.
-
 
 ## The real value isn’t the interface
 
@@ -122,7 +119,6 @@ For a Standard or Leadership profile, I have no reason to impose GitHub.
 
 For a Tech profile, my current implementation can launch a Device Flow then clone `mdm-setup` into the user workspace.
 
-
 This point has started to move since the first runs.
 
 The private registry is now wired up, and the helper knows how to import a prebuilt closure when one is available. GitHub therefore no longer needs to be the workstation distribution mechanism.
@@ -141,7 +137,6 @@ Today the app walks through a small checklist: Determinate, Apple Command Line T
 
 The network part also became a real gate. I check the path, a possible captive portal, and reachability of the Microsoft endpoint before launching MSAL, with a bounded retry. That avoids turning a Wi-Fi problem into a fake Entra incident.
 
-
 It isn’t very spectacular technically, but it’s much nicer to operate: the user sees what the machine is actually waiting for instead of watching a spinner.
 
 ## I also stopped making the whole window jump around
@@ -153,7 +148,6 @@ I ended up treating the app as a real assistant: fixed header, Welcome → Sign-
 It isn’t the most “architecture” piece of the project, but it matters enormously during onboarding. A Retry button you have to find by resizing the window isn’t really a recovery mechanism.
 
 And when a step breaks, the error screen now shows the checkpoints already validated and the next step Retry will resume. There too, the state machine becomes visible to the user instead of remaining an internal detail.
-
 
 ## I ended up showing Nix logs in the app
 
@@ -168,8 +162,6 @@ The app shows progress, the Build / Install / Activate / Validate steps, and a b
 *Provisioning stays visible: Setup downloads the prebuilt closure, shows throughput and progress before import and activation.*
 
 On failure, you can retry, export diagnostics, and, when it makes sense, rollback.
-
-
 
 For me, that fully belongs to the Platform Engineering topic.
 
@@ -280,7 +272,6 @@ The end dashboard is no longer just an idea. It already collects bootstrap prove
 
 It isn’t a full SBOM yet, and I don’t want to sell it as one. It’s more of a “workstation neofetch” precise enough to know what you’re looking at.
 
-
 I still wouldn’t put remote verification in the root daemon.
 
 The privileged helper should stay dumb: read system state, activate a generation, validate, rollback. The periodic loop belongs to the user LaunchAgent. It collects state, checks sessions non-interactively, writes its snapshot, emits pilot telemetry, then exits.
@@ -288,7 +279,6 @@ The privileged helper should stay dumb: read system state, activate a generation
 That especially avoids giving user tokens or network traffic to a root process that doesn’t need them.
 
 The app then becomes less of a “wizard you use once” and more of a small workstation control panel.
-
 
 ## In the end, the app stays fairly small
 
@@ -301,10 +291,6 @@ SwiftUI handles interaction. Entra identity. The helper privileges. Nix machine 
 Once that split was in place, the rest became fairly logical.
 
 I already version my services, images, and artefacts. Why should my workstations stay on “the last Git config that managed to pass”?
-
-## Next
-
-4/5: **I version my workstations like software** — publishing next week.
 
 ## Official sources
 

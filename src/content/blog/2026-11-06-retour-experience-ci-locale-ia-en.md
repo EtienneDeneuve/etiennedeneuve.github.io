@@ -29,8 +29,6 @@ relatedArticles:
   - 2026-10-28-versionner-postes-semver-nix-en
 ---
 
-> Series **When AI speeds up the code, CI has to keep up**, 5/6. The start: [why we began moving validations](/en/thinking/2026-10-09-ia-accelere-code-ci-doit-suivre-en/).
-
 On the internal project that served as our first proving ground, the design looked fairly clean.
 
 A Mac prepared with Nix, devenv for the project environment, a few validation scripts, a result attached to the SHA, and GitHub still deciding the merge.

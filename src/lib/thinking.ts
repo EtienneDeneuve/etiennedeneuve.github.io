@@ -1,5 +1,4 @@
 import type { CollectionEntry } from "astro:content";
-import { getCollection } from "astro:content";
 import {
   thinkingConfig,
   type ThinkingContentType,
@@ -110,6 +109,8 @@ export function getArticlePath(slug: string, lang: "fr" | "en"): string {
 }
 
 export async function getAllThinkingArticles(): Promise<ThinkingArticle[]> {
+  // Dynamic import keeps pure helpers (series/related) loadable outside Astro.
+  const { getCollection } = await import("astro:content");
   const blog = await getCollection("blog");
   let articles: CollectionEntry<"articles">[] = [];
   try {
@@ -307,60 +308,80 @@ export function getTranslationSiblings(
   );
 }
 
+/**
+ * @deprecated Do not use for article chrome — invents “same pillar” neighbours.
+ * Prefer getSeriesForArticle / getRelatedArticles (editorial frontmatter only).
+ */
 export function getPrevNextArticles(
-  entry: ThinkingArticle,
-  all: ThinkingArticle[]
+  _entry: ThinkingArticle,
+  _all: ThinkingArticle[]
 ): { prev: ThinkingArticle | null; next: ThinkingArticle | null } {
-  const pillar = entry.data.pillar as ThinkingPillar;
-  const samePillar = all
-    .filter((candidate) => candidate.data.pillar === pillar)
-    .sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf());
-  const index = samePillar.findIndex((candidate) => candidate.id === entry.id);
-  if (index === -1) {
-    const chronological = [...all].sort(
-      (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
-    );
-    const globalIndex = chronological.findIndex((candidate) => candidate.id === entry.id);
-    return {
-      prev: globalIndex > 0 ? chronological[globalIndex - 1] : null,
-      next:
-        globalIndex >= 0 && globalIndex < chronological.length - 1
-          ? chronological[globalIndex + 1]
-          : null,
-    };
-  }
-  return {
-    prev: index > 0 ? samePillar[index - 1] : null,
-    next: index < samePillar.length - 1 ? samePillar[index + 1] : null,
-  };
+  return { prev: null, next: null };
 }
 
-/** Resolve collection id / stem matches for relatedArticles frontmatter. */
-function findArticleByRef(all: ThinkingArticle[], id: string): ThinkingArticle | undefined {
-  return all.find(
-    (candidate) =>
+/** Normalize editorial refs to the FR series stem (strip optional `-en`). */
+export function refStem(id: string): string {
+  return id.endsWith("-en") ? id.slice(0, -3) : id;
+}
+
+/**
+ * Resolve a frontmatter / series id to a released article.
+ * When `lang` is set, never silently return the other language.
+ */
+export function findArticleByRef(
+  all: ThinkingArticle[],
+  id: string,
+  lang?: "fr" | "en"
+): ThinkingArticle | undefined {
+  const stem = refStem(id);
+  const matches = all.filter((candidate) => {
+    const slug = getCanonicalSlug(candidate);
+    const cStem = seriesStem(candidate);
+    return (
       candidate.id === id ||
-      candidate.id === `${id}-en` ||
-      getCanonicalSlug(candidate) === id ||
-      getCanonicalSlug(candidate) === `${id}-en` ||
-      candidate.id.endsWith(`/${id}`) ||
-      candidate.id.endsWith(`/${id}.md`)
+      candidate.id === stem ||
+      candidate.id === `${stem}-en` ||
+      slug === id ||
+      slug === stem ||
+      slug === `${stem}-en` ||
+      cStem === stem ||
+      candidate.id.endsWith(`/${stem}`) ||
+      candidate.id.endsWith(`/${stem}.md`) ||
+      candidate.id.endsWith(`/${stem}-en`) ||
+      candidate.id.endsWith(`/${stem}-en.md`)
+    );
+  });
+  if (lang) {
+    return matches.find((candidate) => getArticleLanguage(candidate) === lang);
+  }
+  return matches[0];
+}
+
+function seriesMateStems(entry: ThinkingArticle): Set<string> {
+  const stem = seriesStem(entry);
+  const series = thinkingConfig.series.find((item) =>
+    (item.articleIds as readonly string[]).includes(stem)
   );
+  return new Set(series?.articleIds ?? []);
 }
 
 /**
  * Explicit editorial relations only — never invent “same pillar” neighbours.
- * Empty relatedArticles ⇒ empty list (honest UX per #174).
+ * Same-language only; series mates are omitted (handled by series chrome).
+ * Empty / unresolved relatedArticles ⇒ empty list.
  */
 export function getRelatedArticles(
   entry: ThinkingArticle,
   all: ThinkingArticle[]
 ): ThinkingArticle[] {
   const relatedIds = entry.data.relatedArticles ?? [];
+  const lang = getArticleLanguage(entry);
+  const mates = seriesMateStems(entry);
   return relatedIds
-    .map((id) => findArticleByRef(all, id))
+    .map((id) => findArticleByRef(all, id, lang))
     .filter((candidate): candidate is ThinkingArticle => Boolean(candidate))
     .filter((candidate) => candidate.id !== entry.id)
+    .filter((candidate) => !mates.has(seriesStem(candidate)))
     .slice(0, 3);
 }
 
@@ -383,6 +404,13 @@ export type ThinkingSeriesContext = {
   publishedCount: number;
 };
 
+/**
+ * Series chrome for an article.
+ * - `total` / `index` always reflect the editorial roster (e.g. 1/5) even when
+ *   later episodes are not released yet.
+ * - `prev` / `next` only point at released same-language neighbours — never at
+ *   future ids and never at the other language silently.
+ */
 export function getSeriesForArticle(
   entry: ThinkingArticle,
   all: ThinkingArticle[]
@@ -397,15 +425,11 @@ export function getSeriesForArticle(
   if (index === -1) return null;
 
   const lang = getArticleLanguage(entry);
-  const resolveId = (id: string) => {
-    const preferred = lang === "en" ? findArticleByRef(all, `${id}-en`) : findArticleByRef(all, id);
-    return preferred ?? findArticleByRef(all, id) ?? null;
-  };
+  const resolveId = (id: string): ThinkingArticle | null => findArticleByRef(all, id, lang) ?? null;
 
   const published = series.articleIds
     .map((id) => resolveId(id))
     .filter((candidate): candidate is ThinkingArticle => Boolean(candidate));
-  if (published.length === 0) return null;
 
   let prev: ThinkingArticle | null = null;
   for (let i = index - 1; i >= 0; i -= 1) {
@@ -434,7 +458,7 @@ export function getSeriesForArticle(
     total: series.articleIds.length,
     prev,
     next,
-    entry: published[0],
+    entry,
     publishedCount: published.length,
   };
 }
@@ -443,11 +467,7 @@ export function listPublishedSeries(all: ThinkingArticle[], lang: "fr" | "en") {
   return thinkingConfig.series
     .map((series) => {
       const published = series.articleIds
-        .map((id) => {
-          const preferred =
-            lang === "en" ? findArticleByRef(all, `${id}-en`) : findArticleByRef(all, id);
-          return preferred ?? findArticleByRef(all, id);
-        })
+        .map((id) => findArticleByRef(all, id, lang))
         .filter((candidate): candidate is ThinkingArticle => Boolean(candidate));
       if (published.length === 0) return null;
       return {

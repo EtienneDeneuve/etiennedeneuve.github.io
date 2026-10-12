@@ -29,8 +29,6 @@ relatedArticles:
   - 2026-10-28-versionner-postes-semver-nix-en
 ---
 
-> Series **When AI speeds up the code, CI has to keep up**, 4/6. The start: [why we began moving validations](/en/thinking/2026-10-09-ia-accelere-code-ci-doit-suivre-en/).
-
 Once CI was local, we rediscovered a problem we already knew with runners: a small change is enough to relaunch far too much.
 
 On the internal project where we started, the repository contains Go, Vue, PostgreSQL, and some Rust. Checking everything after every modification can get fairly painful.

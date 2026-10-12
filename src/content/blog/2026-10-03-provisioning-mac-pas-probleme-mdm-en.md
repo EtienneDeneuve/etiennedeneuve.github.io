@@ -26,8 +26,6 @@ relatedArticles:
   - 2026-11-04-ce-qui-casse-provisioning-macos-en
 ---
 
-> Series **Nix, Entra and Apple Business: the split that finally felt clean**, 1/5. The rest of the series lands next week.
-
 I wanted something fairly simple: a Mac comes out of its box, the user signs in, and a few minutes later they have a ready workstation.
 
 Not “enrolled.” Not “almost ready—just three scripts left to run and two apps to install.” Ready.
@@ -227,10 +225,6 @@ The workstation is a platform. So I preferred to apply the same principles I use
 The next question was then fairly natural: if Apple Business no longer chooses the workstation, who does?
 
 In my case, the answer was already in Entra.
-
-## Next
-
-2/5: **Apple Business to enroll, Entra to decide which workstation to build** — publishing next week.
 
 ## Official sources
 

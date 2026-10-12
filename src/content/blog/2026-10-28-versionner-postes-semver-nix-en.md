@@ -26,8 +26,6 @@ relatedArticles:
   - 2026-11-04-ce-qui-casse-provisioning-macos-en
 ---
 
-> Series **Nix, Entra and Apple Business: the split that finally felt clean**, 4/5. Start here: [why I stopped treating Mac provisioning as an MDM problem](/en/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm-en/). The rest of the series lands next week.
-
 There’s something I find odd about workstation management.
 
 For a service, an image, or an application in production, you want to know exactly which version is running. You want to be able to find the commit, reproduce the build, and roll back if necessary.
@@ -43,7 +41,6 @@ If the workstation is an important work platform, I want to know what I deployed
 The first easy thing to version was the package itself.
 
 Today, the build produces an artefact named with its version and source commit, then embeds a small provenance file. When I diagnose a Mac, I can therefore find the package version, the app version, the embedded `mdm-setup` revision, and the build date.
-
 
 It isn’t very sophisticated, but it already answers a question that quickly becomes painful without it: **what did this machine actually receive?**
 
@@ -85,7 +82,6 @@ The next step will be to cross that with the release inventory generated at buil
 
 That’s what will gradually turn the current snapshot into a compliance check rather than a simple inventory.
 
-
 ## As long as I know that state, I might as well ship it upstream
 
 From the moment the workstation can say precisely what it is, keeping that information only locally was a bit of a waste.
@@ -126,7 +122,6 @@ I also did a pass to avoid high-cardinality metrics. Dynamic states stay in wide
 The dashboard obviously isn’t a full fleet-management console yet, but it already answers simple questions: is the agent running, is the helper responding, are credentials still valid, is the Mac in local adoption or enrolled, and when did the agent last speak.
 
 The funniest part is that I started from a small provisioning app “for fun,” and I’m slowly starting to have a workstation control plane without really having set out to build one.
-
 
 ## The Bootstrap is already a real release
 
@@ -277,10 +272,6 @@ That seems much healthier to me than “rerun the update script and see if it pa
 The theory is fairly pretty. Obviously, the first Mac I actually wiped quickly reminded me that between the diagram and the machine there is `appstored`, PackageKit, incomplete Entra claims, Homebrew that doesn’t exist, and a few other charming details.
 
 That’s the last part.
-
-## Next
-
-5/5: **What breaks when you actually try to provision a Mac from scratch** — publishing next week.
 
 ## Official sources
 

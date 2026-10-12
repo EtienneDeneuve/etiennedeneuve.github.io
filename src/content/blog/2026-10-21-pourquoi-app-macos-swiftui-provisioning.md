@@ -27,8 +27,6 @@ relatedArticles:
   - 2026-11-04-ce-qui-casse-provisioning-macos
 ---
 
-> Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 3/5. Le début : [pourquoi j’ai arrêté de traiter le provisioning Mac comme un problème MDM](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/). La suite arrive la semaine prochaine.
-
 Au début, je pensais vraiment pouvoir gérer le premier login avec quelques scripts.
 
 Sur le papier, il fallait vérifier que Nix était là, récupérer l’utilisateur, faire une authentification, construire la config, lancer nix-darwin et terminé.
@@ -50,7 +48,6 @@ Je n’avais aucune envie de rajouter Electron ou une webview pour une applicati
 L’app est petite et très liée au système. SwiftUI est largement suffisant.
 
 Je garde aussi le build utilisable en ligne de commande avec `xcodebuild`. Xcode sert quand j’en ai besoin pour les previews, le debug ou la signature, mais je ne veux pas que la release dépende d’une série de clics dans l’IDE.
-
 
 ## Le vrai intérêt n’est pas l’interface
 
@@ -122,7 +119,6 @@ Pour un profil Standard ou Direction, je n’ai aucune raison d’imposer GitHub
 
 Pour un profil Tech, mon implémentation actuelle peut lancer un Device Flow puis cloner `mdm-setup` dans le workspace utilisateur.
 
-
 Ce point a commencé à bouger depuis les premiers runs.
 
 Le registry privé est maintenant câblé, et le helper sait importer une closure prébuildée lorsqu’elle est disponible. GitHub n’a donc plus besoin d’être le mécanisme de distribution de la workstation.
@@ -141,7 +137,6 @@ Aujourd’hui l’app déroule une petite checklist : Determinate, Apple Command
 
 La partie réseau est devenue un vrai gate également. Je vérifie le path, un éventuel captive portal et la joignabilité de l’endpoint Microsoft avant de lancer MSAL, avec un retry borné. Ça évite de transformer un problème Wi-Fi en faux incident Entra.
 
-
 Ce n’est pas très spectaculaire techniquement, mais c’est nettement plus agréable à exploiter : l’utilisateur voit ce que la machine attend réellement au lieu de regarder une roue tourner.
 
 ## J’ai aussi arrêté de faire bouger toute la fenêtre
@@ -153,7 +148,6 @@ J’ai fini par traiter l’app comme un vrai assistant : header fixe, progressi
 Ce n’est pas le morceau le plus « architecture » du projet, mais ça compte énormément pendant un onboarding. Un bouton Retry qu’il faut retrouver en redimensionnant la fenêtre n’est pas vraiment un mécanisme de recovery.
 
 Et quand une étape casse, l’écran d’erreur affiche maintenant les checkpoints déjà validés et la prochaine étape que Retry va reprendre. Là aussi, la state machine devient visible pour l’utilisateur au lieu de rester un détail interne.
-
 
 ## J’ai fini par afficher les logs Nix dans l’app
 
@@ -168,8 +162,6 @@ L’app affiche une progression, les étapes Build / Install / Activate / Valida
 *Le provisioning reste visible : Setup télécharge la closure préconstruite, affiche le débit et la progression avant import et activation.*
 
 En cas d’échec, on peut retry, exporter les diagnostics et, quand ça a du sens, rollback.
-
-
 
 Pour moi, ça fait complètement partie du sujet Platform Engineering.
 
@@ -280,7 +272,6 @@ Le dashboard de fin n’est plus seulement une idée. Il collecte déjà la prov
 
 Ce n’est pas encore un SBOM complet, et je ne veux pas le vendre comme tel. C’est plutôt un « neofetch de workstation » suffisamment précis pour savoir ce qu’on regarde.
 
-
 Je ne mettrais pas pour autant la vérification distante dans le daemon root.
 
 Le helper privilégié doit rester bête : lire l’état système, activer une génération, valider, rollback. La boucle périodique appartient au LaunchAgent utilisateur. Il collecte l’état, vérifie les sessions de manière non interactive, écrit son snapshot et émet la télémétrie du pilote, puis sort.
@@ -288,7 +279,6 @@ Le helper privilégié doit rester bête : lire l’état système, activer une 
 Ça évite surtout de donner des tokens utilisateur ou du trafic réseau à un process root qui n’en a pas besoin.
 
 L’app devient alors moins un « wizard qu’on utilise une fois » qu’un petit panneau de contrôle de la workstation.
-
 
 ## Finalement, l’app reste assez petite
 
@@ -301,10 +291,6 @@ SwiftUI gère l’interaction. Entra l’identité. Le helper les privilèges. N
 Une fois ce découpage posé, la suite est devenue assez logique.
 
 Je versionne déjà mes services, mes images et mes artefacts. Pourquoi mes postes resteraient-ils sur « la dernière config Git qui a réussi à passer » ?
-
-## Suite
-
-4/5 : **Je versionne mes postes de travail comme du logiciel** — publication la semaine prochaine.
 
 ## Sources officielles
 

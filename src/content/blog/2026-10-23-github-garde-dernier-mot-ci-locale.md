@@ -29,8 +29,6 @@ relatedArticles:
   - 2026-10-24-versionner-postes-semver-nix
 ---
 
-> Série **Quand l’IA accélère le code, la CI doit suivre**, 3/6. Le début : [pourquoi nous avons commencé à déplacer les validations](/thinking/2026-10-09-ia-accelere-code-ci-doit-suivre/).
-
 Une fois les tests revenus sur les Mac, il restait une question un peu gênante.
 
 Sur GitHub, qu’est-ce qui empêche quelqu’un de merger une PR alors qu’il n’a rien validé ?

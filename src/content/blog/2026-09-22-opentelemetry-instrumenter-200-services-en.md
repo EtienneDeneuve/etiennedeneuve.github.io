@@ -25,8 +25,6 @@ relatedArticles:
   - 2026-09-22-opentelemetry-exploiter-la-plateforme-en
 ---
 
-> Series **OpenTelemetry in production**, 2/4. Start: [why I proposed OpenTelemetry](/en/thinking/2026-09-22-opentelemetry-pourquoi-je-lai-propose-en/). Next: [cardinality, PII, and sampling](/en/thinking/2026-09-22-opentelemetry-cardinalite-pii-sampling-en/).
-
 A clean architecture on a slide is easy. Fitting it into about 200 services, some of them fifteen years old, is another matter.
 
 There were several languages, historical shared libraries, and tests that were solid in places, lighter elsewhere. The application is fifteen years old; I am not going to pretend to be surprised.
@@ -128,10 +126,6 @@ The result is not "200 perfectly instrumented services". That would be too neat 
 The useful result is a fleet that roughly speaks the same language, and teams able to improve instrumentation without starting from scratch every time.
 
 The next difficulty arrives quickly: when you collect better, you can also collect far too much.
-
-## Next
-
-[3/4: OpenTelemetry, cardinality, PII, and sampling: the traps that come after](/en/thinking/2026-09-22-opentelemetry-cardinalite-pii-sampling-en/)
 
 ## Official sources
 

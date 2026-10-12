@@ -25,8 +25,6 @@ relatedArticles:
   - 2026-10-24-versionner-postes-semver-nix
 ---
 
-> Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 5/5. Le début : [pourquoi j’ai arrêté de traiter le provisioning Mac comme un problème MDM](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/).
-
 Le schéma était propre.
 
 Apple Business installe Determinate puis mon Bootstrap.pkg. Au premier login, Entra identifie l’utilisateur, l’app résout le profil, Nix construit le poste et tout le monde est content.
@@ -261,7 +259,6 @@ Elle est maintenant visible.
 Le preflight affiche ses gates, le provisioning montre les étapes Build / Install / Activate / Validate, et en cas d’échec l’app affiche les checkpoints déjà passés ainsi que l’endroit exact où Try Again va reprendre.
 
 Le Done screen est lui aussi devenu un vrai petit dashboard avec l’état Entra, GitHub, helper, MDM, bootstrap, macOS, Nix et Homebrew.
-
 
 Je trouve ça beaucoup plus intéressant qu’un simple écran vert « success ». Le système commence à pouvoir expliquer son propre état.
 

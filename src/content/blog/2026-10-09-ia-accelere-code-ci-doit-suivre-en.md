@@ -29,8 +29,6 @@ relatedArticles:
   - 2026-10-28-versionner-postes-semver-nix-en
 ---
 
-> Series **When AI speeds up the code, CI has to keep up**, 1/6. The first article in a field report on how we validate code since agents changed the pace of development.
-
 There is something fairly curious about AI agents.
 
 You can have them modify a Go handler, the matching Vue interface, and a few tests in a matter of minutes. And then you wait while a runner reinstalls the tools before discovering a TypeScript error you could have caught on the Mac.

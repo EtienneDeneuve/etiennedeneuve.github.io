@@ -27,8 +27,6 @@ relatedArticles:
   - 2026-09-22-opentelemetry-exploiter-la-plateforme-en
 ---
 
-> Series **OpenTelemetry in production**, 3/4. Previous: [instrument about 200 services](/en/thinking/2026-09-22-opentelemetry-instrumenter-200-services-en/). Next: [operate the platform](/en/thinking/2026-09-22-opentelemetry-exploiter-la-plateforme-en/).
-
 We had put the database name into the C++ traces.
 
 On paper, it was a good idea. To diagnose a SQL call, knowing which database is involved helps a lot.
@@ -159,10 +157,6 @@ A database name can remain very useful in a detailed trace and never become a me
 It is less spectacular than "collect everything", but much more operable.
 
 And once those volumes are under control, you still have to run the backends that receive them correctly.
-
-## Next
-
-[4/4: OpenTelemetry in production: the open-source stack you still have to operate](/en/thinking/2026-09-22-opentelemetry-exploiter-la-plateforme-en/)
 
 ## Official sources
 

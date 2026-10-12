@@ -26,8 +26,6 @@ relatedArticles:
   - 2026-07-06-observabilite-contrat-testable
 ---
 
-> Series **OpenTelemetry in production**, 1/4. Next: [instrument about 200 services without rewriting the application](/en/thinking/2026-09-22-opentelemetry-instrumenter-200-services-en/).
-
 The starting context was fairly simple: the client was migrating to Dynatrace, Prometheus and Grafana were already in place, and a significant part of the application was in C++.
 
 The problem showed up with instrumentation. The proprietary SDK used until then on the C++ side had to be replaced. So we needed to touch code to keep the traces.
@@ -123,10 +121,6 @@ I was looking to separate four responsibilities:
 That separation leaves more room for what comes next. It also lets you answer the Dynatrace migration without losing the existing Grafana setup or turning application code into a catalogue of vendor SDKs.
 
 The real work started right after: we had to apply this model to about 200 services without rewriting fifteen years of code.
-
-## Next
-
-[2/4: OpenTelemetry on 200 services: cover fast without rewriting fifteen years of code](/en/thinking/2026-09-22-opentelemetry-instrumenter-200-services-en/)
 
 ## Official sources
 

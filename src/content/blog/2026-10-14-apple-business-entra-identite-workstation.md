@@ -26,8 +26,6 @@ relatedArticles:
   - 2026-11-04-ce-qui-casse-provisioning-macos
 ---
 
-> Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 2/5. Le début : [pourquoi j’ai arrêté de traiter le provisioning Mac comme un problème MDM](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/). La suite arrive la semaine prochaine.
-
 Une fois Apple Business limité à son rôle de bootstrap, il restait une question assez basique : comment le Mac sait-il quel poste construire ?
 
 La première idée qui vient est de regarder l’adresse mail. C’est tentant parce que ça marche vite. On prend `alice@entreprise.fr`, on en déduit Alice, puis un rôle, puis une configuration.
@@ -179,10 +177,6 @@ C’était exactement ce que je cherchais : le parcours reste très simple, mais
 Il me restait encore à gérer tout ce qui se passe entre ces trois mondes au premier login.
 
 C’est là que j’ai arrêté de vouloir résoudre le problème avec des scripts.
-
-## Suite
-
-3/5 : **Pourquoi j’ai fini par écrire une petite app macOS pour provisionner mes postes** — publication la semaine prochaine.
 
 ## Sources officielles
 

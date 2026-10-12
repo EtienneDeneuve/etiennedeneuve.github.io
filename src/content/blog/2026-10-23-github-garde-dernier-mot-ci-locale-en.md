@@ -29,8 +29,6 @@ relatedArticles:
   - 2026-10-28-versionner-postes-semver-nix-en
 ---
 
-> Series **When AI speeds up the code, CI has to keep up**, 3/6. The start: [why we began moving validations](/en/thinking/2026-10-09-ia-accelere-code-ci-doit-suivre-en/).
-
 Once the tests were back on the Macs, one slightly awkward question remained.
 
 On GitHub, what stops someone from merging a PR when they have not validated anything?

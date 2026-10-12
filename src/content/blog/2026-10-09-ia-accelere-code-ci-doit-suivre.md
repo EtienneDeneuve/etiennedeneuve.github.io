@@ -29,8 +29,6 @@ relatedArticles:
   - 2026-10-28-versionner-postes-semver-nix
 ---
 
-> Série **Quand l’IA accélère le code, la CI doit suivre**, 1/6. Le premier article d’un retour d’expérience sur notre façon de valider le code depuis que les agents ont changé le rythme des développements.
-
 Il y a un truc assez curieux avec les agents IA.
 
 On peut leur faire modifier un handler Go, l’interface Vue qui va avec et quelques tests en quelques minutes. Et derrière, on attend parfois qu’un runner réinstalle les outils pour découvrir une erreur TypeScript qu’on aurait pu voir sur le Mac.

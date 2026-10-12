@@ -26,8 +26,6 @@ relatedArticles:
   - 2026-11-04-ce-qui-casse-provisioning-macos
 ---
 
-> Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 4/5. Le début : [pourquoi j’ai arrêté de traiter le provisioning Mac comme un problème MDM](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/). La suite arrive la semaine prochaine.
-
 Il y a un truc que je trouve bizarre dans la gestion des postes.
 
 Pour un service, une image ou une application en production, on veut savoir exactement quelle version tourne. On veut pouvoir retrouver le commit, reproduire le build et revenir en arrière si nécessaire.
@@ -43,7 +41,6 @@ Si le poste est une plateforme de travail importante, je veux savoir ce que j’
 Le premier truc facile à versionner était le package lui-même.
 
 Aujourd’hui, le build produit un artefact nommé avec sa version et le commit source, puis embarque un petit fichier de provenance. Quand je diagnostique un Mac, je peux donc retrouver la version du package, celle de l’app, la révision de `mdm-setup` embarquée et la date du build.
-
 
 Ce n’est pas très sophistiqué, mais ça répond déjà à une question qui devient vite pénible sans ça : **qu’est-ce que cette machine a réellement reçu ?**
 
@@ -85,7 +82,6 @@ La suite sera de croiser ça avec l’inventaire de release généré au build p
 
 C’est ce qui transformera progressivement le snapshot actuel en contrôle de conformité plutôt qu’en simple inventaire.
 
-
 ## Tant qu’à connaître cet état, autant le remonter
 
 À partir du moment où le poste sait dire précisément ce qu’il est, garder cette information uniquement en local devenait un peu dommage.
@@ -126,7 +122,6 @@ J’ai aussi fait une passe pour éviter les métriques à forte cardinalité. L
 Le dashboard n’est évidemment pas encore une console de fleet management complète, mais il répond déjà à des questions simples : est-ce que l’agent tourne, est-ce que le helper répond, est-ce que les credentials sont encore valides, est-ce que le Mac est en adoption locale ou enrôlé, et quand l’agent a parlé pour la dernière fois.
 
 Le plus drôle est que j’étais parti d’une petite app de provisioning « pour le fun », et que je commence doucement à avoir un control plane de workstation sans l’avoir vraiment cherché.
-
 
 ## Le Bootstrap est déjà une vraie release
 
@@ -277,10 +272,6 @@ Et si ça casse, je sais quelle version j’essaie de poser et vers laquelle je 
 La théorie est assez jolie. Évidemment, le premier Mac réellement effacé m’a rapidement rappelé qu’entre le diagramme et la machine il y a `appstored`, PackageKit, des claims Entra incomplets, Homebrew qui n’existe pas et quelques autres détails sympathiques.
 
 C’est la dernière partie.
-
-## Suite
-
-5/5 : **Ce qui casse quand on essaie vraiment de provisionner un Mac de zéro** — publication la semaine prochaine.
 
 ## Sources officielles
 

@@ -29,8 +29,6 @@ relatedArticles:
   - 2026-10-28-versionner-postes-semver-nix-en
 ---
 
-> Series **When AI speeds up the code, CI has to keep up**, 6/6. The start: [why we began moving validations](/en/thinking/2026-10-09-ia-accelere-code-ci-doit-suivre-en/).
-
 There is something people do easily after changing a CI: take the job that was slow, show that the command now runs faster on their Mac, then announce a percentage improvement.
 
 I nearly did exactly that.

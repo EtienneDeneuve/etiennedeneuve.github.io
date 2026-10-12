@@ -26,8 +26,6 @@ relatedArticles:
   - 2026-11-04-ce-qui-casse-provisioning-macos
 ---
 
-> Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 1/5. La suite arrive la semaine prochaine.
-
 Je voulais un truc assez simple : un Mac sort de sa boîte, l’utilisateur se connecte, et quelques minutes plus tard il a un poste prêt.
 
 Pas « enrôlé ». Pas « presque prêt, il reste juste trois scripts à lancer et deux applications à installer ». Prêt.
@@ -227,10 +225,6 @@ Le poste de travail est une plateforme. J’ai donc préféré lui appliquer les
 La question suivante était alors assez naturelle : si Apple Business ne choisit plus la workstation, qui la choisit ?
 
 Dans mon cas, la réponse était déjà dans Entra.
-
-## Suite
-
-2/5 : **Apple Business pour enrôler, Entra pour décider quel poste construire** — publication la semaine prochaine.
 
 ## Sources officielles
 

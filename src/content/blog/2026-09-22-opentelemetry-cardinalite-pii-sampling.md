@@ -27,8 +27,6 @@ relatedArticles:
   - 2026-09-22-opentelemetry-exploiter-la-plateforme
 ---
 
-> Série **OpenTelemetry en production**, 3/4. Le précédent : [instrumenter environ 200 services](/2026-09-22-opentelemetry-instrumenter-200-services). La suite : [exploiter la plateforme](/2026-09-22-opentelemetry-exploiter-la-plateforme).
-
 On avait mis le nom de la base dans les traces C++.
 
 Sur le papier, c’était une bonne idée. Pour diagnostiquer un appel SQL, savoir quelle base est concernée aide beaucoup.
@@ -159,10 +157,6 @@ Le nom d’une base peut rester très utile dans une trace détaillée et ne jam
 C’est moins spectaculaire que "collect everything", mais beaucoup plus exploitable.
 
 Et une fois ces volumes sous contrôle, il reste encore à faire tourner correctement les backends qui les reçoivent.
-
-## Suite
-
-[4/4 : OpenTelemetry en production : la stack open source qu’il faut quand même opérer](/2026-09-22-opentelemetry-exploiter-la-plateforme)
 
 ## Sources officielles
 

@@ -55,6 +55,7 @@ const series = getSeriesForArticle(entry, allArticles);
 const relatedArticles = getRelatedArticles(entry, allArticles);
 const relatedProjectSlugs = getRelatedProjectSlugs(entry);
 const cta = getArticleCta(entry);
+const seriesHasNeighbors = Boolean(series?.prev || series?.next);
 
 const projects = (await getCollection("projects")).filter(
   (project) =>
@@ -62,6 +63,8 @@ const projects = (await getCollection("projects")).filter(
     (relatedProjectSlugs.includes(project.id) ||
       relatedProjectSlugs.some((slug) => project.id.includes(slug)))
 );
+const showRelatedBlock = relatedArticles.length > 0 || projects.length > 0;
+const showContinueBlock = seriesHasNeighbors || showRelatedBlock;
 
 const canonicalUrl = getCanonicalUrl(entry, siteConfig.seo.siteUrl);
 const pillar = entry.data.pillar as ThinkingPillar;
@@ -195,7 +198,7 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
         <ArticleTableOfContents headings={headings} lang={lang} />
         <div class="article-prose measure">
           {
-            series && (series.prev || series.next) && (
+            series && (
               <p class="article-series">
                 {labels.seriesPart[lang]} <strong>{series.title[lang]}</strong>
                 {" · "}
@@ -308,60 +311,66 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
           }
 
           {
-            series ? (
+            showContinueBlock ? (
               <div class="article-continue stack gap-3">
-                <h2 class="eyebrow">{labels.continueSeries[lang]}</h2>
-                {series.prev && (
-                  <a
-                    href={getArticlePath(
-                      getCanonicalSlug(series.prev),
-                      getArticleLanguage(series.prev)
+                {seriesHasNeighbors && series && (
+                  <>
+                    <h2 class="eyebrow">{labels.continueSeries[lang]}</h2>
+                    {series.prev && (
+                      <a
+                        href={getArticlePath(
+                          getCanonicalSlug(series.prev),
+                          getArticleLanguage(series.prev)
+                        )}
+                      >
+                        <span class="eyebrow">
+                          {labels.prev[lang]} · {series.index}/{series.total}
+                        </span>
+                        <strong>{series.prev.data.title}</strong>
+                      </a>
                     )}
-                  >
-                    <span class="eyebrow">
-                      {labels.prev[lang]} · {series.index}/{series.total}
-                    </span>
-                    <strong>{series.prev.data.title}</strong>
-                  </a>
-                )}
-                {series.next && (
-                  <a
-                    href={getArticlePath(
-                      getCanonicalSlug(series.next),
-                      getArticleLanguage(series.next)
+                    {series.next && (
+                      <a
+                        href={getArticlePath(
+                          getCanonicalSlug(series.next),
+                          getArticleLanguage(series.next)
+                        )}
+                      >
+                        <span class="eyebrow">
+                          {labels.next[lang]} · {series.index + 2}/{series.total}
+                        </span>
+                        <strong>{series.next.data.title}</strong>
+                      </a>
                     )}
-                  >
-                    <span class="eyebrow">
-                      {labels.next[lang]} · {series.index + 2}/{series.total}
-                    </span>
-                    <strong>{series.next.data.title}</strong>
-                  </a>
+                  </>
                 )}
-                <p>
-                  <a href={indexHref}>← {labels.backToLibrary[lang]}</a>
-                </p>
-              </div>
-            ) : relatedArticles.length > 0 || projects.length > 0 ? (
-              <div class="article-continue stack gap-3">
-                <h2 class="eyebrow">{labels.related[lang]}</h2>
-                {relatedArticles.map((related) => (
-                  <a href={getArticlePath(getCanonicalSlug(related), getArticleLanguage(related))}>
-                    <strong>{related.data.title}</strong>
-                  </a>
-                ))}
-                {projects.map((project) => (
-                  <a href={`${prefix}/projects/${project.id}/`}>
-                    <span class="eyebrow">{labels.relatedProjects[lang]}</span>
-                    <strong>{project.data.name}</strong>
-                  </a>
-                ))}
+                {showRelatedBlock && (
+                  <>
+                    {!seriesHasNeighbors && <h2 class="eyebrow">{labels.related[lang]}</h2>}
+                    {relatedArticles.map((related) => (
+                      <a
+                        href={getArticlePath(
+                          getCanonicalSlug(related),
+                          getArticleLanguage(related)
+                        )}
+                      >
+                        <strong>{related.data.title}</strong>
+                      </a>
+                    ))}
+                    {projects.map((project) => (
+                      <a href={`${prefix}/projects/${project.id}/`}>
+                        <span class="eyebrow">{labels.relatedProjects[lang]}</span>
+                        <strong>{project.data.name}</strong>
+                      </a>
+                    ))}
+                  </>
+                )}
                 <p>
                   <a href={indexHref}>← {labels.backToLibrary[lang]}</a>
                 </p>
               </div>
             ) : (
               <div class="article-continue stack gap-3">
-                <p>{labels.continueEmpty[lang]}</p>
                 <p>
                   <a href={indexHref}>← {labels.backToLibrary[lang]}</a>
                 </p>

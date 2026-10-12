@@ -26,8 +26,6 @@ relatedArticles:
   - 2026-11-04-ce-qui-casse-provisioning-macos-en
 ---
 
-> Series **Nix, Entra and Apple Business: the split that finally felt clean**, 2/5. Start here: [why I stopped treating Mac provisioning as an MDM problem](/en/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm-en/). The rest of the series lands next week.
-
 Once Apple Business was limited to its bootstrap role, a fairly basic question remained: how does the Mac know which workstation to build?
 
 The first idea that comes to mind is to look at the email address. It’s tempting because it works quickly. You take `alice@entreprise.fr`, infer Alice, then a role, then a configuration.
@@ -179,10 +177,6 @@ At that point, the model was starting to get clean: Apple Business knows the Mac
 I still had to handle everything that happens between those three worlds at first login.
 
 That’s where I stopped wanting to solve the problem with scripts.
-
-## Next
-
-3/5: **Why I ended up writing a small macOS app to provision my workstations** — publishing next week.
 
 ## Official sources
 

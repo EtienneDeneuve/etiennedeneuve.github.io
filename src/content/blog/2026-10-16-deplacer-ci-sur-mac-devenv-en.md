@@ -29,8 +29,6 @@ relatedArticles:
   - 2026-10-28-versionner-postes-semver-nix-en
 ---
 
-> Series **When AI speeds up the code, CI has to keep up**, 2/6. The start: [why we began moving validations](/en/thinking/2026-10-09-ia-accelere-code-ci-doit-suivre-en/).
-
 Running tests on a Mac is not hard.
 
 Making sure another developer, on a freshly installed Mac, gets the same result without spending a day fixing their environment is another story.
