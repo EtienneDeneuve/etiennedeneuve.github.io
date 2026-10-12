@@ -440,9 +440,14 @@ const jsonLd = buildJsonLdGraph([
       onChange();
     };
     const onMore = (): void => {
+      const previouslyHidden = new Set(cards.filter((card) => card.hidden));
       visibleLimit = Math.min(visibleLimit + pageSize, cards.length);
       updateUrl(false);
       applyFilters();
+      const firstNew = [...grid.querySelectorAll<HTMLElement>(":scope > article")].find(
+        (card) => previouslyHidden.has(card) && !card.hidden
+      );
+      firstNew?.querySelector<HTMLAnchorElement>("a")?.focus();
     };
 
     form.addEventListener("change", onChange);
