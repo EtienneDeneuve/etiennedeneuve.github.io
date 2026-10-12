@@ -92,7 +92,8 @@ const jsonLd = buildJsonLdGraph([
           <p class="ed-aside__label">{config.meta.asideLabel[lang]}</p>
           <p>{config.meta.aside[lang]}</p>
           <a class="ed-aside__link" href={projectsPath}>
-            {config.meta.asideLink[lang]} <span aria-hidden="true">↗</span>
+            {config.meta.asideLink[lang]}
+            <span aria-hidden="true">↗</span>
           </a>
         </aside>
       </div>
@@ -106,39 +107,41 @@ const jsonLd = buildJsonLdGraph([
           <p>{config.labels.situationsIntro[lang]}</p>
         </div>
         <ol class="ed-situations">
-          {config.situations.map((item, index) => (
-            <li class="ed-situation" id={item.id}>
-              <span class="ed-situation__index" aria-hidden="true">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-              <h3>{item.title[lang]}</h3>
-              <p class="ed-situation__signal">{item.signal[lang]}</p>
-              <dl class="ed-facts">
-                <div>
-                  <dt>{config.labels.examines[lang]}</dt>
-                  <dd>{item.examines[lang]}</dd>
-                </div>
-                <div>
-                  <dt>{config.labels.decision[lang]}</dt>
-                  <dd>{item.decision[lang]}</dd>
-                </div>
-                <div>
-                  <dt>{config.labels.outcome[lang]}</dt>
-                  <dd>{item.outcome[lang]}</dd>
-                </div>
-              </dl>
-              {item.related && (
-                <p class="ed-situation__related">
-                  <a href={localizedHref(item.related.href)}>
-                    {item.related.label[lang]} <span aria-hidden="true">↗</span>
-                  </a>
-                  {lang === "en" && item.related.href.startsWith("/thinking/") && (
-                    <span> — {config.labels.originalLanguage[lang]}</span>
-                  )}
-                </p>
-              )}
-            </li>
-          ))}
+          {
+            config.situations.map((item, index) => (
+              <li class="ed-situation" id={item.id}>
+                <span class="ed-situation__index" aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <h3>{item.title[lang]}</h3>
+                <p class="ed-situation__signal">{item.signal[lang]}</p>
+                <dl class="ed-facts">
+                  <div>
+                    <dt>{config.labels.examines[lang]}</dt>
+                    <dd>{item.examines[lang]}</dd>
+                  </div>
+                  <div>
+                    <dt>{config.labels.decision[lang]}</dt>
+                    <dd>{item.decision[lang]}</dd>
+                  </div>
+                  <div>
+                    <dt>{config.labels.outcome[lang]}</dt>
+                    <dd>{item.outcome[lang]}</dd>
+                  </div>
+                </dl>
+                {item.related && (
+                  <p class="ed-situation__related">
+                    <a href={localizedHref(item.related.href)}>
+                      {item.related.label[lang]} <span aria-hidden="true">↗</span>
+                    </a>
+                    {lang === "en" && item.related.href.startsWith("/thinking/") && (
+                      <span> — {config.labels.originalLanguage[lang]}</span>
+                    )}
+                  </p>
+                )}
+              </li>
+            ))
+          }
         </ol>
       </div>
     </section>
@@ -150,13 +153,17 @@ const jsonLd = buildJsonLdGraph([
           <p>{config.method.intro[lang]}</p>
         </div>
         <ol class="ed-steps">
-          {config.method.steps.map((step) => (
-            <li>
-              <span class="ed-steps__number" aria-hidden="true">{step.number}</span>
-              <h3>{step.title[lang]}</h3>
-              <p>{step.body[lang]}</p>
-            </li>
-          ))}
+          {
+            config.method.steps.map((step) => (
+              <li>
+                <span class="ed-steps__number" aria-hidden="true">
+                  {step.number}
+                </span>
+                <h3>{step.title[lang]}</h3>
+                <p>{step.body[lang]}</p>
+              </li>
+            ))
+          }
         </ol>
       </div>
     </section>
@@ -178,7 +185,8 @@ const jsonLd = buildJsonLdGraph([
               lang,
             })}
           >
-            {config.cta.contactLabel[lang]} <span aria-hidden="true">↗</span>
+            {config.cta.contactLabel[lang]}
+            <span aria-hidden="true">↗</span>
           </a>
           <a
             class="ed-text-link"
@@ -191,7 +199,8 @@ const jsonLd = buildJsonLdGraph([
               lang,
             })}
           >
-            {config.cta.omnivyaLabel[lang]} <span aria-hidden="true">↗</span>
+            {config.cta.omnivyaLabel[lang]}
+            <span aria-hidden="true">↗</span>
           </a>
         </div>
       </div>
