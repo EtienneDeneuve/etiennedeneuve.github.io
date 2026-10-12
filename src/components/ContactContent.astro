@@ -1,8 +1,9 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import ConversionCTA from "../components/ConversionCTA.astro";
 import { contactConfig } from "../config/contact.ts";
 import { siteConfig } from "../config/site.ts";
+import { analyticsAttrs } from "../lib/analytics.ts";
+import "../styles/editorial-pages.css";
 import {
   breadcrumbJsonLd,
   buildJsonLdGraph,
@@ -17,8 +18,11 @@ interface Props {
 const { lang } = Astro.props;
 const config = contactConfig;
 const prefix = lang === "en" ? "/en" : "";
-const contactPath = `${prefix}/contact/`;
+const contactPath = prefix + "/contact/";
+const workPath = prefix + "/work/";
+const speakingPath = prefix + "/speaking/";
 const mailto = config.buildMailto(config.other.subject[lang]);
+const speakingMailto = config.buildMailto(config.speaking.subject[lang]);
 
 const jsonLd = buildJsonLdGraph([
   personJsonLd(),
@@ -46,63 +50,125 @@ const jsonLd = buildJsonLdGraph([
   ]}
   jsonLd={jsonLd}
 >
-  <main class="wrapper contact stack gap-10">
-    <header class="page-hero stack gap-3">
-      <h1>{config.meta.title[lang]}</h1>
-      <p class="lede">{config.meta.intro[lang]}</p>
-      <p class="subtle">
-        <a href={`mailto:${config.email}`}>{config.email}</a>
-      </p>
+  <main class="editorial-page ed-contact">
+    <header class="ed-band--dark ed-hero">
+      <div class="ed-shell ed-hero__grid">
+        <div>
+          <p class="ed-kicker">{config.meta.eyebrow[lang]}</p>
+          <h1 class="ed-title">
+            {config.meta.title[lang]}
+            <span class="ed-title__accent">{config.meta.headline[lang]}</span>
+          </h1>
+          <p class="ed-lede">{config.meta.intro[lang]}</p>
+        </div>
+        <aside class="ed-hero__aside">
+          <p class="ed-aside__label">{config.meta.asideLabel[lang]}</p>
+          <p>{config.meta.aside[lang]}</p>
+          <a class="ed-aside__link" href={workPath}>
+            {config.meta.asideLink[lang]}
+            <span aria-hidden="true">↗</span>
+          </a>
+        </aside>
+      </div>
     </header>
 
-    <section class="path stack gap-3" id="mission">
-      <h2>{config.mission.title[lang]}</h2>
-      <p>{config.mission.body[lang]}</p>
-      <ConversionCTA
-        href={config.mission.hrefFor(lang)}
-        event="cta_booking"
-        props={{ surface: "contact", intent: "mission", lang }}
-        variant="primary"
-        external
-      >
-        {config.mission.cta[lang]}
-      </ConversionCTA>
+    <section class="ed-band--light ed-section" aria-labelledby="contact-pathways">
+      <div class="ed-shell">
+        <div class="ed-section__head">
+          <h2 id="contact-pathways">{config.meta.pathwaysTitle[lang]}</h2>
+          <p>{config.meta.pathwaysIntro[lang]}</p>
+        </div>
+        <div class="ed-contact-grid">
+          <section class="ed-contact-card ed-contact-card--primary" id="mission">
+            <p class="ed-kicker ed-kicker--light">
+              {lang === "fr" ? "01 · Professionnel" : "01 · Professional"}
+            </p>
+            <h2>{config.mission.title[lang]}</h2>
+            <p>{config.mission.body[lang]}</p>
+            <a
+              class="ed-button"
+              href={config.mission.hrefFor(lang)}
+              target="_blank"
+              rel="noopener noreferrer"
+              {...analyticsAttrs("cta_booking", {
+                surface: "contact",
+                intent: "mission",
+                lang,
+              })}
+            >
+              {config.mission.cta[lang]}
+              <span aria-hidden="true">↗</span>
+            </a>
+            <p class="ed-note">{config.mission.note[lang]}</p>
+          </section>
+
+          <section class="ed-contact-card" id="speaking">
+            <p class="ed-kicker ed-kicker--light">
+              {lang === "fr" ? "02 · Transmission" : "02 · Speaking"}
+            </p>
+            <h2>{config.speaking.title[lang]}</h2>
+            <p>{config.speaking.body[lang]}</p>
+            <a
+              class="ed-text-link"
+              href={speakingMailto}
+              {...analyticsAttrs("cta_speaking", {
+                surface: "contact",
+                intent: "speaking",
+                lang,
+              })}
+            >
+              {config.speaking.cta[lang]}
+              <span aria-hidden="true">↗</span>
+            </a>
+            <p class="ed-note">{config.speaking.note[lang]}</p>
+            <a class="ed-contact-card__related" href={speakingPath}>
+              {lang === "fr" ? "Conférences et sujets" : "Talks and topics"}
+              <span aria-hidden="true"> →</span>
+            </a>
+          </section>
+
+          <section class="ed-contact-card ed-contact-card--conversation" id="conversation">
+            <p class="ed-kicker ed-kicker--light">
+              {lang === "fr" ? "03 · Échange libre" : "03 · Open conversation"}
+            </p>
+            <h2>{config.other.title[lang]}</h2>
+            <p>{config.other.body[lang]}</p>
+            <a
+              class="ed-text-link"
+              href={siteConfig.social.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {config.other.cta[lang]}
+              <span aria-hidden="true">↗</span>
+            </a>
+          </section>
+        </div>
+      </div>
     </section>
 
-    <section class="path stack gap-3" id="other">
-      <h2>{config.other.title[lang]}</h2>
-      <p>{config.other.body[lang]}</p>
-      <ConversionCTA
-        href={mailto}
-        event="cta_contact_email"
-        props={{ surface: "contact", intent: "other", lang }}
-      >
-        {config.other.cta[lang]}
-      </ConversionCTA>
-      <p class="subtle">
-        <a href={siteConfig.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        {" · "}
-        <a href={siteConfig.social.github} target="_blank" rel="noopener noreferrer">GitHub</a>
-      </p>
+    <section class="ed-band--dark ed-section" aria-labelledby="contact-direct">
+      <div class="ed-shell ed-contact-footer">
+        <h2 id="contact-direct" class="ed-contact-footer__title">
+          {lang === "fr" ? "Un message direct suffit aussi." : "A direct message works too."}
+        </h2>
+        <p>{config.meta.footer[lang]}</p>
+        <div class="ed-actions">
+          <a
+            href={mailto}
+            {...analyticsAttrs("cta_contact_email", {
+              surface: "contact",
+              intent: "other",
+              lang,
+            })}
+          >
+            {config.email}
+          </a>
+          <a href={siteConfig.social.github} target="_blank" rel="noopener noreferrer">
+            GitHub <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
     </section>
   </main>
 </BaseLayout>
-
-<style>
-  .contact {
-    max-width: 40rem;
-  }
-  .path p {
-    margin: 0;
-    color: var(--color-fg-muted);
-    line-height: 1.55;
-  }
-  .path {
-    border-top: var(--border-width) solid var(--color-border);
-    padding-top: var(--space-6);
-  }
-  .subtle {
-    font-size: var(--text-sm);
-    color: var(--color-fg-subtle);
-  }
-</style>

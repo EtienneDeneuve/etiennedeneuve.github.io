@@ -1,22 +1,13 @@
-/**
- * /work — Accompagnement (advisory CTO).
- * Observable visitor situations first; Omnivya is secondary.
- */
-
+/** Accompagnement — where a hands-on CTO can help, not a staffing catalogue. */
 type Localized<T> = { fr: T; en: T };
 
 export type WorkSituation = {
   id: string;
   title: Localized<string>;
-  /** What the visitor observes */
   signal: Localized<string>;
-  /** What Etienne examines */
   examines: Localized<string>;
-  /** Decision the engagement supports */
   decision: Localized<string>;
-  /** Concrete outcome expected */
   outcome: Localized<string>;
-  /** Optional existing on-site reference (not invented cases) */
   related?: { label: Localized<string>; href: string };
 };
 
@@ -24,180 +15,196 @@ export const workConfig = {
   meta: {
     title: { fr: "Accompagnement", en: "Advisory" } as Localized<string>,
     description: {
-      fr: "Accompagnement CTO conseil : quand les livraisons ralentissent, l’exploitation absorbe la capacité ou un arbitrage reste bloqué.",
-      en: "Advisory CTO support: when delivery slows, operations absorb capacity, or a trade-off stays stuck.",
+      fr: "CTO expert : équipes, delivery, code et plateformes. Comprendre ce qui bloque, choisir une réponse adaptée et l'éprouver sur le terrain.",
+      en: "Hands-on CTO: teams, engineering delivery, software and platforms. Understand what is holding things back, choose an approach and test it in practice.",
     } as Localized<string>,
-    eyebrow: {
-      fr: "CTO conseil",
-      en: "Advisory CTO",
+    eyebrow: { fr: "CTO expert · Interventions", en: "Hands-on CTO · Engagements" },
+    headline: {
+      fr: "Faire avancer ce qui bloque.",
+      en: "Tackle what holds delivery back.",
     } as Localized<string>,
     intro: {
-      fr: "Si l’une de ces situations vous ressemble, on peut clarifier ce qu’il faut regarder, quelle décision sécuriser et ce que l’accompagnement change concrètement.",
-      en: "If one of these situations sounds familiar, we can clarify what to look at, which decision to secure and what advisory support changes in practice.",
+      fr: "Je dirige des équipes et je reste impliqué dans le code, les plateformes et la production. J'interviens lorsqu'un problème demande de regarder ces dimensions ensemble, pas d'appliquer une recette de plus.",
+      en: "I lead teams and stay involved in code, platforms and production. I step in when a problem calls for looking at those dimensions together, rather than applying another ready-made playbook.",
     } as Localized<string>,
+    asideLabel: { fr: "Sur le terrain", en: "In practice" },
+    aside: {
+      fr: "Je parle aux équipes, lis le code et regarde ce qui se passe en production. Le problème réel se trouve souvent dans l'écart entre ces trois réalités.",
+      en: "I talk to teams, read the code and look at what happens in production. The real problem is often in the gaps between those three perspectives.",
+    } as Localized<string>,
+    asideLink: { fr: "Voir les réalisations", en: "Explore the work" },
   },
   situations: [
     {
       id: "delivery-slowdown",
       title: {
-        fr: "Les livraisons ralentissent ou n’aboutissent plus",
-        en: "Delivery slows or stops landing",
+        fr: "Les équipes sont occupées. Les livraisons n'avancent plus.",
+        en: "The teams are busy. Delivery keeps slipping.",
       },
       signal: {
-        fr: "Les fonctionnalités prévues ne sortent plus au rythme attendu, malgré des équipes occupées.",
-        en: "Planned features no longer ship at the expected pace, even though teams stay busy.",
+        fr: "Les changements prennent trop de temps à passer du code à la production, malgré l'effort fourni.",
+        en: "Changes take too long to travel from code to production, despite everyone's efforts.",
       },
       examines: {
-        fr: "Je regarde priorités, interfaces entre équipes, dépendances techniques et freins d’organisation — pas seulement la stack.",
-        en: "I look at priorities, team interfaces, technical dependencies and organisational friction — not only the stack.",
+        fr: "Responsabilités, coordination, feedback CI, dépendances et parcours réel des changements.",
+        en: "Ownership, coordination, CI feedback, dependencies and the actual path to production.",
       },
       decision: {
-        fr: "Décider où concentrer l’effort pour débloquer le flux, et ce qu’il faut arrêter de faire.",
-        en: "Decide where to focus effort to unblock flow, and what to stop doing.",
+        fr: "Ce qui doit être simplifié, automatisé ou arrêté, sans affaiblir la qualité.",
+        en: "What to simplify, automate or stop doing without weakening quality.",
       },
       outcome: {
-        fr: "Une lecture partagée des causes et un ordre de décisions actionnable par la direction et les leads.",
-        en: "A shared reading of causes and a decision order leadership and leads can act on.",
+        fr: "Des priorités vérifiables et des changements que l'équipe peut maintenir.",
+        en: "Priorities that can be checked and changes the team can sustain.",
       },
       related: {
-        label: { fr: "Publications", en: "Publications" },
-        href: "/thinking/",
+        label: { fr: "REX sur la CI locale", en: "Local-first CI field report" },
+        href: "/thinking/2026-10-09-ia-accelere-code-ci-doit-suivre/",
       },
     },
     {
       id: "ops-absorbs-capacity",
       title: {
-        fr: "Incidents et exploitation absorbent la capacité",
-        en: "Incidents and operations absorb capacity",
+        fr: "L'exploitation prend le pas sur le développement.",
+        en: "Operations crowd out engineering.",
       },
       signal: {
-        fr: "La plateforme ou la prod monopolise les équipes : peu de place pour avancer, beaucoup de temps à contenir.",
-        en: "The platform or production monopolises teams: little room to advance, much time spent containing.",
+        fr: "Les incidents, les alertes et les interventions récurrentes occupent les équipes sans améliorer leur visibilité.",
+        en: "Incidents, alerts and recurring interventions keep teams busy without improving visibility.",
       },
       examines: {
-        fr: "Je distingue charge d’exploitation, dette invisible, signaux utiles et responsabilités floues entre équipes.",
-        en: "I separate operational load, invisible debt, useful signals and blurry accountabilities across teams.",
+        fr: "Signaux réellement utiles, dette de plateforme, dépendances et manière d'exploiter.",
+        en: "Useful signals, platform debt, dependencies and day-to-day operations.",
       },
       decision: {
-        fr: "Arbitrer ce qui doit être stabilisé, simplifié ou volontairement non traité.",
-        en: "Decide what must be stabilized, simplified or deliberately left alone.",
+        fr: "Où rétablir de la lisibilité et ce qu'il ne faut pas instrumenter inutilement.",
+        en: "Where to restore visibility and what not to instrument needlessly.",
       },
       outcome: {
-        fr: "Des critères pour récupérer de la capacité sans ajouter une couche d’outil ou de process.",
-        en: "Criteria to reclaim capacity without adding another tool or process layer.",
+        fr: "Une exploitation plus lisible, avec des conventions que les équipes partagent.",
+        en: "More legible operations, with conventions teams can share.",
       },
       related: {
-        label: { fr: "External Metrics Exporter", en: "External Metrics Exporter" },
-        href: "/projects/external-metrics-exporter/",
+        label: { fr: "REX OpenTelemetry 2/4", en: "OpenTelemetry field report 2/4" },
+        href: "/thinking/2026-09-22-opentelemetry-instrumenter-200-services/",
       },
     },
     {
       id: "decision-blocked",
       title: {
-        fr: "Un arbitrage reste bloqué",
-        en: "A trade-off stays stuck",
+        fr: "Le choix habituel ne répond plus au besoin.",
+        en: "The usual approach no longer fits.",
       },
       signal: {
-        fr: "Options, responsabilités ou peurs de trancher empêchent une décision qui engage coût, sécurité ou trajectoire.",
-        en: "Options, accountabilities or fear of deciding block a choice that commits cost, security or trajectory.",
+        fr: "La stack ou les pratiques en place sont devenues des contraintes, mais personne ne veut prendre le risque d'une alternative.",
+        en: "Existing tools or practices have become constraints, but a different approach feels risky.",
       },
       examines: {
-        fr: "Je rends explicites options, conséquences et responsabilités — côté équipes, organisation et technique.",
-        en: "I make options, consequences and accountabilities explicit — across teams, organisation and technique.",
+        fr: "Options concrètes, coût de changement, sécurité, maintenance et réversibilité.",
+        en: "Real alternatives, switching costs, security, maintainability and reversibility.",
       },
       decision: {
-        fr: "Permettre à la direction de choisir avec une carte claire, pas un catalogue d’avis.",
-        en: "Enable leadership to choose with a clear map, not a catalog of opinions.",
+        fr: "Conserver, adapter ou expérimenter autrement — avec des critères explicites.",
+        en: "Keep, adapt or test a different approach, with explicit criteria.",
       },
       outcome: {
-        fr: "Une décision documentée : choix retenu, alternatives écartées, critères de suivi.",
-        en: "A documented decision: chosen path, rejected alternatives, follow-up criteria.",
+        fr: "Un choix documenté, un essai cadré et des conditions de poursuite ou d'arrêt.",
+        en: "A documented choice, a bounded trial and clear go/no-go conditions.",
       },
     },
     {
       id: "unreadability",
       title: {
-        fr: "Responsabilités et dépendances sont devenues illisibles",
-        en: "Accountabilities and dependencies have become unreadable",
+        fr: "Les responsabilités et les dépendances se brouillent.",
+        en: "Ownership and dependencies have become unclear.",
       },
       signal: {
-        fr: "Personne ne partage la même carte du système ; la complexité augmente plus vite que la capacité à décider.",
-        en: "No one shares the same system map; complexity grows faster than the ability to decide.",
+        fr: "Les équipes n'ont plus la même lecture du système ni de la manière dont elles doivent travailler ensemble.",
+        en: "Teams no longer share a clear picture of the system or how they should work together.",
       },
       examines: {
-        fr: "Je cartographie dépendances, frontières de responsabilité et points où le système n’est plus gouvernable.",
-        en: "I map dependencies, responsibility boundaries and points where the system is no longer governable.",
+        fr: "Frontières d'équipe, contrats entre composants, points de décision et transmission.",
+        en: "Team boundaries, component contracts, decision points and knowledge transfer.",
       },
       decision: {
-        fr: "Décider ce qu’il faut rendre lisible en premier pour pouvoir agir sans augmenter la dette.",
-        en: "Decide what must become readable first so action is possible without growing debt.",
+        fr: "Ce qu'il faut clarifier d'abord pour que les équipes reprennent la main.",
+        en: "What to clarify first so teams can take back control.",
       },
       outcome: {
-        fr: "Une représentation partagée et des leviers ordonnés — humains, organisationnels et techniques.",
-        en: "A shared representation and ordered levers — human, organisational and technical.",
+        fr: "Des responsabilités explicites et un plan que les personnes concernées comprennent.",
+        en: "Clear ownership and a plan that the people involved understand.",
       },
       related: {
-        label: { fr: "Conférences & médias", en: "Talks & media" },
+        label: { fr: "Conférences et ateliers", en: "Talks and workshops" },
         href: "/speaking/",
       },
     },
   ] satisfies WorkSituation[],
   method: {
     title: {
-      fr: "Ce que l’accompagnement change",
-      en: "What advisory support changes",
+      fr: "Comprendre, éprouver, faire aboutir.",
+      en: "Understand, test, follow through.",
+    } as Localized<string>,
+    intro: {
+      fr: "La méthode n'est pas le produit. Elle doit s'adapter à la situation, et tenir face au terrain.",
+      en: "The method is not the product. It needs to fit the situation and hold up in practice.",
     } as Localized<string>,
     steps: [
       {
         number: "01",
-        title: { fr: "Lire la situation telle qu’elle est", en: "Read the situation as it is" },
+        title: { fr: "Voir le problème réel", en: "Find the real constraint" },
         body: {
-          fr: "Écouter les équipes et séparer causes humaines, organisationnelles et techniques.",
-          en: "Listen to teams and separate human, organisational and technical causes.",
+          fr: "Écouter les équipes, examiner les systèmes et distinguer symptômes et causes.",
+          en: "Listen to teams, examine the systems and separate symptoms from causes.",
         },
       },
       {
         number: "02",
-        title: { fr: "Rendre la décision possible", en: "Make the decision possible" },
+        title: { fr: "Choisir et tester", en: "Choose and test" },
         body: {
-          fr: "Options, responsabilités et conséquences explicites pour trancher.",
-          en: "Explicit options, accountabilities and consequences so a choice can be made.",
+          fr: "Comparer les réponses possibles. Sortir du cadre quand il le faut, sans abandonner les contrôles.",
+          en: "Compare workable options. Challenge the playbook when needed, without losing the safeguards.",
         },
       },
       {
         number: "03",
-        title: {
-          fr: "Tenir la suite sans confisquer le contrôle",
-          en: "Hold the follow-through without seizing control",
-        },
+        title: { fr: "Livrer et transmettre", en: "Deliver and transfer" },
         body: {
-          fr: "Challenger et ajuster avec les leads ; le management reste chez vous.",
-          en: "Challenge and adjust with leads; management stays with you.",
+          fr: "Mettre en œuvre avec les équipes, vérifier ce qui change et laisser des pratiques qu'elles peuvent reprendre.",
+          en: "Implement with the teams, check what changes and leave practices they can own.",
         },
       },
     ],
   },
   omnivyaNote: {
-    fr: "Pour une mission structurée, voir aussi Omnivya.",
-    en: "For a structured mission, see also Omnivya.",
+    fr: "Pour les missions, j'interviens via Omnivya, que j'ai cofondée avec Taous. Taous en assure la direction ; j'en suis CTO.",
+    en: "For client engagements, I work through Omnivya, which I co-founded with Taous. Taous leads the company; I serve as CTO.",
   } as Localized<string>,
   cta: {
-    title: { fr: "Échanger", en: "Talk" } as Localized<string>,
-    body: {
-      fr: "Décrivez la situation en quelques lignes.",
-      en: "Describe the situation in a few lines.",
+    title: {
+      fr: "Vous avez une situation concrète à démêler ?",
+      en: "Have a specific problem to work through?",
     } as Localized<string>,
-    contactLabel: { fr: "Contacter", en: "Contact" } as Localized<string>,
-    omnivyaLabel: { fr: "Omnivya", en: "Omnivya" } as Localized<string>,
+    body: {
+      fr: "Quelques lignes sur le contexte, les contraintes et ce qui doit changer suffisent pour commencer.",
+      en: "A short account of the context, constraints and what needs to change is enough to start.",
+    } as Localized<string>,
+    contactLabel: { fr: "Prendre contact", en: "Get in touch" } as Localized<string>,
+    omnivyaLabel: { fr: "Passer par Omnivya", en: "Contact Omnivya" } as Localized<string>,
   },
   labels: {
     situationsTitle: {
-      fr: "Situations où j’interviens",
-      en: "Situations I work on",
+      fr: "Les situations sur lesquelles je travaille",
+      en: "Where I get involved",
     } as Localized<string>,
-    examines: { fr: "Ce que j’examine", en: "What I examine" } as Localized<string>,
-    decision: { fr: "Décision accompagnée", en: "Decision supported" } as Localized<string>,
-    outcome: { fr: "Résultat attendu", en: "Expected outcome" } as Localized<string>,
-    related: { fr: "Repère", en: "Reference" } as Localized<string>,
+    situationsIntro: {
+      fr: "Il n'y a pas une technologie à vendre à chaque fois. Il y a une difficulté à comprendre et un résultat à rendre possible.",
+      en: "Not every problem calls for another technology. The work starts by understanding what is actually in the way.",
+    } as Localized<string>,
+    examines: { fr: "Ce que je regarde", en: "What I examine" } as Localized<string>,
+    decision: { fr: "Ce qu'on tranche", en: "What we decide" } as Localized<string>,
+    outcome: { fr: "Ce qui doit changer", en: "What should change" } as Localized<string>,
+    related: { fr: "À lire", en: "Related reading" } as Localized<string>,
+    originalLanguage: { fr: "", en: "article in French" } as Localized<string>,
   },
 } as const;

@@ -6,6 +6,8 @@ import { isPortfolioProject, projectsPageConfig } from "../config/projects-page.
 import { getPublishableEntries } from "../lib/publication-policy.ts";
 import { sortProjects } from "../lib/projects-i18n.ts";
 import { getSortedGitHubProjects } from "../lib/github-projects.ts";
+import { analyticsAttrs } from "../lib/analytics.ts";
+import "../styles/editorial-pages.css";
 import {
   breadcrumbJsonLd,
   buildJsonLdGraph,
@@ -20,18 +22,19 @@ interface Props {
 
 const { lang } = Astro.props;
 const prefix = lang === "en" ? "/en" : "";
-const projectsPath = `${prefix}/projects/`;
+const projectsPath = prefix + "/projects/";
+const contactPath = prefix + "/contact/";
+const thinkingPath = prefix + "/thinking/";
 const config = projectsPageConfig;
+const labels = config.labels;
 
 const projects = sortProjects(
   getPublishableEntries(await getCollection("projects")).filter(isPortfolioProject)
 );
-
-const featuredSlugs = new Set(projects.map((p) => p.id));
+const featuredSlugs = new Set(projects.map((project) => project.id));
 const otherRepos = getSortedGitHubProjects(lang).filter(
   (repo) => !repo.relatedProjectSlug || !featuredSlugs.has(repo.relatedProjectSlug)
 );
-const labels = config.labels;
 
 const jsonLd = buildJsonLdGraph([
   personJsonLd(),
@@ -69,70 +72,120 @@ const jsonLd = buildJsonLdGraph([
   ]}
   jsonLd={jsonLd}
 >
-  <main class="wrapper stack gap-12">
-    <section class="stack gap-4 page-hero">
-      <p class="eyebrow">{config.meta.eyebrow[lang]}</p>
-      <h1>{config.meta.title[lang]}</h1>
-      <p class="lede">{config.meta.intro[lang]}</p>
+  <main class="editorial-page ed-projects">
+    <header class="ed-band--dark ed-hero">
+      <div class="ed-shell ed-hero__grid">
+        <div>
+          <p class="ed-kicker">{config.meta.eyebrow[lang]}</p>
+          <h1 class="ed-title">
+            {config.meta.title[lang]}
+            <span class="ed-title__accent">{config.meta.headline[lang]}</span>
+          </h1>
+          <p class="ed-lede">{config.meta.intro[lang]}</p>
+        </div>
+        <aside class="ed-hero__aside">
+          <p class="ed-aside__label">{config.meta.asideLabel[lang]}</p>
+          <p>{config.meta.aside[lang]}</p>
+          <a class="ed-aside__link" href={thinkingPath}>
+            {config.meta.asideLink[lang]}
+            <span aria-hidden="true">↗</span>
+          </a>
+        </aside>
+      </div>
+    </header>
+
+    <section class="ed-band--light ed-section" aria-labelledby="featured-title">
+      <div class="ed-shell">
+        <div class="ed-section__head">
+          <h2 id="featured-title">{labels.featured[lang]}</h2>
+          <p>{config.meta.featuredIntro[lang]}</p>
+        </div>
+        {
+          projects.length > 0 ? (
+            <div class="ed-project-grid">
+              {projects.map((project) => (
+                <ProjectCard entry={project} lang={lang} />
+              ))}
+            </div>
+          ) : (
+            <p>{labels.empty[lang]}</p>
+          )
+        }
+      </div>
     </section>
 
-    <section class="stack gap-4" aria-labelledby="featured-title">
-      <h2 id="featured-title">{labels.featured[lang]}</h2>
-      {
-        projects.length > 0 ? (
-          <div class="grid-auto">
-            {projects.map((project) => (
-              <ProjectCard entry={project} lang={lang} />
-            ))}
-          </div>
-        ) : (
-          <p class="muted">{labels.empty[lang]}</p>
-        )
-      }
-    </section>
-
-    {
-      otherRepos.length > 0 && (
-        <section class="stack gap-4" aria-labelledby="other-title">
-          <h2 id="other-title">{labels.other[lang]}</h2>
-          <ul class="contrib-list">
-            {otherRepos.map((repo) => (
-              <li>
-                <a href={repo.htmlUrl} target="_blank" rel="noopener noreferrer">
-                  {repo.name[lang]}
+    <section class="ed-band--dark ed-section" aria-labelledby="reports-title">
+      <div class="ed-shell">
+        <div class="ed-section__head">
+          <p class="ed-kicker">{config.meta.eyebrow[lang]}</p>
+          <h2 id="reports-title">{config.meta.fieldReportsTitle[lang]}</h2>
+          <p>{config.meta.fieldReportsIntro[lang]}</p>
+        </div>
+        <div class="ed-reports">
+          {
+            config.meta.fieldReports.map((report) => (
+              <article class="ed-report">
+                <p class="ed-report__label">{report.label[lang]}</p>
+                <h3>{report.title[lang]}</h3>
+                <p>{report.description[lang]}</p>
+                <a
+                  class="ed-text-link"
+                  href={report.href}
+                  {...analyticsAttrs("cta_project_open", {
+                    surface: "projects",
+                    intent: "field-report",
+                    lang,
+                  })}
+                >
+                  {lang === "fr" ? "Lire le retour de terrain" : "Read the field report (FR)"}
+                  <span aria-hidden="true"> ↗</span>
                 </a>
-                <span class="meta"> — {repo.problem[lang]}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )
-    }
+              </article>
+            ))
+          }
+        </div>
+        <p class="ed-note">{config.meta.fieldReportsNote[lang]}</p>
+        {
+          otherRepos.length > 0 && (
+            <details class="ed-contrib">
+              <summary>
+                {labels.other[lang]} ({otherRepos.length})
+              </summary>
+              <ul class="ed-contrib__list">
+                {otherRepos.map((repo) => (
+                  <li>
+                    <a href={repo.htmlUrl} target="_blank" rel="noopener noreferrer">
+                      {repo.name[lang]} <span aria-hidden="true">↗</span>
+                    </a>
+                    <span class="ed-contrib__desc">{repo.problem[lang]}</span>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          )
+        }
+      </div>
+    </section>
+
+    <section class="ed-band--light ed-section" aria-labelledby="projects-contact-title">
+      <div class="ed-shell ed-cta">
+        <div class="ed-cta__text">
+          <h2 id="projects-contact-title">{config.meta.contactTitle[lang]}</h2>
+          <p>{config.meta.contactBody[lang]}</p>
+        </div>
+        <a
+          class="ed-button"
+          href={contactPath}
+          {...analyticsAttrs("cta_contact_email", {
+            surface: "projects",
+            intent: "qualification",
+            lang,
+          })}
+        >
+          {config.meta.contactLabel[lang]}
+          <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </section>
   </main>
 </BaseLayout>
-
-<style>
-  .muted {
-    color: var(--color-fg-subtle);
-  }
-  .contrib-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: var(--space-3);
-    max-width: 48rem;
-  }
-  .contrib-list a {
-    font-weight: 600;
-    color: var(--color-fg);
-    text-decoration: none;
-  }
-  .contrib-list a:hover {
-    text-decoration: underline;
-  }
-  .meta {
-    color: var(--color-fg-muted);
-    font-size: var(--text-sm);
-  }
-</style>
