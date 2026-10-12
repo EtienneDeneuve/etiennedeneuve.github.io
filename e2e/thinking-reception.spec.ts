@@ -103,11 +103,21 @@ test.describe("Thinking reception screenshots + finishing checks", () => {
   for (const vp of VIEWPORTS) {
     for (const route of PAGES) {
       test(`${route.id} @ ${vp.name}`, async ({ page }) => {
+        // Full-page screenshots must render below-the-fold ScrollReveal sections.
+        // Reduced motion preserves their final visible state for reliable review.
+        await page.emulateMedia({ reducedMotion: "reduce" });
         await page.setViewportSize({ width: vp.width, height: vp.height });
         const res = await page.goto(route.path, { waitUntil: "networkidle" });
         expect(res?.ok()).toBeTruthy();
         await assertNoHorizontalOverflow(page);
         await assertKeyContrast(page);
+        if (route.id.startsWith("thinking-index")) {
+          const series = page.locator("[data-series-section]");
+          await expect(series).toBeVisible();
+          await expect
+            .poll(() => series.evaluate((el) => getComputedStyle(el).backgroundColor))
+            .toBe("rgb(243, 239, 231)");
+        }
 
         if (
           route.id.includes("otel") ||
@@ -183,6 +193,17 @@ test.describe("Thinking reception screenshots + finishing checks", () => {
       .locator(`[id="${sectionId}"]`)
       .evaluate((el) => el.getBoundingClientRect().top);
     expect(mobileTop).toBeGreaterThan(40);
+  });
+
+  test("mobile sections reveal on actual scroll with normal motion", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/thinking/", { waitUntil: "networkidle" });
+    const section = page.locator("[data-series-section]");
+    await section.scrollIntoViewIfNeeded();
+    await expect(section).toHaveClass(/is-in/);
+    await expect
+      .poll(() => section.evaluate((el) => Number(getComputedStyle(el).opacity)))
+      .toBeGreaterThanOrEqual(0.99);
   });
 
   test("shell regression smoke: home / work / footer visible", async ({ page }) => {
