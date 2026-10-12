@@ -95,17 +95,17 @@ The build needs to know the right user, their home, Home Manager, and optionally
 
 At first, I therefore systematically built in the user context then activated on the helper side.
 
-Since then, the engine also knows another path: if the Entra registry provides a prebuilt and verified Nix closure, Setup materializes it in its cache, then the helper imports it directly into the store before activation. If the artefact doesn’t exist yet, I keep the local build path as a fallback.
+Since then, the engine also knows another path: if the Entra registry provides a prebuilt and verified Nix closure, Setup materializes it in its cache, then the helper imports it directly into the store before activation. If the artifact doesn’t exist yet, I keep the local build path as a fallback.
 
 ~~~text
-registry artefact disponible
+registry artifact available
    -> download
    -> SHA-256
    -> nix-store --import
    -> activate
 
-sinon
-   -> nix build local
+otherwise
+   -> local nix build
    -> activate
 ~~~
 
@@ -188,21 +188,21 @@ Only then does it converge toward the same state a fresh install would have prod
 That ultimately gives two entry points to the same workstation:
 
 ~~~text
-Mac neuf
+New Mac
   -> ADE
   -> Bootstrap
   -> Setup
 
-Mac existant
-  -> Bootstrap manuel
-  -> audit local
+Existing Mac
+  -> Manual Bootstrap
+  -> local audit
   -> Setup
 
-puis dans les deux cas
+then in both cases
   -> Entra
-  -> profil
+  -> profile
   -> Nix
-  -> même état versionné
+  -> same versioned state
 ~~~
 
 I much prefer that to maintaining an “old fleet” alongside the new one for months.
@@ -256,7 +256,7 @@ Omnivya Workstation
 Bootstrap      <version>
 Setup.app      <version>
 Helper         connected / protocol 2
-Nix            <système actif>
+Nix            <active system>
 
 Profile        tech / stable
 Configuration  2.7.0
@@ -264,7 +264,7 @@ Source         <commit>
 System         /nix/store/...
 Previous       2.6.1
 
-Last check     il y a 2 h
+Last check     2 h ago
 Status         up to date
 ~~~
 
@@ -290,7 +290,7 @@ SwiftUI handles interaction. Entra identity. The helper privileges. Nix machine 
 
 Once that split was in place, the rest became fairly logical.
 
-I already version my services, images, and artefacts. Why should my workstations stay on “the last Git config that managed to pass”?
+I already version my services, images, and artifacts. Why should my workstations stay on “the last Git config that managed to pass”?
 
 ## Official sources
 

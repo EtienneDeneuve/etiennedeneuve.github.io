@@ -55,11 +55,11 @@ We used a GitHub App to publish a commit status and a ruleset that requires that
 
 On a PR from our internal pilot project, you see both local checks marked `Required`, with a green status on the exact commit. GitHub then shows the merge button. That is the behavior we want to see, eventually, across all of our repositories. You do not need to show the publisher script to explain what is happening.
 
-<!-- IMAGE À INTÉGRER APRÈS IMPORT DES ASSETS ANONYMISÉS :
-     Fichier préparé : ci-required-checks-anonymized.webp
-     Alt : « GitHub : validation locale et E2E exact-SHA requis, PR prête à merger »
-     Légende : « Deux contrôles produits en local, deux checks requis sur GitHub. »
-     Les noms internes sont masqués ; ne pas ajouter la capture originale au dépôt public.
+<!-- IMAGE TO ADD AFTER IMPORTING ANONYMIZED ASSETS:
+     Prepared file: ci-required-checks-anonymized.webp
+     Alt: "GitHub: local validation and exact-SHA E2E required, PR ready to merge"
+     Caption: "Two checks produced locally, two required checks on GitHub."
+     Internal names are masked; do not add the original screenshot to the public repo.
 -->
 
 The screenshot shows that the merge policy exists and works on this PR. It does not, by itself, prove that local execution actually happened.

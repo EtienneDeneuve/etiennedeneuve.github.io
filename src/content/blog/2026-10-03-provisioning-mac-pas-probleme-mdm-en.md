@@ -68,9 +68,9 @@ It looked like this:
 
 ~~~text
 macbook-zine
-  -> utilisateur zine
-  -> rôle tech
-  -> configuration tech
+  -> user zine
+  -> tech role
+  -> tech configuration
 ~~~
 
 For a small fleet, that isn’t absurd at all. The problem shows up when the hostname becomes the implicit key linking the person, the machine, and their role.
@@ -107,7 +107,7 @@ flowchart TD
     C[Entra] -->|identity + App Role| D[Omnivya Setup]
     C -->|Storage token| D
     B --> D
-    D -->|manifest + artefact| E[Private Blob registry]
+    D -->|manifest + artifact| E[Private Blob registry]
     E --> D
     D -->|import or build + activate| F[Nix / nix-darwin]
     F --> G[Workstation]
@@ -180,11 +180,11 @@ If there’s already a Nix install I don’t recognize, I don’t delete it. If 
 The first pass therefore becomes more of a convergence than a provisioning.
 
 ~~~text
-Mac existant
+Existing Mac
    -> Bootstrap.pkg
-   -> état des lieux
+   -> inventory / current state
    -> Entra
-   -> profil cible
+   -> target profile
    -> review / dry-run
    -> convergence
    -> validation

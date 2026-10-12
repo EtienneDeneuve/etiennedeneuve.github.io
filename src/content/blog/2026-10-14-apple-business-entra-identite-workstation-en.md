@@ -101,9 +101,9 @@ But a group name belongs to the organization. The workstation role belongs to th
 So I prefer to keep an indirection layer:
 
 ~~~text
-groupes Entra
+Entra groups
     -> App Role Workstation.*
-    -> profil Nix
+    -> Nix profile
 ~~~
 
 If tomorrow a group changes name or the organization moves, I can adapt the assignment on the Entra side without changing the application code or the Nix logic.
@@ -138,7 +138,7 @@ Entra no longer only serves to choose the role.
 
 Once the user is authenticated, Setup also requests an Azure Storage token to access the private workstation profile registry. There is no SAS embedded in the app, and the container isn’t public.
 
-The split is fairly simple: the App Role answers “which profile are you entitled to receive?”, then the Storage token and RBAC answer “are you allowed to read the artefacts in this registry?”
+The split is fairly simple: the App Role answers “which profile are you entitled to receive?”, then the Storage token and RBAC answer “are you allowed to read the artifacts in this registry?”
 
 ~~~text
 Entra login
@@ -149,7 +149,7 @@ Entra Storage token
    -> private Blob
    -> channel
    -> manifest
-   -> profile.json / artefact
+   -> profile.json / artifact
 ~~~
 
 I like that much more than a static key hidden in the bundle. And if the Storage token or RBAC fails, Setup still doesn’t make the container public: it falls back to the baseline embedded in the Bootstrap.

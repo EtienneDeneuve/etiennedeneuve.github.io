@@ -29,7 +29,7 @@ relatedArticles:
   - 2026-10-28-versionner-postes-semver-nix-en
 ---
 
-There is something fairly curious about AI agents.
+There's something odd about AI agents.
 
 You can have them modify a Go handler, the matching Vue interface, and a few tests in a matter of minutes. And then you wait while a runner reinstalls the tools before discovering a TypeScript error you could have caught on the Mac.
 
@@ -75,7 +75,7 @@ In [the series on Apple Business, Entra, and Nix](/en/thinking/2026-10-03-provis
 
 The goal was to have Macs whose tools and state we know, without asking everyone to rebuild their environment by hand.
 
-Workstation versioning is also on the Mac series agenda. I will come back to it in a later episode, because what is actually installed on the machine becomes interesting once you entrust it with part of the validation.
+Workstation versioning is also planned for the Mac series. I will come back to it in a later episode, because what is actually installed on the machine becomes interesting once you entrust it with part of the validation.
 
 Those are two topics I had not started for CI. But when we wanted to bring checks closer to the developer, the environment was already there.
 
@@ -87,15 +87,15 @@ The split we settled on is fairly simple.
 
 ~~~mermaid
 flowchart LR
-    A[Code humain ou agent] --> B[Checks locaux]
-    B --> C[Preuve liée au SHA]
+    A[Human or agent code] --> B[Local checks]
+    B --> C[Proof tied to the SHA]
     C --> D[GitHub]
-    D --> E[Merge selon les règles]
+    D --> E[Merge per the rules]
 ~~~
 
 Pre-commit stays fast. PR-ready validation can start the needed services and run the relevant suites. Its result is tied to the exact commit.
 
-GitHub keeps the merge rules. Release builds, image manufacturing, and checks that need an independent environment stay separate.
+GitHub keeps the merge rules. Release builds, image builds, and checks that need an independent environment stay separate.
 
 I was not trying to take GitHub out of the chain. I wanted to stop asking it to systematically redo work that was already reproducible on the workstation.
 
@@ -105,7 +105,7 @@ A test result produced on a Mac does not carry the same guarantees as a result p
 
 The SHA tells you which commit is supposed to have been tested. A GitHub App lets you control who publishes the status. Neither proves that someone who fully controls their machine honestly ran the tests.
 
-That trust boundary is part of the architecture choice. If the organization must resist a malicious contributor or a compromised workstation, it needs adapted independent checks.
+That trust boundary is part of the architecture choice. If the organization must resist a malicious contributor or a compromised workstation, it needs independent checks that match that threat.
 
 In our case, we first wanted reproducible checks, run regularly, with GitHub still refusing changes that lack the expected status.
 

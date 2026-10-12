@@ -50,11 +50,11 @@ The file “Distribution” doesn’t exist.
 ~~~
 
 <!-- SCREENSHOT 1
-Capture Terminal du log appstored montrant :
+Terminal capture of the appstored log showing:
 Finished asset promise
 Could not create PKProduct
 "The file “Distribution” doesn’t exist."
-Garder 6 à 10 lignes maximum et masquer UUID/serial si nécessaire.
+Keep 6 to 10 lines max and mask UUID/serial if needed.
 -->
 
 The network worked. Apple Business had done its job. The file had been retrieved.
@@ -74,7 +74,7 @@ So I changed the pipeline to also go through `productbuild`.
 Since then, the build itself verifies the contents of the final package. It expands it and fails if `Distribution` isn’t there.
 
 <!-- SCREENSHOT 2
-Terminal avec pkgutil --expand sur le PKG final, puis Distribution + le component pkg.
+Terminal with pkgutil --expand on the final PKG, then Distribution + the component pkg.
 -->
 
 That’s typically the kind of bug I prefer to turn into a test rather than a note in a wiki.

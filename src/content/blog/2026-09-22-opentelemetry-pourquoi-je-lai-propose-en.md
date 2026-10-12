@@ -1,6 +1,6 @@
 ---
 title: "Why I proposed OpenTelemetry during a Dynatrace migration"
-description: "The client was migrating to Dynatrace, but the C++ instrumentation had to be replaced. I proposed OpenTelemetry to avoid gluing the application to a new backend."
+description: "The client was migrating to Dynatrace, but the C++ instrumentation had to be replaced. I proposed OpenTelemetry to avoid locking the application to another backend."
 pubDate: 2026-09-22T21:20:00.000Z
 language: en
 translationKey: 2026-09-22-opentelemetry-pourquoi-je-lai-propose
@@ -42,7 +42,7 @@ Dynatrace was supposed to receive the expected logs, metrics, and traces. That d
 
 On the other hand, I saw no value in the application knowing that those signals were destined for Dynatrace.
 
-That is where OpenTelemetry becomes interesting. Applications emit against a shared contract. The platform collects, transforms, and routes. The backend remains an operations choice.
+That is where OpenTelemetry becomes interesting. Applications emit against a shared contract. The platform collects, transforms, and routes. The backend remains an operational choice.
 
 That does not make the tools interchangeable. Queries, dashboards, alerting, retention, and proprietary features stay specific. Moving from Dynatrace to Tempo is obviously not a URL change.
 
@@ -52,20 +52,20 @@ But re-instrumenting 200 services just to change the destination is a different 
 
 Prometheus and Grafana were already used to operate the platform. There was no reason to throw that away at the start of the migration.
 
-Same for Splunk: some log dashboards still existed and had not been migrated. So it had to stay in the loop until those usages were picked up elsewhere.
+Same for Splunk: some log dashboards still existed and had not been migrated. So it had to stay in the path until those uses were covered elsewhere.
 
 The proposed trajectory looked like this:
 
 ~~~mermaid
 flowchart LR
-    A[Applications et runtimes] --> B[OpenTelemetry]
+    A[Applications and runtimes] --> B[OpenTelemetry]
     B --> C[Grafana Alloy]
 
     C --> D[VictoriaMetrics]
     C --> E[Tempo]
     C --> F[Loki]
     C --> G[Dynatrace]
-    C --> H[Splunk pendant la transition]
+    C --> H[Splunk during the transition]
 
     D --> I[Grafana]
     E --> I

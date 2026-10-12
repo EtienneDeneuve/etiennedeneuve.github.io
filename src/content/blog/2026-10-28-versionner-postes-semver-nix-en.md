@@ -1,6 +1,6 @@
 ---
 title: "I version my workstations like software"
-description: "A workstation shouldn’t simply be “on the latest Git config.” I now treat the workstation as a versioned artefact: private registry, SemVer, provenance, Nix closures, and rollback."
+description: "A workstation shouldn’t simply be “on the latest Git config.” I now treat the workstation as a versioned artifact: private registry, SemVer, provenance, Nix closures, and rollback."
 pubDate: 2026-10-28T07:30:00.000Z
 language: en
 translationKey: 2026-10-28-versionner-postes-semver-nix
@@ -40,7 +40,7 @@ If the workstation is an important work platform, I want to know what I deployed
 
 The first easy thing to version was the package itself.
 
-Today, the build produces an artefact named with its version and source commit, then embeds a small provenance file. When I diagnose a Mac, I can therefore find the package version, the app version, the embedded `mdm-setup` revision, and the build date.
+Today, the build produces an artifact named with its version and source commit, then embeds a small provenance file. When I diagnose a Mac, I can therefore find the package version, the app version, the embedded `mdm-setup` revision, and the build date.
 
 It isn’t very sophisticated, but it already answers a question that quickly becomes painful without it: **what did this machine actually receive?**
 
@@ -111,7 +111,7 @@ For now, it’s deliberately a lab: the collector runs on my Mac and the pilot m
 
 The interesting point is mainly that the instrumentation already exists on the endpoint. Changing the backend later shouldn’t require rewriting the app.
 
-The agent currently ships a heartbeat, helper and XPC health, Entra and GitHub state, enrollment mode, and some inventory information. Interactive Setup, for its part, sends its end-to-end traces, structured logs, and registry artefact download progress.
+The agent currently ships a heartbeat, helper and XPC health, Entra and GitHub state, enrollment mode, and some inventory information. Interactive Setup, for its part, sends its end-to-end traces, structured logs, and registry artifact download progress.
 
 I also did a pass to avoid high-cardinality metrics. Dynamic states stay in wide-event JSON logs; Prometheus metrics keep stable labels, mainly the host and the few dimensions that are actually useful.
 
@@ -129,7 +129,7 @@ At the time I’m writing this, the Bootstrap itself has already reached `0.1.45
 
 Each version is published on an immutable Blob path, with its SHA-256, its signed package, and its provenance. I never silently replace a file behind the same URL.
 
-That forced me fairly early to apply the same reflexes to the workstation as to a software artefact: a given version must point to a given content.
+That forced me fairly early to apply the same reflexes to the workstation as to a software artifact: a given version must point to a given content.
 
 The Nix configuration must now follow the same logic, but with its own SemVer cycle. I specifically don’t want to confuse “bootstrap version” and “workstation version.”
 
@@ -137,7 +137,7 @@ The Nix configuration must now follow the same logic, but with its own SemVer cy
 
 I had started talking about `stable` and `pilot` channels, then realized that wasn’t enough.
 
-A channel says whom I offer a release to.
+A channel says who gets a release.
 
 It doesn’t say what that release is.
 
@@ -176,7 +176,7 @@ workstation-profiles/
           closure.nar.zst
 ~~~
 
-The channel pointer says which version to look at. The manifest describes the artefacts. The `profile.json` contains the role, the store path, and a few metadata fields needed for activation.
+The channel pointer says which version to look at. The manifest describes the artifacts. The `profile.json` contains the role, the store path, and a few metadata fields needed for activation.
 
 The `0.1.0` pilot channel is already published and resolved by the app after Entra auth.
 
@@ -231,7 +231,7 @@ That’s where the topic becomes more concrete.
 
 A Nix closure isn’t necessarily small. On a 512 GB Mac, downloading several full generations without a retention strategy can get stupid fairly quickly.
 
-The manifest must therefore contain enough information for the app to know before download whether the update is reasonable: compressed size, closure size, minimum bootstrap version, minimum macOS version, artefact digest.
+The manifest must therefore contain enough information for the app to know before download whether the update is reasonable: compressed size, closure size, minimum bootstrap version, minimum macOS version, artifact digest.
 
 No need for a huge protocol. Just enough to avoid discovering at 95% of the download that you’re short 20 GB.
 
@@ -247,11 +247,11 @@ Otherwise, you turn the rollback mechanism into decoration.
 
 That’s also why I prefer the application to know the applied versions and protected store paths rather than leaving a Nix cron to clean up on its own in a corner.
 
-## At bottom, this looks a lot like a software supply chain
+## At heart, this looks a lot like a software supply chain
 
 That’s probably the point that interests me most in all of this.
 
-I’m not trying to build a “super MDM.” I’m mainly trying to treat the workstation as an artefact I can build, identify, verify, deploy, and resume.
+I’m not trying to build a “super MDM.” I’m mainly trying to treat the workstation as an artifact I can build, identify, verify, deploy, and roll back.
 
 The source stays in Git.
 

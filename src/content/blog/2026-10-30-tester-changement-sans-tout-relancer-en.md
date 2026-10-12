@@ -39,7 +39,7 @@ But if you start dropping tests somewhat at random to save time, you have missed
 
 The first idea is obvious: look at the modified files and pick the matching suite.
 
-\`apps/backend/\` triggers the Go tests. \`apps/frontend/\` triggers the frontend tests. Rust code triggers Clippy and the native tests.
+`apps/backend/` triggers the Go tests. `apps/frontend/` triggers the frontend tests. Rust code triggers Clippy and the native tests.
 
 That works for the simple cases.
 
@@ -67,7 +67,7 @@ This table obviously does not replace the repository's real dependencies. It is 
 
 You have to identify the diff. And that is often where "affected" scripts become less simple than they look.
 
-If the PR contains five commits and you only compare \`HEAD\` to \`HEAD~1\`, you only see the last one.
+If the PR contains five commits and you only compare `HEAD` to `HEAD~1`, you only see the last one.
 
 What I care about is the change proposed for integration. So we work relative to the base branch and the appropriate merge-base.
 
@@ -92,20 +92,20 @@ We added several checks: replay history on a clean database, verify the schema a
 
 Then we had to look at upgrades on existing data.
 
-A poorly prepared \`ADD COLUMN ... NOT NULL\` can break on a populated database while causing no problem in a test that recreates everything from scratch. Same for a backfill, a constraint validated too early, or an index created at the wrong time.
+A poorly prepared `ADD COLUMN ... NOT NULL` can break on a populated database while causing no problem in a test that recreates everything from scratch. Same for a backfill, a constraint validated too early, or an index created at the wrong time.
 
 We started testing that situation with representative synthetic data.
 
 ~~~text
-Base N-1 déjà peuplée
-  -> nouvelles migrations
-  -> vérification des contraintes et des données
-  -> requêtes des versions compatibles
+Populated N-1 database
+  -> new migrations
+  -> constraint and data checks
+  -> queries from compatible versions
 ~~~
 
 There is another trap with rolling deployments: during deployment, old and new code can serve queries at the same time. You cannot assume every application flips in the same second.
 
-That is not specific to local CI. But since we were bringing these checks home, we might as well stop settling for a green \`migrate up\`.
+That is not specific to local CI. But since we were bringing these checks home, we might as well stop settling for a green `migrate up`.
 
 ## Not everything is validated at the same time
 
@@ -115,11 +115,11 @@ Pre-commit stays short. PR-ready validation runs the checks relevant for integra
 
 That second case is not a successfully executed E2E: it is a test-selection decision, also tied to the commit SHA. The first screenshot shows exactly that case: GitHub requires the E2E check, but diff analysis concluded that no full journey was needed.
 
-<!-- IMAGE À INTÉGRER APRÈS IMPORT DES ASSETS ANONYMISÉS :
-     Fichier préparé : ci-e2e-not-required-anonymized.webp
-     Alt : « Contrôle E2E exact-SHA requis sur GitHub, marqué non nécessaire pour cette modification »
-     Légende : « Requis ne veut pas dire exécuté à chaque PR. Si le diff ne nécessite pas d’E2E, le statut le dit explicitement. »
-     Le nom interne du contexte est masqué ; ne pas ajouter la capture originale au dépôt public.
+<!-- IMAGE TO ADD AFTER IMPORTING ANONYMIZED ASSETS:
+     Prepared file: ci-e2e-not-required-anonymized.webp
+     Alt: "Exact-SHA E2E check required on GitHub, marked not needed for this change"
+     Caption: "Required does not mean executed on every PR. If the diff does not need E2E, the status says so explicitly."
+     The internal context name is masked; do not add the original screenshot to the public repo.
 -->
 
 Selection must stay conservative when you cannot correctly determine what changed. Release keeps its own validation criteria as well.

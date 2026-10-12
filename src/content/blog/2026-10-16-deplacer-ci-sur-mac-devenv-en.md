@@ -1,6 +1,6 @@
 ---
 title: "We moved CI onto our Macs. Not our standards."
-description: "Nix, devenv, prek, and local PostgreSQL to bring checks closer to the code, without maintaining two contradictory technical chains."
+description: "Nix, devenv, prek, and local PostgreSQL to bring checks closer to the code, without maintaining two conflicting toolchains."
 pubDate: 2026-10-16T07:30:00.000Z
 language: en
 translationKey: 2026-10-16-deplacer-ci-sur-mac-devenv
@@ -43,17 +43,17 @@ Apple Business handles enrollment and prerequisites. Entra provides an identity 
 
 On the internal project that served as our pilot, we already had devenv. It describes the toolchain, services, and commands needed in the repository. The working environment therefore does not depend on a small checklist everyone follows more or less carefully.
 
-That is not new. The change was deciding that this environment could also carry a large share of the validations.
+That is not new. The change was deciding that this environment could also run a large share of the validations.
 
 ~~~text
-Nix sur le Mac
-  -> outils du poste
+Nix on the Mac
+  -> workstation tools
 
-devenv dans le repository
-  -> outils et services du projet
+devenv in the repository
+  -> project tools and services
 
-scripts de validation versionnés
-  -> ce qu'on vérifie réellement
+versioned validation scripts
+  -> what we actually check
 ~~~
 
 I prefer these responsibilities to stay separate. When a tool is missing, you know where to declare it. When a test is wrong, you do not need to change Mac provisioning.
@@ -74,11 +74,11 @@ devenv shell -- ci:validate
 
 There are deliberately three commands.
 
-\`check:commit\` must stay almost instantaneous. It catches leftover conflict markers in files, formatting errors, and a few syntax problems. No PostgreSQL database, no full compilation.
+`check:commit` must stay almost instantaneous. It catches leftover conflict markers in files, formatting errors, and a few syntax problems. No PostgreSQL database, no full compilation.
 
-\`check:push\` is a broader check you can run by hand. It stays distinct from full validation.
+`check:push` is a broader check you can run by hand. It stays distinct from full validation.
 
-\`ci:validate\` is the PR-ready validation. That is what must produce the publishable result for the tested commit. The pre-push hook can call it on a \`git push\`, but you can also run it explicitly to diagnose a failure.
+`ci:validate` is the PR-ready validation. That is what must produce the publishable result for the tested commit. The pre-push hook can call it on a `git push`, but you can also run it explicitly to diagnose a failure.
 
 That avoids a fairly silly trap: treating a formatting pass as proof the change is ready to merge.
 
@@ -128,7 +128,7 @@ I want to see what happens on a new Mac: does devenv enter correctly? Does the P
 
 And, as we discovered later, you have to go a bit further: passing the tests is not enough if the workstation does not have the identity needed to publish the result to GitHub.
 
-I come back to that part in the next article. It is less comfortable than \`devenv shell\`, but much more interesting for understanding where trust sits.
+I come back to that part in the next article. It is less comfortable than `devenv shell`, but much more interesting for understanding where trust sits.
 
 ## Official sources
 
