@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { omnivyaContactUrl, siteConfig } from "../config/site.ts";
 import { workConfig } from "../config/work.ts";
+import "../styles/editorial-pages.css";
 import {
   breadcrumbJsonLd,
   buildJsonLdGraph,
@@ -21,14 +22,16 @@ interface Props {
 const { lang } = Astro.props;
 const config = workConfig;
 const prefix = lang === "en" ? "/en" : "";
-const workPath = `${prefix}/work/`;
-const contactPath = `${prefix}/contact/`;
+const workPath = prefix + "/work/";
+const contactPath = prefix + "/contact/";
+const projectsPath = prefix + "/projects/";
 const omnivyaHref = omnivyaContactUrl(lang, "work");
 
 function localizedHref(href: string): string {
+  // Editorial references always lead to the already-published French source.
+  // Do not invent a translated route for every article or project.
   if (href.startsWith("http") || lang === "fr") return href;
-  if (href.startsWith("/en/")) return href;
-  return `/en${href}`;
+  return href.startsWith("/en/") ? href : href;
 }
 
 const omnivyaExpertNode: JsonLdObject = {
@@ -75,22 +78,43 @@ const jsonLd = buildJsonLdGraph([
   ]}
   jsonLd={jsonLd}
 >
-  <main class="wrapper stack gap-12 work-page">
-    <section class="stack gap-4 page-hero">
-      <p class="eyebrow">{config.meta.eyebrow[lang]}</p>
-      <h1>{config.meta.title[lang]}</h1>
-      <p class="lede">{config.meta.intro[lang]}</p>
-    </section>
+  <main class="editorial-page ed-work">
+    <header class="ed-band--dark ed-hero">
+      <div class="ed-shell ed-hero__grid">
+        <div>
+          <p class="ed-kicker">{config.meta.eyebrow[lang]}</p>
+          <h1 class="ed-title">
+            {config.meta.title[lang]}
+            <span class="ed-title__accent">{config.meta.headline[lang]}</span>
+          </h1>
+          <p class="ed-lede">{config.meta.intro[lang]}</p>
+        </div>
+        <aside class="ed-hero__aside">
+          <p class="ed-aside__label">{config.meta.asideLabel[lang]}</p>
+          <p>{config.meta.aside[lang]}</p>
+          <a class="ed-aside__link" href={projectsPath}>
+            {config.meta.asideLink[lang]} <span aria-hidden="true">↗</span>
+          </a>
+        </aside>
+      </div>
+    </header>
 
-    <section class="stack gap-6" aria-labelledby="situations-title">
-      <h2 id="situations-title">{config.labels.situationsTitle[lang]}</h2>
-      <ol class="situations">
-        {
-          config.situations.map((item) => (
-            <li id={item.id}>
+    <section class="ed-band--light ed-section" aria-labelledby="situations-title">
+      <div class="ed-shell">
+        <div class="ed-section__head">
+          <p class="ed-kicker ed-kicker--light">{config.meta.eyebrow[lang]}</p>
+          <h2 id="situations-title">{config.labels.situationsTitle[lang]}</h2>
+          <p>{config.labels.situationsIntro[lang]}</p>
+        </div>
+        <ol class="ed-situations">
+          {config.situations.map((item, index) => (
+            <li class="ed-situation" id={item.id}>
+              <span class="ed-situation__index" aria-hidden="true">
+                {String(index + 1).padStart(2, "0")}
+              </span>
               <h3>{item.title[lang]}</h3>
-              <p>{item.signal[lang]}</p>
-              <dl class="situation-meta">
+              <p class="ed-situation__signal">{item.signal[lang]}</p>
+              <dl class="ed-facts">
                 <div>
                   <dt>{config.labels.examines[lang]}</dt>
                   <dd>{item.examines[lang]}</dd>
@@ -105,165 +129,73 @@ const jsonLd = buildJsonLdGraph([
                 </div>
               </dl>
               {item.related && (
-                <p class="related">
-                  {config.labels.related[lang]}:{" "}
-                  <a href={localizedHref(item.related.href)}>{item.related.label[lang]}</a>
+                <p class="ed-situation__related">
+                  <a href={localizedHref(item.related.href)}>
+                    {item.related.label[lang]} <span aria-hidden="true">↗</span>
+                  </a>
+                  {lang === "en" && (
+                    <span> — {config.labels.originalLanguage[lang]}</span>
+                  )}
                 </p>
               )}
             </li>
-          ))
-        }
-      </ol>
-    </section>
-
-    <section class="stack gap-5" aria-labelledby="method-title">
-      <h2 id="method-title">{config.method.title[lang]}</h2>
-      <ol class="method">
-        {
-          config.method.steps.map((step) => (
-            <li>
-              <span class="method__num" aria-hidden="true">
-                {step.number}
-              </span>
-              <div>
-                <h3>{step.title[lang]}</h3>
-                <p>{step.body[lang]}</p>
-              </div>
-            </li>
-          ))
-        }
-      </ol>
-    </section>
-
-    <section class="cta-band stack gap-4" aria-labelledby="cta-title">
-      <h2 id="cta-title">{config.cta.title[lang]}</h2>
-      <p>{config.cta.body[lang]}</p>
-      <div class="actions">
-        <a
-          class="btn-primary"
-          href={contactPath}
-          {...analyticsAttrs("cta_contact_email", {
-            surface: "work",
-            intent: "qualification",
-            lang,
-          })}
-        >
-          {config.cta.contactLabel[lang]}
-        </a>
+          ))}
+        </ol>
       </div>
-      <p class="omnivya-note">
-        {config.omnivyaNote[lang]}{" "}
-        <a
-          href={omnivyaHref}
-          rel="noopener noreferrer"
-          target="_blank"
-          {...analyticsAttrs("cta_booking", {
-            surface: "work",
-            intent: "qualification",
-            lang,
-          })}
-        >
-          {config.cta.omnivyaLabel[lang]}
-        </a>
-      </p>
+    </section>
+
+    <section class="ed-band--dark ed-section" aria-labelledby="method-title">
+      <div class="ed-shell">
+        <div class="ed-section__head">
+          <h2 id="method-title">{config.method.title[lang]}</h2>
+          <p>{config.method.intro[lang]}</p>
+        </div>
+        <ol class="ed-steps">
+          {config.method.steps.map((step) => (
+            <li>
+              <span class="ed-steps__number" aria-hidden="true">{step.number}</span>
+              <h3>{step.title[lang]}</h3>
+              <p>{step.body[lang]}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="ed-band--light ed-section" aria-labelledby="cta-title">
+      <div class="ed-shell ed-cta">
+        <div class="ed-cta__text">
+          <h2 id="cta-title">{config.cta.title[lang]}</h2>
+          <p>{config.cta.body[lang]}</p>
+          <p class="ed-note">{config.omnivyaNote[lang]}</p>
+        </div>
+        <div class="ed-actions">
+          <a
+            class="ed-button"
+            href={contactPath}
+            {...analyticsAttrs("cta_contact_email", {
+              surface: "work",
+              intent: "qualification",
+              lang,
+            })}
+          >
+            {config.cta.contactLabel[lang]} <span aria-hidden="true">↗</span>
+          </a>
+          <a
+            class="ed-text-link"
+            href={omnivyaHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            {...analyticsAttrs("cta_booking", {
+              surface: "work",
+              intent: "qualification",
+              lang,
+            })}
+          >
+            {config.cta.omnivyaLabel[lang]} <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
     </section>
   </main>
 </BaseLayout>
-
-<style>
-  .work-page {
-    max-width: 48rem;
-    padding-block: var(--space-10) var(--space-16);
-  }
-
-  .situations {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: var(--space-8);
-  }
-
-  .situations h3 {
-    margin: 0 0 var(--space-2);
-    font-size: var(--text-lg);
-  }
-
-  .situations > li > p {
-    margin: 0 0 var(--space-3);
-    color: var(--color-fg-muted);
-    line-height: 1.5;
-  }
-
-  .situation-meta {
-    margin: 0;
-    display: grid;
-    gap: var(--space-3);
-  }
-
-  .situation-meta dt {
-    margin: 0 0 0.15rem;
-    font-size: var(--text-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--color-fg-subtle);
-  }
-
-  .situation-meta dd {
-    margin: 0;
-    color: var(--color-fg-muted);
-    line-height: 1.5;
-  }
-
-  .related {
-    margin: var(--space-3) 0 0 !important;
-    font-size: var(--text-sm);
-  }
-
-  .method {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: var(--space-5);
-  }
-
-  .method li {
-    display: grid;
-    grid-template-columns: 2.5rem 1fr;
-    gap: var(--space-3);
-  }
-
-  .method__num {
-    font-weight: 700;
-    color: var(--copper-on-light, var(--accent-regular));
-  }
-
-  .method h3 {
-    margin: 0 0 var(--space-1);
-    font-size: var(--text-md);
-  }
-
-  .method p {
-    margin: 0;
-    color: var(--color-fg-muted);
-  }
-
-  .cta-band {
-    border-top: var(--border-width) solid var(--color-border);
-    padding-top: var(--space-8);
-  }
-
-  .actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-    align-items: center;
-  }
-
-  .omnivya-note {
-    margin: 0;
-    font-size: var(--text-sm);
-    color: var(--color-fg-subtle);
-  }
-</style>
