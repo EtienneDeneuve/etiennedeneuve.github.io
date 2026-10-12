@@ -97,18 +97,21 @@ test.describe("inverted editorial theme across the site", () => {
     await page.goto("/");
     await page.evaluate(() => localStorage.setItem("theme", "light"));
     await page.reload();
-    await expect(page.locator(".home-band--dark")).toHaveCSS("background-color", COLOR.ivory);
+    await expect(page.locator(".home-band--dark").first()).toHaveCSS("background-color", COLOR.ivory);
     await page.locator(".site-nav theme-toggle button").click();
     await expect(page.locator("html")).toHaveClass(/theme-dark/);
-    await expect(page.locator(".home-band--dark")).toHaveCSS("background-color", COLOR.graphite);
+    await expect(page.locator(".home-band--dark").first()).toHaveCSS("background-color", COLOR.graphite);
 
-    await page.goto("/thinking/");
+    // Follow real internal links to exercise Astro ClientRouter swaps.
+    await page.locator('.site-nav a[href="/thinking/"]').click();
+    await expect(page).toHaveURL(/\/thinking\/$/);
     await expect(page.locator("html")).toHaveClass(/theme-dark/);
-    await expect(page.locator(".thinking-band--dark")).toHaveCSS(
+    await expect(page.locator(".thinking-band--dark").first()).toHaveCSS(
       "background-color",
       COLOR.graphite
     );
-    await page.goto("/contact/");
+    await page.locator('.site-nav .cta-link[href="/contact/"]').click();
+    await expect(page).toHaveURL(/\/contact\/$/);
     await expect(page.locator("html")).toHaveClass(/theme-dark/);
     await expect(page.locator(".ed-band--dark").first()).toHaveCSS(
       "background-color",
