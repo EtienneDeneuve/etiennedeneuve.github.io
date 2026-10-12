@@ -223,8 +223,7 @@ const jsonLd = buildJsonLdGraph([
               const contentType = entry.data.contentType as ThinkingContentType;
               const tagSlugs = getEntryTags(entry).map(slugifyTag).join(" ");
               const publishedAt = new Date(entry.data.pubDate).toISOString();
-              const editorialKey =
-                entry.data.translationKey ?? entry.id.replace(/-en$/, "");
+              const editorialKey = entry.data.translationKey ?? entry.id.replace(/-en$/, "");
               const editorialRank = (config.featuredSlugs as readonly string[]).indexOf(
                 editorialKey
               );
@@ -339,7 +338,7 @@ const jsonLd = buildJsonLdGraph([
     const featuredFirst = (a: HTMLElement, b: HTMLElement): number => {
       const rankA = Number(a.dataset.featuredRank ?? -1);
       const rankB = Number(b.dataset.featuredRank ?? -1);
-      if ((rankA >= 0) !== (rankB >= 0)) return Number(rankB >= 0) - Number(rankA >= 0);
+      if (rankA >= 0 !== rankB >= 0) return Number(rankB >= 0) - Number(rankA >= 0);
       if (rankA >= 0 && rankB >= 0 && rankA !== rankB) return rankA - rankB;
       return dateNewestFirst(a, b);
     };
