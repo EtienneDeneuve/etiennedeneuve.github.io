@@ -4,7 +4,7 @@ import { expect, test, type Page } from "@playwright/test";
  * /thinking/ is statically built for GitHub Pages. Filters must run in the
  * browser against data-* rows — Astro.url.searchParams is empty at generate.
  */
-async function visibleLibrary(page: Page) {
+function visibleLibrary(page: Page) {
   return page.locator("[data-library-grid] > article:visible");
 }
 
@@ -243,13 +243,14 @@ test.describe("/thinking/ filters (built site)", () => {
     }
     await page.goto("/thinking/?lang=all&sort=recent");
     const recentFirst = await visibleLibrary(page).first().getAttribute("data-date");
-    const featuredFirst = await page.goto("/thinking/?lang=all&sort=featured").then(() =>
-      visibleLibrary(page).first().getAttribute("data-date")
-    );
+    await page.goto("/thinking/?lang=all&sort=featured");
+    const featuredFirst = await visibleLibrary(page).first().getAttribute("data-date");
     expect(recentFirst).not.toBe(featuredFirst);
   });
 
-  test("show more preserves filters, URL on reload, and resets on new filters", async ({ page }) => {
+  test("show more preserves filters, URL on reload, and resets on new filters", async ({
+    page,
+  }) => {
     await page.goto("/thinking/?lang=all");
     const total = await totalMatches(page);
     expect(total).toBeGreaterThan(24);
