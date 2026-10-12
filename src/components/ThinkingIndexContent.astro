@@ -4,20 +4,20 @@ import ThinkingFilters from "../components/ThinkingFilters.astro";
 import { thinkingConfig } from "../config/thinking.ts";
 import {
   articlesForLocale,
-  filterArticles,
   formatArticleDate,
   getAllThinkingArticles,
   getArticleLanguage,
   getArticlePath,
   getCanonicalSlug,
   getContentTypeLabel,
+  getEntryTags,
   getQualifyingTags,
   listPublishedSeries,
-  parseThinkingFilters,
-  resolveThinkingLanguageScope,
   selectOpeningArticles,
+  slugifyTag,
   sortArticles,
   type ThinkingContentType,
+  type ThinkingPillar,
 } from "../lib/thinking.ts";
 import { breadcrumbJsonLd, buildJsonLdGraph, collectionPageJsonLd } from "../lib/json-ld.ts";
 
@@ -31,31 +31,23 @@ const thinkingPath = `${prefix}/thinking/`;
 const config = thinkingConfig;
 const labels = config.labels;
 
-const url = Astro.url;
-const filters = parseThinkingFilters(url.searchParams);
-const sort = filters.sort ?? "recent";
-const languageScope = resolveThinkingLanguageScope(lang, url.searchParams);
-const languageFromUrl = url.searchParams.has("lang");
-const hasActiveFilters = Boolean(
-  filters.pillar || filters.contentType || languageFromUrl || filters.tag
-);
-
+/**
+ * Static build (GitHub Pages): Astro.url.searchParams is empty at generate time.
+ * Render the full library with data-* attributes and apply filters in the browser.
+ * Default (no JS / no query): UI locale only, opening shelf visible, opening rows hidden
+ * in the library to avoid duplicates.
+ */
+const defaultSort = "recent" as const;
 const allArticles = await getAllThinkingArticles();
 const localeArticles = articlesForLocale(allArticles, lang);
-const libraryFilters = {
-  ...filters,
-  language: languageScope === "all" ? undefined : languageScope,
-  sort,
-};
-const filtered = sortArticles(filterArticles(allArticles, libraryFilters), sort);
-const openingSource = hasActiveFilters ? filtered : localeArticles;
-const { lead, side } = selectOpeningArticles(openingSource, config.openingSideCount);
+const { lead, side } = selectOpeningArticles(localeArticles, config.openingSideCount);
 const openingIds = new Set([lead, ...side].filter(Boolean).map((entry) => entry!.id));
-const libraryArticles = filtered.filter((entry) => !openingIds.has(entry.id));
-const libraryPage = libraryArticles.slice(0, config.libraryPageSize);
-const libraryMore = libraryArticles.slice(config.libraryPageSize);
+const libraryArticles = sortArticles(allArticles, defaultSort);
+const defaultVisibleCount = libraryArticles.filter(
+  (entry) => getArticleLanguage(entry) === lang && !openingIds.has(entry.id)
+).length;
 const series = listPublishedSeries(localeArticles, lang);
-const qualifyingTags = getQualifyingTags(localeArticles);
+const qualifyingTags = getQualifyingTags(allArticles);
 
 const jsonLd = buildJsonLdGraph([
   collectionPageJsonLd({
@@ -110,8 +102,12 @@ const jsonLd = buildJsonLdGraph([
         </div>
 
         {
-          !hasActiveFilters && lead && (
-            <aside class="thinking-pubs" aria-labelledby="thinking-opening-title">
+          lead && (
+            <aside
+              class="thinking-pubs"
+              aria-labelledby="thinking-opening-title"
+              data-opening-section
+            >
               <div class="thinking-pubs__head">
                 <h2 id="thinking-opening-title">{labels.opening[lang]}</h2>
                 <a class="thinking-pubs__all" href="#bibliotheque">
@@ -132,27 +128,20 @@ const jsonLd = buildJsonLdGraph([
                   </span>
                 </a>
               </article>
-              {
-                side.length > 0 && (
-                  <ol class="thinking-pubs__list">
-                    {side.map((entry) => (
-                      <li>
-                        <a
-                          href={getArticlePath(
-                            getCanonicalSlug(entry),
-                            getArticleLanguage(entry)
-                          )}
-                        >
-                          <time datetime={entry.data.pubDate.toISOString()}>
-                            {formatArticleDate(entry.data.pubDate, lang)}
-                          </time>
-                          <span class="thinking-pubs__title">{entry.data.title}</span>
-                        </a>
-                      </li>
-                    ))}
-                  </ol>
-                )
-              }
+              {side.length > 0 && (
+                <ol class="thinking-pubs__list">
+                  {side.map((entry) => (
+                    <li>
+                      <a href={getArticlePath(getCanonicalSlug(entry), getArticleLanguage(entry))}>
+                        <time datetime={entry.data.pubDate.toISOString()}>
+                          {formatArticleDate(entry.data.pubDate, lang)}
+                        </time>
+                        <span class="thinking-pubs__title">{entry.data.title}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              )}
             </aside>
           )
         }
@@ -160,8 +149,12 @@ const jsonLd = buildJsonLdGraph([
     </section>
 
     {
-      !hasActiveFilters && series.length > 0 && (
-        <section class="thinking-band thinking-band--light thinking-series" aria-labelledby="thinking-series-title">
+      series.length > 0 && (
+        <section
+          class="thinking-band thinking-band--light thinking-series"
+          aria-labelledby="thinking-series-title"
+          data-series-section
+        >
           <div class="thinking-shell">
             <p class="thinking-eyebrow thinking-eyebrow--light">{labels.seriesEyebrow[lang]}</p>
             <h2 id="thinking-series-title">{labels.series[lang]}</h2>
@@ -177,8 +170,7 @@ const jsonLd = buildJsonLdGraph([
                   <article class="thinking-serie">
                     <a href={href}>
                       <span class="thinking-serie__n">
-                        {item.total} {labels.textsCount[lang]} · {item.publishedCount}{" "}
-                        {countLabel}
+                        {item.total} {labels.textsCount[lang]} · {item.publishedCount} {countLabel}
                       </span>
                       <span class="thinking-serie__name">{item.title[lang]}</span>
                       <span class="thinking-serie__hint">{item.hint[lang]}</span>
@@ -197,14 +189,17 @@ const jsonLd = buildJsonLdGraph([
         <div class="thinking-library__head">
           <h2>{labels.library[lang]}</h2>
           <div class="thinking-library__tools">
-            <span>{labels.sortRecent[lang]}</span>
+            <p class="thinking-library__count">
+              <span data-library-count aria-live="polite">{defaultVisibleCount}</span>{" "}
+              {labels.articlesCount[lang]}
+            </p>
             <details class="thinking-filters-panel">
               <summary>{labels.filtersToggle[lang]}</summary>
               <div class="thinking-filters-panel__body">
                 <ThinkingFilters
                   lang={lang}
                   prefix={prefix}
-                  current={{ ...filters, sort, language: languageScope }}
+                  current={{ sort: defaultSort, language: lang }}
                   tagOptions={qualifyingTags}
                 />
               </div>
@@ -212,77 +207,201 @@ const jsonLd = buildJsonLdGraph([
           </div>
         </div>
 
-        {
-          filtered.length === 0 ? (
-            <p class="thinking-empty">
-              {lang === "en"
-                ? "No article matches these filters."
-                : "Aucun article ne correspond à ces filtres."}
-            </p>
-          ) : (
-            <>
-              <ul class="thinking-rows">
-                {libraryPage.map((entry) => (
-                  <li>
-                    <a
-                      href={getArticlePath(
-                        getCanonicalSlug(entry),
-                        getArticleLanguage(entry)
-                      )}
-                    >
-                      <time datetime={entry.data.pubDate.toISOString()}>
-                        {formatArticleDate(entry.data.pubDate, lang)}
-                      </time>
-                      <span class="thinking-rows__title">{entry.data.title}</span>
-                      <span class="thinking-rows__type">
-                        {getContentTypeLabel(
-                          entry.data.contentType as ThinkingContentType,
-                          lang
-                        )}
-                      </span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-              {
-                libraryMore.length > 0 && (
-                  <details class="thinking-more">
-                    <summary>
-                      {labels.seeMore[lang]} ({libraryMore.length})
-                    </summary>
-                    <ul class="thinking-rows">
-                      {libraryMore.map((entry) => (
-                        <li>
-                          <a
-                            href={getArticlePath(
-                              getCanonicalSlug(entry),
-                              getArticleLanguage(entry)
-                            )}
-                          >
-                            <time datetime={entry.data.pubDate.toISOString()}>
-                              {formatArticleDate(entry.data.pubDate, lang)}
-                            </time>
-                            <span class="thinking-rows__title">{entry.data.title}</span>
-                            <span class="thinking-rows__type">
-                              {getContentTypeLabel(
-                                entry.data.contentType as ThinkingContentType,
-                                lang
-                              )}
-                            </span>
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </details>
-                )
-              }
-            </>
-          )
-        }
+        <div class="thinking-rows" data-library-grid>
+          {
+            libraryArticles.map((entry) => {
+              const articleLang = getArticleLanguage(entry);
+              const isOpening = openingIds.has(entry.id);
+              const defaultHidden = isOpening || articleLang !== lang;
+              const pillar = entry.data.pillar as ThinkingPillar;
+              const contentType = entry.data.contentType as ThinkingContentType;
+              const tagSlugs = getEntryTags(entry).map(slugifyTag).join(" ");
+              const publishedAt = new Date(entry.data.pubDate).toISOString();
+              return (
+                <article
+                  class="thinking-row"
+                  data-pillar={pillar}
+                  data-type={contentType}
+                  data-lang={articleLang}
+                  data-tags={tagSlugs}
+                  data-date={publishedAt}
+                  data-title={entry.data.title.toLocaleLowerCase(articleLang)}
+                  data-opening={isOpening ? "true" : undefined}
+                  hidden={defaultHidden || undefined}
+                >
+                  <a href={getArticlePath(getCanonicalSlug(entry), articleLang)}>
+                    <time datetime={publishedAt}>
+                      {formatArticleDate(entry.data.pubDate, lang)}
+                    </time>
+                    <span class="thinking-rows__title">{entry.data.title}</span>
+                    <span class="thinking-rows__type">
+                      {getContentTypeLabel(contentType, lang)}
+                    </span>
+                  </a>
+                </article>
+              );
+            })
+          }
+        </div>
+        <p class="thinking-empty" data-library-empty hidden>
+          {
+            lang === "en"
+              ? "No article matches these filters."
+              : "Aucun article ne correspond à ces filtres."
+          }
+        </p>
       </div>
     </section>
   </main>
 </BaseLayout>
+
+{/* Static GH Pages: reapply ?pillar=&type=&lang=&tag=&sort= in the browser. */}
+<script>
+  // @ts-nocheck
+  const FILTER_FIELDS = ["pillar", "type", "lang", "sort", "tag"];
+  let thinkingFiltersCleanup;
+
+  function initThinkingLibraryFilters() {
+    if (typeof thinkingFiltersCleanup === "function") thinkingFiltersCleanup();
+    thinkingFiltersCleanup = undefined;
+
+    const form = document.querySelector("form.filters");
+    const grid = document.querySelector("[data-library-grid]");
+    const countEl = document.querySelector("[data-library-count]");
+    const emptyEl = document.querySelector("[data-library-empty]");
+    const openingSection = document.querySelector("[data-opening-section]");
+    const seriesSection = document.querySelector("[data-series-section]");
+    if (!(form instanceof HTMLFormElement) || !(grid instanceof HTMLElement)) return;
+
+    const uiLang = form.getAttribute("data-ui-lang") === "en" ? "en" : "fr";
+    const cards = [...grid.querySelectorAll(":scope > article")].filter(
+      (node) => node instanceof HTMLElement
+    );
+    const buildOrder = cards.slice();
+
+    const getSelect = (name) => {
+      const field = form.elements.namedItem(name);
+      return field instanceof HTMLSelectElement ? field : null;
+    };
+
+    const readFilters = () => {
+      const params = new URLSearchParams();
+      for (const name of FILTER_FIELDS) {
+        const value = getSelect(name)?.value ?? "";
+        if (!value) continue;
+        if (name === "sort" && value === "recent") continue;
+        if (name === "lang" && value === uiLang) continue;
+        params.set(name, value);
+      }
+      return params;
+    };
+
+    const applyFilters = () => {
+      const params = readFilters();
+      const pillar = params.get("pillar");
+      const type = params.get("type");
+      const tag = params.get("tag");
+      const sort = params.get("sort") ?? "recent";
+      const langParam = params.get("lang");
+      const languageScope =
+        langParam === "all" || langParam === "fr" || langParam === "en" ? langParam : uiLang;
+
+      const hasActiveFilters = Boolean(
+        pillar || type || tag || langParam === "all" || (langParam && langParam !== uiLang)
+      );
+
+      let visible = 0;
+      for (const card of cards) {
+        const tags = (card.dataset.tags ?? "").split(" ").filter(Boolean);
+        const langOk = languageScope === "all" || card.dataset.lang === languageScope;
+        const matches =
+          langOk &&
+          (!pillar || card.dataset.pillar === pillar) &&
+          (!type || card.dataset.type === type) &&
+          (!tag || tags.includes(tag));
+        // Keep opening rows in the DOM; only suppress them while the shelf is shown.
+        const hideAsOpeningDuplicate =
+          !hasActiveFilters && card.dataset.opening === "true" && matches;
+        card.hidden = !matches || hideAsOpeningDuplicate;
+        if (matches && !hideAsOpeningDuplicate) visible += 1;
+      }
+
+      const ordered =
+        sort === "oldest"
+          ? [...buildOrder].sort((a, b) =>
+              (a.dataset.date ?? "").localeCompare(b.dataset.date ?? "")
+            )
+          : sort === "title"
+            ? [...buildOrder].sort((a, b) =>
+                (a.dataset.title ?? "").localeCompare(b.dataset.title ?? "")
+              )
+            : sort === "featured"
+              ? [...buildOrder]
+              : [...buildOrder].sort((a, b) =>
+                  (b.dataset.date ?? "").localeCompare(a.dataset.date ?? "")
+                );
+      for (const card of ordered) grid.append(card);
+
+      if (openingSection instanceof HTMLElement) {
+        openingSection.hidden = hasActiveFilters;
+      }
+      if (seriesSection instanceof HTMLElement) {
+        seriesSection.hidden = hasActiveFilters;
+      }
+      if (countEl) countEl.textContent = String(visible);
+      if (emptyEl instanceof HTMLElement) emptyEl.hidden = visible > 0;
+    };
+
+    const syncFormFromUrl = () => {
+      const params = new URLSearchParams(window.location.search);
+      for (const name of FILTER_FIELDS) {
+        const select = getSelect(name);
+        if (!select) continue;
+        if (name === "lang") {
+          select.value = params.get("lang") ?? uiLang;
+        } else if (name === "sort") {
+          select.value = params.get("sort") ?? "recent";
+        } else {
+          select.value = params.get(name) ?? "";
+        }
+        if (select.selectedIndex === -1) {
+          select.value = name === "sort" ? "recent" : name === "lang" ? uiLang : "";
+        }
+      }
+      applyFilters();
+    };
+
+    const updateFromForm = (push) => {
+      const query = readFilters().toString();
+      const nextUrl = `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`;
+      const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+      if (nextUrl !== current) {
+        if (push) window.history.pushState(window.history.state, "", nextUrl);
+        else window.history.replaceState(window.history.state, "", nextUrl);
+      }
+      applyFilters();
+    };
+
+    const onChange = () => updateFromForm(true);
+    const onSubmit = (event) => {
+      event.preventDefault();
+      updateFromForm(true);
+    };
+
+    form.addEventListener("change", onChange);
+    form.addEventListener("submit", onSubmit);
+    window.addEventListener("popstate", syncFormFromUrl);
+    syncFormFromUrl();
+
+    thinkingFiltersCleanup = () => {
+      form.removeEventListener("change", onChange);
+      form.removeEventListener("submit", onSubmit);
+      window.removeEventListener("popstate", syncFormFromUrl);
+    };
+  }
+
+  document.addEventListener("astro:page-load", initThinkingLibraryFilters);
+</script>
 
 <style>
   .thinking {
@@ -443,7 +562,7 @@ const jsonLd = buildJsonLdGraph([
   }
   .thinking-pubs__featured a:hover .thinking-pubs__title,
   .thinking-pubs__list a:hover .thinking-pubs__title,
-  .thinking-rows a:hover .thinking-rows__title,
+  .thinking-row > a:hover .thinking-rows__title,
   .thinking-serie a:hover .thinking-serie__name {
     color: var(--thinking-copper-bright);
   }
@@ -556,12 +675,20 @@ const jsonLd = buildJsonLdGraph([
     margin-top: 0.85rem;
   }
 
+  .thinking-library__count {
+    margin: 0;
+  }
   .thinking-rows {
-    list-style: none;
     margin: 0;
     padding: 0;
   }
-  .thinking-rows a {
+  .thinking-row[hidden],
+  [data-opening-section][hidden],
+  [data-series-section][hidden],
+  [data-library-empty][hidden] {
+    display: none !important;
+  }
+  .thinking-row > a {
     display: grid;
     grid-template-columns: 7rem minmax(0, 1fr) auto;
     gap: 0.75rem 1rem;
@@ -585,22 +712,13 @@ const jsonLd = buildJsonLdGraph([
     color: var(--thinking-muted);
     white-space: nowrap;
   }
-  .thinking-more {
-    margin-top: 1rem;
-  }
-  .thinking-more summary {
-    cursor: pointer;
-    color: var(--thinking-copper);
-    font-weight: 600;
-    font-size: 0.9rem;
-  }
   .thinking-empty {
-    margin: 0;
+    margin: 1rem 0 0;
     color: var(--thinking-muted);
   }
 
   @media (max-width: 50em) {
-    .thinking-rows a {
+    .thinking-row > a {
       grid-template-columns: 1fr;
       gap: 0.2rem;
     }

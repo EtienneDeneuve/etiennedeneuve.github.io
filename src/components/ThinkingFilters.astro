@@ -69,7 +69,7 @@ const languageScope = current.language ?? lang;
       <select name="sort">
         {
           Object.entries(thinkingConfig.sortLabels).map(([id, label]) => (
-            <option value={id} selected={(current.sort ?? "featured") === id}>
+            <option value={id} selected={(current.sort ?? "recent") === id}>
               {label[lang]}
             </option>
           ))

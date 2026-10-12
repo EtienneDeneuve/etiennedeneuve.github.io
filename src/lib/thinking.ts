@@ -235,6 +235,12 @@ export function filterArticles(
   });
 }
 
+/**
+ * Parse Thinking query params for faceted static routes (/thinking/pillar/…, tests).
+ * The /thinking/ index itself is a single static HTML page on GitHub Pages: do not
+ * drive its library from Astro.url.searchParams at build time — apply filters in the
+ * browser from data-* rows (see ThinkingIndexContent).
+ */
 export function parseThinkingFilters(searchParams: URLSearchParams): ThinkingFilters {
   const sort = searchParams.get("sort") as ThinkingSort | null;
   const pillar = searchParams.get("pillar") as ThinkingPillar | null;
@@ -438,7 +444,8 @@ export function listPublishedSeries(all: ThinkingArticle[], lang: "fr" | "en") {
     .map((series) => {
       const published = series.articleIds
         .map((id) => {
-          const preferred = lang === "en" ? findArticleByRef(all, `${id}-en`) : findArticleByRef(all, id);
+          const preferred =
+            lang === "en" ? findArticleByRef(all, `${id}-en`) : findArticleByRef(all, id);
           return preferred ?? findArticleByRef(all, id);
         })
         .filter((candidate): candidate is ThinkingArticle => Boolean(candidate));
@@ -456,7 +463,10 @@ export function listPublishedSeries(all: ThinkingArticle[], lang: "fr" | "en") {
 
 export function getArticleCta(entry: ThinkingArticle) {
   const stem = seriesStem(entry);
-  const map = thinkingConfig.articleCtas as Record<string, (typeof thinkingConfig.articleCtas)[keyof typeof thinkingConfig.articleCtas]>;
+  const map = thinkingConfig.articleCtas as Record<
+    string,
+    (typeof thinkingConfig.articleCtas)[keyof typeof thinkingConfig.articleCtas]
+  >;
   return map[stem] ?? null;
 }
 
