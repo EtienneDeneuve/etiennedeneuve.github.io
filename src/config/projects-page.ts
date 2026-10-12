@@ -35,7 +35,7 @@ export const projectsPageConfig = {
     asideLabel: { fr: "Ce qui compte", en: "What matters" },
     aside: {
       fr: "Je distingue ici les réalisations publiques des missions clients. Un dépôt peut démontrer une façon de travailler ; il ne remplace pas un résultat client documenté et autorisé.",
-      en: "I distinguish public work from client engagements. A repository can show how I work; it does not replace a documented and authorised client outcome.",
+      en: "I distinguish public work from client engagements. A repository can show how I work; it does not replace a documented and approved client outcome.",
     },
     asideLink: { fr: "Lire les publications", en: "Read the field notes" },
     featuredIntro: {
