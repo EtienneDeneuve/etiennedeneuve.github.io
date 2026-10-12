@@ -30,12 +30,14 @@ test.describe("editorial work, projects and contact pages", () => {
         await expect(main.locator(".ed-hero")).toBeVisible();
         await expect(main.locator(".ed-title__accent")).toBeVisible();
 
-        const darkSurface = await main.locator(".ed-band--dark").first().evaluate(
-          (node) => getComputedStyle(node).backgroundColor
-        );
-        const ivorySurface = await main.locator(".ed-band--light").first().evaluate(
-          (node) => getComputedStyle(node).backgroundColor
-        );
+        const darkSurface = await main
+          .locator(".ed-band--dark")
+          .first()
+          .evaluate((node) => getComputedStyle(node).backgroundColor);
+        const ivorySurface = await main
+          .locator(".ed-band--light")
+          .first()
+          .evaluate((node) => getComputedStyle(node).backgroundColor);
         expect(darkSurface).toBe("rgb(17, 20, 22)");
         expect(ivorySurface).toBe("rgb(243, 239, 231)");
 
@@ -59,9 +61,10 @@ test.describe("editorial work, projects and contact pages", () => {
 
         if (route.kind === "contact") {
           await expect(main.locator(".ed-contact-card")).toHaveCount(3);
-          await expect(
-            main.locator(".ed-contact-card--primary .ed-button")
-          ).toHaveAttribute("href", /omnivya\.fr.*utm_source=etienne_deneuve/);
+          await expect(main.locator(".ed-contact-card--primary .ed-button")).toHaveAttribute(
+            "href",
+            /omnivya\.fr.*utm_source=etienne_deneuve/
+          );
           await expect(main.locator("#speaking a[href^='mailto:']")).toHaveCount(1);
           await expect(main.locator("#conversation a[href*='linkedin.com']")).toHaveCount(1);
         }
