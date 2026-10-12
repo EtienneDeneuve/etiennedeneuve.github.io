@@ -142,6 +142,8 @@
   /* Shared horizontal gutter: nav, home shells, footer (Safari-stable). */
   --page-gutter: clamp(1.5rem, 4vw, 4rem);
   --page-max: 90rem;
+  /* Sticky header clearance (scroll-margin, progress bars). */
+  --site-nav-offset: 4.75rem;
   --grid-gap: 1rem;
   --base-unit: 0.5rem;
 
@@ -234,15 +236,16 @@
 
 html {
   scrollbar-gutter: stable;
+  /*
+    Do not set height:100% on html+body: that makes body the scrollport
+    (window.scrollY stays 0), which breaks sticky, scroll-spy, and progress.
+  */
+  overflow-x: clip;
 }
 
-html,
 body {
-  height: 100%;
-  overflow-x: hidden;
-}
-
-body {
+  min-height: 100%;
+  overflow-x: clip;
   background-color: var(--color-bg);
   color: var(--color-fg);
   font-family: var(--font-body);
@@ -259,7 +262,7 @@ body {
 }
 
 img,
-svg,
+svg:not([id^="mermaid"]),
 video {
   max-width: 100%;
   height: auto;
@@ -396,6 +399,15 @@ h5 {
   max-width: var(--wrapper-max);
   margin-inline: auto;
   padding-inline: var(--space-6);
+}
+
+/* Shared with nav/footer/home/thinking — Safari-stable page gutter. */
+.page-shell {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
 }
 
 .measure {
@@ -815,12 +827,32 @@ a.surface-card:hover,
 .prose > * + * {
   margin-top: var(--space-4);
 }
+.prose h1,
 .prose h2,
 .prose h3,
 .prose h4 {
   margin-top: var(--space-8);
   margin-bottom: var(--space-3);
   scroll-margin-top: var(--space-16);
+}
+.heading-anchor,
+.prose .heading-anchor {
+  margin-left: 0.35em;
+  color: var(--copper-on-dark, #f0aa78);
+  text-decoration: none !important;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+h1:hover > .heading-anchor,
+h2:hover > .heading-anchor,
+h3:hover > .heading-anchor,
+.prose h1:hover > .heading-anchor,
+.prose h2:hover > .heading-anchor,
+.prose h3:hover > .heading-anchor,
+.heading-anchor:focus-visible,
+.prose .heading-anchor:focus-visible {
+  opacity: 1;
 }
 .prose p,
 .prose li {
@@ -838,6 +870,72 @@ a.surface-card:hover,
 .prose img {
   border-radius: var(--radius-md);
   border: var(--border-width) solid var(--color-border);
+}
+
+/* Mermaid — graphite/copper. No frame. Keep pixel width from Mermaid + max-width. */
+.prose p:has(> svg[id^="mermaid"]),
+.prose p:has(> svg.flowchart),
+.prose p:has(> svg.sequenceDiagram) {
+  margin-block: var(--space-6);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow-x: auto;
+}
+.prose svg[id^="mermaid"],
+.prose svg.flowchart,
+.prose svg.sequenceDiagram {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  padding: 0;
+  margin: 0 auto;
+  overflow: visible;
+  background: transparent;
+  border: 0;
+}
+.prose svg[id^="mermaid"] .node rect,
+.prose svg[id^="mermaid"] .node circle,
+.prose svg[id^="mermaid"] .node ellipse,
+.prose svg[id^="mermaid"] .node polygon,
+.prose svg[id^="mermaid"] [data-look="neo"].node rect,
+.prose svg[id^="mermaid"] [data-look="neo"].node polygon {
+  fill: #1b1e20 !important;
+  stroke: #f0aa78 !important;
+  stroke-width: 1.25px !important;
+  filter: none !important;
+}
+.prose svg[id^="mermaid"] .node .label,
+.prose svg[id^="mermaid"] .nodeLabel,
+.prose svg[id^="mermaid"] .label text,
+.prose svg[id^="mermaid"] text {
+  fill: #f7f3ec !important;
+  color: #f7f3ec !important;
+}
+.prose svg[id^="mermaid"] .edgeLabel text,
+.prose svg[id^="mermaid"] .edgeLabel tspan {
+  fill: #cdd0cf !important;
+}
+.prose svg[id^="mermaid"] .edgePath .path,
+.prose svg[id^="mermaid"] .flowchart-link {
+  stroke: #9aa0a3 !important;
+  fill: none !important;
+}
+.prose svg[id^="mermaid"] .marker,
+.prose svg[id^="mermaid"] .marker path,
+.prose svg[id^="mermaid"] .arrowheadPath,
+.prose svg[id^="mermaid"] .root .anchor path {
+  fill: #f0aa78 !important;
+  stroke: #f0aa78 !important;
+}
+.prose svg[id^="mermaid"] .edgeLabel rect {
+  fill: #111416 !important;
+  opacity: 0.9 !important;
+  stroke: none !important;
+}
+/* Mermaid sometimes emits empty edgeLabel groups at 0,0 */
+.prose svg[id^="mermaid"] g.edgeLabel:not([transform]) {
+  display: none !important;
 }
 .prose hr {
   border: 0;

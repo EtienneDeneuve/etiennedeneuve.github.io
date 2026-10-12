@@ -60,8 +60,8 @@ export const navigationConfig = {
     en: [{ label: "Media Kit", href: "/media-kit.html" }],
   },
   cta: {
-    fr: { label: "Écrire", href: "/contact/" },
-    en: { label: "Write", href: "/en/contact/" },
+    fr: { label: "Nous contacter", href: "/contact/" },
+    en: { label: "Contact us", href: "/en/contact/" },
   },
   rss: "/rss.xml",
 } as const;

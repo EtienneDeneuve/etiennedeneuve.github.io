@@ -3,6 +3,7 @@ title: "Pourquoi j’ai proposé OpenTelemetry pendant une migration vers Dynatr
 description: "Le client migrait vers Dynatrace, mais l’instrumentation C++ devait être reprise. J’ai proposé OpenTelemetry pour éviter de recoller l’application à un nouveau backend."
 pubDate: 2026-09-22T21:20:00.000Z
 language: fr
+translationKey: 2026-09-22-opentelemetry-pourquoi-je-lai-propose
 contentType: architecture-decision
 pillar: observability
 audience:

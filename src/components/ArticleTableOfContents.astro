@@ -1,4 +1,6 @@
 ---
+import { thinkingConfig } from "../config/thinking.ts";
+
 interface Heading {
   depth: number;
   slug: string;
@@ -10,53 +12,248 @@ interface Props {
   lang: "fr" | "en";
 }
 
+/** rehype-autolink-headings appends "#" into Astro's heading.text — strip it for TOC. */
+function cleanHeadingText(text: string): string {
+  return text.replace(/\s*#\s*$/u, "").trim();
+}
+
 const { headings, lang } = Astro.props;
-const items = headings.filter((heading) => heading.depth === 2);
+const items = headings
+  .filter((heading) => heading.depth === 2)
+  .map((heading) => ({
+    ...heading,
+    text: cleanHeadingText(heading.text),
+  }));
+const tocLabel = thinkingConfig.labels.toc[lang];
+const quickNav = thinkingConfig.labels.quickNav[lang];
 ---
 
 {
   items.length >= 2 && (
-    <nav class="toc" aria-label={lang === "en" ? "Table of contents" : "Sommaire"}>
-      <h2>{lang === "en" ? "Table of contents" : "Sommaire"}</h2>
-      <ol>
-        {items.map((heading) => (
-          <li>
-            <a href={`#${heading.slug}`}>{heading.text}</a>
-          </li>
-        ))}
-      </ol>
+    <nav class="toc" aria-label={tocLabel} data-toc>
+      <details class="toc__panel" open>
+        <summary class="toc__summary">
+          <span class="toc__summary-mobile">{quickNav}</span>
+          <span class="toc__summary-desktop">{tocLabel}</span>
+        </summary>
+        <ol>
+          {items.map((heading) => (
+            <li>
+              <a href={`#${heading.slug}`} data-toc-link={heading.slug}>
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </details>
     </nav>
   )
 }
 
 <style>
   .toc {
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: 1rem 1.15rem;
-    background: var(--color-bg-elevated);
+    min-width: 0;
+    color: var(--text-muted-on-dark, #cdd0cf);
   }
-  .toc h2 {
-    margin: 0 0 0.75rem;
-    font-size: var(--text-sm);
+  .toc__panel {
+    margin: 0;
+  }
+  .toc__summary {
+    list-style: none;
+    cursor: pointer;
+    font-size: 0.65rem;
+    font-weight: 650;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--color-fg-subtle);
+    color: var(--text-muted-on-dark, #cdd0cf);
+  }
+  .toc__summary::-webkit-details-marker {
+    display: none;
+  }
+  .toc__summary-mobile {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .toc__summary-mobile::after {
+    content: "▾";
+    font-size: 0.7em;
+    opacity: 0.7;
+  }
+  .toc__panel[open] .toc__summary-mobile::after {
+    content: "▴";
+  }
+  .toc__summary-desktop {
+    display: none;
   }
   .toc ol {
-    margin: 0;
-    padding-left: 1.15rem;
+    margin: 0.55rem 0 0;
+    padding: 0;
+    list-style: none;
     display: grid;
-    gap: 0.45rem;
+    gap: 0.35rem;
+  }
+  .toc li {
+    margin: 0;
   }
   .toc a {
-    color: var(--color-fg-muted);
+    display: block;
+    color: color-mix(in srgb, var(--text-on-dark, #f7f3ec) 62%, transparent);
     text-decoration: none;
-    font-size: var(--text-sm);
-    line-height: 1.4;
+    font-size: 0.78rem;
+    line-height: 1.35;
+    font-weight: 450;
+    border-left: 2px solid transparent;
+    padding-left: 0.55rem;
+    margin-left: -0.55rem;
+    transition: color 0.15s ease, border-color 0.15s ease;
   }
   .toc a:hover {
-    color: var(--color-fg);
-    text-decoration: underline;
+    color: var(--copper-on-dark, #f0aa78);
+  }
+  .toc a.is-active {
+    color: var(--copper-on-dark, #f0aa78);
+    font-weight: 600;
+    border-left-color: var(--copper-on-dark, #f0aa78);
+  }
+
+  @media (max-width: 63.99em) {
+    .toc {
+      margin: 0 0 0.85rem;
+    }
+    .toc__summary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      min-height: 2.5rem;
+      padding: 0.4rem 0.75rem;
+      border: 1px solid var(--border-on-dark, rgba(243, 239, 231, 0.22));
+      border-radius: 4px;
+      background: var(--graphite-soft, #1b1e20);
+      color: var(--text-on-dark, #f7f3ec);
+      font-size: 0.78rem;
+      font-weight: 650;
+      letter-spacing: 0.06em;
+    }
+    .toc__summary-mobile {
+      color: var(--copper-on-dark, #f0aa78);
+    }
+    .toc__summary-mobile::after {
+      color: var(--text-on-dark, #f7f3ec);
+      opacity: 0.85;
+      font-size: 0.85em;
+    }
+    .toc a {
+      border-left: 0;
+      padding-left: 0;
+      margin-left: 0;
+    }
+  }
+
+  @media (min-width: 64em) {
+    .toc {
+      position: sticky;
+      top: var(--site-nav-offset, 4.75rem);
+      align-self: start;
+      max-height: calc(100vh - var(--site-nav-offset, 4.75rem) - 1rem);
+      overflow: auto;
+      padding-top: 0.35rem;
+      padding-left: 0.85rem;
+      border-left: 1px solid var(--border-on-dark, rgba(243, 239, 231, 0.16));
+    }
+    .toc__summary {
+      cursor: default;
+      margin-bottom: 0.55rem;
+      pointer-events: none;
+    }
+    .toc__summary-mobile {
+      display: none;
+    }
+    .toc__summary-desktop {
+      display: inline;
+    }
+    .toc__panel ol {
+      display: grid;
+    }
   }
 </style>
+
+<script>
+  // @ts-nocheck
+  /**
+   * Static + ClientRouter: init immediately and on astro:page-load.
+   * Scroll events do not bubble — listen on window and document.body
+   * (body was the scrollport when html/body had height:100%).
+   */
+  let spyCleanup;
+
+  const navOffsetPx = () => {
+    const raw = getComputedStyle(document.documentElement).getPropertyValue("--site-nav-offset");
+    const px = Number.parseFloat(raw);
+    return Number.isFinite(px) ? px : 76;
+  };
+
+  const syncTocOpen = () => {
+    const desktop = window.matchMedia("(min-width: 64em)").matches;
+    document.querySelectorAll(".toc__panel").forEach((panel) => {
+      if (!(panel instanceof HTMLDetailsElement)) return;
+      panel.open = desktop;
+    });
+  };
+
+  const initTocSpy = () => {
+    if (typeof spyCleanup === "function") spyCleanup();
+    spyCleanup = undefined;
+    syncTocOpen();
+
+    const toc = document.querySelector("[data-toc]");
+    if (!(toc instanceof HTMLElement)) return;
+
+    const links = [...toc.querySelectorAll("[data-toc-link]")].filter(
+      (el) => el instanceof HTMLAnchorElement
+    );
+    if (links.length === 0) return;
+
+    const items = links
+      .map((link) => {
+        const id = link.getAttribute("data-toc-link");
+        if (!id) return null;
+        const el = document.getElementById(id);
+        return el instanceof HTMLElement ? { id, el, link } : null;
+      })
+      .filter(Boolean);
+
+    if (items.length === 0) return;
+
+    let activeId = "";
+
+    const pickActive = () => {
+      const line = navOffsetPx() + 12;
+      let current = items[0].id;
+      for (const item of items) {
+        if (item.el.getBoundingClientRect().top - line <= 0) current = item.id;
+        else break;
+      }
+      if (current === activeId) return;
+      activeId = current;
+      for (const item of items) {
+        item.link.classList.toggle("is-active", item.id === current);
+      }
+    };
+
+    const onScroll = () => pickActive();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    document.body.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    pickActive();
+
+    spyCleanup = () => {
+      window.removeEventListener("scroll", onScroll);
+      document.body.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  };
+
+  initTocSpy();
+  document.addEventListener("astro:page-load", initTocSpy);
+</script>

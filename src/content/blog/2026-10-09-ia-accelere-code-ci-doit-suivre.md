@@ -3,6 +3,7 @@ title: "L'IA écrit plus vite. Notre CI devait suivre."
 description: "L'accélération du développement assisté par IA nous a amenés à déplacer des validations sur les postes, sans abandonner la gouvernance GitHub."
 pubDate: 2026-10-09T07:30:00.000Z
 language: fr
+translationKey: 2026-10-09-ia-accelere-code-ci-doit-suivre
 contentType: architecture-decision
 pillar: platform-engineering
 audience:

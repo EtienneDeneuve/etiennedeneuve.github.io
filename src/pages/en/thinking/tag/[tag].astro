@@ -2,6 +2,7 @@
 import ThinkingFacetContent from "../../../../components/ThinkingFacetContent.astro";
 import { thinkingConfig } from "../../../../config/thinking.ts";
 import {
+  articlesForLocale,
   getAllThinkingArticles,
   getQualifyingTags,
   getEntryTags,
@@ -9,7 +10,7 @@ import {
 } from "../../../../lib/thinking.ts";
 
 export async function getStaticPaths() {
-  const articles = await getAllThinkingArticles();
+  const articles = articlesForLocale(await getAllThinkingArticles(), "en");
   const qualifying = getQualifyingTags(articles);
   return qualifying
     .map((tag) => ({

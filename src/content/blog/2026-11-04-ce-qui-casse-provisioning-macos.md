@@ -3,6 +3,7 @@ title: "Ce qui casse quand on essaie vraiment de provisionner un Mac de zéro"
 description: "Le schéma Apple Business + Entra + Nix était propre. Le premier Mac effacé m’a rappelé tout ce qu’un diagramme ne montre pas : format PKG, appstored, claims incomplets, Homebrew absent et mauvaise source Nix."
 pubDate: 2026-11-04T07:30:00.000Z
 language: fr
+translationKey: 2026-11-04-ce-qui-casse-provisioning-macos
 contentType: field-note
 pillar: platform-engineering
 audience:

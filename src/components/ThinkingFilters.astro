@@ -12,7 +12,8 @@ interface Props {
   current: {
     pillar?: ThinkingPillar;
     contentType?: ThinkingContentType;
-    language?: "fr" | "en";
+    /** Selected language scope: UI locale by default, or `all`. */
+    language?: "fr" | "en" | "all";
     tag?: string;
     sort?: ThinkingSort;
   };
@@ -22,9 +23,10 @@ interface Props {
 const { lang, prefix, current, tagOptions = [] } = Astro.props;
 const labels = thinkingConfig.labels;
 const action = `${prefix}/thinking/`;
+const languageScope = current.language ?? lang;
 ---
 
-<form class="filters" method="get" action={action}>
+<form class="filters" method="get" action={action} data-ui-lang={lang}>
   <div class="filter-row">
     <label>
       <span>{labels.pillar[lang]}</span>
@@ -55,9 +57,11 @@ const action = `${prefix}/thinking/`;
     <label>
       <span>{labels.language[lang]}</span>
       <select name="lang">
-        <option value="">{labels.all[lang]}</option>
-        <option value="fr" selected={current.language === "fr"}>FR</option>
-        <option value="en" selected={current.language === "en"}>EN</option>
+        <option value="all" selected={languageScope === "all"}>
+          {labels.allLanguages[lang]}
+        </option>
+        <option value="fr" selected={languageScope === "fr"}>FR</option>
+        <option value="en" selected={languageScope === "en"}>EN</option>
       </select>
     </label>
     <label>

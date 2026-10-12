@@ -3,6 +3,7 @@ title: "OpenTelemetry sur 200 services : couvrir vite sans refaire quinze ans de
 description: "Sur une application brownfield, l’enjeu n’était pas de refaire l’instrumentation parfaite service par service, mais de donner aux équipes un cadre commun qu’elles pouvaient appliquer vite."
 pubDate: 2026-09-22T21:30:00.000Z
 language: fr
+translationKey: 2026-09-22-opentelemetry-instrumenter-200-services
 contentType: field-note
 pillar: observability
 audience:

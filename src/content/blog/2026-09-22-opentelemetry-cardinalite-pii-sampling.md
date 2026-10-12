@@ -3,6 +3,7 @@ title: "OpenTelemetry : 400 000 bases, cardinalité et autres pièges de télém
 description: "Une dimension utile dans une trace peut devenir un désastre dans une métrique. Retour terrain sur la cardinalité, les PII et le sampling."
 pubDate: 2026-09-22T21:40:00.000Z
 language: fr
+translationKey: 2026-09-22-opentelemetry-cardinalite-pii-sampling
 contentType: field-note
 pillar: observability
 audience:

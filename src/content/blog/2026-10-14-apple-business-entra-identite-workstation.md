@@ -3,6 +3,7 @@ title: "Apple Business pour enrôler, Entra pour décider quel poste construire"
 description: "Je ne voulais ni mapper des adresses mail à des profils dans un script, ni demander à l’utilisateur quel poste il voulait. J’ai utilisé Entra et des App Roles pour faire de l’identité une entrée du provisioning."
 pubDate: 2026-10-14T07:30:00.000Z
 language: fr
+translationKey: 2026-10-14-apple-business-entra-identite-workstation
 contentType: architecture-decision
 pillar: platform-engineering
 audience:

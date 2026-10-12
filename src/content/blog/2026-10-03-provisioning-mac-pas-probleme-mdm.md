@@ -3,6 +3,7 @@ title: "Pourquoi j’ai arrêté de traiter le provisioning Mac comme un problè
 description: "Je voulais qu’un Mac neuf puisse passer de la boîte à un poste réellement prêt sans transformer le MDM en moteur de configuration. J’ai fini par séparer enrollment, identité, orchestration et état du poste."
 pubDate: 2026-10-03T07:30:00.000Z
 language: fr
+translationKey: 2026-10-03-provisioning-mac-pas-probleme-mdm
 contentType: architecture-decision
 pillar: platform-engineering
 audience:
@@ -22,7 +23,7 @@ relatedArticles:
   - 2026-10-14-apple-business-entra-identite-workstation
   - 2026-10-21-pourquoi-app-macos-swiftui-provisioning
   - 2026-10-28-versionner-postes-semver-nix
-  - 2026-10-31-ce-qui-casse-provisioning-macos
+  - 2026-11-04-ce-qui-casse-provisioning-macos
 ---
 
 > Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 1/5. La suite arrive la semaine prochaine.

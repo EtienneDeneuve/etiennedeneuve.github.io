@@ -3,6 +3,7 @@ title: "Les tests tournent en local. GitHub garde le dernier mot."
 description: "Un contrôle local doit rester lié au commit exact et être soumis à la gouvernance GitHub. Ce que garantit réellement ce modèle, et ses limites."
 pubDate: 2026-10-23T07:30:00.000Z
 language: fr
+translationKey: 2026-10-23-github-garde-dernier-mot-ci-locale
 contentType: architecture-decision
 pillar: software-supply-chain
 audience:

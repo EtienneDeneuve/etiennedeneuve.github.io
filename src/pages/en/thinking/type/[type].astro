@@ -5,10 +5,10 @@ import {
   thinkingContentTypes,
   type ThinkingContentType,
 } from "../../../../config/thinking.ts";
-import { getAllThinkingArticles } from "../../../../lib/thinking.ts";
+import { articlesForLocale, getAllThinkingArticles } from "../../../../lib/thinking.ts";
 
 export async function getStaticPaths() {
-  const articles = await getAllThinkingArticles();
+  const articles = articlesForLocale(await getAllThinkingArticles(), "en");
   return thinkingContentTypes
     .map((type) => ({
       params: { type },

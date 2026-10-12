@@ -3,6 +3,7 @@ title: "Tout tester à chaque changement ? Pas nécessairement."
 description: "Dans un monorepo, sélectionner les suites pertinentes est un vrai problème de dépendances, pas seulement un filtre sur les répertoires modifiés."
 pubDate: 2026-10-30T07:30:00.000Z
 language: fr
+translationKey: 2026-10-30-tester-changement-sans-tout-relancer
 contentType: architecture-decision
 pillar: platform-engineering
 audience:

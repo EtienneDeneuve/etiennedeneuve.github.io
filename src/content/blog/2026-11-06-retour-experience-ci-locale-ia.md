@@ -3,6 +3,7 @@ title: "Développer à la vitesse de l'IA, livrer avec la rigueur de l'ingénier
 description: "Retour d'expérience sur le déplacement des validations en local : onboarding, statuts GitHub, confiance, cutover et erreurs que je chercherais à éviter."
 pubDate: 2026-11-06T07:30:00.000Z
 language: fr
+translationKey: 2026-11-06-retour-experience-ci-locale-ia
 contentType: architecture-decision
 pillar: platform-engineering
 audience:

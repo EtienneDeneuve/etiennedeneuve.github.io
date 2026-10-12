@@ -1,10 +1,10 @@
 ---
 import ThinkingFacetContent from "../../../components/ThinkingFacetContent.astro";
 import { thinkingConfig, thinkingPillars, type ThinkingPillar } from "../../../config/thinking.ts";
-import { getAllThinkingArticles } from "../../../lib/thinking.ts";
+import { articlesForLocale, getAllThinkingArticles } from "../../../lib/thinking.ts";
 
 export async function getStaticPaths() {
-  const articles = await getAllThinkingArticles();
+  const articles = articlesForLocale(await getAllThinkingArticles(), "fr");
   return thinkingPillars
     .map((pillar) => ({
       params: { pillar },

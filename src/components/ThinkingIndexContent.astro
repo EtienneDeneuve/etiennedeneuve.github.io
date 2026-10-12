@@ -1,19 +1,24 @@
 ---
-import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import ArticleCard from "../components/ArticleCard.astro";
-import LearningPath from "../components/LearningPath.astro";
 import ThinkingFilters from "../components/ThinkingFilters.astro";
-import { thinkingConfig, thinkingPillars, thinkingContentTypes } from "../config/thinking.ts";
+import { thinkingConfig } from "../config/thinking.ts";
 import {
+  articlesForLocale,
   filterArticles,
+  formatArticleDate,
   getAllThinkingArticles,
-  getFeaturedArticles,
+  getArticleLanguage,
+  getArticlePath,
+  getCanonicalSlug,
+  getContentTypeLabel,
   getQualifyingTags,
+  listPublishedSeries,
   parseThinkingFilters,
+  resolveThinkingLanguageScope,
+  selectOpeningArticles,
   sortArticles,
+  type ThinkingContentType,
 } from "../lib/thinking.ts";
-import { resolveContentRefs } from "../lib/resolve-content.ts";
 import { breadcrumbJsonLd, buildJsonLdGraph, collectionPageJsonLd } from "../lib/json-ld.ts";
 
 interface Props {
@@ -28,43 +33,29 @@ const labels = config.labels;
 
 const url = Astro.url;
 const filters = parseThinkingFilters(url.searchParams);
-const sort = filters.sort ?? "featured";
+const sort = filters.sort ?? "recent";
+const languageScope = resolveThinkingLanguageScope(lang, url.searchParams);
+const languageFromUrl = url.searchParams.has("lang");
 const hasActiveFilters = Boolean(
-  filters.pillar || filters.contentType || filters.language || filters.tag
+  filters.pillar || filters.contentType || languageFromUrl || filters.tag
 );
 
 const allArticles = await getAllThinkingArticles();
-// Both indexes list the full library; EN UI can show FR bodies. Language filter narrows.
-const filtered = sortArticles(filterArticles(allArticles, filters), sort);
-const featured = hasActiveFilters ? [] : getFeaturedArticles(allArticles);
-const qualifyingTags = getQualifyingTags(allArticles);
-
-const populatedPillars = thinkingPillars.filter((pillar) =>
-  allArticles.some((entry) => entry.data.pillar === pillar)
-);
-const populatedTypes = thinkingContentTypes.filter((type) =>
-  allArticles.some((entry) => entry.data.contentType === type)
-);
-
-const [projects, resources] = await Promise.all([
-  getCollection("projects"),
-  getCollection("resources"),
-]);
-
-const readingPaths = config.readingPaths
-  .map((path) => ({
-    ...path,
-    resolvedItems: resolveContentRefs(
-      path.items,
-      {
-        articles: allArticles,
-        projects,
-        resources,
-      },
-      lang
-    ),
-  }))
-  .filter((path) => path.resolvedItems.length > 0);
+const localeArticles = articlesForLocale(allArticles, lang);
+const libraryFilters = {
+  ...filters,
+  language: languageScope === "all" ? undefined : languageScope,
+  sort,
+};
+const filtered = sortArticles(filterArticles(allArticles, libraryFilters), sort);
+const openingSource = hasActiveFilters ? filtered : localeArticles;
+const { lead, side } = selectOpeningArticles(openingSource, config.openingSideCount);
+const openingIds = new Set([lead, ...side].filter(Boolean).map((entry) => entry!.id));
+const libraryArticles = filtered.filter((entry) => !openingIds.has(entry.id));
+const libraryPage = libraryArticles.slice(0, config.libraryPageSize);
+const libraryMore = libraryArticles.slice(config.libraryPageSize);
+const series = listPublishedSeries(localeArticles, lang);
+const qualifyingTags = getQualifyingTags(localeArticles);
 
 const jsonLd = buildJsonLdGraph([
   collectionPageJsonLd({
@@ -91,358 +82,527 @@ const jsonLd = buildJsonLdGraph([
   ]}
   jsonLd={jsonLd}
 >
-  <main class="wrapper stack gap-12">
-    <section class="stack gap-3 hero">
-      <h1>{config.meta.title[lang]}</h1>
-      <p class="intro">{config.meta.intro[lang]}</p>
-      <p class="rss-links">
-        <a href="/rss.xml">{labels.rss[lang]}</a>
+  <main class="thinking">
+    <section class="thinking-band thinking-band--dark thinking-hero">
+      <div class="thinking-shell thinking-hero__grid">
+        <div class="thinking-hero__present">
+          <p class="thinking-eyebrow">{config.meta.title[lang]}</p>
+          <h1 class="thinking-title">
+            {
+              lang === "fr" ? (
+                <>
+                  Décisions <span>&amp; retours</span>
+                  <br />
+                  de terrain
+                </>
+              ) : (
+                <>
+                  Decisions <span>&amp; field</span>
+                  <br />
+                  notes
+                </>
+              )
+            }
+          </h1>
+          <p class="thinking-tagline">{config.meta.intro[lang]}</p>
+          <p class="thinking-lede">{config.meta.description[lang]}</p>
+          <a class="thinking-rss" href="/rss.xml">{labels.rss[lang]} →</a>
+        </div>
+
         {
-          populatedPillars.map((pillar) => (
+          !hasActiveFilters && lead && (
+            <aside class="thinking-pubs" aria-labelledby="thinking-opening-title">
+              <div class="thinking-pubs__head">
+                <h2 id="thinking-opening-title">{labels.opening[lang]}</h2>
+                <a class="thinking-pubs__all" href="#bibliotheque">
+                  {labels.openingAll[lang]} <span aria-hidden="true">→</span>
+                </a>
+              </div>
+              <article class="thinking-pubs__featured">
+                <a href={getArticlePath(getCanonicalSlug(lead), getArticleLanguage(lead))}>
+                  <time datetime={lead.data.pubDate.toISOString()}>
+                    {formatArticleDate(lead.data.pubDate, lang)}
+                  </time>
+                  <span class="thinking-pubs__title">{lead.data.title}</span>
+                  {lead.data.description && (
+                    <span class="thinking-pubs__desc">{lead.data.description}</span>
+                  )}
+                  <span class="thinking-pubs__read">
+                    {labels.readAnalysis[lang]} <span aria-hidden="true">→</span>
+                  </span>
+                </a>
+              </article>
+              {
+                side.length > 0 && (
+                  <ol class="thinking-pubs__list">
+                    {side.map((entry) => (
+                      <li>
+                        <a
+                          href={getArticlePath(
+                            getCanonicalSlug(entry),
+                            getArticleLanguage(entry)
+                          )}
+                        >
+                          <time datetime={entry.data.pubDate.toISOString()}>
+                            {formatArticleDate(entry.data.pubDate, lang)}
+                          </time>
+                          <span class="thinking-pubs__title">{entry.data.title}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ol>
+                )
+              }
+            </aside>
+          )
+        }
+      </div>
+    </section>
+
+    {
+      !hasActiveFilters && series.length > 0 && (
+        <section class="thinking-band thinking-band--light thinking-series" aria-labelledby="thinking-series-title">
+          <div class="thinking-shell">
+            <p class="thinking-eyebrow thinking-eyebrow--light">{labels.seriesEyebrow[lang]}</p>
+            <h2 id="thinking-series-title">{labels.series[lang]}</h2>
+            <div class="thinking-series__grid">
+              {series.map((item) => {
+                const entryLang = getArticleLanguage(item.entry);
+                const href = getArticlePath(getCanonicalSlug(item.entry), entryLang);
+                const countLabel =
+                  item.publishedCount === 1
+                    ? labels.publishedCount[lang]
+                    : labels.publishedCountPlural[lang];
+                return (
+                  <article class="thinking-serie">
+                    <a href={href}>
+                      <span class="thinking-serie__n">
+                        {item.total} {labels.textsCount[lang]} · {item.publishedCount}{" "}
+                        {countLabel}
+                      </span>
+                      <span class="thinking-serie__name">{item.title[lang]}</span>
+                      <span class="thinking-serie__hint">{item.hint[lang]}</span>
+                    </a>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <section class="thinking-band thinking-band--dark thinking-library" id="bibliotheque">
+      <div class="thinking-shell">
+        <div class="thinking-library__head">
+          <h2>{labels.library[lang]}</h2>
+          <div class="thinking-library__tools">
+            <span>{labels.sortRecent[lang]}</span>
+            <details class="thinking-filters-panel">
+              <summary>{labels.filtersToggle[lang]}</summary>
+              <div class="thinking-filters-panel__body">
+                <ThinkingFilters
+                  lang={lang}
+                  prefix={prefix}
+                  current={{ ...filters, sort, language: languageScope }}
+                  tagOptions={qualifyingTags}
+                />
+              </div>
+            </details>
+          </div>
+        </div>
+
+        {
+          filtered.length === 0 ? (
+            <p class="thinking-empty">
+              {lang === "en"
+                ? "No article matches these filters."
+                : "Aucun article ne correspond à ces filtres."}
+            </p>
+          ) : (
             <>
-              {" · "}
-              <a href={`/thinking/rss/${pillar}.xml`}>RSS {config.pillarLabels[pillar][lang]}</a>
+              <ul class="thinking-rows">
+                {libraryPage.map((entry) => (
+                  <li>
+                    <a
+                      href={getArticlePath(
+                        getCanonicalSlug(entry),
+                        getArticleLanguage(entry)
+                      )}
+                    >
+                      <time datetime={entry.data.pubDate.toISOString()}>
+                        {formatArticleDate(entry.data.pubDate, lang)}
+                      </time>
+                      <span class="thinking-rows__title">{entry.data.title}</span>
+                      <span class="thinking-rows__type">
+                        {getContentTypeLabel(
+                          entry.data.contentType as ThinkingContentType,
+                          lang
+                        )}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              {
+                libraryMore.length > 0 && (
+                  <details class="thinking-more">
+                    <summary>
+                      {labels.seeMore[lang]} ({libraryMore.length})
+                    </summary>
+                    <ul class="thinking-rows">
+                      {libraryMore.map((entry) => (
+                        <li>
+                          <a
+                            href={getArticlePath(
+                              getCanonicalSlug(entry),
+                              getArticleLanguage(entry)
+                            )}
+                          >
+                            <time datetime={entry.data.pubDate.toISOString()}>
+                              {formatArticleDate(entry.data.pubDate, lang)}
+                            </time>
+                            <span class="thinking-rows__title">{entry.data.title}</span>
+                            <span class="thinking-rows__type">
+                              {getContentTypeLabel(
+                                entry.data.contentType as ThinkingContentType,
+                                lang
+                              )}
+                            </span>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                )
+              }
             </>
-          ))
-        }
-      </p>
-    </section>
-
-    <section class="stack gap-3" id="browse">
-      <h2>{labels.browse[lang]}</h2>
-      <div class="browse-grid">
-        {
-          populatedPillars.length > 0 && (
-            <div>
-              <h3>{labels.browsePillars[lang]}</h3>
-              <ul>
-                {populatedPillars.map((pillar) => (
-                  <li>
-                    <a href={`${prefix}/thinking/pillar/${pillar}/`}>
-                      {config.pillarLabels[pillar][lang]}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )
-        }
-        {
-          populatedTypes.length > 0 && (
-            <div>
-              <h3>{labels.browseTypes[lang]}</h3>
-              <ul>
-                {populatedTypes.map((type) => (
-                  <li>
-                    <a href={`${prefix}/thinking/type/${type}/`}>
-                      {config.contentTypeLabels[type][lang]}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )
-        }
-        {
-          qualifyingTags.length > 0 && (
-            <div>
-              <h3>{labels.browseTags[lang]}</h3>
-              <ul>
-                {qualifyingTags.map((tag) => (
-                  <li>
-                    <a href={`${prefix}/thinking/tag/${tag.slug}/`}>
-                      {tag.label} ({tag.count})
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
           )
         }
       </div>
     </section>
-
-    <ThinkingFilters
-      lang={lang}
-      prefix={prefix}
-      current={{ ...filters, sort }}
-      tagOptions={qualifyingTags}
-    />
-
-    {
-      featured.length > 0 && (
-        <section class="stack gap-4" data-featured-section>
-          <h2>{labels.featured[lang]}</h2>
-          <div class="cards-grid">
-            {featured.map((entry) => (
-              <ArticleCard entry={entry} lang={lang} />
-            ))}
-          </div>
-        </section>
-      )
-    }
-
-    <section class="stack gap-4">
-      <header class="section-header">
-        <h2>{labels.allArticles[lang]}</h2>
-        <p>
-          <span data-library-count aria-live="polite">{filtered.length}</span>
-          {labels.articlesCount[lang]}
-        </p>
-      </header>
-      <div class="cards-grid" data-library-grid>
-        {filtered.map((entry) => <ArticleCard entry={entry} lang={lang} />)}
-      </div>
-      <p class="empty" data-library-empty hidden>
-        {
-          lang === "en"
-            ? "No article matches these filters."
-            : "Aucun article ne correspond à ces filtres."
-        }
-      </p>
-    </section>
-
-    {
-      readingPaths.length > 0 && (
-        <section class="stack gap-4" id="reading-paths">
-          <h2>{labels.readingPaths[lang]}</h2>
-          <div class="paths stack gap-4">
-            {readingPaths.map((path) => (
-              <LearningPath
-                id={path.id}
-                title={path.title[lang]}
-                summary={path.summary[lang]}
-                themes={path.themes[lang]}
-                items={path.resolvedItems}
-                lang={lang}
-              />
-            ))}
-          </div>
-        </section>
-      )
-    }
   </main>
 </BaseLayout>
 
-{
-  /* The site is statically built, so the GET filter form cannot be resolved
-    server-side. Reapply the query string here so shared URLs still work. */
-}
-<script>
-  const form = document.querySelector<HTMLFormElement>("form.filters");
-  const grid = document.querySelector<HTMLElement>("[data-library-grid]");
-  const countEl = document.querySelector<HTMLElement>("[data-library-count]");
-  const emptyEl = document.querySelector<HTMLElement>("[data-library-empty]");
-  const featuredSection = document.querySelector<HTMLElement>("[data-featured-section]");
-
-  if (form && grid) {
-    const cards = Array.from(grid.children).filter(
-      (node): node is HTMLElement => node instanceof HTMLElement
-    );
-    // The HTML order is the server-rendered "featured" order.
-    const fields = ["pillar", "type", "lang", "sort", "tag"] as const;
-
-    function getSelect(name: (typeof fields)[number]): HTMLSelectElement | null {
-      const field = form!.elements.namedItem(name);
-      return field instanceof HTMLSelectElement ? field : null;
-    }
-
-    function readFilters(): URLSearchParams {
-      const params = new URLSearchParams();
-      for (const name of fields) {
-        const value = getSelect(name)?.value ?? "";
-        if (value && !(name === "sort" && value === "featured")) {
-          params.set(name, value);
-        }
-      }
-      return params;
-    }
-
-    function applyFilters(): void {
-      const params = readFilters();
-      const pillar = params.get("pillar");
-      const type = params.get("type");
-      const language = params.get("lang");
-      const tag = params.get("tag");
-      const sort = params.get("sort");
-
-      let visible = 0;
-      for (const card of cards) {
-        const tags = (card.dataset.tags ?? "").split(" ").filter(Boolean);
-        const matches =
-          (!pillar || card.dataset.pillar === pillar) &&
-          (!type || card.dataset.type === type) &&
-          (!language || card.dataset.lang === language) &&
-          (!tag || tags.includes(tag));
-        card.hidden = !matches;
-        if (matches) visible += 1;
-      }
-
-      const sortedCards = [...cards];
-      if (sort && sort !== "featured") {
-        sortedCards.sort((a, b) => {
-          const dateA = a.dataset.date ?? "";
-          const dateB = b.dataset.date ?? "";
-          if (sort === "recent") return dateB.localeCompare(dateA);
-          if (sort === "oldest") return dateA.localeCompare(dateB);
-          return (a.dataset.title ?? "").localeCompare(b.dataset.title ?? "");
-        });
-      }
-      // Reapply all sort orders, including the original featured order.
-      for (const card of sortedCards) grid!.append(card);
-
-      const hasActiveFilters = Boolean(pillar || type || language || tag);
-      if (countEl) countEl.textContent = String(visible);
-      if (emptyEl) emptyEl.hidden = visible > 0;
-      if (featuredSection) featuredSection.hidden = hasActiveFilters;
-    }
-
-    function syncFormFromUrl(): void {
-      const params = new URLSearchParams(window.location.search);
-      for (const name of fields) {
-        const select = getSelect(name);
-        if (!select) continue;
-        select.value = params.get(name) ?? (name === "sort" ? "featured" : "");
-        if (select.selectedIndex === -1) {
-          select.value = name === "sort" ? "featured" : "";
-        }
-      }
-      applyFilters();
-    }
-
-    function updateFromForm(): void {
-      const query = readFilters().toString();
-      const nextUrl = `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`;
-      window.history.replaceState(window.history.state, "", nextUrl);
-      applyFilters();
-    }
-
-    // Filter and sort immediately; no reload or server-side query support needed.
-    form.addEventListener("change", updateFromForm);
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      updateFromForm();
-    });
-    window.addEventListener("popstate", syncFormFromUrl);
-    syncFormFromUrl();
-  }
-</script>
-
 <style>
-  .empty {
-    margin: 0;
-    color: var(--color-fg-muted);
-    font-size: var(--text-sm);
+  .thinking {
+    --thinking-max: 90rem;
+    --thinking-pad: var(--page-gutter, clamp(1.5rem, 4vw, 4rem));
+    --thinking-bg: var(--graphite, #111416);
+    --thinking-bg-soft: var(--graphite-soft, #1b1e20);
+    --thinking-ivory: #f3efe7;
+    --thinking-ivory-ink: #151819;
+    --thinking-ivory-muted: #454a4d;
+    --thinking-ivory-border: rgba(21, 24, 25, 0.14);
+    --thinking-copper: var(--copper-on-dark, #f0aa78);
+    --thinking-copper-bright: #f5c49a;
+    --thinking-copper-light: var(--copper-on-light, #a54822);
+    --thinking-ink: var(--text-on-dark, #f7f3ec);
+    --thinking-muted: var(--text-muted-on-dark, #cdd0cf);
+    --thinking-border: var(--border-on-dark, rgba(243, 239, 231, 0.16));
+    --thinking-sans: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --thinking-radius: 4px;
+    font-family: var(--thinking-sans);
+    background: var(--thinking-bg);
+    color: var(--thinking-ink);
   }
-  /* .surface-card and .stack set display:flex, which would defeat [hidden]. */
-  [data-library-grid] > :global([hidden]),
-  [data-featured-section][hidden] {
-    display: none;
+
+  .thinking-band--dark {
+    background: var(--thinking-bg);
+    color: var(--thinking-ink);
   }
-  .hero {
-    max-width: 40rem;
-    padding-block: var(--space-4);
+  .thinking-band--light {
+    background: var(--thinking-ivory);
+    color: var(--thinking-ivory-ink);
   }
-  .intro {
-    margin: 0;
-    color: var(--color-fg-muted);
-    line-height: var(--leading-relaxed);
-    font-size: var(--text-lg);
+  .thinking-shell {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: var(--thinking-max);
+    margin-inline: auto;
+    padding-inline: var(--thinking-pad);
   }
-  .rss-links {
-    margin: 0;
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
-    color: var(--color-fg-subtle);
+
+  .thinking-hero {
+    padding-block: 0.85rem 1.15rem;
   }
-  .rss-links a {
-    color: var(--color-fg-muted);
-  }
-  .browse-grid {
+  .thinking-hero__grid {
     display: grid;
-    gap: 0;
-    border: var(--border-width) solid var(--color-border);
+    gap: 1.5rem;
   }
-  @media (min-width: 50em) {
-    .browse-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+  @media (min-width: 60em) {
+    .thinking-hero__grid {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+      gap: 2.5rem;
+      align-items: start;
     }
   }
-  .browse-grid > div {
-    padding: var(--space-5);
-    border-bottom: var(--border-width) solid var(--color-border);
+
+  .thinking-eyebrow {
+    margin: 0 0 0.45rem;
+    font-size: 0.68rem;
+    font-weight: 650;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--thinking-copper);
   }
-  @media (min-width: 50em) {
-    .browse-grid > div {
-      border-bottom: 0;
-      border-right: var(--border-width) solid var(--color-border);
-    }
-    .browse-grid > div:last-child {
-      border-right: 0;
-    }
+  .thinking-eyebrow--light {
+    color: var(--thinking-copper-light);
   }
-  .browse-grid h3 {
-    margin: 0 0 var(--space-3);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
+  .thinking-title {
+    margin: 0 0 0.5rem;
+    font-weight: 700;
+    font-size: clamp(1.85rem, 5vw, 2.35rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+  .thinking-title span {
+    color: var(--thinking-copper);
+  }
+  .thinking-tagline {
+    margin: 0 0 0.75rem;
+    max-width: 38ch;
+    font-size: 1.1rem;
     font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wide);
-    color: var(--color-fg-subtle);
+    line-height: 1.3;
   }
-  .browse-grid ul {
-    list-style: none;
-    padding: 0;
+  .thinking-lede {
     margin: 0;
-    display: grid;
-    gap: var(--space-2);
+    max-width: 44ch;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--thinking-muted);
   }
-  .browse-grid a {
-    color: var(--color-fg);
+  .thinking-rss {
+    display: inline-block;
+    margin-top: 0.85rem;
+    color: var(--thinking-copper);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .thinking-rss:hover {
+    color: var(--thinking-copper-bright);
+  }
+
+  .thinking-pubs__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-bottom: 0.65rem;
+  }
+  .thinking-pubs__head h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 650;
+  }
+  .thinking-pubs__all {
+    color: var(--thinking-copper);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .thinking-pubs__featured {
+    margin: 0 0 0.55rem;
+  }
+  .thinking-pubs__featured a {
+    display: grid;
+    gap: 0.35rem;
+    padding-bottom: 0.85rem;
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px solid var(--thinking-border);
+  }
+  .thinking-pubs__featured time,
+  .thinking-pubs__list time,
+  .thinking-rows time {
+    font-size: 0.8125rem;
+    color: var(--thinking-muted);
+  }
+  .thinking-pubs__title {
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    color: var(--thinking-ink);
+  }
+  .thinking-pubs__featured .thinking-pubs__title {
+    font-size: clamp(1.25rem, 2vw, 1.625rem);
+  }
+  .thinking-pubs__desc {
+    font-size: 0.95rem;
+    line-height: 1.45;
+    color: var(--thinking-muted);
+  }
+  .thinking-pubs__read {
+    margin-top: 0.15rem;
+    font-size: 0.95rem;
+    font-weight: 650;
+    color: var(--thinking-copper);
+  }
+  .thinking-pubs__featured a:hover .thinking-pubs__title,
+  .thinking-pubs__list a:hover .thinking-pubs__title,
+  .thinking-rows a:hover .thinking-rows__title,
+  .thinking-serie a:hover .thinking-serie__name {
+    color: var(--thinking-copper-bright);
+  }
+  .thinking-pubs__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .thinking-pubs__list > li {
+    border-bottom: 1px solid var(--thinking-border);
+  }
+  .thinking-pubs__list a {
+    display: grid;
+    gap: 0.2rem;
+    padding-block: 0.6rem;
+    text-decoration: none;
+    color: inherit;
+  }
+  .thinking-pubs__list .thinking-pubs__title {
+    font-size: clamp(1rem, 1.3vw, 1.2rem);
+  }
+
+  .thinking-series {
+    padding-block: 1.25rem 1.45rem;
+  }
+  .thinking-series h2 {
+    margin: 0 0 1rem;
+    font-size: 1.25rem;
+    font-weight: 650;
+  }
+  .thinking-series__grid {
+    display: grid;
+    gap: 0.85rem;
+  }
+  @media (min-width: 50em) {
+    .thinking-series__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+  }
+  .thinking-serie {
+    padding-top: 0.75rem;
+    border-top: 2px solid var(--thinking-ivory-ink);
+  }
+  .thinking-serie a {
+    display: grid;
+    gap: 0.35rem;
+    color: inherit;
     text-decoration: none;
   }
-  .browse-grid a:hover {
-    color: var(--accent-regular);
+  .thinking-serie__n {
+    font-size: 0.72rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--thinking-copper-light);
   }
-  .cards-grid {
-    display: grid;
-    gap: 0;
-    border: var(--border-width) solid var(--color-border);
+  .thinking-serie__name {
+    font-size: 1.05rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
   }
-  .cards-grid > :global(*) {
-    border: 0;
-    border-bottom: var(--border-width) solid var(--color-border);
-    border-radius: 0;
+  .thinking-serie__hint {
+    font-size: 0.92rem;
+    line-height: 1.45;
+    color: var(--thinking-ivory-muted);
   }
-  @media (min-width: 50em) {
-    .cards-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .cards-grid > :global(*) {
-      border-right: var(--border-width) solid var(--color-border);
-    }
+
+  .thinking-library {
+    padding-block: 1.35rem 2rem;
   }
-  @media (min-width: 75em) {
-    .cards-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-  .section-header {
+  .thinking-library__head {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2) var(--space-4);
+    gap: 0.75rem 1rem;
+    justify-content: space-between;
     align-items: baseline;
-    padding-bottom: var(--space-3);
-    border-bottom: var(--border-width) solid var(--color-border);
+    margin-bottom: 0.75rem;
   }
-  .section-header p {
+  .thinking-library__head h2 {
     margin: 0;
-    color: var(--color-fg-subtle);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: var(--tracking-wide);
+    font-size: 1.25rem;
+    font-weight: 650;
+  }
+  .thinking-library__tools {
+    display: flex;
+    gap: 0.85rem;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--thinking-muted);
+  }
+  .thinking-filters-panel summary {
+    list-style: none;
+    cursor: pointer;
+    font-weight: 650;
+    color: var(--thinking-ink);
+    border: 1px solid var(--thinking-border);
+    border-radius: var(--thinking-radius);
+    padding: 0.55rem 0.8rem;
+  }
+  .thinking-filters-panel summary::-webkit-details-marker {
+    display: none;
+  }
+  .thinking-filters-panel[open] summary {
+    color: var(--thinking-copper);
+    border-color: var(--thinking-copper);
+  }
+  .thinking-filters-panel__body {
+    margin-top: 0.85rem;
+  }
+
+  .thinking-rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .thinking-rows a {
+    display: grid;
+    grid-template-columns: 7rem minmax(0, 1fr) auto;
+    gap: 0.75rem 1rem;
+    align-items: baseline;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--thinking-border);
+    text-decoration: none;
+    color: inherit;
+  }
+  .thinking-rows__title {
+    font-size: 1rem;
+    font-weight: 650;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+  }
+  .thinking-rows__type {
+    font-size: 0.72rem;
+    font-weight: 650;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
+    color: var(--thinking-muted);
+    white-space: nowrap;
+  }
+  .thinking-more {
+    margin-top: 1rem;
+  }
+  .thinking-more summary {
+    cursor: pointer;
+    color: var(--thinking-copper);
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .thinking-empty {
+    margin: 0;
+    color: var(--thinking-muted);
+  }
+
+  @media (max-width: 50em) {
+    .thinking-rows a {
+      grid-template-columns: 1fr;
+      gap: 0.2rem;
+    }
   }
 </style>

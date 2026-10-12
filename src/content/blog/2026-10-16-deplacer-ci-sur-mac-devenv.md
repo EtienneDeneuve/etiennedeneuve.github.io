@@ -3,6 +3,7 @@ title: "Nous avons déplacé la CI sur nos Mac. Pas nos exigences."
 description: "Nix, devenv, prek et PostgreSQL local pour rapprocher les vérifications du code, sans entretenir deux chaînes techniques contradictoires."
 pubDate: 2026-10-16T07:30:00.000Z
 language: fr
+translationKey: 2026-10-16-deplacer-ci-sur-mac-devenv
 contentType: architecture-decision
 pillar: platform-engineering
 audience:

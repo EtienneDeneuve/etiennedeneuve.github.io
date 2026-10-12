@@ -3,6 +3,7 @@ title: "Je versionne mes postes de travail comme du logiciel"
 description: "Un poste ne devrait pas être simplement « sur la dernière config Git ». Je traite maintenant la workstation comme un artefact versionné : registry privé, SemVer, provenance, closures Nix et rollback."
 pubDate: 2026-10-28T07:30:00.000Z
 language: fr
+translationKey: 2026-10-28-versionner-postes-semver-nix
 contentType: architecture-decision
 pillar: software-supply-chain
 audience:

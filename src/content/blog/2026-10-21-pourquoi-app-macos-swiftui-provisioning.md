@@ -3,6 +3,7 @@ title: "Pourquoi j’ai fini par écrire une petite app macOS pour provisionner 
 description: "Le premier login mélange réseau, identité, privilèges root, Nix et reprise sur erreur. À un moment, continuer en shell était plus compliqué qu’écrire une petite app SwiftUI avec une vraie machine à états."
 pubDate: 2026-10-21T07:30:00.000Z
 language: fr
+translationKey: 2026-10-21-pourquoi-app-macos-swiftui-provisioning
 contentType: field-note
 pillar: platform-engineering
 audience:

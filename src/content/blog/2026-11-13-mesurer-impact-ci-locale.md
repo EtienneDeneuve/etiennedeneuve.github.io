@@ -3,6 +3,7 @@ title: "CI locale : moins de minutes GitHub, mais quel gain réel ?"
 description: "Une première comparaison chiffrée de notre CI locale : minutes de runners, dollars, délai de feedback et indicateurs de qualité, sans inventer un ROI."
 pubDate: 2026-11-13T07:30:00.000Z
 language: fr
+translationKey: 2026-11-13-mesurer-impact-ci-locale
 contentType: architecture-decision
 pillar: platform-engineering
 audience:

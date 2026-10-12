@@ -12,6 +12,7 @@ import sitemap from "@astrojs/sitemap";
 import jopSoftwarecookieconsent from "@jop-software/astro-cookieconsent";
 import remarkMermaid from "remark-mermaidjs";
 import { unified } from "@astrojs/markdown-remark";
+import { mermaidConfig, mermaidCssUrls } from "./src/config/mermaid.ts";
 
 import react from "@astrojs/react";
 
@@ -261,13 +262,33 @@ export default defineConfig({
   markdown: {
     // Keep remark/rehype plugins on the unified pipeline (Sätteri is default in Astro 7).
     processor: unified({
-      remarkPlugins: [remarkToc, remarkReadingTime, remarkModifiedTime, remarkMermaid],
+      remarkPlugins: [
+        remarkToc,
+        remarkReadingTime,
+        remarkModifiedTime,
+        [
+          remarkMermaid,
+          {
+            mermaidConfig,
+            css: mermaidCssUrls,
+          },
+        ],
+      ],
       rehypePlugins: [
         rehypeSlug,
         [
           rehypeAutolinkHeadings,
           {
             behavior: "append",
+            test: ["h1", "h2", "h3"],
+            properties: {
+              className: ["heading-anchor"],
+              ariaLabel: "Link to this section",
+            },
+            content: {
+              type: "text",
+              value: "#",
+            },
           },
         ],
       ],
