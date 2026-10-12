@@ -76,7 +76,10 @@ function parseFrontmatter(raw: string): { fm: Fm; body: string } {
   return { fm, body };
 }
 
-function readPair(stem: string): { fr: { fm: Fm; body: string; path: string }; en: { fm: Fm; body: string; path: string } } {
+function readPair(stem: string): {
+  fr: { fm: Fm; body: string; path: string };
+  en: { fm: Fm; body: string; path: string };
+} {
   const frPath = join(blogDir, `${stem}.md`);
   const enPath = join(blogDir, `${stem}-en.md`);
   if (!existsSync(frPath)) throw new Error(`missing FR ${stem}.md`);
@@ -141,7 +144,10 @@ for (const stem of seriesIds) {
   assert(en.fm.language === "en", `${stem}-en: language=en`);
   assert(fr.fm.translationKey === stem, `${stem}: translationKey matches stem`);
   assert(en.fm.translationKey === stem, `${stem}-en: translationKey matches FR stem`);
-  assert(fr.fm.pubDate === en.fm.pubDate, `${stem}: pubDate FR/EN match (${fr.fm.pubDate} vs ${en.fm.pubDate})`);
+  assert(
+    fr.fm.pubDate === en.fm.pubDate,
+    `${stem}: pubDate FR/EN match (${fr.fm.pubDate} vs ${en.fm.pubDate})`
+  );
   assert(
     Boolean(fr.fm.draft) === Boolean(en.fm.draft),
     `${stem}: draft FR/EN match (${fr.fm.draft} vs ${en.fm.draft})`
@@ -185,4 +191,6 @@ if (failed > 0) {
   process.exit(1);
 }
 
-console.log(`OK: ${seriesIds.length} EN series pairs checked (frontmatter, residue, scheduling, related).`);
+console.log(
+  `OK: ${seriesIds.length} EN series pairs checked (frontmatter, residue, scheduling, related).`
+);

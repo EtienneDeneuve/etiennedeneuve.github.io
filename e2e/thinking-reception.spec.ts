@@ -109,7 +109,12 @@ test.describe("Thinking reception screenshots + finishing checks", () => {
         await assertNoHorizontalOverflow(page);
         await assertKeyContrast(page);
 
-        if (route.id.includes("otel") || route.id.includes("mac") || route.id.includes("ci") || route.id.includes("long")) {
+        if (
+          route.id.includes("otel") ||
+          route.id.includes("mac") ||
+          route.id.includes("ci") ||
+          route.id.includes("long")
+        ) {
           await expect(page.locator("[data-article-root]")).toBeVisible();
           const lang = route.path.startsWith("/en/") ? "en" : "fr";
           const expected = lang === "fr" ? /Lien vers cette section/i : /Link to this section/i;

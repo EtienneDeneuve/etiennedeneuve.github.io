@@ -390,15 +390,18 @@ function main() {
       fail("en/index.html: missing language switcher");
     }
     const hasEmptyThinking = /No English notes yet/i.test(enHomeHtml);
-    const hasThinkingFeed = /atelier-feed/i.test(enHomeHtml);
+    // #121 home uses home-pubs (not the legacy atelier-feed class).
+    const hasThinkingFeed = /home-pubs/i.test(enHomeHtml) || /atelier-feed/i.test(enHomeHtml);
     if (!hasEmptyThinking && !hasThinkingFeed) {
       fail("en/index.html: missing Thinking section (empty state or EN feed)");
     }
     if (!hasEmptyThinking && hasThinkingFeed) {
-      // When EN articles exist, feed is OK; when they do not, empty copy is required.
-      // Detect FR fallback: empty copy must appear if feed links go to FR /thinking/ only.
-      const frArticleOnEnHome = /href=["']\/thinking\/[^"']+["']/i.test(enHomeHtml);
-      if (frArticleOnEnHome) {
+      // Scope to publications aside — depth CTA may still link the FR OTel article.
+      const pubsBlock = enHomeHtml.match(
+        /<aside[^>]*class=["'][^"']*home-pubs[^"']*["'][^>]*>[\s\S]*?<\/aside>/i
+      );
+      const pubsHtml = pubsBlock?.[0] ?? "";
+      if (/href=["']\/thinking\/[^"']+["']/i.test(pubsHtml)) {
         fail("en/index.html: FR article cards on EN home (forbidden fallback)");
       }
     }

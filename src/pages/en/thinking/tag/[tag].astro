@@ -1,33 +1,17 @@
 ---
 import ThinkingFacetContent from "../../../../components/ThinkingFacetContent.astro";
 import { thinkingConfig } from "../../../../config/thinking.ts";
-import {
-  articlesForLocale,
-  getAllThinkingArticles,
-  getQualifyingTags,
-  getEntryTags,
-  slugifyTag,
-} from "../../../../lib/thinking.ts";
+import { loadFacetCorpus, tagFacetPaths } from "../../../../lib/thinking-facets.ts";
+import type { ThinkingArticle } from "../../../../lib/thinking.ts";
 
 export async function getStaticPaths() {
-  const articles = articlesForLocale(await getAllThinkingArticles(), "en");
-  const qualifying = getQualifyingTags(articles);
-  return qualifying
-    .map((tag) => ({
-      params: { tag: tag.slug },
-      props: {
-        tag,
-        entries: articles.filter((entry) =>
-          getEntryTags(entry).some((label) => slugifyTag(label) === tag.slug)
-        ),
-      },
-    }))
-    .filter((path) => path.props.entries.length > 0);
+  const { fr, en } = await loadFacetCorpus();
+  return tagFacetPaths(fr, en, "en");
 }
 
 interface Props {
   tag: { slug: string; label: string; count: number };
-  entries: Awaited<ReturnType<typeof getAllThinkingArticles>>;
+  entries: ThinkingArticle[];
 }
 
 const { tag, entries } = Astro.props;
@@ -37,7 +21,7 @@ const { tag, entries } = Astro.props;
   lang="en"
   title={tag.label}
   seoTitle={`Tag: ${tag.label}`}
-  description={`Articles tagged “${tag.label}” (${tag.count}).`}
+  description={`Articles tagged “${tag.label}” (${entries.length}).`}
   entries={entries}
   facetLabel={thinkingConfig.labels.browseTags.en}
 />

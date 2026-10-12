@@ -16,7 +16,12 @@ function treeWithAnchor(): Root {
           {
             type: "element",
             tagName: "a",
-            properties: { className: ["heading-anchor"], href: "#section", ariaHidden: true, tabIndex: -1 },
+            properties: {
+              className: ["heading-anchor"],
+              href: "#section",
+              ariaHidden: true,
+              tabIndex: -1,
+            },
             children: [{ type: "text", value: "#" }],
           },
         ],
@@ -28,7 +33,8 @@ function treeWithAnchor(): Root {
 function run(file: VFile) {
   const tree = treeWithAnchor();
   rehypeLocalizeHeadingAnchors()(tree, file);
-  const link = (tree.children[0] as { children: Array<{ properties?: Record<string, unknown> }> }).children[1]!;
+  const link = (tree.children[0] as { children: Array<{ properties?: Record<string, unknown> }> })
+    .children[1]!;
   return link.properties ?? {};
 }
 
@@ -51,7 +57,11 @@ function run(file: VFile) {
 {
   const file = new VFile({ path: "/tmp/2026-10-09-ia-accelere-code-ci-doit-suivre-en.md" });
   const props = run(file);
-  assert.equal(props.ariaLabel, "Link to this section", "path -en.md falls back without frontmatter");
+  assert.equal(
+    props.ariaLabel,
+    "Link to this section",
+    "path -en.md falls back without frontmatter"
+  );
 }
 
 console.log("rehype-localize-heading-anchors: ok");

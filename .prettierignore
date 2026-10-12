@@ -13,3 +13,4 @@ megalinter-reports
 coverage
 playwright-report
 test-results
+exports
