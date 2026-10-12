@@ -12,6 +12,7 @@ import {
   getContentTypeLabel,
   getEntryTags,
   getQualifyingTags,
+  isFeatured,
   listPublishedSeries,
   selectOpeningArticles,
   slugifyTag,
@@ -207,7 +208,12 @@ const jsonLd = buildJsonLdGraph([
           </div>
         </div>
 
-        <div class="thinking-rows" data-library-grid>
+        <div
+          class="thinking-rows"
+          id="thinking-library-grid"
+          data-library-grid
+          data-library-page-size={config.libraryPageSize}
+        >
           {
             libraryArticles.map((entry) => {
               const articleLang = getArticleLanguage(entry);
@@ -217,6 +223,12 @@ const jsonLd = buildJsonLdGraph([
               const contentType = entry.data.contentType as ThinkingContentType;
               const tagSlugs = getEntryTags(entry).map(slugifyTag).join(" ");
               const publishedAt = new Date(entry.data.pubDate).toISOString();
+              const editorialRank = (config.featuredSlugs as readonly string[]).indexOf(entry.id);
+              const featuredRank = isFeatured(entry)
+                ? editorialRank >= 0
+                  ? editorialRank
+                  : 999
+                : -1;
               return (
                 <article
                   class="thinking-row"
@@ -227,6 +239,7 @@ const jsonLd = buildJsonLdGraph([
                   data-date={publishedAt}
                   data-title={entry.data.title.toLocaleLowerCase(articleLang)}
                   data-opening={isOpening ? "true" : undefined}
+                  data-featured-rank={featuredRank}
                   hidden={defaultHidden || undefined}
                 >
                   <a href={getArticlePath(getCanonicalSlug(entry), articleLang)}>
@@ -243,6 +256,21 @@ const jsonLd = buildJsonLdGraph([
             })
           }
         </div>
+        <div class="thinking-library__pagination" data-library-pagination hidden>
+          <p class="thinking-library__progress" data-library-progress aria-live="polite">
+            <span data-library-shown></span> / <span data-library-total></span>{" "}
+            {lang === "fr" ? "articles affichés" : "articles shown"}
+          </p>
+          <button
+            class="thinking-library__more"
+            type="button"
+            data-library-more
+            aria-controls="thinking-library-grid"
+            hidden
+          >
+            {labels.seeMore[lang]} →
+          </button>
+        </div>
         <p class="thinking-empty" data-library-empty hidden>
           {
             lang === "en"
@@ -255,14 +283,13 @@ const jsonLd = buildJsonLdGraph([
   </main>
 </BaseLayout>
 
-{/* Static GH Pages: reapply ?pillar=&type=&lang=&tag=&sort= in the browser. */}
+{/* Static GH Pages: filter, sort and paginate released articles in the browser. */}
 <script>
-  // @ts-nocheck
-  const FILTER_FIELDS = ["pillar", "type", "lang", "sort", "tag"];
-  let thinkingFiltersCleanup;
+  const FILTER_FIELDS = ["pillar", "type", "lang", "sort", "tag"] as const;
+  let thinkingFiltersCleanup: (() => void) | undefined;
 
-  function initThinkingLibraryFilters() {
-    if (typeof thinkingFiltersCleanup === "function") thinkingFiltersCleanup();
+  function initThinkingLibraryFilters(): void {
+    thinkingFiltersCleanup?.();
     thinkingFiltersCleanup = undefined;
 
     const form = document.querySelector("form.filters");
@@ -271,20 +298,25 @@ const jsonLd = buildJsonLdGraph([
     const emptyEl = document.querySelector("[data-library-empty]");
     const openingSection = document.querySelector("[data-opening-section]");
     const seriesSection = document.querySelector("[data-series-section]");
+    const pagination = document.querySelector("[data-library-pagination]");
+    const progressEl = document.querySelector("[data-library-progress]");
+    const shownEl = document.querySelector("[data-library-shown]");
+    const totalEl = document.querySelector("[data-library-total]");
+    const moreButton = document.querySelector("[data-library-more]");
     if (!(form instanceof HTMLFormElement) || !(grid instanceof HTMLElement)) return;
 
     const uiLang = form.getAttribute("data-ui-lang") === "en" ? "en" : "fr";
-    const cards = [...grid.querySelectorAll(":scope > article")].filter(
-      (node) => node instanceof HTMLElement
-    );
+    const pageSize = Number(grid.dataset.libraryPageSize) || 12;
+    const cards = [...grid.querySelectorAll<HTMLElement>(":scope > article")];
     const buildOrder = cards.slice();
+    let visibleLimit = pageSize;
 
-    const getSelect = (name) => {
+    const getSelect = (name: string): HTMLSelectElement | null => {
       const field = form.elements.namedItem(name);
       return field instanceof HTMLSelectElement ? field : null;
     };
 
-    const readFilters = () => {
+    const readFilters = (): URLSearchParams => {
       const params = new URLSearchParams();
       for (const name of FILTER_FIELDS) {
         const value = getSelect(name)?.value ?? "";
@@ -296,7 +328,18 @@ const jsonLd = buildJsonLdGraph([
       return params;
     };
 
-    const applyFilters = () => {
+    const dateNewestFirst = (a: HTMLElement, b: HTMLElement): number =>
+      (b.dataset.date ?? "").localeCompare(a.dataset.date ?? "");
+
+    const featuredFirst = (a: HTMLElement, b: HTMLElement): number => {
+      const rankA = Number(a.dataset.featuredRank ?? -1);
+      const rankB = Number(b.dataset.featuredRank ?? -1);
+      if ((rankA >= 0) !== (rankB >= 0)) return Number(rankB >= 0) - Number(rankA >= 0);
+      if (rankA >= 0 && rankB >= 0 && rankA !== rankB) return rankA - rankB;
+      return dateNewestFirst(a, b);
+    };
+
+    const applyFilters = (): void => {
       const params = readFilters();
       const pillar = params.get("pillar");
       const type = params.get("type");
@@ -305,26 +348,9 @@ const jsonLd = buildJsonLdGraph([
       const langParam = params.get("lang");
       const languageScope =
         langParam === "all" || langParam === "fr" || langParam === "en" ? langParam : uiLang;
-
       const hasActiveFilters = Boolean(
         pillar || type || tag || langParam === "all" || (langParam && langParam !== uiLang)
       );
-
-      let visible = 0;
-      for (const card of cards) {
-        const tags = (card.dataset.tags ?? "").split(" ").filter(Boolean);
-        const langOk = languageScope === "all" || card.dataset.lang === languageScope;
-        const matches =
-          langOk &&
-          (!pillar || card.dataset.pillar === pillar) &&
-          (!type || card.dataset.type === type) &&
-          (!tag || tags.includes(tag));
-        // Keep opening rows in the DOM; only suppress them while the shelf is shown.
-        const hideAsOpeningDuplicate =
-          !hasActiveFilters && card.dataset.opening === "true" && matches;
-        card.hidden = !matches || hideAsOpeningDuplicate;
-        if (matches && !hideAsOpeningDuplicate) visible += 1;
-      }
 
       const ordered =
         sort === "oldest"
@@ -333,69 +359,97 @@ const jsonLd = buildJsonLdGraph([
             )
           : sort === "title"
             ? [...buildOrder].sort((a, b) =>
-                (a.dataset.title ?? "").localeCompare(b.dataset.title ?? "")
+                (a.dataset.title ?? "").localeCompare(b.dataset.title ?? "", uiLang)
               )
             : sort === "featured"
-              ? [...buildOrder]
-              : [...buildOrder].sort((a, b) =>
-                  (b.dataset.date ?? "").localeCompare(a.dataset.date ?? "")
-                );
+              ? [...buildOrder].sort(featuredFirst)
+              : [...buildOrder].sort(dateNewestFirst);
       for (const card of ordered) grid.append(card);
 
-      if (openingSection instanceof HTMLElement) {
-        openingSection.hidden = hasActiveFilters;
-      }
-      if (seriesSection instanceof HTMLElement) {
-        seriesSection.hidden = hasActiveFilters;
-      }
-      if (countEl) countEl.textContent = String(visible);
-      if (emptyEl instanceof HTMLElement) emptyEl.hidden = visible > 0;
+      const matching = ordered.filter((card) => {
+        const tags = (card.dataset.tags ?? "").split(" ").filter(Boolean);
+        const langOk = languageScope === "all" || card.dataset.lang === languageScope;
+        return (
+          langOk &&
+          (!pillar || card.dataset.pillar === pillar) &&
+          (!type || card.dataset.type === type) &&
+          (!tag || tags.includes(tag)) &&
+          (hasActiveFilters || card.dataset.opening !== "true")
+        );
+      });
+      const matches = new Set(matching);
+      const shown = Math.min(visibleLimit, matching.length);
+      const displayed = new Set(matching.slice(0, shown));
+      for (const card of cards) card.hidden = !displayed.has(card);
+
+      if (openingSection instanceof HTMLElement) openingSection.hidden = hasActiveFilters;
+      if (seriesSection instanceof HTMLElement) seriesSection.hidden = hasActiveFilters;
+      if (countEl) countEl.textContent = String(matching.length);
+      if (emptyEl instanceof HTMLElement) emptyEl.hidden = matching.length > 0;
+      if (pagination instanceof HTMLElement) pagination.hidden = matching.length <= pageSize;
+      if (progressEl instanceof HTMLElement) progressEl.hidden = matching.length <= pageSize;
+      if (shownEl) shownEl.textContent = String(shown);
+      if (totalEl) totalEl.textContent = String(matching.length);
+      if (moreButton instanceof HTMLButtonElement) moreButton.hidden = shown >= matching.length;
     };
 
-    const syncFormFromUrl = () => {
+    const syncFormFromUrl = (): void => {
       const params = new URLSearchParams(window.location.search);
       for (const name of FILTER_FIELDS) {
         const select = getSelect(name);
         if (!select) continue;
-        if (name === "lang") {
-          select.value = params.get("lang") ?? uiLang;
-        } else if (name === "sort") {
-          select.value = params.get("sort") ?? "recent";
-        } else {
-          select.value = params.get(name) ?? "";
-        }
+        if (name === "lang") select.value = params.get("lang") ?? uiLang;
+        else if (name === "sort") select.value = params.get("sort") ?? "recent";
+        else select.value = params.get(name) ?? "";
+
         if (select.selectedIndex === -1) {
           select.value = name === "sort" ? "recent" : name === "lang" ? uiLang : "";
         }
       }
+      const requested = Number(params.get("show"));
+      visibleLimit =
+        Number.isSafeInteger(requested) && requested > pageSize
+          ? Math.min(requested, cards.length)
+          : pageSize;
       applyFilters();
     };
 
-    const updateFromForm = (push) => {
-      const query = readFilters().toString();
+    const updateUrl = (push: boolean): void => {
+      const params = readFilters();
+      if (visibleLimit > pageSize) params.set("show", String(visibleLimit));
+      const query = params.toString();
       const nextUrl = `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`;
       const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-      if (nextUrl !== current) {
-        if (push) window.history.pushState(window.history.state, "", nextUrl);
-        else window.history.replaceState(window.history.state, "", nextUrl);
-      }
-      applyFilters();
+      if (nextUrl === current) return;
+      if (push) window.history.pushState(window.history.state, "", nextUrl);
+      else window.history.replaceState(window.history.state, "", nextUrl);
     };
 
-    const onChange = () => updateFromForm(true);
-    const onSubmit = (event) => {
+    const onChange = (): void => {
+      visibleLimit = pageSize;
+      updateUrl(true);
+      applyFilters();
+    };
+    const onSubmit = (event: SubmitEvent): void => {
       event.preventDefault();
-      updateFromForm(true);
+      onChange();
+    };
+    const onMore = (): void => {
+      visibleLimit = Math.min(visibleLimit + pageSize, cards.length);
+      updateUrl(false);
+      applyFilters();
     };
 
     form.addEventListener("change", onChange);
     form.addEventListener("submit", onSubmit);
+    if (moreButton instanceof HTMLButtonElement) moreButton.addEventListener("click", onMore);
     window.addEventListener("popstate", syncFormFromUrl);
     syncFormFromUrl();
 
     thinkingFiltersCleanup = () => {
       form.removeEventListener("change", onChange);
       form.removeEventListener("submit", onSubmit);
+      if (moreButton instanceof HTMLButtonElement) moreButton.removeEventListener("click", onMore);
       window.removeEventListener("popstate", syncFormFromUrl);
     };
   }
@@ -695,6 +749,39 @@ const jsonLd = buildJsonLdGraph([
 
   .thinking-library__count {
     margin: 0;
+  }
+  .thinking-library__pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.25rem;
+    margin-top: 1.25rem;
+  }
+  .thinking-library__pagination[hidden],
+  .thinking-library__progress[hidden],
+  .thinking-library__more[hidden] {
+    display: none !important;
+  }
+  .thinking-library__progress {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--thinking-muted);
+  }
+  .thinking-library__more {
+    padding: 0.65rem 0.95rem;
+    border: 1px solid var(--thinking-copper);
+    border-radius: var(--thinking-radius);
+    color: var(--thinking-copper);
+    background: transparent;
+    font: inherit;
+    font-weight: 650;
+    cursor: pointer;
+  }
+  .thinking-library__more:hover,
+  .thinking-library__more:focus-visible {
+    color: var(--thinking-bg);
+    background: var(--thinking-copper);
   }
   .thinking-rows {
     margin: 0;
