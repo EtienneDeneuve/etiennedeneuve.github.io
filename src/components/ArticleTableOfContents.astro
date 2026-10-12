@@ -165,13 +165,15 @@ const quickNav = thinkingConfig.labels.quickNav[lang];
   @media (min-width: 64em) {
     .toc {
       position: sticky;
-      top: var(--site-nav-offset, 4.75rem);
+      /* Clear sticky nav + reading progress (3px) so TOC never covers headings. */
+      top: calc(var(--site-nav-offset, 4.75rem) + 0.35rem);
       align-self: start;
-      max-height: calc(100vh - var(--site-nav-offset, 4.75rem) - 1rem);
+      max-height: calc(100vh - var(--site-nav-offset, 4.75rem) - 1.5rem);
       overflow: auto;
       padding-top: 0.35rem;
       padding-left: 0.85rem;
       border-left: 1px solid var(--border-on-dark, rgba(243, 239, 231, 0.16));
+      z-index: 1;
     }
     .toc__summary {
       cursor: default;
@@ -205,8 +207,18 @@ const quickNav = thinkingConfig.labels.quickNav[lang];
     return Number.isFinite(px) ? px : 76;
   };
 
+  const pageScrollY = (): number =>
+    window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+
   const prefersReducedMotion = (): boolean =>
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const scrollHeadingIntoView = (heading: HTMLElement): void => {
+    const top = pageScrollY() + heading.getBoundingClientRect().top - navOffsetPx() - 10;
+    const behavior = prefersReducedMotion() ? "auto" : "smooth";
+    window.scrollTo({ top: Math.max(0, top), behavior });
+    document.documentElement.scrollTo?.({ top: Math.max(0, top), behavior });
+  };
 
   const syncTocOpen = (): void => {
     const desktop = window.matchMedia("(min-width: 64em)").matches;
@@ -269,10 +281,7 @@ const quickNav = thinkingConfig.labels.quickNav[lang];
       const heading = document.getElementById(id);
       if (!(heading instanceof HTMLElement)) return;
       event.preventDefault();
-      heading.scrollIntoView({
-        block: "start",
-        behavior: prefersReducedMotion() ? "auto" : "smooth",
-      });
+      scrollHeadingIntoView(heading);
       history.replaceState(history.state, "", `#${id}`);
       pickActive();
       link.focus({ preventScroll: true });

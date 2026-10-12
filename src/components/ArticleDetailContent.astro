@@ -565,7 +565,7 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
     font-weight: 700;
     letter-spacing: -0.03em;
     line-height: 1.15;
-    scroll-margin-top: calc(var(--site-nav-offset, 4.75rem) + 0.5rem);
+    scroll-margin-top: calc(var(--site-nav-offset, 4.75rem) + 0.75rem);
   }
   .article-open :global(.lede) {
     margin: 0 0 1rem;
@@ -664,7 +664,8 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
   .article-prose :global(.prose h1),
   .article-prose :global(.prose h2),
   .article-prose :global(.prose h3) {
-    scroll-margin-top: calc(var(--site-nav-offset, 4.75rem) + 0.5rem);
+    /* Nav sticky + 3px progress bar — keep anchors clear of chrome. */
+    scroll-margin-top: calc(var(--site-nav-offset, 4.75rem) + 0.75rem);
   }
   .article-prose :global(.prose h2) {
     margin-top: 1.75rem;
@@ -681,15 +682,27 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
   .article-open .heading-anchor,
   .article-prose :global(.prose .heading-anchor) {
     color: var(--copper-on-dark);
-    opacity: 0;
     text-decoration: none;
+    opacity: 0.55;
   }
-  .article-open h1:hover > .heading-anchor,
-  .article-prose :global(.prose h2:hover > .heading-anchor),
-  .article-prose :global(.prose h3:hover > .heading-anchor),
+  @media (hover: hover) and (pointer: fine) {
+    .article-open .heading-anchor,
+    .article-prose :global(.prose .heading-anchor) {
+      opacity: 0;
+    }
+    .article-open h1:hover > .heading-anchor,
+    .article-prose :global(.prose h2:hover > .heading-anchor),
+    .article-prose :global(.prose h3:hover > .heading-anchor),
+    .article-open .heading-anchor:focus-visible,
+    .article-prose :global(.prose .heading-anchor:focus-visible) {
+      opacity: 1;
+    }
+  }
   .article-open .heading-anchor:focus-visible,
   .article-prose :global(.prose .heading-anchor:focus-visible) {
     opacity: 1;
+    outline: 2px solid var(--copper-on-dark);
+    outline-offset: 2px;
   }
   .article-prose :global(.prose :not(pre) > code) {
     background: var(--bg-dark-soft);

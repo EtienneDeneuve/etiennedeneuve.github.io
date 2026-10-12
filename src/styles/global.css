@@ -839,20 +839,33 @@ a.surface-card:hover,
 .prose .heading-anchor {
   margin-left: 0.35em;
   color: var(--copper-on-dark, #f0aa78);
-  text-decoration: none !important;
+  text-decoration: none;
   font-weight: 600;
-  opacity: 0;
+  /* Touch / coarse pointers: keep anchors discoverable without hover. */
+  opacity: 0.55;
   transition: opacity 0.15s ease;
 }
-h1:hover > .heading-anchor,
-h2:hover > .heading-anchor,
-h3:hover > .heading-anchor,
-.prose h1:hover > .heading-anchor,
-.prose h2:hover > .heading-anchor,
-.prose h3:hover > .heading-anchor,
+@media (hover: hover) and (pointer: fine) {
+  .heading-anchor,
+  .prose .heading-anchor {
+    opacity: 0;
+  }
+  h1:hover > .heading-anchor,
+  h2:hover > .heading-anchor,
+  h3:hover > .heading-anchor,
+  .prose h1:hover > .heading-anchor,
+  .prose h2:hover > .heading-anchor,
+  .prose h3:hover > .heading-anchor,
+  .heading-anchor:focus-visible,
+  .prose .heading-anchor:focus-visible {
+    opacity: 1;
+  }
+}
 .heading-anchor:focus-visible,
 .prose .heading-anchor:focus-visible {
   opacity: 1;
+  outline: 2px solid var(--copper-on-dark, #f0aa78);
+  outline-offset: 2px;
 }
 .prose p,
 .prose li {
@@ -872,7 +885,10 @@ h3:hover > .heading-anchor,
   border: var(--border-width) solid var(--color-border);
 }
 
-/* Mermaid — graphite/copper. No frame. Keep pixel width from Mermaid + max-width. */
+/*
+ * Mermaid layout only — colours are baked via src/config/mermaid.ts themeCSS.
+ * Avoid a second global !important paint that fights rebuilt SVGs.
+ */
 .prose p:has(> svg[id^="mermaid"]),
 .prose p:has(> svg.flowchart),
 .prose p:has(> svg.sequenceDiagram) {
@@ -881,6 +897,7 @@ h3:hover > .heading-anchor,
   border: 0;
   background: transparent;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .prose svg[id^="mermaid"],
 .prose svg.flowchart,
@@ -894,48 +911,9 @@ h3:hover > .heading-anchor,
   background: transparent;
   border: 0;
 }
-.prose svg[id^="mermaid"] .node rect,
-.prose svg[id^="mermaid"] .node circle,
-.prose svg[id^="mermaid"] .node ellipse,
-.prose svg[id^="mermaid"] .node polygon,
-.prose svg[id^="mermaid"] [data-look="neo"].node rect,
-.prose svg[id^="mermaid"] [data-look="neo"].node polygon {
-  fill: #1b1e20 !important;
-  stroke: #f0aa78 !important;
-  stroke-width: 1.25px !important;
-  filter: none !important;
-}
-.prose svg[id^="mermaid"] .node .label,
-.prose svg[id^="mermaid"] .nodeLabel,
-.prose svg[id^="mermaid"] .label text,
-.prose svg[id^="mermaid"] text {
-  fill: #f7f3ec !important;
-  color: #f7f3ec !important;
-}
-.prose svg[id^="mermaid"] .edgeLabel text,
-.prose svg[id^="mermaid"] .edgeLabel tspan {
-  fill: #cdd0cf !important;
-}
-.prose svg[id^="mermaid"] .edgePath .path,
-.prose svg[id^="mermaid"] .flowchart-link {
-  stroke: #9aa0a3 !important;
-  fill: none !important;
-}
-.prose svg[id^="mermaid"] .marker,
-.prose svg[id^="mermaid"] .marker path,
-.prose svg[id^="mermaid"] .arrowheadPath,
-.prose svg[id^="mermaid"] .root .anchor path {
-  fill: #f0aa78 !important;
-  stroke: #f0aa78 !important;
-}
-.prose svg[id^="mermaid"] .edgeLabel rect {
-  fill: #111416 !important;
-  opacity: 0.9 !important;
-  stroke: none !important;
-}
 /* Mermaid sometimes emits empty edgeLabel groups at 0,0 */
 .prose svg[id^="mermaid"] g.edgeLabel:not([transform]) {
-  display: none !important;
+  display: none;
 }
 .prose hr {
   border: 0;

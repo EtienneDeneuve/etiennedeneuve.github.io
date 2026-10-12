@@ -13,6 +13,7 @@ import jopSoftwarecookieconsent from "@jop-software/astro-cookieconsent";
 import remarkMermaid from "remark-mermaidjs";
 import { unified } from "@astrojs/markdown-remark";
 import { mermaidConfig, mermaidCssUrls } from "./src/config/mermaid.ts";
+import { rehypeLocalizeHeadingAnchors } from "./src/lib/rehype-localize-heading-anchors.ts";
 
 import react from "@astrojs/react";
 
@@ -283,7 +284,6 @@ export default defineConfig({
             test: ["h1", "h2", "h3"],
             properties: {
               className: ["heading-anchor"],
-              ariaLabel: "Link to this section",
             },
             content: {
               type: "text",
@@ -291,6 +291,7 @@ export default defineConfig({
             },
           },
         ],
+        rehypeLocalizeHeadingAnchors,
       ],
     }),
     shikiConfig: {

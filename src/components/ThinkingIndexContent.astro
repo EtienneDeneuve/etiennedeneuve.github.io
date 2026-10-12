@@ -430,9 +430,27 @@ const jsonLd = buildJsonLdGraph([
     background: var(--thinking-bg);
     color: var(--thinking-ink);
   }
+  /* Global h1/h2 use --color-fg (theme); force band ink so light theme
+     never paints dark titles onto graphite. */
+  .thinking-band--dark :global(h1),
+  .thinking-band--dark :global(h2),
+  .thinking-band--dark .thinking-title,
+  .thinking-band--dark .thinking-rows__title,
+  .thinking-band--dark .thinking-tagline,
+  .thinking-band--dark .thinking-lede {
+    color: var(--thinking-ink);
+  }
   .thinking-band--light {
     background: var(--thinking-ivory);
     color: var(--thinking-ivory-ink);
+  }
+  .thinking-band--light :global(h1),
+  .thinking-band--light :global(h2),
+  .thinking-band--light .thinking-serie__name {
+    color: var(--thinking-ivory-ink);
+  }
+  .thinking-band--light .thinking-serie__hint {
+    color: var(--thinking-ivory-muted);
   }
   .thinking-shell {
     box-sizing: border-box;

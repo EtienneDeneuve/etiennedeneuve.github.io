@@ -1,8 +1,8 @@
 /**
  * Mermaid theme for Thinking articles — graphite / ivory / copper.
  * Baked into SVG at build time via remark-mermaidjs (Playwright).
- * global.css also forces the same palette with !important so stale
- * / default SVGs still look on-brand in dev.
+ * Prefer system fonts here so the bake does not fetch Google Fonts.
+ * Article CSS only sizes/overflows SVGs; colours come from this bake.
  */
 export const mermaidThemeCSS = `
   .node rect,
@@ -81,7 +81,7 @@ export const mermaidConfig = {
   themeVariables: {
     darkMode: true,
     background: "#111416",
-    fontFamily: "Outfit, system-ui, -apple-system, Segoe UI, sans-serif",
+    fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif',
     fontSize: "14px",
     primaryColor: "#1b1e20",
     primaryTextColor: "#f7f3ec",
@@ -139,7 +139,8 @@ export const mermaidConfig = {
   },
 };
 
-/** Playwright needs Outfit while baking SVG. Must be an array (isomorphic iterates it). */
-export const mermaidCssUrls = [
-  "https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&display=swap",
-];
+/**
+ * No remote CSS during SVG bake — avoids fragile Google Fonts downloads in CI/build.
+ * Mermaid still receives fontFamily via themeVariables (system stack).
+ */
+export const mermaidCssUrls: string[] = [];
