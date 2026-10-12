@@ -106,15 +106,27 @@ const quickNav = thinkingConfig.labels.quickNav[lang];
     border-left: 2px solid transparent;
     padding-left: 0.55rem;
     margin-left: -0.55rem;
-    transition: color 0.15s ease, border-color 0.15s ease;
+    transition:
+      color 0.15s ease,
+      border-color 0.15s ease;
   }
-  .toc a:hover {
+  .toc a:hover,
+  .toc a:focus-visible {
     color: var(--copper-on-dark, #f0aa78);
+  }
+  .toc a:focus-visible {
+    outline: 2px solid var(--copper-on-dark, #f0aa78);
+    outline-offset: 2px;
   }
   .toc a.is-active {
     color: var(--copper-on-dark, #f0aa78);
     font-weight: 600;
     border-left-color: var(--copper-on-dark, #f0aa78);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .toc a {
+      transition: none;
+    }
   }
 
   @media (max-width: 63.99em) {
@@ -179,21 +191,24 @@ const quickNav = thinkingConfig.labels.quickNav[lang];
 </style>
 
 <script>
-  // @ts-nocheck
   /**
-   * Static + ClientRouter: init immediately and on astro:page-load.
-   * Scroll events do not bubble — listen on window and document.body
-   * (body was the scrollport when html/body had height:100%).
+   * ClientRouter: re-bind on every astro:page-load and tear down prior
+   * scroll/resize/matchMedia listeners so soft navigations never stack handlers.
    */
-  let spyCleanup;
+  type TocItem = { id: string; el: HTMLElement; link: HTMLAnchorElement };
 
-  const navOffsetPx = () => {
+  let tocSpyCleanup: (() => void) | undefined;
+
+  const navOffsetPx = (): number => {
     const raw = getComputedStyle(document.documentElement).getPropertyValue("--site-nav-offset");
     const px = Number.parseFloat(raw);
     return Number.isFinite(px) ? px : 76;
   };
 
-  const syncTocOpen = () => {
+  const prefersReducedMotion = (): boolean =>
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const syncTocOpen = (): void => {
     const desktop = window.matchMedia("(min-width: 64em)").matches;
     document.querySelectorAll(".toc__panel").forEach((panel) => {
       if (!(panel instanceof HTMLDetailsElement)) return;
@@ -201,35 +216,33 @@ const quickNav = thinkingConfig.labels.quickNav[lang];
     });
   };
 
-  const initTocSpy = () => {
-    if (typeof spyCleanup === "function") spyCleanup();
-    spyCleanup = undefined;
+  function initTocSpy(): void {
+    tocSpyCleanup?.();
+    tocSpyCleanup = undefined;
     syncTocOpen();
 
     const toc = document.querySelector("[data-toc]");
     if (!(toc instanceof HTMLElement)) return;
 
     const links = [...toc.querySelectorAll("[data-toc-link]")].filter(
-      (el) => el instanceof HTMLAnchorElement
+      (el): el is HTMLAnchorElement => el instanceof HTMLAnchorElement
     );
     if (links.length === 0) return;
 
-    const items = links
-      .map((link) => {
-        const id = link.getAttribute("data-toc-link");
-        if (!id) return null;
-        const el = document.getElementById(id);
-        return el instanceof HTMLElement ? { id, el, link } : null;
-      })
-      .filter(Boolean);
-
+    const items: TocItem[] = links.flatMap((link) => {
+      const id = link.getAttribute("data-toc-link");
+      if (!id) return [];
+      const el = document.getElementById(id);
+      return el instanceof HTMLElement ? [{ id, el, link }] : [];
+    });
     if (items.length === 0) return;
 
     let activeId = "";
 
-    const pickActive = () => {
+    const pickActive = (): void => {
       const line = navOffsetPx() + 12;
-      let current = items[0].id;
+      let current = items[0]?.id;
+      if (!current) return;
       for (const item of items) {
         if (item.el.getBoundingClientRect().top - line <= 0) current = item.id;
         else break;
@@ -238,22 +251,52 @@ const quickNav = thinkingConfig.labels.quickNav[lang];
       activeId = current;
       for (const item of items) {
         item.link.classList.toggle("is-active", item.id === current);
+        if (item.id === current) {
+          item.link.setAttribute("aria-current", "true");
+        } else {
+          item.link.removeAttribute("aria-current");
+        }
       }
     };
 
-    const onScroll = () => pickActive();
+    const onTocClick = (event: Event): void => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const link = target.closest("[data-toc-link]");
+      if (!(link instanceof HTMLAnchorElement)) return;
+      const id = link.getAttribute("data-toc-link");
+      if (!id) return;
+      const heading = document.getElementById(id);
+      if (!(heading instanceof HTMLElement)) return;
+      event.preventDefault();
+      heading.scrollIntoView({
+        block: "start",
+        behavior: prefersReducedMotion() ? "auto" : "smooth",
+      });
+      history.replaceState(history.state, "", `#${id}`);
+      pickActive();
+      link.focus({ preventScroll: true });
+    };
+
+    const desktopMq = window.matchMedia("(min-width: 64em)");
+    const onMq = (): void => syncTocOpen();
+    const onScroll = (): void => pickActive();
+
+    toc.addEventListener("click", onTocClick);
     window.addEventListener("scroll", onScroll, { passive: true });
     document.body.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
+    desktopMq.addEventListener("change", onMq);
     pickActive();
 
-    spyCleanup = () => {
+    tocSpyCleanup = () => {
+      toc.removeEventListener("click", onTocClick);
       window.removeEventListener("scroll", onScroll);
       document.body.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
+      desktopMq.removeEventListener("change", onMq);
     };
-  };
+  }
 
-  initTocSpy();
   document.addEventListener("astro:page-load", initTocSpy);
 </script>

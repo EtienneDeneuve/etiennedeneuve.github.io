@@ -150,13 +150,7 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
         </h1>
         {entry.data.description && <p class="lede">{entry.data.description}</p>}
         <div class="article-byline">
-          <img
-            src={author.portraitSrc}
-            alt=""
-            width="96"
-            height="96"
-            decoding="async"
-          />
+          <img src={author.portraitSrc} alt="" width="96" height="96" decoding="async" />
           <div>
             <p>
               <strong>{author.name}</strong> — {author.role[lang]}
@@ -304,8 +298,7 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
                   >
                     {cta.primaryLabel[lang]}
                     <span aria-hidden="true"> ↗</span>
-                  </a>
-                  {" "}
+                  </a>{" "}
                   <a class="btn-text" href={`${prefix}/work/`}>
                     {cta.secondaryLabel[lang]} →
                   </a>
@@ -319,7 +312,12 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
               <div class="article-continue stack gap-3">
                 <h2 class="eyebrow">{labels.continueSeries[lang]}</h2>
                 {series.prev && (
-                  <a href={getArticlePath(getCanonicalSlug(series.prev), getArticleLanguage(series.prev))}>
+                  <a
+                    href={getArticlePath(
+                      getCanonicalSlug(series.prev),
+                      getArticleLanguage(series.prev)
+                    )}
+                  >
                     <span class="eyebrow">
                       {labels.prev[lang]} · {series.index}/{series.total}
                     </span>
@@ -327,7 +325,12 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
                   </a>
                 )}
                 {series.next && (
-                  <a href={getArticlePath(getCanonicalSlug(series.next), getArticleLanguage(series.next))}>
+                  <a
+                    href={getArticlePath(
+                      getCanonicalSlug(series.next),
+                      getArticleLanguage(series.next)
+                    )}
+                  >
                     <span class="eyebrow">
                       {labels.next[lang]} · {series.index + 2}/{series.total}
                     </span>
@@ -407,20 +410,27 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
   </main>
 
   <script>
-    const root = document.querySelector("[data-article-root]");
-    if (root instanceof HTMLElement) {
+    let articleReadingCleanup: (() => void) | undefined;
+
+    const pageScrollY = () =>
+      window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+
+    const prefersReducedMotion = () =>
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function initArticleReadingUI() {
+      articleReadingCleanup?.();
+      articleReadingCleanup = undefined;
+
+      const root = document.querySelector("[data-article-root]");
+      if (!(root instanceof HTMLElement)) return;
+
       const progress = root.querySelector("[data-article-progress]");
       const bar = root.querySelector("[data-article-progress-bar]");
       const topBtn = root.querySelector("[data-article-top]");
       const sticky = root.querySelector("[data-article-cta-sticky]");
       const fullCta = root.querySelector("[data-article-cta-full]");
       const prose = root.querySelector(".article-prose");
-
-      const pageScrollY = () =>
-        window.scrollY ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop ||
-        0;
 
       const updateProgress = () => {
         const readEl = prose instanceof HTMLElement ? prose : root;
@@ -446,10 +456,11 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
         root.classList.toggle("article--cta-docked", ctaInView);
       };
 
+      let io: IntersectionObserver | undefined;
       if (sticky instanceof HTMLElement && fullCta instanceof HTMLElement) {
-        const io = new IntersectionObserver(
+        io = new IntersectionObserver(
           ([entry]) => {
-            ctaInView = entry.isIntersecting;
+            ctaInView = Boolean(entry?.isIntersecting);
             syncSticky();
           },
           { root: null, threshold: 0.35 }
@@ -457,10 +468,14 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
         io.observe(fullCta);
       }
 
-      if (topBtn instanceof HTMLButtonElement) {
-        topBtn.addEventListener("click", () => {
-          window.scrollTo({ top: 0, behavior: "smooth" });
+      const onTopClick = () => {
+        window.scrollTo({
+          top: 0,
+          behavior: prefersReducedMotion() ? "auto" : "smooth",
         });
+      };
+      if (topBtn instanceof HTMLButtonElement) {
+        topBtn.addEventListener("click", onTopClick);
       }
 
       const onScroll = () => {
@@ -471,7 +486,19 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
       window.addEventListener("scroll", onScroll, { passive: true });
       document.body.addEventListener("scroll", onScroll, { passive: true });
       window.addEventListener("resize", onScroll);
+
+      articleReadingCleanup = () => {
+        io?.disconnect();
+        window.removeEventListener("scroll", onScroll);
+        document.body.removeEventListener("scroll", onScroll);
+        window.removeEventListener("resize", onScroll);
+        if (topBtn instanceof HTMLButtonElement) {
+          topBtn.removeEventListener("click", onTopClick);
+        }
+      };
     }
+
+    document.addEventListener("astro:page-load", initArticleReadingUI);
   </script>
 </BaseLayout>
 
@@ -830,9 +857,14 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
   .article-top[hidden] {
     display: none;
   }
-  .article-top:hover {
+  .article-top:hover,
+  .article-top:focus-visible {
     color: var(--copper-on-dark);
     border-color: var(--copper-on-dark);
+  }
+  .article-top:focus-visible {
+    outline: 2px solid var(--copper-on-dark);
+    outline-offset: 2px;
   }
   .article.article--cta-docked .article-top {
     bottom: 1.25rem;
@@ -851,6 +883,14 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
     .article-top {
       right: 1rem;
       bottom: 4.25rem;
+      width: 2.75rem;
+      height: 2.75rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .article-progress span {
+      transition: none;
     }
   }
 </style>

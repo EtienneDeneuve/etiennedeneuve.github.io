@@ -158,17 +158,35 @@ const linkEvent = (href: string) => {
   }
   customElements.define("menu-button", MenuButton);
 
-  const nav = document.querySelector(".site-nav");
-  const syncNavOffset = () => {
+  let navOffsetCleanup: (() => void) | undefined;
+
+  function initSiteNavOffset() {
+    navOffsetCleanup?.();
+    navOffsetCleanup = undefined;
+
+    const nav = document.querySelector(".site-nav");
     if (!(nav instanceof HTMLElement)) return;
-    const px = Math.ceil(nav.getBoundingClientRect().height);
-    document.documentElement.style.setProperty("--site-nav-offset", `${px}px`);
-  };
-  syncNavOffset();
-  window.addEventListener("resize", syncNavOffset);
-  if (nav instanceof HTMLElement && "ResizeObserver" in window) {
-    new ResizeObserver(syncNavOffset).observe(nav);
+
+    const syncNavOffset = () => {
+      const px = Math.ceil(nav.getBoundingClientRect().height);
+      document.documentElement.style.setProperty("--site-nav-offset", `${px}px`);
+    };
+
+    syncNavOffset();
+    window.addEventListener("resize", syncNavOffset);
+    let resizeObserver: ResizeObserver | undefined;
+    if ("ResizeObserver" in window) {
+      resizeObserver = new ResizeObserver(syncNavOffset);
+      resizeObserver.observe(nav);
+    }
+
+    navOffsetCleanup = () => {
+      window.removeEventListener("resize", syncNavOffset);
+      resizeObserver?.disconnect();
+    };
   }
+
+  document.addEventListener("astro:page-load", initSiteNavOffset);
 </script>
 
 <style>
