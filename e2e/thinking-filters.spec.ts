@@ -15,15 +15,30 @@ async function openFilters(page: Page) {
   }
 }
 
+async function totalMatches(page: Page): Promise<number> {
+  return Number(await page.locator("[data-library-count]").textContent());
+}
+
+async function showAllMatching(page: Page): Promise<void> {
+  const more = page.locator("[data-library-more]");
+  for (let i = 0; i < 100 && (await more.isVisible()); i += 1) {
+    await more.click();
+  }
+  expect(await visibleLibrary(page).count()).toBe(await totalMatches(page));
+}
+
 test.describe("/thinking/ filters (built site)", () => {
   test("unfiltered library lists locale articles and keeps opening shelf", async ({ page }) => {
     await page.goto("/thinking/");
     const cards = await visibleLibrary(page);
-    const total = await cards.count();
+    const total = await totalMatches(page);
     expect(total).toBeGreaterThan(12);
+    await expect(cards).toHaveCount(12);
     await expect(page.locator("[data-library-empty]")).toBeHidden();
     await expect(page.locator("[data-opening-section]")).toBeVisible();
     await expect(page.locator("[data-library-count]")).toHaveText(String(total));
+    await expect(page.locator("[data-library-progress]")).toContainText(`12 / ${total}`);
+    await expect(page.locator("[data-library-more]")).toBeVisible();
 
     // Opening rows stay in the DOM but stay hidden while the shelf is shown.
     const openingHidden = page.locator('[data-library-grid] > article[data-opening="true"]');
@@ -32,12 +47,13 @@ test.describe("/thinking/ filters (built site)", () => {
 
   test("lang=all reveals both languages", async ({ page }) => {
     await page.goto("/thinking/");
-    const frOnly = await (await visibleLibrary(page)).count();
+    const frOnly = await totalMatches(page);
 
     await page.goto("/thinking/?lang=all");
-    const allLang = await visibleLibrary(page);
-    const allCount = await allLang.count();
+    const allCount = await totalMatches(page);
     expect(allCount).toBeGreaterThan(frOnly);
+    await showAllMatching(page);
+    const allLang = await visibleLibrary(page);
 
     const langs = await allLang.evaluateAll((nodes) => [
       ...new Set(nodes.map((node) => (node as HTMLElement).dataset.lang)),
@@ -54,6 +70,7 @@ test.describe("/thinking/ filters (built site)", () => {
     expect(openingTitles.length).toBeGreaterThan(0);
 
     await page.goto("/thinking/?lang=all");
+    await showAllMatching(page);
     for (const title of openingTitles) {
       const row = page.locator(
         `[data-library-grid] > article[data-opening='true'][data-title="${title}"]`
@@ -71,7 +88,7 @@ test.describe("/thinking/ filters (built site)", () => {
     for (const card of await visible.all()) {
       await expect(card).toHaveAttribute("data-type", "architecture-decision");
     }
-    await expect(page.locator("[data-library-count]")).toHaveText(String(count));
+    expect(await totalMatches(page)).toBeGreaterThanOrEqual(count);
     await expect(page.locator("[data-opening-section]")).toBeHidden();
   });
 
@@ -195,7 +212,10 @@ test.describe("/thinking/ filters (built site)", () => {
     }
 
     await page.goto("/thinking/?lang=all");
-    expect(await (await visibleLibrary(page)).count()).toBeGreaterThan(12);
+    expect(await totalMatches(page)).toBeGreaterThan(12);
+    await expect(await visibleLibrary(page)).toHaveCount(12);
+    await page.locator("[data-library-more]").click();
+    expect(await visibleLibrary(page).count()).toBeGreaterThan(12);
   });
 
   test("sorting by oldest reorders the library", async ({ page }) => {
@@ -207,6 +227,57 @@ test.describe("/thinking/ filters (built site)", () => {
 
     expect(dates.length).toBeGreaterThan(1);
     expect(dates).toEqual([...dates].sort());
+  });
+
+  test("featured sort genuinely prioritizes editorial selections", async ({ page }) => {
+    await page.goto("/thinking/?lang=all&sort=featured");
+    const visible = await visibleLibrary(page);
+    const featured = await visible.evaluateAll((nodes) =>
+      nodes.map((node) => Number((node as HTMLElement).dataset.featuredRank ?? -1))
+    );
+    expect(featured.length).toBe(12);
+    expect(featured[0]).toBeGreaterThanOrEqual(0);
+    const firstNormal = featured.findIndex((rank) => rank < 0);
+    if (firstNormal !== -1) {
+      expect(featured.slice(firstNormal).every((rank) => rank === -1)).toBe(true);
+    }
+    await page.goto("/thinking/?lang=all&sort=recent");
+    const recentFirst = await visibleLibrary(page).first().getAttribute("data-date");
+    const featuredFirst = await page.goto("/thinking/?lang=all&sort=featured").then(() =>
+      visibleLibrary(page).first().getAttribute("data-date")
+    );
+    expect(recentFirst).not.toBe(featuredFirst);
+  });
+
+  test("show more preserves filters, URL on reload, and resets on new filters", async ({ page }) => {
+    await page.goto("/thinking/?lang=all");
+    const total = await totalMatches(page);
+    expect(total).toBeGreaterThan(24);
+    await expect(await visibleLibrary(page)).toHaveCount(12);
+    await page.locator("[data-library-more]").click();
+    await expect(await visibleLibrary(page)).toHaveCount(24);
+    await expect(page).toHaveURL(/show=24/);
+    await page.reload();
+    await expect(await visibleLibrary(page)).toHaveCount(24);
+    await openFilters(page);
+    await page.locator('select[name="pillar"]').selectOption("observability");
+    await expect(page).not.toHaveURL(/show=/);
+    expect(await visibleLibrary(page).count()).toBeLessThanOrEqual(12);
+    expect(await totalMatches(page)).toBeGreaterThan(0);
+  });
+
+  test("without JavaScript all default-locale entries remain accessible", async ({ browser }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    try {
+      const page = await context.newPage();
+      await page.goto("/thinking/");
+      const matches = await totalMatches(page);
+      expect(matches).toBeGreaterThan(12);
+      await expect(await visibleLibrary(page)).toHaveCount(matches);
+      await expect(page.locator("[data-library-pagination]")).toBeHidden();
+    } finally {
+      await context.close();
+    }
   });
 
   test("query parameters sync into form selections", async ({ page }) => {
