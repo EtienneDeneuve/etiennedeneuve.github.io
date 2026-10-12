@@ -205,5 +205,6 @@ export const workConfig = {
     decision: { fr: "Ce qu'on tranche", en: "What we decide" } as Localized<string>,
     outcome: { fr: "Ce qui doit changer", en: "What should change" } as Localized<string>,
     related: { fr: "À lire", en: "Related reading" } as Localized<string>,
+    originalLanguage: { fr: "", en: "article in French" } as Localized<string>,
   },
 } as const;
