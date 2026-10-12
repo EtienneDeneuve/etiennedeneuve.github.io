@@ -17,9 +17,11 @@ import {
 interface Props {
   entry: ThinkingArticle;
   lang: "fr" | "en";
+  /** Hide on first paint (Thinking index defaults to UI-locale articles). */
+  hidden?: boolean;
 }
 
-const { entry, lang } = Astro.props;
+const { entry, lang, hidden = false } = Astro.props;
 const articleLang = getArticleLanguage(entry);
 const href = getArticlePath(getCanonicalSlug(entry), articleLang);
 const pillar = entry.data.pillar as ThinkingPillar;
@@ -39,6 +41,7 @@ const publishedAt = new Date(entry.data.pubDate).toISOString();
   data-tags={tagSlugs}
   data-date={publishedAt}
   data-title={entry.data.title.toLocaleLowerCase(articleLang)}
+  hidden={hidden || undefined}
 >
   <a class="article-card__hit" href={href}>
     <header class="card-header">

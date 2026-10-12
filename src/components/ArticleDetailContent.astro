@@ -1,27 +1,27 @@
 ---
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import ArticleCard from "../components/ArticleCard.astro";
 import ArticleTableOfContents from "../components/ArticleTableOfContents.astro";
 import {
   thinkingConfig,
   type ThinkingContentType,
   type ThinkingPillar,
 } from "../config/thinking.ts";
-import { siteConfig } from "../config/site.ts";
+import { omnivyaContactUrl, siteConfig } from "../config/site.ts";
 import {
   formatArticleDate,
   getAllThinkingArticles,
+  getArticleCta,
   getArticleLanguage,
   getArticlePath,
   getCanonicalSlug,
   getCanonicalUrl,
   getContentTypeLabel,
   getPillarLabel,
-  getPrevNextArticles,
   getReadingTime,
   getRelatedArticles,
   getRelatedProjectSlugs,
+  getSeriesForArticle,
   getTranslationSiblings,
   shouldShowUpdatedDate,
   type ThinkingArticle,
@@ -33,7 +33,6 @@ interface Props {
   lang: "fr" | "en";
 }
 
-/** Engineering content maps to TechArticle; commentary stays a plain Article. */
 const TECH_ARTICLE_TYPES = new Set<ThinkingContentType>([
   "doctrine",
   "technical-guide",
@@ -45,15 +44,22 @@ const { entry, lang } = Astro.props;
 const { Content, headings } = await render(entry);
 const prefix = lang === "en" ? "/en" : "";
 const labels = thinkingConfig.labels;
+const author = thinkingConfig.author;
+const omnivyaBridge = thinkingConfig.omnivyaBridge;
+const contactAside = thinkingConfig.contactAside;
+const linkedinHref = siteConfig.social.linkedin;
+const contactHref = `${prefix}/contact/`;
 const articleLang = getArticleLanguage(entry);
 const indexHref = `${prefix}/thinking/`;
 const articlePath = getArticlePath(getCanonicalSlug(entry), articleLang);
 
 const allArticles = await getAllThinkingArticles();
 const translations = getTranslationSiblings(entry, allArticles);
-const { prev, next } = getPrevNextArticles(entry, allArticles);
+const series = getSeriesForArticle(entry, allArticles);
 const relatedArticles = getRelatedArticles(entry, allArticles);
 const relatedProjectSlugs = getRelatedProjectSlugs(entry);
+const cta = getArticleCta(entry);
+const seriesHasNeighbors = Boolean(series?.prev || series?.next);
 
 const projects = (await getCollection("projects")).filter(
   (project) =>
@@ -61,11 +67,15 @@ const projects = (await getCollection("projects")).filter(
     (relatedProjectSlugs.includes(project.id) ||
       relatedProjectSlugs.some((slug) => project.id.includes(slug)))
 );
+const showRelatedBlock = relatedArticles.length > 0 || projects.length > 0;
+const showContinueBlock = seriesHasNeighbors || showRelatedBlock;
 
 const canonicalUrl = getCanonicalUrl(entry, siteConfig.seo.siteUrl);
 const pillar = entry.data.pillar as ThinkingPillar;
 const contentType = entry.data.contentType as ThinkingContentType;
 const readingTime = getReadingTime(entry);
+const decisionSummary = entry.data.decisionSummary;
+const titleAnchorId = getCanonicalSlug(entry);
 
 const alternates: { lang: "fr" | "en"; href: string }[] = [
   {
@@ -100,6 +110,9 @@ const jsonLd = buildJsonLdGraph([
     { name: entry.data.title, path: articlePath },
   ]),
 ]);
+
+/** Type + pillar only — series lives once in the body chrome, not in the kicker. */
+const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pillar, lang)];
 ---
 
 <BaseLayout
@@ -115,291 +128,740 @@ const jsonLd = buildJsonLdGraph([
   canonical={canonicalUrl}
   jsonLd={jsonLd}
 >
-  <main class="wrapper article-layout stack gap-8">
-    <a class="back-link" href={indexHref}>← {thinkingConfig.meta.title[lang]}</a>
+  <main class="article" data-article-root>
+    <div
+      class="article-progress"
+      role="progressbar"
+      aria-label={labels.readingProgress[lang]}
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="0"
+      data-article-progress
+    >
+      <span data-article-progress-bar></span>
+    </div>
 
-    <header class="article-header stack gap-3">
-      <div class="badges">
-        <a class="badge" href={`${prefix}/thinking/type/${contentType}/`}>
-          {getContentTypeLabel(contentType, lang)}
-        </a>
-        <a class="badge" href={`${prefix}/thinking/pillar/${pillar}/`}>
-          {getPillarLabel(pillar, lang)}
-        </a>
-        <span class="badge muted">{articleLang.toUpperCase()}</span>
-      </div>
-      <h1>{entry.data.title}</h1>
-      {entry.data.description && <p class="dek">{entry.data.description}</p>}
-      <dl class="article-meta">
-        <div>
-          <dt>{labels.published[lang]}</dt>
-          <dd>{formatArticleDate(entry.data.pubDate, lang)}</dd>
+    <div class="page-shell">
+      <header class="article-open measure">
+        <a class="btn-text" href={indexHref}>← {thinkingConfig.meta.title[lang]}</a>
+        <p class="eyebrow">{kickerParts.join(" · ")}</p>
+        <h1 id={titleAnchorId}>
+          {entry.data.title}
+          <a
+            class="heading-anchor"
+            href={`#${titleAnchorId}`}
+            aria-label={labels.headingAnchor[lang]}
+          >
+            #
+          </a>
+        </h1>
+        {entry.data.description && <p class="lede">{entry.data.description}</p>}
+        <div class="article-byline">
+          <img src={author.portraitSrc} alt="" width="96" height="96" decoding="async" />
+          <div>
+            <p>
+              <strong>{author.name}</strong> — {author.role[lang]}
+            </p>
+            <p class="muted">
+              {formatArticleDate(entry.data.pubDate, lang)}
+              {
+                shouldShowUpdatedDate(entry) && entry.data.lastModified && (
+                  <>
+                    {" "}
+                    · {labels.updated[lang]} {formatArticleDate(entry.data.lastModified, lang)}
+                  </>
+                )
+              }
+              {readingTime && <> · {readingTime}</>}
+            </p>
+            {
+              translations.length > 0 && (
+                <p class="muted">
+                  {labels.translation[lang]}:{" "}
+                  {translations.map((translated, index) => (
+                    <>
+                      {index > 0 && " · "}
+                      <a
+                        href={getArticlePath(
+                          getCanonicalSlug(translated),
+                          getArticleLanguage(translated)
+                        )}
+                      >
+                        {getArticleLanguage(translated).toUpperCase()}
+                      </a>
+                    </>
+                  ))}
+                </p>
+              )
+            }
+          </div>
         </div>
-        {
-          shouldShowUpdatedDate(entry) && entry.data.lastModified && (
-            <div>
-              <dt>{labels.updated[lang]}</dt>
-              <dd>{formatArticleDate(entry.data.lastModified, lang)}</dd>
-            </div>
-          )
-        }
-        {
-          readingTime && (
-            <div>
-              <dt>{labels.readingTime[lang]}</dt>
-              <dd>{readingTime}</dd>
-            </div>
-          )
-        }
-      </dl>
-      {
-        translations.length > 0 && (
-          <p class="translations">
-            {labels.translation[lang]}:{" "}
-            {translations.map((translated, index) => (
-              <>
-                {index > 0 && " · "}
-                <a
-                  href={getArticlePath(
-                    getCanonicalSlug(translated),
-                    getArticleLanguage(translated)
-                  )}
-                >
-                  {getArticleLanguage(translated).toUpperCase()} : {translated.data.title}
-                </a>
-              </>
-            ))}
-          </p>
-        )
-      }
-    </header>
+      </header>
 
-    <div class="article-body">
-      <ArticleTableOfContents headings={headings} lang={lang} />
-      <div class="prose">
-        {
-          entry.data.img && (
-            <div class="media-frame" data-ratio="16/9">
-              <img
-                src={entry.data.img}
-                alt={entry.data.imgAlt || entry.data.title}
-                loading="lazy"
-                decoding="async"
-                width="1200"
-                height="675"
-              />
-            </div>
-          )
-        }
-        <Content />
+      <div class="article-layout">
+        <ArticleTableOfContents headings={headings} lang={lang} />
+        <div class="article-prose measure">
+          {
+            series && (
+              <p class="article-series">
+                {labels.seriesPart[lang]} <strong>{series.title[lang]}</strong>
+                {" · "}
+                {series.index + 1}/{series.total}
+                {series.prev && (
+                  <>
+                    {" · "}
+                    <a
+                      href={getArticlePath(
+                        getCanonicalSlug(series.prev),
+                        getArticleLanguage(series.prev)
+                      )}
+                    >
+                      ← {labels.prev[lang]}
+                    </a>
+                  </>
+                )}
+                {series.next && (
+                  <>
+                    {" · "}
+                    <a
+                      href={getArticlePath(
+                        getCanonicalSlug(series.next),
+                        getArticleLanguage(series.next)
+                      )}
+                    >
+                      {labels.next[lang]} →
+                    </a>
+                  </>
+                )}
+              </p>
+            )
+          }
+          {
+            decisionSummary && (
+              <aside class="article-brief">
+                <h2 class="eyebrow">{labels.decisionBrief[lang]}</h2>
+                <p>{decisionSummary}</p>
+              </aside>
+            )
+          }
+          {
+            entry.data.img && (
+              <div class="media-frame" data-ratio="16/9">
+                <img
+                  src={entry.data.img}
+                  alt={entry.data.imgAlt || entry.data.title}
+                  loading="lazy"
+                  decoding="async"
+                  width="1200"
+                  height="675"
+                />
+              </div>
+            )
+          }
+          <div class="prose">
+            <Content />
+          </div>
+        </div>
       </div>
     </div>
 
-    {
-      (relatedArticles.length > 0 || projects.length > 0) && (
-        <section class="related stack gap-3">
-          <h2>{labels.related[lang]}</h2>
-          {projects.length > 0 && (
+    <section class="article-after">
+      <div class="page-shell">
+        <div class="measure stack gap-6">
+          <div class="article-sign">
+            <img src={author.portraitSrc} alt="" width="136" height="136" decoding="async" />
             <div>
-              <h3>{labels.relatedProjects[lang]}</h3>
-              <ul>
-                {projects.map((project) => (
-                  <li>
-                    <a href={`${prefix}/projects/${project.id}/`}>{project.data.name}</a>
-                  </li>
-                ))}
-              </ul>
+              <h2>{author.name}</h2>
+              <p class="eyebrow">{author.role[lang]}</p>
+              <p>{author.signOff[lang]}</p>
+              <p>
+                <a href={`${prefix}/about/`}>{labels.about[lang]}</a>
+                {" · "}
+                <a href={`${prefix}/work/`}>{labels.work[lang]}</a>
+              </p>
             </div>
-          )}
-          {relatedArticles.length > 0 && (
-            <div class="cards-grid">
-              {relatedArticles.map((related) => (
-                <ArticleCard entry={related} lang={lang} />
-              ))}
-            </div>
-          )}
-        </section>
-      )
+          </div>
+
+          <div class="article-cta stack gap-3" id="article-cta" data-article-cta-full>
+            {
+              cta && (
+                <>
+                  <p>
+                    <strong>{cta.question[lang]}</strong>
+                  </p>
+                  <p>{cta.value[lang]}</p>
+                  <p>
+                    <a
+                      class="btn-primary"
+                      href={omnivyaContactUrl(lang, cta.utmContent)}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                      data-analytics-event="cta_booking"
+                      data-analytics-props={JSON.stringify({
+                        surface: "thinking-article",
+                        lang,
+                        intent: "qualification",
+                        article: getCanonicalSlug(entry),
+                      })}
+                    >
+                      {cta.primaryLabel[lang]}
+                      <span aria-hidden="true"> ↗</span>
+                    </a>{" "}
+                    <a class="btn-text" href={`${prefix}/work/`}>
+                      {cta.secondaryLabel[lang]} →
+                    </a>
+                  </p>
+                </>
+              )
+            }
+            <p class="article-cta__bridge">{omnivyaBridge[lang]}</p>
+            <p class="article-cta__aside">
+              {contactAside[lang]}{" "}
+              <a
+                href={contactHref}
+                data-analytics-event="cta_contact_email"
+                data-analytics-props={JSON.stringify({
+                  surface: "thinking-article",
+                  lang,
+                  intent: "conversation",
+                  article: getCanonicalSlug(entry),
+                })}
+              >
+                {labels.contactPage[lang]}
+              </a>
+              {" · "}
+              <a
+                href={linkedinHref}
+                rel="noopener noreferrer"
+                target="_blank"
+                data-analytics-event="cta_linkedin"
+                data-analytics-props={JSON.stringify({
+                  surface: "thinking-article",
+                  lang,
+                  intent: "conversation",
+                  article: getCanonicalSlug(entry),
+                })}
+              >
+                {labels.linkedin[lang]}
+                <span aria-hidden="true"> ↗</span>
+              </a>
+            </p>
+          </div>
+
+          {
+            showContinueBlock ? (
+              <div class="article-continue stack gap-3">
+                {seriesHasNeighbors && series && (
+                  <>
+                    <h2 class="eyebrow">{labels.continueSeries[lang]}</h2>
+                    {series.prev && (
+                      <a
+                        href={getArticlePath(
+                          getCanonicalSlug(series.prev),
+                          getArticleLanguage(series.prev)
+                        )}
+                      >
+                        <span class="eyebrow">
+                          {labels.prev[lang]} · {series.index}/{series.total}
+                        </span>
+                        <strong>{series.prev.data.title}</strong>
+                      </a>
+                    )}
+                    {series.next && (
+                      <a
+                        href={getArticlePath(
+                          getCanonicalSlug(series.next),
+                          getArticleLanguage(series.next)
+                        )}
+                      >
+                        <span class="eyebrow">
+                          {labels.next[lang]} · {series.index + 2}/{series.total}
+                        </span>
+                        <strong>{series.next.data.title}</strong>
+                      </a>
+                    )}
+                  </>
+                )}
+                {showRelatedBlock && (
+                  <>
+                    {!seriesHasNeighbors && <h2 class="eyebrow">{labels.related[lang]}</h2>}
+                    {relatedArticles.map((related) => (
+                      <a
+                        href={getArticlePath(
+                          getCanonicalSlug(related),
+                          getArticleLanguage(related)
+                        )}
+                      >
+                        <strong>{related.data.title}</strong>
+                      </a>
+                    ))}
+                    {projects.map((project) => (
+                      <a href={`${prefix}/projects/${project.id}/`}>
+                        <span class="eyebrow">{labels.relatedProjects[lang]}</span>
+                        <strong>{project.data.name}</strong>
+                      </a>
+                    ))}
+                  </>
+                )}
+                <p>
+                  <a href={indexHref}>← {labels.backToLibrary[lang]}</a>
+                </p>
+              </div>
+            ) : (
+              <div class="article-continue stack gap-3">
+                <p>
+                  <a href={indexHref}>← {labels.backToLibrary[lang]}</a>
+                </p>
+              </div>
+            )
+          }
+        </div>
+      </div>
+    </section>
+
+    <button
+      type="button"
+      class="article-top"
+      data-article-top
+      hidden
+      aria-label={labels.toTop[lang]}
+    >
+      ↑
+    </button>
+  </main>
+
+  <script>
+    let articleReadingCleanup: (() => void) | undefined;
+
+    const pageScrollY = () =>
+      window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+
+    const prefersReducedMotion = () =>
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function initArticleReadingUI() {
+      articleReadingCleanup?.();
+      articleReadingCleanup = undefined;
+
+      const root = document.querySelector("[data-article-root]");
+      if (!(root instanceof HTMLElement)) return;
+
+      const progress = root.querySelector("[data-article-progress]");
+      const bar = root.querySelector("[data-article-progress-bar]");
+      const topBtn = root.querySelector("[data-article-top]");
+      const prose = root.querySelector(".article-prose");
+
+      const updateProgress = () => {
+        const readEl = prose instanceof HTMLElement ? prose : root;
+        const rect = readEl.getBoundingClientRect();
+        const y = pageScrollY();
+        const start = y + rect.top;
+        const end = start + readEl.offsetHeight - window.innerHeight;
+        const raw = end <= start ? 1 : (y - start) / (end - start);
+        const value = Math.max(0, Math.min(1, raw));
+        if (bar instanceof HTMLElement) bar.style.transform = `scaleX(${value})`;
+        if (progress instanceof HTMLElement) {
+          progress.setAttribute("aria-valuenow", String(Math.round(value * 100)));
+        }
+        if (topBtn instanceof HTMLButtonElement) {
+          topBtn.hidden = y < 480;
+        }
+      };
+
+      const onTopClick = () => {
+        window.scrollTo({
+          top: 0,
+          behavior: prefersReducedMotion() ? "auto" : "smooth",
+        });
+      };
+      if (topBtn instanceof HTMLButtonElement) {
+        topBtn.addEventListener("click", onTopClick);
+      }
+
+      const onScroll = () => updateProgress();
+      onScroll();
+      window.addEventListener("scroll", onScroll, { passive: true });
+      document.body.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onScroll);
+
+      articleReadingCleanup = () => {
+        window.removeEventListener("scroll", onScroll);
+        document.body.removeEventListener("scroll", onScroll);
+        window.removeEventListener("resize", onScroll);
+        if (topBtn instanceof HTMLButtonElement) {
+          topBtn.removeEventListener("click", onTopClick);
+        }
+      };
     }
 
-    {
-      (prev || next) && (
-        <nav
-          class="prev-next"
-          aria-label={lang === "en" ? "Previous and next" : "Précédent et suivant"}
-        >
-          {prev ? (
-            <a
-              class="nav-card"
-              href={getArticlePath(getCanonicalSlug(prev), getArticleLanguage(prev))}
-            >
-              <span>{labels.prev[lang]}</span>
-              <strong>{prev.data.title}</strong>
-            </a>
-          ) : (
-            <span />
-          )}
-          {next ? (
-            <a
-              class="nav-card next"
-              href={getArticlePath(getCanonicalSlug(next), getArticleLanguage(next))}
-            >
-              <span>{labels.next[lang]}</span>
-              <strong>{next.data.title}</strong>
-            </a>
-          ) : (
-            <span />
-          )}
-        </nav>
-      )
-    }
-  </main>
+    document.addEventListener("astro:page-load", initArticleReadingUI);
+  </script>
 </BaseLayout>
 
 <style>
-  .back-link {
-    color: var(--color-fg-subtle);
+  /*
+    Composition bands match home/thinking: graphite + ivory stay fixed
+    so dark/light theme toggle does not invert contrast on these surfaces.
+  */
+  .article {
+    --ink-on-dark: #f7f3ec;
+    --muted-on-dark: #cdd0cf;
+    --border-on-dark: rgba(243, 239, 231, 0.16);
+    --copper-on-dark: #f0aa78;
+    --bg-dark: #111416;
+    --bg-dark-soft: #1b1e20;
+    --ivory: #f3efe7;
+    --ivory-ink: #151819;
+    --ivory-muted: #454a4d;
+    --ivory-border: rgba(21, 24, 25, 0.14);
+    --copper-on-ivory: #a54822;
+    position: relative;
+    font-family: var(--font-body);
+    background: var(--bg-dark);
+    color: var(--ink-on-dark);
+  }
+  .article :global(.eyebrow) {
+    margin-bottom: 0.55rem;
+    color: var(--copper-on-dark);
+    font-family: var(--font-body);
+    font-weight: 650;
+  }
+  .article :global(.lede),
+  .article :global(.muted),
+  .article :global(.btn-text) {
+    color: var(--muted-on-dark);
+  }
+  .article :global(.btn-text:hover) {
+    color: var(--copper-on-dark);
+  }
+  .article :global(h1) {
+    color: var(--ink-on-dark);
+  }
+
+  .article-progress {
+    position: sticky;
+    top: var(--site-nav-offset, 4.75rem);
+    z-index: 40;
+    height: 3px;
+    background: color-mix(in srgb, var(--ink-on-dark) 10%, transparent);
+  }
+  .article-progress span {
+    display: block;
+    height: 100%;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left center;
+    background: var(--copper-on-dark);
+  }
+
+  .article-open {
+    padding: 1.1rem 0 1.35rem;
+    border-bottom: 1px solid var(--border-on-dark);
+  }
+  .article-open h1 {
+    margin: 0 0 0.55rem;
+    max-width: 28ch;
+    font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    scroll-margin-top: calc(var(--site-nav-offset, 4.75rem) + 0.75rem);
+  }
+  .article-open :global(.lede) {
+    margin: 0 0 1rem;
+    max-width: 52ch;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .article-byline {
+    display: grid;
+    grid-template-columns: 2.75rem 1fr;
+    gap: 0.65rem 0.8rem;
+    align-items: center;
+  }
+  .article-byline img {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center 22%;
+  }
+  .article-byline p {
+    margin: 0;
+  }
+  .article-byline .muted {
+    margin-top: 0.15rem;
+    font-size: 0.82rem;
+  }
+  .article-byline a {
+    color: var(--copper-on-dark);
+    font-weight: 650;
     text-decoration: none;
-    font-size: var(--text-sm);
   }
-  .article-header {
-    max-width: min(100%, calc(19rem + 3.5rem + var(--measure)));
-  }
-  .article-header h1 {
-    max-width: var(--measure-wide);
-  }
-  .badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-  }
-  .badge {
-    font-size: var(--text-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: 0.15rem 0.55rem;
-    color: var(--color-fg-muted);
-    text-decoration: none;
-  }
-  .badge.muted {
-    color: var(--color-fg-subtle);
-  }
-  .dek {
-    margin: 0;
-    max-width: var(--measure);
-    color: var(--color-fg-muted);
-    font-size: var(--text-lg);
-    line-height: 1.55;
-  }
-  .article-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin: 0;
-    font-size: var(--text-sm);
-  }
-  .article-meta dt {
-    color: var(--color-fg-subtle);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    font-size: var(--text-xs);
-  }
-  .article-meta dd {
-    margin: 0.15rem 0 0;
-    color: var(--color-fg-muted);
-  }
-  .translations {
-    margin: 0;
-    font-size: var(--text-sm);
-    color: var(--color-fg-subtle);
-  }
-  .translations a {
-    color: var(--color-fg);
-  }
-  .article-body {
+
+  .article-layout {
     display: grid;
     gap: 1.25rem;
+    padding: 1.25rem 0 2rem;
+    align-items: start;
   }
-  .article-body :global(.toc) {
-    order: 2;
-  }
-  .article-body .prose {
-    order: 1;
-  }
-  .article-body :global(.toc) {
-    order: 2;
-  }
-  .article-body .prose {
-    order: 1;
-  }
-  @media (min-width: 60em) {
-    .article-body {
-      grid-template-columns: minmax(17rem, 19rem) minmax(0, 1fr);
-      column-gap: clamp(2rem, 4vw, 3.5rem);
-      align-items: start;
+  @media (min-width: 64em) {
+    .article-layout {
+      grid-template-columns: minmax(0, 40rem) minmax(9.5rem, 13rem);
+      gap: 2rem 2.5rem;
     }
-    .article-body :global(.toc),
-    .article-body .prose {
-      order: initial;
+    .article-prose {
+      grid-column: 1;
+      grid-row: 1;
     }
-    .article-body :global(.toc) {
-      position: sticky;
-      top: calc(var(--space-6) + var(--space-2));
-      max-height: calc(100vh - var(--space-12));
-      overflow: auto;
+    .article-layout :global(.toc) {
+      grid-column: 2;
+      grid-row: 1;
     }
   }
-  .prose :global(h2),
-  .prose :global(h3) {
-    scroll-margin-top: 5rem;
+
+  .article-prose {
+    min-width: 0;
   }
-  .related ul {
-    margin: 0;
-    padding-left: 1rem;
+  .article-series {
+    margin: 0 0 1rem;
+    font-size: 0.9rem;
+    color: var(--muted-on-dark);
   }
-  .cards-grid {
-    display: grid;
-    gap: 1rem;
-  }
-  @media (min-width: 50em) {
-    .cards-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-  .prev-next {
-    display: grid;
-    gap: 0.75rem;
-  }
-  @media (min-width: 50em) {
-    .prev-next {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-  .nav-card {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: 0.85rem 1rem;
+  .article-series strong,
+  .article-series a {
+    color: var(--copper-on-dark);
+    font-weight: 650;
     text-decoration: none;
-    color: var(--color-fg-muted);
-    background: var(--color-bg-elevated);
   }
-  .nav-card.next {
-    text-align: right;
+  .article-brief {
+    margin: 0 0 1.25rem;
+    padding: 1rem 1.1rem;
+    border-left: 3px solid var(--copper-on-dark);
+    background: var(--bg-dark-soft);
   }
-  .nav-card span {
-    font-size: var(--text-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--color-fg-subtle);
+  .article-brief :global(.eyebrow) {
+    margin-bottom: 0.45rem;
   }
-  .nav-card strong {
-    color: var(--color-fg);
-    font-size: var(--text-sm);
-    line-height: 1.4;
+  .article-brief p {
+    margin: 0;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .article-prose :global(.prose) {
+    max-width: none;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: color-mix(in srgb, var(--ink-on-dark) 90%, transparent);
+  }
+  .article-prose :global(.prose h1),
+  .article-prose :global(.prose h2),
+  .article-prose :global(.prose h3),
+  .article-prose :global(.prose h4),
+  .article-prose :global(.prose strong) {
+    color: var(--ink-on-dark);
+  }
+  .article-prose :global(.prose h1),
+  .article-prose :global(.prose h2),
+  .article-prose :global(.prose h3) {
+    /* Nav sticky + 3px progress bar — keep anchors clear of chrome. */
+    scroll-margin-top: calc(var(--site-nav-offset, 4.75rem) + 0.75rem);
+  }
+  .article-prose :global(.prose h2) {
+    margin-top: 1.75rem;
+    font-size: clamp(1.15rem, 2vw, 1.3rem);
+    font-weight: 650;
+    line-height: 1.25;
+  }
+  .article-prose :global(.prose h3) {
+    font-size: 1.05rem;
+  }
+  .article-prose :global(.prose a:not(.heading-anchor)) {
+    color: var(--copper-on-dark);
+  }
+  .article-open .heading-anchor,
+  .article-prose :global(.prose .heading-anchor) {
+    color: var(--copper-on-dark);
+    text-decoration: none;
+    opacity: 0.55;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .article-open .heading-anchor,
+    .article-prose :global(.prose .heading-anchor) {
+      opacity: 0;
+    }
+    .article-open h1:hover > .heading-anchor,
+    .article-prose :global(.prose h2:hover > .heading-anchor),
+    .article-prose :global(.prose h3:hover > .heading-anchor),
+    .article-open .heading-anchor:focus-visible,
+    .article-prose :global(.prose .heading-anchor:focus-visible) {
+      opacity: 1;
+    }
+  }
+  .article-open .heading-anchor:focus-visible,
+  .article-prose :global(.prose .heading-anchor:focus-visible) {
+    opacity: 1;
+    outline: 2px solid var(--copper-on-dark);
+    outline-offset: 2px;
+  }
+  .article-prose :global(.prose :not(pre) > code) {
+    background: var(--bg-dark-soft);
+    border-color: var(--border-on-dark);
+    color: var(--ink-on-dark);
+  }
+
+  .article-after {
+    background: var(--ivory);
+    color: var(--ivory-ink);
+    padding: 1.5rem 0 1.85rem;
+  }
+  .article-after :global(h2),
+  .article-after :global(.eyebrow),
+  .article-after :global(.lede),
+  .article-after :global(.muted),
+  .article-after :global(.btn-text),
+  .article-after :global(p) {
+    color: var(--ivory-ink);
+  }
+  .article-after :global(.eyebrow) {
+    color: var(--copper-on-ivory);
+    font-family: var(--font-body);
+    font-weight: 650;
+  }
+  .article-after :global(a):not(:global(.btn-primary)) {
+    color: var(--copper-on-ivory);
+    font-weight: 650;
+    text-decoration: none;
+  }
+  .article-after :global(.btn-primary) {
+    background: var(--copper-on-ivory);
+    border-color: var(--copper-on-ivory);
+    color: #fff;
+  }
+  .article-after :global(.btn-text) {
+    color: var(--copper-on-ivory);
+  }
+
+  .article-sign {
+    display: grid;
+    grid-template-columns: 4.25rem 1fr;
+    gap: 0.9rem 1rem;
+    align-items: center;
+    padding-bottom: 1.15rem;
+    border-bottom: 1px solid var(--ivory-border);
+  }
+  .article-sign img {
+    width: 4.25rem;
+    height: 4.25rem;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center 22%;
+  }
+  .article-sign h2 {
+    margin: 0 0 0.15rem;
+    color: var(--ivory-ink);
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .article-sign p {
+    margin: 0.25rem 0 0;
+    color: var(--ivory-muted);
+    font-size: 0.92rem;
+    line-height: 1.45;
+  }
+  .article-sign :global(.eyebrow) {
+    margin: 0 0 0.35rem;
+  }
+
+  .article-cta {
+    padding: 1.1rem 1.15rem;
+    background: #fff;
+    border: 1px solid var(--ivory-border);
+    border-radius: var(--radius-sm);
+  }
+  .article-cta p {
+    margin: 0;
+    color: var(--ivory-muted);
+  }
+  .article-cta strong {
+    color: var(--ivory-ink);
+  }
+
+  .article-continue a {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--ivory-border);
+    text-decoration: none;
+    color: inherit;
+  }
+  .article-continue strong {
+    color: var(--ivory-ink);
+    font-size: 1rem;
+  }
+  .article-continue a:hover strong {
+    color: var(--copper-on-ivory);
+  }
+
+  .article-cta__bridge,
+  .article-cta__aside {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    color: var(--ivory-muted);
+  }
+  .article-cta__aside a {
+    color: var(--copper-on-ivory);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .article-cta__aside a:hover {
+    text-decoration: underline;
+  }
+
+  .article-top {
+    position: fixed;
+    right: max(1rem, calc((100vw - min(100vw, var(--page-max))) / 2 + var(--page-gutter)));
+    bottom: 1.25rem;
+    z-index: 36;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid var(--border-on-dark);
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--bg-dark-soft) 88%, transparent);
+    color: var(--ink-on-dark);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .article-top[hidden] {
+    display: none;
+  }
+  .article-top:hover,
+  .article-top:focus-visible {
+    color: var(--copper-on-dark);
+    border-color: var(--copper-on-dark);
+  }
+  .article-top:focus-visible {
+    outline: 2px solid var(--copper-on-dark);
+    outline-offset: 2px;
+  }
+  @media (max-width: 50em) {
+    .article-open h1 {
+      max-width: none;
+    }
+    .article-top {
+      right: 1rem;
+      bottom: 1rem;
+      width: 2.75rem;
+      height: 2.75rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .article-progress span {
+      transition: none;
+    }
   }
 </style>

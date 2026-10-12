@@ -3,6 +3,7 @@ title: "Ce qui casse quand on essaie vraiment de provisionner un Mac de zéro"
 description: "Le schéma Apple Business + Entra + Nix était propre. Le premier Mac effacé m’a rappelé tout ce qu’un diagramme ne montre pas : format PKG, appstored, claims incomplets, Homebrew absent et mauvaise source Nix."
 pubDate: 2026-11-04T07:30:00.000Z
 language: fr
+translationKey: 2026-11-04-ce-qui-casse-provisioning-macos
 contentType: field-note
 pillar: platform-engineering
 audience:
@@ -24,8 +25,6 @@ relatedArticles:
   - 2026-10-21-pourquoi-app-macos-swiftui-provisioning
   - 2026-10-28-versionner-postes-semver-nix
 ---
-
-> Série **Nix, Entra et Apple Business : le découpage qui m’a enfin semblé propre**, 5/5. Le début : [pourquoi j’ai arrêté de traiter le provisioning Mac comme un problème MDM](/thinking/2026-10-03-provisioning-mac-pas-probleme-mdm/).
 
 Le schéma était propre.
 
@@ -242,7 +241,6 @@ Elle est maintenant visible.
 Le preflight affiche ses gates, le provisioning montre les étapes Build / Install / Activate / Validate, et en cas d’échec l’app affiche les checkpoints déjà passés ainsi que l’endroit exact où Try Again va reprendre.
 
 Le Done screen est lui aussi devenu un vrai petit dashboard avec l’état Entra, GitHub, helper, MDM, bootstrap, macOS, Nix et Homebrew.
-
 
 Je trouve ça beaucoup plus intéressant qu’un simple écran vert « success ». Le système commence à pouvoir expliquer son propre état.
 

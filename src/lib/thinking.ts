@@ -1,5 +1,4 @@
 import type { CollectionEntry } from "astro:content";
-import { getCollection } from "astro:content";
 import {
   thinkingConfig,
   type ThinkingContentType,
@@ -110,6 +109,8 @@ export function getArticlePath(slug: string, lang: "fr" | "en"): string {
 }
 
 export async function getAllThinkingArticles(): Promise<ThinkingArticle[]> {
+  // Dynamic import keeps pure helpers (series/related) loadable outside Astro.
+  const { getCollection } = await import("astro:content");
   const blog = await getCollection("blog");
   let articles: CollectionEntry<"articles">[] = [];
   try {
@@ -235,22 +236,32 @@ export function filterArticles(
   });
 }
 
+/**
+ * Parse Thinking query params for faceted static routes (/thinking/pillar/…, tests).
+ * The /thinking/ index itself is a single static HTML page on GitHub Pages: do not
+ * drive its library from Astro.url.searchParams at build time — apply filters in the
+ * browser from data-* rows (see ThinkingIndexContent).
+ */
 export function parseThinkingFilters(searchParams: URLSearchParams): ThinkingFilters {
   const sort = searchParams.get("sort") as ThinkingSort | null;
   const pillar = searchParams.get("pillar") as ThinkingPillar | null;
   const contentType = searchParams.get("type") as ThinkingContentType | null;
-  const language = searchParams.get("lang") as "fr" | "en" | null;
+  const language = searchParams.get("lang") as "fr" | "en" | "all" | null;
   const tag = searchParams.get("tag");
 
   return {
     pillar: pillar && thinkingConfig.pillarLabels[pillar] ? pillar : undefined,
     contentType:
       contentType && thinkingConfig.contentTypeLabels[contentType] ? contentType : undefined,
+    // `all` (or any other value) → no language constraint. Missing param is handled by the UI
+    // as "default to UI locale" so indexes stay honest per chrome language.
     language: language === "fr" || language === "en" ? language : undefined,
     tag: tag ? slugifyTag(tag) : undefined,
     sort: sort && thinkingConfig.sortLabels[sort] ? sort : undefined,
   };
 }
+
+export { resolveThinkingLanguageScope } from "./thinking-locale.ts";
 
 export function getTagCounts(entries: ThinkingArticle[]): Map<string, number> {
   const counts = new Map<string, number>();
@@ -297,63 +308,197 @@ export function getTranslationSiblings(
   );
 }
 
+/**
+ * @deprecated Do not use for article chrome — invents “same pillar” neighbours.
+ * Prefer getSeriesForArticle / getRelatedArticles (editorial frontmatter only).
+ */
 export function getPrevNextArticles(
-  entry: ThinkingArticle,
-  all: ThinkingArticle[]
+  _entry: ThinkingArticle,
+  _all: ThinkingArticle[]
 ): { prev: ThinkingArticle | null; next: ThinkingArticle | null } {
-  const pillar = entry.data.pillar as ThinkingPillar;
-  const samePillar = all
-    .filter((candidate) => candidate.data.pillar === pillar)
-    .sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf());
-  const index = samePillar.findIndex((candidate) => candidate.id === entry.id);
-  if (index === -1) {
-    const chronological = [...all].sort(
-      (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
-    );
-    const globalIndex = chronological.findIndex((candidate) => candidate.id === entry.id);
-    return {
-      prev: globalIndex > 0 ? chronological[globalIndex - 1] : null,
-      next:
-        globalIndex >= 0 && globalIndex < chronological.length - 1
-          ? chronological[globalIndex + 1]
-          : null,
-    };
-  }
-  return {
-    prev: index > 0 ? samePillar[index - 1] : null,
-    next: index < samePillar.length - 1 ? samePillar[index + 1] : null,
-  };
+  return { prev: null, next: null };
 }
 
+/** Normalize editorial refs to the FR series stem (strip optional `-en`). */
+export function refStem(id: string): string {
+  return id.endsWith("-en") ? id.slice(0, -3) : id;
+}
+
+/**
+ * Resolve a frontmatter / series id to a released article.
+ * When `lang` is set, never silently return the other language.
+ */
+export function findArticleByRef(
+  all: ThinkingArticle[],
+  id: string,
+  lang?: "fr" | "en"
+): ThinkingArticle | undefined {
+  const stem = refStem(id);
+  const matches = all.filter((candidate) => {
+    const slug = getCanonicalSlug(candidate);
+    const cStem = seriesStem(candidate);
+    return (
+      candidate.id === id ||
+      candidate.id === stem ||
+      candidate.id === `${stem}-en` ||
+      slug === id ||
+      slug === stem ||
+      slug === `${stem}-en` ||
+      cStem === stem ||
+      candidate.id.endsWith(`/${stem}`) ||
+      candidate.id.endsWith(`/${stem}.md`) ||
+      candidate.id.endsWith(`/${stem}-en`) ||
+      candidate.id.endsWith(`/${stem}-en.md`)
+    );
+  });
+  if (lang) {
+    return matches.find((candidate) => getArticleLanguage(candidate) === lang);
+  }
+  return matches[0];
+}
+
+function seriesMateStems(entry: ThinkingArticle): Set<string> {
+  const stem = seriesStem(entry);
+  const series = thinkingConfig.series.find((item) =>
+    (item.articleIds as readonly string[]).includes(stem)
+  );
+  return new Set(series?.articleIds ?? []);
+}
+
+/**
+ * Explicit editorial relations only — never invent “same pillar” neighbours.
+ * Same-language only; series mates are omitted (handled by series chrome).
+ * Empty / unresolved relatedArticles ⇒ empty list.
+ */
 export function getRelatedArticles(
   entry: ThinkingArticle,
   all: ThinkingArticle[]
 ): ThinkingArticle[] {
   const relatedIds = entry.data.relatedArticles ?? [];
-  const byId = relatedIds
-    .map((id) =>
-      all.find(
-        (candidate) =>
-          candidate.id === id ||
-          candidate.id === id ||
-          candidate.id.endsWith(`/${id}.md`) ||
-          candidate.id.endsWith(`/${id}`)
-      )
-    )
+  const lang = getArticleLanguage(entry);
+  const mates = seriesMateStems(entry);
+  return relatedIds
+    .map((id) => findArticleByRef(all, id, lang))
     .filter((candidate): candidate is ThinkingArticle => Boolean(candidate))
-    .filter((candidate) => candidate.id !== entry.id);
+    .filter((candidate) => candidate.id !== entry.id)
+    .filter((candidate) => !mates.has(seriesStem(candidate)))
+    .slice(0, 3);
+}
 
-  if (byId.length >= 3) return byId.slice(0, 4);
+/** Strip optional `-en` suffix to match FR series ids. */
+export function seriesStem(entry: ThinkingArticle): string {
+  const slug = getCanonicalSlug(entry);
+  return slug.endsWith("-en") ? slug.slice(0, -3) : slug;
+}
 
-  const samePillar = all.filter(
-    (candidate) =>
-      candidate.id !== entry.id &&
-      candidate.data.pillar === entry.data.pillar &&
-      !byId.some((item) => item.id === candidate.id)
+export type ThinkingSeriesContext = {
+  id: string;
+  title: { fr: string; en: string };
+  hint: { fr: string; en: string };
+  articleIds: readonly string[];
+  index: number;
+  total: number;
+  prev: ThinkingArticle | null;
+  next: ThinkingArticle | null;
+  entry: ThinkingArticle;
+  publishedCount: number;
+};
+
+/**
+ * Series chrome for an article.
+ * - `total` / `index` always reflect the editorial roster (e.g. 1/5) even when
+ *   later episodes are not released yet.
+ * - `prev` / `next` only point at released same-language neighbours — never at
+ *   future ids and never at the other language silently.
+ */
+export function getSeriesForArticle(
+  entry: ThinkingArticle,
+  all: ThinkingArticle[]
+): ThinkingSeriesContext | null {
+  const stem = seriesStem(entry);
+  const series = thinkingConfig.series.find((item) =>
+    (item.articleIds as readonly string[]).includes(stem)
   );
-  return [...byId, ...samePillar]
-    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-    .slice(0, 4);
+  if (!series) return null;
+
+  const index = series.articleIds.findIndex((id) => id === stem);
+  if (index === -1) return null;
+
+  const lang = getArticleLanguage(entry);
+  const resolveId = (id: string): ThinkingArticle | null => findArticleByRef(all, id, lang) ?? null;
+
+  const published = series.articleIds
+    .map((id) => resolveId(id))
+    .filter((candidate): candidate is ThinkingArticle => Boolean(candidate));
+
+  let prev: ThinkingArticle | null = null;
+  for (let i = index - 1; i >= 0; i -= 1) {
+    const hit = resolveId(series.articleIds[i]);
+    if (hit) {
+      prev = hit;
+      break;
+    }
+  }
+  let next: ThinkingArticle | null = null;
+  for (let i = index + 1; i < series.articleIds.length; i += 1) {
+    const hit = resolveId(series.articleIds[i]);
+    if (hit) {
+      next = hit;
+      break;
+    }
+  }
+
+  return {
+    id: series.id,
+    title: series.title,
+    hint: series.hint,
+    articleIds: series.articleIds,
+    index,
+    /** Editorial series length — not only parts already released. */
+    total: series.articleIds.length,
+    prev,
+    next,
+    entry,
+    publishedCount: published.length,
+  };
+}
+
+export function listPublishedSeries(all: ThinkingArticle[], lang: "fr" | "en") {
+  return thinkingConfig.series
+    .map((series) => {
+      const published = series.articleIds
+        .map((id) => findArticleByRef(all, id, lang))
+        .filter((candidate): candidate is ThinkingArticle => Boolean(candidate));
+      if (published.length === 0) return null;
+      return {
+        ...series,
+        published,
+        entry: published[0],
+        publishedCount: published.length,
+        total: series.articleIds.length,
+      };
+    })
+    .filter((item): item is NonNullable<typeof item> => Boolean(item));
+}
+
+export function getArticleCta(entry: ThinkingArticle) {
+  const stem = seriesStem(entry);
+  const map = thinkingConfig.articleCtas as Record<
+    string,
+    (typeof thinkingConfig.articleCtas)[keyof typeof thinkingConfig.articleCtas]
+  >;
+  return map[stem] ?? null;
+}
+
+/** Opening shelf: newest first (1 lead + side), never the old featured-slug dump. */
+export function selectOpeningArticles(
+  articles: ThinkingArticle[],
+  sideCount = thinkingConfig.openingSideCount
+): { lead: ThinkingArticle | null; side: ThinkingArticle[] } {
+  const recent = sortArticles(articles, "recent");
+  const lead = recent[0] ?? null;
+  const side = recent.slice(1, 1 + sideCount);
+  return { lead, side };
 }
 
 export function getRelatedProjectSlugs(entry: ThinkingArticle): string[] {

@@ -1,6 +1,5 @@
 /* ==========================================================================
-   CTO conseil — Etienne Deneuve
-   Graphite / ivory / copper, Outfit UI
+   Étienne Deneuve — graphite / ivory / copper, Outfit UI
    ========================================================================== */
 
 :root {
@@ -142,6 +141,8 @@
   /* Shared horizontal gutter: nav, home shells, footer (Safari-stable). */
   --page-gutter: clamp(1.5rem, 4vw, 4rem);
   --page-max: 90rem;
+  /* Sticky header clearance (scroll-margin, progress bars). */
+  --site-nav-offset: 4.75rem;
   --grid-gap: 1rem;
   --base-unit: 0.5rem;
 
@@ -234,15 +235,16 @@
 
 html {
   scrollbar-gutter: stable;
+  /*
+    Do not set height:100% on html+body: that makes body the scrollport
+    (window.scrollY stays 0), which breaks sticky, scroll-spy, and progress.
+  */
+  overflow-x: clip;
 }
 
-html,
 body {
-  height: 100%;
-  overflow-x: hidden;
-}
-
-body {
+  min-height: 100%;
+  overflow-x: clip;
   background-color: var(--color-bg);
   color: var(--color-fg);
   font-family: var(--font-body);
@@ -259,7 +261,7 @@ body {
 }
 
 img,
-svg,
+svg:not([id^="mermaid"]),
 video {
   max-width: 100%;
   height: auto;
@@ -396,6 +398,15 @@ h5 {
   max-width: var(--wrapper-max);
   margin-inline: auto;
   padding-inline: var(--space-6);
+}
+
+/* Shared with nav/footer/home/thinking — Safari-stable page gutter. */
+.page-shell {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
 }
 
 .measure {
@@ -815,12 +826,45 @@ a.surface-card:hover,
 .prose > * + * {
   margin-top: var(--space-4);
 }
+.prose h1,
 .prose h2,
 .prose h3,
 .prose h4 {
   margin-top: var(--space-8);
   margin-bottom: var(--space-3);
   scroll-margin-top: var(--space-16);
+}
+.heading-anchor,
+.prose .heading-anchor {
+  margin-left: 0.35em;
+  color: var(--copper-on-dark, #f0aa78);
+  text-decoration: none;
+  font-weight: 600;
+  /* Touch / coarse pointers: keep anchors discoverable without hover. */
+  opacity: 0.55;
+  transition: opacity 0.15s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .heading-anchor,
+  .prose .heading-anchor {
+    opacity: 0;
+  }
+  h1:hover > .heading-anchor,
+  h2:hover > .heading-anchor,
+  h3:hover > .heading-anchor,
+  .prose h1:hover > .heading-anchor,
+  .prose h2:hover > .heading-anchor,
+  .prose h3:hover > .heading-anchor,
+  .heading-anchor:focus-visible,
+  .prose .heading-anchor:focus-visible {
+    opacity: 1;
+  }
+}
+.heading-anchor:focus-visible,
+.prose .heading-anchor:focus-visible {
+  opacity: 1;
+  outline: 2px solid var(--copper-on-dark, #f0aa78);
+  outline-offset: 2px;
 }
 .prose p,
 .prose li {
@@ -838,6 +882,37 @@ a.surface-card:hover,
 .prose img {
   border-radius: var(--radius-md);
   border: var(--border-width) solid var(--color-border);
+}
+
+/*
+ * Mermaid layout only — colours are baked via src/config/mermaid.ts themeCSS.
+ * Avoid a second global !important paint that fights rebuilt SVGs.
+ */
+.prose p:has(> svg[id^="mermaid"]),
+.prose p:has(> svg.flowchart),
+.prose p:has(> svg.sequenceDiagram) {
+  margin-block: var(--space-6);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.prose svg[id^="mermaid"],
+.prose svg.flowchart,
+.prose svg.sequenceDiagram {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  padding: 0;
+  margin: 0 auto;
+  overflow: visible;
+  background: transparent;
+  border: 0;
+}
+/* Mermaid sometimes emits empty edgeLabel groups at 0,0 */
+.prose svg[id^="mermaid"] g.edgeLabel:not([transform]) {
+  display: none;
 }
 .prose hr {
   border: 0;

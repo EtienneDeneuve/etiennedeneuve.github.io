@@ -3,6 +3,7 @@ title: "L'IA écrit plus vite. Notre CI devait suivre."
 description: "L'accélération du développement assisté par IA nous a amenés à déplacer des validations sur les postes, sans abandonner la gouvernance GitHub."
 pubDate: 2026-10-09T07:30:00.000Z
 language: fr
+translationKey: 2026-10-09-ia-accelere-code-ci-doit-suivre
 contentType: architecture-decision
 pillar: platform-engineering
 audience:
@@ -27,8 +28,6 @@ relatedArticles:
   - 2026-10-03-provisioning-mac-pas-probleme-mdm
   - 2026-10-28-versionner-postes-semver-nix
 ---
-
-> Série **Quand l’IA accélère le code, la CI doit suivre**, 1/6. Le premier article d’un retour d’expérience sur notre façon de valider le code depuis que les agents ont changé le rythme des développements.
 
 Il y a un truc assez curieux avec les agents IA.
 

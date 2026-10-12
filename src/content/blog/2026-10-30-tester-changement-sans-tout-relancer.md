@@ -3,6 +3,7 @@ title: "Tout tester à chaque changement ? Pas nécessairement."
 description: "Dans un monorepo, sélectionner les suites pertinentes est un vrai problème de dépendances, pas seulement un filtre sur les répertoires modifiés."
 pubDate: 2026-10-30T07:30:00.000Z
 language: fr
+translationKey: 2026-10-30-tester-changement-sans-tout-relancer
 contentType: architecture-decision
 pillar: platform-engineering
 audience:
@@ -27,8 +28,6 @@ relatedArticles:
   - 2026-10-03-provisioning-mac-pas-probleme-mdm
   - 2026-10-24-versionner-postes-semver-nix
 ---
-
-> Série **Quand l’IA accélère le code, la CI doit suivre**, 4/6. Le début : [pourquoi nous avons commencé à déplacer les validations](/thinking/2026-10-09-ia-accelere-code-ci-doit-suivre/).
 
 Une fois la CI en local, nous avons retrouvé un problème qu’on connaissait déjà avec les runners : il suffit d’un petit changement pour relancer beaucoup trop de choses.
 

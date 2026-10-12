@@ -3,6 +3,7 @@ title: "CI locale : moins de minutes GitHub, mais quel gain réel ?"
 description: "Une première comparaison chiffrée de notre CI locale : minutes de runners, dollars, délai de feedback et indicateurs de qualité, sans inventer un ROI."
 pubDate: 2026-11-13T07:30:00.000Z
 language: fr
+translationKey: 2026-11-13-mesurer-impact-ci-locale
 contentType: architecture-decision
 pillar: platform-engineering
 audience:
@@ -27,8 +28,6 @@ relatedArticles:
   - 2026-10-03-provisioning-mac-pas-probleme-mdm
   - 2026-10-24-versionner-postes-semver-nix
 ---
-
-> Série **Quand l’IA accélère le code, la CI doit suivre**, 6/6. Le début : [pourquoi nous avons commencé à déplacer les validations](/thinking/2026-10-09-ia-accelere-code-ci-doit-suivre/).
 
 Il y a un truc qu’on fait facilement après avoir modifié une CI : on prend le job qui était lent, on montre que la commande tourne maintenant plus vite sur son Mac, puis on annonce un pourcentage d’amélioration.
 

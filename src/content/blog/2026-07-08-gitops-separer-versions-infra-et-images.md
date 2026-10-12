@@ -17,6 +17,7 @@ featured: true
 draft: false
 relatedProjects: []
 relatedArticles: []
+decisionSummary: "Séparer les canaux de promotion image / infra / config. Un tag « release » peut rester une API humaine — pas l’identité technique de tous les artefacts."
 ---
 
 Dans beaucoup de plateformes GitOps, un seul commit fait deux choses à la fois : il change la version de l’infrastructure (chart, kustomization, policy) et la version de l’image applicative. Le déploiement passe au vert. L’équipe considère la promotion terminée.

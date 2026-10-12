@@ -1,28 +1,17 @@
 ---
 import ThinkingFacetContent from "../../../components/ThinkingFacetContent.astro";
-import {
-  thinkingConfig,
-  thinkingContentTypes,
-  type ThinkingContentType,
-} from "../../../config/thinking.ts";
-import { getAllThinkingArticles } from "../../../lib/thinking.ts";
+import { thinkingConfig, type ThinkingContentType } from "../../../config/thinking.ts";
+import { loadFacetCorpus, typeFacetPaths } from "../../../lib/thinking-facets.ts";
+import type { ThinkingArticle } from "../../../lib/thinking.ts";
 
 export async function getStaticPaths() {
-  const articles = await getAllThinkingArticles();
-  return thinkingContentTypes
-    .map((type) => ({
-      params: { type },
-      props: {
-        type,
-        entries: articles.filter((entry) => entry.data.contentType === type),
-      },
-    }))
-    .filter((path) => path.props.entries.length > 0);
+  const { fr, en } = await loadFacetCorpus();
+  return typeFacetPaths(fr, en, "fr");
 }
 
 interface Props {
   type: ThinkingContentType;
-  entries: Awaited<ReturnType<typeof getAllThinkingArticles>>;
+  entries: ThinkingArticle[];
 }
 
 const { type, entries } = Astro.props;

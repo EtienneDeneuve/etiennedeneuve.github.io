@@ -157,19 +157,53 @@ const linkEvent = (href: string) => {
     }
   }
   customElements.define("menu-button", MenuButton);
+
+  let navOffsetCleanup: (() => void) | undefined;
+
+  function initSiteNavOffset() {
+    navOffsetCleanup?.();
+    navOffsetCleanup = undefined;
+
+    const nav = document.querySelector(".site-nav");
+    if (!(nav instanceof HTMLElement)) return;
+
+    const syncNavOffset = () => {
+      const px = Math.ceil(nav.getBoundingClientRect().height);
+      document.documentElement.style.setProperty("--site-nav-offset", `${px}px`);
+    };
+
+    syncNavOffset();
+    window.addEventListener("resize", syncNavOffset);
+    let resizeObserver: ResizeObserver | undefined;
+    if ("ResizeObserver" in window) {
+      resizeObserver = new ResizeObserver(syncNavOffset);
+      resizeObserver.observe(nav);
+    }
+
+    navOffsetCleanup = () => {
+      window.removeEventListener("resize", syncNavOffset);
+      resizeObserver?.disconnect();
+    };
+  }
+
+  document.addEventListener("astro:page-load", initSiteNavOffset);
 </script>
 
 <style>
   .site-nav {
+    --site-nav-offset: 4.75rem;
     z-index: 9999;
-    position: relative;
+    position: sticky;
+    top: 0;
     font-family: var(--font-body);
     font-weight: 500;
     margin-bottom: 0;
-    background: var(--graphite, #111416);
+    background: color-mix(in srgb, var(--graphite, #111416) 94%, transparent);
     color: var(--text-on-dark, #f7f3ec);
     border-bottom: 1px solid var(--border-on-dark, rgba(243, 239, 231, 0.16));
     box-sizing: border-box;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 
   .site-nav__shell {

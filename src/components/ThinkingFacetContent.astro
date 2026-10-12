@@ -59,9 +59,22 @@ const jsonLd = buildJsonLdGraph([
       <p class="intro">{description}</p>
       <p class="count">{sorted.length} {thinkingConfig.labels.articlesCount[lang]}</p>
     </header>
-    <div class="cards-grid">
-      {sorted.map((entry) => <ArticleCard entry={entry} lang={lang} />)}
-    </div>
+    {
+      sorted.length === 0 ? (
+        <p class="empty">
+          {lang === "en"
+            ? "No English articles in this facet yet. Browse the full library or switch to French."
+            : "Aucun article français dans cette facette pour l’instant. Parcourir la bibliothèque ou passer en anglais."}{" "}
+          <a href={`${prefix}/thinking/`}>{thinkingConfig.meta.title[lang]}</a>
+        </p>
+      ) : (
+        <div class="cards-grid">
+          {sorted.map((entry) => (
+            <ArticleCard entry={entry} lang={lang} />
+          ))}
+        </div>
+      )
+    }
   </main>
 </BaseLayout>
 
@@ -87,6 +100,15 @@ const jsonLd = buildJsonLdGraph([
     margin: 0;
     color: var(--color-fg-subtle);
     font-size: var(--text-sm);
+  }
+  .empty {
+    margin: 0;
+    color: var(--color-fg-muted);
+    max-width: 52ch;
+  }
+  .empty a {
+    color: var(--color-fg);
+    font-weight: 600;
   }
   .cards-grid {
     display: grid;
