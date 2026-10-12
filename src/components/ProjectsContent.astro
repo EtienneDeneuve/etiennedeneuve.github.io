@@ -87,7 +87,8 @@ const jsonLd = buildJsonLdGraph([
           <p class="ed-aside__label">{config.meta.asideLabel[lang]}</p>
           <p>{config.meta.aside[lang]}</p>
           <a class="ed-aside__link" href={thinkingPath}>
-            {config.meta.asideLink[lang]} <span aria-hidden="true">↗</span>
+            {config.meta.asideLink[lang]}
+            <span aria-hidden="true">↗</span>
           </a>
         </aside>
       </div>
@@ -99,13 +100,17 @@ const jsonLd = buildJsonLdGraph([
           <h2 id="featured-title">{labels.featured[lang]}</h2>
           <p>{config.meta.featuredIntro[lang]}</p>
         </div>
-        {projects.length > 0 ? (
-          <div class="ed-project-grid">
-            {projects.map((project) => <ProjectCard entry={project} lang={lang} />)}
-          </div>
-        ) : (
-          <p>{labels.empty[lang]}</p>
-        )}
+        {
+          projects.length > 0 ? (
+            <div class="ed-project-grid">
+              {projects.map((project) => (
+                <ProjectCard entry={project} lang={lang} />
+              ))}
+            </div>
+          ) : (
+            <p>{labels.empty[lang]}</p>
+          )
+        }
       </div>
     </section>
 
@@ -117,44 +122,48 @@ const jsonLd = buildJsonLdGraph([
           <p>{config.meta.fieldReportsIntro[lang]}</p>
         </div>
         <div class="ed-reports">
-          {config.meta.fieldReports.map((report) => (
-            <article class="ed-report">
-              <p class="ed-report__label">{report.label[lang]}</p>
-              <h3>{report.title[lang]}</h3>
-              <p>{report.description[lang]}</p>
-              <a
-                class="ed-text-link"
-                href={report.href}
-                {...analyticsAttrs("cta_project_open", {
-                  surface: "projects",
-                  intent: "field-report",
-                  lang,
-                })}
-              >
-                {lang === "fr" ? "Lire le retour de terrain" : "Read the field report (FR)"}
-                <span aria-hidden="true"> ↗</span>
-              </a>
-            </article>
-          ))}
+          {
+            config.meta.fieldReports.map((report) => (
+              <article class="ed-report">
+                <p class="ed-report__label">{report.label[lang]}</p>
+                <h3>{report.title[lang]}</h3>
+                <p>{report.description[lang]}</p>
+                <a
+                  class="ed-text-link"
+                  href={report.href}
+                  {...analyticsAttrs("cta_project_open", {
+                    surface: "projects",
+                    intent: "field-report",
+                    lang,
+                  })}
+                >
+                  {lang === "fr" ? "Lire le retour de terrain" : "Read the field report (FR)"}
+                  <span aria-hidden="true"> ↗</span>
+                </a>
+              </article>
+            ))
+          }
         </div>
         <p class="ed-note">{config.meta.fieldReportsNote[lang]}</p>
-        {otherRepos.length > 0 && (
-          <details class="ed-contrib">
-            <summary>
-              {labels.other[lang]} ({otherRepos.length})
-            </summary>
-            <ul class="ed-contrib__list">
-              {otherRepos.map((repo) => (
-                <li>
-                  <a href={repo.htmlUrl} target="_blank" rel="noopener noreferrer">
-                    {repo.name[lang]} <span aria-hidden="true">↗</span>
-                  </a>
-                  <span class="ed-contrib__desc">{repo.problem[lang]}</span>
-                </li>
-              ))}
-            </ul>
-          </details>
-        )}
+        {
+          otherRepos.length > 0 && (
+            <details class="ed-contrib">
+              <summary>
+                {labels.other[lang]} ({otherRepos.length})
+              </summary>
+              <ul class="ed-contrib__list">
+                {otherRepos.map((repo) => (
+                  <li>
+                    <a href={repo.htmlUrl} target="_blank" rel="noopener noreferrer">
+                      {repo.name[lang]} <span aria-hidden="true">↗</span>
+                    </a>
+                    <span class="ed-contrib__desc">{repo.problem[lang]}</span>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          )
+        }
       </div>
     </section>
 
@@ -173,7 +182,8 @@ const jsonLd = buildJsonLdGraph([
             lang,
           })}
         >
-          {config.meta.contactLabel[lang]} <span aria-hidden="true">↗</span>
+          {config.meta.contactLabel[lang]}
+          <span aria-hidden="true">↗</span>
         </a>
       </div>
     </section>
