@@ -267,7 +267,10 @@ test.describe("/thinking/ filters (built site)", () => {
   });
 
   test("without JavaScript all default-locale entries remain accessible", async ({ browser }) => {
-    const context = await browser.newContext({ javaScriptEnabled: false });
+    const context = await browser.newContext({
+      javaScriptEnabled: false,
+      baseURL: "http://127.0.0.1:4321",
+    });
     try {
       const page = await context.newPage();
       await page.goto("/thinking/");
