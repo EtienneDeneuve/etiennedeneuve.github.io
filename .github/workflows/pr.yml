@@ -86,6 +86,15 @@ jobs:
       - name: Playwright (built site)
         run: bun run test:e2e
 
+      - name: Upload Thinking reception screenshots
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: thinking-reception-screenshots
+          path: exports/reception/thinking-ux/*.png
+          retention-days: 7
+          if-no-files-found: warn
+
       - name: Lighthouse (critical pages)
         run: bun run lighthouse
 
