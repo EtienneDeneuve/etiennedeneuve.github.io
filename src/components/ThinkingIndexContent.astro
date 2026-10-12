@@ -470,18 +470,20 @@ const jsonLd = buildJsonLdGraph([
   .thinking {
     --thinking-max: 90rem;
     --thinking-pad: var(--page-gutter, clamp(1.5rem, 4vw, 4rem));
-    --thinking-bg: var(--graphite, #111416);
-    --thinking-bg-soft: var(--graphite-soft, #1b1e20);
-    --thinking-ivory: #f3efe7;
-    --thinking-ivory-ink: #151819;
-    --thinking-ivory-muted: #454a4d;
-    --thinking-ivory-border: rgba(21, 24, 25, 0.14);
-    --thinking-copper: var(--copper-on-dark, #f0aa78);
-    --thinking-copper-bright: #f5c49a;
-    --thinking-copper-light: var(--copper-on-light, #a54822);
-    --thinking-ink: var(--text-on-dark, #f7f3ec);
-    --thinking-muted: var(--text-muted-on-dark, #cdd0cf);
-    --thinking-border: var(--border-on-dark, rgba(243, 239, 231, 0.16));
+    /* Theme roles instead of hardcoded graphite/ivory sections.
+       The index keeps a contrasting central series band in both modes. */
+    --thinking-bg: var(--brand-main-bg);
+    --thinking-bg-soft: var(--brand-main-soft);
+    --thinking-ivory: var(--brand-contrast-bg);
+    --thinking-ivory-ink: var(--brand-contrast-ink);
+    --thinking-ivory-muted: var(--brand-contrast-muted);
+    --thinking-ivory-border: var(--brand-contrast-border);
+    --thinking-copper: var(--brand-main-copper);
+    --thinking-copper-bright: var(--brand-main-copper-hover);
+    --thinking-copper-light: var(--brand-contrast-copper);
+    --thinking-ink: var(--brand-main-ink);
+    --thinking-muted: var(--brand-main-muted);
+    --thinking-border: var(--brand-main-border);
     --thinking-sans: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
     --thinking-radius: 4px;
     font-family: var(--thinking-sans);
@@ -493,8 +495,8 @@ const jsonLd = buildJsonLdGraph([
     background: var(--thinking-bg);
     color: var(--thinking-ink);
   }
-  /* Global h1/h2 use --color-fg (theme); force band ink so light theme
-     never paints dark titles onto graphite. */
+  /* Global headings use the document theme; band headings must match
+     their own semantic surface and foreground roles. */
   .thinking-band--dark :global(h1),
   .thinking-band--dark :global(h2),
   .thinking-band--dark .thinking-title,
@@ -789,7 +791,7 @@ const jsonLd = buildJsonLdGraph([
   }
   .thinking-library__more:hover,
   .thinking-library__more:focus-visible {
-    color: var(--thinking-bg);
+    color: var(--brand-main-copper-text);
     background: var(--thinking-copper);
   }
   .thinking-rows {
