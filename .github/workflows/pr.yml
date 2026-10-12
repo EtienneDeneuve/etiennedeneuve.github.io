@@ -36,11 +36,6 @@ jobs:
       - name: Clear old reception screenshots
         run: rm -rf exports/reception/thinking-ux exports/reception/editorial-pages exports/reception/theme-palette
 
-      - name: Temporary Prettier diagnostics
-        run: |
-          bunx prettier --write e2e/theme-palette.spec.ts
-          git --no-pager diff -- e2e/theme-palette.spec.ts
-
       - name: Format check
         run: bun run format:check
 
