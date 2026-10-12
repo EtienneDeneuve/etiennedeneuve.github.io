@@ -97,10 +97,16 @@ test.describe("inverted editorial theme across the site", () => {
     await page.goto("/");
     await page.evaluate(() => localStorage.setItem("theme", "light"));
     await page.reload();
-    await expect(page.locator(".home-band--dark").first()).toHaveCSS("background-color", COLOR.ivory);
+    await expect(page.locator(".home-band--dark").first()).toHaveCSS(
+      "background-color",
+      COLOR.ivory
+    );
     await page.locator(".site-nav theme-toggle button").click();
     await expect(page.locator("html")).toHaveClass(/theme-dark/);
-    await expect(page.locator(".home-band--dark").first()).toHaveCSS("background-color", COLOR.graphite);
+    await expect(page.locator(".home-band--dark").first()).toHaveCSS(
+      "background-color",
+      COLOR.graphite
+    );
 
     // Follow real internal links to exercise Astro ClientRouter swaps.
     await page.locator('.site-nav a[href="/thinking/"]').click();
@@ -119,7 +125,10 @@ test.describe("inverted editorial theme across the site", () => {
     );
 
     await page.locator(".site-nav theme-toggle button").click();
-    await expect(page.locator(".ed-band--dark").first()).toHaveCSS("background-color", COLOR.ivory);
+    await expect(page.locator(".ed-band--dark").first()).toHaveCSS(
+      "background-color",
+      COLOR.ivory
+    );
     await page.reload();
     await expect(page.locator("html")).not.toHaveClass(/theme-dark/);
   });
