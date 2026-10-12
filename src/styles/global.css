@@ -213,7 +213,8 @@
   --graphite: #111416;
   --graphite-soft: #1b1e20;
   --copper-on-dark: #f0aa78;
-  --copper-on-light: #a54822;
+  /* Preserve readable legacy copper for existing dark surfaces. */
+  --copper-on-light: #f0aa78;
   --text-on-dark: #f7f3ec;
   --text-muted-on-dark: #cdd0cf;
   --border-on-dark: rgba(243, 239, 231, 0.16);
