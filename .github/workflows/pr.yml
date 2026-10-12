@@ -98,6 +98,15 @@ jobs:
           retention-days: 7
           if-no-files-found: warn
 
+      - name: Upload editorial pages screenshots
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: editorial-pages-screenshots
+          path: exports/reception/editorial-pages/*.png
+          retention-days: 7
+          if-no-files-found: warn
+
       - name: Lighthouse (critical pages)
         run: bun run lighthouse
 
