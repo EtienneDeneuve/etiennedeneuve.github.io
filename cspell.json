@@ -48,6 +48,7 @@
     ".github/**",
     "public/**",
     "docs/**",
+    "exports/**",
     "src/content/**",
     "src/content-drafts/**",
     "src/data/**",
@@ -172,7 +173,18 @@
     "gitops",
     "separer",
     "bunx",
-    "Bun"
+    "Bun",
+    "bibliotheque",
+    "serie",
+    "colours",
+    "neighbours",
+    "accelere",
+    "deplacer",
+    "probleme",
+    "identite",
+    "swiftui",
+    "cardinalite",
+    "vfile"
   ],
   "flagWords": [],
   "overrides": [
