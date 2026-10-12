@@ -3,7 +3,12 @@ import { mkdirSync } from "node:fs";
 
 const pages = [
   { name: "home", path: "/", primary: ".home-band--dark", contrast: ".home-band--light" },
-  { name: "thinking", path: "/thinking/", primary: ".thinking-band--dark", contrast: ".thinking-band--light" },
+  {
+    name: "thinking",
+    path: "/thinking/",
+    primary: ".thinking-band--dark",
+    contrast: ".thinking-band--light",
+  },
   {
     name: "article",
     path: "/thinking/2026-09-22-opentelemetry-instrumenter-200-services/",
@@ -99,10 +104,16 @@ test.describe("inverted editorial theme across the site", () => {
 
     await page.goto("/thinking/");
     await expect(page.locator("html")).toHaveClass(/theme-dark/);
-    await expect(page.locator(".thinking-band--dark")).toHaveCSS("background-color", COLOR.graphite);
+    await expect(page.locator(".thinking-band--dark")).toHaveCSS(
+      "background-color",
+      COLOR.graphite
+    );
     await page.goto("/contact/");
     await expect(page.locator("html")).toHaveClass(/theme-dark/);
-    await expect(page.locator(".ed-band--dark").first()).toHaveCSS("background-color", COLOR.graphite);
+    await expect(page.locator(".ed-band--dark").first()).toHaveCSS(
+      "background-color",
+      COLOR.graphite
+    );
 
     await page.locator(".site-nav theme-toggle button").click();
     await expect(page.locator(".ed-band--dark").first()).toHaveCSS("background-color", COLOR.ivory);
