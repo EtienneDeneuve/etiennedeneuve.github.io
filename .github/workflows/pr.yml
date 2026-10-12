@@ -33,6 +33,14 @@ jobs:
         with:
           install-playwright: "true"
 
+      - name: Clear old reception screenshots
+        run: rm -rf exports/reception/thinking-ux
+
+      - name: Temporary format diagnostics
+        run: |
+          bunx prettier --write e2e/thinking-filters.spec.ts src/components/ThinkingIndexContent.astro
+          git --no-pager diff -- e2e/thinking-filters.spec.ts src/components/ThinkingIndexContent.astro
+
       - name: Format check
         run: bun run format:check
 
