@@ -135,11 +135,6 @@ const jsonLd = buildJsonLdGraph([
               href={siteConfig.social.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              {...analyticsAttrs("cta_contact_email", {
-                surface: "contact",
-                intent: "conversation",
-                lang,
-              })}
             >
               {config.other.cta[lang]} <span aria-hidden="true">↗</span>
             </a>
