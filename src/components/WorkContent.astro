@@ -28,10 +28,9 @@ const projectsPath = prefix + "/projects/";
 const omnivyaHref = omnivyaContactUrl(lang, "work");
 
 function localizedHref(href: string): string {
-  // Editorial references always lead to the already-published French source.
-  // Do not invent a translated route for every article or project.
-  if (href.startsWith("http") || lang === "fr") return href;
-  return href.startsWith("/en/") ? href : href;
+  // Use the actual English speaking page. Field notes remain on their
+  // documented French canonical URLs rather than inventing translations.
+  return lang === "en" && href === "/speaking/" ? "/en/speaking/" : href;
 }
 
 const omnivyaExpertNode: JsonLdObject = {
@@ -133,7 +132,7 @@ const jsonLd = buildJsonLdGraph([
                   <a href={localizedHref(item.related.href)}>
                     {item.related.label[lang]} <span aria-hidden="true">↗</span>
                   </a>
-                  {lang === "en" && (
+                  {lang === "en" && item.related.href.startsWith("/thinking/") && (
                     <span> — {config.labels.originalLanguage[lang]}</span>
                   )}
                 </p>
