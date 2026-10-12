@@ -198,9 +198,9 @@ const linkEvent = (href: string) => {
     font-family: var(--font-body);
     font-weight: 500;
     margin-bottom: 0;
-    background: color-mix(in srgb, var(--graphite, #111416) 94%, transparent);
-    color: var(--text-on-dark, #f7f3ec);
-    border-bottom: 1px solid var(--border-on-dark, rgba(243, 239, 231, 0.16));
+    background: color-mix(in srgb, var(--brand-main-bg) 94%, transparent);
+    color: var(--brand-main-ink);
+    border-bottom: 1px solid var(--brand-main-border);
     box-sizing: border-box;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -228,7 +228,7 @@ const linkEvent = (href: string) => {
     align-items: center;
     min-height: var(--touch-min);
     line-height: 1.15;
-    color: #f7f3ec;
+    color: var(--brand-main-ink);
     text-decoration: none;
     font-weight: 650;
     letter-spacing: var(--tracking-tight);
@@ -239,7 +239,7 @@ const linkEvent = (href: string) => {
     font-size: 1.65rem;
     font-weight: 600;
     line-height: 1;
-    color: var(--copper-on-dark, #f0aa78);
+    color: var(--brand-main-copper);
   }
 
   .site-title__text {
@@ -257,7 +257,7 @@ const linkEvent = (href: string) => {
   .site-title__role {
     font-size: 0.75rem;
     font-weight: 500;
-    color: #b8b4ac;
+    color: var(--brand-main-muted);
     line-height: 1.15;
   }
 
@@ -267,18 +267,18 @@ const linkEvent = (href: string) => {
     justify-content: center;
     min-height: var(--touch-min);
     min-width: var(--touch-min);
-    border: var(--border-width-strong) solid rgba(243, 239, 231, 0.35);
+    border: var(--border-width-strong) solid var(--brand-main-border);
     border-radius: var(--radius-md);
     padding: var(--space-2);
     font-size: var(--text-xl);
-    color: #f7f3ec;
+    color: var(--brand-main-ink);
     background: transparent;
   }
 
   .menu-button[aria-expanded="true"] {
-    background: #f7f3ec;
-    color: #111416;
-    border-color: #f7f3ec;
+    background: var(--brand-main-ink);
+    color: var(--brand-main-bg);
+    border-color: var(--brand-main-ink);
   }
 
   .menu-button[hidden] {
@@ -301,12 +301,12 @@ const linkEvent = (href: string) => {
     line-height: 1.2;
     list-style: none;
     padding: 0;
-    background-color: var(--graphite-soft, #1b1e20);
-    border-bottom: 1px solid rgba(243, 239, 231, 0.12);
+    background-color: var(--brand-main-soft);
+    border-bottom: 1px solid var(--brand-main-border);
   }
 
   .nav-items li {
-    border-bottom: 1px solid rgba(243, 239, 231, 0.1);
+    border-bottom: 1px solid var(--brand-main-border);
   }
 
   .nav-items li:last-child {
@@ -318,7 +318,7 @@ const linkEvent = (href: string) => {
     align-items: center;
     min-height: var(--touch-min);
     padding: var(--space-3) 0;
-    color: #cdd0cf;
+    color: var(--brand-main-muted);
     text-decoration: none;
     font-size: var(--text-sm);
     font-weight: 500;
@@ -326,9 +326,9 @@ const linkEvent = (href: string) => {
   }
 
   .link.active {
-    color: #f7f3ec;
-    background: color-mix(in srgb, var(--accent-on-dark, #f0aa78) 12%, transparent);
-    box-shadow: inset 3px 0 0 var(--accent-on-dark, #f0aa78);
+    color: var(--brand-main-ink);
+    background: color-mix(in srgb, var(--brand-main-copper) 12%, transparent);
+    box-shadow: inset 3px 0 0 var(--brand-main-copper);
   }
 
   .menu-footer {
@@ -337,8 +337,8 @@ const linkEvent = (href: string) => {
     align-items: center;
     gap: var(--space-3);
     padding: var(--space-4) 0;
-    background-color: var(--graphite-soft, #1b1e20);
-    border-bottom: 1px solid rgba(243, 239, 231, 0.12);
+    background-color: var(--brand-main-soft);
+    border-bottom: 1px solid var(--brand-main-border);
   }
 
   .cta-link {
@@ -349,8 +349,8 @@ const linkEvent = (href: string) => {
     padding: 0 1rem;
     border-radius: 4px;
     border: 0;
-    background: var(--copper-on-dark, #f0aa78);
-    color: #14110f;
+    background: var(--brand-main-copper);
+    color: var(--brand-main-copper-text);
     text-decoration: none;
     font-size: 0.88rem;
     font-weight: 650;
@@ -375,23 +375,23 @@ const linkEvent = (href: string) => {
   .menu-tools :global(.lang-switch__current),
   .menu-tools :global(.lang-switch__link),
   .menu-tools :global(.lang-switch__sep) {
-    color: #b8b4ac;
+    color: var(--brand-main-muted);
   }
 
   .menu-tools :global(.lang-switch__current) {
-    color: #f7f3ec;
+    color: var(--brand-main-ink);
   }
 
   .menu-tools :global(.lang-switch__link:hover) {
-    color: #d69e6f;
+    color: var(--brand-main-copper-hover);
   }
 
   .menu-tools :global(theme-toggle button) {
-    border-color: rgba(255, 255, 255, 0.35);
+    border-color: var(--brand-main-border);
   }
 
   .menu-tools :global(theme-toggle .icon) {
-    color: #b8b4ac;
+    color: var(--brand-main-muted);
   }
 
   @media (min-width: 75em) {
@@ -431,7 +431,7 @@ const linkEvent = (href: string) => {
       font-size: 0.9rem;
       letter-spacing: 0;
       text-transform: none;
-      color: #f7f3ec;
+      color: var(--brand-main-ink);
     }
 
     .nav-items {
@@ -440,12 +440,12 @@ const linkEvent = (href: string) => {
 
     .link:hover,
     .link:focus-visible {
-      color: var(--copper-on-dark, #f0aa78);
+      color: var(--brand-main-copper);
       background: transparent;
     }
 
     .link.active {
-      color: var(--copper-on-dark, #f0aa78);
+      color: var(--brand-main-copper);
       background: transparent;
       box-shadow: none;
     }
