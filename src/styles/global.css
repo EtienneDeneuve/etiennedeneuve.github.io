@@ -880,7 +880,7 @@ a.surface-card:hover,
 .heading-anchor,
 .prose .heading-anchor {
   margin-left: 0.35em;
-  color: var(--copper-on-dark, #f0aa78);
+  color: var(--brand-main-copper);
   text-decoration: none;
   font-weight: 600;
   /* Touch / coarse pointers: keep anchors discoverable without hover. */
@@ -906,7 +906,7 @@ a.surface-card:hover,
 .heading-anchor:focus-visible,
 .prose .heading-anchor:focus-visible {
   opacity: 1;
-  outline: 2px solid var(--copper-on-dark, #f0aa78);
+  outline: 2px solid var(--brand-main-copper);
   outline-offset: 2px;
 }
 .prose p,
