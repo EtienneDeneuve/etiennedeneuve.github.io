@@ -223,12 +223,17 @@ const jsonLd = buildJsonLdGraph([
               const contentType = entry.data.contentType as ThinkingContentType;
               const tagSlugs = getEntryTags(entry).map(slugifyTag).join(" ");
               const publishedAt = new Date(entry.data.pubDate).toISOString();
-              const editorialRank = (config.featuredSlugs as readonly string[]).indexOf(entry.id);
-              const featuredRank = isFeatured(entry)
-                ? editorialRank >= 0
-                  ? editorialRank
-                  : 999
-                : -1;
+              const editorialKey =
+                entry.data.translationKey ?? entry.id.replace(/-en$/, "");
+              const editorialRank = (config.featuredSlugs as readonly string[]).indexOf(
+                editorialKey
+              );
+              const featuredRank =
+                isFeatured(entry) || editorialRank >= 0
+                  ? editorialRank >= 0
+                    ? editorialRank
+                    : 999
+                  : -1;
               return (
                 <article
                   class="thinking-row"
