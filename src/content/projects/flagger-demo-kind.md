@@ -35,8 +35,8 @@ whatExists_en:
   - "Repository EtienneDeneuve/flagger-demo-kind (MIT)"
   - "Participant / facilitator guides and English mirrors"
   - "Validate CI + real Kind E2E"
-currentState: "Lab maintenu pour ateliers. Ouverture publique et page projet coordonnées (voir checklist publication du dépôt)."
-currentState_en: "Lab maintained for workshops. Public opening and project page coordinated (see the repo publication checklist)."
+currentState: "Repository GitHub public le 13 octobre 2026 à 10h30 (heure de Paris). Lab maintenu pour ateliers."
+currentState_en: "GitHub repository goes public on 13 October 2026 at 10:30 (Paris time). Lab maintained for workshops."
 limitations:
   - "Pas de GitOps, TLS, NetworkPolicy ni métriques Envoy bout-en-bout"
   - "Cible macOS + moteur Docker ; pas un parcours Linux desktop documenté pour les participants"
@@ -49,7 +49,8 @@ learnings:
 learnings_en:
   - "Without config to apply, make good/fail/ab stays magical in a workshop"
   - "A PromQL window that outlives fault injection fails the next A/B"
-relatedArticles: []
+relatedArticles:
+  - "2026-10-13-flagger-lab-kind-gateway-api"
 proofs:
   - label: "GitHub: EtienneDeneuve/flagger-demo-kind"
     url: "https://github.com/EtienneDeneuve/flagger-demo-kind"
@@ -75,10 +76,12 @@ technologies:
 startedAt: 2026-10-01
 verified: true
 featured: true
-draft: true
+draft: false
 displayOrder: 2
 ecosystemRole: "open source, lab plateforme"
 ecosystemRole_en: "open source, platform lab"
 ---
 
 Flagger Demo Kind est un atelier macOS pour faire **ressentir** la boucle Flagger : une révision YAML, une HTTPRoute Gateway API pilotée, un SLI Prometheus, puis promote ou rollback — sans Istio.
+
+**Ouverture publique du dépôt :** 13 octobre 2026, **10h30** (Europe/Paris) — [EtienneDeneuve/flagger-demo-kind](https://github.com/EtienneDeneuve/flagger-demo-kind).

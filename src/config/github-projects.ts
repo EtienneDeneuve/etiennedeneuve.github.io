@@ -88,8 +88,8 @@ export const githubProjectsEditorial: GitHubProjectEditorial[] = [
       en: "Show traffic decisions (Flagger + Gateway API) without Istio, with YAML attendees actually apply.",
     },
     status: {
-      fr: "Lab : ouverture publique imminente",
-      en: "Lab : public opening imminent",
+      fr: "Lab : public le 13 oct. 2026 à 10h30 (Paris)",
+      en: "Lab : public 13 Oct 2026 at 10:30 (Paris)",
     },
     role: {
       fr: "Auteur",

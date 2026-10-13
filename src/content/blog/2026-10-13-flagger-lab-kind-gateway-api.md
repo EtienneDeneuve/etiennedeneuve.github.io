@@ -18,11 +18,14 @@ tags:
   - Platform Engineering
   - Open Source
 featured: false
-draft: true
+draft: false
 relatedProjects:
   - flagger-demo-kind
 relatedArticles: []
 ---
+
+**Le dépôt GitHub passe public le 13 octobre 2026 à 10h30 (heure de Paris).**  
+Lien : [EtienneDeneuve/flagger-demo-kind](https://github.com/EtienneDeneuve/flagger-demo-kind).
 
 Kubernetes sait remplacer des pods. Il ne décide pas seul si une version **mérite** davantage de trafic.
 
