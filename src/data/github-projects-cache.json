@@ -5,6 +5,46 @@
   "syncError": null,
   "repositories": [
     {
+      "id": "flagger-demo-kind",
+      "category": "kubernetes-platform",
+      "github": {
+        "owner": "EtienneDeneuve",
+        "repo": "flagger-demo-kind"
+      },
+      "name": {
+        "fr": "Flagger Demo Kind",
+        "en": "Flagger Demo Kind"
+      },
+      "problem": {
+        "fr": "Montrer la décision de trafic (Flagger + Gateway API) sans Istio, avec du YAML que les participants appliquent vraiment.",
+        "en": "Show traffic decisions (Flagger + Gateway API) without Istio, with YAML attendees actually apply."
+      },
+      "status": {
+        "fr": "Lab : ouverture publique imminente",
+        "en": "Lab : public opening imminent"
+      },
+      "role": {
+        "fr": "Auteur",
+        "en": "Author"
+      },
+      "documentation": {
+        "fr": "Page projet + README FR/EN + docs/en/05-tp-participant.md.",
+        "en": "Project page + FR/EN README + docs/en/05-tp-participant.md."
+      },
+      "documentationUrl": "/projects/flagger-demo-kind/",
+      "contributionSought": {
+        "fr": "Retours d’atelier, issues macOS/Rancher, améliorations docs EN.",
+        "en": "Workshop feedback, macOS/Rancher issues, EN docs improvements."
+      },
+      "relatedProjectSlug": "flagger-demo-kind",
+      "displayOrder": 0,
+      "htmlUrl": "https://github.com/EtienneDeneuve/flagger-demo-kind",
+      "language": "Shell",
+      "license": "MIT",
+      "lastUpdated": null,
+      "metadataStatus": "static"
+    },
+    {
       "id": "external-metrics-exporter",
       "category": "kubernetes-platform",
       "github": {
