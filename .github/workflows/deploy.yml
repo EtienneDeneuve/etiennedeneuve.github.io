@@ -115,29 +115,53 @@ jobs:
       - name: Playwright (built site)
         run: bun run test:e2e
 
-      # A publication-only refresh does not modify site sources. Keep all
-      # functional checks, but do not let a duplicate Lighthouse lab score
-      # block a scheduled article already represented in the repository.
-      # Direct source changes still run Lighthouse in this deployment workflow.
-      - name: Detect publication-only refresh
-        id: release_only
-        shell: bash
-        run: |
-          if ! git rev-parse --verify HEAD^ >/dev/null 2>&1; then
-            echo "skip_lighthouse=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          changed="$(git diff --name-only HEAD^ HEAD)"
-          if [ -z "$changed" ] || [ "$changed" = ".github/workflows/deploy.yml" ]; then
-            echo "skip_lighthouse=true" >> "$GITHUB_OUTPUT"
-            echo "::notice::Publication/workflow-only update: Lighthouse stays enforced on source-changing pushes and PRs."
-          else
-            echo "skip_lighthouse=false" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Lighthouse (critical pages)
-        if: steps.release_only.outputs.skip_lighthouse != 'true'
-        run: bun run lighthouse
+        run: |
+          set +e
+          bun run lighthouse
+          rc=$?
+          if [ "$rc" -ne 0 ]; then
+            echo "::group::Lighthouse failed audit details"
+            node <<'NODE'
+          const fs = require("node:fs");
+          const path = require("node:path");
+          const root = ".lighthouseci";
+          function walk(dir) {
+            return fs.existsSync(dir)
+              ? fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
+                  const full = path.join(dir, entry.name);
+                  return entry.isDirectory() ? walk(full) : [full];
+                })
+              : [];
+          }
+          let reports = 0;
+          for (const file of walk(root).filter(f => f.endsWith(".json"))) {
+            try {
+              const report = JSON.parse(fs.readFileSync(file, "utf8"));
+              const category = report.categories?.["best-practices"];
+              if (!category || !report.audits) continue;
+              reports++;
+              const failures = category.auditRefs
+                .filter(ref => ref.weight > 0)
+                .map(ref => ({ id: ref.id, audit: report.audits[ref.id] }))
+                .filter(({ audit }) => audit && audit.score !== null && audit.score < 1);
+              if (!failures.length) continue;
+              console.log(JSON.stringify({
+                url: report.finalUrl, bestPracticesScore: category.score,
+                failedAudits: failures.map(({ id, audit }) => ({
+                  id, title: audit.title, score: audit.score,
+                  displayValue: audit.displayValue,
+                  explanation: audit.explanation,
+                  details: audit.details?.items?.slice(0, 3)
+                }))
+              }, null, 2).slice(0, 8000));
+            } catch(e) { console.log("Cannot parse report", file, String(e)); }
+          }
+          console.log("Parsed Lighthouse reports:", reports);
+          NODE
+            echo "::endgroup::"
+          fi
+          exit "$rc"
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
@@ -150,6 +174,7 @@ jobs:
         with:
           name: lighthouse-results
           path: .lighthouseci
+          include-hidden-files: true
           retention-days: 14
           if-no-files-found: warn
 
