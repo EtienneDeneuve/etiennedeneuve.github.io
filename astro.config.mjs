@@ -7,7 +7,6 @@ import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import { remarkReadingTime } from "./remark-reading-time.mjs";
 import { remarkModifiedTime } from "./remark-modified-time.mjs";
-import partytown from "@astrojs/partytown";
 import sitemap from "@astrojs/sitemap";
 import jopSoftwarecookieconsent from "@jop-software/astro-cookieconsent";
 import remarkMermaid from "remark-mermaidjs";
@@ -174,12 +173,6 @@ export default defineConfig({
   integrations: [
     sitemap({
       filter: (page) => !isSitemapExcluded(page),
-    }),
-    partytown({
-      // Adds dataLayer.push as a forwarding-event.
-      config: {
-        forward: ["dataLayer.push"],
-      },
     }),
     jopSoftwarecookieconsent({
       categories: {
