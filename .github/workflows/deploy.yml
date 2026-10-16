@@ -1,4 +1,5 @@
-# Master branch: quality gate + deterministic build + GitHub Pages deploy
+# GitHub Pages release: PR already runs all quality checks and browser audits.
+# Every push/schedule still builds fresh HTML from its exact commit and date.
 name: Deploy GitHub Pages
 
 on:
@@ -30,8 +31,8 @@ env:
   PUBLIC_CLARITY_PROJECT_ID: ${{ secrets.PUBLIC_CLARITY_PROJECT_ID }}
 
 jobs:
-  quality:
-    name: Quality & deterministic build
+  build:
+    name: Deterministic release build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -42,29 +43,11 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
         with:
-          install-playwright: "true"
+          install-playwright: "false"
 
-      - name: Format check
-        run: bun run format:check
-
-      - name: Lint
-        run: bun run lint
-
-      - name: Astro check
-        run: bun run check
-
-      - name: Validate collections
-        run: bun run validate:collections
-
-      - name: Publication policy
-        run: bun run validate-publication
-
-      - name: Spellcheck
-        run: bun run spellcheck
-
-      - name: SEO config
-        run: bun run verify-seo
-
+      # Pre-merge PR CI owns format/lint/Astro/spelling/unit/E2E/Lighthouse.
+      # The release job builds from master again because generated pages,
+      # scheduled publishing, source dates and analytics are release inputs.
       - name: Generate assets
         run: bun run generate:assets
         env:
@@ -109,28 +92,13 @@ jobs:
       - name: SEO HTML checks
         run: bun run verify-seo
 
-      - name: Unit tests
-        run: bun run test
-
-      - name: Playwright (built site)
-        run: bun run test:e2e
-
-      - name: Lighthouse (critical pages)
-        run: bun run lighthouse
+      # Keep inexpensive artifact-integrity checks (links, SEO, analytics),
+      # but do not re-run Playwright/Lighthouse on an already-tested merge.
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
         with:
           path: dist
-
-      - name: Upload Lighthouse results
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: lighthouse-results
-          path: .lighthouseci
-          retention-days: 14
-          if-no-files-found: warn
 
       - name: Upload media kit
         if: always()
@@ -145,7 +113,7 @@ jobs:
 
   deploy:
     name: Deploy to GitHub Pages
-    needs: quality
+    needs: build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
