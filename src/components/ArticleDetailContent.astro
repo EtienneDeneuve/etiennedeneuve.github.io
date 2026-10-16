@@ -500,21 +500,22 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
 
 <style>
   /*
-    Composition bands match home/thinking: graphite + ivory stay fixed
-    so dark/light theme toggle does not invert contrast on these surfaces.
+    Semantic editorial surfaces mirror Home and Thinking:
+    light mode reads on ivory, dark mode on graphite. The final
+    author/continuation band uses the contrasting brand surface.
   */
   .article {
-    --ink-on-dark: #f7f3ec;
-    --muted-on-dark: #cdd0cf;
-    --border-on-dark: rgba(243, 239, 231, 0.16);
-    --copper-on-dark: #f0aa78;
-    --bg-dark: #111416;
-    --bg-dark-soft: #1b1e20;
-    --ivory: #f3efe7;
-    --ivory-ink: #151819;
-    --ivory-muted: #454a4d;
-    --ivory-border: rgba(21, 24, 25, 0.14);
-    --copper-on-ivory: #a54822;
+    --ink-on-dark: var(--brand-main-ink);
+    --muted-on-dark: var(--brand-main-muted);
+    --border-on-dark: var(--brand-main-border);
+    --copper-on-dark: var(--brand-main-copper);
+    --bg-dark: var(--brand-main-bg);
+    --bg-dark-soft: var(--brand-main-soft);
+    --ivory: var(--brand-contrast-bg);
+    --ivory-ink: var(--brand-contrast-ink);
+    --ivory-muted: var(--brand-contrast-muted);
+    --ivory-border: var(--brand-contrast-border);
+    --copper-on-ivory: var(--brand-contrast-copper);
     position: relative;
     font-family: var(--font-body);
     background: var(--bg-dark);
@@ -736,7 +737,7 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
   .article-after :global(.btn-primary) {
     background: var(--copper-on-ivory);
     border-color: var(--copper-on-ivory);
-    color: #fff;
+    color: var(--brand-contrast-copper-text);
   }
   .article-after :global(.btn-text) {
     color: var(--copper-on-ivory);
@@ -776,7 +777,7 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
 
   .article-cta {
     padding: 1.1rem 1.15rem;
-    background: #fff;
+    background: var(--brand-contrast-elevated);
     border: 1px solid var(--ivory-border);
     border-radius: var(--radius-sm);
   }

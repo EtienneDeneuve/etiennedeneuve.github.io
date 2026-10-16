@@ -88,9 +88,9 @@ const linkAttrs = (href: string) => {
 <style>
   .site-footer {
     /* Full-bleed bar — gutter lives on the shell, same as nav/home (Safari). */
-    background: var(--graphite, #111416);
-    color: var(--text-on-dark, #f7f3ec);
-    border-top: 1px solid var(--border-on-dark, rgba(243, 239, 231, 0.16));
+    background: var(--brand-main-bg);
+    color: var(--brand-main-ink);
+    border-top: 1px solid var(--brand-main-border);
     padding-block: 1rem 1.15rem;
     box-sizing: border-box;
   }
@@ -120,24 +120,24 @@ const linkAttrs = (href: string) => {
     align-items: baseline;
     gap: 0.4rem;
     font-size: 0.92rem;
-    color: var(--text-muted-on-dark, #cdd0cf);
+    color: var(--brand-main-muted);
   }
 
   .site-footer__mono {
     font-family: var(--font-serif, "Cormorant Garamond", Georgia, "Times New Roman", serif);
     font-weight: 600;
-    color: var(--copper-on-dark, #f0aa78);
+    color: var(--brand-main-copper);
   }
 
   .site-footer__email {
-    color: var(--text-muted-on-dark, #cdd0cf);
+    color: var(--brand-main-muted);
     text-decoration: none;
     font-size: 0.9rem;
   }
 
   .site-footer__email:hover,
   .site-footer__email:focus-visible {
-    color: var(--copper-on-dark, #f0aa78);
+    color: var(--brand-main-copper);
   }
 
   .site-footer__nav {
@@ -147,24 +147,24 @@ const linkAttrs = (href: string) => {
   }
 
   .site-footer__nav a {
-    color: var(--text-muted-on-dark, #cdd0cf);
+    color: var(--brand-main-muted);
     text-decoration: none;
     font-size: 0.88rem;
   }
 
   .site-footer__nav--utility a {
     font-size: 0.82rem;
-    color: #9aa0a3;
+    color: var(--brand-main-muted);
   }
 
   .site-footer__nav a:hover,
   .site-footer__nav a:focus-visible {
-    color: var(--copper-on-dark, #f0aa78);
+    color: var(--brand-main-copper);
   }
 
   .site-footer__copy {
     margin: 0.25rem 0 0;
     font-size: 0.75rem;
-    color: #7a736a;
+    color: var(--brand-main-muted);
   }
 </style>

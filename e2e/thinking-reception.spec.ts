@@ -105,7 +105,8 @@ test.describe("Thinking reception screenshots + finishing checks", () => {
       test(`${route.id} @ ${vp.name}`, async ({ page }) => {
         // Full-page screenshots must render below-the-fold ScrollReveal sections.
         // Reduced motion preserves their final visible state for reliable review.
-        await page.emulateMedia({ reducedMotion: "reduce" });
+        await page.emulateMedia({ reducedMotion: "reduce", colorScheme: "light" });
+        await page.addInitScript(() => localStorage.setItem("theme", "light"));
         await page.setViewportSize({ width: vp.width, height: vp.height });
         const res = await page.goto(route.path, { waitUntil: "networkidle" });
         expect(res?.ok()).toBeTruthy();
@@ -116,7 +117,7 @@ test.describe("Thinking reception screenshots + finishing checks", () => {
           await expect(series).toBeVisible();
           await expect
             .poll(() => series.evaluate((el) => getComputedStyle(el).backgroundColor))
-            .toBe("rgb(243, 239, 231)");
+            .toBe("rgb(17, 20, 22)");
         }
 
         if (

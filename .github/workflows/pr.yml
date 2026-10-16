@@ -34,7 +34,7 @@ jobs:
           install-playwright: "true"
 
       - name: Clear old reception screenshots
-        run: rm -rf exports/reception/thinking-ux
+        run: rm -rf exports/reception/thinking-ux exports/reception/editorial-pages exports/reception/theme-palette
 
       - name: Format check
         run: bun run format:check
@@ -104,6 +104,15 @@ jobs:
         with:
           name: editorial-pages-screenshots
           path: exports/reception/editorial-pages/*.png
+          retention-days: 7
+          if-no-files-found: warn
+
+      - name: Upload theme inversion screenshots
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: theme-inversion-screenshots
+          path: exports/reception/theme-palette/*.png
           retention-days: 7
           if-no-files-found: warn
 
