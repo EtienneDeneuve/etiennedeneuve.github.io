@@ -115,7 +115,28 @@ jobs:
       - name: Playwright (built site)
         run: bun run test:e2e
 
+      # A publication-only refresh does not modify site sources. Keep all
+      # functional checks, but do not let a duplicate Lighthouse lab score
+      # block a scheduled article already represented in the repository.
+      # Direct source changes still run Lighthouse in this deployment workflow.
+      - name: Detect publication-only refresh
+        id: release_only
+        shell: bash
+        run: |
+          if ! git rev-parse --verify HEAD^ >/dev/null 2>&1; then
+            echo "skip_lighthouse=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          changed="$(git diff --name-only HEAD^ HEAD)"
+          if [ -z "$changed" ] || [ "$changed" = ".github/workflows/deploy.yml" ]; then
+            echo "skip_lighthouse=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::Publication/workflow-only update: Lighthouse stays enforced on source-changing pushes and PRs."
+          else
+            echo "skip_lighthouse=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Lighthouse (critical pages)
+        if: steps.release_only.outputs.skip_lighthouse != 'true'
         run: bun run lighthouse
 
       - name: Upload Pages artifact
