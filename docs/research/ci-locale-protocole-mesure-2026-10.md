@@ -39,7 +39,7 @@ La première extraction, du **28 septembre au 9 octobre** (11 jours), indiquait 
 
 Ce sont des **totaux d'export**. Ils ne sont pas une mesure causalement comparable, car :
 
-- GitHub limite à **1 000 résultats par recherche filtrée**, notamment par \`created\`. Le premier export atteint exactement ce plafond : **complétude non démontrée**.
+- GitHub limite à **1 000 résultats par recherche filtrée**, notamment par `created`. Le premier export atteint exactement ce plafond : **complétude non démontrée**.
 - La première période inclut une phase de double exécution des tests pour vérifier la parité.
 - L'activité est différente : l'analyse historique mentionne **112 branches de PR actives avant**, **26 après**. Une branche active n'est **pas** un nombre de PR normalisé.
 - La seconde période commence **le jour du cutover**, pas après une période de stabilisation.
@@ -49,7 +49,7 @@ Ce sont des **totaux d'export**. Ils ne sont pas une mesure causalement comparab
 
 ## 3. Reconstituer une base exhaustive et traçable
 
-Script autonome fourni : [\`src/scripts/audit-actions-case-study.mjs\`](../../src/scripts/audit-actions-case-study.mjs).
+Script autonome fourni : [`src/scripts/audit-actions-case-study.mjs`](../../src/scripts/audit-actions-case-study.mjs).
 
 Exemple de collecte **à exécuter seulement avec accès autorisé au dépôt interne**, résultats hors du dépôt public :
 
@@ -58,7 +58,7 @@ gh auth status
 
 bun src/scripts/audit-actions-case-study.mjs collect \
   --repo OWNER/REPOSITORY \
-  --start 2026-09-11 --end 2026-10-09 \
+  --start 2026-09-01 --end 2026-09-29 \
   --out /tmp/ci-audit-before.json
 
 bun src/scripts/audit-actions-case-study.mjs collect \
@@ -75,8 +75,8 @@ bun src/scripts/audit-actions-case-study.mjs compare \
 
 Le script :
 
-- Découpe récursivement les recherches \`created\` en sous-périodes jusqu'à être **strictement sous la limite de 1 000 résultats** ; vérifie le nombre de résultats collectés pour chaque tranche.
-- Récupère **tous les jobs de chaque run et toutes leurs tentatives** (\`filter=all\`), y compris les jobs échoués/annulés. Les jobs \`skipped\` n'ont pas de temps runner.
+- Découpe récursivement les recherches `created` en sous-périodes jusqu'à être **strictement sous la limite de 1 000 résultats** ; vérifie le nombre de résultats collectés pour chaque tranche.
+- Récupère **tous les jobs de chaque run et toutes leurs tentatives** (`filter=all`), y compris les jobs échoués/annulés. Les jobs `skipped` n'ont pas de temps runner.
 - Contrôle les doublons, les périodes, les jobs orphelins et les dates d'exécution invalides ; **échoue sans publier de KPI** si les données sont incomplètes.
 - Conserve la liste des fenêtres effectivement interrogées, le nombre attendu/reçu et l'horodatage de l'extraction dans la preuve brute.
 - Produit une ventilation par workflow et type d'événement ; les dépôts privés et identifiants restent dans les fichiers **hors Git**.
@@ -87,15 +87,15 @@ Le script :
 
 ### A. Charge des runners, **observation descriptive**
 
-Pour chaque job exécuté \`j\`, en excluant les jobs \`skipped\` :
+Pour chaque job exécuté `j`, en excluant les jobs `skipped` :
 
-\`durée(j) = completed_at(j) - started_at(j)\`
+`durée(j) = completed_at(j) - started_at(j)`
 
-\`runner-minutes = somme(durée(j) / 60)\`
+`runner-minutes = somme(durée(j) / 60)`
 
 Inclure les tentatives réexécutées et les jobs en échec ou annulés : ils ont consommé du calcul. Ne pas confondre la somme des durées des jobs parallèles avec l'horloge d'un run.
 
-\`variation brute (%) = 100 × (total_après / total_avant - 1)\`
+`variation brute (%) = 100 × (total_après / total_avant - 1)`
 
 **N'utiliser cette variation que si les deux exports sont exhaustifs.** Même alors, elle décrit **un volume d'exécution**, pas l'effet causal de la migration.
 
@@ -103,21 +103,21 @@ Inclure les tentatives réexécutées et les jobs en échec ou annulés : ils on
 
 Identifier **chaque PR réellement active côté code** (PR et révisions proposées à l'intégration), indépendamment de l'existence de jobs GitHub Actions. Une PR sans runner après la bascule compte **au dénominateur**.
 
-Établir un registre avec : identifiant PR, dates de commits/push, révision testée, taille du changement, surfaces touchées, présence de migrations, présence de code partagé, catégories de contrôles requises et nombre de tentatives. Ne **pas** assimiler \`head_branch\` à un identifiant de PR, ni \`updated_at\` à un push de code.
+Établir un registre avec : identifiant PR, dates de commits/push, révision testée, taille du changement, surfaces touchées, présence de migrations, présence de code partagé, catégories de contrôles requises et nombre de tentatives. Ne **pas** assimiler `head_branch` à un identifiant de PR, ni `updated_at` à un push de code.
 
-Classer les PR par risque/surface : \`docs-only\`, \`backend\`, \`frontend\`, \`db\`, \`rust\`, \`shared/mixed\`. Les catégories doivent être **exclusives** ; un changement multi-surfaces rejoint \`shared/mixed\` plutôt que de compter trois fois.
+Classer les PR par risque/surface : `docs-only`, `backend`, `frontend`, `db`, `rust`, `shared/mixed`. Les catégories doivent être **exclusives** ; un changement multi-surfaces rejoint `shared/mixed` plutôt que de compter trois fois.
 
-Pour chaque classe \`s\` et période \`t\` :
+Pour chaque classe `s` et période `t` :
 
-\`m(t,s) = minutes des validations PR hébergées attribuables à la classe s / nombre de PR éligibles de classe s\`
+`m(t,s) = minutes des validations PR hébergées attribuables à la classe s / nombre de PR éligibles de classe s`
 
-Fixer **avant le calcul** des poids \`w(s)\` correspondant à la distribution **avant** (ou à une distribution de référence métier explicitement justifiée) :
+Fixer **avant le calcul** des poids `w(s)` correspondant à la distribution **avant** (ou à une distribution de référence métier explicitement justifiée) :
 
-\`m_standardisé(t) = somme_s [ w(s) × m(t,s) ]\`
+`m_standardisé(t) = somme_s [ w(s) × m(t,s) ]`
 
-La variation de \`m_standardisé\` neutralise **une partie** de la variation de composition des PR. Elle ne neutralise pas automatiquement l'effet de la taille des changements, les rebases, les retries, les pratiques d'équipe ou les releases.
+La variation de `m_standardisé` neutralise **une partie** de la variation de composition des PR. Elle ne neutralise pas automatiquement l'effet de la taille des changements, les rebases, les retries, les pratiques d'équipe ou les releases.
 
-**Interdire ce calcul** si l'inventaire des PR est incomplet, si une classe utile est absente d'une période ou si les vérifications requises ne sont pas comparables. Publier alors des données stratifiées avec les tailles d'échantillon \`n\`, et « données insuffisantes ».
+**Interdire ce calcul** si l'inventaire des PR est incomplet, si une classe utile est absente d'une période ou si les vérifications requises ne sont pas comparables. Publier alors des données stratifiées avec les tailles d'échantillon `n`, et « données insuffisantes ».
 
 ### C. Ce qui n'est **pas** un coût de PR
 
@@ -136,9 +136,11 @@ La collecte automatique seule ne connaît **pas** la population complète de PR 
 
 La notion de **PR éligible** doit être fixée avant de compter : par exemple, une PR ayant proposé une nouvelle révision de code pendant la fenêtre. Une PR ouverte depuis un mois sans changement dans la fenêtre ne vaut pas une nouvelle unité de validation. Pour éviter les doubles comptes, une même PR contribue au maximum **une fois par période**, avec toutes ses révisions et tous ses runs de validations rattachés. Les relances restent comptées dans les minutes.
 
-Classer chaque PR **une seule fois** dans l'une des classes suivantes : \`docs-only\`, \`backend\`, \`frontend\`, \`db\`, \`rust\`, \`shared/mixed\`. \`shared/mixed\` inclut les fichiers communs et les changements touchant plusieurs surfaces. La classe doit se déduire du diff **complet avec la branche de base**, pas simplement de \`HEAD~1\`. Une catégorie absente d'une période interdit une agrégation standardisée sur l'ensemble de ces catégories.
+**Contrôle de sensibilité obligatoire :** la moyenne « minutes par PR » reste dépendante du nombre de révisions par PR. Compter aussi les **SHA distincts soumis à validation** dans chaque classe et calculer des « minutes hébergées par révision éligible ». Confronter les deux normalisations, conserver le nombre de révisions par PR et les effectifs ; si elles divergent fortement, ne pas condenser le résultat dans un pourcentage unique. Une même révision ne doit être comptée qu'une fois au dénominateur, même après un rerun (dont les minutes restent au numérateur). Le manifeste PR ci-dessous ne contient **pas encore** le recensement exhaustif de ces SHA : l'outil fournit la normalisation **par PR**, pas une normalisation par révision ni un estimateur causal.
 
-Exemple synthétique de manifeste \`/tmp/pr-before.json\` (**ne jamais committer les vrais manifestes du dépôt pilote**) :
+Classer chaque PR **une seule fois** dans l'une des classes suivantes : `docs-only`, `backend`, `frontend`, `db`, `rust`, `shared/mixed`. `shared/mixed` inclut les fichiers communs et les changements touchant plusieurs surfaces. La classe doit se déduire du diff **complet avec la branche de base**, pas simplement de `HEAD~1`. Une catégorie absente d'une période interdit une agrégation standardisée sur l'ensemble de ces catégories.
+
+Exemple synthétique de manifeste `/tmp/pr-before.json` (**ne jamais committer les vrais manifestes du dépôt pilote**) :
 
 ```json
 {
@@ -146,8 +148,8 @@ Exemple synthétique de manifeste \`/tmp/pr-before.json\` (**ne jamais committer
   "quality_parity_verified": true,
   "source": "Extraction PR par API et revue manuelle de la matrice de contrôle, horodatées et archivées hors Git",
   "window": {
-    "start": "2026-09-11",
-    "end": "2026-10-09"
+    "start": "2026-09-01",
+    "end": "2026-09-29"
   },
   "pull_requests": [
     { "number": 101, "category": "backend", "validation_run_ids": [10001, 10002] },
@@ -156,9 +158,9 @@ Exemple synthétique de manifeste \`/tmp/pr-before.json\` (**ne jamais committer
 }
 ```
 
-Le manifeste « après » reprend **la même structure** et sa propre fenêtre. Le tableau ci-dessus est uniquement un exemple de syntaxe, **pas une population réelle ni un résultat**. Une PR à zéro runner reste nécessairement dans la liste avec \`validation_run_ids: []\`.
+Le manifeste « après » reprend **la même structure** et sa propre fenêtre. Le tableau ci-dessus est uniquement un exemple de syntaxe, **pas une population réelle ni un résultat**. Une PR à zéro runner reste nécessairement dans la liste avec `validation_run_ids: []`.
 
-**Procédure d'établissement de la population :** extraire les PR + leurs révisions (push/commits), conserver les identifiants PR stables, vérifier que les périodes sont intégralement couvertes par les bornes \`created/updated\` et l'historique des commits, classer leurs diffs par risque, rapprocher tous les runs liés au SHA et à la PR, puis vérifier manuellement les événements \`push\` ou déclenchements manuels rattachés. Les runs **release, preview, sécurité et automatisation** doivent rester exclus de \`validation_run_ids\`. Archiver la requête, les filtres et la liste finale en dehors du dépôt public. Le champ \`population_verified\` est une **attestation humaine** ; le script ne peut pas vérifier à lui seul la complétude de ce recensement.
+**Procédure d'établissement de la population :** extraire les PR + leurs révisions (push/commits), conserver les identifiants PR stables, vérifier que les périodes sont intégralement couvertes par les bornes `created/updated` et l'historique des commits, classer leurs diffs par risque, rapprocher tous les runs liés au SHA et à la PR, puis vérifier manuellement les événements `push` ou déclenchements manuels rattachés. Les runs **release, preview, sécurité et automatisation** doivent rester exclus de `validation_run_ids`. Archiver la requête, les filtres et la liste finale en dehors du dépôt public. Le champ `population_verified` est une **attestation humaine** ; le script ne peut pas vérifier à lui seul la complétude de ce recensement.
 
 Après collecte exhaustive et recensement des PR :
 
@@ -174,29 +176,29 @@ bun src/scripts/audit-actions-case-study.mjs normalize \
   --prs-after /tmp/pr-after.json
 ```
 
-Le mode \`compare\` ne calcule **aucun « gain »** : il imprime les volumes d'exécution par workflow et type d'événement. Le mode \`normalize\` n'est autorisé qu'avec deux manifestes attestés et un inventaire complet. Il affiche **les poids fixés sur l'avant, les tailles d'échantillon par catégorie et les taux standardisés**, mais qualifie le pourcentage de **descriptif, non causal**.
+Le mode `compare` ne calcule **aucun « gain »** : il imprime les volumes d'exécution par workflow et type d'événement. Le mode `normalize` n'est autorisé qu'avec deux manifestes attestés et un inventaire complet. Il affiche **les poids fixés sur l'avant, les tailles d'échantillon par catégorie et les taux standardisés**, mais qualifie le pourcentage de **descriptif, non causal**.
 
 Une classe faiblement peuplée a une forte incertitude même lorsque le calcul est arithmétiquement possible. Avant toute communication externe d'un pourcentage normalisé, vérifier la dispersion par classe et fournir un intervalle d'incertitude ou déclarer l'effectif insuffisant. Une standardisation **ne** corrige **pas** toute différence de complexité à l'intérieur d'une même catégorie.
 
 ### Pourquoi les runner-minutes ne doivent pas être confondues avec la facturation
 
-Pour contrôler que l'indicateur est bien une **consommation GitHub-hosted**, vérifier la classe des runners dans les jobs (\`labels\`, \`runner_group\`, etc.) et exclure explicitement tout self-hosted éventuel. Sans preuve de cette classification, l'indicateur doit rester « durée des jobs GitHub Actions », pas « minutes facturées ».
+Pour contrôler que l'indicateur est bien une **consommation GitHub-hosted**, vérifier la classe des runners dans les jobs (`labels`, `runner_group`, etc.) et exclure explicitement tout self-hosted éventuel. Sans preuve de cette classification, l'indicateur doit rester « durée des jobs GitHub Actions », pas « minutes facturées ».
 
 ### D. Feedback et temps humain
 
 Comparer **la même famille de contrôles**, sur une machine et un runner décrits (CPU, mémoire, outillage, caches, état devenv), avec des échantillons répétés :
 
-- \`T_feedback = résultat pertinent disponible - instant du changement/push\`
+- `T_feedback = résultat pertinent disponible - instant du changement/push`
 - Mesurer **médiane et p90**, froid et chaud séparés, et le taux de vérifications réellement lancées.
-- Mesurer ensuite \`T_mergeable = instant où tous les contrôles et validations requis sont satisfaits - ouverture/dernier push\`, en spécifiant le point de départ et en distinguant attente humaine et temps de test.
+- Mesurer ensuite `T_mergeable = instant où tous les contrôles et validations requis sont satisfaits - ouverture/dernier push`, en spécifiant le point de départ et en distinguant attente humaine et temps de test.
 
-Le benchmark ciblé du **2 octobre** trouvait \`38,63 s\` sur le poste à chaud et \`1 min 36 s\` sur un runner simplifié à chaud pour la même commande Go. **Deux exécutions ciblées ne forment pas une distribution statistique du délai de feedback de toutes les PR.** Le job GitHub historique de \`6 min 10 s\` en moyenne exécutait des étapes supplémentaires : comparaison directe invalide.
+Le benchmark ciblé du **2 octobre** trouvait `38,63 s` sur le poste à chaud et `1 min 36 s` sur un runner simplifié à chaud pour la même commande Go. **Deux exécutions ciblées ne forment pas une distribution statistique du délai de feedback de toutes les PR.** Le job GitHub historique de `6 min 10 s` en moyenne exécutait des étapes supplémentaires : comparaison directe invalide.
 
 ### E. Coût financier
 
-Source obligatoire : export **Billing GitHub** détaillé, par \`repository × SKU × date\`, avec les quotas, tarifs et conditions d'abonnement effectivement appliqués.
+Source obligatoire : export **Billing GitHub** détaillé, par `repository × SKU × date`, avec les quotas, tarifs et conditions d'abonnement effectivement appliqués.
 
-\`coût évité net = dépense facturée de référence ajustée - dépense facturée après\`
+`coût évité net = dépense facturée de référence ajustée - dépense facturée après`
 
 La durée runner ne suffit pas à déterminer ce coût. Ajouter le coût de maintenance du devenv, la charge Mac, l'onboarding et les échecs de publication du statut.
 
@@ -205,7 +207,7 @@ La durée runner ne suffit pas à déterminer ce coût. Ajouter le coût de main
 ## 5. Conditions de validation avant publication
 
 1. **Complétude** : aucun segment de recherche à 1 000, pas de runs/jobs manquants, toutes les tentatives et les bornes UTC contrôlées.
-2. **Comparabilité** : 28 jours stabilisés, matrice \`avant / shadow / après\`, même nomenclature des workloads, catégories de PR et échantillons par classe documentés.
+2. **Comparabilité** : 28 jours stabilisés, matrice `avant / shadow / après`, même nomenclature des workloads, catégories de PR et échantillons par classe documentés.
 3. **Parité qualité** : vérification des commandes équivalentes, des E2E exigés/non exigés, du statut sur le SHA exact et du périmètre Linux/macOS.
 4. **Sensibilité** : refaire les totaux en excluant la phase de double-run et en séparant les relances/campagnes de release.
 5. **Facturation** : ne pas assimiler le rapport d'API à l'export financier.

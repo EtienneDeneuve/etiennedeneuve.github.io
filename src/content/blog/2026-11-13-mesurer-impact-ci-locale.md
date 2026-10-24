@@ -83,7 +83,7 @@ Nous récupérons **tous les jobs et toutes les tentatives** de chaque run, y co
 
 La première métrique devient donc :
 
-\`Minutes d'exécution = somme des (fin du job - début du job) / 60\`
+`Minutes d'exécution = somme des (fin du job - début du job) / 60`
 
 C'est la **somme des durées des jobs**, pas le temps écoulé sur l'horloge lorsqu'ils tournent en parallèle. Et ce n'est pas non plus la facture GitHub, qui dépend d'autres règles.
 
@@ -99,17 +99,19 @@ Ensuite, nous classons chaque PR **une seule fois**, selon le risque dominant et
 
 Pour chaque catégorie, nous calculons :
 
-\`Minutes hébergées par PR = minutes des validations attribuées / nombre de PR éligibles\`
+`Minutes hébergées par PR = minutes des validations attribuées / nombre de PR éligibles`
 
 Mais si, avant, nous avions surtout des changements PostgreSQL et, après, surtout des corrections de documentation, cette moyenne ne signifie rien.
 
 Nous fixons donc les **poids des catégories sur la population de référence « avant »**, puis appliquons exactement ces mêmes poids aux deux périodes :
 
-\`M_standardisé = somme (poids de catégorie × minutes hébergées moyennes par PR de cette catégorie)\`
+`M_standardisé = somme (poids de catégorie × minutes hébergées moyennes par PR de cette catégorie)`
 
 Pourquoi des poids fixes ? Pour éviter d'attribuer à l'architecture CI ce qui vient simplement d'une semaine où l'équipe a changé des fichiers plus faciles à valider.
 
 Si une catégorie manque dans l'une des périodes, si les PR ne sont pas toutes recensées ou si les contrôles de qualité ne sont plus équivalents, **nous ne calculons pas de pourcentage standardisé**. Nous publions les données par catégorie et indiquons « comparaison insuffisante ».
+
+Le **nombre de révisions soumises par PR** peut encore fausser cette moyenne. Nous prévoyons donc un contrôle complémentaire en « minutes de validation par SHA éligible » : un rerun consomme des minutes mais ne crée pas un nouveau changement. Cette population de SHA n'a pas encore été établie sur tout le pilote.
 
 Les releases, les previews et les scans de sécurité restent **hors de cette normalisation** : une release se mesure par release et par composant construit, un scan par politique de couverture, pas par nombre de PR.
 

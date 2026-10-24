@@ -83,7 +83,7 @@ For each run, we include **every job attempt**, including reruns, failed jobs an
 
 The first metric is simply:
 
-\`Runner execution minutes = sum(job completion - job start) / 60\`
+`Runner execution minutes = sum(job completion - job start) / 60`
 
 That is the **sum of job durations**, not the wall-clock duration of several parallel jobs, and it is not the amount GitHub billed.
 
@@ -99,17 +99,19 @@ We then classify each PR **once** by the dominant risk and required checks: docu
 
 For each category:
 
-\`Hosted minutes per PR = attributed validation minutes / number of eligible PRs\`
+`Hosted minutes per PR = attributed validation minutes / number of eligible PRs`
 
 But if the baseline contained many PostgreSQL migrations while the later window mostly involved documentation, even those averages would be misleading.
 
 So we **freeze the category weights using the baseline population** and apply the very same weights to both periods:
 
-\`Standardized measure = sum(category weight × hosted minutes per PR in category)\`
+`Standardized measure = sum(category weight × hosted minutes per PR in category)`
 
 Why fixed weights? To avoid crediting the CI architecture for a week in which the team simply worked on less demanding changes.
 
 If a category is absent in either period, the PR population is incomplete, or check parity is not established, **we refuse to produce a standardized percentage**. We report the strata and say that the comparison is insufficient.
+
+The **number of pushed revisions per PR** is another confounder: as a sensitivity check, we must also examine hosted validation minutes per distinct eligible SHA, not just per PR. Retries count towards consumed minutes, but must not create another revision in the denominator. This has not yet been measured on the full pilot population.
 
 Releases, previews and security scans are **not** normalized per PR. They have their own units: releases and components built, requested previews and actual scan coverage.
 
