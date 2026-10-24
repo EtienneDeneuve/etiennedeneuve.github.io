@@ -79,5 +79,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     console.error("[editorial-links] " + issues.length + " error(s) in dated article sources");
     process.exit(1);
   }
-  console.log("[editorial-links] OK: source links and unique titles (" + docs.length + " articles)");
+  console.log(
+    "[editorial-links] OK: source links and unique titles (" + docs.length + " articles)"
+  );
 }

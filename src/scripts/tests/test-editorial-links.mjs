@@ -44,11 +44,21 @@ assert.deepEqual(
   "future posts must fail before they become public"
 );
 
-const duplicate = { ...future, file: "duplicate.md", title: docs[0].title, body: "", relatedArticles: [] };
+const duplicate = {
+  ...future,
+  file: "duplicate.md",
+  title: docs[0].title,
+  body: "",
+  relatedArticles: [],
+};
 assert(
   checkEditorialLinks([...docs, duplicate]).some((issue) => issue.kind === "duplicate-title"),
   "duplicate FR editorial titles must be rejected"
 );
 const legacy = { ...future, id: "2026-09-22-legacy", file: "legacy.md" };
-assert.deepEqual(checkEditorialLinks([...docs, legacy]), [], "cutover date excludes legacy content");
+assert.deepEqual(
+  checkEditorialLinks([...docs, legacy]),
+  [],
+  "cutover date excludes legacy content"
+);
 console.log("Editorial source link checks passed");
