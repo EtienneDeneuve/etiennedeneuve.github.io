@@ -25,8 +25,8 @@ relatedArticles:
   - 2026-10-30-tester-changement-sans-tout-relancer
   - 2026-11-06-retour-experience-ci-locale-ia
   - 2026-11-13-mesurer-impact-ci-locale
-  - 2026-10-10-apple-business-entra-identite-workstation
-  - 2026-10-24-versionner-postes-semver-nix
+  - 2026-10-14-apple-business-entra-identite-workstation
+  - 2026-10-28-versionner-postes-semver-nix
 ---
 
 Une fois les tests revenus sur les Mac, il restait une question un peu gênante.
@@ -53,16 +53,10 @@ Après un amend ou un rebase, le SHA change. Le résultat précédent ne convien
 
 Nous avons utilisé une GitHub App pour publier un commit status et un ruleset qui exige ce contexte.
 
-Sur une PR de notre projet interne pilote, on voit les deux contrôles locaux marqués `Required`, avec un statut vert sur le commit exact. GitHub affiche ensuite le bouton de merge. C’est ce fonctionnement que nous voulons retrouver, à terme, sur l’ensemble de nos repositories. Pas besoin de montrer le script du publisher pour expliquer ce qui se passe.
+Sur une PR de notre projet interne pilote, les deux contrôles locaux étaient marqués `Required`, avec un statut vert sur le commit exact. GitHub affichait ensuite le bouton de merge. C’est ce fonctionnement que nous voulons retrouver, à terme, sur l’ensemble de nos repositories. Pas besoin de montrer le script du publisher pour expliquer ce qui se passe.
 
-<!-- IMAGE À INTÉGRER APRÈS IMPORT DES ASSETS ANONYMISÉS :
-     Fichier préparé : ci-required-checks-anonymized.webp
-     Alt : « GitHub : validation locale et E2E exact-SHA requis, PR prête à merger »
-     Légende : « Deux contrôles produits en local, deux checks requis sur GitHub. »
-     Les noms internes sont masqués ; ne pas ajouter la capture originale au dépôt public.
--->
 
-La capture démontre que la politique de merge existe et fonctionne sur cette PR. Elle ne prouve pas, à elle seule, la réalité de l'exécution locale.
+La politique de merge exige ces contrôles sur le SHA ciblé. Ce statut ne prouve pas, à lui seul, que les tests ont effectivement tourné sur le poste.
 
 J’ai préféré une App dédiée plutôt que de faire publier les résultats avec les credentials Git personnels. Ça permet de limiter la source du statut autorisée par le ruleset.
 
@@ -92,7 +86,7 @@ Sur un poste fraîchement installé, c’est une autre histoire. Nous avons eu l
 
 Sur nos postes, cette publication repose sur une identité dédiée dont l’accès doit être provisionné et maintenu. Un nouveau Mac capable de compiler n’a pas nécessairement encore les droits pour publier le statut. La rotation des accès fait donc aussi partie du sujet.
 
-C’est exactement le lien avec [la séparation identité / poste de ma série Entra](/thinking/2026-10-10-apple-business-entra-identite-workstation/). Avoir un environnement prêt ne veut pas dire que le poste dispose automatiquement de tous les droits nécessaires.
+C’est exactement le lien avec [la séparation identité / poste de ma série Entra](/thinking/2026-10-14-apple-business-entra-identite-workstation/). Avoir un environnement prêt ne veut pas dire que le poste dispose automatiquement de tous les droits nécessaires.
 
 Le message d’erreur doit permettre de faire la différence entre un test qui échoue et un statut qui ne peut pas être publié.
 

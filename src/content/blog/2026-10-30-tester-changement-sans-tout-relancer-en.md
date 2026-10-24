@@ -113,14 +113,8 @@ I also did not want to turn pre-push into a full E2E campaign.
 
 Pre-commit stays short. PR-ready validation runs the checks relevant for integration. For E2E, we now have a distinct status, required by GitHub on PRs. It can be satisfied in two ways: the full journeys pass locally when the change touches the relevant application surfaces, or the check is explicitly marked "not required" for a diff that does not need it.
 
-That second case is not a successfully executed E2E: it is a test-selection decision, also tied to the commit SHA. The first screenshot shows exactly that case: GitHub requires the E2E check, but diff analysis concluded that no full journey was needed.
+That second case is not a successfully executed E2E: it is a test-selection decision, also tied to the commit SHA. In this case, GitHub requires the E2E check, but diff analysis concluded that no full journey was needed.
 
-<!-- IMAGE TO ADD AFTER IMPORTING ANONYMIZED ASSETS:
-     Prepared file: ci-e2e-not-required-anonymized.webp
-     Alt: "Exact-SHA E2E check required on GitHub, marked not needed for this change"
-     Caption: "Required does not mean executed on every PR. If the diff does not need E2E, the status says so explicitly."
-     The internal context name is masked; do not add the original screenshot to the public repo.
--->
 
 Selection must stay conservative when you cannot correctly determine what changed. Release keeps its own validation criteria as well.
 

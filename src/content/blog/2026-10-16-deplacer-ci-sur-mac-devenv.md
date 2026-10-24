@@ -26,7 +26,7 @@ relatedArticles:
   - 2026-11-06-retour-experience-ci-locale-ia
   - 2026-11-13-mesurer-impact-ci-locale
   - 2026-10-03-provisioning-mac-pas-probleme-mdm
-  - 2026-10-24-versionner-postes-semver-nix
+  - 2026-10-28-versionner-postes-semver-nix
 ---
 
 Faire tourner les tests sur un Mac, ce n’est pas compliqué.

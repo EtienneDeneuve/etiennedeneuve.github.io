@@ -26,7 +26,7 @@ relatedArticles:
   - 2026-10-30-tester-changement-sans-tout-relancer
   - 2026-11-13-mesurer-impact-ci-locale
   - 2026-10-03-provisioning-mac-pas-probleme-mdm
-  - 2026-10-24-versionner-postes-semver-nix
+  - 2026-10-28-versionner-postes-semver-nix
 ---
 
 Sur le projet interne qui nous a servi de premier terrain d’essai, le schéma était assez propre.
@@ -117,7 +117,7 @@ C’est moins visible qu’un nouveau pipeline. Mais sans ça, il devient vite c
 
 ## Du poste au code, puis à la livraison
 
-J’avais commencé par [versionner les workstations comme du logiciel](/thinking/2026-10-24-versionner-postes-semver-nix/) pour savoir ce qui tourne réellement sur chaque Mac.
+J’avais commencé par [versionner les workstations comme du logiciel](/thinking/2026-10-28-versionner-postes-semver-nix/) pour savoir ce qui tourne réellement sur chaque Mac.
 
 On retrouve un peu le même problème ici : nous voulons savoir quel commit a été vérifié, par quels contrôles, avant quelle intégration, puis quel artefact est livré.
 
