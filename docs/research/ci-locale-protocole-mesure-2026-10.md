@@ -194,6 +194,27 @@ Comparer **la même famille de contrôles**, sur une machine et un runner décri
 
 Le benchmark ciblé du **2 octobre** trouvait `38,63 s` sur le poste à chaud et `1 min 36 s` sur un runner simplifié à chaud pour la même commande Go. **Deux exécutions ciblées ne forment pas une distribution statistique du délai de feedback de toutes les PR.** Le job GitHub historique de `6 min 10 s` en moyenne exécutait des étapes supplémentaires : comparaison directe invalide.
 
+### D bis. Mesures locales, traces et complétude de la télémétrie
+
+**Dette identifiée le 24 octobre 2026 :** le JSON local exact-SHA existant conserve un horodatage et le résultat des contrôles, mais **aucune durée instrumentée** et aucun historique de tentatives réutilisable pour une série temporelle. GitHub ne reçoit qu'un Commit Status synthétique. **Il ne faut pas inférer le temps local à partir du délai entre l'horodatage du JSON et celui du statut GitHub** : ce délai mélange calcul, push, attente et transport.
+
+Les évolutions **planifiées, non déployées à cette date**, sont suivies dans le dépôt de gestion privé (instrumentation locale, export OTLP, bilan réconcilié). Le protocole cible distingue trois preuves :
+
+1. **Preuve canonique locale** par `sha` et `attempt_id` : `started_at`, `finished_at`, `duration_ms` fondé sur une horloge monotone, résultat, version de politique, surfaces, contrôles avec `duration_ms` propre et décision `executed/skipped`. Préserver chaque tentative ; ne jamais remplacer une durée manquante par zéro. Garde-fou exact-SHA inchangé.
+2. **Trace OpenTelemetry facultative** par tentative : `ci.local.validate` parent, sous-spans des contrôles réellement exécutés, attributs à cardinalité maîtrisée et contexte `trace_id` conservé dans la preuve locale. Les phases `git push` et `ci.status-sync` sont corrélables, mais mesurées séparément. Export **OTLP privé vers ClickStack/HyperDX** best-effort : un backend indisponible n'invalide jamais une validation locale ni le statut requis GitHub.
+3. **Reconciliation des populations** : confronter `attempt_id` locaux et traces reçues, dédupliquer les retries de transport, qualifier les traces échantillonnées, perdues ou retardées. Ne calculer p50/p90/p95 à partir des traces que si la couverture et le biais de l'échantillon sont vérifiés ; sinon calculer les durées sur les preuves locales exhaustives ou déclarer les données insuffisantes.
+
+Pour éviter de déduire un gain trompeur :
+
+- `T_local_validation` = temps mur de la validation, incluant les checks exécutés ; **ne pas sommer aveuglément les sous-spans parallèles**.
+- `T_status_sync` = temps de publication GitHub ; ne pas l'ajouter au calcul local sauf pour un KPI explicitement nommé de bout en bout.
+- `T_feedback` = temps depuis un événement de modification/push clairement défini jusqu'au **premier résultat exploitable** ; nécessite un timestamp de départ indépendant de la seule trace de validation.
+- Préserver `cache.state=cold/warm/unknown` ; ne pas déduire un cache chaud d'une durée courte.
+- Aucun hostname, identité, secret, chemin personnel, argv brut ou sortie de tests dans les spans ; ne jamais employer `git.commit.sha` / `ci.attempt.id` comme labels d'une métrique agrégée.
+- Une panne OTLP / Tailscale / ClickStack ne doit ni bloquer les hooks ni fausser le résultat CI. File locale de retry bornée, limitation de rétention et contrôle de perte nécessaires.
+
+**Conséquence scientifique :** les durées historiques avant mise en place de cette instrumentation sont inconnues, hors benchmarks chronométrés individuellement. La série locale commence **après instrumentation** ; elle n'autorise pas à reconstituer rétroactivement un temps humain ou des gains moyens d'avant le cutover.
+
 ### E. Coût financier
 
 Source obligatoire : export **Billing GitHub** détaillé, par `repository × SKU × date`, avec les quotas, tarifs et conditions d'abonnement effectivement appliqués.
@@ -213,6 +234,7 @@ La durée runner ne suffit pas à déterminer ce coût. Ajouter le coût de main
 5. **Facturation** : ne pas assimiler le rapport d'API à l'export financier.
 6. **Confidentialité** : pas de nom de repo, nom de produit interne, identité de salarié, commit privé, URL privée, capture brute ni montant de facture privée dans le billet public.
 7. **Reproductibilité** : conserver la version du script, les fenêtres, la date de collecte et un hash local des exports complets.
+8. **Temps local et tracing** : vérifier l'historique des tentatives, l'intégrité des durées locales, le taux d'ingestion OTLP et la séparation entre calcul, push, publication et feedback. Aucune extrapolation sur la période non instrumentée.
 
 ### Décision éditoriale
 

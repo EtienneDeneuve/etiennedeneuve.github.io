@@ -115,6 +115,30 @@ Le **nombre de révisions soumises par PR** peut encore fausser cette moyenne. N
 
 Les releases, les previews et les scans de sécurité restent **hors de cette normalisation** : une release se mesure par release et par composant construit, un scan par politique de couverture, pas par nombre de PR.
 
+## Ce qu'on a oublié de mesurer : la CI qui tourne sur les postes
+
+En préparant ce bilan, nous avons découvert un autre angle mort. Il était pourtant assez évident.
+
+**Nous avons mesuré ce que nous retirions des runners GitHub, mais pas systématiquement ce que nous déplacions sur les postes.** C'est une erreur de cadrage assez bête. Nous aurions dû définir cette mesure avant la bascule, puis comparer les deux chemins pendant la phase de validation parallèle.
+
+La preuve locale liée au SHA indique déjà la politique, l'environnement, les contrôles réalisés et leur résultat. Elle possède un horodatage. En revanche, elle ne conserve aujourd'hui **ni la durée totale de la validation, ni le temps passé dans chaque contrôle, ni l'historique exploitable des tentatives sur un même commit**. Le statut renvoyé à GitHub n'y ajoute pas ces informations.
+
+Et soustraire l'horodatage de la preuve à celui du statut GitHub ne résout rien : entre les deux se glissent le push, le réseau, les éventuels retries et le temps écoulé avant publication. Ce n'est pas le temps de calcul local.
+
+### Instrumenter, puis tracer
+
+Nous avons donc décidé d'ajouter deux niveaux complémentaires, **encore à implémenter au moment de ce retour d'expérience**.
+
+D'abord, chaque tentative de validation conservera localement une preuve versionnée avec son identifiant, le SHA testé, des heures de début et de fin, une **durée mesurée avec une horloge monotone**, les contrôles exécutés ou sautés et leurs durées. Une relance sur le même SHA restera une tentative distincte. C'est cette preuve qui fera foi pour les calculs, y compris sans réseau.
+
+Ensuite, nous voulons produire **une trace OpenTelemetry par tentative**, avec un span racine pour la validation et des sous-spans pour les contrôles réellement lancés : tests Go, typecheck, migrations PostgreSQL, intégrations ou Rust, selon les surfaces touchées. Ces traces seront exportées en **OTLP vers notre plateforme ClickStack/HyperDX**, par un accès privé. Le push et la publication du statut GitHub seront corrélés, mais **chronométrés séparément** : ils ne doivent pas gonfler artificiellement le temps de validation.
+
+Pourquoi ne pas tout mettre uniquement dans le tracing ? Parce qu'une trace peut être échantillonnée, perdue ou rejetée lorsque le collecteur est indisponible. **Une panne d'observabilité ne doit jamais faire échouer la CI locale.** L'export sera borné et non bloquant ; nous comparerons le nombre de traces reçues au nombre de tentatives enregistrées localement avant de calculer des percentiles. Et les attributs exportés ne contiendront ni identité personnelle, ni secrets, ni chemins locaux ou sorties brutes de tests.
+
+Nous pourrons ainsi identifier quelle validation ralentit, dans quelle catégorie de changement, avec quel état de cache — **à condition que cet état soit réellement connu**. Mais il faut être précis : une durée de test ne mesure toujours pas le délai entre une modification du code et le premier retour exploitable. Ce sont deux indicateurs distincts.
+
+**Nous n'avons pas de série historique complète de ces durées locales.** Les benchmarks manuels restent ce qu'ils sont ; la future télémétrie produira une base de mesure prospective. Nous ne reconstituerons pas des temps passés que nous n'avons jamais enregistrés.
+
 ## Le temps de feedback est encore une autre mesure
 
 Nous disposons d'un petit benchmark ciblé du **2 octobre 2026**, sur une même commande Go :

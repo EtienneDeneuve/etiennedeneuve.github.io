@@ -115,6 +115,30 @@ The **number of pushed revisions per PR** is another confounder: as a sensitivit
 
 Releases, previews and security scans are **not** normalized per PR. They have their own units: releases and components built, requested previews and actual scan coverage.
 
+## The measurement we forgot: the CI running on workstations
+
+While preparing this assessment, we found another blind spot. In retrospect, it was an obvious one.
+
+**We measured the compute being removed from GitHub runners without systematically measuring the compute moving onto workstations.** That was a fairly basic planning mistake. We should have designed this measurement before the cutover and collected both sides during the parallel-validation phase.
+
+Our exact-SHA local proof already records the validation policy, environment, checks and outcome. It has a timestamp. But it does **not currently record total validation duration, elapsed time per check or a usable history of separate attempts against the same commit**. The commit status sent back to GitHub does not add those timings.
+
+Subtracting the proof timestamp from the GitHub status timestamp would not fix this: the gap also contains the push, network delays, retries and any waiting before publication. It is not local execution time.
+
+### Instrument first, then trace
+
+We have therefore decided to add two complementary layers, **neither of which is deployed yet at the time of this report**.
+
+First, every validation attempt will keep a versioned local proof with its attempt ID, tested SHA, start and end timestamps, **elapsed duration from a monotonic clock**, executed and skipped checks, and per-check durations. Revalidating the same SHA will create a distinct attempt. This proof will remain the authoritative measurement source, even offline.
+
+Second, we plan to emit **one OpenTelemetry trace per attempt**, with a root validation span and child spans for the checks that actually run: Go tests, typechecks, PostgreSQL migrations and integration tests, or Rust checks, depending on the affected components. The traces will go over **OTLP to our ClickStack/HyperDX tracing platform** through a private connection. The push and GitHub status publication will be correlated but **timed separately**, rather than inflating local validation duration.
+
+Why not rely on tracing alone? Because spans may be sampled, lost or rejected when the collector is unavailable. **An observability outage must never fail local CI.** Export will be bounded and non-blocking. Before computing percentiles, we will reconcile ingested traces against attempts recorded in local proofs. Exported attributes must also exclude personal identities, secrets, local paths and raw test output.
+
+This should let us identify which checks slow down, on which kinds of changes, and under which cache conditions — **only when those conditions are actually known**. But execution duration is still not the interval between a code change and its first actionable feedback. Those remain two different metrics.
+
+**We do not have a complete historical series of local CI durations.** The manually timed benchmarks remain useful but limited observations. Future telemetry will create a prospective baseline; we will not manufacture timings that were never recorded.
+
 ## Feedback latency needs its own data
 
 We have a small targeted benchmark from **2 October 2026**, using the same Go test command:
