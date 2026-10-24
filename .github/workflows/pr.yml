@@ -36,6 +36,12 @@ jobs:
       - name: Clear old reception screenshots
         run: rm -rf exports/reception/thinking-ux
 
+      - name: Temporary formatter diagnostics
+        run: |
+          bunx prettier --write src/scripts/validate-editorial-links.mjs
+          echo '=== PRETTIER-DIFF ==='
+          git diff -- src/scripts/validate-editorial-links.mjs
+
       - name: Format check
         run: bun run format:check
 
