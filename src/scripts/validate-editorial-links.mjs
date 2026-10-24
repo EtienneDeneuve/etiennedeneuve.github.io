@@ -19,7 +19,10 @@ export function checkEditorialLinks(docs, modernFrom = MODERN_FROM) {
   for (const doc of docs) {
     if (doc.id < modernFrom || !/^20\d{2}-\d{2}-\d{2}-/.test(doc.id)) continue;
 
-    const title = String(doc.title || "").normalize("NFKC").trim().toLowerCase();
+    const title = String(doc.title || "")
+      .normalize("NFKC")
+      .trim()
+      .toLowerCase();
     const lang = doc.language || "fr";
     if (title) {
       const key = lang + ":" + title;
