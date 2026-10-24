@@ -1,10 +1,10 @@
 ---
-title: "Local CI: fewer GitHub minutes, but what real gain?"
-description: "A first quantified comparison of our local CI: runner minutes, dollars, feedback latency, and quality indicators, without inventing an ROI."
+title: "Local CI: measure properly before claiming a win"
+description: "Our pilot removed hosted test jobs, but raw totals are misleading. A field report on measuring runner usage, feedback, validation quality and cost responsibly."
 pubDate: 2026-11-13T07:30:00.000Z
 language: en
 translationKey: 2026-11-13-mesurer-impact-ci-locale
-contentType: architecture-decision
+contentType: field-note
 pillar: platform-engineering
 audience:
   - cto-cio-ciso
@@ -17,7 +17,7 @@ tags:
   - Engineering Metrics
   - Platform Engineering
 featured: false
-draft: false
+draft: true
 relatedProjects: []
 relatedArticles:
   - 2026-10-09-ia-accelere-code-ci-doit-suivre-en
@@ -29,127 +29,159 @@ relatedArticles:
   - 2026-10-28-versionner-postes-semver-nix-en
 ---
 
-There is something people do easily after changing a CI: take the job that was slow, show that the command now runs faster on their Mac, then announce a percentage improvement.
+At first, we simply wanted to stop running the same checks repeatedly on GitHub runners.
 
-I nearly did exactly that.
+AI-assisted code production accelerated, but every small change could still restart a long remote validation chain. We moved part of CI to developer workstations so that corrections could happen while the context was fresh.
 
-Except looking a bit closer at the numbers, we were sometimes comparing the full duration of a remote job with the duration of a single local command. And the financial gain told a completely different story from the feedback gain.
+A few weeks later, an initial GitHub Actions export appeared to show a spectacular result. The temptation was obvious: a before-and-after table, a large percentage and a conclusion about productivity.
 
-To finish this series, I prefer to look at what we actually measured, and what we are still missing.
+**We chose not to publish that percentage.**
 
-## We had a starting snapshot
+Not because we made the data up. A mathematically correct calculation on incomplete data is still a bad measurement. And accurate runner consumption does not, by itself, establish that a team is shipping better software.
 
-Before removing the historical workflows, we collected activity from one of our internal projects, the one where we deployed this approach first.
+This is what changed in **one small internal pilot project**, what we actually observed, and the protocol we are using to determine whether this architecture deserves broader adoption.
 
-The audit window ran from 7 to 25 September 2026. It contained **561 workflow runs, 635 jobs, and 2,964 minutes of cumulative job duration**.
+## First, what we can verify without statistics
 
-That is a useful first order of magnitude. You see the recurring jobs, duplicate triggers, cancelled runs, tool setup, and the validations actually executed.
+The pilot monorepo combines Go, Vue, PostgreSQL and a Rust component. Previously, pull requests triggered several hosted jobs: tests, typechecks, integrations and application-specific validations. Each runner brought its own setup costs and, sometimes, repeated a check already available on the workstation.
 
-But 2,964 job minutes do not mean 2,964 billed minutes. The period is not a full month, runners can have different rates, and GitHub applies its own billing rules.
+We separated the responsibilities.
 
-It would have been fairly easy to multiply that number by a rate and announce a saving. That would mainly have produced an incorrect figure.
+**Pre-commit** remains short. **PR-ready validation** runs in a reproducible local environment with devenv, including PostgreSQL integrations when the change requires them. Test selection is driven by affected components and dependencies, not only file extensions.
 
-## The interesting benchmark was much smaller
+GitHub still decides whether a change can merge: a GitHub App publishes a result for the **exact commit SHA**, and the ruleset requires that status. E2E checks have their own contract; Linux image builds, previews and releases stay remote when their properties require it.
 
-We isolated a representative Go test command and compared several runs.
+On **9 October 2026**, we removed redundant hosted PR test jobs.
 
-| Run | Measurement |
+**That is verifiable in the repository and commit history without relying on any claimed percentage.**
+
+There is also a trust boundary: a green status published from a workstation is **not independent attestation** that tests actually ran. GitHub App permissions, possible ruleset bypasses and sensitive changes still matter.
+
+## The first trap: measuring an export, not all activity
+
+Our initial extraction suggested a very large drop in GitHub Actions job-minutes across two eleven-day windows.
+
+We found three methodological problems.
+
+**Completeness.** The “before” export contained exactly **1,000 runs**. That is the search limit of the GitHub Actions API when applying filters. Ordinary pagination cannot get past it. We had not proven that the entire window had been collected.
+
+**Activity mix.** The two exports represented different levels of PR activity. Their branch counts might themselves have been truncated: a branch is not a reliable unit of work, and an incomplete extraction cannot define a reference population.
+
+**The transition.** Part of the “before” window included a shadow period when old and new CI ran together to validate parity. That was responsible engineering, but a poor baseline for permanent savings.
+
+We retain those first numbers in the audit working papers as **unverified descriptive observations**. They do not belong in this article's headline or in any financial extrapolation.
+
+## Collecting runs without silently losing data
+
+We are preparing equal-length windows, ideally **28 full days**, outside the shadow period. Dates will be fixed using the actual cutover history, in UTC, with an inclusive start and exclusive end.
+
+Why 28 days? To include the same number of each weekday. It is not a magical cure for seasonality, but it is more defensible than choosing convenient date ranges after seeing the result.
+
+Our collector automatically splits searches that approach GitHub's 1,000-result cap. Every segment records the expected and fetched counts. Any mismatch stops the calculation.
+
+For each run, we include **every job attempt**, including reruns, failed jobs and cancellations that used compute. A job that never started did not consume runner time.
+
+The first metric is simply:
+
+`Runner execution minutes = sum(job completion - job start) / 60`
+
+That is the **sum of job durations**, not the wall-clock duration of several parallel jobs, and it is not the amount GitHub billed.
+
+Only after proving the extraction complete can we responsibly compare those volumes.
+
+## Normalize pull-request work, not releases
+
+Even a complete dataset does not account for changing levels of activity.
+
+First, we need a **complete inventory of eligible pull requests**, including PRs that consumed **zero hosted minutes** after the change. Counting only PRs that have GitHub Actions runs would systematically hide the very effect we are looking for.
+
+We then classify each PR **once** by the dominant risk and required checks: documentation, backend, frontend, database, Rust or shared/multi-component changes.
+
+For each category:
+
+`Hosted minutes per PR = attributed validation minutes / number of eligible PRs`
+
+But if the baseline contained many PostgreSQL migrations while the later window mostly involved documentation, even those averages would be misleading.
+
+So we **freeze the category weights using the baseline population** and apply the very same weights to both periods:
+
+`Standardized measure = sum(category weight × hosted minutes per PR in category)`
+
+Why fixed weights? To avoid crediting the CI architecture for a week in which the team simply worked on less demanding changes.
+
+If a category is absent in either period, the PR population is incomplete, or check parity is not established, **we refuse to produce a standardized percentage**. We report the strata and say that the comparison is insufficient.
+
+The **number of pushed revisions per PR** is another confounder: as a sensitivity check, we must also examine hosted validation minutes per distinct eligible SHA, not just per PR. Retries count towards consumed minutes, but must not create another revision in the denominator. This has not yet been measured on the full pilot population.
+
+Releases, previews and security scans are **not** normalized per PR. They have their own units: releases and components built, requested previews and actual scan coverage.
+
+## The measurement we forgot: the CI running on workstations
+
+While preparing this assessment, we found another blind spot. In retrospect, it was an obvious one.
+
+**We measured the compute being removed from GitHub runners without systematically measuring the compute moving onto workstations.** That was a fairly basic planning mistake. We should have designed this measurement before the cutover and collected both sides during the parallel-validation phase.
+
+Our exact-SHA local proof already records the validation policy, environment, checks and outcome. It has a timestamp. But it does **not currently record total validation duration, elapsed time per check or a usable history of separate attempts against the same commit**. The commit status sent back to GitHub does not add those timings.
+
+Subtracting the proof timestamp from the GitHub status timestamp would not fix this: the gap also contains the push, network delays, retries and any waiting before publication. It is not local execution time.
+
+### Instrument first, then trace
+
+We have therefore decided to add two complementary layers, **neither of which is deployed yet at the time of this report**.
+
+First, every validation attempt will keep a versioned local proof with its attempt ID, tested SHA, start and end timestamps, **elapsed duration from a monotonic clock**, executed and skipped checks, and per-check durations. Revalidating the same SHA will create a distinct attempt. This proof will remain the authoritative measurement source, even offline.
+
+Second, we plan to emit **one OpenTelemetry trace per attempt**, with a root validation span and child spans for the checks that actually run: Go tests, typechecks, PostgreSQL migrations and integration tests, or Rust checks, depending on the affected components. The traces will go over **OTLP to our ClickStack/HyperDX tracing platform** through a private connection. The push and GitHub status publication will be correlated but **timed separately**, rather than inflating local validation duration.
+
+Why not rely on tracing alone? Because spans may be sampled, lost or rejected when the collector is unavailable. **An observability outage must never fail local CI.** Export will be bounded and non-blocking. Before computing percentiles, we will reconcile ingested traces against attempts recorded in local proofs. Exported attributes must also exclude personal identities, secrets, local paths and raw test output.
+
+This should let us identify which checks slow down, on which kinds of changes, and under which cache conditions — **only when those conditions are actually known**. But execution duration is still not the interval between a code change and its first actionable feedback. Those remain two different metrics.
+
+**We do not have a complete historical series of local CI durations.** The manually timed benchmarks remain useful but limited observations. Future telemetry will create a prospective baseline; we will not manufacture timings that were never recorded.
+
+## Feedback latency needs its own data
+
+We have a small targeted benchmark from **2 October 2026**, using the same Go test command:
+
+| Environment | Observed execution |
 | --- | ---: |
-| Full historical GitHub Actions job | 6 min 10 s average, p95 at 9 min 48 s |
-| Simplified GitHub runner, cold cache | 4 min 32 s |
-| Simplified GitHub runner, warm cache | 1 min 36 s |
-| Local command, cold cache | 121.25 s |
-| Local command, warm cache | 38.63 s |
+| Simplified GitHub runner, warm cache | 1m 36s |
+| Local workstation, warm cache | 38.63s |
 
-These values come from our audit and the targeted trials on 2 October 2026.
+That is encouraging. This particular command returned faster on a warm workstation.
 
-You have to be careful about what you read. The historical average covers the whole job, with its setup and other checks. The simplified trials targeted the same business command, but the environment, startup, and caches were not identical.
+It is not a representative distribution across the repository, though. The historical remote job also performed other checks: comparing its entire runtime with this one local command would be dishonest.
 
-**What I take away is that the chosen command produced a warm local result in under forty seconds.** That is not the full validation time for a PR, nor proof that every change validates at that speed.
+To quantify feedback, we need the interval from a code change to **the first actionable result**, including median, p90, cache state and type of check. Separately, we need to measure how long it takes for a PR to become mergeable.
 
-On the workstation, those few seconds still change how you iterate. You fix while the context is still fresh, rather than coming back to a problem after a remote cycle.
+A runner-minute avoided is not automatically a minute of developer waiting recovered.
 
-But I want a measurement of that behavior over several weeks before drawing a general conclusion.
+## What about actual costs?
 
-## And in dollars, what does that give?
+That takes a third dataset: **GitHub's detailed Billing export**, by repository, runner category and period. Without it, multiplying runtime by a list price does not establish savings.
 
-This is where the topic gets amusing.
+The other side also matters: maintaining devenv, workstation compute, onboarding, status publisher incidents and any independent checks kept for sensitive changes.
 
-As of 8 October 2026, GitHub's public rates list **USD 0.006 per minute for a standard two-core Linux x64 runner** and **USD 0.062 for a standard macOS runner**. GitHub rounds each job's duration up to the next minute. You then have to account for minutes included in the plan, other usage, and storage.
+We met a practical example: a fresh Mac could pass all local checks but fail to publish the required status because GitHub App credentials were missing from the Keychain. Merge safety held; developer experience suffered.
 
-An order of magnitude: one hundred PRs that each saved ten minutes on a standard Linux runner represent **USD 6 of gross consumption** before quotas.
+Moving a cost away from GitHub doesn't make it disappear.
 
-That is not a saving we observed. It is simply the rate applied to an easy-to-check hypothesis.
+## What we can responsibly conclude
 
-And put that way, you immediately see that standard Linux runners are not necessarily the best economic argument to justify weeks of work.
+We **did remove entire families of redundant hosted PR test jobs** from this pilot without removing those checks from the validation contract. One targeted Go command produced faster feedback in a warm local environment. Those are defensible statements.
 
-With more expensive runners, more jobs, or workflows that continually rebuild the same things, the bill can become more significant. It is the real execution profile that decides, not the demo on one PR.
+We do not yet have a trustworthy **standardized** reduction in GitHub runner consumption, a median feedback improvement, net financial savings or an observed delivery-quality uplift.
 
-A serious calculation must start from *billable* consumption by runner type and from the GitHub bill before and after, without mixing PR tests with the builds, previews, and releases that keep running.
+We have therefore written a [reproducible measurement protocol, including formulas, refusal conditions and collection tools](https://github.com/EtienneDeneuve/etiennedeneuve.github.io/blob/master/docs/research/ci-locale-protocole-mesure-2026-10.md). Once comparable, complete windows are available, we can publish stronger numbers.
 
-## Developer time is harder to measure
+**Retesting everything by default does not prove we understand dependencies. Optimizing against an incomplete chart of runner-minutes does not prove we understand CI either.**
 
-A saved CI minute is not automatically a recovered minute of human work.
+The tangible progress so far is that the validation decisions are more explicit — and we have a way to test whether they really are better.
 
-While a job runs, a developer can review something else. An agent can keep working. Conversely, a failure that arrives too late can completely break a work session.
+## Reference documentation
 
-What I would like to measure is the time between a change and **the first usable result**, then the share of that delay during which someone was actually waiting.
+- [GitHub: workflow-run searches and limits](https://docs.github.com/en/rest/actions/workflow-runs)
+- [GitHub: jobs across all run attempts](https://docs.github.com/en/rest/actions/workflow-jobs)
+- [GitHub: Actions usage and billing](https://docs.github.com/en/billing/concepts/product-billing/github-actions)
 
-I would look at the median and the p90, not the best run with a warm cache.
-
-I would also like to compare how many fixes go out in a PR with an error that was detectable locally. That is a more interesting indicator than a simple count of tests executed.
-
-If errors are fixed before the push and PRs arrive more often already in a valid state, we will have gained something in the work flow.
-
-But that gain does not automatically express itself as euros of salary saved. At best, you can talk about recovered capacity, provided you measure it seriously.
-
-## The indicators I would keep
-
-I would limit myself to a few figures the team can actually use.
-
-| Topic | Measure to track |
-| --- | --- |
-| Feedback | Median and p90 of the delay between a change and the first usable result |
-| Integration | Delay between PR opening and a truly mergeable state |
-| GitHub Actions | Billed minutes and cost by runner type, separated across PR, preview, and release |
-| Quality | Required checks executed per surface and failures escaping local validation |
-| Publisher | Statuses published on the correct SHA, errors, and publication delays |
-| Onboarding | Time needed on a new Mac to produce a mergeable PR |
-| Friction | Retries, post-push fixes, and observed blocking waits |
-
-You also have to distinguish change types. A documentation PR, a PostgreSQL migration, and a Rust change should not have the same validation profile.
-
-I would not aggregate all of that into a single "developer productivity" score. You would lose precisely the problems you are trying to understand.
-
-## The before / after comparison is not finished yet
-
-We have a baseline and a few precise benchmarks.
-
-We still lack a stabilized post-cutover window, with the same scope and the same indicator definitions. I would take four comparable weeks before and after, separating builds and tests, then check that PR volume and nature have not changed too much.
-
-You would also need to track time spent maintaining local environments. A Mac that compiles locally consumes resources. Caches take space, PostgreSQL can interfere with another service, and onboarding needs support.
-
-The GitHub bill does not tell that part of the story.
-
-Finally, I would keep an eye on status publication failures. A fast validation that regularly blocks merges because the GitHub App does not publish correctly has not improved the experience.
-
-## What I take away for now
-
-On this first project, we showed that part of the checks could move back onto the workstation with shorter feedback on the measured scenarios.
-
-We also reduced dependence on remote workflows for repetitive verifications, while keeping GitHub as the decision point before merge.
-
-Results still need consolidating over a full cycle, and the publisher edge cases still need finishing. And above all, we have not yet deployed the model on all our repositories: that is the next phase of the work, not a result we can already quantify.
-
-So I am not going to announce a global ROI or a definitive monthly saving.
-
-The most interesting part, for me, is elsewhere: we started wanting to accelerate a validation loop and ended up connecting workstation provisioning, the project environment, the tested commit, and its integration decision.
-
-That is fairly close to what I was already looking for when [versioning our workstations like software](/en/thinking/2026-10-28-versionner-postes-semver-nix-en/).
-
-And if the next measurement shows that some validations need to go back onto a remote runner, that will not be a failure. At least we will know why we run them there.
-
-## Official sources
-
-- [GitHub: Actions runner pricing](https://docs.github.com/en/billing/reference/actions-runner-pricing)
-- [GitHub: GitHub Actions billing](https://docs.github.com/en/billing/concepts/product-billing/github-actions)
+*Anonymized field report from one pilot repository. Incomplete and non-standardized initial measurements are deliberately excluded from the conclusions.*

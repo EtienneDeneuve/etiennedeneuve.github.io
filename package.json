@@ -28,7 +28,7 @@
     "linkcheck:source": "bun src/scripts/check-links.mjs",
     "verify-seo": "bun src/scripts/verify-seo.mjs",
     "test": "bun run test:unit",
-    "test:unit": "bun run test:publication-day && bun run test:ecosystem-jsonld && bun run validate:content && bun run test:locale-switch && bun run test:thinking-locale && bun run test:thinking-related && bun run test:thinking-en-series && bun run test:rehype-heading-anchors && bun run test:no-secrets-in-dist && bun run test:seo && bun src/scripts/tests/test-editorial-links.mjs",
+    "test:unit": "bun run test:publication-day && bun run test:ecosystem-jsonld && bun run validate:content && bun run test:locale-switch && bun run test:thinking-locale && bun run test:thinking-related && bun run test:thinking-en-series && bun run test:rehype-heading-anchors && bun run test:no-secrets-in-dist && bun run test:seo && bun src/scripts/tests/test-editorial-links.mjs && bun src/scripts/tests/test-ci-audit.mjs",
     "test:publication-day": "bun src/scripts/tests/test-publication-day.ts",
     "test:ecosystem-jsonld": "bun src/scripts/tests/test-ecosystem-json-ld.ts",
     "test:locale-switch": "bun src/scripts/tests/test-locale-switch.ts",
@@ -52,7 +52,8 @@
     "audit:ai-voice": "bun src/scripts/audit-ai-voice.ts",
     "ci:quality": "bun run format:check && bun run lint && bun run check && bun run validate:collections && bun run validate-publication && bun run spellcheck && bun run verify-seo",
     "ci:build": "bun run build && bun run linkcheck && bun run test && bun run test:e2e && bun run lighthouse",
-    "ci:deploy-prep": "bun run generate:assets && bun run generate-media-kit && bun run sync:github-projects && bun run build"
+    "ci:deploy-prep": "bun run generate:assets && bun run generate-media-kit && bun run sync:github-projects && bun run build",
+    "audit:ci-local": "bun src/scripts/audit-actions-case-study.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.1",
