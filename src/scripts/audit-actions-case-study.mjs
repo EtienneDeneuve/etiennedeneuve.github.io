@@ -70,7 +70,10 @@ function getPages(first, key, fetchPage) {
     invariant(Array.isArray(next[key]), "Missing page of " + key);
     items.push(...next[key]);
   }
-  invariant(items.length === count, "Incomplete " + key + ": got " + items.length + " expected " + count);
+  invariant(
+    items.length === count,
+    "Incomplete " + key + ": got " + items.length + " expected " + count
+  );
   return items;
 }
 
@@ -101,7 +104,10 @@ export function collectRuns(repo, startMs, endMs, api, segments = []) {
   // Enforce the count AND the search interval even when the API returns an unexpected item.
   for (const run of runs) {
     const time = Date.parse(run.created_at);
-    invariant(Number.isFinite(time) && time >= startMs && time < endMs, "Run out of range: " + run.id);
+    invariant(
+      Number.isFinite(time) && time >= startMs && time < endMs,
+      "Run out of range: " + run.id
+    );
     invariant(run.status === "completed", "Workflow run still active: " + run.id);
   }
   segments.push({
@@ -126,7 +132,10 @@ function fetchRunJobs(repo, runId, api) {
     jobs.push(...more.jobs);
   }
   invariant(jobs.length === count, "Incomplete jobs for run " + runId);
-  invariant(jobs.every((j) => Number(j.run_id) === Number(runId)), "Cross-run job returned");
+  invariant(
+    jobs.every((j) => Number(j.run_id) === Number(runId)),
+    "Cross-run job returned"
+  );
   return jobs;
 }
 
@@ -143,7 +152,10 @@ export function jobMinutes(job) {
 }
 
 export function summarize(snapshot) {
-  invariant(snapshot.schema_version === 1 && snapshot.complete === true, "Incomplete or incompatible snapshot");
+  invariant(
+    snapshot.schema_version === 1 && snapshot.complete === true,
+    "Incomplete or incompatible snapshot"
+  );
   const runById = new Map(snapshot.runs.map((r) => [Number(r.id), r]));
   invariant(runById.size === snapshot.runs.length, "Duplicate workflow run ID");
   const grouped = new Map();
@@ -171,21 +183,29 @@ export function summarize(snapshot) {
 
 function digest(snapshot) {
   return createHash("sha256")
-    .update(JSON.stringify({
-      segments: snapshot.segments,
-      runs: snapshot.runs,
-      jobs: snapshot.jobs,
-    }))
+    .update(
+      JSON.stringify({
+        segments: snapshot.segments,
+        runs: snapshot.runs,
+        jobs: snapshot.jobs,
+      })
+    )
     .digest("hex");
 }
 
 function readSnapshot(path) {
   const x = JSON.parse(readFileSync(path, "utf8"));
-  invariant(x.complete === true && x.schema_version === 1, "Not a complete audit snapshot: " + path);
+  invariant(
+    x.complete === true && x.schema_version === 1,
+    "Not a complete audit snapshot: " + path
+  );
   invariant(Array.isArray(x.jobs) && Array.isArray(x.runs), "Snapshot has no runs/jobs");
   invariant(Array.isArray(x.segments), "Missing search segments");
   invariant(x.data_sha256 === digest(x), "Snapshot data hash mismatch: " + path);
-  invariant(x.segments.every((s) => s.expected === s.fetched && s.expected < LIMIT), "Unverified search segment");
+  invariant(
+    x.segments.every((s) => s.expected === s.fetched && s.expected < LIMIT),
+    "Unverified search segment"
+  );
   const ids = new Set();
   for (const job of x.jobs) {
     invariant(!ids.has(job.id), "Duplicate job ID: " + job.id);
@@ -220,21 +240,38 @@ export function compareSnapshots(before, after) {
  * zero hosted actions. This tool cannot prove that the PR population is complete.
  */
 export function normalizePullRequests(before, after, pre, post) {
-  invariant(pre.population_verified === true && post.population_verified === true, "PR populations not attested complete");
-  invariant(pre.quality_parity_verified === true && post.quality_parity_verified === true, "Check parity not verified");
+  invariant(
+    pre.population_verified === true && post.population_verified === true,
+    "PR populations not attested complete"
+  );
+  invariant(
+    pre.quality_parity_verified === true && post.quality_parity_verified === true,
+    "Check parity not verified"
+  );
   invariant(pre.source && post.source, "Missing PR inventory provenance");
-  invariant(pre.window.start === before.window.start && pre.window.end === before.window.end, "Before manifest date mismatch");
-  invariant(post.window.start === after.window.start && post.window.end === after.window.end, "After manifest date mismatch");
+  invariant(
+    pre.window.start === before.window.start && pre.window.end === before.window.end,
+    "Before manifest date mismatch"
+  );
+  invariant(
+    post.window.start === after.window.start && post.window.end === after.window.end,
+    "After manifest date mismatch"
+  );
 
   function index(snapshot, manifest) {
-    invariant(Array.isArray(manifest.pull_requests) && manifest.pull_requests.length > 0, "Empty PR inventory");
+    invariant(
+      Array.isArray(manifest.pull_requests) && manifest.pull_requests.length > 0,
+      "Empty PR inventory"
+    );
     const runById = new Map(snapshot.runs.map((r) => [Number(r.id), r]));
     const jobCost = new Map();
     for (const job of snapshot.jobs) {
       const id = Number(job.run_id);
       jobCost.set(id, (jobCost.get(id) || 0) + jobMinutes(job));
     }
-    const results = new Map(CATEGORIES.map((category) => [category, { category, n: 0, minutes: 0 }]));
+    const results = new Map(
+      CATEGORIES.map((category) => [category, { category, n: 0, minutes: 0 }])
+    );
     const assignedRuns = new Set();
     const seenPrs = new Set();
     for (const pr of manifest.pull_requests) {
@@ -252,7 +289,9 @@ export function normalizePullRequests(before, after, pre, post) {
         const run = runById.get(id);
         invariant(run, "PR references run outside its snapshot: " + id);
         invariant(
-          run.event === "pull_request" || run.event === "pull_request_target" || run.event === "push",
+          run.event === "pull_request" ||
+            run.event === "pull_request_target" ||
+            run.event === "push",
           "Non-PR validation run included: " + id
         );
         entry.minutes += jobCost.get(id) || 0;
@@ -294,7 +333,8 @@ export function normalizePullRequests(before, after, pre, post) {
   invariant(standardizedBefore > 0, "No hosted baseline minutes to compare");
   return {
     designation: "conditionally standardized hosted validation minutes per eligible PR",
-    conditions: "requires manually verified complete PR universes, mutually exclusive classification and quality parity",
+    conditions:
+      "requires manually verified complete PR universes, mutually exclusive classification and quality parity",
     before_minutes_per_pr: standardizedBefore,
     after_minutes_per_pr: standardizedAfter,
     descriptive_change_pct: 100 * (standardizedAfter / standardizedBefore - 1),
@@ -356,7 +396,8 @@ export function collectSnapshot(repo, start, end, api) {
         runner_name: job.runner_name || null,
       });
     }
-    if ((i + 1) % 25 === 0) process.stderr.write("Validated " + (i + 1) + "/" + runs.length + " runs\n");
+    if ((i + 1) % 25 === 0)
+      process.stderr.write("Validated " + (i + 1) + "/" + runs.length + " runs\n");
   }
   const cleanedRuns = runs.map((run) => ({
     id: run.id,
@@ -395,29 +436,44 @@ if (isMain) {
     if (cmd === "collect") {
       invariant(p.repo && p.start && p.end && p.out, "collect requires --repo --start --end --out");
       const data = collectSnapshot(p.repo, p.start, p.end, ghApi);
-      process.stdout.write(JSON.stringify({
-        output: saveJson(p.out, data),
-        runs: data.runs.length,
-        jobs: data.jobs.length,
-        segments: data.segments.length,
-        data_sha256: data.data_sha256,
-      }, null, 2) + "\n");
+      process.stdout.write(
+        JSON.stringify(
+          {
+            output: saveJson(p.out, data),
+            runs: data.runs.length,
+            jobs: data.jobs.length,
+            segments: data.segments.length,
+            data_sha256: data.data_sha256,
+          },
+          null,
+          2
+        ) + "\n"
+      );
     } else if (cmd === "compare") {
       invariant(p.before && p.after, "compare requires --before --after");
-      process.stdout.write(JSON.stringify(
-        compareSnapshots(readSnapshot(p.before), readSnapshot(p.after)), null, 2
-      ) + "\n");
+      process.stdout.write(
+        JSON.stringify(compareSnapshots(readSnapshot(p.before), readSnapshot(p.after)), null, 2) +
+          "\n"
+      );
     } else if (cmd === "normalize") {
-      invariant(p.before && p.after && p["prs-before"] && p["prs-after"],
-        "normalize requires --before --after --prs-before --prs-after");
+      invariant(
+        p.before && p.after && p["prs-before"] && p["prs-after"],
+        "normalize requires --before --after --prs-before --prs-after"
+      );
       const before = readSnapshot(p.before);
       const after = readSnapshot(p.after);
       compareSnapshots(before, after); // Fail on incompatible periods.
-      process.stdout.write(JSON.stringify(normalizePullRequests(
-        before, after, readJson(p["prs-before"]), readJson(p["prs-after"])
-      ), null, 2) + "\n");
+      process.stdout.write(
+        JSON.stringify(
+          normalizePullRequests(before, after, readJson(p["prs-before"]), readJson(p["prs-after"])),
+          null,
+          2
+        ) + "\n"
+      );
     } else {
-      throw new Error("Usage: collect|compare|normalize; see docs/research/ci-locale-protocole-mesure-2026-10.md");
+      throw new Error(
+        "Usage: collect|compare|normalize; see docs/research/ci-locale-protocole-mesure-2026-10.md"
+      );
     }
   } catch (error) {
     console.error("Audit refused (fail closed): " + error.message);

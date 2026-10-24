@@ -36,15 +36,6 @@ jobs:
       - name: Clear old reception screenshots
         run: rm -rf exports/reception/thinking-ux
 
-      - name: Temporary audit formatting export
-        run: |
-          for path in docs/research/ci-locale-protocole-mesure-2026-10.md src/scripts/audit-actions-case-study.mjs src/scripts/tests/test-ci-audit.mjs; do
-            bunx prettier --write "$path"
-            printf '\n@@FMT_BEGIN:%s@@\n' "$path"
-            base64 -w0 "$path"
-            printf '\n@@FMT_END:%s@@\n' "$path"
-          done
-
       - name: Format check
         run: bun run format:check
 

@@ -65,7 +65,7 @@ We found three methodological problems.
 
 **Completeness.** The “before” export contained exactly **1,000 runs**. That is the search limit of the GitHub Actions API when applying filters. Ordinary pagination cannot get past it. We had not proven that the entire window had been collected.
 
-**Activity mix.** We observed **112 active PR branches** in one window and **26** in the other. Those are not comparable workloads. Dividing by branch count would not solve anything: a branch is not a reliable unit of work.
+**Activity mix.** The two exports represented different levels of PR activity. Their branch counts might themselves have been truncated: a branch is not a reliable unit of work, and an incomplete extraction cannot define a reference population.
 
 **The transition.** Part of the “before” window included a shadow period when old and new CI ran together to validate parity. That was responsible engineering, but a poor baseline for permanent savings.
 

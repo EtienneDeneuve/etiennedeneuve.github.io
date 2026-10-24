@@ -8,17 +8,17 @@ Ce document définit **ce que nous pouvons mesurer**, **comment le calculer** et
 
 ## 1. Questions distinctes et hypothèses
 
-| Question | Unité | Source | Ce qu'elle ne prouve pas |
-| --- | --- | --- | --- |
-| Les runners hébergés exécutent-ils moins de travail ? | Somme des durées des jobs en minutes | GitHub Actions, API runs + jobs | Ni le coût facturé, ni le temps de développement |
-| Les changements obtiennent-ils un résultat exploitable plus vite ? | Médiane et p90 de l'intervalle changement → contrôle pertinent achevé | Timestamps instrumentés côté poste **et** GH | Pas une simple comparaison de deux commandes |
-| Le coût facturable a-t-il baissé ? | Usage et montant nets, par SKU et dépôt | Rapport Billing GitHub, périodes calendaires | Pas la même chose que les minutes wall-clock |
-| Les garanties sont-elles préservées ? | Matrice des contrôles requis, taux d'échappement, statut exact-SHA | Scripts CI, rulesets, PR, incidents | Un statut GitHub n'atteste pas l'exécution indépendante sur le Mac |
-| L'équipe livre-t-elle mieux ? | Lead time PR, taux de reprise, défauts en aval, ressenti contextualisé | PR, incidents, enquête équipe | N'est **pas** directement déduit de la facture |
+| Question                                                           | Unité                                                                  | Source                                       | Ce qu'elle ne prouve pas                                           |
+| ------------------------------------------------------------------ | ---------------------------------------------------------------------- | -------------------------------------------- | ------------------------------------------------------------------ |
+| Les runners hébergés exécutent-ils moins de travail ?              | Somme des durées des jobs en minutes                                   | GitHub Actions, API runs + jobs              | Ni le coût facturé, ni le temps de développement                   |
+| Les changements obtiennent-ils un résultat exploitable plus vite ? | Médiane et p90 de l'intervalle changement → contrôle pertinent achevé  | Timestamps instrumentés côté poste **et** GH | Pas une simple comparaison de deux commandes                       |
+| Le coût facturable a-t-il baissé ?                                 | Usage et montant nets, par SKU et dépôt                                | Rapport Billing GitHub, périodes calendaires | Pas la même chose que les minutes wall-clock                       |
+| Les garanties sont-elles préservées ?                              | Matrice des contrôles requis, taux d'échappement, statut exact-SHA     | Scripts CI, rulesets, PR, incidents          | Un statut GitHub n'atteste pas l'exécution indépendante sur le Mac |
+| L'équipe livre-t-elle mieux ?                                      | Lead time PR, taux de reprise, défauts en aval, ressenti contextualisé | PR, incidents, enquête équipe                | N'est **pas** directement déduit de la facture                     |
 
 Objectif : mesurer le déplacement du travail répétitif des runners vers le poste, **sans dégrader le contrat qualité**.
 
-## 2. Définir les périodes *avant* de regarder les chiffres
+## 2. Définir les périodes _avant_ de regarder les chiffres
 
 Le changement de fonctionnement est intervenu le **9 octobre 2026**. Cette journée est une phase de transition, à **exclure** des fenêtres stabilisées.
 
@@ -53,7 +53,7 @@ Script autonome fourni : [\`src/scripts/audit-actions-case-study.mjs\`](../../sr
 
 Exemple de collecte **à exécuter seulement avec accès autorisé au dépôt interne**, résultats hors du dépôt public :
 
-~~~bash
+```bash
 gh auth status
 
 bun src/scripts/audit-actions-case-study.mjs collect \
@@ -69,7 +69,7 @@ bun src/scripts/audit-actions-case-study.mjs collect \
 bun src/scripts/audit-actions-case-study.mjs compare \
   --before /tmp/ci-audit-before.json \
   --after /tmp/ci-audit-after.json
-~~~
+```
 
 **Ces dates sont un gabarit de fenêtres de 28 jours**, et **ne sont pas approuvées** avant vérification de la date de début du shadow. Elles ne décrivent pas des données déjà collectées au 24 octobre.
 
@@ -140,7 +140,7 @@ Classer chaque PR **une seule fois** dans l'une des classes suivantes : \`docs-o
 
 Exemple synthétique de manifeste \`/tmp/pr-before.json\` (**ne jamais committer les vrais manifestes du dépôt pilote**) :
 
-~~~json
+```json
 {
   "population_verified": true,
   "quality_parity_verified": true,
@@ -154,7 +154,7 @@ Exemple synthétique de manifeste \`/tmp/pr-before.json\` (**ne jamais committer
     { "number": 102, "category": "docs-only", "validation_run_ids": [] }
   ]
 }
-~~~
+```
 
 Le manifeste « après » reprend **la même structure** et sa propre fenêtre. Le tableau ci-dessus est uniquement un exemple de syntaxe, **pas une population réelle ni un résultat**. Une PR à zéro runner reste nécessairement dans la liste avec \`validation_run_ids: []\`.
 
@@ -162,7 +162,7 @@ Le manifeste « après » reprend **la même structure** et sa propre fenêtre. 
 
 Après collecte exhaustive et recensement des PR :
 
-~~~bash
+```bash
 bun src/scripts/audit-actions-case-study.mjs compare \
   --before /tmp/ci-audit-before.json \
   --after /tmp/ci-audit-after.json
@@ -172,7 +172,7 @@ bun src/scripts/audit-actions-case-study.mjs normalize \
   --after /tmp/ci-audit-after.json \
   --prs-before /tmp/pr-before.json \
   --prs-after /tmp/pr-after.json
-~~~
+```
 
 Le mode \`compare\` ne calcule **aucun « gain »** : il imprime les volumes d'exécution par workflow et type d'événement. Le mode \`normalize\` n'est autorisé qu'avec deux manifestes attestés et un inventaire complet. Il affiche **les poids fixés sur l'avant, les tailles d'échantillon par catégorie et les taux standardisés**, mais qualifie le pourcentage de **descriptif, non causal**.
 

@@ -65,7 +65,7 @@ En regardant les conditions de collecte, nous avons identifié trois problèmes.
 
 **Premier problème : la complétude.** L'export « avant » contenait exactement **1 000 runs**. C'est précisément le plafond de résultats des recherches filtrées de l'API GitHub Actions. Une pagination classique ne permet pas de franchir ce plafond. Nous n'avions donc pas démontré avoir récupéré toute la période.
 
-**Deuxième problème : l'activité.** Nous avions relevé **112 branches de PR actives** dans une fenêtre, contre **26** dans l'autre. Ce ne sont ni les mêmes volumes, ni nécessairement les mêmes types de changements. Diviser par le nombre de branches ne règle rien : une branche n'est pas une unité fiable de travail.
+**Deuxième problème : l'activité.** Les deux exports représentaient des volumes d'activité PR différents. Leur décompte des branches pouvait lui-même être tronqué : une branche n'est pas une unité de travail fiable, et une extraction incomplète ne définit pas une population de référence.
 
 **Troisième problème : la transition.** Une partie du « avant » comprenait une période où l'ancienne et la nouvelle CI tournaient en parallèle pour vérifier leur équivalence. C'était la bonne méthode pour sécuriser la migration, mais un mauvais point de départ pour mesurer une économie permanente.
 
