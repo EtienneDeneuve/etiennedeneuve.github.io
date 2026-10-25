@@ -26,7 +26,7 @@ relatedArticles:
   - 2026-10-30-tester-changement-sans-tout-relancer
   - 2026-11-06-retour-experience-ci-locale-ia
   - 2026-10-03-provisioning-mac-pas-probleme-mdm
-  - 2026-10-24-versionner-postes-semver-nix
+  - 2026-10-28-versionner-postes-semver-nix
 ---
 
 Il y a un truc qu’on fait facilement après avoir modifié une CI : on prend le job qui était lent, on montre que la commande tourne maintenant plus vite sur son Mac, puis on annonce un pourcentage d’amélioration.
@@ -145,7 +145,7 @@ Je ne vais donc pas annoncer un ROI global ni une économie mensuelle définitiv
 
 Le plus intéressant, pour moi, est ailleurs : nous avons commencé par vouloir accélérer une boucle de validation et nous avons fini par relier le provisioning du poste, l’environnement projet, le commit testé et sa décision d’intégration.
 
-C’est assez proche de ce que je cherchais déjà en [versionnant nos postes de travail comme du logiciel](/thinking/2026-10-24-versionner-postes-semver-nix/).
+C’est assez proche de ce que je cherchais déjà en [versionnant nos postes de travail comme du logiciel](/thinking/2026-10-28-versionner-postes-semver-nix/).
 
 Et si la prochaine mesure montre que certaines validations doivent retourner sur un runner distant, ce ne sera pas un échec. On saura au moins pourquoi on les exécute là-bas.
 

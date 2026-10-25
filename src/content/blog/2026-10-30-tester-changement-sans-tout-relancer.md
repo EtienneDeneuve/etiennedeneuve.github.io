@@ -26,7 +26,7 @@ relatedArticles:
   - 2026-11-06-retour-experience-ci-locale-ia
   - 2026-11-13-mesurer-impact-ci-locale
   - 2026-10-03-provisioning-mac-pas-probleme-mdm
-  - 2026-10-24-versionner-postes-semver-nix
+  - 2026-10-28-versionner-postes-semver-nix
 ---
 
 Une fois la CI en local, nous avons retrouvé un problème qu’on connaissait déjà avec les runners : il suffit d’un petit changement pour relancer beaucoup trop de choses.
@@ -113,14 +113,8 @@ Je ne voulais pas non plus transformer le pre-push en campagne E2E complète.
 
 Le pre-commit reste court. La validation PR-ready lance les contrôles pertinents pour l’intégration. Pour l’E2E, nous avons maintenant un statut distinct, exigé par GitHub sur les PR. Il peut être satisfait de deux façons : les parcours complets passent localement lorsque le changement touche les surfaces applicatives concernées, ou le contrôle est explicitement marqué « non requis » pour un diff qui n’en a pas besoin.
 
-Ce deuxième cas n’est pas un E2E exécuté avec succès : c’est une décision de sélection des tests, liée elle aussi au SHA du commit. La première capture montre exactement ce cas : GitHub exige le contrôle E2E, mais l’analyse du diff a conclu qu’aucun parcours complet n’était nécessaire.
+Ce deuxième cas n’est pas un E2E exécuté avec succès : c’est une décision de sélection des tests, liée elle aussi au SHA du commit. Dans ce cas, GitHub exige le contrôle E2E, mais l’analyse du diff a conclu qu’aucun parcours complet n’était nécessaire.
 
-<!-- IMAGE À INTÉGRER APRÈS IMPORT DES ASSETS ANONYMISÉS :
-     Fichier préparé : ci-e2e-not-required-anonymized.webp
-     Alt : « Contrôle E2E exact-SHA requis sur GitHub, marqué non nécessaire pour cette modification »
-     Légende : « Requis ne veut pas dire exécuté à chaque PR. Si le diff ne nécessite pas d’E2E, le statut le dit explicitement. »
-     Le nom interne du contexte est masqué ; ne pas ajouter la capture originale au dépôt public.
--->
 
 La sélection doit rester conservatrice lorsqu’on ne sait pas déterminer correctement ce qui a changé. La release garde par ailleurs ses propres critères de validation.
 
