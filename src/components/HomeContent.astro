@@ -35,7 +35,7 @@ const rest = pubs.slice(1);
 
 <style is:global>
   body:has(.home) {
-    background: var(--graphite, #111416);
+    background: var(--brand-main-bg);
   }
 </style>
 
@@ -196,20 +196,21 @@ const rest = pubs.slice(1);
     /* Shared gutter with nav/footer — avoids Safari left-edge drift. */
     --home-max: 90rem;
     --home-pad: var(--page-gutter, clamp(1.5rem, 4vw, 4rem));
-    --home-bg: var(--graphite, #111416);
-    --home-bg-soft: var(--graphite-soft, #1b1e20);
-    /* Composition ivory — never follow theme --paper (dark mode flips it). */
-    --home-ivory: #f3efe7;
-    --home-ivory-ink: #151819;
-    --home-ivory-muted: #454a4d;
-    --home-ivory-border: rgba(21, 24, 25, 0.14);
+    /* Section-role aliases. In light mode the primary surface is ivory;
+       in dark mode it is graphite. Preserve editorial contrast rhythm. */
+    --home-bg: var(--brand-main-bg);
+    --home-bg-soft: var(--brand-main-soft);
+    --home-ivory: var(--brand-contrast-bg);
+    --home-ivory-ink: var(--brand-contrast-ink);
+    --home-ivory-muted: var(--brand-contrast-muted);
+    --home-ivory-border: var(--brand-contrast-border);
     --home-light: var(--home-ivory);
-    --home-copper: var(--copper-on-dark, #f0aa78);
-    --home-copper-bright: #f5c49a;
-    --home-copper-light: var(--copper-on-light, #a54822);
-    --home-ink: var(--text-on-dark, #f7f3ec);
-    --home-muted: var(--text-muted-on-dark, #cdd0cf);
-    --home-border: var(--border-on-dark, rgba(243, 239, 231, 0.16));
+    --home-copper: var(--brand-main-copper);
+    --home-copper-bright: var(--brand-main-copper-hover);
+    --home-copper-light: var(--brand-contrast-copper);
+    --home-ink: var(--brand-main-ink);
+    --home-muted: var(--brand-main-muted);
+    --home-border: var(--brand-main-border);
     --home-sans: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
     --home-radius: 4px;
     font-family: var(--home-sans);
@@ -343,7 +344,7 @@ const rest = pubs.slice(1);
     padding: 0 1.15rem;
     border-radius: var(--home-radius);
     background: var(--home-copper);
-    color: #14110f;
+    color: var(--brand-main-copper-text);
     font-size: 0.92rem;
     font-weight: 650;
     text-decoration: none;
@@ -547,7 +548,7 @@ const rest = pubs.slice(1);
   }
 
   .home-approach__more:hover {
-    color: #84381a;
+    color: var(--brand-contrast-copper-hover);
   }
 
   .home-depth {
@@ -689,7 +690,7 @@ const rest = pubs.slice(1);
     .home-approach__steps li {
       display: block;
       padding: 0 1rem;
-      border-left: 1px solid var(--border-on-light, rgba(21, 24, 25, 0.2));
+      border-left: 1px solid var(--home-ivory-border);
     }
 
     .home-approach__steps li:first-child {

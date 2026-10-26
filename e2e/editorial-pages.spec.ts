@@ -21,6 +21,7 @@ test.describe("editorial work, projects and contact pages", () => {
       test(route.slug + " / " + viewport.label, async ({ page }) => {
         await page.emulateMedia({ reducedMotion: "reduce" });
         await page.setViewportSize({ width: viewport.width, height: viewport.height });
+        await page.addInitScript(() => localStorage.setItem("theme", "light"));
         const res = await page.goto(route.path, { waitUntil: "networkidle" });
         expect(res?.status()).toBe(200);
 
@@ -38,8 +39,10 @@ test.describe("editorial work, projects and contact pages", () => {
           .locator(".ed-band--light")
           .first()
           .evaluate((node) => getComputedStyle(node).backgroundColor);
-        expect(darkSurface).toBe("rgb(17, 20, 22)");
-        expect(ivorySurface).toBe("rgb(243, 239, 231)");
+        // Semantic roles invert: in LIGHT the primary band is ivory,
+        // the contrasting band is graphite (and vice versa in dark).
+        expect(darkSurface).toBe("rgb(243, 239, 231)");
+        expect(ivorySurface).toBe("rgb(17, 20, 22)");
 
         expect(
           await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)

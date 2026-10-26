@@ -4,18 +4,20 @@
  * Scoped by .editorial-page so the rest of the site is unaffected.
  */
 .editorial-page {
-  --ed-graphite: var(--graphite, #111416);
-  --ed-graphite-soft: var(--graphite-soft, #1b1e20);
-  --ed-paper: #f3efe7;
-  --ed-paper-soft: #faf8f3;
-  --ed-ink: #151819;
-  --ed-muted-light: #454a4d;
-  --ed-ink-dark: #f7f3ec;
-  --ed-muted-dark: #cdd0cf;
-  --ed-copper-dark: var(--copper-on-dark, #f0aa78);
-  --ed-copper-light: var(--copper-on-light, #a54822);
-  --ed-line-dark: rgba(243, 239, 231, 0.18);
-  --ed-line-light: rgba(21, 24, 25, 0.16);
+  /* Aliases preserve existing markup while both themes share the same
+     semantic palette as Home, Thinking and long-form articles. */
+  --ed-graphite: var(--brand-main-bg);
+  --ed-graphite-soft: var(--brand-main-soft);
+  --ed-paper: var(--brand-contrast-bg);
+  --ed-paper-soft: var(--brand-contrast-elevated);
+  --ed-ink: var(--brand-contrast-ink);
+  --ed-muted-light: var(--brand-contrast-muted);
+  --ed-ink-dark: var(--brand-main-ink);
+  --ed-muted-dark: var(--brand-main-muted);
+  --ed-copper-dark: var(--brand-main-copper);
+  --ed-copper-light: var(--brand-contrast-copper);
+  --ed-line-dark: var(--brand-main-border);
+  --ed-line-light: var(--brand-contrast-border);
   --ed-gutter: var(--page-gutter, clamp(1.5rem, 4vw, 4rem));
   --ed-font: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
   font-family: var(--ed-font);
@@ -283,7 +285,7 @@
   justify-content: center;
   min-height: 2.9rem;
   padding: 0.7rem 1.2rem;
-  color: #14110f;
+  color: var(--brand-main-copper-text);
   background: var(--ed-copper-dark);
   border: 1px solid transparent;
   border-radius: 4px;
@@ -294,8 +296,8 @@
 }
 .editorial-page .ed-button:hover,
 .editorial-page .ed-button:focus-visible {
-  background: #f5c49a;
-  color: #14110f;
+  background: var(--brand-main-copper-hover);
+  color: var(--brand-main-copper-text);
 }
 .editorial-page .ed-band--light .ed-button {
   background: var(--ed-ink);
@@ -303,8 +305,8 @@
 }
 .editorial-page .ed-band--light .ed-button:hover,
 .editorial-page .ed-band--light .ed-button:focus-visible {
-  background: #343b3d;
-  color: #ffffff;
+  background: var(--ed-copper-light);
+  color: var(--brand-contrast-copper-text);
 }
 .editorial-page .ed-text-link {
   color: var(--ed-copper-dark);

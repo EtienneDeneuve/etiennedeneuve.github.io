@@ -20,6 +20,29 @@
   --border-on-dark: rgba(243, 239, 231, 0.16);
   --border-on-light: rgba(21, 24, 25, 0.2);
 
+  /* Editorial band roles, distinct from the fixed brand pigments.
+   * Light: ivory-led canvas + graphite contrast.
+   * Dark: graphite-led canvas + ivory contrast.
+   * Home, Thinking, articles and editorial pages all consume this contract. */
+  --brand-main-bg: #f3efe7;
+  --brand-main-soft: #e8e3d8;
+  --brand-main-ink: #151819;
+  --brand-main-muted: #454a4d;
+  --brand-main-border: rgba(21, 24, 25, 0.2);
+  --brand-main-copper: #a54822;
+  --brand-main-copper-hover: #84381a;
+  --brand-main-copper-text: #fff;
+
+  --brand-contrast-bg: #111416;
+  --brand-contrast-soft: #1b1e20;
+  --brand-contrast-elevated: #24282a;
+  --brand-contrast-ink: #f7f3ec;
+  --brand-contrast-muted: #cdd0cf;
+  --brand-contrast-border: rgba(243, 239, 231, 0.18);
+  --brand-contrast-copper: #f0aa78;
+  --brand-contrast-copper-hover: #f5c49a;
+  --brand-contrast-copper-text: #14110f;
+
   /* Legacy gray aliases → map to ink scale (compat for components) */
   --gray-0: var(--ink);
   --gray-50: #1c1917;
@@ -162,6 +185,25 @@
 
 :root.theme-dark {
   color-scheme: dark;
+
+  --brand-main-bg: #111416;
+  --brand-main-soft: #1b1e20;
+  --brand-main-ink: #f7f3ec;
+  --brand-main-muted: #cdd0cf;
+  --brand-main-border: rgba(243, 239, 231, 0.18);
+  --brand-main-copper: #f0aa78;
+  --brand-main-copper-hover: #f5c49a;
+  --brand-main-copper-text: #14110f;
+
+  --brand-contrast-bg: #f3efe7;
+  --brand-contrast-soft: #e8e3d8;
+  --brand-contrast-elevated: #faf8f3;
+  --brand-contrast-ink: #151819;
+  --brand-contrast-muted: #454a4d;
+  --brand-contrast-border: rgba(21, 24, 25, 0.2);
+  --brand-contrast-copper: #a54822;
+  --brand-contrast-copper-hover: #84381a;
+  --brand-contrast-copper-text: #fff;
   --ink: #f7f3ec;
   --ink-muted: #cdd0cf;
   --ink-subtle: #9aa0a3;
@@ -171,6 +213,7 @@
   --graphite: #111416;
   --graphite-soft: #1b1e20;
   --copper-on-dark: #f0aa78;
+  /* Preserve readable legacy copper for existing dark surfaces. */
   --copper-on-light: #f0aa78;
   --text-on-dark: #f7f3ec;
   --text-muted-on-dark: #cdd0cf;
@@ -837,7 +880,7 @@ a.surface-card:hover,
 .heading-anchor,
 .prose .heading-anchor {
   margin-left: 0.35em;
-  color: var(--copper-on-dark, #f0aa78);
+  color: var(--brand-main-copper);
   text-decoration: none;
   font-weight: 600;
   /* Touch / coarse pointers: keep anchors discoverable without hover. */
@@ -863,7 +906,7 @@ a.surface-card:hover,
 .heading-anchor:focus-visible,
 .prose .heading-anchor:focus-visible {
   opacity: 1;
-  outline: 2px solid var(--copper-on-dark, #f0aa78);
+  outline: 2px solid var(--brand-main-copper);
   outline-offset: 2px;
 }
 .prose p,
