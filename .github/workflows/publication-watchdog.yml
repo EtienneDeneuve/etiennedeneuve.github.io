@@ -1,0 +1,77 @@
+name: Editorial publication watchdog
+
+on:
+  schedule:
+    # Independent catch-up checks for the Wednesday/Friday/Saturday editorial calendar.
+    - cron: "43 10,13 * * 3,5,6"
+      timezone: "Europe/Paris"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+  issues: write
+
+jobs:
+  watchdog:
+    name: Detect and recover missed editorial deployments
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ensure an editorial deployment completed today
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fmt = new Intl.DateTimeFormat("en-CA", {
+              timeZone: "Europe/Paris", year: "numeric", month: "2-digit", day: "2-digit"
+            });
+            const parisDay = (date) => {
+              const parts = Object.fromEntries(fmt.formatToParts(date).map(x => [x.type, x.value]));
+              return `${parts.year}-${parts.month}-${parts.day}`;
+            };
+            const today = parisDay(new Date());
+            const nowParts = Object.fromEntries(new Intl.DateTimeFormat("en-GB", {
+              timeZone: "Europe/Paris", hour: "2-digit", hourCycle: "h23"
+            }).formatToParts(new Date()).map(x => [x.type, x.value]));
+            const hour = Number(nowParts.hour);
+            // workflow_dispatch allows diagnosis on any day; never publish ad hoc.
+            const dow = new Date().toLocaleDateString("en-US", {
+              timeZone: "Europe/Paris", weekday: "short"
+            });
+            if (!["Wed", "Fri", "Sat"].includes(dow)) {
+              core.info("Not an editorial day in Europe/Paris; skipping.");
+              return;
+            }
+            const {data} = await github.rest.actions.listWorkflowRuns({
+              ...context.repo, workflow_id: "deploy.yml", per_page: 50
+            });
+            const todayRuns = data.workflow_runs.filter(run =>
+              parisDay(new Date(run.created_at)) === today && ["push", "schedule", "workflow_dispatch"].includes(run.event)
+            );
+            const success = todayRuns.some(run => run.conclusion === "success");
+            if (success) {
+              core.info("Editorial deployment already succeeded today.");
+              return;
+            }
+            const running = todayRuns.some(run => ["queued", "waiting", "in_progress", "requested", "pending"].includes(run.status));
+            if (running) {
+              core.info("A deployment is already running; no duplicate dispatch.");
+              return;
+            }
+            // First check retries; second check also alerts if still missing.
+            if (hour >= 13) {
+              const title = `Editorial release missing: ${today}`;
+              const issues = await github.paginate(github.rest.issues.listForRepo, {
+                ...context.repo, state: "open", per_page: 100
+              });
+              if (!issues.some(issue => issue.title === title && !issue.pull_request)) {
+                await github.rest.issues.create({
+                  ...context.repo,
+                  title,
+                  body: `No successful Deploy GitHub Pages run for the Paris editorial day ${today} by the afternoon watchdog check. The watchdog attempted another dispatch. Check https://github.com/${context.repo.owner}/${context.repo.repo}/actions/workflows/deploy.yml. Close after confirming the article is live.`
+                });
+              }
+            }
+            await github.rest.actions.createWorkflowDispatch({
+              ...context.repo, workflow_id: "deploy.yml", ref: context.payload.repository.default_branch
+            });
+            core.notice(`Dispatched catch-up deployment for ${today}.`);
