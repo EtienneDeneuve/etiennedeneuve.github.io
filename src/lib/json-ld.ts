@@ -83,7 +83,7 @@ export function websiteJsonLd(): JsonLdObject {
     "@id": ecosystemNodeId("website"),
     url: seoConfig.siteUrl,
     name: seoConfig.siteName,
-    description: seoConfig.defaultDescription,
+    description: seoConfig.defaultDescription.fr,
     inLanguage: ["fr", "en"],
     publisher: { "@id": ecosystemNodeId("etienne") },
   };
