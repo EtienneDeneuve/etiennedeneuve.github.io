@@ -29,12 +29,17 @@ export type ThinkingSeries = {
   articleIds: readonly string[];
 };
 
+export type ThinkingOfferId =
+  "decision-review" | "platform-risk-review" | "cloud-reliability-diagnostic";
+
 export type ThinkingArticleCta = {
   question: Localized;
   value: Localized;
   primaryLabel: Localized;
   secondaryLabel: Localized;
   utmContent: string;
+  offerId: ThinkingOfferId;
+  missionSlug: "revue-architecture" | "audit-plateforme" | "diagnostic-cible";
 };
 
 export const thinkingConfig = {
@@ -158,6 +163,8 @@ export const thinkingConfig = {
         en: "See how I work with teams",
       },
       utmContent: "thinking-gitops",
+      offerId: "platform-risk-review",
+      missionSlug: "audit-plateforme",
     },
     "2026-09-22-opentelemetry-instrumenter-200-services": {
       question: {
@@ -177,8 +184,142 @@ export const thinkingConfig = {
         en: "See how I work with teams",
       },
       utmContent: "thinking-otel-cover",
+      offerId: "cloud-reliability-diagnostic",
+      missionSlug: "diagnostic-cible",
     },
   } as const satisfies Record<string, ThinkingArticleCta>,
+  /**
+   * Commercial fallback by editorial pillar. Article-specific CTAs above always win.
+   * Product/market writing intentionally has no forced technical offer.
+   */
+  pillarCtas: {
+    observability: {
+      question: {
+        fr: "Votre observabilité collecte beaucoup, mais aide mal à décider ?",
+        en: "Does your observability collect a lot while still failing to support decisions?",
+      },
+      value: {
+        fr: "Cadrer un diagnostic court pour relier signaux, dépendances et décisions avant d’ajouter un outil ou de relancer une migration.",
+        en: "Frame a short diagnostic that connects signals, dependencies and decisions before adding another tool or restarting a migration.",
+      },
+      primaryLabel: {
+        fr: "Voir le diagnostic cloud & trajectoire",
+        en: "See the cloud & reliability diagnostic",
+      },
+      secondaryLabel: {
+        fr: "Voir comment j’interviens",
+        en: "See how I work with teams",
+      },
+      utmContent: "thinking-observability",
+      offerId: "cloud-reliability-diagnostic",
+      missionSlug: "diagnostic-cible",
+    },
+    "platform-engineering": {
+      question: {
+        fr: "Votre plateforme est critique mais chaque évolution devient difficile à sécuriser ?",
+        en: "Has your platform become critical while every change gets harder to make safely?",
+      },
+      value: {
+        fr: "Qualifier les responsabilités, modes de panne et risques qui empêchent la plateforme d’évoluer sans régression.",
+        en: "Qualify ownership, failure modes and risks that keep the platform from evolving safely.",
+      },
+      primaryLabel: {
+        fr: "Voir la revue de risque plateforme",
+        en: "See the platform risk review",
+      },
+      secondaryLabel: {
+        fr: "Voir comment j’interviens",
+        en: "See how I work with teams",
+      },
+      utmContent: "thinking-platform",
+      offerId: "platform-risk-review",
+      missionSlug: "audit-plateforme",
+    },
+    "software-supply-chain": {
+      question: {
+        fr: "Votre chaîne de delivery ajoute des contrôles sans rendre le risque plus lisible ?",
+        en: "Is your delivery chain adding controls without making risk easier to understand?",
+      },
+      value: {
+        fr: "Revenir aux chemins d’exposition, aux responsabilités et aux contrôles qui changent réellement le risque de la plateforme.",
+        en: "Return to exposure paths, ownership and controls that materially change platform risk.",
+      },
+      primaryLabel: {
+        fr: "Voir la revue de risque plateforme",
+        en: "See the platform risk review",
+      },
+      secondaryLabel: {
+        fr: "Voir comment j’interviens",
+        en: "See how I work with teams",
+      },
+      utmContent: "thinking-supply-chain",
+      offerId: "platform-risk-review",
+      missionSlug: "audit-plateforme",
+    },
+    "systems-and-risk": {
+      question: {
+        fr: "Le risque technique est visible, mais personne ne sait quoi traiter en premier ?",
+        en: "Is technical risk visible while nobody knows what should be addressed first?",
+      },
+      value: {
+        fr: "Qualifier l’exposition, les dépendances et les conséquences avant de transformer un backlog en programme.",
+        en: "Qualify exposure, dependencies and consequences before turning a backlog into a programme.",
+      },
+      primaryLabel: {
+        fr: "Voir la revue de risque plateforme",
+        en: "See the platform risk review",
+      },
+      secondaryLabel: {
+        fr: "Voir comment j’interviens",
+        en: "See how I work with teams",
+      },
+      utmContent: "thinking-systems-risk",
+      offerId: "platform-risk-review",
+      missionSlug: "audit-plateforme",
+    },
+    "cloud-and-infrastructure": {
+      question: {
+        fr: "Une décision cloud ou d’architecture va engager la trajectoire pour plusieurs années ?",
+        en: "Will a cloud or architecture decision lock in the trajectory for years?",
+      },
+      value: {
+        fr: "Tester les options, dépendances et critères avant de transformer une hypothèse en architecture cible.",
+        en: "Test options, dependencies and criteria before turning an assumption into the target architecture.",
+      },
+      primaryLabel: {
+        fr: "Voir la revue de décision & architecture",
+        en: "See the decision & architecture review",
+      },
+      secondaryLabel: {
+        fr: "Voir comment j’interviens",
+        en: "See how I work with teams",
+      },
+      utmContent: "thinking-cloud-architecture",
+      offerId: "decision-review",
+      missionSlug: "revue-architecture",
+    },
+    "technical-leadership": {
+      question: {
+        fr: "Une décision technique reste bloquée entre équipes, architecture et direction ?",
+        en: "Is a technical decision stuck between teams, architecture and leadership?",
+      },
+      value: {
+        fr: "Rendre les options et responsabilités explicites pour pouvoir trancher sans imposer une refonte par principe.",
+        en: "Make options and ownership explicit so the decision can close without defaulting to a rewrite.",
+      },
+      primaryLabel: {
+        fr: "Voir la revue de décision & architecture",
+        en: "See the decision & architecture review",
+      },
+      secondaryLabel: {
+        fr: "Voir comment j’interviens",
+        en: "See how I work with teams",
+      },
+      utmContent: "thinking-technical-leadership",
+      offerId: "decision-review",
+      missionSlug: "revue-architecture",
+    },
+  } as const satisfies Partial<Record<ThinkingPillar, ThinkingArticleCta>>,
   /** Editorial featured slugs (filename-based Astro slugs) — used as fallback only. */
   featuredSlugs: [
     "2026-07-06-observabilite-contrat-testable",

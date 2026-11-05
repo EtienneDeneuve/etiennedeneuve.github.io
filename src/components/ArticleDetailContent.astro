@@ -7,7 +7,7 @@ import {
   type ThinkingContentType,
   type ThinkingPillar,
 } from "../config/thinking.ts";
-import { omnivyaContactUrl, siteConfig } from "../config/site.ts";
+import { omnivyaMissionUrl, siteConfig } from "../config/site.ts";
 import {
   formatArticleDate,
   getAllThinkingArticles,
@@ -58,7 +58,9 @@ const translations = getTranslationSiblings(entry, allArticles);
 const series = getSeriesForArticle(entry, allArticles);
 const relatedArticles = getRelatedArticles(entry, allArticles);
 const relatedProjectSlugs = getRelatedProjectSlugs(entry);
+const pillar = entry.data.pillar as ThinkingPillar;
 const cta = getArticleCta(entry);
+const articleSlug = getCanonicalSlug(entry);
 const seriesHasNeighbors = Boolean(series?.prev || series?.next);
 
 const projects = (await getCollection("projects")).filter(
@@ -71,7 +73,6 @@ const showRelatedBlock = relatedArticles.length > 0 || projects.length > 0;
 const showContinueBlock = seriesHasNeighbors || showRelatedBlock;
 
 const canonicalUrl = getCanonicalUrl(entry, siteConfig.seo.siteUrl);
-const pillar = entry.data.pillar as ThinkingPillar;
 const contentType = entry.data.contentType as ThinkingContentType;
 const readingTime = getReadingTime(entry);
 const decisionSummary = entry.data.decisionSummary;
@@ -293,15 +294,17 @@ const kickerParts = [getContentTypeLabel(contentType, lang), getPillarLabel(pill
                   <p>
                     <a
                       class="btn-primary"
-                      href={omnivyaContactUrl(lang, cta.utmContent)}
+                      href={omnivyaMissionUrl(lang, cta.missionSlug, cta.utmContent, articleSlug)}
                       rel="noopener noreferrer"
                       target="_blank"
-                      data-analytics-event="cta_booking"
+                      data-analytics-event="cta_offer_open"
                       data-analytics-props={JSON.stringify({
                         surface: "thinking-article",
                         lang,
-                        intent: "qualification",
-                        article: getCanonicalSlug(entry),
+                        intent: "offer",
+                        article: articleSlug,
+                        pillar,
+                        offer: cta.offerId,
                       })}
                     >
                       {cta.primaryLabel[lang]}
