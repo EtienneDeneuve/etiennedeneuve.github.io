@@ -145,6 +145,7 @@
     "sitemap",
     "rss",
     "jsonld",
+    "llms",
     "schema",
     "lastModified",
     "lastReviewed",
