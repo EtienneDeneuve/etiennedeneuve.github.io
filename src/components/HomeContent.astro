@@ -87,8 +87,8 @@ const rest = pubs.slice(1);
         </div>
       </div>
 
-      <aside class="home-side">
-        <section class="home-proofs" aria-labelledby="home-proofs-title">
+      <aside class="home-pubs" aria-labelledby="home-pubs-title">
+        <div class="home-proofs" aria-labelledby="home-proofs-title">
           <div class="home-proofs__head">
             <h2 id="home-proofs-title">
               {lang === "fr" ? "Preuves terrain" : "Field evidence"}
@@ -108,17 +108,16 @@ const rest = pubs.slice(1);
               ))
             }
           </ul>
-        </section>
+        </div>
 
-        <section class="home-pubs" aria-labelledby="home-pubs-title">
-          <div class="home-pubs__head">
-            <h2 id="home-pubs-title">{copy.publicationsTitle}</h2>
-            <a class="home-pubs__all" href={`${base}/thinking/`}
-              >{copy.publicationsAll} <span aria-hidden="true">→</span></a
-            >
-          </div>
-          {
-            pubs.length === 0 ? (
+        <div class="home-pubs__head">
+          <h2 id="home-pubs-title">{copy.publicationsTitle}</h2>
+          <a class="home-pubs__all" href={`${base}/thinking/`}
+            >{copy.publicationsAll} <span aria-hidden="true">→</span></a
+          >
+        </div>
+        {
+          pubs.length === 0 ? (
             <p class="home-pubs__empty">{copy.publicationsEmpty}</p>
           ) : (
             <>
@@ -131,7 +130,9 @@ const rest = pubs.slice(1);
                     )}
                   >
                     {featured.spotlight && (
-                      <span class="home-pubs__series">{lang === "fr" ? "À la une" : "Featured"} · OpenTelemetry 2/4</span>
+                      <span class="home-pubs__series">
+                        {lang === "fr" ? "À la une" : "Featured"} · OpenTelemetry 2/4
+                      </span>
                     )}
                     <time datetime={featured.entry.data.pubDate.toISOString()}>
                       {dateFmt.format(featured.entry.data.pubDate)}
@@ -160,8 +161,7 @@ const rest = pubs.slice(1);
               </ol>
             </>
           )
-          }
-        </section>
+        }
       </aside>
     </div>
   </section>
@@ -380,13 +380,8 @@ const rest = pubs.slice(1);
     filter: brightness(1.06);
   }
 
-  .home-side {
-    min-width: 0;
-    display: grid;
-    gap: 1rem;
-  }
-
   .home-proofs {
+    margin-bottom: 1rem;
     border: 1px solid var(--home-border);
     background: color-mix(in srgb, var(--home-bg-soft) 72%, transparent);
     padding: 0.85rem 1rem;
