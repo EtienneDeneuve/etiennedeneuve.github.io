@@ -42,7 +42,7 @@ I could have concluded the problem was elsewhere.
 
 Looking at the logs, reality was simpler: `appstored` had downloaded my package fine, then installation had stopped immediately.
 
-The message was fairly telling:
+The message was clear:
 
 ~~~text
 Could not create PKProduct
@@ -87,7 +87,7 @@ On my workstation, Homebrew has existed for a long time.
 
 On a freshly wiped Mac, no.
 
-That seems obvious said that way. It’s much less so when a nix-darwin activation has worked for months on your machine and only breaks during a real ADE enrollment.
+That sounds obvious when you say it out loud. It is much less obvious when nix-darwin has worked for months on your machine and only breaks during a real ADE enrollment.
 
 Some of my profiles still used Homebrew casks. Activation therefore landed on a system where `brew` simply didn’t exist.
 
@@ -115,7 +115,7 @@ That wasn’t robust enough.
 
 So I added the necessary fallbacks and, above all, made that data mandatory when the build needs it. If the app can’t correctly identify the user to attach their customizations, it mustn’t continue silently with a half-good workstation.
 
-It’s a detail, but it illustrates well the difference between “auth works” and “I have all the data needed to build the machine correctly.”
+It is a small bug with a useful lesson: “auth works” is not the same as “I have all the data needed to build the machine correctly.”
 
 ## I managed to clone the right config… then not use it
 
@@ -266,7 +266,7 @@ Nix worked.
 
 My engine had simply chosen the wrong source.
 
-Each time, the problem was fairly localized because responsibilities were separated.
+Each time, the problem stayed well contained because responsibilities were separated.
 
 That’s exactly what I wanted to achieve.
 
@@ -296,7 +296,7 @@ That’s where you see whether the system actually manages workstations.
 
 Or whether it only knows how to work on the machine of the person who wrote it.
 
-For now, that’s probably the most useful lesson from the whole effort.
+For now, that is the most useful lesson from the whole effort.
 
 ## Official sources
 
