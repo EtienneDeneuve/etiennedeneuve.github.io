@@ -47,7 +47,7 @@ Le problème n’était donc pas "le nom de la base est une mauvaise donnée".
 
 Le problème était de laisser cette donnée dynamique arriver jusqu’à la génération de métriques comme si elle avait la même valeur partout.
 
-C’est un piège assez classique avec les pipelines modernes : on pense au signal que l’on produit, pas toujours aux transformations qu’il subit ensuite.
+C’est un piège classique avec les pipelines modernes : on pense au signal que l’on produit, pas toujours aux transformations qu’il subit ensuite.
 
 Un UUID de requête, un identifiant utilisateur, un nom de job généré ou une URL complète peuvent être très utiles dans une trace. Comme label de métrique, c’est une autre histoire.
 
@@ -59,7 +59,7 @@ Je garde volontairement le détail d’implémentation pour une mise à jour, pa
 
 Le principe, lui, est simple : **une donnée n’a pas besoin d’avoir le même niveau de détail dans les traces, les logs et les métriques**.
 
-C’est probablement l’un des changements de modèle mental les plus utiles avec OpenTelemetry.
+C’est un changement de modèle mental utile avec OpenTelemetry : le même attribut n’a pas la même valeur selon le signal qui le transporte.
 
 On ne définit pas seulement un schéma de trace. On définit une donnée qui va potentiellement être enrichie, filtrée, transformée, échantillonnée et envoyée vers plusieurs backends.
 
@@ -83,7 +83,7 @@ Je ne dis pas qu’il faut les supprimer partout. Dans une trace, ils peuvent ê
 
 Je dis qu’il faut savoir où ils finissent.
 
-La différence entre "je peux retrouver cette requête" et "je crée une série pour chaque requête" est assez importante.
+« Je peux retrouver cette requête » et « je crée une série pour chaque requête » n’ont pas du tout les mêmes conséquences.
 
 ## Enrichir les logs fait aussi remonter les PII
 
@@ -108,7 +108,7 @@ Mais sur du brownfield, avoir un deuxième contrôle dans le pipeline évite que
 
 Les traces posent ensuite une autre question : combien en garder ?
 
-En production, on échantillonne le trafic courant. Un ordre de grandeur autour de 10 % donne déjà beaucoup de matière sur une plateforme active.
+En production, on échantillonne le trafic courant. Autour de 10 % donne déjà beaucoup de matière sur une plateforme active.
 
 Ce chiffre n’est pas une recommandation universelle. Dix pour cent d’un petit service et dix pour cent d’une plateforme très chargée ne représentent pas du tout le même volume.
 

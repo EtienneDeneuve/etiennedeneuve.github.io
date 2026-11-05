@@ -29,7 +29,7 @@ relatedArticles:
   - 2026-10-28-versionner-postes-semver-nix
 ---
 
-Une fois les tests revenus sur les Mac, il restait une question un peu gênante.
+Une fois les tests revenus sur les Mac, il restait une question gênante.
 
 Sur GitHub, qu’est-ce qui empêche quelqu’un de merger une PR alors qu’il n’a rien validé ?
 
@@ -76,7 +76,7 @@ Nous avons séparé le calcul de la publication pour ne pas avoir à relancer to
 
 C’est une partie que je n’ai pas envie de déclarer terminée simplement parce que trois pushes se sont bien passés. Les cas d’échec et de concurrence sont précisément ceux qu’il faut rejouer.
 
-Le bon comportement en cas de doute est assez simple : pas de statut de succès, donc pas de merge par le chemin normal.
+En cas de doute, la règle est simple : pas de statut de succès, donc pas de merge par le chemin normal.
 
 ## Une nouvelle machine peut tester, mais pas publier
 

@@ -27,15 +27,15 @@ relatedArticles:
   - 2026-09-22-opentelemetry-exploiter-la-plateforme-en
 ---
 
-We had put the database name into the C++ traces.
+We had added the database name to our C++ traces.
 
 On paper, it was a good idea. To diagnose a SQL call, knowing which database is involved helps a lot.
 
-The detail that changes everything: there are about 400,000 of them.
+The catch: there are about 400,000 of them.
 
 And behind the traces, Tempo was also generating metrics sent to VictoriaMetrics.
 
-That is how information that is useful in a trace became a very effective way to explode cardinality.
+That was enough to turn useful trace context into a cardinality bomb.
 
 ## A trace and a metric do not have the same contract
 
@@ -47,7 +47,7 @@ So the problem was not "the database name is bad data".
 
 The problem was letting that dynamic data reach metric generation as if it had the same value everywhere.
 
-It is a fairly classic trap with modern pipelines: you think about the signal you produce, not always about the transformations it undergoes afterwards.
+This is a common trap in modern telemetry pipelines: you think about the signal you emit, but not always about every transformation it goes through afterwards.
 
 A request UUID, a user identifier, a generated job name, or a full URL can be very useful in a trace. As a metric label, that is another story.
 
@@ -59,7 +59,7 @@ I am deliberately keeping the implementation detail for an update, because I pre
 
 The principle itself is simple: **a piece of data does not need the same level of detail in traces, logs, and metrics**.
 
-That is probably one of the most useful mental-model shifts with OpenTelemetry.
+That shift in mental model is one of the useful parts of adopting OpenTelemetry.
 
 You are not only defining a trace schema. You are defining data that may be enriched, filtered, transformed, sampled, and sent to several backends.
 
@@ -83,7 +83,7 @@ I am not saying you should remove them everywhere. In a trace, they can be essen
 
 I am saying you need to know where they end up.
 
-The difference between "I can find this request" and "I create a series for every request" is fairly important.
+"I can find this request" and "I create a series for every request" are two very different outcomes.
 
 ## Enriching logs also surfaces PII
 
@@ -102,17 +102,17 @@ Regex is obviously not a security policy on its own. It does not guess that free
 
 The best filter is still not to produce the data when it is not needed.
 
-But on brownfield, having a second control in the pipeline avoids a few nasty surprises.
+But in a brownfield environment, a second control in the pipeline still avoids a few nasty surprises.
 
 ## Keeping everything does not necessarily improve observability
 
 Traces then raise another question: how many should you keep?
 
-In production, we sample current traffic. An order of magnitude around 10% already gives a lot of material on an active platform.
+In production, we sample current traffic. About 10% already gives us plenty of material on an active platform.
 
 That number is not a universal recommendation. Ten percent of a small service and ten percent of a heavily loaded platform do not represent the same volume at all.
 
-The important idea is elsewhere: storing 100% of traces is not automatically a sign of maturity.
+The point is that storing 100% of traces is not automatically a sign of maturity.
 
 It increases network, storage, SaaS-side ingestion, and load on the backends. If you end up degrading the pipeline or limiting retention because you wanted to keep everything, you have gained nothing.
 
@@ -128,11 +128,11 @@ To get that property, you need a later decision, typically tail sampling, or an 
 
 In our setup, sampling is centralised around the instrumentation managed by the Operator. That is convenient for evolving the policy without modifying services one by one. But centralising a setting does not change its semantics.
 
-This is a point I prefer to make explicit: there is a difference between the policy you want and the one the pipeline actually guarantees.
+That distinction matters: the policy you want and the guarantees your pipeline actually provides are not always the same thing.
 
 ## Three budgets rather than one
 
-Since then, I look at telemetry with three budgets.
+Since then, I think about telemetry in terms of three budgets.
 
 **Volume**: how much data can we transport and store without degrading the platform or making the bill absurd?
 
@@ -154,7 +154,7 @@ An observability data point has a collection cost, a storage cost, a security co
 
 A database name can remain very useful in a detailed trace and never become a metric label. Personal information may never leave the service. A normal trace can be sampled without losing the general understanding of the system.
 
-It is less spectacular than "collect everything", but much more operable.
+It is less glamorous than "collect everything", but much easier to operate.
 
 And once those volumes are under control, you still have to run the backends that receive them correctly.
 

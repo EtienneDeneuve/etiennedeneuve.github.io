@@ -1,5 +1,5 @@
 ---
-title: "Un lab Flagger public : Gateway API, pas de magie make"
+title: "Un lab Flagger public : Gateway API sans tout cacher derrière make"
 description: "J’ouvre un atelier Kind (Cilium, Envoy Gateway, Flagger) où les participants patchent du YAML pour voir qui décide vraiment du trafic."
 pubDate: 2026-10-13T08:00:00.000Z
 language: fr
@@ -31,7 +31,7 @@ Kubernetes sait remplacer des pods. Il ne décide pas seul si une version **mér
 
 Pour les ateliers plateforme, j’ai packagé un lab macOS — Kind, Cilium, Envoy Gateway, Flagger, Prometheus — avec une contrainte volontaire : les participants **appliquent des fichiers** sous `manifests/tp/`, au lieu de seulement taper `make good`.
 
-Trois moments :
+Trois exercices :
 
 1. **Promotion** — patch Deployment V2, poids HTTPRoute 25→50, puis primary.
 2. **Rollback** — pods Ready + 5xx HTTP sur la canary uniquement ; la primary reste intacte.

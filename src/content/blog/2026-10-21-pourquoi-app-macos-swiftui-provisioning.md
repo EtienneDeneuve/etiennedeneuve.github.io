@@ -31,7 +31,7 @@ Au début, je pensais vraiment pouvoir gérer le premier login avec quelques scr
 
 Sur le papier, il fallait vérifier que Nix était là, récupérer l’utilisateur, faire une authentification, construire la config, lancer nix-darwin et terminé.
 
-Évidemment, la vraie liste était un peu moins jolie.
+La vraie liste était moins jolie.
 
 Il fallait attendre une vraie session graphique, savoir si Determinate était réellement prêt, gérer Entra, éventuellement GitHub, construire Nix dans le bon contexte utilisateur, activer en root, reprendre après un crash, expliquer ce qui se passe à l’écran et surtout éviter qu’un retry relance n’importe quoi dans n’importe quel état.
 
@@ -67,7 +67,7 @@ Là, les transitions sont testées et le run garde des checkpoints.
 
 ## Je ne voulais pas faire tourner l’UI en root
 
-Autre point assez vite évident : l’application graphique ne doit pas avoir les privilèges nécessaires pour modifier le système.
+Autre évidence apparue rapidement : l’application graphique ne doit pas avoir les privilèges nécessaires pour modifier le système.
 
 J’ai donc séparé l’app et un helper privilégié.
 

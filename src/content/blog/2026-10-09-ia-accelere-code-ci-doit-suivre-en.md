@@ -1,6 +1,6 @@
 ---
 title: "AI writes faster. Our CI had to keep up."
-description: "AI-assisted development acceleration led us to move validations onto workstations, without abandoning GitHub governance."
+description: "AI agents shortened the coding loop enough that our GitHub-heavy feedback loop started to feel slow. We moved repeatable checks onto developer Macs while keeping GitHub in charge of merge policy."
 pubDate: 2026-10-09T07:30:00.000Z
 language: en
 translationKey: 2026-10-09-ia-accelere-code-ci-doit-suivre
@@ -29,15 +29,15 @@ relatedArticles:
   - 2026-10-28-versionner-postes-semver-nix-en
 ---
 
-There's something odd about AI agents.
+One of our agents changed a Go handler, the matching Vue interface, and a few tests in minutes.
 
-You can have them modify a Go handler, the matching Vue interface, and a few tests in a matter of minutes. And then you wait while a runner reinstalls the tools before discovering a TypeScript error you could have caught on the Mac.
+Then we waited longer for GitHub Actions to reinstall its tools, only to discover a TypeScript error the Mac could have caught immediately.
 
-At first, that did not bother me particularly. That is how our CI worked; it did its job. But as we used more agents, the gap between the time needed to produce a change and the time needed to get feedback became hard to ignore.
+That was the point where the feedback loop started to look wrong. The CI was doing its job, but the time to produce a change had dropped much faster than the time to validate it.
 
-I will not pretend an agent does three engineers' work in ten minutes. It produces changes quickly, and that alone is different enough to force us to revisit some habits.
+I am not claiming an agent does three engineers' work in ten minutes. It simply produces changes quickly enough that some old CI habits become painfully visible.
 
-## We had mostly put too much after the push
+## We had put too much after the push
 
 We put this model in place on one of our internal projects. The repository mixes Go, Vue, PostgreSQL, some Rust, and several applications: enough different cases that we could not settle for a POC on three files.
 
@@ -47,17 +47,17 @@ The GitHub Actions workflows checked the right things: unit tests, integration, 
 
 When we started looking at GitHub Actions consumption, we found redundant checks and repeated setup. That was a useful starting point for the audit.
 
-Except the first pain point was not even the bill.
+The first pain point was not even the bill.
 
 Take a type error in a frontend change. It needs to be caught, of course. But do we really need to push a branch and spin up a remote environment to find it?
 
 Same question for a Go test, a migration that will not replay, or Rust formatting.
 
-At that point, I wanted to shorten the fix loop more than I wanted to delete jobs for the sake of it.
+I cared more about shortening the fix loop than deleting jobs for the sake of it.
 
 ## The agent does not need a special CI
 
-I am a bit wary of quality rules we add into prompts.
+I do not trust quality rules just because they are written into a prompt.
 
 You can ask an agent to run all the tests, review its changes, and never declare a task done too early. Fine. But that is not a sufficient contract.
 
@@ -83,7 +83,7 @@ Nix let us recover the expected dependencies. devenv added the project's service
 
 ## What we moved
 
-The split we settled on is fairly simple.
+The split we settled on is simple.
 
 ~~~mermaid
 flowchart LR
@@ -99,7 +99,7 @@ GitHub keeps the merge rules. Release builds, image builds, and checks that need
 
 I was not trying to take GitHub out of the chain. I wanted to stop asking it to systematically redo work that was already reproducible on the workstation.
 
-## There is still a fairly important limit
+## There is still an important limit
 
 A test result produced on a Mac does not carry the same guarantees as a result produced on an independent runner.
 
@@ -109,7 +109,7 @@ That trust boundary is part of the architecture choice. If the organization must
 
 In our case, we first wanted reproducible checks, run regularly, with GitHub still refusing changes that lack the expected status.
 
-The hard part was not installing the tools in the end. It was finding the right split between the workstation, the repository, and GitHub.
+The hard part was not installing the tools. It was deciding exactly what belongs on the workstation, what belongs in the repository, and what GitHub still has to enforce.
 
 That is what I cover in the second article, with devenv, hooks, and local PostgreSQL.
 

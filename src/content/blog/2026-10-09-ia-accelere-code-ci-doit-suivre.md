@@ -1,6 +1,6 @@
 ---
 title: "L'IA écrit plus vite. Notre CI devait suivre."
-description: "L'accélération du développement assisté par IA nous a amenés à déplacer des validations sur les postes, sans abandonner la gouvernance GitHub."
+description: "Les agents IA ont raccourci la boucle de code au point de rendre notre feedback GitHub trop lent. Nous avons déplacé les contrôles reproductibles sur les Mac tout en laissant GitHub décider du merge."
 pubDate: 2026-10-09T07:30:00.000Z
 language: fr
 translationKey: 2026-10-09-ia-accelere-code-ci-doit-suivre
@@ -29,15 +29,15 @@ relatedArticles:
   - 2026-10-28-versionner-postes-semver-nix
 ---
 
-Il y a un truc assez curieux avec les agents IA.
+Un de nos agents a modifié un handler Go, l’interface Vue associée et quelques tests en quelques minutes.
 
-On peut leur faire modifier un handler Go, l’interface Vue qui va avec et quelques tests en quelques minutes. Et derrière, on attend parfois qu’un runner réinstalle les outils pour découvrir une erreur TypeScript qu’on aurait pu voir sur le Mac.
+Puis on a attendu plus longtemps que GitHub Actions réinstalle ses outils pour découvrir une erreur TypeScript que le Mac aurait pu voir tout de suite.
 
-Au début, ça ne m’avait pas spécialement dérangé. C’est comme ça que fonctionnait notre CI, elle faisait son travail. Mais à mesure qu’on a utilisé davantage d’agents, l’écart entre le temps nécessaire pour produire un changement et celui nécessaire pour obtenir un retour est devenu difficile à ignorer.
+C’est là que la boucle de feedback a commencé à me sembler bancale. La CI faisait son travail, mais le temps nécessaire pour produire un changement avait baissé beaucoup plus vite que le temps nécessaire pour le valider.
 
-Je ne vais pas prétendre qu’un agent fait en dix minutes le travail de trois ingénieurs. Il produit des modifications rapidement, c’est déjà suffisamment différent pour nous obliger à revoir certains réflexes.
+Je ne prétends pas qu’un agent fait en dix minutes le travail de trois ingénieurs. Il produit simplement des changements assez vite pour rendre certains vieux réflexes CI franchement visibles.
 
-## On avait surtout mis trop de choses après le push
+## On avait mis trop de choses après le push
 
 C’est sur un de nos projets internes que nous avons mis ce modèle en place. Le repository mélange du Go, du Vue, PostgreSQL, une partie Rust et plusieurs applications : suffisamment de cas différents pour ne pas se contenter d’un POC sur trois fichiers.
 
@@ -47,17 +47,17 @@ Les workflows GitHub Actions vérifiaient les bonnes choses : tests unitaires, i
 
 Lorsqu’on a commencé à regarder les consommations GitHub Actions, on a retrouvé des contrôles redondants et du setup répété. C’était un bon point de départ pour l’audit.
 
-Sauf que le premier irritant n’était même pas la facture.
+Le premier irritant n’était même pas la facture.
 
 Prenons une erreur de type dans une modification frontend. Il faut qu’elle soit détectée, évidemment. Mais est-ce qu’on a vraiment besoin de pousser une branche et de démarrer un environnement distant pour la découvrir ?
 
 Même question pour un test Go, une migration qui ne se rejoue pas ou un formatage Rust.
 
-À ce stade, j’avais davantage envie de raccourcir la boucle de correction que de supprimer des jobs pour le plaisir.
+Je voulais surtout raccourcir la boucle de correction, pas supprimer des jobs pour le plaisir.
 
 ## L’agent n’a pas besoin d’une CI spéciale
 
-Je me méfie un peu des règles de qualité qu’on ajoute dans les prompts.
+Je ne fais pas confiance aux règles de qualité simplement parce qu’on les a écrites dans un prompt.
 
 On peut demander à un agent de lancer tous les tests, de relire ses changements et de ne jamais déclarer une tâche terminée trop tôt. Très bien. Mais ce n’est pas un contrat suffisant.
 
@@ -83,7 +83,7 @@ Nix nous permettait de retrouver les dépendances attendues. devenv ajoutait les
 
 ## Ce que nous avons déplacé
 
-Le découpage retenu est assez simple.
+Le découpage retenu est simple.
 
 ~~~mermaid
 flowchart LR

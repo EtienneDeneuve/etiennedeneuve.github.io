@@ -1,5 +1,5 @@
 ---
-title: "OpenTelemetry sur 200 services : couvrir vite sans refaire quinze ans de code"
+title: "OpenTelemetry sur 200 services : instrumenter sans refaire quinze ans de code"
 description: "Sur une application brownfield, l’enjeu n’était pas de refaire l’instrumentation parfaite service par service, mais de donner aux équipes un cadre commun qu’elles pouvaient appliquer vite."
 pubDate: 2026-09-22T21:30:00.000Z
 language: fr
@@ -84,7 +84,7 @@ Rien de très exotique. Justement.
 
 Une métrique montre facilement qu’un service consomme trop. La trace donne le chemin qui explique pourquoi.
 
-C’est aussi ce qui a fait que la R&D a assez vite accroché au sujet. On ne leur demandait plus d’instrumenter "pour l’observabilité". Ils pouvaient utiliser les traces pour comprendre des comportements qu’ils cherchaient déjà à expliquer.
+C’est aussi ce qui a fait accrocher la R&D rapidement au sujet. On ne leur demandait plus d’instrumenter "pour l’observabilité". Ils pouvaient utiliser les traces pour comprendre des comportements qu’ils cherchaient déjà à expliquer.
 
 ## Les spans métier viennent après
 

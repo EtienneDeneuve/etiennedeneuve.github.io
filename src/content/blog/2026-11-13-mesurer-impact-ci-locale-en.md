@@ -29,7 +29,7 @@ relatedArticles:
   - 2026-10-28-versionner-postes-semver-nix-en
 ---
 
-There is something people do easily after changing a CI: take the job that was slow, show that the command now runs faster on their Mac, then announce a percentage improvement.
+The easiest way to oversell a CI migration is to compare the slowest GitHub job with the fastest local command and turn the gap into a percentage.
 
 I nearly did exactly that.
 
@@ -73,13 +73,13 @@ But I want a measurement of that behavior over several weeks before drawing a ge
 
 ## And in dollars, what does that give?
 
-This is where the topic gets amusing.
+The dollar numbers were much less dramatic.
 
 As of 8 October 2026, GitHub's public rates list **USD 0.006 per minute for a standard two-core Linux x64 runner** and **USD 0.062 for a standard macOS runner**. GitHub rounds each job's duration up to the next minute. You then have to account for minutes included in the plan, other usage, and storage.
 
 An order of magnitude: one hundred PRs that each saved ten minutes on a standard Linux runner represent **USD 6 of gross consumption** before quotas.
 
-That is not a saving we observed. It is simply the rate applied to an easy-to-check hypothesis.
+That is not a saving we observed. It is simply the public rate applied to an easy-to-check hypothesis.
 
 And put that way, you immediately see that standard Linux runners are not necessarily the best economic argument to justify weeks of work.
 
@@ -143,7 +143,7 @@ Results still need consolidating over a full cycle, and the publisher edge cases
 
 So I am not going to announce a global ROI or a definitive monthly saving.
 
-The most interesting part, for me, is elsewhere: we started wanting to accelerate a validation loop and ended up connecting workstation provisioning, the project environment, the tested commit, and its integration decision.
+The more useful result is elsewhere: we started by trying to accelerate a validation loop and ended up connecting workstation provisioning, the project environment, the tested commit, and its integration decision.
 
 That is fairly close to what I was already looking for when [versioning our workstations like software](/en/thinking/2026-10-28-versionner-postes-semver-nix-en/).
 

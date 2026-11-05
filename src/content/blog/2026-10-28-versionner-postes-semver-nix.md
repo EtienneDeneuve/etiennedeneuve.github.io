@@ -26,15 +26,11 @@ relatedArticles:
   - 2026-11-04-ce-qui-casse-provisioning-macos
 ---
 
-Il y a un truc que je trouve bizarre dans la gestion des postes.
+On versionne les services de production jusqu’au commit, puis pour un poste on accepte encore « il a fait un git pull hier normalement ».
 
-Pour un service, une image ou une application en production, on veut savoir exactement quelle version tourne. On veut pouvoir retrouver le commit, reproduire le build et revenir en arrière si nécessaire.
+Ça a fini par me sembler absurde.
 
-Pour un laptop, on accepte encore très facilement « il a fait un git pull hier normalement ».
-
-Je n’aime pas trop cette différence.
-
-Si le poste est une plateforme de travail importante, je veux savoir ce que j’ai déployé dessus.
+Si le poste est une plateforme de travail importante, je veux les mêmes réponses de base que pour un service ou une image : quelle version tourne, quel commit l’a produite, est-ce reproductible, et est-ce que je peux revenir en arrière ?
 
 ## J’ai commencé par le Bootstrap.pkg
 

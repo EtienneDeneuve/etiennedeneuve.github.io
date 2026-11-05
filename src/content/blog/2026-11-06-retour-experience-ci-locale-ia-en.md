@@ -1,5 +1,5 @@
 ---
-title: "Develop at AI speed, ship with engineering rigor."
+title: "Local CI after the demo: onboarding, trust, and the parts that still hurt"
 description: "A field report on moving validations local: onboarding, GitHub statuses, trust, cutover, and mistakes I would try to avoid."
 pubDate: 2026-11-06T07:30:00.000Z
 language: en
@@ -29,13 +29,11 @@ relatedArticles:
   - 2026-10-28-versionner-postes-semver-nix-en
 ---
 
-On the internal project that served as our first proving ground, the design looked fairly clean.
+Our first local-CI setup worked perfectly on the Mac that built it.
 
-A Mac prepared with Nix, devenv for the project environment, a few validation scripts, a result attached to the SHA, and GitHub still deciding the merge.
+Then a fresh Mac passed every local test and still could not make a PR mergeable.
 
-Then we started having it used somewhere other than the machine that had designed it.
-
-That is when the details got interesting.
+That failure was useful. It exposed the parts the architecture diagram had hidden: publishing credentials, push timing, key rotation, migration overlap, and the difference between “the tests passed” and “GitHub can trust the result enough to unblock a merge.”
 
 ## Everything worked, except the GitHub status
 
@@ -45,7 +43,7 @@ But the required check did not appear on the PR.
 
 The problem was neither PostgreSQL, nor Go, nor a badly installed hook. The publisher could not find the GitHub App credentials in the Keychain.
 
-That is fairly typical of this kind of project: you think you have sorted the development environment, then you discover a missing piece of the full path.
+That failure was a good reminder that the development environment is only one part of the full path.
 
 We documented onboarding for the publishing identity. But a new workstation that still needs a manual procedure before it can merge its first PR is not done.
 
@@ -55,7 +53,7 @@ That is why I connect this series to [macOS provisioning with Apple Business and
 
 The machine could run the expected tools. It was not yet ready to publish the result and make a PR mergeable.
 
-At the time, that is rather annoying. In hindsight, it shows clearly that "workstation ready" is a stricter definition than "installation finished."
+At the time, it was annoying. In hindsight, it made one thing clear: "workstation ready" is a stricter definition than "installation finished."
 
 ## The pre-push hook cannot know the future
 
@@ -113,7 +111,7 @@ I would also start with a precise map of the tests already run in the remote wor
 
 And I would take a snapshot of costs and feedback times before any change.
 
-That is less visible than a new pipeline. But without it, it quickly becomes hard to know whether the migration actually improved anything.
+That work is less visible than a new pipeline, but without it you quickly lose the ability to tell whether the migration improved anything.
 
 ## From workstation to code, then to delivery
 

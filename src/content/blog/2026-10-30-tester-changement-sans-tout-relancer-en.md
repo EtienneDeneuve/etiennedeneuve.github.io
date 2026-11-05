@@ -31,9 +31,9 @@ relatedArticles:
 
 Once CI was local, we rediscovered a problem we already knew with runners: a small change is enough to relaunch far too much.
 
-On the internal project where we started, the repository contains Go, Vue, PostgreSQL, and some Rust. Checking everything after every modification can get fairly painful.
+On the internal project where we started, the repository contains Go, Vue, PostgreSQL, and some Rust. Checking everything after every modification gets painful quickly.
 
-But if you start dropping tests somewhat at random to save time, you have missed the original goal.
+But if you start dropping tests at random to save time, you have missed the original goal.
 
 ## A change in a folder does not necessarily concern that folder
 
@@ -80,7 +80,7 @@ git diff --name-only "$base" HEAD
 
 You especially need to think about a shallow checkout, an outdated base branch, or missing local history. If I cannot compute the diff correctly, I prefer to fail or widen the tests rather than conclude that nothing changed.
 
-That choice is a bit less comfortable when you only look at check duration. But a green status produced by an incomplete diff is not worth much.
+That choice makes the duration graph look worse, but a green status produced by an incomplete diff is not worth much.
 
 ## PostgreSQL forced us to go further
 
@@ -122,7 +122,7 @@ Production images and artifact builds also keep their own checks. A local test o
 
 ## You have to test the selection rules themselves
 
-The part I find least visible may be the most important.
+The least visible part may be the most important.
 
 When you add a new folder or a cross-cutting dependency, who checks that the right test will be chosen?
 
@@ -144,7 +144,7 @@ I mostly wanted to keep something a developer could understand by reading a few 
 
 Eventually, we want to apply the same logic to all our repositories. The principle is reusable; the dependency map and the checks themselves will need to be rebuilt for each one. That is one reason I prefer a readable contract over a huge opaque orchestrator.
 
-Test selection then becomes a contract you can discuss and whose exceptions you can verify. And when it is not sure, it must be able to run more checks.
+Test selection then becomes a contract you can discuss and whose exceptions you can verify. And when the selector is not sure, it must run more checks.
 
 In the next episode, I come back to the details that complicated the rollout onto workstations, especially the GitHub publisher. The last article will be reserved for measurements, because a nicer validation in my terminal is not enough to prove we actually saved time.
 
