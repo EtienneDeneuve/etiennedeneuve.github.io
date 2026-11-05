@@ -1,3 +1,5 @@
+import { messagingConfig } from "./messaging.ts";
+
 const currentYear = new Date().getFullYear();
 const copyrightStartYear = 2015;
 
@@ -17,9 +19,10 @@ export const siteConfig = {
     brandName: "Etienne Deneuve",
   },
   professionalRole: {
-    title: "CTO expert",
-    subtitle:
-      "Management, productivité et ingénierie — du code au Cloud et à l’IA, selon l’objectif",
+    title: messagingConfig.etienne.role.fr,
+    titleByLang: messagingConfig.etienne.role,
+    subtitle: messagingConfig.etienne.promise.fr,
+    subtitleByLang: messagingConfig.etienne.promise,
   },
   location: {
     label: "France (remote-first, Europe)",
@@ -52,8 +55,7 @@ export const siteConfig = {
   seo: {
     siteUrl: "https://etienne.deneuve.xyz",
     title: "Etienne Deneuve",
-    description:
-      "CTO expert: engineering leadership, productivity and hands-on work from software to cloud and AI. Practical decisions, experiments and field notes.",
+    description: messagingConfig.etienne.seoDescription,
     locale: "fr_FR",
     defaultLanguage: "fr",
     defaultOgImage: "https://etienne.deneuve.xyz/assets/og-default.jpg",
@@ -99,15 +101,14 @@ export const siteConfig = {
     name: "Étienne Deneuve",
     fullName: "Etienne Deneuve",
     siteName: "Etienne Deneuve",
-    tagline: "CTO expert — la technique vaut ce qu’elle change",
-    jobTitle: "CTO expert",
+    tagline: messagingConfig.etienne.positioning.fr,
+    jobTitle: messagingConfig.etienne.role.fr,
     location: "France (remote-first, Europe)",
   },
   site: {
     url: "https://etienne.deneuve.xyz",
     title: "Etienne Deneuve",
-    description:
-      "CTO expert: engineering leadership, productivity and hands-on work from software to cloud and AI. Practical decisions, experiments and field notes.",
+    description: messagingConfig.etienne.seoDescription.fr,
     locale: "fr_FR",
     defaultOgImage: "https://etienne.deneuve.xyz/assets/og-default.jpg",
   },
