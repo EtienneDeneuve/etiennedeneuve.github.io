@@ -26,7 +26,7 @@ relatedArticles:
   - 2026-11-04-ce-qui-casse-provisioning-macos
 ---
 
-Je voulais un truc assez simple : un Mac sort de sa boîte, l’utilisateur se connecte, et quelques minutes plus tard il a un poste prêt.
+Je voulais un truc simple : un Mac sort de sa boîte, l’utilisateur se connecte, et quelques minutes plus tard il a un poste prêt.
 
 Pas « enrôlé ». Pas « presque prêt, il reste juste trois scripts à lancer et deux applications à installer ». Prêt.
 
@@ -97,7 +97,7 @@ Le résultat reste composé de modules communs, du rôle, de l’organisation, d
 
 C’est beaucoup plus proche de ce que je voulais : l’inventaire décrit le parc connu, il ne bloque pas l’arrivée d’un nouveau poste.
 
-## Le découpage a fini par devenir assez évident
+## Une fois les responsabilités séparées, le découpage est devenu évident
 
 Une fois ce problème posé correctement, les responsabilités se sont séparées presque toutes seules.
 
