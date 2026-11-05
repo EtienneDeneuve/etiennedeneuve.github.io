@@ -9,12 +9,11 @@
 
 ## Public sections
 
-- [Home](https://etienne.deneuve.xyz/): positioning and selected proofs
-- [Start here](https://etienne.deneuve.xyz/start-here/): orientation for readers and partners
-- [Thinking](https://etienne.deneuve.xyz/thinking/): articles (doctrine, field notes, architecture decisions, guides)
-- [Projects](https://etienne.deneuve.xyz/projects/): technical and open-source project entries
-- [Work](https://etienne.deneuve.xyz/work/): intervention modes (Diagnose, Decide, Build)
-- [Speaking](https://etienne.deneuve.xyz/speaking/): topics, media kit, documented appearances
+- [Home](https://etienne.deneuve.xyz/): positioning, approach and selected field evidence
+- [Advisory](https://etienne.deneuve.xyz/work/): when to engage and how I work
+- [Projects](https://etienne.deneuve.xyz/projects/): technical and open-source proof
+- [Publications](https://etienne.deneuve.xyz/thinking/): doctrine, field notes, architecture decisions and guides
+- [Speaking](https://etienne.deneuve.xyz/speaking/): topics, media kit and documented appearances
 - [About](https://etienne.deneuve.xyz/about/): trajectory and professional identity
 - [Contact](https://etienne.deneuve.xyz/contact/): intent-based contact
 
