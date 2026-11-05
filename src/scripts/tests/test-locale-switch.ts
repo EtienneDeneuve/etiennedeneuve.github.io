@@ -40,6 +40,7 @@ assert(
   resolveLocaleSwitchPath("/thinking/type/doctrine/", "en") === "/en/thinking/type/doctrine/",
   "facet stays paired"
 );
+assert(resolveLocaleSwitchPath("/start-here/", "en") === "/en/", "legacy Start Here → EN home");
 assert(resolveLocaleSwitchPath("/design-system/", "en") === "/en/", "unknown → EN home");
 
 if (failed > 0) {
