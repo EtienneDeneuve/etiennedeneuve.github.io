@@ -61,7 +61,14 @@ for (const term of [
 }
 
 const messaging = read("src/config/messaging.ts");
-for (const term of ["Kubernetes/AKS", "OpenTelemetry", "Platform Engineering", "SRE", "DevSecOps", "FinOps"]) {
+for (const term of [
+  "Kubernetes/AKS",
+  "OpenTelemetry",
+  "Platform Engineering",
+  "SRE",
+  "DevSecOps",
+  "FinOps",
+]) {
   if (!messaging.includes(term)) {
     throw new Error(`AI discoverability: SEO messaging missing ${term}`);
   }
