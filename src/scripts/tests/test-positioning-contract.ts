@@ -1,3 +1,4 @@
+import { websiteJsonLd } from "../../lib/json-ld.ts";
 import { messagingConfig } from "../../config/messaging.ts";
 import { seoConfig } from "../../config/seo.ts";
 import { siteConfig } from "../../config/site.ts";
@@ -23,6 +24,12 @@ for (const lang of ["fr", "en"] as const) {
 
 if (seoConfig.person.jobTitle !== expectedRole) {
   throw new Error("JSON-LD person jobTitle drifted from canonical role");
+}
+
+for (const lang of ["fr", "en"] as const) {
+  if (websiteJsonLd(lang).description !== messagingConfig.etienne.seoDescription[lang]) {
+    throw new Error(`WebSite JSON-LD description drifted for ${lang}`);
+  }
 }
 
 const serialized = JSON.stringify({
