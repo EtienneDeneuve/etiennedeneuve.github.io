@@ -8,7 +8,7 @@ import { coreIdentityNodes } from "../lib/ecosystem-json-ld.ts";
 import { getAllThinkingArticles, articlesForLocale } from "../lib/thinking.ts";
 import { selectHomeThinking } from "../lib/home-thinking.ts";
 
-const homeJsonLd = buildJsonLdGraph([...coreIdentityNodes("fr"), websiteJsonLd()]);
+const homeJsonLd = buildJsonLdGraph([...coreIdentityNodes("fr"), websiteJsonLd("fr")]);
 
 const allArticles = articlesForLocale(await getAllThinkingArticles(), "fr").sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
