@@ -60,12 +60,11 @@ for (const term of [
   if (!seo.includes(term)) throw new Error(`AI discoverability: JSON-LD expertise missing ${term}`);
 }
 
-const site = read("src/config/site.ts");
-if (!site.includes('title: "CTO · Platform Reliability Architect"')) {
-  throw new Error("AI discoverability: canonical professional role drifted");
-}
-if (!/Kubernetes.*OpenTelemetry.*Platform Engineering/s.test(site)) {
-  throw new Error("AI discoverability: site description no longer names core expertise");
+const messaging = read("src/config/messaging.ts");
+for (const term of ["Kubernetes/AKS", "OpenTelemetry", "Platform Engineering", "SRE", "DevSecOps", "FinOps"]) {
+  if (!messaging.includes(term)) {
+    throw new Error(`AI discoverability: SEO messaging missing ${term}`);
+  }
 }
 
 console.log("AI discoverability contract OK");
