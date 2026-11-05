@@ -26,7 +26,7 @@ relatedArticles:
   - 2026-11-04-ce-qui-casse-provisioning-macos-en
 ---
 
-I wanted something fairly simple: a Mac comes out of its box, the user signs in, and a few minutes later they have a ready workstation.
+I wanted something simple: a Mac comes out of its box, the user signs in, and a few minutes later they have a ready workstation.
 
 Not “enrolled.” Not “almost ready—just three scripts left to run and two apps to install.” Ready.
 
@@ -97,7 +97,7 @@ The result is still composed of common modules, the role, the organization, any 
 
 That’s much closer to what I wanted: inventory describes the known fleet; it doesn’t block a new workstation from arriving.
 
-## The split ended up becoming fairly obvious
+## Once the responsibilities were separated, the split became obvious
 
 Once the problem was framed correctly, the responsibilities almost separated themselves.
 
@@ -159,7 +159,7 @@ Opening a terminal to run three commands in the right order? Useless.
 
 Authenticating with your work account, on the other hand, makes sense. It’s even a step I prefer to keep explicit: it clearly marks the boundary between an enrolled machine and an identity authorized to receive a given environment.
 
-The journey I’m aiming for is therefore fairly simple: the Mac enrolls, the user signs in, their identity determines their profile, then the configuration applies.
+The journey I’m aiming for is simple: the Mac enrolls, the user signs in, their identity determines their profile, then the configuration applies.
 
 The important point is that each step knows what it does and why it does it.
 
@@ -200,7 +200,7 @@ Management      local adoption
 ADE             pending next reinstall
 ~~~
 
-I find this distinction important. “Compliant” and “enrolled via ADE” don’t describe the same thing.
+That distinction matters. “Compliant” and “enrolled via ADE” do not describe the same thing.
 
 Meanwhile, this path is no longer just an idea in a diagram. The app now detects whether it arrived via ADE or on an existing machine, collects local state, and shows a real review step before the first apply. An unrecognized Nix install deliberately blocks convergence instead of being deleted automatically. Existing Homebrew is detected, Home Manager backups are surfaced, and the provisioning mode is recorded in workstation state.
 
@@ -222,7 +222,7 @@ Apple Business does the enrollment and device-control part very well. I simply w
 
 The workstation is a platform. So I preferred to apply the same principles I use elsewhere: separation of responsibilities, declarative state, explicit identity, versioning, and rollback.
 
-The next question was then fairly natural: if Apple Business no longer chooses the workstation, who does?
+That left one obvious question: if Apple Business no longer chooses the workstation, who does?
 
 In my case, the answer was already in Entra.
 

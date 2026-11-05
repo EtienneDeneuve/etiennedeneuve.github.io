@@ -26,11 +26,11 @@ relatedArticles:
   - 2026-11-04-ce-qui-casse-provisioning-macos-en
 ---
 
-Once Apple Business was limited to its bootstrap role, a fairly basic question remained: how does the Mac know which workstation to build?
+Once Apple Business was limited to its bootstrap role, one basic question remained: how does the Mac know which workstation to build?
 
 The first idea that comes to mind is to look at the email address. It’s tempting because it works quickly. You take `alice@entreprise.fr`, infer Alice, then a role, then a configuration.
 
-I didn’t like that much.
+I did not want that coupling.
 
 An email address is handy for displaying a name, configuring Git, or attaching a few preferences. It’s not a good basis for deciding what a user is allowed to install on their workstation.
 
@@ -62,7 +62,7 @@ But that happens **after** the authorization decision.
 
 The role comes from Entra. Customizations optionally come from the known identity in the repo.
 
-That separation also let me spot a bug fairly quickly during the pilot: the user was correctly authenticated, the App Role was right, but the claim I used to get the email wasn’t always present. The workstation therefore received the right general profile, but some customizations didn’t attach.
+That separation also exposed a bug quickly during the pilot: the user was correctly authenticated, the App Role was right, but the claim I used to get the email wasn’t always present. The workstation therefore received the right general profile, but some customizations didn’t attach.
 
 It’s a good reminder: a convenient claim isn’t necessarily an invariant. If I truly need it to build the workstation, I must validate it explicitly.
 
@@ -108,7 +108,7 @@ Entra groups
 
 If tomorrow a group changes name or the organization moves, I can adapt the assignment on the Entra side without changing the application code or the Nix logic.
 
-It’s a small architecture detail, but I like this kind of detail: it avoids leaking the internal organization into workstation code.
+Small detail, useful boundary: it keeps the organization’s group structure out of workstation code.
 
 ## What if someone has multiple roles?
 
@@ -122,13 +122,13 @@ Authorization must be intentional.
 
 ## Resume without asking to sign in again
 
-A fairly important detail showed up during pilot retries: authenticating the user correctly once is useless if every relaunch opens Microsoft again, then GitHub.
+One important detail showed up during pilot retries: authenticating the user correctly once is useless if every relaunch opens Microsoft again, then GitHub.
 
 MSAL now first tries to silently recover a token from its cache. If the session is still valid, the journey resumes without a new window. Same thing on the GitHub side: the token kept in Keychain is reused as long as it still grants access to the expected repository.
 
 I deliberately keep a strict rule for headless mode: the background agent never opens interactive authentication. If it doesn’t have the necessary credentials, it records the state and waits for the next pass through the app.
 
-It looks like a UX detail, but on a recoverable workflow it’s fairly fundamental. A retry must resume a state, not replay the whole onboarding as if nothing had existed.
+It looks like a UX detail, but on a recoverable workflow it is fundamental. A retry must resume a state, not replay the whole onboarding as if nothing had existed.
 
 On Macs adopted without ADE, I also kept the hostname visible as-is. The user identity can serve to derive the logical name used by the Nix configuration without brutally renaming a machine that already has a history.
 
@@ -138,7 +138,7 @@ Entra no longer only serves to choose the role.
 
 Once the user is authenticated, Setup also requests an Azure Storage token to access the private workstation profile registry. There is no SAS embedded in the app, and the container isn’t public.
 
-The split is fairly simple: the App Role answers “which profile are you entitled to receive?”, then the Storage token and RBAC answer “are you allowed to read the artifacts in this registry?”
+The split is simple: the App Role answers “which profile are you entitled to receive?”, then the Storage token and RBAC answer “are you allowed to read the artifacts in this registry?”
 
 ~~~text
 Entra login
@@ -172,7 +172,7 @@ The role isn’t editable.
 
 That was exactly what I was looking for: the journey stays very simple, but the simplicity doesn’t come from a big “trust me” button. It comes from the fact that identity already did the work.
 
-At that point, the model was starting to get clean: Apple Business knows the Mac belongs to the fleet, Entra knows who’s in front of it, Nix knows what the profile means.
+At that point, the model was finally clean: Apple Business knows the Mac belongs to the fleet, Entra knows who is in front of it, and Nix knows what the profile means.
 
 I still had to handle everything that happens between those three worlds at first login.
 
