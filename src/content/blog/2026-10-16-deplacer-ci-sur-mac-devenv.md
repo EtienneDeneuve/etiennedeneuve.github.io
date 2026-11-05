@@ -98,7 +98,7 @@ C’est le genre de sujet que j’ai davantage envie de découvrir avant de pous
 
 ## Il fallait aussi penser aux agents
 
-Le choix de scripts versionnés a été assez pratique de ce côté-là.
+Le choix de scripts versionnés a été pratique de ce côté-là.
 
 Un agent capable de lancer des commandes, depuis un IDE ou un terminal, peut exécuter les mêmes validations qu’un développeur. Il lit le résultat, corrige et relance.
 

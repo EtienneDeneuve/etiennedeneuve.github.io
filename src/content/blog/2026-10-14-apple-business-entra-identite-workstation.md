@@ -26,11 +26,11 @@ relatedArticles:
   - 2026-11-04-ce-qui-casse-provisioning-macos
 ---
 
-Une fois Apple Business limité à son rôle de bootstrap, il restait une question assez basique : comment le Mac sait-il quel poste construire ?
+Une fois Apple Business limité à son rôle de bootstrap, il restait une question simple : comment le Mac sait-il quel poste construire ?
 
 La première idée qui vient est de regarder l’adresse mail. C’est tentant parce que ça marche vite. On prend `alice@entreprise.fr`, on en déduit Alice, puis un rôle, puis une configuration.
 
-Je n’aimais pas trop.
+Je ne voulais pas de ce couplage.
 
 Une adresse mail est pratique pour afficher un nom, configurer Git ou rattacher quelques préférences. Ce n’est pas une bonne base pour décider de ce qu’un utilisateur a le droit d’installer sur son poste.
 
@@ -62,7 +62,7 @@ Mais ça arrive **après** la décision d’autorisation.
 
 Le rôle vient d’Entra. Les personnalisations viennent éventuellement de l’identité connue dans le repo.
 
-Cette séparation m’a d’ailleurs permis de voir un bug assez vite pendant le pilote : l’utilisateur était correctement authentifié, l’App Role était bon, mais le claim que j’utilisais pour récupérer l’email n’était pas toujours présent. Le poste recevait donc le bon profil général, mais certaines personnalisations ne s’attachaient pas.
+Cette séparation a d’ailleurs exposé rapidement un bug pendant le pilote : l’utilisateur était correctement authentifié, l’App Role était bon, mais le claim que j’utilisais pour récupérer l’email n’était pas toujours présent. Le poste recevait donc le bon profil général, mais certaines personnalisations ne s’attachaient pas.
 
 C’est un bon rappel : un claim pratique n’est pas forcément un invariant. Si j’en ai réellement besoin pour construire le poste, je dois le valider explicitement.
 
