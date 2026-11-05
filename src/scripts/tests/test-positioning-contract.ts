@@ -5,6 +5,14 @@ import { siteConfig } from "../../config/site.ts";
 
 const expectedRole = messagingConfig.etienne.role.fr;
 
+if (!messagingConfig.etienne.positioning.fr.includes("plateformes critiques")) {
+  throw new Error("FR critical-platform positioning drifted");
+}
+if (!messagingConfig.etienne.positioning.en.includes("critical platforms")) {
+  throw new Error("EN critical-platform positioning drifted");
+}
+
+
 if (siteConfig.professionalRole.title !== expectedRole) {
   throw new Error("professionalRole.title drifted from messagingConfig");
 }
