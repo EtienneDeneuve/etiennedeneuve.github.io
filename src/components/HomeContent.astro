@@ -90,7 +90,9 @@ const rest = pubs.slice(1);
       <aside class="home-side">
         <section class="home-proofs" aria-labelledby="home-proofs-title">
           <div class="home-proofs__head">
-            <h2 id="home-proofs-title">{lang === "fr" ? "Preuves terrain" : "Field evidence"}</h2>
+            <h2 id="home-proofs-title">
+              {lang === "fr" ? "Preuves terrain" : "Field evidence"}
+            </h2>
             <span>{lang === "fr" ? "Sources publiques" : "Public sources"}</span>
           </div>
           <ul class="home-proofs__list">
@@ -109,14 +111,14 @@ const rest = pubs.slice(1);
         </section>
 
         <section class="home-pubs" aria-labelledby="home-pubs-title">
-        <div class="home-pubs__head">
-          <h2 id="home-pubs-title">{copy.publicationsTitle}</h2>
-          <a class="home-pubs__all" href={`${base}/thinking/`}
-            >{copy.publicationsAll} <span aria-hidden="true">→</span></a
-          >
-        </div>
-        {
-          pubs.length === 0 ? (
+          <div class="home-pubs__head">
+            <h2 id="home-pubs-title">{copy.publicationsTitle}</h2>
+            <a class="home-pubs__all" href={`${base}/thinking/`}
+              >{copy.publicationsAll} <span aria-hidden="true">→</span></a
+            >
+          </div>
+          {
+            pubs.length === 0 ? (
             <p class="home-pubs__empty">{copy.publicationsEmpty}</p>
           ) : (
             <>
@@ -158,7 +160,7 @@ const rest = pubs.slice(1);
               </ol>
             </>
           )
-        }
+          }
         </section>
       </aside>
     </div>
