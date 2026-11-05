@@ -21,9 +21,7 @@ if (siteConfig.professionalRole.subtitle !== messagingConfig.etienne.promise.fr)
 }
 
 for (const lang of ["fr", "en"] as const) {
-  if (
-    siteConfig.professionalRole.titleByLang[lang] !== messagingConfig.etienne.role[lang]
-  ) {
+  if (siteConfig.professionalRole.titleByLang[lang] !== messagingConfig.etienne.role[lang]) {
     throw new Error(`localized role drifted for ${lang}`);
   }
   if (seoConfig.defaultDescription[lang] !== messagingConfig.etienne.seoDescription[lang]) {
