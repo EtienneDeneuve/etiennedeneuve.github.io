@@ -42,8 +42,7 @@ export const homeConfig: { fr: HomeLocaleCopy; en: HomeLocaleCopy } = {
     headlineAccent: "Débloquer les décisions qui empêchent d’avancer.",
     tagline:
       "J’aide les CTO et DSI quand la plateforme, l’organisation ou la dette technique rendent chaque changement trop risqué.",
-    lede:
-      "Je travaille là où une décision technique bloque réellement le delivery : architecture cloud, Kubernetes, observabilité, DevSecOps, organisation et engineering. Le but n’est pas d’ajouter une couche de conseil, mais de rendre le problème explicite, trancher avec les équipes et vérifier ce qui change en production.",
+    lede: "Je travaille là où une décision technique bloque réellement le delivery : architecture cloud, Kubernetes, observabilité, DevSecOps, organisation et engineering. Le but n’est pas d’ajouter une couche de conseil, mais de rendre le problème explicite, trancher avec les équipes et vérifier ce qui change en production.",
     ctaMission: "Parler d’un blocage concret",
     ctaMissionExternalHint: "↗",
     ctaContext:
@@ -97,8 +96,7 @@ export const homeConfig: { fr: HomeLocaleCopy; en: HomeLocaleCopy } = {
     headlineAccent: "Unblock decisions that keep teams from moving.",
     tagline:
       "I help CTOs and CIOs when platform complexity, organisation or technical debt makes every change feel too risky.",
-    lede:
-      "I work where a technical decision is genuinely blocking delivery: cloud architecture, Kubernetes, observability, DevSecOps, organisation and engineering. The goal is not to add another layer of consulting, but to make the problem explicit, decide with the teams and verify what changes in production.",
+    lede: "I work where a technical decision is genuinely blocking delivery: cloud architecture, Kubernetes, observability, DevSecOps, organisation and engineering. The goal is not to add another layer of consulting, but to make the problem explicit, decide with the teams and verify what changes in production.",
     ctaMission: "Discuss a concrete blocker",
     ctaMissionExternalHint: "↗",
     ctaContext:
@@ -136,8 +134,7 @@ export const homeConfig: { fr: HomeLocaleCopy; en: HomeLocaleCopy } = {
       completePath: "/work/",
     },
     technicalDepth: {
-      title:
-        "Around 200 services instrumented without rewriting the application.",
+      title: "Around 200 services instrumented without rewriting the application.",
       body: "For the OpenTelemetry rollout, we chose a shared baseline over a broad rewrite. Working with R&D meant common conventions, workshops, focused PRs and checking what the traces actually showed.",
       cta: "Read the OpenTelemetry field report (FR)",
       ctaPath: "/thinking/2026-09-22-opentelemetry-instrumenter-200-services/",
