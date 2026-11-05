@@ -29,6 +29,13 @@ export type HomeLocaleCopy = {
     cta: string;
     ctaPath: string;
   };
+  proofsTitle: string;
+  proofs: readonly {
+    metric: string;
+    title: string;
+    body: string;
+    path: string;
+  }[];
   publicationsTitle: string;
   publicationsAll: string;
   publicationsEmpty: string;
@@ -85,6 +92,27 @@ export const homeConfig: { fr: HomeLocaleCopy; en: HomeLocaleCopy } = {
       cta: "Lire le retour d’expérience OpenTelemetry",
       ctaPath: "/thinking/2026-09-22-opentelemetry-instrumenter-200-services/",
     },
+    proofsTitle: "Preuves terrain",
+    proofs: [
+      {
+        metric: "≈200 services",
+        title: "Instrumenter sans réécriture générale",
+        body: "Un socle OpenTelemetry commun appliqué à un brownfield existant plutôt qu’une refonte service par service.",
+        path: "/thinking/2026-09-22-opentelemetry-instrumenter-200-services/",
+      },
+      {
+        metric: "400 000 bases",
+        title: "Traiter la cardinalité avant qu’elle coûte",
+        body: "Un retour de production sur la cardinalité, les PII et le sampling avant de transformer la télémétrie en dette.",
+        path: "/thinking/2026-09-22-opentelemetry-cardinalite-pii-sampling/",
+      },
+      {
+        metric: "Lab public",
+        title: "Montrer qui contrôle réellement le trafic",
+        body: "Kind, Cilium, Envoy Gateway et Flagger dans un atelier reproductible où les mécanismes restent visibles.",
+        path: "/thinking/2026-10-13-flagger-lab-kind-gateway-api/",
+      },
+    ],
     publicationsTitle: "Publications",
     publicationsAll: "Tout lire",
     publicationsEmpty: "",
@@ -136,9 +164,30 @@ export const homeConfig: { fr: HomeLocaleCopy; en: HomeLocaleCopy } = {
     technicalDepth: {
       title: "Around 200 services instrumented without rewriting the application.",
       body: "For the OpenTelemetry rollout, we chose a shared baseline over a broad rewrite. Working with R&D meant common conventions, workshops, focused PRs and checking what the traces actually showed.",
-      cta: "Read the OpenTelemetry field report (FR)",
-      ctaPath: "/thinking/2026-09-22-opentelemetry-instrumenter-200-services/",
+      cta: "Read the OpenTelemetry field report",
+      ctaPath: "/en/thinking/2026-09-22-opentelemetry-instrumenter-200-services/",
     },
+    proofsTitle: "Field evidence",
+    proofs: [
+      {
+        metric: "≈200 services",
+        title: "Instrument without a broad rewrite",
+        body: "A shared OpenTelemetry baseline applied to an existing brownfield estate instead of rewriting instrumentation service by service.",
+        path: "/en/thinking/2026-09-22-opentelemetry-instrumenter-200-services/",
+      },
+      {
+        metric: "400,000 databases",
+        title: "Control cardinality before it becomes cost",
+        body: "A production field note on cardinality, PII and sampling before telemetry turns into another source of debt.",
+        path: "/en/thinking/2026-09-22-opentelemetry-cardinalite-pii-sampling/",
+      },
+      {
+        metric: "Public lab",
+        title: "Expose who actually controls traffic",
+        body: "Kind, Cilium, Envoy Gateway and Flagger in a reproducible workshop where the traffic mechanics stay visible.",
+        path: "/en/thinking/2026-10-13-flagger-lab-kind-gateway-api/",
+      },
+    ],
     publicationsTitle: "Publications",
     publicationsAll: "Read all",
     publicationsEmpty:
