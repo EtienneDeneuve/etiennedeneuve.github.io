@@ -60,6 +60,11 @@ for (const term of [
   if (!seo.includes(term)) throw new Error(`AI discoverability: JSON-LD expertise missing ${term}`);
 }
 
+const head = read("src/components/MainHead.astro");
+if (!head.includes('href="/llms.txt"')) {
+  throw new Error("AI discoverability: MainHead does not advertise llms.txt");
+}
+
 const messaging = read("src/config/messaging.ts");
 for (const term of [
   "Kubernetes/AKS",
