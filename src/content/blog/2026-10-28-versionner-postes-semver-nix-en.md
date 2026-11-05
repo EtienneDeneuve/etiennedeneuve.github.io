@@ -26,15 +26,11 @@ relatedArticles:
   - 2026-11-04-ce-qui-casse-provisioning-macos-en
 ---
 
-There’s something I find odd about workstation management.
+We version production services down to the commit, then accept “they did a git pull yesterday, probably” as workstation state.
 
-For a service, an image, or an application in production, you want to know exactly which version is running. You want to be able to find the commit, reproduce the build, and roll back if necessary.
+That stopped making sense to me.
 
-For a laptop, people still very easily accept “they did a git pull yesterday, normally.”
-
-I don’t much like that difference.
-
-If the workstation is an important work platform, I want to know what I deployed on it.
+If the workstation is an important work platform, I want the same basic answers I expect from a service or an image: what version is running, which commit produced it, can I reproduce it, and can I roll it back?
 
 ## I started with the Bootstrap.pkg
 
@@ -60,7 +56,7 @@ That gives something much more useful than a simple “provisioning succeeded.�
 
 I still keep the distinction between what is **observed** and what is **declared**.
 
-Since the first trials, the declared part has started to exist for real: Setup now resolves a channel, a version, a manifest, and a `profile.json` from the private registry. That information is attached to the provisioning run and cached locally.
+Since the first trials, the declared side has become real too: Setup now resolves a channel, a version, a manifest, and a `profile.json` from the private registry. That information is attached to the provisioning run and cached locally.
 
 I still have to go all the way to the `current / previous-known-good` model and automatic drift, but I’m no longer only drawing the format on a whiteboard.
 
@@ -239,7 +235,7 @@ No need for a huge protocol. Just enough to avoid discovering at 95% of the down
 
 I always want to be able to go back to the last generation known as good.
 
-The policy I’ve settled on is therefore fairly simple: keep the current version and the `previous-known-good`. The rest can become eligible for garbage collection once the new version has been activated and validated.
+The policy is simple: keep the current version and the `previous-known-good`. The rest can become eligible for garbage collection once the new version has been activated and validated.
 
 I especially don’t want to launch an aggressive GC before that validation.
 
@@ -269,7 +265,7 @@ And if it breaks, I know which version I’m trying to land and which one I can 
 
 That seems much healthier to me than “rerun the update script and see if it passes.”
 
-The theory is fairly pretty. Obviously, the first Mac I actually wiped quickly reminded me that between the diagram and the machine there is `appstored`, PackageKit, incomplete Entra claims, Homebrew that doesn’t exist, and a few other charming details.
+The diagram looks great. The first Mac I actually wiped quickly reminded me that between the diagram and the machine there is `appstored`, PackageKit, incomplete Entra claims, missing Homebrew, and a few other charming details.
 
 That’s the last part.
 

@@ -29,9 +29,9 @@ relatedArticles:
 
 At first, I really thought I could handle first login with a few scripts.
 
-On paper, you had to check that Nix was there, recover the user, do an authentication, build the config, launch nix-darwin, and done.
+On paper, the sequence was short: check that Nix is there, identify the user, authenticate, build the config, run nix-darwin, done.
 
-Obviously, the real list was a bit less pretty.
+The real list was less tidy.
 
 You had to wait for a real graphical session, know whether Determinate was actually ready, handle Entra, optionally GitHub, build Nix in the right user context, activate as root, resume after a crash, explain what’s happening on screen, and above all avoid a retry relaunching anything in any state.
 
@@ -111,7 +111,7 @@ otherwise
 
 That also avoids depending on a `sudo` prompt that would appear more or less well in the middle of first login. And above all, the state machine doesn’t change: only the implementation of the provisioning step evolves.
 
-That kind of detail isn’t spectacular, but it’s precisely what makes provisioning reproducible instead of only working on my Mac.
+That kind of detail is not glamorous, but it is what makes provisioning reproducible instead of merely working on my Mac.
 
 ## GitHub only shows up when it’s useful
 
@@ -209,7 +209,7 @@ I much prefer that to maintaining an “old fleet” alongside the new one for m
 
 ## I ended up instrumenting the journey itself
 
-Because the state machine was already explicit, OpenTelemetry instrumentation became fairly natural.
+Because the state machine was already explicit, OpenTelemetry instrumentation fit naturally.
 
 Interactive Setup now emits an end-to-end trace for a full run, with the main phases as spans: preflight, Entra, role resolution, GitHub, provisioning, and validation. Inside provisioning, I also distinguish local build, registry download, closure import, and activation.
 

@@ -98,7 +98,7 @@ That is the kind of issue I would rather discover before pushing than after depl
 
 ## We also had to think about agents
 
-Choosing versioned scripts turned out to be fairly practical on that front.
+Choosing versioned scripts turned out to be practical on that front.
 
 An agent that can run commands, from an IDE or a terminal, can execute the same validations as a developer. It reads the result, fixes, and retries.
 
@@ -106,7 +106,7 @@ I did not create an "agent-ci" command with a shorter suite and three exceptions
 
 And the hooks remain useful even when the agent forgets the tests. They do not replace merge policy, but they make the usual path harder to skip.
 
-On a repository where commits arrive often, that detail ends up mattering.
+On a busy repository, that detail matters.
 
 ## The Mac does not become a GitHub runner
 
@@ -122,13 +122,13 @@ And I am not trying to claim a macOS result replaces every Linux test. If you ne
 
 ## The test that always fails on the first pass
 
-A developer who has had every tool installed for months is a fairly poor reproducibility test.
+A developer who has had every tool installed for months is a bad reproducibility test.
 
 I want to see what happens on a new Mac: does devenv enter correctly? Does the PostgreSQL service start? Are the hooks present? Do the errors explain how to repair the environment?
 
 And, as we discovered later, you have to go a bit further: passing the tests is not enough if the workstation does not have the identity needed to publish the result to GitHub.
 
-I come back to that part in the next article. It is less comfortable than `devenv shell`, but much more interesting for understanding where trust sits.
+I come back to that part in the next article. It is less comfortable than `devenv shell`, but much more useful for understanding where trust actually sits.
 
 ## Official sources
 

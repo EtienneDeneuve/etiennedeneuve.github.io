@@ -29,7 +29,7 @@ relatedArticles:
   - 2026-10-28-versionner-postes-semver-nix-en
 ---
 
-Once the tests were back on the Macs, one slightly awkward question remained.
+Once the tests were back on the Macs, one uncomfortable question remained.
 
 On GitHub, what stops someone from merging a PR when they have not validated anything?
 
@@ -76,17 +76,17 @@ We separated computation from publication so we would not have to rerun the whol
 
 That is a part I do not want to call done just because three pushes went well. Failure and concurrency cases are precisely the ones you need to replay.
 
-The right behavior when in doubt is fairly simple: no success status, therefore no merge through the normal path.
+When in doubt, the rule is simple: no success status, therefore no merge through the normal path.
 
 ## A new machine can test, but not publish
 
 On a Mac I have used for months, the needed credentials are already there.
 
-On a freshly installed workstation, it is another story. We hit the case of a correct local validation, followed by an impossible publication because the GitHub App pieces were missing from the Keychain.
+On a freshly installed workstation, that assumption breaks. We hit the case of a correct local validation, followed by an impossible publication because the GitHub App pieces were missing from the Keychain.
 
 On our workstations, that publication relies on a dedicated identity whose access must be provisioned and maintained. A new Mac that can compile does not necessarily yet have the rights to publish the status. Access rotation is therefore part of the problem too.
 
-That is exactly the link with [the identity / workstation separation in my Entra series](/en/thinking/2026-10-14-apple-business-entra-identite-workstation-en/). Having a ready environment does not mean the workstation automatically has every right it needs.
+That is where [the identity / workstation separation in my Entra series](/en/thinking/2026-10-14-apple-business-entra-identite-workstation-en/) becomes operational rather than theoretical. Having a ready environment does not mean the workstation automatically has every right it needs.
 
 The error message must make it possible to tell a failing test from a status that cannot be published.
 
