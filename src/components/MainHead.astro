@@ -52,7 +52,7 @@ const resolvedPath =
 
 const seoInput: PageSeoInput = {
   title: title ?? seoConfig.defaultTitle,
-  description: description ?? seoConfig.defaultDescription,
+  description: description ?? seoConfig.defaultDescriptionByLanguage[lang],
   path: resolvedPath,
   lang,
   image: image ?? og,
