@@ -25,8 +25,6 @@ const docsOut = join(rootDir, "docs/ai-voice-audit.md");
 const PRIORITY_ROUTES = [
   "/",
   "/en/",
-  "/start-here/",
-  "/en/start-here/",
   "/about/",
   "/en/about/",
   "/work/",
@@ -414,7 +412,7 @@ bun run audit:ai-voice
 
 ## Pages prioritaires (relecture FR/EN)
 
-Ordre : home → start-here → about → thinking → work → projects → speaking → contact.
+Ordre : home → about → work → thinking → projects → speaking → contact.
 
 ${PRIORITY_ROUTES.map((path) => `- [ ] \`${path}\``).join("\n")}
 
@@ -453,7 +451,7 @@ ${
 
 ## Checklist relecture humaine
 
-Pour chaque page FR/EN prioritaire (home, start-here, about, work, thinking index, speaking, contact) :
+Pour chaque page FR/EN prioritaire (home, about, work, thinking index, speaking, contact) :
 
 1. Lire à voix haute 20 secondes : est-ce que ça sonne **parlé** ou **généré** ?
 2. Supprimer tirets cadratin et transitions creuses.
