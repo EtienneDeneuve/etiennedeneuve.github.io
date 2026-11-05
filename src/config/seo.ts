@@ -78,6 +78,7 @@ export const seoConfig = {
   siteName: siteConfig.identity.name,
   defaultTitle: siteConfig.seo.title,
   defaultDescription: siteConfig.seo.description,
+  defaultDescriptionByLanguage: siteConfig.positioning.description,
   defaultImage: stripPublicSegment(siteConfig.seo.defaultOgImage),
   imageWidth: 1200,
   imageHeight: 630,
