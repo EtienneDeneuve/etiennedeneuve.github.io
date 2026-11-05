@@ -481,13 +481,27 @@ export function listPublishedSeries(all: ThinkingArticle[], lang: "fr" | "en") {
     .filter((item): item is NonNullable<typeof item> => Boolean(item));
 }
 
+export function getPillarCta(pillar: ThinkingPillar) {
+  const map = thinkingConfig.pillarCtas as Partial<
+    Record<
+      ThinkingPillar,
+      (typeof thinkingConfig.pillarCtas)[keyof typeof thinkingConfig.pillarCtas]
+    >
+  >;
+  return map[pillar] ?? null;
+}
+
 export function getArticleCta(entry: ThinkingArticle) {
   const stem = seriesStem(entry);
-  const map = thinkingConfig.articleCtas as Record<
+  const explicitMap = thinkingConfig.articleCtas as Record<
     string,
     (typeof thinkingConfig.articleCtas)[keyof typeof thinkingConfig.articleCtas]
   >;
-  return map[stem] ?? null;
+  const explicit = explicitMap[stem];
+  if (explicit) return explicit;
+
+  const pillar = entry.data.pillar as ThinkingPillar | undefined;
+  return pillar ? getPillarCta(pillar) : null;
 }
 
 /** Opening shelf: newest first (1 lead + side), never the old featured-slug dump. */

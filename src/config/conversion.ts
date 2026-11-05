@@ -8,6 +8,7 @@ export const conversionEvents = [
   "cta_project_open",
   "cta_contact_email",
   "cta_booking",
+  "cta_offer_open",
   "cta_speaking",
   "cta_rss",
   "cta_github",

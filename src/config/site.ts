@@ -137,6 +137,26 @@ export function omnivyaContactUrl(lang: "fr" | "en", content = "cta"): string {
   return url.toString();
 }
 
+/** Omnivya mission URL with article-level attribution. */
+export function omnivyaMissionUrl(
+  lang: "fr" | "en",
+  missionSlug: string,
+  content: string,
+  article: string
+): string {
+  const base =
+    lang === "en"
+      ? `https://www.omnivya.fr/missions/${missionSlug}/`
+      : `https://www.omnivya.fr/fr/missions/${missionSlug}/`;
+  const url = new URL(base);
+  url.searchParams.set("utm_source", "etienne_deneuve");
+  url.searchParams.set("utm_medium", "referral");
+  url.searchParams.set("utm_campaign", "thinking");
+  url.searchParams.set("utm_content", content);
+  url.searchParams.set("utm_term", article);
+  return url.toString();
+}
+
 export const getBrandText = {
   primary: () => siteConfig.identity.name,
   siteTitle: (suffix?: string) =>
