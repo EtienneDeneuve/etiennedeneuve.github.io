@@ -7,9 +7,17 @@ export type Localized = { fr: string; en: string };
 
 export const messagingConfig = {
   etienne: {
+    role: {
+      fr: "CTO",
+      en: "CTO",
+    } as Localized,
     positioning: {
       fr: "J’aide les CTO et DSI à débloquer les plateformes critiques.",
       en: "I help CTOs and CIOs unblock critical platforms.",
+    } as Localized,
+    seoDescription: {
+      fr: "Étienne Deneuve aide les CTO et DSI à débloquer les plateformes critiques : architecture cloud, Kubernetes, observabilité, DevSecOps et organisation.",
+      en: "Étienne Deneuve helps CTOs and CIOs unblock critical platforms across cloud architecture, Kubernetes, observability, DevSecOps and organisation.",
     } as Localized,
     promise: {
       fr: "Architecture, plateformes et organisation : rendre les blocages visibles, arbitrer avec les équipes et remettre le delivery en mouvement.",
