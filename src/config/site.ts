@@ -17,9 +17,9 @@ export const siteConfig = {
     brandName: "Etienne Deneuve",
   },
   professionalRole: {
-    title: "CTO expert",
+    title: "CTO · Platform Reliability Architect",
     subtitle:
-      "Management, productivité et ingénierie — du code au Cloud et à l’IA, selon l’objectif",
+      "Architecture cloud, Kubernetes, observabilité, Platform Engineering et fiabilité des systèmes",
   },
   location: {
     label: "France (remote-first, Europe)",
@@ -53,7 +53,7 @@ export const siteConfig = {
     siteUrl: "https://etienne.deneuve.xyz",
     title: "Etienne Deneuve",
     description:
-      "CTO expert: engineering leadership, productivity and hands-on work from software to cloud and AI. Practical decisions, experiments and field notes.",
+      "CTO and Platform Reliability Architect working on Kubernetes, AKS, cloud architecture, OpenTelemetry, observability, Platform Engineering, SRE, DevSecOps, software supply chain and FinOps.",
     locale: "fr_FR",
     defaultLanguage: "fr",
     defaultOgImage: "https://etienne.deneuve.xyz/assets/og-default.jpg",
@@ -99,15 +99,15 @@ export const siteConfig = {
     name: "Étienne Deneuve",
     fullName: "Etienne Deneuve",
     siteName: "Etienne Deneuve",
-    tagline: "CTO expert — la technique vaut ce qu’elle change",
-    jobTitle: "CTO expert",
+    tagline: "CTO · Platform Reliability Architect — architecture, plateformes et fiabilité",
+    jobTitle: "CTO · Platform Reliability Architect",
     location: "France (remote-first, Europe)",
   },
   site: {
     url: "https://etienne.deneuve.xyz",
     title: "Etienne Deneuve",
     description:
-      "CTO expert: engineering leadership, productivity and hands-on work from software to cloud and AI. Practical decisions, experiments and field notes.",
+      "CTO and Platform Reliability Architect working on Kubernetes, AKS, cloud architecture, OpenTelemetry, observability, Platform Engineering, SRE, DevSecOps, software supply chain and FinOps.",
     locale: "fr_FR",
     defaultOgImage: "https://etienne.deneuve.xyz/assets/og-default.jpg",
   },
