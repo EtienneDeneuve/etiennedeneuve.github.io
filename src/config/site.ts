@@ -9,6 +9,22 @@ const copyrightStartYear = 2015;
 const ga4MeasurementId = String(import.meta.env.PUBLIC_GA4_MEASUREMENT_ID ?? "").trim();
 const clarityProjectId = String(import.meta.env.PUBLIC_CLARITY_PROJECT_ID ?? "").trim();
 
+export const profileMessaging = {
+  jobTitle: "CTO",
+  headline: {
+    fr: "J’aide les CTO et DSI à débloquer les plateformes critiques.",
+    en: "I help CTOs and CIOs unblock critical platforms.",
+  },
+  promise: {
+    fr: "Architecture, plateformes et organisation : rendre les blocages visibles, arbitrer avec les équipes et remettre le delivery en mouvement.",
+    en: "Architecture, platforms and organisation: make blockers visible, decide with the teams and get delivery moving again.",
+  },
+  description: {
+    fr: "CTO et cofondateur d’Omnivya. J’aide CTO et DSI à débloquer les décisions d’architecture, de plateforme cloud, Kubernetes, observabilité et DevSecOps qui ralentissent le delivery.",
+    en: "CTO and Omnivya co-founder. I help CTOs and CIOs unblock architecture, cloud platform, Kubernetes, observability and DevSecOps decisions that slow delivery.",
+  },
+} as const;
+
 export const siteConfig = {
   identity: {
     firstName: "Etienne",
@@ -17,10 +33,10 @@ export const siteConfig = {
     brandName: "Etienne Deneuve",
   },
   professionalRole: {
-    title: "CTO expert",
-    subtitle:
-      "Management, productivité et ingénierie — du code au Cloud et à l’IA, selon l’objectif",
+    title: profileMessaging.jobTitle,
+    subtitle: profileMessaging.promise.fr,
   },
+  positioning: profileMessaging,
   location: {
     label: "France (remote-first, Europe)",
     countryCode: "FR",
@@ -52,8 +68,7 @@ export const siteConfig = {
   seo: {
     siteUrl: "https://etienne.deneuve.xyz",
     title: "Etienne Deneuve",
-    description:
-      "CTO expert: engineering leadership, productivity and hands-on work from software to cloud and AI. Practical decisions, experiments and field notes.",
+    description: profileMessaging.description.fr,
     locale: "fr_FR",
     defaultLanguage: "fr",
     defaultOgImage: "https://etienne.deneuve.xyz/assets/og-default.jpg",
@@ -99,15 +114,14 @@ export const siteConfig = {
     name: "Étienne Deneuve",
     fullName: "Etienne Deneuve",
     siteName: "Etienne Deneuve",
-    tagline: "CTO expert — la technique vaut ce qu’elle change",
-    jobTitle: "CTO expert",
+    tagline: profileMessaging.headline.fr,
+    jobTitle: profileMessaging.jobTitle,
     location: "France (remote-first, Europe)",
   },
   site: {
     url: "https://etienne.deneuve.xyz",
     title: "Etienne Deneuve",
-    description:
-      "CTO expert: engineering leadership, productivity and hands-on work from software to cloud and AI. Practical decisions, experiments and field notes.",
+    description: profileMessaging.description.fr,
     locale: "fr_FR",
     defaultOgImage: "https://etienne.deneuve.xyz/assets/og-default.jpg",
   },
