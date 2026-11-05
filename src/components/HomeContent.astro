@@ -129,7 +129,7 @@ const rest = pubs.slice(1);
                     )}
                   >
                     {featured.spotlight && (
-                      <span class="home-pubs__series">À la une · OpenTelemetry 2/4</span>
+                      <span class="home-pubs__series">{lang === "fr" ? "À la une" : "Featured"} · OpenTelemetry 2/4</span>
                     )}
                     <time datetime={featured.entry.data.pubDate.toISOString()}>
                       {dateFmt.format(featured.entry.data.pubDate)}
