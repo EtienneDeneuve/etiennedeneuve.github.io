@@ -41,7 +41,6 @@ const BILINGUAL_EXACT = new Set([
   "/work",
   "/work/case-studies",
   "/thinking",
-  "/start-here",
   "/speaking",
   "/projects",
   "/contact",
