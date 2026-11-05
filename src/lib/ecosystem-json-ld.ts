@@ -46,7 +46,7 @@ export function buildEcosystemEntityNodes(locale: EcosystemLocale = "fr"): JsonL
       "@id": ecosystemNodeId("etienne"),
       name: etienne.canonicalName,
       jobTitle: seoConfig.person.jobTitle,
-      description: seoConfig.defaultDescription,
+      description: seoConfig.defaultDescription[locale],
       url: etienne.externalUrl ?? SITE,
       email: seoConfig.person.email,
       image: absoluteUrl(seoConfig.person.image),

@@ -34,7 +34,7 @@ const jsonLd = buildJsonLdGraph([
     worksFor: { "@id": ecosystemNodeId("omnivya-expert") },
   }),
   omnivyaExpertNode,
-  websiteJsonLd(),
+  websiteJsonLd(lang),
   profilePageJsonLd(aboutPath),
 ]);
 ---

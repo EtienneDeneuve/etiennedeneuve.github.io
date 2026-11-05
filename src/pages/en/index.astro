@@ -8,7 +8,7 @@ import { coreIdentityNodes } from "../../lib/ecosystem-json-ld.ts";
 import { getAllThinkingArticles, articlesForLocale } from "../../lib/thinking.ts";
 import { selectHomeThinking } from "../../lib/home-thinking.ts";
 
-const homeJsonLd = buildJsonLdGraph([...coreIdentityNodes("en"), websiteJsonLd()]);
+const homeJsonLd = buildJsonLdGraph([...coreIdentityNodes("en"), websiteJsonLd("en")]);
 
 // EN home only lists EN articles; no FR fallback cards.
 const enArticles = articlesForLocale(await getAllThinkingArticles(), "en").sort(
