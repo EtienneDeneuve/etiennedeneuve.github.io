@@ -1,3 +1,5 @@
+import { profileMessaging } from "./site.ts";
+
 /**
  * Founder / Omnivya messaging (site perso — source exécutable).
  * Drift vs cash-factory-backlog/messaging.md is expected until that doc is updated separately.
@@ -7,14 +9,8 @@ export type Localized = { fr: string; en: string };
 
 export const messagingConfig = {
   etienne: {
-    positioning: {
-      fr: "J’aide les CTO et DSI à débloquer les plateformes critiques.",
-      en: "I help CTOs and CIOs unblock critical platforms.",
-    } as Localized,
-    promise: {
-      fr: "Architecture, plateformes et organisation : rendre les blocages visibles, arbitrer avec les équipes et remettre le delivery en mouvement.",
-      en: "Architecture, platforms and organisation: make blockers visible, decide with the teams and get delivery moving again.",
-    } as Localized,
+    positioning: profileMessaging.headline as Localized,
+    promise: profileMessaging.promise as Localized,
     audiences: {
       dg: {
         fr: "J’identifie ce qui freine les équipes et les systèmes, clarifie les options puis accompagne les décisions jusque dans leur mise en œuvre.",
