@@ -48,6 +48,7 @@ export const siteConfig = {
     github: "https://github.com/EtienneDeneuve",
     linkedin: "https://linkedin.com/in/EtienneDeneuve",
     youtube: "https://www.youtube.com/@EtienneDeneuve/",
+    malt: "https://www.malt.fr/profile/etiennedeneuve",
   },
   ecosystemLinks: {
     omnivya: "https://www.omnivya.fr",
