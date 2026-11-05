@@ -102,6 +102,7 @@ export const seoConfig = {
       siteConfig.social.github,
       siteConfig.social.x,
       siteConfig.social.youtube,
+      siteConfig.social.malt,
     ],
     knowsAbout: [
       "Cloud architecture",
