@@ -38,20 +38,20 @@ export type HomeLocaleCopy = {
 
 export const homeConfig: { fr: HomeLocaleCopy; en: HomeLocaleCopy } = {
   fr: {
-    eyebrow: "Direction technique · Ingénierie · Transmission",
-    headlineAccent: "La technique vaut ce qu’elle change.",
+    eyebrow: "CTO · Architecture · Plateformes critiques",
+    headlineAccent: "Débloquer les décisions qui empêchent d’avancer.",
     tagline:
-      "Du management au code, une même exigence : faire avancer les équipes et leurs systèmes.",
-    lede: "Je dirige des équipes et je reste impliqué dans le code, les plateformes et la production. Je pars du problème, confronte les options et change de méthode lorsque les habitudes freinent le résultat. Sans sacrifier la qualité, la sécurité ni la maintenabilité.",
-    ctaMission: "Échanger avec moi via Omnivya",
+      "J’aide les CTO et DSI quand la plateforme, l’organisation ou la dette technique rendent chaque changement trop risqué.",
+    lede: "Je travaille là où une décision technique bloque réellement le delivery : architecture cloud, Kubernetes, observabilité, DevSecOps, organisation et engineering. Le but n’est pas d’ajouter une couche de conseil, mais de rendre le problème explicite, trancher avec les équipes et vérifier ce qui change en production.",
+    ctaMission: "Parler d’un blocage concret",
     ctaMissionExternalHint: "↗",
     ctaContext:
-      "Pour les missions, j’interviens via Omnivya, que j’ai cofondée avec Taous et dont je suis CTO.",
+      "Les missions sont menées via Omnivya. Premier échange : qualifier le blocage et vérifier si nous sommes utiles.",
     domains: [
-      "Diriger et faire progresser les équipes",
-      "Réduire les frictions du delivery",
-      "Du code aux plateformes Cloud",
-      "Former, animer, transmettre",
+      "Plateforme cloud devenue difficile à faire évoluer",
+      "Delivery ralenti par l’outillage ou l’organisation",
+      "Observabilité qui collecte sans aider à décider",
+      "Architecture ou sécurité où personne n’ose trancher",
     ],
     approach: {
       eyebrow: "Ma manière de travailler",
@@ -80,7 +80,7 @@ export const homeConfig: { fr: HomeLocaleCopy; en: HomeLocaleCopy } = {
       completePath: "/work/",
     },
     technicalDepth: {
-      title: "Environ 200 services. Quinze ans de code.",
+      title: "Environ 200 services instrumentés sans réécrire l’application.",
       body: "Pour déployer OpenTelemetry, nous avons préféré un socle commun à une refonte générale. Avec la R&D : conventions, ateliers, petites PR et vérification des traces. Ce retour terrain explique aussi ce que nous n’avons pas cherché à faire.",
       cta: "Lire le retour d’expérience OpenTelemetry",
       ctaPath: "/thinking/2026-09-22-opentelemetry-instrumenter-200-services/",
@@ -92,19 +92,20 @@ export const homeConfig: { fr: HomeLocaleCopy; en: HomeLocaleCopy } = {
     portraitAlt: "Portrait d’Étienne Deneuve",
   },
   en: {
-    eyebrow: "Technology leadership · Engineering · Teaching",
-    headlineAccent: "Technology must earn its place.",
-    tagline: "From leading teams to shipping software, the test is what actually improves.",
-    lede: "I lead teams and stay involved in the code, platforms and production systems. I start with the problem, examine the alternatives and change the approach when established practices get in the way. Quality, security and maintainability are not negotiable.",
-    ctaMission: "Get in touch through Omnivya",
+    eyebrow: "CTO · Architecture · Critical platforms",
+    headlineAccent: "Unblock decisions that keep teams from moving.",
+    tagline:
+      "I help CTOs and CIOs when platform complexity, organisation or technical debt makes every change feel too risky.",
+    lede: "I work where a technical decision is genuinely blocking delivery: cloud architecture, Kubernetes, observability, DevSecOps, organisation and engineering. The goal is not to add another layer of consulting, but to make the problem explicit, decide with the teams and verify what changes in production.",
+    ctaMission: "Discuss a concrete blocker",
     ctaMissionExternalHint: "↗",
     ctaContext:
-      "For professional engagements, I work through Omnivya, which I co-founded with Taous and where I serve as CTO.",
+      "Engagements run through Omnivya. The first conversation qualifies the blocker and whether we can materially help.",
     domains: [
-      "Lead and develop engineering teams",
-      "Remove friction from delivery",
-      "From software to cloud platforms",
-      "Speak, teach and run workshops",
+      "Cloud platform becoming hard to evolve safely",
+      "Delivery slowed by tooling or organisation",
+      "Observability collecting data without supporting decisions",
+      "Architecture or security choices nobody wants to own",
     ],
     approach: {
       eyebrow: "How I work",
@@ -133,7 +134,7 @@ export const homeConfig: { fr: HomeLocaleCopy; en: HomeLocaleCopy } = {
       completePath: "/work/",
     },
     technicalDepth: {
-      title: "Around 200 services. Fifteen years of code.",
+      title: "Around 200 services instrumented without rewriting the application.",
       body: "For the OpenTelemetry rollout, we chose a shared baseline over a broad rewrite. Working with R&D meant common conventions, workshops, focused PRs and checking what the traces actually showed.",
       cta: "Read the OpenTelemetry field report (FR)",
       ctaPath: "/thinking/2026-09-22-opentelemetry-instrumenter-200-services/",

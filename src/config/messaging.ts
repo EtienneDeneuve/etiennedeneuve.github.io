@@ -8,12 +8,12 @@ export type Localized = { fr: string; en: string };
 export const messagingConfig = {
   etienne: {
     positioning: {
-      fr: "CTO expert.",
-      en: "Hands-on CTO.",
+      fr: "J’aide les CTO et DSI à débloquer les plateformes critiques.",
+      en: "I help CTOs and CIOs unblock critical platforms.",
     } as Localized,
     promise: {
-      fr: "Diriger les équipes, maîtriser les systèmes et améliorer ce qui compte. Les décisions techniques ont une valeur lorsqu’elles changent réellement la situation.",
-      en: "Lead teams, understand the systems and improve what matters. Technology decisions earn their value through real-world impact.",
+      fr: "Architecture, plateformes et organisation : rendre les blocages visibles, arbitrer avec les équipes et remettre le delivery en mouvement.",
+      en: "Architecture, platforms and organisation: make blockers visible, decide with the teams and get delivery moving again.",
     } as Localized,
     audiences: {
       dg: {

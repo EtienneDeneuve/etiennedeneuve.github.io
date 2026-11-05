@@ -65,7 +65,7 @@ export const siteConfig = {
   },
   primaryCtas: {
     discussMission: {
-      label: "Discuter d’un objectif concret",
+      label: "Parler d’un blocage concret",
       href: "https://www.omnivya.fr/fr/contact/?utm_source=etienne_deneuve&utm_medium=referral&utm_campaign=site&utm_content=primary-cta",
     },
     omnivyaExecution: {
