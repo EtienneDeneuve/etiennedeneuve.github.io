@@ -77,13 +77,13 @@ export function organizationJsonLd(overrides: JsonLdObject = {}): JsonLdObject {
   };
 }
 
-export function websiteJsonLd(): JsonLdObject {
+export function websiteJsonLd(lang: SeoLang = "fr"): JsonLdObject {
   return {
     "@type": "WebSite",
     "@id": ecosystemNodeId("website"),
     url: seoConfig.siteUrl,
     name: seoConfig.siteName,
-    description: seoConfig.defaultDescription.fr,
+    description: seoConfig.defaultDescription[lang],
     inLanguage: ["fr", "en"],
     publisher: { "@id": ecosystemNodeId("etienne") },
   };
