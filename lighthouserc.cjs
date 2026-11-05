@@ -6,7 +6,7 @@ module.exports = {
       numberOfRuns: 3,
       url: [
         "http://127.0.0.1:4321/",
-        "http://127.0.0.1:4321/start-here/",
+        "http://127.0.0.1:4321/contact/",
         "http://127.0.0.1:4321/thinking/",
         "http://127.0.0.1:4321/work/",
         "http://127.0.0.1:4321/projects/",
