@@ -1,5 +1,5 @@
 ---
-title: "OpenTelemetry on 200 services: cover fast without rewriting fifteen years of code"
+title: "OpenTelemetry on 200 services: get coverage without rewriting fifteen years of code"
 description: "On a brownfield application, the challenge was not perfect instrumentation service by service, but giving teams a shared framework they could apply quickly."
 pubDate: 2026-09-22T21:30:00.000Z
 language: en
@@ -44,7 +44,7 @@ On the first pass, I mainly wanted to verify a few invariants:
 - logs can be correlated with the trace;
 - instrumentation does not change the service’s behaviour.
 
-It is not very glamorous, but with 200 services it already delivers a lot of value.
+It is not glamorous, but across 200 services it already delivers a lot of value.
 
 You can always spend three weeks designing the perfect span taxonomy for one business domain. Meanwhile the rest of the application stays blind.
 
@@ -92,7 +92,7 @@ Auto-instrumentation mainly gives a technical view: HTTP, SQL, external calls, e
 
 We started adding a few business spans with the teams when it added meaning, but without trying to model everything from day one.
 
-I prefer that pace.
+That pace works better for me.
 
 When developers start using traces, they quickly see what is missing. That is when an extra span becomes useful, because it answers a real question.
 
@@ -104,7 +104,7 @@ For logs, we patched a shared library to add what was needed for correlation wit
 
 That avoids modifying every application by hand and, more importantly, letting each team choose its own format.
 
-The gain during a debug session is fairly immediate: you start from a trace and find the logs for the same processing without reconstructing context from timestamps, the pod, or a business identifier.
+The payoff in a debugging session is immediate: start from a trace and you can find the logs for the same request without reconstructing context from timestamps, the pod, or a business identifier.
 
 That normalisation also surfaced a less pleasant topic: the more you enrich signals, the more you risk putting data that does not belong in an observability backend.
 
@@ -121,7 +121,7 @@ For a brownfield migration, I would keep the same method:
 - favour coverage before finesse;
 - add business context when a usage justifies it.
 
-The result is not "200 perfectly instrumented services". That would be too neat a formulation to be true.
+The result is not "200 perfectly instrumented services". That would be too neat to be true.
 
 The useful result is a fleet that roughly speaks the same language, and teams able to improve instrumentation without starting from scratch every time.
 

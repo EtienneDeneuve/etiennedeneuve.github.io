@@ -26,15 +26,15 @@ relatedArticles:
   - 2026-07-06-observabilite-contrat-testable
 ---
 
-The starting context was fairly simple: the client was migrating to Dynatrace, Prometheus and Grafana were already in place, and a significant part of the application was in C++.
+The situation was simple: the client was migrating to Dynatrace, Prometheus and Grafana were already in place, and a significant part of the application was in C++.
 
 The problem showed up with instrumentation. The proprietary SDK used until then on the C++ side had to be replaced. So we needed to touch code to keep the traces.
 
-At that point, two options were possible: go straight onto the new backend’s SDK, or use the change as an opportunity to decouple instrumentation from storage.
+At that point, we had two options: instrument directly with the new backend’s SDK, or use the change to decouple instrumentation from storage.
 
 I proposed OpenTelemetry.
 
-Not to challenge Dynatrace. The client had chosen its path and my role was not to re-decide it. The idea was more pragmatic: if we already have to touch the code, we might as well avoid doing the same operation again at the next tool change, contract change, or cost model change.
+Not to challenge Dynatrace. The client had chosen its path and my role was not to re-decide it. The reasoning was pragmatic: if we already had to touch the code, we might as well avoid doing the same job again at the next tool change, contract change, or cost model change.
 
 ## The point was not to replace Dynatrace
 
@@ -42,7 +42,7 @@ Dynatrace was supposed to receive the expected logs, metrics, and traces. That d
 
 On the other hand, I saw no value in the application knowing that those signals were destined for Dynatrace.
 
-That is where OpenTelemetry becomes interesting. Applications emit against a shared contract. The platform collects, transforms, and routes. The backend remains an operational choice.
+That is where OpenTelemetry earned its keep. Applications emit against a shared contract; the platform collects, transforms, and routes; the backend remains an operational choice.
 
 That does not make the tools interchangeable. Queries, dashboards, alerting, retention, and proprietary features stay specific. Moving from Dynatrace to Tempo is obviously not a URL change.
 
@@ -84,7 +84,7 @@ We could have stayed on the upstream OpenTelemetry Collector. I preferred to pro
 
 We had to make OpenTelemetry, Prometheus metrics, and several technical sources coexist. Alloy provides the required components in the same configuration model, including useful exporters for Azure, SQL Server, or MongoDB.
 
-It also deploys fairly freely: DaemonSet, Deployment, gateway, multiple instances with different roles. The web UI helps understand what is running and how components are connected.
+It is also flexible to deploy: DaemonSet, Deployment, gateway, or multiple instances with different roles. The web UI helps understand what is running and how components are connected.
 
 This is not a general claim about Alloy. In this specific context, it mainly avoided stacking a different tool for each source.
 
@@ -96,7 +96,7 @@ On a fifteen-year-old application, doing that bluntly is risky.
 
 A field you think is useless may feed a dashboard nobody mentioned. A historical source may still serve a team. Cutting before you have observed the usages is mostly a good way to create a migration incident.
 
-So the approach was more like:
+So we took the opposite route:
 
 1. standardize emission;
 2. make the flows visible;
@@ -105,7 +105,7 @@ So the approach was more like:
 5. remove what no longer has a use;
 6. tighten progressively.
 
-It looks less pretty for a few weeks, but it is much healthier than an observability big bang.
+It is messier for a few weeks, but much healthier than an observability big bang.
 
 ## What I was really trying to achieve
 
