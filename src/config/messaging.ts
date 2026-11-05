@@ -12,8 +12,8 @@ export const messagingConfig = {
       en: "I help CTOs and CIOs unblock critical platforms.",
     } as Localized,
     promise: {
-      fr: "Architecture, plateformes et organisation : rendre les blocages visibles, arbitrer avec les équipes et remettre le delivery en mouvement.",
-      en: "Architecture, platforms and organisation: make blockers visible, decide with the teams and get delivery moving again.",
+      fr: "CTO et Platform Reliability Architect : architecture cloud, Kubernetes/AKS, OpenTelemetry, observabilité, Platform Engineering et DevSecOps pour débloquer les plateformes critiques.",
+      en: "CTO and Platform Reliability Architect: cloud architecture, Kubernetes/AKS, OpenTelemetry, observability, Platform Engineering and DevSecOps for critical platforms.",
     } as Localized,
     audiences: {
       dg: {
