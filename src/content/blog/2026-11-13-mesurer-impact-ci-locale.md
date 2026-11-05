@@ -29,7 +29,7 @@ relatedArticles:
   - 2026-10-28-versionner-postes-semver-nix
 ---
 
-Il y a un truc qu’on fait facilement après avoir modifié une CI : on prend le job qui était lent, on montre que la commande tourne maintenant plus vite sur son Mac, puis on annonce un pourcentage d’amélioration.
+La manière la plus simple de survendre une migration CI, c’est de comparer le job GitHub le plus lent à la commande locale la plus rapide, puis de transformer l’écart en pourcentage.
 
 J’ai failli faire exactement ça.
 
@@ -47,7 +47,7 @@ C’est un premier ordre de grandeur utile. On voit les jobs récurrents, les d�
 
 Mais 2 964 minutes de jobs ne veulent pas dire 2 964 minutes facturées. La période ne correspond pas à un mois entier, les runners peuvent avoir des tarifs différents et GitHub applique ses propres règles de facturation.
 
-Il aurait été assez facile de multiplier ce nombre par un tarif et d’annoncer une économie. Ça aurait surtout donné un chiffre incorrect.
+On aurait pu multiplier ce nombre par un tarif et annoncer une économie. Ça aurait surtout donné un chiffre incorrect.
 
 ## Le benchmark intéressant était beaucoup plus petit
 
@@ -73,7 +73,7 @@ Mais je veux une mesure de ce comportement sur plusieurs semaines avant d’en t
 
 ## Et en dollars, ça donne quoi ?
 
-C’est là que le sujet devient amusant.
+Les chiffres en dollars étaient nettement moins spectaculaires.
 
 Au 8 octobre 2026, les tarifs publics de GitHub indiquent **0,006 USD par minute pour un runner Linux x64 standard à deux cœurs** et **0,062 USD pour un runner macOS standard**. GitHub arrondit la durée de chaque job à la minute supérieure. Il faut ensuite tenir compte des minutes incluses dans le plan, des autres usages et du stockage.
 

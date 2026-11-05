@@ -42,7 +42,7 @@ J’aurais pu conclure que le problème était ailleurs.
 
 En regardant les logs, la réalité était plus simple : `appstored` avait bien téléchargé mon package, puis l’installation s’était arrêtée immédiatement.
 
-Le message était assez parlant :
+Le message était clair :
 
 ~~~text
 Could not create PKProduct
@@ -115,7 +115,7 @@ Ce n’était pas suffisamment robuste.
 
 J’ai donc ajouté les fallbacks nécessaires et surtout rendu cette donnée obligatoire lorsque le build en a besoin. Si l’app ne sait pas correctement identifier l’utilisateur pour rattacher ses personnalisations, elle ne doit pas continuer silencieusement avec un poste à moitié bon.
 
-C’est un détail, mais il illustre bien la différence entre « l’auth marche » et « j’ai toutes les données nécessaires pour construire correctement la machine ».
+Petit bug, leçon utile : « l’auth marche » n’est pas la même chose que « j’ai toutes les données nécessaires pour construire correctement la machine ».
 
 ## J’ai réussi à cloner la bonne config… puis à ne pas l’utiliser
 

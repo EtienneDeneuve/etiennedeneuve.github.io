@@ -1,5 +1,5 @@
 ---
-title: "Développer à la vitesse de l'IA, livrer avec la rigueur de l'ingénierie."
+title: "CI locale après la démo : onboarding, confiance et ce qui coince encore"
 description: "Retour d'expérience sur le déplacement des validations en local : onboarding, statuts GitHub, confiance, cutover et erreurs que je chercherais à éviter."
 pubDate: 2026-11-06T07:30:00.000Z
 language: fr
@@ -29,13 +29,11 @@ relatedArticles:
   - 2026-10-28-versionner-postes-semver-nix
 ---
 
-Sur le projet interne qui nous a servi de premier terrain d’essai, le schéma était assez propre.
+Notre première CI locale marchait parfaitement sur le Mac qui l’avait construite.
 
-Un Mac préparé avec Nix, devenv pour l’environnement du projet, quelques scripts de validation, un résultat attaché au SHA et GitHub qui continue de décider du merge.
+Puis un Mac neuf a passé tous les tests locaux sans être capable de rendre la PR mergeable.
 
-Puis on a commencé à le faire utiliser ailleurs que sur la machine qui avait servi à le concevoir.
-
-C’est là que les détails sont devenus intéressants.
+Cet échec était utile. Il a exposé ce que le schéma masquait : credentials de publication, timing du push, rotation des clés, période de transition et différence entre « les tests passent » et « GitHub peut accepter le résultat pour autoriser le merge ».
 
 ## Tout fonctionnait, sauf le statut GitHub
 
@@ -45,7 +43,7 @@ Mais le required check n’apparaissait pas sur la PR.
 
 Le problème n’était ni PostgreSQL, ni Go, ni un hook mal installé. Le publisher ne trouvait pas les credentials de la GitHub App dans le Keychain.
 
-C’est assez typique de ce genre de chantier : on pense avoir réglé l’environnement de développement, puis on découvre qu’il manque une pièce du parcours complet.
+Cet échec m’a rappelé que l’environnement de développement n’est qu’une partie du parcours complet.
 
 Nous avons documenté l’onboarding de l’identité de publication. Mais un poste neuf qui doit encore passer par une procédure manuelle pour pouvoir merger sa première PR, ce n’est pas terminé.
 
@@ -55,7 +53,7 @@ C’est pour cette raison que je relie cette série au [provisioning macOS avec 
 
 La machine était capable d’exécuter les outils attendus. Elle n’était pas encore prête à publier le résultat et à rendre une PR mergeable.
 
-Sur le moment, c’est plutôt agaçant. Après coup, ça montre bien que « poste prêt » est une définition plus exigeante qu’« installation terminée ».
+Sur le moment, c’était agaçant. Après coup, ça montre bien que « poste prêt » est une définition plus exigeante qu’« installation terminée ».
 
 ## Le hook pre-push ne peut pas connaître l’avenir
 
@@ -113,7 +111,7 @@ Je commencerais aussi par une cartographie précise des tests déjà exécutés 
 
 Et je prendrais une photographie des coûts et des temps de feedback avant toute modification.
 
-C’est moins visible qu’un nouveau pipeline. Mais sans ça, il devient vite compliqué de savoir si la migration a réellement amélioré quelque chose.
+C’est moins visible qu’un nouveau pipeline, mais sans ça il devient vite compliqué de savoir si la migration a réellement amélioré quelque chose.
 
 ## Du poste au code, puis à la livraison
 

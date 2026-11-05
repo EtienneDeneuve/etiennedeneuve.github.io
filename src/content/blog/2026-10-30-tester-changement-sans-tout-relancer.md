@@ -31,9 +31,9 @@ relatedArticles:
 
 Une fois la CI en local, nous avons retrouvé un problème qu’on connaissait déjà avec les runners : il suffit d’un petit changement pour relancer beaucoup trop de choses.
 
-Sur le projet interne où nous avons commencé, le repository contient du Go, du Vue, PostgreSQL et une partie Rust. Tout vérifier après chaque modification peut devenir assez pénible.
+Sur le projet interne où nous avons commencé, le repository contient du Go, du Vue, PostgreSQL et une partie Rust. Tout vérifier après chaque modification devient vite pénible.
 
-Mais si on commence à supprimer des tests un peu au hasard pour gagner du temps, on a raté l’objectif initial.
+Mais si on commence à supprimer des tests au hasard pour gagner du temps, on a raté l’objectif initial.
 
 ## Un changement dans un dossier ne concerne pas forcément ce dossier
 
@@ -80,7 +80,7 @@ git diff --name-only "$base" HEAD
 
 Il faut notamment penser au checkout peu profond, à une branche de base pas à jour, ou à l’absence d’historique local. Si je ne sais pas calculer le diff correctement, je préfère échouer ou élargir les tests plutôt que de conclure que rien n’a changé.
 
-C’est un choix un peu moins confortable quand on regarde uniquement la durée des contrôles. Mais un statut vert produit par un diff incomplet n’a pas beaucoup d’intérêt.
+Ça rend les durées moins flatteuses, mais un statut vert produit par un diff incomplet n’a pas beaucoup d’intérêt.
 
 ## PostgreSQL nous a obligés à aller plus loin
 
