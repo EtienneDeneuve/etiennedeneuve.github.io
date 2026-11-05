@@ -2,6 +2,7 @@
 import { omnivyaContactUrl } from "../config/site.ts";
 import { messagingConfig } from "../config/messaging.ts";
 import { homeConfig } from "../config/home.ts";
+import { homeProofs } from "../config/home-proofs.ts";
 import { getArticlePath, getArticleLanguage, getCanonicalSlug } from "../lib/thinking.ts";
 import { orderHomeThinking, type HomeThinkingItem } from "../lib/home-thinking.ts";
 
@@ -13,6 +14,7 @@ interface Props {
 const { lang, selectedThinking } = Astro.props;
 const base = lang === "en" ? "/en" : "";
 const copy = homeConfig[lang];
+const proofs = homeProofs[lang];
 const headline = messagingConfig.etienne.positioning[lang];
 const approachId = "approche";
 
@@ -85,7 +87,28 @@ const rest = pubs.slice(1);
         </div>
       </div>
 
-      <aside class="home-pubs" aria-labelledby="home-pubs-title">
+      <aside class="home-side">
+        <section class="home-proofs" aria-labelledby="home-proofs-title">
+          <div class="home-proofs__head">
+            <h2 id="home-proofs-title">{lang === "fr" ? "Preuves terrain" : "Field evidence"}</h2>
+            <span>{lang === "fr" ? "Sources publiques" : "Public sources"}</span>
+          </div>
+          <ul class="home-proofs__list">
+            {
+              proofs.map((proof) => (
+                <li>
+                  <a href={proof.href}>
+                    <strong>{proof.value}</strong>
+                    <span class="home-proofs__label">{proof.label}</span>
+                    <span class="home-proofs__body">{proof.body}</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        <section class="home-pubs" aria-labelledby="home-pubs-title">
         <div class="home-pubs__head">
           <h2 id="home-pubs-title">{copy.publicationsTitle}</h2>
           <a class="home-pubs__all" href={`${base}/thinking/`}
@@ -136,6 +159,7 @@ const rest = pubs.slice(1);
             </>
           )
         }
+        </section>
       </aside>
     </div>
   </section>
@@ -352,6 +376,86 @@ const rest = pubs.slice(1);
   .home-cta:hover,
   .home-cta:focus-visible {
     filter: brightness(1.06);
+  }
+
+  .home-side {
+    min-width: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .home-proofs {
+    border: 1px solid var(--home-border);
+    background: color-mix(in srgb, var(--home-bg-soft) 72%, transparent);
+    padding: 0.85rem 1rem;
+  }
+
+  .home-proofs__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .home-proofs__head h2 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--home-ink);
+  }
+
+  .home-proofs__head span {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--home-muted);
+  }
+
+  .home-proofs__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+  }
+
+  .home-proofs__list li + li {
+    border-top: 1px solid var(--home-border);
+  }
+
+  .home-proofs__list a {
+    display: grid;
+    grid-template-columns: minmax(6.5rem, auto) 1fr;
+    gap: 0.1rem 0.75rem;
+    padding-block: 0.55rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .home-proofs__list strong {
+    grid-row: 1 / span 2;
+    align-self: start;
+    color: var(--home-copper);
+    font-size: 1.05rem;
+    line-height: 1.2;
+  }
+
+  .home-proofs__label {
+    color: var(--home-ink);
+    font-size: 0.84rem;
+    font-weight: 650;
+    line-height: 1.25;
+  }
+
+  .home-proofs__body {
+    color: var(--home-muted);
+    font-size: 0.76rem;
+    line-height: 1.35;
+  }
+
+  .home-proofs__list a:hover strong,
+  .home-proofs__list a:focus-visible strong {
+    color: var(--home-copper-bright);
   }
 
   .home-pubs__head {
