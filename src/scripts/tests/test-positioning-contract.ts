@@ -12,7 +12,6 @@ if (!messagingConfig.etienne.positioning.en.includes("critical platforms")) {
   throw new Error("EN critical-platform positioning drifted");
 }
 
-
 if (siteConfig.professionalRole.title !== expectedRole) {
   throw new Error("professionalRole.title drifted from messagingConfig");
 }
@@ -22,7 +21,9 @@ if (siteConfig.professionalRole.subtitle !== messagingConfig.etienne.promise.fr)
 }
 
 for (const lang of ["fr", "en"] as const) {
-  if (siteConfig.professionalRole.titleByLang[lang] !== messagingConfig.etienne.role[lang]) {
+  if (
+    siteConfig.professionalRole.titleByLang[lang] !== messagingConfig.etienne.role[lang]
+  ) {
     throw new Error(`localized role drifted for ${lang}`);
   }
   if (seoConfig.defaultDescription[lang] !== messagingConfig.etienne.seoDescription[lang]) {
