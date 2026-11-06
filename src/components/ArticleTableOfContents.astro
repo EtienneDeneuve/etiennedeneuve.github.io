@@ -53,7 +53,7 @@ const quickNav = thinkingConfig.labels.quickNav[lang];
 <style>
   .toc {
     min-width: 0;
-    color: var(--text-muted-on-dark, #cdd0cf);
+    color: var(--brand-main-muted);
   }
   .toc__panel {
     margin: 0;
@@ -65,7 +65,7 @@ const quickNav = thinkingConfig.labels.quickNav[lang];
     font-weight: 650;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--text-muted-on-dark, #cdd0cf);
+    color: var(--brand-main-muted);
   }
   .toc__summary::-webkit-details-marker {
     display: none;
@@ -98,7 +98,7 @@ const quickNav = thinkingConfig.labels.quickNav[lang];
   }
   .toc a {
     display: block;
-    color: color-mix(in srgb, var(--text-on-dark, #f7f3ec) 62%, transparent);
+    color: color-mix(in srgb, var(--brand-main-ink) 62%, transparent);
     text-decoration: none;
     font-size: 0.78rem;
     line-height: 1.35;
@@ -112,16 +112,16 @@ const quickNav = thinkingConfig.labels.quickNav[lang];
   }
   .toc a:hover,
   .toc a:focus-visible {
-    color: var(--copper-on-dark, #f0aa78);
+    color: var(--brand-main-copper);
   }
   .toc a:focus-visible {
-    outline: 2px solid var(--copper-on-dark, #f0aa78);
+    outline: 2px solid var(--brand-main-copper);
     outline-offset: 2px;
   }
   .toc a.is-active {
-    color: var(--copper-on-dark, #f0aa78);
+    color: var(--brand-main-copper);
     font-weight: 600;
-    border-left-color: var(--copper-on-dark, #f0aa78);
+    border-left-color: var(--brand-main-copper);
   }
   @media (prefers-reduced-motion: reduce) {
     .toc a {
@@ -139,19 +139,19 @@ const quickNav = thinkingConfig.labels.quickNav[lang];
       gap: 0.45rem;
       min-height: 2.5rem;
       padding: 0.4rem 0.75rem;
-      border: 1px solid var(--border-on-dark, rgba(243, 239, 231, 0.22));
+      border: 1px solid var(--brand-main-border);
       border-radius: 4px;
-      background: var(--graphite-soft, #1b1e20);
-      color: var(--text-on-dark, #f7f3ec);
+      background: var(--brand-main-soft);
+      color: var(--brand-main-ink);
       font-size: 0.78rem;
       font-weight: 650;
       letter-spacing: 0.06em;
     }
     .toc__summary-mobile {
-      color: var(--copper-on-dark, #f0aa78);
+      color: var(--brand-main-copper);
     }
     .toc__summary-mobile::after {
-      color: var(--text-on-dark, #f7f3ec);
+      color: var(--brand-main-ink);
       opacity: 0.85;
       font-size: 0.85em;
     }
