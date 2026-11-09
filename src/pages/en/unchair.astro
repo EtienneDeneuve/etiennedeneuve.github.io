@@ -54,6 +54,12 @@ const jsonLd = buildJsonLdGraph([
     applicationCategory: "UtilitiesApplication",
     softwareRequirements: "macOS 14 or later",
     isAccessibleForFree: true,
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "EUR",
+      availability: "https://schema.org/InStock",
+    },
     license: "https://opensource.org/license/mit",
     downloadUrl: "https://github.com/EtienneDeneuve/unchair/releases/latest",
     sameAs: ["https://github.com/EtienneDeneuve/unchair"],
