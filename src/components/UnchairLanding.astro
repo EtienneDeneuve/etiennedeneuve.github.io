@@ -458,7 +458,7 @@ const ha =
                 <li>
                   <span>{label}</span>
                   <small>
-                    {issues.map((issue, index) => (
+                    {(issues as number[]).map((issue: number, index: number) => (
                       <>
                         {index > 0 && " · "}
                         <a
