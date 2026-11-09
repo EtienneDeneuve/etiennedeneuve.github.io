@@ -10,36 +10,36 @@ const path = "/en/unchair/";
 const faq = [
   [
     "Does Unchair record or upload my camera feed?",
-    "No. Camera frames and Apple Vision data used for movement verification are processed in memory on your Mac. They are not recorded or uploaded."
+    "No. Camera frames and Apple Vision data used for movement verification are processed in memory on your Mac. They are not recorded or uploaded.",
   ],
   [
     "Is the camera required?",
-    "No. Break reminders work without visual verification. Camera access is only needed if you want Unchair to verify locally that you actually stood up and moved."
+    "No. Break reminders work without visual verification. Camera access is only needed if you want Unchair to verify locally that you actually stood up and moved.",
   ],
   [
     "What happens during a meeting or presentation?",
-    "Unchair detects strong presentation or call signals and defers interruptions. The movement debt is not discarded; it returns when the context is normal again."
+    "Unchair detects strong presentation or call signals and defers interruptions. The movement debt is not discarded; it returns when the context is normal again.",
   ],
   [
     "What if I lock my Mac or go to lunch?",
-    "Work and sitting clocks pause while the Mac is locked, asleep, or idle for long enough. Coming back to your desk therefore does not automatically turn lunch into two hours of sitting."
+    "Work and sitting clocks pause while the Mac is locked, asleep, or idle for long enough. Coming back to your desk therefore does not automatically turn lunch into two hours of sitting.",
   ],
   [
     "Do I need Home Assistant or MQTT?",
-    "No. Home Assistant and MQTT are entirely optional. Break scheduling, camera verification, presentation mode and local stats keep working without a broker."
+    "No. Home Assistant and MQTT are entirely optional. Break scheduling, camera verification, presentation mode and local stats keep working without a broker.",
   ],
   [
     "Does Unchair need the Internet or an account?",
-    "Not for the core loop. The standalone path needs no cloud account or backend. Networking is only used by optional features such as MQTT, OpenMetrics and direct-channel updates."
+    "Not for the core loop. The standalone path needs no cloud account or backend. Networking is only used by optional features such as MQTT, OpenMetrics and direct-channel updates.",
   ],
   [
     "How much does Unchair cost?",
-    "Unchair is 100% free and open source under the MIT license. There is no subscription, paid license or mandatory account. The source, releases and privacy model are public on GitHub."
+    "Unchair is 100% free and open source under the MIT license. There is no subscription, paid license or mandatory account. The source, releases and privacy model are public on GitHub.",
   ],
   [
     "Which Macs are supported and how do updates work?",
-    "Unchair targets macOS 14 and later. Direct builds are Developer ID signed, notarized and stapled, with in-app updates powered by Sparkle."
-  ]
+    "Unchair targets macOS 14 and later. Direct builds are Developer ID signed, notarized and stapled, with in-app updates powered by Sparkle.",
+  ],
 ];
 
 const jsonLd = buildJsonLdGraph([
