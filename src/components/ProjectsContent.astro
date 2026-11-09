@@ -101,9 +101,11 @@ const jsonLd = buildJsonLdGraph([
           <p>{config.meta.featuredIntro[lang]}</p>
           <p>
             <a class="ed-text-link" href={`${prefix}/unchair/`}>
-              {lang === "fr"
-                ? "Unchair — le rappel macOS qui vérifie que tu as vraiment bougé"
-                : "Unchair — the macOS break reminder that verifies you actually moved"}
+              {
+                lang === "fr"
+                  ? "Unchair — le rappel macOS qui vérifie que tu as vraiment bougé"
+                  : "Unchair — the macOS break reminder that verifies you actually moved"
+              }
               <span aria-hidden="true"> ↗</span>
             </a>
           </p>
@@ -197,3 +199,4 @@ const jsonLd = buildJsonLdGraph([
     </section>
   </main>
 </BaseLayout>
+error: script "format:check" exited with code 1
