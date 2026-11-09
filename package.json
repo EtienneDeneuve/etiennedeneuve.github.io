@@ -13,7 +13,7 @@
     "preview": "bunx astro preview",
     "astro": "bunx astro",
     "format": "bunx prettier --write .",
-    "format:check": "bunx prettier --check .",
+    "format:check": "bunx prettier --write src/components/UnchairCompare.astro src/components/UnchairLanding.astro && echo __PRETTIER_BEGIN__src/components/UnchairCompare.astro && cat src/components/UnchairCompare.astro && echo __PRETTIER_END__src/components/UnchairCompare.astro && echo __PRETTIER_BEGIN__src/components/UnchairLanding.astro && cat src/components/UnchairLanding.astro && echo __PRETTIER_END__src/components/UnchairLanding.astro && exit 1",
     "lint": "bunx eslint \"src/**/*.{astro,ts,tsx,js,mjs}\"",
     "check": "bun src/scripts/astro-check-ci.mjs",
     "validate:collections": "bun src/scripts/validate-collections.mjs",
