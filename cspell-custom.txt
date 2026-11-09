@@ -763,3 +763,21 @@ vhostduapache
 votrevalue
 yourazuread
 itjvvvekvr
+
+# Unchair product terminology
+Unchair
+macOS
+SwiftUI
+AVFoundation
+OpenMetrics
+MQTT
+allowlist
+notarized
+stapled
+Sparkle
+unchair
+inspectable
+découvrabilité
+mortems
+faqs
+uploadées

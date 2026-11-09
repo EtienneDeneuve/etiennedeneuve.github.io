@@ -1,0 +1,106 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import UnchairLanding from "../../components/UnchairLanding.astro";
+import { buildJsonLdGraph, personJsonLd } from "../../lib/json-ld.ts";
+
+const title = "Unchair — the macOS break reminder that verifies you moved";
+const description =
+  "Unchair is an open-source, local-first macOS break reminder that verifies sit-to-stand movement with Apple Vision, protects meetings and integrates with Home Assistant over MQTT.";
+const path = "/en/unchair/";
+const faq = [
+  [
+    "Does Unchair record or upload my camera feed?",
+    "No. Camera frames and Apple Vision data used for movement verification are processed in memory on your Mac. They are not recorded or uploaded.",
+  ],
+  [
+    "Is the camera required?",
+    "No. Break reminders work without visual verification. Camera access is only needed if you want Unchair to verify locally that you actually stood up and moved.",
+  ],
+  [
+    "What happens during a meeting or presentation?",
+    "Unchair detects strong presentation or call signals and defers interruptions. The movement debt is not discarded; it returns when the context is normal again.",
+  ],
+  [
+    "What if I lock my Mac or go to lunch?",
+    "Work and sitting clocks pause while the Mac is locked, asleep, or idle for long enough. Coming back to your desk therefore does not automatically turn lunch into two hours of sitting.",
+  ],
+  [
+    "Do I need Home Assistant or MQTT?",
+    "No. Home Assistant and MQTT are entirely optional. Break scheduling, camera verification, presentation mode and local stats keep working without a broker.",
+  ],
+  [
+    "Does Unchair need the Internet or an account?",
+    "Not for the core loop. The standalone path needs no cloud account or backend. Networking is only used by optional features such as MQTT, OpenMetrics and direct-channel updates.",
+  ],
+  [
+    "How much does Unchair cost?",
+    "Unchair is 100% free and open source under the MIT license. There is no subscription, paid license or mandatory account. The source, releases and privacy model are public on GitHub.",
+  ],
+  [
+    "Which Macs are supported and how do updates work?",
+    "Unchair targets macOS 14 and later. Direct builds are Developer ID signed, notarized and stapled, with in-app updates powered by Sparkle.",
+  ],
+];
+
+const jsonLd = buildJsonLdGraph([
+  personJsonLd(),
+  {
+    "@type": "SoftwareApplication",
+    "@id": "https://etienne.deneuve.xyz/en/unchair/#software",
+    name: "Unchair",
+    url: "https://etienne.deneuve.xyz/en/unchair/",
+    description,
+    operatingSystem: "macOS 14+",
+    applicationCategory: "UtilitiesApplication",
+    softwareRequirements: "macOS 14 or later",
+    isAccessibleForFree: true,
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "EUR",
+      availability: "https://schema.org/InStock",
+    },
+    license: "https://opensource.org/license/mit",
+    downloadUrl: "https://github.com/EtienneDeneuve/unchair/releases/latest",
+    sameAs: ["https://github.com/EtienneDeneuve/unchair"],
+    author: { "@id": "https://etienne.deneuve.xyz/#etienne" },
+    keywords:
+      "macOS break reminder, sit stand reminder, Apple Vision, local-first, movement verification, developer ergonomics, Home Assistant, MQTT, OpenMetrics, Prometheus, OpenTelemetry",
+  },
+  {
+    "@type": "WebPage",
+    "@id": "https://etienne.deneuve.xyz/en/unchair/",
+    url: "https://etienne.deneuve.xyz/en/unchair/",
+    name: title,
+    description,
+    inLanguage: "en",
+    about: { "@id": "https://etienne.deneuve.xyz/en/unchair/#software" },
+  },
+  {
+    "@type": "FAQPage",
+    "@id": "https://etienne.deneuve.xyz/en/unchair/#faq",
+    mainEntity: faq.map(([name, text]) => ({
+      "@type": "Question",
+      name,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text,
+      },
+    })),
+  },
+]);
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  lang="en"
+  path={path}
+  alternates={[
+    { lang: "fr", href: "/unchair/" },
+    { lang: "en", href: "/en/unchair/" },
+  ]}
+  jsonLd={jsonLd}
+>
+  <UnchairLanding lang="en" />
+</BaseLayout>
