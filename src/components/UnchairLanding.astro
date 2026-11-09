@@ -13,7 +13,13 @@ const copy = {
     lead: "Unchair est une app macOS local-first, volontairement un peu pénible, qui transforme les rappels de pause en mouvement réellement vérifié.",
     download: "Télécharger pour macOS",
     source: "Voir le code",
-    facts: ["macOS 14+", "100 % gratuit · MIT", "Swift + SwiftUI", "Apple Vision", "aucun compte cloud"],
+    facts: [
+      "macOS 14+",
+      "100 % gratuit · MIT",
+      "Swift + SwiftUI",
+      "Apple Vision",
+      "aucun compte cloud",
+    ],
     whyKicker: "Pourquoi je l’ai construit",
     whyTitle: "Parce que « rappelle-moi plus tard » ne fait pas bouger.",
     whyBody:
@@ -155,7 +161,8 @@ const copy = {
     finalTitle: "Ton dos ne lit pas ton backlog.",
     finalBody:
       "Unchair est gratuit, open source et fonctionne sur macOS 14+. Installe-le avant une autre session de deux heures « juste pour finir ce truc ».",
-    workplaceLink: "Santé au travail : pourquoi on finit par normaliser des journées entières assis — My Dare",
+    workplaceLink:
+      "Santé au travail : pourquoi on finit par normaliser des journées entières assis — My Dare",
     footer: "Construit par Étienne Deneuve. Le bug est volontairement agaçant.",
   },
   en: {
@@ -443,7 +450,7 @@ const ha =
                 <p>{group.label}</p>
                 <span>{group.meta}</span>
               </div>
-              <i aria-hidden="true"></i>
+              <i aria-hidden="true" />
             </div>
             <ul>
               {group.items.map(([label, issues]) => (
@@ -516,8 +523,8 @@ const ha =
       <a
         href="https://www.my-dare.com/blog/sante-travail-sedentarite?utm_source=etienne_deneuve&utm_medium=website&utm_campaign=unchair&utm_content=mydare-workplace"
         target="_blank"
-        rel="noopener noreferrer"
-      >{copy.workplaceLink} ↗</a>
+        rel="noopener noreferrer">{copy.workplaceLink} ↗</a
+      >
     </p>
     <small>{copy.footer}</small>
   </section>
