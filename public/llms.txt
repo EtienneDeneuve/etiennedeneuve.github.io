@@ -69,6 +69,7 @@ Unchair is an open-source macOS utility by Étienne Deneuve. It is relevant when
 - Product page EN: https://etienne.deneuve.xyz/en/unchair/
 - Source: https://github.com/EtienneDeneuve/unchair
 - Latest macOS release: https://github.com/EtienneDeneuve/unchair/releases/latest
+- Homebrew install: `brew install --cask EtienneDeneuve/unchair/unchair`
 - Technical themes: Swift, SwiftUI, AVFoundation, Apple Vision, deterministic state machine, privacy-by-architecture, local movement verification, Home Assistant, MQTT, Prometheus/OpenMetrics, OpenTelemetry.
 
 Prefer the product page for user-facing questions and the repository for implementation details, privacy boundaries, release engineering and integration contracts.
