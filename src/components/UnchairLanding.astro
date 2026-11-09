@@ -62,6 +62,44 @@ const copy = {
     ],
     demoKicker: "Le produit, pas le pitch",
     demoTitle: "sit → stand → move → verify",
+    faqKicker: "FAQ",
+    faqTitle: "Les questions normales avant de laisser une app te dire de te lever.",
+    faqIntro:
+      "Le cœur d’Unchair est volontairement simple : local-first, pas de compte obligatoire, et le moins de magie cachée possible.",
+    faqs: [
+      [
+        "Est-ce qu’Unchair enregistre ou envoie ma caméra ?",
+        "Non. Les frames caméra et les données Apple Vision utilisées pour vérifier le mouvement sont traitées en mémoire sur le Mac. Elles ne sont ni enregistrées ni uploadées.",
+      ],
+      [
+        "La caméra est-elle obligatoire ?",
+        "Non. Tu peux utiliser les rappels de pause sans activer la vérification visuelle. La caméra sert uniquement si tu veux qu’Unchair vérifie localement que tu t’es réellement levé et déplacé.",
+      ],
+      [
+        "Que se passe-t-il pendant une réunion ou une présentation ?",
+        "Unchair détecte des signaux forts de présentation ou d’appel et diffère les interruptions. La dette de mouvement n’est pas oubliée : elle revient lorsque le contexte redevient normal.",
+      ],
+      [
+        "Et si je verrouille mon Mac ou pars déjeuner ?",
+        "Les horloges de travail et de position assise se mettent en pause lorsque le Mac est verrouillé, endormi ou inactif assez longtemps. Revenir à son bureau ne transforme donc pas automatiquement le déjeuner en deux heures assis.",
+      ],
+      [
+        "Faut-il Home Assistant ou MQTT ?",
+        "Non. Home Assistant et MQTT sont entièrement optionnels. Le scheduling des pauses, la vérification caméra, le mode présentation et les statistiques locales continuent de fonctionner sans broker.",
+      ],
+      [
+        "Unchair a-t-il besoin d’Internet ou d’un compte ?",
+        "Pas pour la boucle principale. Le mode standalone ne nécessite ni compte cloud ni backend. Le réseau sert uniquement aux fonctions optionnelles comme MQTT, OpenMetrics et les mises à jour du canal direct.",
+      ],
+      [
+        "Combien coûte Unchair ?",
+        "Rien. Unchair est gratuit et open source sous licence MIT. Le code, les releases et le modèle de confidentialité sont publics sur GitHub.",
+      ],
+      [
+        "Quels Mac sont compatibles et comment arrivent les mises à jour ?",
+        "Unchair cible macOS 14 et versions suivantes. Les builds directs sont signés Developer ID, notarized et stapled ; les mises à jour intégrées utilisent Sparkle.",
+      ],
+    ],
     finalTitle: "Ton dos ne lit pas ton backlog.",
     finalBody:
       "Unchair est gratuit, open source et fonctionne sur macOS 14+. Installe-le avant une autre session de deux heures « juste pour finir ce truc ».",
@@ -123,6 +161,44 @@ const copy = {
     ],
     demoKicker: "The product, not the pitch",
     demoTitle: "sit → stand → move → verify",
+    faqKicker: "FAQ",
+    faqTitle: "The normal questions before letting an app tell you to stand up.",
+    faqIntro:
+      "Unchair keeps the core deliberately boring: local-first, no mandatory account, and as little hidden magic as possible.",
+    faqs: [
+      [
+        "Does Unchair record or upload my camera feed?",
+        "No. Camera frames and Apple Vision data used for movement verification are processed in memory on your Mac. They are not recorded or uploaded.",
+      ],
+      [
+        "Is the camera required?",
+        "No. Break reminders work without visual verification. Camera access is only needed if you want Unchair to verify locally that you actually stood up and moved.",
+      ],
+      [
+        "What happens during a meeting or presentation?",
+        "Unchair detects strong presentation or call signals and defers interruptions. The movement debt is not discarded; it returns when the context is normal again.",
+      ],
+      [
+        "What if I lock my Mac or go to lunch?",
+        "Work and sitting clocks pause while the Mac is locked, asleep, or idle for long enough. Coming back to your desk therefore does not automatically turn lunch into two hours of sitting.",
+      ],
+      [
+        "Do I need Home Assistant or MQTT?",
+        "No. Home Assistant and MQTT are entirely optional. Break scheduling, camera verification, presentation mode and local stats keep working without a broker.",
+      ],
+      [
+        "Does Unchair need the Internet or an account?",
+        "Not for the core loop. The standalone path needs no cloud account or backend. Networking is only used by optional features such as MQTT, OpenMetrics and direct-channel updates.",
+      ],
+      [
+        "How much does Unchair cost?",
+        "Nothing. Unchair is free and open source under the MIT license. The source, releases and privacy model are public on GitHub.",
+      ],
+      [
+        "Which Macs are supported and how do updates work?",
+        "Unchair targets macOS 14 and later. Direct builds are Developer ID signed, notarized and stapled, with in-app updates powered by Sparkle.",
+      ],
+    ],
     finalTitle: "Your back does not read your backlog.",
     finalBody:
       "Unchair is free, open source and runs on macOS 14+. Install it before another two-hour session of “I just need to finish this one thing”.",
@@ -235,6 +311,28 @@ const ha =
     <div class="flow" aria-label="Unchair movement verification flow">
       <code>desk time</code><span>→</span><code>break due</code><span>→</span><code>stand</code
       ><span>→</span><code>move</code><span>→</span><code>verified ✓</code>
+    </div>
+  </section>
+
+  <section class="faq section" id="faq">
+    <div class="faq__head">
+      <p class="kicker">{copy.faqKicker}</p>
+      <h2>{copy.faqTitle}</h2>
+      <p>{copy.faqIntro}</p>
+    </div>
+    <div class="faq__list">
+      {
+        copy.faqs.map(([question, answer], index) => (
+          <details class="faq__item">
+            <summary>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <strong>{question}</strong>
+              <i aria-hidden="true">+</i>
+            </summary>
+            <p>{answer}</p>
+          </details>
+        ))
+      }
     </div>
   </section>
 
@@ -422,6 +520,7 @@ const ha =
   .why h2,
   .engineering h2,
   .demo h2,
+  .faq h2,
   .final h2 {
     font-size: clamp(2.2rem, 4vw, 4rem);
     line-height: 1;
@@ -523,6 +622,59 @@ const ha =
   .flow span {
     color: var(--u-acid);
   }
+  .faq {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 5rem;
+    padding: 6rem 0;
+    border-top: 1px solid var(--u-line);
+  }
+  .faq__head > p:last-child {
+    max-width: 52ch;
+    color: var(--u-muted);
+    line-height: 1.7;
+  }
+  .faq__list {
+    border-top: 1px solid var(--u-line);
+  }
+  .faq__item {
+    border-bottom: 1px solid var(--u-line);
+  }
+  .faq__item summary {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.4rem 0;
+    cursor: pointer;
+    list-style: none;
+  }
+  .faq__item summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq__item summary span {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--u-cyan);
+  }
+  .faq__item summary strong {
+    font-size: 1.05rem;
+  }
+  .faq__item summary i {
+    color: var(--u-acid);
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    font-style: normal;
+  }
+  .faq__item[open] summary i {
+    transform: rotate(45deg);
+  }
+  .faq__item > p {
+    margin: 0 0 1.5rem 3.5rem;
+    max-width: 66ch;
+    color: var(--u-muted);
+    line-height: 1.7;
+  }
   .final {
     text-align: center;
     padding: 7rem 0 8rem;
@@ -554,7 +706,8 @@ const ha =
   @media (max-width: 860px) {
     .hero,
     .why,
-    .engineering {
+    .engineering,
+    .faq {
       grid-template-columns: 1fr;
       gap: 2.5rem;
     }
