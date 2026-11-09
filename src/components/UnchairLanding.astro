@@ -155,6 +155,7 @@ const copy = {
     finalTitle: "Ton dos ne lit pas ton backlog.",
     finalBody:
       "Unchair est gratuit, open source et fonctionne sur macOS 14+. Installe-le avant une autre session de deux heures « juste pour finir ce truc ».",
+    workplaceLink: "Santé au travail : pourquoi on finit par normaliser des journées entières assis — My Dare",
     footer: "Construit par Étienne Deneuve. Le bug est volontairement agaçant.",
   },
   en: {
@@ -306,6 +307,7 @@ const copy = {
     finalTitle: "Your back does not read your backlog.",
     finalBody:
       "Unchair is free, open source and runs on macOS 14+. Install it before another two-hour session of “I just need to finish this one thing”.",
+    workplaceLink: "Workplace wellbeing in practice — a French field note from My Dare",
     footer: "Built by Étienne Deneuve. The annoyance is a feature.",
   },
 }[lang];
@@ -510,6 +512,13 @@ const ha =
         >{copy.source}</a
       >
     </div>
+    <p class="workplace-note">
+      <a
+        href="https://www.my-dare.com/blog/sante-travail-sedentarite?utm_source=etienne_deneuve&utm_medium=website&utm_campaign=unchair&utm_content=mydare-workplace"
+        target="_blank"
+        rel="noopener noreferrer"
+      >{copy.workplaceLink} ↗</a>
+    </p>
     <small>{copy.footer}</small>
   </section>
 </main>
@@ -954,6 +963,15 @@ const ha =
   }
   .final .actions {
     justify-content: center;
+  }
+  .workplace-note {
+    margin-top: 2rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+  }
+  .workplace-note a {
+    color: var(--u-cyan);
+    text-decoration: none;
   }
   .final small {
     display: block;
