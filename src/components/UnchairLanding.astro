@@ -314,6 +314,7 @@ const copy = {
     finalTitle: "Your back does not read your backlog.",
     finalBody:
       "Unchair is free, open source and runs on macOS 14+. Install it before another two-hour session of “I just need to finish this one thing”.",
+    engineeringLink: "The engineering write-up at Omnivya",
     workplaceLink: "Workplace wellbeing in practice — a French field note from My Dare",
     footer: "Built by Étienne Deneuve. The annoyance is a feature.",
   },
@@ -520,6 +521,14 @@ const ha =
       >
     </div>
     <p class="workplace-note">
+      <a
+        href={lang === "fr"
+          ? "https://www.omnivya.fr/fr/open-source/unchair/?utm_source=etienne_deneuve&utm_medium=website&utm_campaign=unchair&utm_content=omnivya-engineering"
+          : "https://www.omnivya.fr/open-source/unchair/?utm_source=etienne_deneuve&utm_medium=website&utm_campaign=unchair&utm_content=omnivya-engineering"}
+        target="_blank"
+        rel="noopener noreferrer"
+      >{copy.engineeringLink} ↗</a>
+      <span aria-hidden="true"> · </span>
       <a
         href="https://www.my-dare.com/blog/sante-travail-sedentarite?utm_source=etienne_deneuve&utm_medium=website&utm_campaign=unchair&utm_content=mydare-workplace"
         target="_blank"
