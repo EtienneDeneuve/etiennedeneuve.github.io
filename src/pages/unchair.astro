@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import UnchairLanding from "../components/UnchairLanding.astro";
+import { buildJsonLdGraph, personJsonLd } from "../lib/json-ld.ts";
+
+const title = "Unchair — le rappel de pause macOS qui vérifie que tu bouges";
+const description = "Unchair est une app macOS open source et local-first qui détecte le passage assis-debout avec Apple Vision, protège les réunions et s’intègre à Home Assistant via MQTT.";
+const path = "/unchair/";
+const jsonLd = buildJsonLdGraph([
+  personJsonLd(),
+  {
+    "@type": "SoftwareApplication",
+    "@id": "https://etienne.deneuve.xyz/unchair/#software",
+    name: "Unchair",
+    url: "https://etienne.deneuve.xyz/unchair/",
+    description,
+    operatingSystem: "macOS 14+",
+    applicationCategory: "UtilitiesApplication",
+    softwareRequirements: "macOS 14 or later",
+    isAccessibleForFree: true,
+    license: "https://opensource.org/license/mit",
+    downloadUrl: "https://github.com/EtienneDeneuve/unchair/releases/latest",
+    sameAs: ["https://github.com/EtienneDeneuve/unchair"],
+    author: { "@id": "https://etienne.deneuve.xyz/#person" },
+    keywords: "macOS break reminder, sit stand reminder, Apple Vision, local-first, movement verification, developer ergonomics, Home Assistant, MQTT, OpenMetrics, Prometheus, OpenTelemetry"
+  },
+  {
+    "@type": "WebPage",
+    "@id": "https://etienne.deneuve.xyz/unchair/",
+    url: "https://etienne.deneuve.xyz/unchair/",
+    name: title,
+    description,
+    inLanguage: "fr",
+    about: { "@id": "https://etienne.deneuve.xyz/unchair/#software" }
+  }
+]);
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  lang="fr"
+  path={path}
+  alternates={[
+    { lang: "fr", href: "/unchair/" },
+    { lang: "en", href: "/en/unchair/" }
+  ]}
+  jsonLd={jsonLd}
+>
+  <UnchairLanding lang="fr" />
+</BaseLayout>
