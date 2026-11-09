@@ -37,6 +37,10 @@ const faq = [
     "Unchair est 100 % gratuit et open source sous licence MIT. Il n’y a ni abonnement, ni licence payante, ni compte obligatoire. Le code, les releases et le modèle de confidentialité sont publics sur GitHub.",
   ],
   [
+    "Comment installer Unchair ?",
+    "Le plus simple avec Homebrew : brew install --cask EtienneDeneuve/unchair/unchair. Sinon, le DMG signé et notarisé reste disponible directement sur GitHub.",
+  ],
+  [
     "Quels Mac sont compatibles et comment arrivent les mises à jour ?",
     "Unchair cible macOS 14 et versions suivantes. Les builds directs sont signés Developer ID, notarized et stapled ; les mises à jour intégrées utilisent Sparkle.",
   ],
@@ -66,7 +70,7 @@ const jsonLd = buildJsonLdGraph([
     sameAs: ["https://github.com/EtienneDeneuve/unchair"],
     author: { "@id": "https://etienne.deneuve.xyz/#etienne" },
     keywords:
-      "rappel pause macOS, rappel assis debout, Apple Vision, local-first, vérification du mouvement, ergonomie développeur, Home Assistant, MQTT, OpenMetrics, Prometheus, OpenTelemetry",
+      "rappel pause macOS, rappel assis debout, Apple Vision, local-first, vérification du mouvement, ergonomie développeur, Home Assistant, MQTT, Homebrew Cask, OpenMetrics, Prometheus, OpenTelemetry",
   },
   {
     "@type": "WebPage",
