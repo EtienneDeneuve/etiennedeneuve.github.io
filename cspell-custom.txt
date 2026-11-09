@@ -775,3 +775,4 @@ allowlist
 notarized
 stapled
 Sparkle
+unchair
