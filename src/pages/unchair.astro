@@ -1,96 +1,41 @@
 error: script "format:check" exited with code 1
----
-import BaseLayout from "../layouts/BaseLayout.astro";
-import UnchairLanding from "../components/UnchairLanding.astro";
-import { buildJsonLdGraph, personJsonLd } from "../lib/json-ld.ts";
-
-const title = "Unchair — le rappel de pause macOS qui vérifie que tu bouges";
-const description =
-  "Unchair est une app macOS open source et local-first qui détecte le passage assis-debout avec Apple Vision, protège les réunions et s’intègre à Home Assistant via MQTT.";
-const path = "/unchair/";
-const faq = [
-  [
-    "Est-ce qu’Unchair enregistre ou envoie ma caméra ?",
-    "Non. Les frames caméra et les données Apple Vision utilisées pour vérifier le mouvement sont traitées en mémoire sur le Mac. Elles ne sont ni enregistrées ni uploadées.",
-  ],
-  [
-    "La caméra est-elle obligatoire ?",
-    "Non. Tu peux utiliser les rappels de pause sans activer la vérification visuelle. La caméra sert uniquement si tu veux qu’Unchair vérifie localement que tu t’es réellement levé et déplacé.",
-  ],
-  [
-    "Que se passe-t-il pendant une réunion ou une présentation ?",
-    "Unchair détecte des signaux forts de présentation ou d’appel et diffère les interruptions. La dette de mouvement n’est pas oubliée : elle revient lorsque le contexte redevient normal.",
-  ],
-  [
-    "Et si je verrouille mon Mac ou pars déjeuner ?",
-    "Les horloges de travail et de position assise se mettent en pause lorsque le Mac est verrouillé, endormi ou inactif assez longtemps. Revenir à son bureau ne transforme donc pas automatiquement le déjeuner en deux heures assis.",
-  ],
-  [
-    "Faut-il Home Assistant ou MQTT ?",
-    "Non. Home Assistant et MQTT sont entièrement optionnels. Le scheduling des pauses, la vérification caméra, le mode présentation et les statistiques locales continuent de fonctionner sans broker.",
-  ],
-  [
-    "Unchair a-t-il besoin d’Internet ou d’un compte ?",
-    "Pas pour la boucle principale. Le mode standalone ne nécessite ni compte cloud ni backend. Le réseau sert uniquement aux fonctions optionnelles comme MQTT, OpenMetrics et les mises à jour du canal direct.",
-  ],
-  [
-    "Combien coûte Unchair ?",
-    "Unchair est 100 % gratuit et open source sous licence MIT. Il n’y a ni abonnement, ni licence payante, ni compte obligatoire. Le code, les releases et le modèle de confidentialité sont publics sur GitHub.",
-  ],
-  [
-    "Quels Mac sont compatibles et comment arrivent les mises à jour ?",
-    "Unchair cible macOS 14 et versions suivantes. Les builds directs sont signés Developer ID, notarized et stapled ; les mises à jour intégrées utilisent Sparkle.",
-  ],
-];
-
-const jsonLd = buildJsonLdGraph([
-  personJsonLd(),
-  {
-    "@type": "SoftwareApplication",
-    "@id": "https://etienne.deneuve.xyz/unchair/#software",
-    name: "Unchair",
-    url: "https://etienne.deneuve.xyz/unchair/",
-    description,
-    operatingSystem: "macOS 14+",
-    applicationCategory: "UtilitiesApplication",
-    softwareRequirements: "macOS 14 or later",
-    isAccessibleForFree: true,
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "EUR",
-      availability: "https://schema.org/InStock",
-    },
-    license: "https://opensource.org/license/mit",
-    downloadUrl: "https://github.com/EtienneDeneuve/unchair/releases/latest",
-    sameAs: ["https://github.com/EtienneDeneuve/unchair"],
-    author: { "@id": "https://etienne.deneuve.xyz/#etienne" },
-    keywords:
-      "macOS break reminder, sit stand reminder, Apple Vision, local-first, movement verification, developer ergonomics, Home Assistant, MQTT, OpenMetrics, Prometheus, OpenTelemetry",
-  },
-  {
-    "@type": "WebPage",
-    "@id": "https://etienne.deneuve.xyz/unchair/",
-    url: "https://etienne.deneuve.xyz/unchair/",
-    name: title,
-    description,
-    inLanguage: "fr",
-    about: { "@id": "https://etienne.deneuve.xyz/unchair/#software" },
-  },
-  {
-    "@type": "FAQPage",
-    "@id": "https://etienne.deneuve.xyz/unchair/#faq",
-    mainEntity: faq.map(([name, text]) => ({
-      "@type": "Question",
-      name,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text,
-      },
-    })),
-  },
-]);
----
+error: script "format:check"
+import BaseLayout from "../layouts/BaseLayout.astro"; import UnchairLanding from "../components/UnchairLanding.astro";
+import { buildJsonLdGraph, personJsonLd } from "../lib/json-ld.ts"; const title = "Unchair — le rappel
+de pause macOS qui vérifie que tu bouges"; const description = "Unchair est une app macOS open source
+et local-first qui détecte le passage assis-debout avec Apple Vision, protège les réunions et s’intègre
+à Home Assistant via MQTT."; const path = "/unchair/"; const faq = [ [ "Est-ce qu’Unchair enregistre ou
+envoie ma caméra ?", "Non. Les frames caméra et les données Apple Vision utilisées pour vérifier le mouvement
+sont traitées en mémoire sur le Mac. Elles ne sont ni enregistrées ni uploadées.", ], [ "La caméra est-elle
+obligatoire ?", "Non. Tu peux utiliser les rappels de pause sans activer la vérification visuelle. La
+caméra sert uniquement si tu veux qu’Unchair vérifie localement que tu t’es réellement levé et déplacé.",
+], [ "Que se passe-t-il pendant une réunion ou une présentation ?", "Unchair détecte des signaux forts
+de présentation ou d’appel et diffère les interruptions. La dette de mouvement n’est pas oubliée : elle
+revient lorsque le contexte redevient normal.", ], [ "Et si je verrouille mon Mac ou pars déjeuner ?",
+"Les horloges de travail et de position assise se mettent en pause lorsque le Mac est verrouillé, endormi
+ou inactif assez longtemps. Revenir à son bureau ne transforme donc pas automatiquement le déjeuner en
+deux heures assis.", ], [ "Faut-il Home Assistant ou MQTT ?", "Non. Home Assistant et MQTT sont entièrement
+optionnels. Le scheduling des pauses, la vérification caméra, le mode présentation et les statistiques
+locales continuent de fonctionner sans broker.", ], [ "Unchair a-t-il besoin d’Internet ou d’un compte
+?", "Pas pour la boucle principale. Le mode standalone ne nécessite ni compte cloud ni backend. Le réseau
+sert uniquement aux fonctions optionnelles comme MQTT, OpenMetrics et les mises à jour du canal direct.",
+], [ "Combien coûte Unchair ?", "Unchair est 100 % gratuit et open source sous licence MIT. Il n’y a ni
+abonnement, ni licence payante, ni compte obligatoire. Le code, les releases et le modèle de confidentialité
+sont publics sur GitHub.", ], [ "Quels Mac sont compatibles et comment arrivent les mises à jour ?", "Unchair
+cible macOS 14 et versions suivantes. Les builds directs sont signés Developer ID, notarized et stapled
+; les mises à jour intégrées utilisent Sparkle.", ], ]; const jsonLd = buildJsonLdGraph([ personJsonLd(),
+{ "@type": "SoftwareApplication", "@id": "https://etienne.deneuve.xyz/unchair/#software", name: "Unchair",
+url: "https://etienne.deneuve.xyz/unchair/", description, operatingSystem: "macOS 14+", applicationCategory:
+"UtilitiesApplication", softwareRequirements: "macOS 14 or later", isAccessibleForFree: true, offers:
+{ "@type": "Offer", price: "0", priceCurrency: "EUR", availability: "https://schema.org/InStock", }, license:
+"https://opensource.org/license/mit", downloadUrl: "https://github.com/EtienneDeneuve/unchair/releases/latest",
+sameAs: ["https://github.com/EtienneDeneuve/unchair"], author: { "@id": "https://etienne.deneuve.xyz/#etienne"
+}, keywords: "macOS break reminder, sit stand reminder, Apple Vision, local-first, movement verification,
+developer ergonomics, Home Assistant, MQTT, OpenMetrics, Prometheus, OpenTelemetry", }, { "@type": "WebPage",
+"@id": "https://etienne.deneuve.xyz/unchair/", url: "https://etienne.deneuve.xyz/unchair/", name: title,
+description, inLanguage: "fr", about: { "@id": "https://etienne.deneuve.xyz/unchair/#software" }, }, {
+"@type": "FAQPage", "@id": "https://etienne.deneuve.xyz/unchair/#faq", mainEntity: faq.map(([name, text])
+=> ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text, }, })), }, ]);
 
 <BaseLayout
   title={title}
