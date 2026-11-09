@@ -99,6 +99,14 @@ const jsonLd = buildJsonLdGraph([
         <div class="ed-section__head">
           <h2 id="featured-title">{labels.featured[lang]}</h2>
           <p>{config.meta.featuredIntro[lang]}</p>
+          <p>
+            <a class="ed-text-link" href={`${prefix}/unchair/`}>
+              {lang === "fr"
+                ? "Unchair — le rappel macOS qui vérifie que tu as vraiment bougé"
+                : "Unchair — the macOS break reminder that verifies you actually moved"}
+              <span aria-hidden="true"> ↗</span>
+            </a>
+          </p>
         </div>
         {
           projects.length > 0 ? (
