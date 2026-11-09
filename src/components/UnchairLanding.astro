@@ -16,26 +16,56 @@ const copy = {
     facts: ["macOS 14+", "Swift + SwiftUI", "Apple Vision", "MIT", "aucun compte cloud"],
     whyKicker: "Pourquoi je l’ai construit",
     whyTitle: "Parce que « rappelle-moi plus tard » ne fait pas bouger.",
-    whyBody: "Je passe mes journées devant un Mac, entre architecture, incidents, CI et agents qui travaillent. Les rappels classiques ont un défaut fatal : je peux les fermer sans bouger. Unchair conserve la dette de mouvement et, si tu l’autorises, vérifie localement le passage assis → debout avec Apple Vision.",
+    whyBody:
+      "Je passe mes journées devant un Mac, entre architecture, incidents, CI et agents qui travaillent. Les rappels classiques ont un défaut fatal : je peux les fermer sans bouger. Unchair conserve la dette de mouvement et, si tu l’autorises, vérifie localement le passage assis → debout avec Apple Vision.",
     cards: [
-      ["01", "Pas un timer avec un joli bouton.", "Un rappel peut être ignoré. Une notification peut être balayée. Unchair attend un mouvement réel avant de considérer la pause comme faite."],
-      ["02", "La caméra comme capteur éphémère.", "Frames, masques et landmarks restent en mémoire sur le Mac puis sont jetés. Aucun compte, aucune vidéo enregistrée, aucun upload."],
-      ["03", "Pénible, pas suicidaire en réunion.", "Le moteur diffère les interruptions lorsque le Mac est verrouillé, endormi, inactif ou qu’un signal fort de présentation/appel est détecté. La dette revient ensuite."],
-      ["04", "Home Assistant, parce qu’évidemment.", "MQTT Discovery expose l’état dérivé d’Unchair et une petite allowlist de commandes. Ta lampe peut passer à l’orange, puis au rouge, avant que tu reconsidères tes choix de vie."]
+      [
+        "01",
+        "Pas un timer avec un joli bouton.",
+        "Un rappel peut être ignoré. Une notification peut être balayée. Unchair attend un mouvement réel avant de considérer la pause comme faite.",
+      ],
+      [
+        "02",
+        "La caméra comme capteur éphémère.",
+        "Frames, masques et landmarks restent en mémoire sur le Mac puis sont jetés. Aucun compte, aucune vidéo enregistrée, aucun upload.",
+      ],
+      [
+        "03",
+        "Pénible, pas suicidaire en réunion.",
+        "Le moteur diffère les interruptions lorsque le Mac est verrouillé, endormi, inactif ou qu’un signal fort de présentation/appel est détecté. La dette revient ensuite.",
+      ],
+      [
+        "04",
+        "Home Assistant, parce qu’évidemment.",
+        "MQTT Discovery expose l’état dérivé d’Unchair et une petite allowlist de commandes. Ta lampe peut passer à l’orange, puis au rouge, avant que tu reconsidères tes choix de vie.",
+      ],
     ],
     underKicker: "Sous le capot",
     underTitle: "Petit produit. Vraies contraintes d’ingénierie.",
     engineering: [
-      ["State machine déterministe", "Pause due, report, présentation et validation du mouvement : les transitions sont explicites et testables."],
-      ["Local-first par défaut", "Le cœur fonctionne sans backend, sans Home Assistant et sans connexion réseau."],
-      ["Observabilité optionnelle", "OpenMetrics/Prometheus et tracing permettent d’observer le runtime humain sans imposer de service cloud."],
-      ["Release propre", "Builds Developer ID signés, notarized et stapled, DMG + ZIP, et Sparkle pour les mises à jour."]
+      [
+        "State machine déterministe",
+        "Pause due, report, présentation et validation du mouvement : les transitions sont explicites et testables.",
+      ],
+      [
+        "Local-first par défaut",
+        "Le cœur fonctionne sans backend, sans Home Assistant et sans connexion réseau.",
+      ],
+      [
+        "Observabilité optionnelle",
+        "OpenMetrics/Prometheus et tracing permettent d’observer le runtime humain sans imposer de service cloud.",
+      ],
+      [
+        "Release propre",
+        "Builds Developer ID signés, notarized et stapled, DMG + ZIP, et Sparkle pour les mises à jour.",
+      ],
     ],
     demoKicker: "Le produit, pas le pitch",
     demoTitle: "sit → stand → move → verify",
     finalTitle: "Ton dos ne lit pas ton backlog.",
-    finalBody: "Unchair est gratuit, open source et fonctionne sur macOS 14+. Installe-le avant une autre session de deux heures « juste pour finir ce truc ».",
-    footer: "Construit par Étienne Deneuve. Le bug est volontairement agaçant."
+    finalBody:
+      "Unchair est gratuit, open source et fonctionne sur macOS 14+. Installe-le avant une autre session de deux heures « juste pour finir ce truc ».",
+    footer: "Construit par Étienne Deneuve. Le bug est volontairement agaçant.",
   },
   en: {
     eyebrow: "UNCHAIR · macOS · OPEN SOURCE",
@@ -47,36 +77,69 @@ const copy = {
     facts: ["macOS 14+", "Swift + SwiftUI", "Apple Vision", "MIT", "no cloud account"],
     whyKicker: "Why I built it",
     whyTitle: "Because “remind me later” does not make you move.",
-    whyBody: "I spend my days in front of a Mac, somewhere between architecture, incidents, CI and agents doing their thing. Classic break reminders have one fatal flaw: I can dismiss them without moving. Unchair keeps the movement debt and, if you allow it, verifies sit → stand locally with Apple Vision.",
+    whyBody:
+      "I spend my days in front of a Mac, somewhere between architecture, incidents, CI and agents doing their thing. Classic break reminders have one fatal flaw: I can dismiss them without moving. Unchair keeps the movement debt and, if you allow it, verifies sit → stand locally with Apple Vision.",
     cards: [
-      ["01", "Not a timer with a nicer button.", "A reminder can be ignored. A notification can be swiped away. Unchair waits for real movement before it considers the break complete."],
-      ["02", "The camera is an ephemeral sensor.", "Frames, masks and landmarks stay in memory on the Mac, then disappear. No account, no recorded video, no upload."],
-      ["03", "Annoying, not career-limiting.", "The engine defers interruptions while the Mac is locked, asleep, idle, or strong presentation/call signals are present. The movement debt returns afterwards."],
-      ["04", "Home Assistant, because obviously.", "MQTT Discovery exposes derived Unchair state plus a narrow command allowlist. Your desk light can go orange, then red, before you reconsider your life choices."]
+      [
+        "01",
+        "Not a timer with a nicer button.",
+        "A reminder can be ignored. A notification can be swiped away. Unchair waits for real movement before it considers the break complete.",
+      ],
+      [
+        "02",
+        "The camera is an ephemeral sensor.",
+        "Frames, masks and landmarks stay in memory on the Mac, then disappear. No account, no recorded video, no upload.",
+      ],
+      [
+        "03",
+        "Annoying, not career-limiting.",
+        "The engine defers interruptions while the Mac is locked, asleep, idle, or strong presentation/call signals are present. The movement debt returns afterwards.",
+      ],
+      [
+        "04",
+        "Home Assistant, because obviously.",
+        "MQTT Discovery exposes derived Unchair state plus a narrow command allowlist. Your desk light can go orange, then red, before you reconsider your life choices.",
+      ],
     ],
     underKicker: "Under the hood",
     underTitle: "Small product. Real engineering constraints.",
     engineering: [
-      ["Deterministic state machine", "Due, postponed, presentation-deferred and movement-verified transitions stay explicit and testable."],
-      ["Local-first by default", "The core loop works without a backend, Home Assistant or a network connection."],
-      ["Optional observability", "OpenMetrics/Prometheus and tracing let you inspect the human runtime without requiring a cloud service."],
-      ["Proper release path", "Developer ID signed, notarized and stapled builds, DMG + ZIP, with Sparkle updates."]
+      [
+        "Deterministic state machine",
+        "Due, postponed, presentation-deferred and movement-verified transitions stay explicit and testable.",
+      ],
+      [
+        "Local-first by default",
+        "The core loop works without a backend, Home Assistant or a network connection.",
+      ],
+      [
+        "Optional observability",
+        "OpenMetrics/Prometheus and tracing let you inspect the human runtime without requiring a cloud service.",
+      ],
+      [
+        "Proper release path",
+        "Developer ID signed, notarized and stapled builds, DMG + ZIP, with Sparkle updates.",
+      ],
     ],
     demoKicker: "The product, not the pitch",
     demoTitle: "sit → stand → move → verify",
     finalTitle: "Your back does not read your backlog.",
-    finalBody: "Unchair is free, open source and runs on macOS 14+. Install it before another two-hour session of “I just need to finish this one thing”.",
-    footer: "Built by Étienne Deneuve. The annoyance is a feature."
-  }
+    finalBody:
+      "Unchair is free, open source and runs on macOS 14+. Install it before another two-hour session of “I just need to finish this one thing”.",
+    footer: "Built by Étienne Deneuve. The annoyance is a feature.",
+  },
 }[lang];
 
 const source = "etienne_deneuve";
 const repoBase = "https://github.com/EtienneDeneuve/unchair";
 const release = `${repoBase}/releases/latest?utm_source=${source}&utm_medium=website&utm_campaign=unchair&utm_content=download`;
 const repo = `${repoBase}?utm_source=${source}&utm_medium=website&utm_campaign=unchair&utm_content=source`;
-const tour = "https://raw.githubusercontent.com/EtienneDeneuve/unchair/main/docs/assets/unchair-tour.gif";
-const menu = "https://raw.githubusercontent.com/EtienneDeneuve/unchair/main/docs/assets/screenshots/01-menubar-menu.png";
-const ha = "https://raw.githubusercontent.com/EtienneDeneuve/unchair/main/docs/assets/screenshots/07-ha-device-controls.png";
+const tour =
+  "https://raw.githubusercontent.com/EtienneDeneuve/unchair/main/docs/assets/unchair-tour.gif";
+const menu =
+  "https://raw.githubusercontent.com/EtienneDeneuve/unchair/main/docs/assets/screenshots/01-menubar-menu.png";
+const ha =
+  "https://raw.githubusercontent.com/EtienneDeneuve/unchair/main/docs/assets/screenshots/07-ha-device-controls.png";
 ---
 
 <main class="unchair">
@@ -86,10 +149,22 @@ const ha = "https://raw.githubusercontent.com/EtienneDeneuve/unchair/main/docs/a
       <h1>{copy.title}<strong>{copy.accent}</strong></h1>
       <p class="lead">{copy.lead}</p>
       <div class="actions">
-        <a class="btn btn--primary" href={release} target="_blank" rel="noopener noreferrer" data-analytics-event="cta_unchair_download">
+        <a
+          class="btn btn--primary"
+          href={release}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-analytics-event="cta_unchair_download"
+        >
           {copy.download}<span aria-hidden="true">↗</span>
         </a>
-        <a class="btn btn--ghost" href={repo} target="_blank" rel="noopener noreferrer" data-analytics-event="cta_unchair_source">{copy.source}</a>
+        <a
+          class="btn btn--ghost"
+          href={repo}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-analytics-event="cta_unchair_source">{copy.source}</a
+        >
       </div>
       <ul class="facts" aria-label="Unchair product facts">
         {copy.facts.map((fact) => <li>{fact}</li>)}
@@ -97,9 +172,17 @@ const ha = "https://raw.githubusercontent.com/EtienneDeneuve/unchair/main/docs/a
     </div>
     <div class="hero__visual">
       <div class="window">
-        <div class="window__bar"><span></span><span></span><span></span><code>human-runtime.local</code></div>
-        <img src={tour} alt="Unchair macOS product tour showing break reminders and local movement verification" loading="eager" />
-        <div class="runtime"><span></span><code>movement_debt &gt; 0 → human_action_required</code></div>
+        <div class="window__bar">
+          <span></span><span></span><span></span><code>human-runtime.local</code>
+        </div>
+        <img
+          src={tour}
+          alt="Unchair macOS product tour showing break reminders and local movement verification"
+          loading="eager"
+        />
+        <div class="runtime">
+          <span></span><code>movement_debt &gt; 0 → human_action_required</code>
+        </div>
       </div>
     </div>
   </section>
@@ -110,15 +193,19 @@ const ha = "https://raw.githubusercontent.com/EtienneDeneuve/unchair/main/docs/a
   </section>
 
   <section class="cards section">
-    {copy.cards.map(([index, title, body], i) => (
-      <article class:list={["card", i === 0 || i === 3 ? "card--wide" : ""]}>
-        <p class="card__index">{index}</p>
-        <h3>{title}</h3>
-        <p>{body}</p>
-        {i === 2 && <img src={menu} alt="Unchair menu bar controls on macOS" loading="lazy" />}
-        {i === 3 && <img src={ha} alt="Unchair device controls in Home Assistant" loading="lazy" />}
-      </article>
-    ))}
+    {
+      copy.cards.map(([index, title, body], i) => (
+        <article class:list={["card", i === 0 || i === 3 ? "card--wide" : ""]}>
+          <p class="card__index">{index}</p>
+          <h3>{title}</h3>
+          <p>{body}</p>
+          {i === 2 && <img src={menu} alt="Unchair menu bar controls on macOS" loading="lazy" />}
+          {i === 3 && (
+            <img src={ha} alt="Unchair device controls in Home Assistant" loading="lazy" />
+          )}
+        </article>
+      ))
+    }
   </section>
 
   <section class="engineering section">
@@ -127,19 +214,27 @@ const ha = "https://raw.githubusercontent.com/EtienneDeneuve/unchair/main/docs/a
       <h2>{copy.underTitle}</h2>
     </div>
     <div class="engineering__list">
-      {copy.engineering.map(([title, body], index) => (
-        <article>
-          <span>{String(index + 1).padStart(2, "0")}</span>
-          <div><h3>{title}</h3><p>{body}</p></div>
-        </article>
-      ))}
+      {
+        copy.engineering.map(([title, body], index) => (
+          <article>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <div>
+              <>
+                <h3>{title}</h3>
+                <p>{body}</p>
+              </>
+            </div>
+          </article>
+        ))
+      }
     </div>
   </section>
 
   <section class="demo section">
     <div><p class="kicker">{copy.demoKicker}</p><h2>{copy.demoTitle}</h2></div>
     <div class="flow" aria-label="Unchair movement verification flow">
-      <code>desk time</code><span>→</span><code>break due</code><span>→</span><code>stand</code><span>→</span><code>move</code><span>→</span><code>verified ✓</code>
+      <code>desk time</code><span>→</span><code>break due</code><span>→</span><code>stand</code
+      ><span>→</span><code>move</code><span>→</span><code>verified ✓</code>
     </div>
   </section>
 
@@ -148,54 +243,338 @@ const ha = "https://raw.githubusercontent.com/EtienneDeneuve/unchair/main/docs/a
     <h2>{copy.finalTitle}</h2>
     <p>{copy.finalBody}</p>
     <div class="actions">
-      <a class="btn btn--primary" href={release} target="_blank" rel="noopener noreferrer" data-analytics-event="cta_unchair_download">
+      <a
+        class="btn btn--primary"
+        href={release}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-analytics-event="cta_unchair_download"
+      >
         {copy.download}<span aria-hidden="true">↗</span>
       </a>
-      <a class="btn btn--ghost" href={repo} target="_blank" rel="noopener noreferrer">{copy.source}</a>
+      <a class="btn btn--ghost" href={repo} target="_blank" rel="noopener noreferrer"
+        >{copy.source}</a
+      >
     </div>
     <small>{copy.footer}</small>
   </section>
 </main>
 
 <style>
-  .unchair{--u-bg:#101415;--u-panel:#171d1e;--u-panel2:#202728;--u-text:#f3f6ef;--u-muted:#a9b0aa;--u-line:rgba(255,255,255,.11);--u-acid:#c8ff4d;--u-cyan:#67e8f9;background:var(--u-bg);color:var(--u-text);min-height:100vh}
-  .section,.hero{width:min(1180px,calc(100% - 2rem));margin:0 auto}
-  .hero{display:grid;grid-template-columns:1.02fr .98fr;gap:4rem;align-items:center;padding:7rem 0 5rem}
-  .kicker{margin:0 0 1rem;font-family:var(--font-mono);font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--u-cyan)}
-  h1,h2,h3,p{margin-top:0}
-  h1{font-size:clamp(3rem,6vw,6rem);line-height:.92;letter-spacing:-.055em;max-width:11ch}
-  h1 strong{display:block;color:var(--u-acid);font-weight:600}
-  .lead{max-width:60ch;color:var(--u-muted);font-size:1.15rem;line-height:1.65}
-  .actions{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:2rem}
-  .btn{display:inline-flex;align-items:center;gap:.6rem;padding:.9rem 1.15rem;border:1px solid var(--u-line);border-radius:.5rem;text-decoration:none;font-weight:700;transition:transform .18s ease,border-color .18s ease}
-  .btn:hover{transform:translateY(-2px);border-color:var(--u-cyan)}
-  .btn--primary{background:var(--u-acid);color:#101415;border-color:var(--u-acid)}
-  .btn--ghost{color:var(--u-text);background:rgba(255,255,255,.03)}
-  .facts{display:flex;flex-wrap:wrap;gap:.55rem;padding:0;margin:1.5rem 0 0;list-style:none}
-  .facts li{font-family:var(--font-mono);font-size:.72rem;color:var(--u-muted);border:1px solid var(--u-line);border-radius:99px;padding:.35rem .65rem}
-  .window{overflow:hidden;border:1px solid var(--u-line);border-radius:1rem;background:#090c0d;box-shadow:0 35px 80px rgba(0,0,0,.35);transform:rotate(1deg)}
-  .window__bar{display:flex;align-items:center;gap:.4rem;padding:.7rem .8rem;border-bottom:1px solid var(--u-line)}
-  .window__bar span{width:.55rem;height:.55rem;border-radius:50%;background:#596061}.window__bar code{margin-left:auto;color:#7d8580;font-size:.68rem}
-  .window img{display:block;width:100%;height:auto}
-  .runtime{display:flex;align-items:center;gap:.65rem;padding:.75rem .9rem;color:var(--u-muted);font-size:.72rem;border-top:1px solid var(--u-line)}
-  .runtime span{width:.55rem;height:.55rem;border-radius:50%;background:var(--u-acid);box-shadow:0 0 0 .3rem rgba(200,255,77,.08)}
-  .why{display:grid;grid-template-columns:1fr 1fr;gap:4rem;padding:6rem 0;border-top:1px solid var(--u-line)}
-  .why h2,.engineering h2,.demo h2,.final h2{font-size:clamp(2.2rem,4vw,4rem);line-height:1;letter-spacing:-.04em}
-  .why>p{color:var(--u-muted);font-size:1.1rem;line-height:1.75}
-  .cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;padding-bottom:6rem}
-  .card{background:var(--u-panel);border:1px solid var(--u-line);border-radius:.8rem;padding:2rem;overflow:hidden}
-  .card--wide{grid-column:span 2;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center}
-  .card__index{font-family:var(--font-mono);color:var(--u-cyan);font-size:.75rem}.card h3{font-size:1.6rem;letter-spacing:-.025em}.card>p:last-of-type{color:var(--u-muted);line-height:1.7}
-  .card img{display:block;width:100%;max-height:330px;object-fit:contain;margin-top:1.5rem;border-radius:.55rem;border:1px solid var(--u-line);background:#0d1112}
-  .engineering{display:grid;grid-template-columns:.85fr 1.15fr;gap:5rem;padding:6rem 0;border-top:1px solid var(--u-line)}
-  .engineering__list article{display:grid;grid-template-columns:3rem 1fr;gap:1rem;padding:1.5rem 0;border-top:1px solid var(--u-line)}
-  .engineering__list article>span{font-family:var(--font-mono);font-size:.75rem;color:var(--u-cyan)}
-  .engineering__list h3{margin-bottom:.35rem}.engineering__list p{color:var(--u-muted);line-height:1.6;margin-bottom:0}
-  .demo{padding:6rem 0;border-top:1px solid var(--u-line)}
-  .flow{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem;margin-top:2rem;padding:1.3rem;border:1px solid var(--u-line);background:var(--u-panel);border-radius:.7rem}
-  .flow code{color:var(--u-text)}.flow span{color:var(--u-acid)}
-  .final{text-align:center;padding:7rem 0 8rem;border-top:1px solid var(--u-line)}
-  .final .kicker{justify-content:center}.final h2{max-width:13ch;margin-left:auto;margin-right:auto}.final>p{max-width:58ch;margin-left:auto;margin-right:auto;color:var(--u-muted);line-height:1.7}.final .actions{justify-content:center}.final small{display:block;margin-top:2rem;color:#7e8680}
-  @media(max-width:860px){.hero,.why,.engineering{grid-template-columns:1fr;gap:2.5rem}.hero{padding-top:4rem}.card--wide{grid-column:span 1;grid-template-columns:1fr}.cards{grid-template-columns:1fr}.window{transform:none}}
-  @media(prefers-reduced-motion:reduce){.btn{transition:none}}
+  .unchair {
+    --u-bg: #101415;
+    --u-panel: #171d1e;
+    --u-panel2: #202728;
+    --u-text: #f3f6ef;
+    --u-muted: #a9b0aa;
+    --u-line: rgba(255, 255, 255, 0.11);
+    --u-acid: #c8ff4d;
+    --u-cyan: #67e8f9;
+    background: var(--u-bg);
+    color: var(--u-text);
+    min-height: 100vh;
+  }
+  .section,
+  .hero {
+    width: min(1180px, calc(100% - 2rem));
+    margin: 0 auto;
+  }
+  .hero {
+    display: grid;
+    grid-template-columns: 1.02fr 0.98fr;
+    gap: 4rem;
+    align-items: center;
+    padding: 7rem 0 5rem;
+  }
+  .kicker {
+    margin: 0 0 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--u-cyan);
+  }
+  h1,
+  h2,
+  h3,
+  p {
+    margin-top: 0;
+  }
+  h1 {
+    font-size: clamp(3rem, 6vw, 6rem);
+    line-height: 0.92;
+    letter-spacing: -0.055em;
+    max-width: 11ch;
+  }
+  h1 strong {
+    display: block;
+    color: var(--u-acid);
+    font-weight: 600;
+  }
+  .lead {
+    max-width: 60ch;
+    color: var(--u-muted);
+    font-size: 1.15rem;
+    line-height: 1.65;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.9rem 1.15rem;
+    border: 1px solid var(--u-line);
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 700;
+    transition:
+      transform 0.18s ease,
+      border-color 0.18s ease;
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    border-color: var(--u-cyan);
+  }
+  .btn--primary {
+    background: var(--u-acid);
+    color: #101415;
+    border-color: var(--u-acid);
+  }
+  .btn--ghost {
+    color: var(--u-text);
+    background: rgba(255, 255, 255, 0.03);
+  }
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    padding: 0;
+    margin: 1.5rem 0 0;
+    list-style: none;
+  }
+  .facts li {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--u-muted);
+    border: 1px solid var(--u-line);
+    border-radius: 99px;
+    padding: 0.35rem 0.65rem;
+  }
+  .window {
+    overflow: hidden;
+    border: 1px solid var(--u-line);
+    border-radius: 1rem;
+    background: #090c0d;
+    box-shadow: 0 35px 80px rgba(0, 0, 0, 0.35);
+    transform: rotate(1deg);
+  }
+  .window__bar {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.7rem 0.8rem;
+    border-bottom: 1px solid var(--u-line);
+  }
+  .window__bar span {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: #596061;
+  }
+  .window__bar code {
+    margin-left: auto;
+    color: #7d8580;
+    font-size: 0.68rem;
+  }
+  .window img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .runtime {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.75rem 0.9rem;
+    color: var(--u-muted);
+    font-size: 0.72rem;
+    border-top: 1px solid var(--u-line);
+  }
+  .runtime span {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--u-acid);
+    box-shadow: 0 0 0 0.3rem rgba(200, 255, 77, 0.08);
+  }
+  .why {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    padding: 6rem 0;
+    border-top: 1px solid var(--u-line);
+  }
+  .why h2,
+  .engineering h2,
+  .demo h2,
+  .final h2 {
+    font-size: clamp(2.2rem, 4vw, 4rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+  .why > p {
+    color: var(--u-muted);
+    font-size: 1.1rem;
+    line-height: 1.75;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    padding-bottom: 6rem;
+  }
+  .card {
+    background: var(--u-panel);
+    border: 1px solid var(--u-line);
+    border-radius: 0.8rem;
+    padding: 2rem;
+    overflow: hidden;
+  }
+  .card--wide {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+  }
+  .card__index {
+    font-family: var(--font-mono);
+    color: var(--u-cyan);
+    font-size: 0.75rem;
+  }
+  .card h3 {
+    font-size: 1.6rem;
+    letter-spacing: -0.025em;
+  }
+  .card > p:last-of-type {
+    color: var(--u-muted);
+    line-height: 1.7;
+  }
+  .card img {
+    display: block;
+    width: 100%;
+    max-height: 330px;
+    object-fit: contain;
+    margin-top: 1.5rem;
+    border-radius: 0.55rem;
+    border: 1px solid var(--u-line);
+    background: #0d1112;
+  }
+  .engineering {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 5rem;
+    padding: 6rem 0;
+    border-top: 1px solid var(--u-line);
+  }
+  .engineering__list article {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 1rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--u-line);
+  }
+  .engineering__list article > span {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--u-cyan);
+  }
+  .engineering__list h3 {
+    margin-bottom: 0.35rem;
+  }
+  .engineering__list p {
+    color: var(--u-muted);
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+  .demo {
+    padding: 6rem 0;
+    border-top: 1px solid var(--u-line);
+  }
+  .flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    padding: 1.3rem;
+    border: 1px solid var(--u-line);
+    background: var(--u-panel);
+    border-radius: 0.7rem;
+  }
+  .flow code {
+    color: var(--u-text);
+  }
+  .flow span {
+    color: var(--u-acid);
+  }
+  .final {
+    text-align: center;
+    padding: 7rem 0 8rem;
+    border-top: 1px solid var(--u-line);
+  }
+  .final .kicker {
+    justify-content: center;
+  }
+  .final h2 {
+    max-width: 13ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .final > p {
+    max-width: 58ch;
+    margin-left: auto;
+    margin-right: auto;
+    color: var(--u-muted);
+    line-height: 1.7;
+  }
+  .final .actions {
+    justify-content: center;
+  }
+  .final small {
+    display: block;
+    margin-top: 2rem;
+    color: #7e8680;
+  }
+  @media (max-width: 860px) {
+    .hero,
+    .why,
+    .engineering {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    .hero {
+      padding-top: 4rem;
+    }
+    .card--wide {
+      grid-column: span 1;
+      grid-template-columns: 1fr;
+    }
+    .cards {
+      grid-template-columns: 1fr;
+    }
+    .window {
+      transform: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn {
+      transition: none;
+    }
+  }
 </style>
