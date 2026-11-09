@@ -62,6 +62,110 @@ const copy = {
     ],
     demoKicker: "Le produit, pas le pitch",
     demoTitle: "sit → stand → move → verify",
+    roadmapKicker: "Roadmap publique",
+    roadmapTitle: "Déjà utile aujourd’hui. Plus bizarre demain.",
+    roadmapIntro:
+      "Pas de dates marketing inventées : les issues GitHub sont la source de vérité. Ce qui est livré est fermé ; ce qui arrive reste ouvert et inspectable.",
+    roadmapGroups: [
+      {
+        label: "Disponible maintenant",
+        meta: "v0.1 → v0.3.4",
+        status: "shipped",
+        items: [
+          ["Breaks configurables + overlay difficile à ignorer", [2, 3]],
+          ["Apple Vision local : assis → debout + preuve de mouvement", [4, 5, 6]],
+          ["Protection réunions / présentations + mouvement différé", [13, 20]],
+          ["Historique local, stats Today, launch at login", [8, 9, 11]],
+          ["Home Assistant / MQTT optionnel", [15, 16, 17, 18, 19]],
+          ["OpenMetrics, OpenTelemetry, Grafana + CLI doctor", [22, 23, 24, 33]],
+        ],
+      },
+      {
+        label: "Ensuite",
+        meta: "issues ouvertes · sans date promise",
+        status: "next",
+        items: [
+          ["Installation Homebrew Cask first-class", [84]],
+          ["Résumé hebdomadaire Human Runtime privacy-safe", [85]],
+          ["Distribution et découvrabilité publique", [82, 83, 86, 91]],
+        ],
+      },
+      {
+        label: "Apple Enhanced",
+        meta: "v1.5",
+        status: "later",
+        items: [
+          ["Companion iOS + mouvement récent via HealthKit", [36, 37]],
+          ["App watchOS + preuve de mouvement live", [38, 39]],
+          ["Transport local authentifié et réconciliation wearable", [40, 41]],
+          ["Proximité Watch/iPhone + threat model étendu", [42, 43]],
+        ],
+      },
+      {
+        label: "Human Reliability Engineering",
+        meta: "v2.x · laboratoire",
+        status: "later",
+        items: [
+          ["Sitting SLO + Human Error Budget", [21]],
+          ["Standing desk et capteur de chaise optionnels", [26, 27]],
+          ["Boss Fight + achievements", [28, 29]],
+          ["Post-mortems automatiques + calendrier + multi-Mac", [30, 31, 32]],
+        ],
+      },
+    ],
+    roadmapLink: "Voir toute la roadmap sur GitHub",
+    roadmapKicker: "Public roadmap",
+    roadmapTitle: "Useful today. Weirder tomorrow.",
+    roadmapIntro:
+      "No invented marketing dates: GitHub issues are the source of truth. Shipped work is closed; upcoming work stays open and inspectable.",
+    roadmapGroups: [
+      {
+        label: "Available now",
+        meta: "v0.1 → v0.3.4",
+        status: "shipped",
+        items: [
+          ["Configurable breaks + hard-to-ignore overlay", [2, 3]],
+          ["Local Apple Vision: sit → stand + movement proof", [4, 5, 6]],
+          ["Meeting / presentation protection + movement debt", [13, 20]],
+          ["Local history, Today stats, launch at login", [8, 9, 11]],
+          ["Optional Home Assistant / MQTT", [15, 16, 17, 18, 19]],
+          ["OpenMetrics, OpenTelemetry, Grafana + CLI doctor", [22, 23, 24, 33]],
+        ],
+      },
+      {
+        label: "Next",
+        meta: "open issues · no promised date",
+        status: "next",
+        items: [
+          ["First-class Homebrew Cask install", [84]],
+          ["Privacy-safe Human Runtime weekly summary", [85]],
+          ["Public distribution and discoverability", [82, 83, 86, 91]],
+        ],
+      },
+      {
+        label: "Apple Enhanced",
+        meta: "v1.5",
+        status: "later",
+        items: [
+          ["iOS companion + recent movement from HealthKit", [36, 37]],
+          ["watchOS app + live movement evidence", [38, 39]],
+          ["Authenticated local transport + wearable reconciliation", [40, 41]],
+          ["Watch/iPhone proximity research + extended threat model", [42, 43]],
+        ],
+      },
+      {
+        label: "Human Reliability Engineering",
+        meta: "v2.x · lab",
+        status: "later",
+        items: [
+          ["Sitting SLO + Human Error Budget", [21]],
+          ["Optional standing desk and chair sensor", [26, 27]],
+          ["Boss Fight + achievements", [28, 29]],
+          ["Automatic post-mortems + calendar + multi-Mac", [30, 31, 32]],
+        ],
+      },
+    ],
+    roadmapLink: "See the full roadmap on GitHub",
     faqKicker: "FAQ",
     faqTitle: "Les questions normales avant de laisser une app te dire de te lever.",
     faqIntro:
@@ -311,6 +415,58 @@ const ha =
     <div class="flow" aria-label="Unchair movement verification flow">
       <code>desk time</code><span>→</span><code>break due</code><span>→</span><code>stand</code
       ><span>→</span><code>move</code><span>→</span><code>verified ✓</code>
+    </div>
+  </section>
+
+  <section class="roadmap section" id="roadmap">
+    <div class="roadmap__head">
+      <p class="kicker">{copy.roadmapKicker}</p>
+      <h2>{copy.roadmapTitle}</h2>
+      <p>{copy.roadmapIntro}</p>
+      <a
+        class="roadmap__link"
+        href={`${repoBase}/blob/main/ROADMAP.md?utm_source=${source}&utm_medium=website&utm_campaign=unchair&utm_content=roadmap`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {copy.roadmapLink}<span aria-hidden="true"> ↗</span>
+      </a>
+    </div>
+    <div class="roadmap__groups">
+      {
+        copy.roadmapGroups.map((group) => (
+          <article class:list={["roadmap__group", `roadmap__group--${group.status}`]}>
+            <div class="roadmap__group-head">
+              <div>
+                <p>{group.label}</p>
+                <span>{group.meta}</span>
+              </div>
+              <i aria-hidden="true"></i>
+            </div>
+            <ul>
+              {group.items.map(([label, issues]) => (
+                <li>
+                  <span>{label}</span>
+                  <small>
+                    {issues.map((issue, index) => (
+                      <>
+                        {index > 0 && " · "}
+                        <a
+                          href={`${repoBase}/issues/${issue}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          #{issue}
+                        </a>
+                      </>
+                    ))}
+                  </small>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
     </div>
   </section>
 
@@ -622,6 +778,107 @@ const ha =
   .flow span {
     color: var(--u-acid);
   }
+  .roadmap {
+    padding: 6rem 0;
+    border-top: 1px solid var(--u-line);
+  }
+  .roadmap__head {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 5rem;
+    align-items: end;
+    margin-bottom: 2.5rem;
+  }
+  .roadmap__head .kicker {
+    grid-column: 1 / -1;
+    margin-bottom: 0;
+  }
+  .roadmap__head h2 {
+    margin-bottom: 0;
+    font-size: clamp(2.2rem, 4vw, 4rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+  .roadmap__head > p {
+    margin-bottom: 0;
+    color: var(--u-muted);
+    line-height: 1.7;
+  }
+  .roadmap__link {
+    grid-column: 2;
+    color: var(--u-cyan);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-decoration: none;
+  }
+  .roadmap__groups {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .roadmap__group {
+    padding: 1.6rem;
+    border: 1px solid var(--u-line);
+    border-radius: 0.8rem;
+    background: var(--u-panel);
+  }
+  .roadmap__group-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--u-line);
+  }
+  .roadmap__group-head p {
+    margin-bottom: 0.25rem;
+    font-weight: 700;
+  }
+  .roadmap__group-head span {
+    color: var(--u-muted);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+  }
+  .roadmap__group-head i {
+    width: 0.65rem;
+    height: 0.65rem;
+    margin-top: 0.25rem;
+    border-radius: 50%;
+    background: var(--u-muted);
+  }
+  .roadmap__group--shipped .roadmap__group-head i {
+    background: var(--u-acid);
+    box-shadow: 0 0 0 0.3rem rgba(200, 255, 77, 0.08);
+  }
+  .roadmap__group--next .roadmap__group-head i {
+    background: var(--u-cyan);
+    box-shadow: 0 0 0 0.3rem rgba(103, 232, 249, 0.08);
+  }
+  .roadmap__group ul {
+    display: grid;
+    gap: 0.9rem;
+    margin: 1.2rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .roadmap__group li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: var(--u-muted);
+    line-height: 1.45;
+  }
+  .roadmap__group li > span {
+    color: var(--u-text);
+  }
+  .roadmap__group small {
+    flex: 0 0 auto;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+  }
+  .roadmap__group small a {
+    color: var(--u-cyan);
+    text-decoration: none;
+  }
   .faq {
     display: grid;
     grid-template-columns: 0.8fr 1.2fr;
@@ -707,7 +964,8 @@ const ha =
     .hero,
     .why,
     .engineering,
-    .faq {
+    .faq,
+    .roadmap__head {
       grid-template-columns: 1fr;
       gap: 2.5rem;
     }
@@ -718,8 +976,13 @@ const ha =
       grid-column: span 1;
       grid-template-columns: 1fr;
     }
-    .cards {
+    .cards,
+    .roadmap__groups {
       grid-template-columns: 1fr;
+    }
+    .roadmap__head .kicker,
+    .roadmap__link {
+      grid-column: auto;
     }
     .window {
       transform: none;
