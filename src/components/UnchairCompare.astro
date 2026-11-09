@@ -1,0 +1,431 @@
+---
+interface Props {
+  lang: "fr" | "en";
+}
+
+const { lang } = Astro.props;
+
+const copy = {
+  fr: {
+    eyebrow: "UNCHAIR · COMPARATIF",
+    title: "Unchair vs Stretchly vs Time Out",
+    lead: "Trois façons assez différentes de résoudre le même problème : arrêter de rester assis devant un écran pendant des heures.",
+    disclosure:
+      "Disclosure : je construis Unchair. Ce comparatif est donc assumé comme first-party. Les faits sur Stretchly et Time Out viennent de leurs pages officielles, vérifiées le 9 novembre 2026.",
+    chooseTitle: "Le raccourci utile",
+    choose: [
+      [
+        "Tu veux du cross-platform",
+        "Regarde Stretchly : macOS, Windows et Linux, avec une longue histoire de break reminders configurables.",
+      ],
+      [
+        "Tu veux énormément personnaliser les pauses sur Mac",
+        "Time Out est le plus orienté scheduling, thèmes et règles avancées.",
+      ],
+      [
+        "Tu veux que le Mac vérifie que tu t’es réellement levé",
+        "C’est précisément le problème qu’Unchair essaie de résoudre avec Apple Vision, localement.",
+      ],
+    ],
+    tableTitle: "Comparaison factuelle",
+    rows: [
+      ["Plateformes", "macOS 14+", "macOS 13+, Windows, Linux", "macOS 26+"],
+      [
+        "Modèle de pause",
+        "Breaks configurables + dette de mouvement",
+        "Mini breaks + long breaks configurables",
+        "Breaks et schedules très configurables",
+      ],
+      [
+        "Vérifie que tu as bougé",
+        "Oui — sit → stand + mouvement via Apple Vision, sur le Mac",
+        "Pas de vérification corporelle documentée",
+        "Pas de vérification corporelle documentée",
+      ],
+      [
+        "Réunions / contexte",
+        "Presentation guard + lock/sleep/idle",
+        "Idle, Do Not Disturb et exclusions d’apps",
+        "Rules, fullscreen et détection de réunion configurable",
+      ],
+      ["Open source", "Oui — MIT", "Oui — BSD-2-Clause", "Non"],
+      [
+        "Prix",
+        "Gratuit",
+        "Gratuit / open source",
+        "Utilisable gratuitement + options Premium / Supporter / Lifetime",
+      ],
+      [
+        "Home Assistant",
+        "MQTT Discovery natif et commandes limitées",
+        "Pas d’intégration native documentée",
+        "Pas d’intégration native documentée",
+      ],
+      [
+        "Observabilité",
+        "OpenMetrics / Prometheus + OpenTelemetry optionnels",
+        "Pas positionné comme fonction produit",
+        "Pas positionné comme fonction produit",
+      ],
+      [
+        "Distribution macOS",
+        "DMG Developer ID signé, notarized, stapled + Sparkle",
+        "Homebrew recommandé ; app ad-hoc signée",
+        "Distribution macOS native par Dejal",
+      ],
+    ],
+    nuanceTitle: "Ce que les tableaux cachent",
+    nuance: [
+      [
+        "Stretchly",
+        "C’est le choix logique si ton critère principal est le cross-platform. Le projet est mature, très configurable et fonctionne sur les trois OS desktop majeurs. Sur Mac, son installation demande toutefois plus de tolérance vis-à-vis de Gatekeeper car l’app n’est pas Developer ID signée.",
+      ],
+      [
+        "Time Out",
+        "C’est un vrai produit Mac historique, très poussé sur les types de pauses, les thèmes, les règles et la personnalisation. Sa branche actuelle cible les versions récentes de macOS et certaines fonctions avancées sont liées aux offres Premium/Supporter.",
+      ],
+      [
+        "Unchair",
+        "Il est beaucoup plus jeune et Mac-only. Son angle n’est pas d’avoir le plus de thèmes ou de fonctionner partout : il conserve la dette de mouvement et peut utiliser la caméra comme capteur éphémère pour vérifier localement que tu t’es levé et déplacé.",
+      ],
+    ],
+    sourcesTitle: "Sources utilisées",
+    sourcesIntro:
+      "Pour éviter le comparatif marketing inventé, les informations ci-dessus renvoient aux sources produit officielles.",
+    back: "Retour à Unchair",
+    download: "Télécharger le DMG",
+    github: "Code source Unchair",
+  },
+  en: {
+    eyebrow: "UNCHAIR · COMPARISON",
+    title: "Unchair vs Stretchly vs Time Out",
+    lead: "Three quite different ways to solve the same problem: stop spending hours sitting in front of a screen.",
+    disclosure:
+      "Disclosure: I build Unchair, so this is intentionally a first-party comparison. Stretchly and Time Out facts come from their official pages, checked on November 9, 2026.",
+    chooseTitle: "The useful shortcut",
+    choose: [
+      [
+        "You need cross-platform",
+        "Look at Stretchly: macOS, Windows and Linux, with a long history of configurable break reminders.",
+      ],
+      [
+        "You want deep break customization on Mac",
+        "Time Out is the most focused on scheduling, themes and advanced rules.",
+      ],
+      [
+        "You want the Mac to verify that you actually stood up",
+        "That is the specific problem Unchair tackles with on-device Apple Vision.",
+      ],
+    ],
+    tableTitle: "Factual comparison",
+    rows: [
+      ["Platforms", "macOS 14+", "macOS 13+, Windows, Linux", "macOS 26+"],
+      [
+        "Break model",
+        "Configurable breaks + movement debt",
+        "Configurable mini breaks + long breaks",
+        "Highly configurable breaks and schedules",
+      ],
+      [
+        "Verifies that you moved",
+        "Yes — sit → stand + movement via Apple Vision on the Mac",
+        "No documented body-movement verification",
+        "No documented body-movement verification",
+      ],
+      [
+        "Meetings / context",
+        "Presentation guard + lock/sleep/idle",
+        "Idle, Do Not Disturb and app exclusions",
+        "Rules, fullscreen and configurable meeting detection",
+      ],
+      ["Open source", "Yes — MIT", "Yes — BSD-2-Clause", "No"],
+      [
+        "Price",
+        "Free",
+        "Free / open source",
+        "Free to use + Premium / Supporter / Lifetime options",
+      ],
+      [
+        "Home Assistant",
+        "Native MQTT Discovery + constrained commands",
+        "No native integration documented",
+        "No native integration documented",
+      ],
+      [
+        "Observability",
+        "Optional OpenMetrics / Prometheus + OpenTelemetry",
+        "Not positioned as a product feature",
+        "Not positioned as a product feature",
+      ],
+      [
+        "macOS distribution",
+        "Developer ID signed, notarized and stapled DMG + Sparkle",
+        "Homebrew recommended; app is ad-hoc signed",
+        "Native macOS distribution by Dejal",
+      ],
+    ],
+    nuanceTitle: "What the table hides",
+    nuance: [
+      [
+        "Stretchly",
+        "The obvious fit if cross-platform is the main requirement. It is mature, highly configurable and supports all three major desktop operating systems. On macOS, installation requires more tolerance around Gatekeeper because the app is not Developer ID signed.",
+      ],
+      [
+        "Time Out",
+        "A long-running native Mac product with deep control over break types, themes, rules and scheduling. Its current branch targets recent macOS releases and some advanced features are tied to Premium/Supporter options.",
+      ],
+      [
+        "Unchair",
+        "Much younger and Mac-only. Its angle is not having the most themes or running everywhere: it preserves movement debt and can use the camera as an ephemeral sensor to verify locally that you stood up and moved.",
+      ],
+    ],
+    sourcesTitle: "Sources",
+    sourcesIntro:
+      "To keep this from becoming a made-up marketing comparison, the claims above link to official product sources.",
+    back: "Back to Unchair",
+    download: "Download the DMG",
+    github: "Unchair source",
+  },
+}[lang];
+
+const base = lang === "fr" ? "/unchair/" : "/en/unchair/";
+const download =
+  "https://github.com/EtienneDeneuve/unchair/releases/latest/download/Unchair-latest-macos.dmg?utm_source=etienne_deneuve&utm_medium=website&utm_campaign=unchair&utm_content=comparison-download";
+const repo =
+  "https://github.com/EtienneDeneuve/unchair?utm_source=etienne_deneuve&utm_medium=website&utm_campaign=unchair&utm_content=comparison-source";
+---
+
+<main class="compare">
+  <section class="hero">
+    <p class="kicker">{copy.eyebrow}</p>
+    <h1>{copy.title}</h1>
+    <p class="lead">{copy.lead}</p>
+    <p class="disclosure">{copy.disclosure}</p>
+    <div class="actions">
+      <a class="btn btn--primary" href={download}>{copy.download}</a>
+      <a class="btn" href={base}>{copy.back}</a>
+      <a class="btn" href={repo} target="_blank" rel="noopener noreferrer">{copy.github}</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>{copy.chooseTitle}</h2>
+    <div class="choice-grid">
+      {
+        copy.choose.map(([title, body]) => (
+          <article>
+            <h3>{title}</h3>
+            <p>{body}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>{copy.tableTitle}</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>{lang === "fr" ? "Critère" : "Criterion"}</th>
+            <th>Unchair</th>
+            <th>Stretchly</th>
+            <th>Time Out</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            copy.rows.map(([criterion, unchair, stretchly, timeout]) => (
+              <tr>
+                <th>{criterion}</th>
+                <td>{unchair}</td>
+                <td>{stretchly}</td>
+                <td>{timeout}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>{copy.nuanceTitle}</h2>
+    <div class="nuance-grid">
+      {
+        copy.nuance.map(([title, body]) => (
+          <article>
+            <h3>{title}</h3>
+            <p>{body}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section sources">
+    <h2>{copy.sourcesTitle}</h2>
+    <p>{copy.sourcesIntro}</p>
+    <ul>
+      <li>
+        <a
+          href="https://github.com/EtienneDeneuve/unchair"
+          target="_blank"
+          rel="noopener noreferrer">Unchair — GitHub / README / privacy / releases</a
+        >
+      </li>
+      <li>
+        <a href="https://github.com/hovancik/stretchly" target="_blank" rel="noopener noreferrer"
+          >Stretchly — official GitHub repository</a
+        >
+      </li>
+      <li>
+        <a href="https://www.dejal.com/timeout/" target="_blank" rel="noopener noreferrer"
+          >Time Out — official product page</a
+        >
+      </li>
+      <li>
+        <a
+          href="https://www.dejal.com/blog/time-out-4-0-released/"
+          target="_blank"
+          rel="noopener noreferrer">Time Out 4.0 — official release notes</a
+        >
+      </li>
+    </ul>
+  </section>
+</main>
+
+<style>
+  .compare {
+    --line: color-mix(in srgb, currentColor 16%, transparent);
+    width: min(1120px, calc(100% - 2rem));
+    margin: 0 auto;
+    padding: 5rem 0 8rem;
+  }
+  .hero {
+    max-width: 900px;
+    padding-bottom: 5rem;
+  }
+  .kicker {
+    margin: 0 0 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+  }
+  h1 {
+    max-width: 12ch;
+    margin: 0;
+    font-size: clamp(3rem, 8vw, 6.6rem);
+    line-height: 0.92;
+    letter-spacing: -0.055em;
+  }
+  .lead {
+    max-width: 65ch;
+    margin-top: 2rem;
+    font-size: 1.25rem;
+    line-height: 1.7;
+  }
+  .disclosure {
+    max-width: 74ch;
+    margin-top: 1.5rem;
+    padding-left: 1rem;
+    border-left: 3px solid currentColor;
+    opacity: 0.75;
+    line-height: 1.6;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+  .btn {
+    display: inline-flex;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 0.6rem;
+    text-decoration: none;
+  }
+  .btn--primary {
+    color: #fff;
+    background: #111;
+  }
+  .section {
+    padding: 4rem 0;
+    border-top: 1px solid var(--line);
+  }
+  .section h2 {
+    margin: 0 0 2rem;
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    letter-spacing: -0.035em;
+  }
+  .choice-grid,
+  .nuance-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  article {
+    padding: 1.4rem;
+    border: 1px solid var(--line);
+    border-radius: 0.8rem;
+  }
+  article h3 {
+    margin-top: 0;
+    font-size: 1.15rem;
+  }
+  article p {
+    margin-bottom: 0;
+    line-height: 1.65;
+    opacity: 0.8;
+  }
+  .table-wrap {
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    min-width: 820px;
+    border-collapse: collapse;
+  }
+  th,
+  td {
+    padding: 1rem;
+    border-top: 1px solid var(--line);
+    text-align: left;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  thead th {
+    border-top: 0;
+    font-size: 1.05rem;
+  }
+  tbody th {
+    width: 18%;
+  }
+  tbody td {
+    width: 27%;
+    opacity: 0.82;
+  }
+  .sources > p {
+    max-width: 70ch;
+    line-height: 1.65;
+  }
+  .sources ul {
+    display: grid;
+    gap: 0.75rem;
+    padding-left: 1.2rem;
+  }
+  .sources a {
+    text-underline-offset: 0.2em;
+  }
+  @media (max-width: 800px) {
+    .compare {
+      padding-top: 3rem;
+    }
+    .choice-grid,
+    .nuance-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

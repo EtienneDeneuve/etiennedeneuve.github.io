@@ -68,6 +68,11 @@ const copy = {
     ],
     demoKicker: "Le produit, pas le pitch",
     demoTitle: "sit → stand → move → verify",
+    compareKicker: "Tu compares encore ?",
+    compareTitle: "Unchair vs Stretchly vs Time Out",
+    compareBody:
+      "J’ai mis les trois côte à côte sans faux classement : plateformes, vérification du mouvement, réunions, open source, prix et intégrations.",
+    compareLink: "Voir le comparatif factuel",
     roadmapKicker: "Roadmap publique",
     roadmapTitle: "Déjà utile aujourd’hui. Plus bizarre demain.",
     roadmapIntro:
@@ -221,6 +226,11 @@ const copy = {
     ],
     demoKicker: "The product, not the pitch",
     demoTitle: "sit → stand → move → verify",
+    compareKicker: "Still comparing?",
+    compareTitle: "Unchair vs Stretchly vs Time Out",
+    compareBody:
+      "I put all three side by side without a fake winner: platforms, movement verification, meetings, open source, pricing and integrations.",
+    compareLink: "Read the factual comparison",
     roadmapKicker: "Public roadmap",
     roadmapTitle: "Useful today. Weirder tomorrow.",
     roadmapIntro:
@@ -427,6 +437,15 @@ const ha =
       <code>desk time</code><span>→</span><code>break due</code><span>→</span><code>stand</code
       ><span>→</span><code>move</code><span>→</span><code>verified ✓</code>
     </div>
+  </section>
+
+  <section class="compare-callout section">
+    <p class="kicker">{copy.compareKicker}</p>
+    <h2>{copy.compareTitle}</h2>
+    <p>{copy.compareBody}</p>
+    <a class="btn btn--ghost" href={lang === "fr" ? "/unchair/compare/" : "/en/unchair/compare/"}>
+      {copy.compareLink}
+    </a>
   </section>
 
   <section class="roadmap section" id="roadmap">
@@ -803,6 +822,17 @@ const ha =
   }
   .flow span {
     color: var(--u-acid);
+  }
+  .compare-callout {
+    max-width: 760px;
+  }
+  .compare-callout > p:not(.kicker) {
+    max-width: 62ch;
+    color: var(--u-muted);
+    line-height: 1.7;
+  }
+  .compare-callout .btn {
+    margin-top: 1rem;
   }
   .roadmap {
     padding: 6rem 0;

@@ -1,0 +1,41 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import UnchairCompare from "../../../components/UnchairCompare.astro";
+import { buildJsonLdGraph, personJsonLd } from "../../../lib/json-ld.ts";
+
+const title = "Unchair vs Stretchly vs Time Out — macOS break reminder comparison";
+const description =
+  "A factual comparison of Unchair, Stretchly and Time Out across platforms, movement verification, privacy, meetings, pricing, open source and integrations.";
+const path = "/en/unchair/compare/";
+
+const jsonLd = buildJsonLdGraph([
+  personJsonLd(),
+  {
+    "@type": "WebPage",
+    "@id": "https://etienne.deneuve.xyz/en/unchair/compare/",
+    url: "https://etienne.deneuve.xyz/en/unchair/compare/",
+    name: title,
+    description,
+    inLanguage: "en",
+    about: [
+      { "@type": "SoftwareApplication", name: "Unchair" },
+      { "@type": "SoftwareApplication", name: "Stretchly" },
+      { "@type": "SoftwareApplication", name: "Time Out" },
+    ],
+  },
+]);
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  lang="en"
+  path={path}
+  alternates={[
+    { lang: "fr", href: "/unchair/compare/" },
+    { lang: "en", href: "/en/unchair/compare/" },
+  ]}
+  jsonLd={jsonLd}
+>
+  <UnchairCompare lang="en" />
+</BaseLayout>

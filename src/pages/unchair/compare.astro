@@ -1,0 +1,41 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import UnchairCompare from "../../components/UnchairCompare.astro";
+import { buildJsonLdGraph, personJsonLd } from "../../lib/json-ld.ts";
+
+const title = "Unchair vs Stretchly vs Time Out — quel rappel de pause choisir ?";
+const description =
+  "Comparatif factuel entre Unchair, Stretchly et Time Out : plateformes, vérification du mouvement, confidentialité, réunions, prix, open source et intégrations.";
+const path = "/unchair/compare/";
+
+const jsonLd = buildJsonLdGraph([
+  personJsonLd(),
+  {
+    "@type": "WebPage",
+    "@id": "https://etienne.deneuve.xyz/unchair/compare/",
+    url: "https://etienne.deneuve.xyz/unchair/compare/",
+    name: title,
+    description,
+    inLanguage: "fr",
+    about: [
+      { "@type": "SoftwareApplication", name: "Unchair" },
+      { "@type": "SoftwareApplication", name: "Stretchly" },
+      { "@type": "SoftwareApplication", name: "Time Out" },
+    ],
+  },
+]);
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  lang="fr"
+  path={path}
+  alternates={[
+    { lang: "fr", href: "/unchair/compare/" },
+    { lang: "en", href: "/en/unchair/compare/" },
+  ]}
+  jsonLd={jsonLd}
+>
+  <UnchairCompare lang="fr" />
+</BaseLayout>
