@@ -37,6 +37,7 @@ const otherRepos = getSortedGitHubProjects(lang).filter(
 );
 const activeRepos = otherRepos.filter((repo) => repo.category !== "historical");
 const historicalRepos = otherRepos.filter((repo) => repo.category === "historical");
+const historicalLabel = lang === "fr" ? "Références historiques" : "Historical references";
 
 const jsonLd = buildJsonLdGraph([
   personJsonLd(),
@@ -180,8 +181,7 @@ const jsonLd = buildJsonLdGraph([
           historicalRepos.length > 0 && (
             <details class="ed-contrib">
               <summary>
-                {lang === "fr" ? "Références historiques" : "Historical references"} (
-                {historicalRepos.length})
+                {historicalLabel} ({historicalRepos.length})
               </summary>
               <ul class="ed-contrib__list">
                 {historicalRepos.map((repo) => (
