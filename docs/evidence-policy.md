@@ -118,6 +118,42 @@ Il répond principalement à : **« qu’est-ce qu’une autre organisation peut
 
 ---
 
+## Règle de confidentialité produit
+
+Les produits, projets et initiatives privés (par exemple produits internes, stealth ou clients) **ne sont pas des sujets éditoriaux directs**.
+
+On peut utiliser leur existence comme source interne de compétence, mais le contenu public doit rester à un niveau d’abstraction qui ne permet pas de reconstituer le produit, sa roadmap, son moat, ses workflows distinctifs ou son architecture propriétaire.
+
+### Ce qui peut être publié
+
+- un problème générique rencontré ;
+- un pattern d’architecture déjà largement applicable ailleurs ;
+- une méthode de décision ;
+- un compromis technique générique ;
+- un KPI anonymisé et non attribuable, si sa publication est autorisée ;
+- une leçon d’exploitation ou de gouvernance ;
+- une référence à une technologie publique déjà connue.
+
+### Ce qui ne doit pas être publié
+
+- le nom du produit privé ou stealth ;
+- sa proposition de valeur détaillée ;
+- sa roadmap ;
+- ses workflows métier distinctifs ;
+- son modèle de données propriétaire ;
+- ses algorithmes / heuristiques / corrélations spécifiques ;
+- ses intégrations différenciantes ;
+- son architecture suffisamment précise pour reproduire le produit ;
+- des données permettant d’inférer un client ou un projet confidentiel.
+
+### Test éditorial
+
+Avant publication, vérifier : **si un concurrent lit l’article, peut-il comprendre comment reconstruire une partie significative du produit ou identifier sa stratégie ?**
+
+Si oui, abstraire davantage ou ne pas publier.
+
+---
+
 ## Brouillons éditoriaux
 
 Les modèles non publiables vivent dans `src/content-drafts/` — **hors collections Astro**.
