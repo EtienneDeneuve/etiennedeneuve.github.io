@@ -82,6 +82,15 @@ Speaking may warn on performance; other URLs assert harder budgets.
 
 ## Content notes
 
+### Paired publishing rule
+
+For strong technical topics, default to two complementary publications instead of cross-posting the same article:
+
+- **Étienne**: field note / build story — what happened, decisions, mistakes, trade-offs, implementation detail and personal technical judgment.
+- **Omnivya**: transferable architecture / CTO view — reusable pattern, method, risks, operating model, business impact and explicit limits.
+
+Cross-link both pieces when both exist. Do not duplicate paragraphs or publish near-identical copies across the two domains. See `docs/evidence-policy.md`.
+
 - Thinking articles with a future `pubDate` stay hidden until that date (build-time filter).
 - Do not publish unverified client metrics or draft case studies.
 - Scalion remains draft until publicly available.
