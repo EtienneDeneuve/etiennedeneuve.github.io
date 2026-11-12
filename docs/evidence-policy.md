@@ -72,6 +72,48 @@ Les contenus `draft: true` sont exclus de :
 
 ---
 
+## Règle de publication croisée Étienne ↔ Omnivya
+
+Pour un sujet technique suffisamment fort, la règle par défaut est de produire **deux contenus complémentaires**, pas un duplicata multi-site.
+
+### Étienne — retour terrain / build story
+
+Le contenu personnel doit privilégier :
+
+- le contexte réel ;
+- ce qui a été essayé ;
+- les décisions techniques ;
+- les erreurs, limites et compromis ;
+- les détails d’implémentation utiles ;
+- un jugement technique assumé ;
+- les preuves publiques disponibles.
+
+Il répond principalement à : **« qu’est-ce qui s’est réellement passé, et pourquoi ai-je pris cette décision ? »**
+
+### Omnivya — pattern transférable / lecture CTO
+
+Le contenu Omnivya doit extraire du même sujet :
+
+- le pattern généralisable ;
+- la méthode de décision ;
+- les risques et trade-offs ;
+- les impacts exploitation, sécurité, coût ou organisation ;
+- ce qu’Omnivya recommanderait ou éviterait ;
+- les limites de généralisation.
+
+Il répond principalement à : **« qu’est-ce qu’une autre organisation peut réutiliser de ce retour terrain ? »**
+
+### Anti-duplication
+
+- Ne pas republier le même texte sur les deux domaines.
+- Ne pas paraphraser mécaniquement paragraphe par paragraphe.
+- Conserver une source de faits commune, mais une thèse et une structure éditoriale distinctes.
+- Cross-linker les deux publications lorsqu’elles existent.
+- Le blog Étienne peut porter le détail / la chronologie ; Omnivya porte l’abstraction / le cadre de décision.
+- Si le sujet ne justifie pas réellement deux angles, publier une seule pièce et faire un lien depuis l’autre site plutôt que fabriquer un doublon.
+
+---
+
 ## Brouillons éditoriaux
 
 Les modèles non publiables vivent dans `src/content-drafts/` — **hors collections Astro**.
