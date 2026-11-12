@@ -74,7 +74,9 @@ Les contenus `draft: true` sont exclus de :
 
 ## Règle de publication croisée Étienne ↔ Omnivya
 
-Pour un sujet technique suffisamment fort, la règle par défaut est de produire **deux contenus complémentaires**, pas un duplicata multi-site.
+Pour un sujet technique suffisamment fort, la règle par défaut est de construire un **système de preuves complémentaires**, pas un duplicata multi-site.
+
+Le mapping n’est **pas 1:1**. Le modèle préféré est **many-to-one** : plusieurs field notes / build stories Étienne peuvent alimenter une seule pièce Omnivya plus synthétique. En pratique, viser souvent **2 à 4 contenus Étienne pour 1 contenu Omnivya** lorsque les sujets convergent vers la même décision, le même risque ou le même operating model. Ce ratio est un guide éditorial, pas un quota.
 
 ### Étienne — retour terrain / build story
 
@@ -111,6 +113,8 @@ Il répond principalement à : **« qu’est-ce qu’une autre organisation peut
 - Cross-linker les deux publications lorsqu’elles existent.
 - Le blog Étienne peut porter le détail / la chronologie ; Omnivya porte l’abstraction / le cadre de décision.
 - Si le sujet ne justifie pas réellement deux angles, publier une seule pièce et faire un lien depuis l’autre site plutôt que fabriquer un doublon.
+- Plusieurs articles Étienne peuvent être synthétisés en une seule publication Omnivya.
+- Une publication Omnivya peut aussi naître d’un sujet de gouvernance, risque ou transformation sans équivalent personnel obligatoire.
 
 ---
 
