@@ -57,6 +57,11 @@ jobs:
       - name: SEO config
         run: bun run verify-seo
 
+      - name: Sync GitHub project metadata
+        run: bun run sync:github-projects
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build
         run: |
           export SOURCE_DATE_EPOCH="$(git log -1 --pretty=%ct)"
