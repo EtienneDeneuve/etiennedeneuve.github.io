@@ -199,6 +199,8 @@ export default defineConfig({
       },
       language: {
         default: "fr",
+        // Show the notice in the visitor's browser language (fr or en), fall back to fr.
+        autoDetect: "browser",
         translations: {
           fr: {
             consentModal: {
