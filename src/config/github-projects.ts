@@ -58,6 +58,7 @@ export type GitHubProjectEditorial = {
   id: string;
   category: GitHubProjectCategory;
   github: { owner: string; repo: string };
+  legacyGithub?: { owner: string; repo: string };
   name: { fr: string; en: string };
   problem: { fr: string; en: string };
   status: { fr: string; en: string };
@@ -171,7 +172,7 @@ export const githubProjectsEditorial: GitHubProjectEditorial[] = [
   },
   {
     id: "akslifecycle",
-    category: "kubernetes-platform",
+    category: "historical",
     github: { owner: "Simplifi-ED", repo: "akslifecycle" },
     name: {
       fr: "AKS Lifecycle",
@@ -182,8 +183,8 @@ export const githubProjectsEditorial: GitHubProjectEditorial[] = [
       en: "Manage AKS lifecycle (create, upgrade, drift) without ad hoc scripts per cluster.",
     },
     status: {
-      fr: "Maintenance",
-      en: "Maintenance",
+      fr: "Maintenance : référence historique",
+      en: "Maintenance: historical reference",
     },
     role: {
       fr: "Auteur",
@@ -194,14 +195,14 @@ export const githubProjectsEditorial: GitHubProjectEditorial[] = [
       en: "Repository README.",
     },
     contributionSought: {
-      fr: "Retours d’usage sur les scénarios d’upgrade et de drift.",
-      en: "Usage feedback on upgrade and drift scenarios.",
+      fr: "Non promu : conservé comme preuve historique d’automatisation AKS.",
+      en: "Not promoted: kept as historical AKS automation proof.",
     },
-    displayOrder: 3,
+    displayOrder: 11,
   },
   {
     id: "kubernetes-hyperv",
-    category: "kubernetes-platform",
+    category: "historical",
     github: { owner: "EtienneDeneuve", repo: "kubernetes_hyperv" },
     name: {
       fr: "Kubernetes on Hyper-V",
@@ -212,8 +213,8 @@ export const githubProjectsEditorial: GitHubProjectEditorial[] = [
       en: "Stand up a reproducible Kubernetes cluster on Hyper-V without an opaque stack.",
     },
     status: {
-      fr: "Maintenance : lab / référence",
-      en: "Maintenance : lab / reference",
+      fr: "Référence historique",
+      en: "Historical reference",
     },
     role: {
       fr: "Auteur",
@@ -224,10 +225,10 @@ export const githubProjectsEditorial: GitHubProjectEditorial[] = [
       en: "README (Packer, Ansible, DSC, WSL).",
     },
     contributionSought: {
-      fr: "Issues sur les chemins Hyper-V / WSL et les versions K8s.",
-      en: "Issues on Hyper-V / WSL paths and K8s versions.",
+      fr: "Non actif : conservé comme preuve historique Kubernetes / Hyper-V.",
+      en: "Not active: kept as historical Kubernetes / Hyper-V proof.",
     },
-    displayOrder: 4,
+    displayOrder: 12,
   },
 
   // -- FinOps
@@ -264,16 +265,17 @@ export const githubProjectsEditorial: GitHubProjectEditorial[] = [
 
   // -- DevSecOps
   {
-    id: "shaihulud-azuredevops-scanner",
+    id: "azure-devops-supply-chain-scanner",
     category: "devsecops",
-    github: { owner: "Simplifi-ED", repo: "ShaiHulud-AzureDevops-Scanner" },
+    github: { owner: "Simplifi-ED", repo: "azure-devops-supply-chain-scanner" },
+    legacyGithub: { owner: "Simplifi-ED", repo: "ShaiHulud-AzureDevops-Scanner" },
     name: {
-      fr: "ShaiHulud Azure DevOps Scanner",
-      en: "ShaiHulud Azure DevOps Scanner",
+      fr: "Azure DevOps Supply Chain Scanner",
+      en: "Azure DevOps Supply Chain Scanner",
     },
     problem: {
-      fr: "Détecter des indicateurs supply-chain / compromission dans des pipelines Azure DevOps.",
-      en: "Detect supply-chain / compromise indicators in Azure DevOps pipelines.",
+      fr: "Auditer à l’échelle les dépôts Azure DevOps avec SBOM CycloneDX, détection de secrets et preuves Dependency-Track.",
+      en: "Audit Azure DevOps repositories at scale with CycloneDX SBOMs, secret scanning and Dependency-Track evidence.",
     },
     status: {
       fr: "Actif",
@@ -284,12 +286,13 @@ export const githubProjectsEditorial: GitHubProjectEditorial[] = [
       en: "Author",
     },
     documentation: {
-      fr: "README du scanner.",
-      en: "Scanner README.",
+      fr: "README du toolkit d’audit supply-chain.",
+      en: "Supply-chain audit toolkit README.",
     },
+    documentationUrl: "https://www.omnivya.fr/fr/expertises/software-supply-chain-security/",
     contributionSought: {
-      fr: "Règles de détection et retours de terrain.",
-      en: "Detection rules and field feedback.",
+      fr: "Retours d’audit Azure DevOps, règles SBOM et politiques de supply chain.",
+      en: "Azure DevOps audit feedback, SBOM rules and supply-chain policies.",
     },
     displayOrder: 6,
   },
@@ -448,7 +451,7 @@ export const githubProjectsEditorial: GitHubProjectEditorial[] = [
       fr: "Non actif : conservé comme preuve de construction.",
       en: "Not active : kept as build proof.",
     },
-    displayOrder: 11,
+    displayOrder: 13,
   },
   {
     id: "azure-netapp-files",
@@ -479,7 +482,7 @@ export const githubProjectsEditorial: GitHubProjectEditorial[] = [
       fr: "Non actif : conservé avec l’article ANF RBAC.",
       en: "Not active : kept with the ANF RBAC article.",
     },
-    displayOrder: 12,
+    displayOrder: 14,
   },
 ];
 

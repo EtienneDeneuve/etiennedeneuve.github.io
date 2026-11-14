@@ -16,6 +16,7 @@ const rootDir = join(__dirname, "../..");
 const cachePath = join(rootDir, "src/data/github-projects-cache.json");
 
 const USER_AGENT = "etienne-site-github-sync/1.0";
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN?.trim();
 
 type CacheFile = {
   version: number;
@@ -74,6 +75,7 @@ async function fetchRepoMetadata(
       headers: {
         Accept: "application/vnd.github+json",
         "User-Agent": USER_AGENT,
+        ...(GITHUB_TOKEN ? { Authorization: `Bearer ${GITHUB_TOKEN}` } : {}),
       },
     });
 
@@ -155,7 +157,20 @@ async function main() {
     (a, b) => a.displayOrder - b.displayOrder
   )) {
     const previous = previousById.get(editorial.id);
-    const result = await fetchRepoMetadata(editorial.github.owner, editorial.github.repo);
+    let result = await fetchRepoMetadata(editorial.github.owner, editorial.github.repo);
+
+    if (!result.ok && editorial.legacyGithub && result.error.startsWith("Repository not found:")) {
+      const legacy = await fetchRepoMetadata(
+        editorial.legacyGithub.owner,
+        editorial.legacyGithub.repo
+      );
+      if (legacy.ok) {
+        console.warn(
+          `↪ ${editorial.github.owner}/${editorial.github.repo} not renamed yet; using ${editorial.legacyGithub.owner}/${editorial.legacyGithub.repo}`
+        );
+        result = legacy;
+      }
+    }
 
     if (result.ok) {
       repositories.push(mergeEntry(editorial, previous, result.data, "fresh"));
