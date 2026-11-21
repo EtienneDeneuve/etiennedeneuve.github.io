@@ -42,6 +42,16 @@ jobs:
       - name: Install existing site dependencies
         run: bun install --frozen-lockfile
 
+      - name: TEMP — capture exact Prettier output (remove before merge)
+        run: |
+          bunx prettier --write audit/playwright.config.ts audit/report.mjs
+          printf 'MW_FORMAT_CONFIG='
+          base64 -w0 audit/playwright.config.ts
+          printf '\n'
+          printf 'MW_FORMAT_REPORT='
+          base64 -w0 audit/report.mjs
+          printf '\n'
+
       - name: Install audit browsers
         run: bunx playwright install --with-deps chromium firefox webkit
 
