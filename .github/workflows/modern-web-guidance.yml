@@ -1,4 +1,4 @@
-name: Modern Web Guidance legacy scan
+name: Monthly Modern Web Audit
 
 on:
   # Intentionally not a PR quality gate: run once per month, or on demand.
@@ -13,13 +13,13 @@ permissions:
 
 concurrency:
   group: modern-web-monthly-${{ github.repository }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   legacy-scan:
-    name: Legacy web patterns (informational)
+    name: Web quality evidence (advisory)
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 35
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -28,6 +28,26 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: "24"
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
+
+      - name: Install existing site dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Install audit browsers
+        run: bunx playwright install --with-deps chromium firefox webkit
+
+      - name: Install pinned axe auditor (no lockfile changes)
+        run: bun add --no-save --dev @axe-core/playwright@4.14.0
+
+      - name: Build the site with public non-production analytics placeholders
+        env:
+          PUBLIC_GA4_MEASUREMENT_ID: G-0000000000
+          PUBLIC_CLARITY_PROJECT_ID: monthly-audit
+        run: bun run build
 
       - name: Run pinned Modern Web Guidance legacy scan
         shell: bash
@@ -106,11 +126,23 @@ jobs:
           }
           NODE
 
+      - name: Browser and accessibility audit (advisory findings)
+        run: bunx playwright test --config audit/playwright.config.ts
+
+      - name: Lighthouse route sampling (non-gating lab observations)
+        run: bunx lhci autorun --config=audit/lighthouserc.cjs
+
+      - name: Consolidate findings and sample public HTTP headers
+        if: always()
+        run: node audit/report.mjs
+
       - name: Upload complete scan results
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: modern-web-guidance-legacy-scan
-          path: reports/modern-web-guidance/
+          name: modern-web-monthly-audit
+          path: |
+            reports/modern-web-guidance/
+            audit-results/
           retention-days: 90
           if-no-files-found: warn
