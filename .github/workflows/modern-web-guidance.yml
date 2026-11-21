@@ -1,0 +1,118 @@
+name: Modern Web Guidance legacy scan
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [master]
+    paths:
+      - "src/**"
+      - "public/**"
+      - "package.json"
+      - ".github/workflows/modern-web-guidance.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: modern-web-legacy-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  legacy-scan:
+    name: Legacy web patterns (informational)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Run pinned Modern Web Guidance legacy scan
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p reports/modern-web-guidance
+          npx -y modern-web-guidance@1.0.1 legacy-scan . --json --max-files 0 > reports/modern-web-guidance/legacy-scan.json
+
+      - name: Validate result and publish findings summary
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import { readFileSync, writeFileSync, appendFileSync } from 'node:fs';
+
+          const location = 'reports/modern-web-guidance/';
+          const scan = JSON.parse(readFileSync(location + 'legacy-scan.json', 'utf8'));
+          if (scan.error || typeof scan.totalFindings !== 'number' || !Array.isArray(scan.guides)) {
+            throw new Error('Legacy scan returned an error or invalid JSON contract: ' + (scan.error || 'missing fields'));
+          }
+          if (scan.truncatedByMaxFiles) {
+            throw new Error('Legacy scan is truncated: full source coverage is required');
+          }
+          const metadata = {
+            tool: 'modern-web-guidance',
+            toolVersion: '1.0.1',
+            command: 'legacy-scan . --json --max-files 0',
+            repository: process.env.GITHUB_REPOSITORY,
+            commit: process.env.GITHUB_SHA,
+            runId: process.env.GITHUB_RUN_ID,
+            scannedFileCount: scan.scannedFileCount ?? null,
+            eligibleFileCount: scan.eligibleFileCount ?? null,
+            activeRuleCount: scan.activeRuleCount ?? null,
+            activeGuideCount: scan.activeGuideCount ?? null,
+            skippedDocsAndTestsCount: scan.skippedDocsAndTestsCount ?? null,
+            totalFindings: scan.totalFindings,
+            limitations: 'Static pattern matches are provisional; verify keepWhen/dropWhen. Covers ~20% of modern-web-guidance.',
+          };
+          writeFileSync(location + 'metadata.json', JSON.stringify(metadata, null, 2) + '\n');
+          const esc = (v) => String(v ?? '').replace(/\|/g, '\\|').replace(/\r?\n/g, ' ');
+          const lines = [
+            '# Modern Web Guidance — legacy-scan',
+            '',
+            `**${scan.totalFindings} provisional findings** across **${scan.guides.length} guides**.`,
+            `Scanned **${scan.scannedFileCount ?? '?'}** source files (eligible: ${scan.eligibleFileCount ?? '?'}); tool: **1.0.1**; commit: \`${process.env.GITHUB_SHA}\`.`,
+            '',
+            '> Results are static candidates, **not verified defects**. Triage each rule using its keepWhen/dropWhen criteria.',
+            '> Deterministic legacy rules cover only ~20% of the full guidance catalog. Docs and test files are excluded by default.',
+            '',
+            '| Guide | Rule | Findings | Example locations |',
+            '| --- | --- | ---: | --- |',
+          ];
+          for (const guide of scan.guides) {
+            for (const rule of guide.rules ?? []) {
+              const examples = (rule.findings ?? []).slice(0, 5).map(f => \`${esc(f.file)}:${f.line}\`).join(', ');
+              lines.push(`| ${esc(guide.guideId)} | ${esc(rule.ruleId)} | ${rule.count} | ${examples} |`);
+            }
+          }
+          if (!scan.guides.length) lines.push('| — | — | 0 | No matches in the deterministic subset |');
+          lines.push('', '## Verification', '', 'Triage all findings as **KEEP / DROP / FALLBACK**; never auto-open an issue for an unverified match.', '');
+          if (scan.note) lines.push('Scanner note: ' + esc(scan.note), '');
+          const markdown = lines.join('\n') + '\n';
+          writeFileSync(location + 'summary.md', markdown);
+          appendFileSync(process.env.GITHUB_STEP_SUMMARY, markdown);
+          console.log(JSON.stringify(metadata, null, 2));
+          for (const g of scan.guides) {
+            console.log(`GUIDE ${g.guideId}: ${g.count} provisional findings`);
+            for (const r of g.rules ?? []) {
+              console.log(`  RULE ${r.ruleId} (${r.count}) ${r.summary}`);
+              console.log('  keepWhen:', (r.verifierRubric?.keepWhen ?? []).join(' | '));
+              console.log('  dropWhen:', (r.verifierRubric?.dropWhen ?? []).join(' | '));
+              for (const f of r.findings ?? []) {
+                console.log(`    ${f.file}:${f.line}: ${f.message}`);
+              }
+            }
+          }
+          NODE
+
+      - name: Upload complete scan results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: modern-web-guidance-legacy-scan
+          path: reports/modern-web-guidance/
+          retention-days: 30
+          if-no-files-found: warn
