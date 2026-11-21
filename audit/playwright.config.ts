@@ -19,6 +19,8 @@ export default defineConfig({
     actionTimeout: 15000,
   },
   webServer: {
+    // Playwright config lives in audit/, but Astro build output is at the repo root.
+    cwd: process.cwd(),
     command: "bunx astro preview --host 127.0.0.1 --port 4321",
     url: "http://127.0.0.1:4321",
     reuseExistingServer: !process.env.CI,
