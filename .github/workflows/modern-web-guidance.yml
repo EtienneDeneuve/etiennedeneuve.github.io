@@ -1,7 +1,12 @@
 name: Monthly Modern Web Audit
 
 on:
-  # Intentionally not a PR quality gate: run once per month, or on demand.
+  # TEMPORARY validation trigger on this audit PR only; remove after green proof.
+  pull_request:
+    branches: [master]
+    paths:
+      - "audit/**"
+      - ".github/workflows/modern-web-guidance.yml"
   workflow_dispatch:
   schedule:
     # 08:17 local time on the 1st of each month, including DST.
