@@ -84,7 +84,7 @@ jobs:
           ];
           for (const guide of scan.guides) {
             for (const rule of guide.rules ?? []) {
-              const examples = (rule.findings ?? []).slice(0, 5).map(f => \`${esc(f.file)}:${f.line}\`).join(', ');
+              const examples = (rule.findings ?? []).slice(0, 5).map(f => esc(f.file) + ':' + f.line).join(', ');
               lines.push(`| ${esc(guide.guideId)} | ${esc(rule.ruleId)} | ${rule.count} | ${examples} |`);
             }
           }
