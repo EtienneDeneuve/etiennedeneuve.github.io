@@ -40,8 +40,6 @@ jobs:
 
       - name: Setup
         uses: ./.github/actions/setup
-        with:
-          install-playwright: "true"
 
       - name: Format check
         run: bun run format:check
@@ -110,6 +108,9 @@ jobs:
 
       - name: Unit tests
         run: bun run test
+
+      - name: Install Playwright Chromium
+        run: bunx playwright install chromium --with-deps
 
       - name: Playwright (built site)
         run: bun run test:e2e
