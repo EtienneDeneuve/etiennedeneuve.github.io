@@ -57,21 +57,33 @@ jobs:
               core.info("A deployment is already running; no duplicate dispatch.");
               return;
             }
-            // First check retries; second check also alerts if still missing.
-            if (hour >= 13) {
-              const title = `Editorial release missing: ${today}`;
-              const issues = await github.paginate(github.rest.issues.listForRepo, {
-                ...context.repo, state: "open", per_page: 100
-              });
-              if (!issues.some(issue => issue.title === title && !issue.pull_request)) {
-                await github.rest.issues.create({
-                  ...context.repo,
-                  title,
-                  body: `No successful Deploy GitHub Pages run for the Paris editorial day ${today} by the afternoon watchdog check. The watchdog attempted another dispatch. Check https://github.com/${context.repo.owner}/${context.repo.repo}/actions/workflows/deploy.yml. Close after confirming the article is live.`
-                });
-              }
-            }
+            // Dispatch must happen even when issue tracking is unavailable.
             await github.rest.actions.createWorkflowDispatch({
               ...context.repo, workflow_id: "deploy.yml", ref: context.payload.repository.default_branch
             });
             core.notice(`Dispatched catch-up deployment for ${today}.`);
+
+            // Alert independently: this repository can have Issues disabled.
+            if (hour >= 13) {
+              const title = `Editorial release missing: ${today}`;
+              if (!context.payload.repository.has_issues) {
+                core.warning(`${title}. Repository issues are disabled; check the Pages deployment workflow.`);
+                return;
+              }
+
+              try {
+                const issues = await github.paginate(github.rest.issues.listForRepo, {
+                  ...context.repo, state: "open", per_page: 100
+                });
+                if (!issues.some(issue => issue.title === title && !issue.pull_request)) {
+                  await github.rest.issues.create({
+                    ...context.repo,
+                    title,
+                    body: `No successful Deploy GitHub Pages run for the Paris editorial day ${today} by the afternoon watchdog check. The watchdog dispatched another attempt. Check https://github.com/${context.repo.owner}/${context.repo.repo}/actions/workflows/deploy.yml. Close after confirming the article is live.`
+                  });
+                }
+              } catch (error) {
+                // The catch-up dispatch already happened: notification errors must not break recovery.
+                core.warning(`Could not create editorial alert issue: ${error.message}`);
+              }
+            }

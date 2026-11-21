@@ -3,11 +3,11 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm"
+  - package-ecosystem: "bun"
     directory: "/"
     schedule:
       interval: "weekly"
-    # Lockfile is bun.lock; keep npm ecosystem updates for package.json ranges.
+    # Native Bun ecosystem: update package.json and bun.lock together.
     open-pull-requests-limit: 10
     groups:
       eslint-stack:
