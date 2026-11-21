@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "24"
 
@@ -36,7 +36,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p reports/modern-web-guidance
-          npx -y modern-web-guidance@1.0.1 legacy-scan . --json --max-files 0 > reports/modern-web-guidance/legacy-scan.json
+          npx -y modern-web-guidance@1.0.1 legacy-scan . --json > reports/modern-web-guidance/legacy-scan.json
 
       - name: Validate result and publish findings summary
         shell: bash
@@ -56,7 +56,7 @@ jobs:
           const metadata = {
             tool: 'modern-web-guidance',
             toolVersion: '1.0.1',
-            command: 'legacy-scan . --json --max-files 0',
+            command: 'legacy-scan . --json',
             repository: process.env.GITHUB_REPOSITORY,
             commit: process.env.GITHUB_SHA,
             runId: process.env.GITHUB_RUN_ID,
