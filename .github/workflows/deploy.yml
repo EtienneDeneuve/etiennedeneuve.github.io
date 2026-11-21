@@ -47,6 +47,10 @@ jobs:
       - name: Lint
         run: bun run lint
 
+      # Astro check syncs Markdown and remark-mermaidjs needs Chromium at that point.
+      - name: Install Playwright Chromium
+        run: bunx playwright install chromium --with-deps
+
       - name: Astro check
         run: bun run check
 
@@ -77,10 +81,6 @@ jobs:
         run: bun run sync:github-projects
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Mermaid rendering runs during Astro content sync/build and needs Chromium.
-      - name: Install Playwright Chromium
-        run: bunx playwright install chromium --with-deps
 
       - name: Deterministic build
         run: |
