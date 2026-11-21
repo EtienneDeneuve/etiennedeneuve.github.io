@@ -1,12 +1,7 @@
 name: Monthly Modern Web Audit
 
 on:
-  # TEMPORARY validation trigger on this audit PR only; remove after green proof.
-  pull_request:
-    branches: [master]
-    paths:
-      - "audit/**"
-      - ".github/workflows/modern-web-guidance.yml"
+  # Monthly or manual only. Never part of pull-request or deploy gates.
   workflow_dispatch:
   schedule:
     # 08:17 local time on the 1st of each month, including DST.
@@ -41,16 +36,6 @@ jobs:
 
       - name: Install existing site dependencies
         run: bun install --frozen-lockfile
-
-      - name: TEMP — capture exact Prettier output (remove before merge)
-        run: |
-          bunx prettier --write audit/playwright.config.ts audit/report.mjs
-          printf 'MW_FORMAT_CONFIG='
-          base64 -w0 audit/playwright.config.ts
-          printf '\n'
-          printf 'MW_FORMAT_REPORT='
-          base64 -w0 audit/report.mjs
-          printf '\n'
 
       - name: Install audit browsers
         run: bunx playwright install --with-deps chromium firefox webkit
