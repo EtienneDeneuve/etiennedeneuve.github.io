@@ -78,6 +78,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # Mermaid rendering runs during Astro content sync/build and needs Chromium.
+      - name: Install Playwright Chromium
+        run: bunx playwright install chromium --with-deps
+
       - name: Deterministic build
         run: |
           export SOURCE_DATE_EPOCH="$(git log -1 --pretty=%ct)"
@@ -108,9 +112,6 @@ jobs:
 
       - name: Unit tests
         run: bun run test
-
-      - name: Install Playwright Chromium
-        run: bunx playwright install chromium --with-deps
 
       - name: Playwright (built site)
         run: bun run test:e2e
