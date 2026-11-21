@@ -234,10 +234,12 @@ writeFileSync(join(root, "monthly-audit.md"), summary);
 if (process.env.GITHUB_STEP_SUMMARY) {
   appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary);
 }
-console.log(JSON.stringify({
-  legacy: scan.totalFindings,
-  sampledPages: browsers.length,
-  axeRuleTypes: axeRules.length,
-  lighthouseReports: lighthouse.length,
-  headerProbeStatus: publicHeaders.status,
-}));
+console.log(
+  JSON.stringify({
+    legacy: scan.totalFindings,
+    sampledPages: browsers.length,
+    axeRuleTypes: axeRules.length,
+    lighthouseReports: lighthouse.length,
+    headerProbeStatus: publicHeaders.status,
+  })
+);
