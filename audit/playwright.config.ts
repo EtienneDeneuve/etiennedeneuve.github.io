@@ -7,10 +7,7 @@ export default defineConfig({
   forbidOnly: Boolean(process.env.CI),
   retries: 0,
   workers: process.env.CI ? 2 : undefined,
-  reporter: [
-    ["list"],
-    ["json", { outputFile: "audit-results/playwright-report.json" }],
-  ],
+  reporter: [["list"], ["json", { outputFile: "audit-results/playwright-report.json" }]],
   outputDir: "audit-results/playwright-traces",
   use: {
     baseURL: "http://127.0.0.1:4321",
