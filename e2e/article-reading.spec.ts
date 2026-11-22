@@ -83,9 +83,10 @@ test.describe("article reading UI (ClientRouter lifecycle)", () => {
     await page.evaluate(() => window.scrollBy(0, 1200));
     await page.waitForTimeout(200);
 
-    await expect.poll(async () =>
-      page.locator("[data-article-progress]").evaluate((el) => (el as HTMLProgressElement).value)
-    ).toBeGreaterThan(0);
+    const progressNow = await page
+      .locator("[data-article-progress]")
+      .evaluate((el) => (el as HTMLProgressElement).value);
+    expect(progressNow).toBeGreaterThan(0);
 
     await expect(page.locator("[data-article-top]")).toBeVisible();
     await page.locator("[data-article-top]").click({ force: true });
@@ -98,9 +99,10 @@ test.describe("article reading UI (ClientRouter lifecycle)", () => {
     await expectReadingChrome(page);
     await page.evaluate(() => window.scrollBy(0, 1600));
     await page.waitForTimeout(200);
-    await expect.poll(async () =>
-      page.locator("[data-article-progress]").evaluate((el) => (el as HTMLProgressElement).value)
-    ).toBeGreaterThan(0);
+    const progressAfterReload = await page
+      .locator("[data-article-progress]")
+      .evaluate((el) => (el as HTMLProgressElement).value);
+    expect(progressAfterReload).toBeGreaterThan(0);
 
     const activeAfterScroll = page.locator("[data-toc] [data-toc-link].is-active");
     await expect(activeAfterScroll).toHaveCount(1);
