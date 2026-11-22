@@ -144,6 +144,7 @@ const report = {
     "Lighthouse lab LCP/CLS/TBT are not field INP or p75 Core Web Vitals.",
     "HEAD response headers are observational, not a security penetration test.",
     "Browser tests sample routes and states rather than exhaustively exploring the site.",
+    "Axe contrast checks use a settled reveal end-state; opacity-transition frames are excluded and may need manual motion testing.",
     "Human must verify findings and deduplicate existing issues before opening new ones.",
   ],
 };
