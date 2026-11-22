@@ -153,7 +153,7 @@ async function main() {
 
   const repositories = [];
 
-  for (const editorial of [...githubProjectsEditorial].sort(
+  for (const editorial of githubProjectsEditorial.toSorted(
     (a, b) => a.displayOrder - b.displayOrder
   )) {
     const previous = previousById.get(editorial.id);
