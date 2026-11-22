@@ -24,6 +24,20 @@ for (const route of routes) {
     const response = await page.goto(route, { waitUntil: "domcontentloaded", timeout: 45000 });
     await page.locator("body").waitFor({ state: "visible" });
 
+    // Stable-state baseline: the site's 900ms opacity reveal can skew
+    // computed text contrast during the transition. Audit-only end-state.
+    const stabilizedRevealCount = await page.evaluate(async () => {
+      await document.fonts.ready;
+      const nodes = Array.from(document.querySelectorAll(".reveal"));
+      for (const node of nodes) node.classList.add("is-in");
+      await Promise.all(
+        nodes.flatMap((node) =>
+          node.getAnimations().map((animation) => animation.finished.catch(() => {}))
+        )
+      );
+      return nodes.length;
+    });
+
     const findings = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
       .analyze();
@@ -46,6 +60,12 @@ for (const route of routes) {
       route,
       browser: testInfo.project.name,
       status: response?.status() ?? 0,
+      a11ySnapshot: {
+        stage: "after-scroll-reveal",
+        fontsReady: true,
+        stabilizedRevealCount,
+        transitionStatesExcluded: true,
+      },
       document: documentState,
       firstTab: focusAfterTab,
       pageErrors,
