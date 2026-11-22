@@ -252,7 +252,8 @@ Start MoE OptiQ (M2 Max 64GB sweet spot):
     --model mlx-community/Qwen3.5-35B-A3B-OptiQ-4bit --port 18080
 
 Or fall back: REWRITE_BACKEND=ollama && ollama pull qwen3.5:35b-a3b
-(${String(err)})`
+(${String(err)})`,
+        { cause: err }
       );
     }
     return;
@@ -262,7 +263,8 @@ Or fall back: REWRITE_BACKEND=ollama && ollama pull qwen3.5:35b-a3b
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
   } catch (err) {
     throw new Error(
-      `Ollama unreachable at ${OLLAMA_HOST}. Start with: ollama serve\n(${String(err)})`
+      `Ollama unreachable at ${OLLAMA_HOST}. Start with: ollama serve\n(${String(err)})`,
+      { cause: err }
     );
   }
 }

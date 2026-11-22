@@ -45,7 +45,7 @@ export function loadGitHubProjects(): GitHubProjectsCache {
 }
 
 export function getSortedGitHubProjects(_lang: "fr" | "en" = "fr"): GitHubProjectEntry[] {
-  return [...loadGitHubProjects().repositories].sort((a, b) => a.displayOrder - b.displayOrder);
+  return loadGitHubProjects().repositories.toSorted((a, b) => a.displayOrder - b.displayOrder);
 }
 
 export function getGitHubProjectsByCategory(

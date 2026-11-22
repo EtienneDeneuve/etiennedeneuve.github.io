@@ -358,16 +358,16 @@ const jsonLd = buildJsonLdGraph([
 
       const ordered =
         sort === "oldest"
-          ? [...buildOrder].sort((a, b) =>
+          ? buildOrder.toSorted((a, b) =>
               (a.dataset.date ?? "").localeCompare(b.dataset.date ?? "")
             )
           : sort === "title"
-            ? [...buildOrder].sort((a, b) =>
+            ? buildOrder.toSorted((a, b) =>
                 (a.dataset.title ?? "").localeCompare(b.dataset.title ?? "", uiLang)
               )
             : sort === "featured"
-              ? [...buildOrder].sort(featuredFirst)
-              : [...buildOrder].sort(dateNewestFirst);
+              ? buildOrder.toSorted(featuredFirst)
+              : buildOrder.toSorted(dateNewestFirst);
       for (const card of ordered) grid.append(card);
 
       const matching = ordered.filter((card) => {

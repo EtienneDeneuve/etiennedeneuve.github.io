@@ -32,7 +32,7 @@ export function projectList(
 }
 
 export function sortProjects(entries: CollectionEntry<"projects">[]) {
-  return [...entries].sort((a, b) => {
+  return entries.toSorted((a, b) => {
     const orderDiff = (a.data.displayOrder ?? 99) - (b.data.displayOrder ?? 99);
     if (orderDiff !== 0) return orderDiff;
     return Number(b.data.featured) - Number(a.data.featured);
