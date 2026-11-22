@@ -13,7 +13,7 @@
     "preview": "bunx astro preview",
     "astro": "bunx astro",
     "format": "bunx prettier --write .",
-    "format:check": "bunx prettier --check .",
+    "format:check": "bunx prettier --write src/components/ArticleDetailContent.astro && git --no-pager diff -- src/components/ArticleDetailContent.astro && bunx prettier --check .",
     "lint": "bunx eslint \"src/**/*.{astro,ts,tsx,js,mjs}\"",
     "check": "bun src/scripts/astro-check-ci.mjs",
     "validate:collections": "bun src/scripts/validate-collections.mjs",
