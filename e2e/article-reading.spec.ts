@@ -13,7 +13,10 @@ async function collectPageErrors(page: Page): Promise<string[]> {
 
 async function expectReadingChrome(page: Page) {
   await expect(page.locator("[data-article-root]")).toBeVisible();
-  await expect(page.locator("[data-article-progress]")).toBeVisible();
+  const progress = page.getByRole("progressbar");
+  await expect(progress).toBeVisible();
+  await expect(progress).toHaveAttribute("max", "100");
+  await expect(progress).toHaveAttribute("aria-label", /.+/);
   await expect(page.locator("[data-toc]")).toBeVisible();
   const offset = await page.evaluate(() =>
     getComputedStyle(document.documentElement).getPropertyValue("--site-nav-offset").trim()
@@ -80,8 +83,9 @@ test.describe("article reading UI (ClientRouter lifecycle)", () => {
     await page.evaluate(() => window.scrollBy(0, 1200));
     await page.waitForTimeout(200);
 
-    const progressNow = await page.locator("[data-article-progress]").getAttribute("aria-valuenow");
-    expect(Number(progressNow)).toBeGreaterThan(0);
+    await expect.poll(async () =>
+      page.locator("[data-article-progress]").evaluate((el) => (el as HTMLProgressElement).value)
+    ).toBeGreaterThan(0);
 
     await expect(page.locator("[data-article-top]")).toBeVisible();
     await page.locator("[data-article-top]").click({ force: true });
@@ -94,10 +98,9 @@ test.describe("article reading UI (ClientRouter lifecycle)", () => {
     await expectReadingChrome(page);
     await page.evaluate(() => window.scrollBy(0, 1600));
     await page.waitForTimeout(200);
-    const progressAfterReload = await page
-      .locator("[data-article-progress]")
-      .getAttribute("aria-valuenow");
-    expect(Number(progressAfterReload)).toBeGreaterThan(0);
+    await expect.poll(async () =>
+      page.locator("[data-article-progress]").evaluate((el) => (el as HTMLProgressElement).value)
+    ).toBeGreaterThan(0);
 
     const activeAfterScroll = page.locator("[data-toc] [data-toc-link].is-active");
     await expect(activeAfterScroll).toHaveCount(1);
