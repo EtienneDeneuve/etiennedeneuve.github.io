@@ -445,7 +445,7 @@ export const mediaKitConfig = {
 } as const;
 
 export function getSortedSpeakingTopics(): SpeakingTopic[] {
-  return [...speakingTopics].sort((a, b) => a.displayOrder - b.displayOrder);
+  return speakingTopics.toSorted((a, b) => a.displayOrder - b.displayOrder);
 }
 
 export function getFormatLabel(format: SpeakingFormat, lang: "fr" | "en"): string {
