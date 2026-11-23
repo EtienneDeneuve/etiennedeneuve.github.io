@@ -1,4 +1,6 @@
 ---
+import "../styles/editorial-pages.css";
+
 interface Props {
   lang: "fr" | "en";
 }
@@ -195,237 +197,191 @@ const repo =
   "https://github.com/EtienneDeneuve/unchair?utm_source=etienne_deneuve&utm_medium=website&utm_campaign=unchair&utm_content=comparison-source";
 ---
 
-<main class="compare">
-  <section class="hero">
-    <p class="kicker">{copy.eyebrow}</p>
-    <h1>{copy.title}</h1>
-    <p class="lead">{copy.lead}</p>
-    <p class="disclosure">{copy.disclosure}</p>
-    <div class="actions">
-      <a class="btn btn--primary" href={download}>{copy.download}</a>
-      <a class="btn" href={base}>{copy.back}</a>
-      <a class="btn" href={repo} target="_blank" rel="noopener noreferrer">{copy.github}</a>
+<main class="editorial-page ed-unchair-compare">
+  <header class="ed-band--dark ed-hero">
+    <div class="ed-shell">
+      <p class="ed-kicker">{copy.eyebrow}</p>
+      <h1 class="ed-title">{copy.title}</h1>
+      <p class="ed-lede">{copy.lead}</p>
+      <p class="ed-unchair-compare__disclosure">{copy.disclosure}</p>
+      <div class="ed-actions">
+        <a class="ed-button" href={download}>{copy.download}</a>
+        <a class="ed-text-link" href={base}>{copy.back}</a>
+        <a class="ed-text-link" href={repo} target="_blank" rel="noopener noreferrer"
+          >{copy.github}</a
+        >
+      </div>
+    </div>
+  </header>
+
+  <section class="ed-band--light ed-section" aria-labelledby="unchair-choose">
+    <div class="ed-shell">
+      <div class="ed-section__head">
+        <h2 id="unchair-choose">{copy.chooseTitle}</h2>
+      </div>
+      <ul class="ed-situations ed-unchair-compare__grid">
+        {
+          copy.choose.map(([title, body]) => (
+            <li class="ed-situation">
+              <h3>{title}</h3>
+              <p class="ed-situation__signal">{body}</p>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </section>
 
-  <section class="section">
-    <h2>{copy.chooseTitle}</h2>
-    <div class="choice-grid">
-      {
-        copy.choose.map(([title, body]) => (
-          <article>
-            <h3>{title}</h3>
-            <p>{body}</p>
-          </article>
-        ))
-      }
+  <section class="ed-band--dark ed-section" aria-labelledby="unchair-table">
+    <div class="ed-shell">
+      <div class="ed-section__head">
+        <h2 id="unchair-table">{copy.tableTitle}</h2>
+      </div>
+      <div class="ed-unchair-compare__table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>{lang === "fr" ? "Critère" : "Criterion"}</th>
+              <th>Unchair</th>
+              <th>Stretchly</th>
+              <th>Time Out</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              copy.rows.map(([criterion, unchair, stretchly, timeout]) => (
+                <tr>
+                  <th scope="row">{criterion}</th>
+                  <td>{unchair}</td>
+                  <td>{stretchly}</td>
+                  <td>{timeout}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
   </section>
 
-  <section class="section">
-    <h2>{copy.tableTitle}</h2>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>{lang === "fr" ? "Critère" : "Criterion"}</th>
-            <th>Unchair</th>
-            <th>Stretchly</th>
-            <th>Time Out</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            copy.rows.map(([criterion, unchair, stretchly, timeout]) => (
-              <tr>
-                <th>{criterion}</th>
-                <td>{unchair}</td>
-                <td>{stretchly}</td>
-                <td>{timeout}</td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
+  <section class="ed-band--light ed-section" aria-labelledby="unchair-nuance">
+    <div class="ed-shell">
+      <div class="ed-section__head">
+        <h2 id="unchair-nuance">{copy.nuanceTitle}</h2>
+      </div>
+      <ul class="ed-situations ed-unchair-compare__grid">
+        {
+          copy.nuance.map(([title, body]) => (
+            <li class="ed-situation">
+              <h3>{title}</h3>
+              <p class="ed-situation__signal">{body}</p>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </section>
 
-  <section class="section">
-    <h2>{copy.nuanceTitle}</h2>
-    <div class="nuance-grid">
-      {
-        copy.nuance.map(([title, body]) => (
-          <article>
-            <h3>{title}</h3>
-            <p>{body}</p>
-          </article>
-        ))
-      }
+  <section class="ed-band--soft ed-section" aria-labelledby="unchair-sources">
+    <div class="ed-shell">
+      <div class="ed-section__head">
+        <h2 id="unchair-sources">{copy.sourcesTitle}</h2>
+        <p>{copy.sourcesIntro}</p>
+      </div>
+      <ul class="ed-unchair-compare__sources">
+        <li>
+          <a
+            href="https://github.com/EtienneDeneuve/unchair"
+            target="_blank"
+            rel="noopener noreferrer">Unchair — GitHub / README / privacy / releases</a
+          >
+        </li>
+        <li>
+          <a href="https://github.com/hovancik/stretchly" target="_blank" rel="noopener noreferrer"
+            >Stretchly — official GitHub repository</a
+          >
+        </li>
+        <li>
+          <a href="https://www.dejal.com/timeout/" target="_blank" rel="noopener noreferrer"
+            >Time Out — official product page</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://www.dejal.com/blog/time-out-4-0-released/"
+            target="_blank"
+            rel="noopener noreferrer">Time Out 4.0 — official release notes</a
+          >
+        </li>
+      </ul>
     </div>
-  </section>
-
-  <section class="section sources">
-    <h2>{copy.sourcesTitle}</h2>
-    <p>{copy.sourcesIntro}</p>
-    <ul>
-      <li>
-        <a
-          href="https://github.com/EtienneDeneuve/unchair"
-          target="_blank"
-          rel="noopener noreferrer">Unchair — GitHub / README / privacy / releases</a
-        >
-      </li>
-      <li>
-        <a href="https://github.com/hovancik/stretchly" target="_blank" rel="noopener noreferrer"
-          >Stretchly — official GitHub repository</a
-        >
-      </li>
-      <li>
-        <a href="https://www.dejal.com/timeout/" target="_blank" rel="noopener noreferrer"
-          >Time Out — official product page</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://www.dejal.com/blog/time-out-4-0-released/"
-          target="_blank"
-          rel="noopener noreferrer">Time Out 4.0 — official release notes</a
-        >
-      </li>
-    </ul>
   </section>
 </main>
 
 <style>
-  .compare {
-    --line: color-mix(in srgb, currentColor 16%, transparent);
-    width: min(1120px, calc(100% - 2rem));
-    margin: 0 auto;
-    padding: 5rem 0 8rem;
+  .ed-unchair-compare__disclosure {
+    max-width: 70ch;
+    margin: 1.25rem 0 0;
+    padding-left: 0.9rem;
+    border-left: 2px solid var(--ed-copper-dark);
+    color: var(--ed-muted-dark);
+    line-height: 1.55;
   }
-  .hero {
-    max-width: 900px;
-    padding-bottom: 5rem;
-  }
-  .kicker {
-    margin: 0 0 1rem;
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    letter-spacing: 0.14em;
-  }
-  h1 {
-    max-width: 12ch;
-    margin: 0;
-    font-size: clamp(3rem, 8vw, 6.6rem);
-    line-height: 0.92;
-    letter-spacing: -0.055em;
-  }
-  .lead {
-    max-width: 65ch;
-    margin-top: 2rem;
-    font-size: 1.25rem;
-    line-height: 1.7;
-  }
-  .disclosure {
-    max-width: 74ch;
+
+  .ed-unchair-compare .ed-actions {
     margin-top: 1.5rem;
-    padding-left: 1rem;
-    border-left: 3px solid currentColor;
-    opacity: 0.75;
-    line-height: 1.6;
   }
-  .actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-top: 2rem;
+
+  .ed-unchair-compare__grid {
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
   }
-  .btn {
-    display: inline-flex;
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--line);
-    border-radius: 0.6rem;
-    text-decoration: none;
-  }
-  .btn--primary {
-    color: #fff;
-    background: #111;
-  }
-  .section {
-    padding: 4rem 0;
-    border-top: 1px solid var(--line);
-  }
-  .section h2 {
-    margin: 0 0 2rem;
-    font-size: clamp(2rem, 4vw, 3.4rem);
-    letter-spacing: -0.035em;
-  }
-  .choice-grid,
-  .nuance-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-  }
-  article {
-    padding: 1.4rem;
-    border: 1px solid var(--line);
-    border-radius: 0.8rem;
-  }
-  article h3 {
-    margin-top: 0;
-    font-size: 1.15rem;
-  }
-  article p {
-    margin-bottom: 0;
-    line-height: 1.65;
-    opacity: 0.8;
-  }
-  .table-wrap {
+
+  .ed-unchair-compare__table-wrap {
     overflow-x: auto;
+    border: 1px solid var(--ed-line-dark);
+    border-radius: var(--radius-md, 6px);
   }
-  table {
+
+  .ed-unchair-compare table {
     width: 100%;
     min-width: 820px;
     border-collapse: collapse;
+    background: var(--ed-graphite-soft);
   }
-  th,
-  td {
-    padding: 1rem;
-    border-top: 1px solid var(--line);
+
+  .ed-unchair-compare th,
+  .ed-unchair-compare td {
+    padding: 0.9rem 1rem;
+    border-top: 1px solid var(--ed-line-dark);
     text-align: left;
     vertical-align: top;
-    line-height: 1.5;
+    line-height: 1.45;
+    color: var(--ed-muted-dark);
   }
-  thead th {
+
+  .ed-unchair-compare thead th {
     border-top: 0;
-    font-size: 1.05rem;
+    color: var(--ed-ink-dark);
+    font-weight: 650;
   }
-  tbody th {
+
+  .ed-unchair-compare tbody th {
+    color: var(--ed-ink-dark);
+    font-weight: 650;
     width: 18%;
   }
-  tbody td {
-    width: 27%;
-    opacity: 0.82;
-  }
-  .sources > p {
-    max-width: 70ch;
-    line-height: 1.65;
-  }
-  .sources ul {
+
+  .ed-unchair-compare__sources {
     display: grid;
-    gap: 0.75rem;
-    padding-left: 1.2rem;
+    gap: 0.65rem;
+    margin: 0;
+    padding-left: 1.1rem;
+    color: var(--ed-muted-dark);
   }
-  .sources a {
+
+  .ed-unchair-compare__sources a {
+    color: var(--ed-copper-dark);
+    font-weight: 650;
     text-underline-offset: 0.2em;
-  }
-  @media (max-width: 800px) {
-    .compare {
-      padding-top: 3rem;
-    }
-    .choice-grid,
-    .nuance-grid {
-      grid-template-columns: 1fr;
-    }
   }
 </style>
