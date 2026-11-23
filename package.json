@@ -111,7 +111,7 @@
     "tw-to-css": "^0.0.12",
     "typescript": "^5.9.3",
     "unlighthouse": "^0.20.0",
-    "uuid": "^14.0.1",
+    "uuid": "^14.0.3",
     "@eslint/js": "^10.0.1",
     "globals": "^16.5.0"
   }
