@@ -54,6 +54,7 @@ test.describe("editorial work, projects and contact pages", () => {
         if (route.kind === "projects") {
           await expect(main.locator(".ed-report")).toHaveCount(2);
           expect(await main.locator(".ed-project-grid .project-card").count()).toBeGreaterThan(0);
+          await expect(main.locator("a[href$='/unchair/']")).toHaveCount(1);
           await expect(
             main.locator("a[href='/thinking/2026-09-22-opentelemetry-instrumenter-200-services/']")
           ).toHaveCount(1);

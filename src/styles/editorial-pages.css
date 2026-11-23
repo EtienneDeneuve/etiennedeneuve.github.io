@@ -315,6 +315,10 @@
 .editorial-page .ed-band--light .ed-text-link {
   color: var(--ed-copper-light);
 }
+.editorial-page .ed-unchair-feature-wrap {
+  margin: 0 0 1.5rem;
+  max-width: 40rem;
+}
 .editorial-page :is(a, button, summary):focus-visible {
   outline: 3px solid var(--ed-copper-dark);
   outline-offset: 4px;

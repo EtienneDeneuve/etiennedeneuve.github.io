@@ -102,16 +102,25 @@ const jsonLd = buildJsonLdGraph([
         <div class="ed-section__head">
           <h2 id="featured-title">{labels.featured[lang]}</h2>
           <p>{config.meta.featuredIntro[lang]}</p>
-          <p>
-            <a class="ed-text-link" href={`${prefix}/unchair/`}>
+        </div>
+        <div class="ed-unchair-feature-wrap">
+          <article class="ed-situation ed-unchair-feature">
+            <span class="ed-situation__index">{lang === "fr" ? "Produit" : "Product"}</span>
+            <h3>Unchair</h3>
+            <p class="ed-situation__signal">
               {
                 lang === "fr"
-                  ? "Unchair — le rappel macOS qui vérifie que tu as vraiment bougé"
-                  : "Unchair — the macOS break reminder that verifies you actually moved"
+                  ? "Rappel de pause macOS local-first qui vérifie que tu as vraiment bougé — open source, sans compte cloud."
+                  : "Local-first macOS break reminder that verifies you actually moved — open source, no cloud account."
               }
-              <span aria-hidden="true"> ↗</span>
-            </a>
-          </p>
+            </p>
+            <p class="ed-situation__related">
+              <a href={`${prefix}/unchair/`}>
+                {lang === "fr" ? "Voir la page Unchair" : "Open the Unchair page"}
+                <span aria-hidden="true"> →</span>
+              </a>
+            </p>
+          </article>
         </div>
         {
           projects.length > 0 ? (

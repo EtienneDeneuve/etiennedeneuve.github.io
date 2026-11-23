@@ -29,6 +29,13 @@ export type HomeLocaleCopy = {
     cta: string;
     ctaPath: string;
   };
+  openSource: {
+    eyebrow: string;
+    title: string;
+    body: string;
+    cta: string;
+    ctaPath: string;
+  };
   publicationsTitle: string;
   publicationsAll: string;
   publicationsEmpty: string;
@@ -85,6 +92,13 @@ export const homeConfig: { fr: HomeLocaleCopy; en: HomeLocaleCopy } = {
       cta: "Lire le retour d’expérience OpenTelemetry",
       ctaPath: "/thinking/2026-09-22-opentelemetry-instrumenter-200-services/",
     },
+    openSource: {
+      eyebrow: "Open source",
+      title: "Unchair — le rappel macOS qui vérifie que tu as bougé.",
+      body: "Produit local-first que je construis à côté des missions : pauses, preuve de mouvement, sans compte cloud.",
+      cta: "Voir Unchair",
+      ctaPath: "/unchair/",
+    },
     publicationsTitle: "Publications",
     publicationsAll: "Tout lire",
     publicationsEmpty: "",
@@ -138,6 +152,13 @@ export const homeConfig: { fr: HomeLocaleCopy; en: HomeLocaleCopy } = {
       body: "For the OpenTelemetry rollout, we chose a shared baseline over a broad rewrite. Working with R&D meant common conventions, workshops, focused PRs and checking what the traces actually showed.",
       cta: "Read the OpenTelemetry field report (FR)",
       ctaPath: "/thinking/2026-09-22-opentelemetry-instrumenter-200-services/",
+    },
+    openSource: {
+      eyebrow: "Open source",
+      title: "Unchair — the macOS reminder that verifies you moved.",
+      body: "A local-first product I build alongside client work: breaks, movement proof, no cloud account.",
+      cta: "See Unchair",
+      ctaPath: "/unchair/",
     },
     publicationsTitle: "Publications",
     publicationsAll: "Read all",
