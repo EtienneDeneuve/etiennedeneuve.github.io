@@ -396,7 +396,11 @@ const ha =
         <img
           src={tour}
           alt="Unchair macOS product tour showing break reminders and local movement verification"
+          width="840"
+          height="560"
           loading="eager"
+          fetchpriority="high"
+          decoding="async"
         />
         <div class="runtime">
           <span></span><code>movement_debt &gt; 0 → human_action_required</code>
@@ -417,9 +421,25 @@ const ha =
           <p class="card__index">{index}</p>
           <h3>{title}</h3>
           <p>{body}</p>
-          {i === 2 && <img src={menu} alt="Unchair menu bar controls on macOS" loading="lazy" />}
+          {i === 2 && (
+            <img
+              src={menu}
+              alt="Unchair menu bar controls on macOS"
+              width="435"
+              height="515"
+              loading="lazy"
+              decoding="async"
+            />
+          )}
           {i === 3 && (
-            <img src={ha} alt="Unchair device controls in Home Assistant" loading="lazy" />
+            <img
+              src={ha}
+              alt="Unchair device controls in Home Assistant"
+              width="1024"
+              height="525"
+              loading="lazy"
+              decoding="async"
+            />
           )}
         </article>
       ))
@@ -589,6 +609,11 @@ const ha =
     background: var(--u-bg);
     color: var(--u-text);
     min-height: 100vh;
+    /* Always a dark product surface — do not inherit site light/dark ink. */
+    color-scheme: dark;
+  }
+  .unchair :is(h1, h2, h3, h4) {
+    color: inherit;
   }
   .section,
   .hero {
@@ -727,6 +752,9 @@ const ha =
     display: block;
     width: 100%;
     height: auto;
+    aspect-ratio: 840 / 560;
+    object-fit: cover;
+    background: #090c0d;
   }
   .runtime {
     display: flex;
@@ -801,6 +829,7 @@ const ha =
   .card img {
     display: block;
     width: 100%;
+    height: auto;
     max-height: 330px;
     object-fit: contain;
     margin-top: 1.5rem;

@@ -73,19 +73,29 @@ test.describe("home hero reception (#171)", () => {
 
   test("CTA focus-visible and theme toggle keep hero usable", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
+    await page.emulateMedia({ colorScheme: "light" });
     await page.goto("/");
+    await page.evaluate(() => localStorage.removeItem("theme"));
+    await page.reload();
 
     const cta = page.locator("a.home-cta");
     await cta.focus();
     await expect(cta).toBeFocused();
 
     const themeBtn = page.locator(".site-nav theme-toggle button");
+    const colorScheme = page.locator('meta[name="color-scheme"]');
+    await expect(colorScheme).toHaveAttribute("content", "light dark");
+    await expect(page.locator("html")).not.toHaveClass(/theme-dark/);
+
     await themeBtn.click();
     await expect(page.locator("html")).toHaveClass(/theme-dark/);
+    await expect(colorScheme).toHaveAttribute("content", "dark");
     await assertPortraitReserved(page);
     await expect(cta).toBeVisible();
 
     await themeBtn.click();
+    await expect(colorScheme).toHaveAttribute("content", "light dark");
+    await expect(page.locator("html")).not.toHaveClass(/theme-dark/);
     await expect(cta).toBeVisible();
     await cta.focus();
     await expect(cta).toBeFocused();
