@@ -108,6 +108,8 @@ const {
 
 <style>
   .offer-card {
+    /* Opt-in so block-size can transition to/from auto (Chrome/Edge). */
+    interpolate-size: allow-keywords;
     display: flex;
     flex-direction: column;
     background: var(--gradient-subtle);
@@ -231,26 +233,32 @@ const {
     gap: 1.5rem;
     min-height: 0; /* Allow flex item to shrink */
     overflow: hidden;
+    block-size: auto;
+    opacity: 1;
     transition:
-      max-height 0.3s ease,
+      block-size 0.3s ease,
       opacity 0.3s ease,
       margin 0.3s ease,
       padding 0.3s ease;
-    max-height: 5000px; /* Large enough for expanded content */
-    opacity: 1;
   }
 
   .offer-card[aria-expanded="false"] .offer-content {
-    max-height: 0 !important;
+    block-size: 0;
     opacity: 0;
-    margin: 0 !important;
-    padding: 0 !important;
+    margin: 0;
+    padding: 0;
     gap: 0;
     overflow: hidden;
   }
 
   .offer-card[aria-expanded="false"] .offer-footer {
-    display: none !important;
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .offer-content {
+      transition: none;
+    }
   }
 
   .offer-section {

@@ -3,7 +3,8 @@
    ========================================================================== */
 
 :root {
-  color-scheme: light;
+  /* Follow system by default; meta[name=color-scheme] pins an override. */
+  color-scheme: light dark;
   /* ——— Kit / maquette tokens (SPECIFICATION.txt) ——— */
   --ink: #151819;
   --ink-muted: #454a4d;
@@ -158,6 +159,15 @@
 
   --bp-md: 50em;
   --bp-lg: 75em;
+}
+
+/* Map <meta name="color-scheme"> overrides onto the CSS property (meta is only a hint). */
+:root:has(> head > meta[name="color-scheme"][content="dark"]) {
+  color-scheme: dark;
+}
+
+:root:has(> head > meta[name="color-scheme"][content="light"]) {
+  color-scheme: light;
 }
 
 :root.theme-dark {

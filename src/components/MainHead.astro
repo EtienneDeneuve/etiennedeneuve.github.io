@@ -74,6 +74,18 @@ const canonicalHref =
 
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width" />
+<meta name="color-scheme" content="light dark" />
+<script is:inline>
+  (() => {
+    try {
+      const stored = localStorage.getItem("theme");
+      const meta = document.querySelector('meta[name="color-scheme"]');
+      if (meta && (stored === "dark" || stored === "light")) meta.content = stored;
+    } catch {
+      /* private mode */
+    }
+  })();
+</script>
 <title>{seo.title}</title>
 <meta name="description" content={seo.description} />
 <meta name="robots" content={seo.robots} />
@@ -141,36 +153,39 @@ const canonicalHref =
 
 <script is:inline>
   (() => {
-    const readDark = () => {
+    const readStored = () => {
       try {
         const stored = localStorage.getItem("theme");
-        if (stored === "dark" || stored === "light") return stored === "dark";
+        if (stored === "dark" || stored === "light") return stored;
       } catch {
         /* private mode */
       }
-      return (
-        typeof window.matchMedia === "function" &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches
-      );
+      return null;
     };
 
-    const paint = (root, dark) => {
+    const systemDark = () =>
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+    const paint = (root, stored) => {
+      const dark = stored ? stored === "dark" : systemDark();
       root.classList.toggle("theme-dark", dark);
       root.classList.toggle("cc--darkmode", dark);
-      root.style.colorScheme = dark ? "dark" : "light";
+      const meta = root.querySelector('meta[name="color-scheme"]');
+      if (meta) meta.setAttribute("content", stored ?? "light dark");
     };
 
-    // Initial paint (before CSS).
-    paint(document.documentElement, readDark());
+    // Initial paint (before CSS) — also sync meta for native UI / light-dark().
+    paint(document.documentElement, readStored());
 
     // Critical: stamp the *incoming* document before Astro swaps attributes,
     // otherwise theme-dark is lost and any class→storage sync would poison localStorage.
     document.addEventListener("astro:before-swap", (event) => {
-      paint(event.newDocument.documentElement, readDark());
+      paint(event.newDocument.documentElement, readStored());
     });
 
     document.addEventListener("astro:after-swap", () => {
-      paint(document.documentElement, readDark());
+      paint(document.documentElement, readStored());
     });
   })();
 </script>
