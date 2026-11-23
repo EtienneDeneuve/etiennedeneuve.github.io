@@ -260,6 +260,8 @@ body {
   font-family: var(--font-body);
   font-size: var(--text-base);
   line-height: var(--leading-normal);
+  /* Keep fallback metrics close to Outfit while the webfont swaps in (CLS). */
+  font-size-adjust: from-font;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -352,8 +354,9 @@ summary:focus-visible,
   }
 }
 
-h1,
-h2 {
+/* :where() keeps specificity at 0 so section/band colors inherit correctly
+   (Unchair, thinking dark bands, editorial ivory, etc.). */
+:where(h1, h2) {
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
   font-family: var(--font-display);
@@ -361,9 +364,7 @@ h2 {
   color: var(--color-fg);
 }
 
-h3,
-h4,
-h5 {
+:where(h3, h4, h5) {
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
   font-family: var(--font-body);
@@ -371,19 +372,19 @@ h5 {
   color: var(--color-fg);
 }
 
-h1 {
+:where(h1) {
   font-size: clamp(var(--text-3xl), 5vw, var(--text-5xl));
 }
-h2 {
+:where(h2) {
   font-size: clamp(var(--text-2xl), 3vw, var(--text-4xl));
 }
-h3 {
+:where(h3) {
   font-size: clamp(var(--text-xl), 2.2vw, var(--text-2xl));
 }
-h4 {
+:where(h4) {
   font-size: var(--text-xl);
 }
-h5 {
+:where(h5) {
   font-size: var(--text-lg);
 }
 
