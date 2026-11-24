@@ -57,6 +57,19 @@ Après publication, je veux récupérer l'artefact par son digest, vérifier le 
 
 Si des valeurs restent à injecter, le paquet de base est validé une première fois puis chaque composition est validée après substitution. Une validation du paquet ne doit pas être présentée comme une validation de toutes les configurations finales.
 
+## Le registre n'est pas le format
+
+Il existe trois choix différents : le contenu à distribuer, son enveloppe et le protocole qui permet de le récupérer. Un OCI Image Layout conserve les descripteurs et les blobs dans des fichiers adressés par leur contenu. ORAS permet de copier un artefact entre un registre et un layout local. Ce layout peut ensuite être archivé dans S3 ou Azure Blob, sans dépendre du registre d'origine.
+
+Un bucket brut ne parle toutefois pas le protocole OCI Distribution. Pour consommer le layout avec OCIRepository, il faut le restaurer dans un registre compatible ou disposer d'un adaptateur qui expose ce protocole. Une autre option est de publier directement les manifests validés dans un préfixe versionné du stockage objet et de les consommer avec une source Flux Bucket (provider aws, azure ou generic). Ce second chemin ne consomme pas un manifeste OCI : Flux assemble sa propre source à partir des fichiers du bucket.
+
+Je sépare donc la somme de contrôle des fichiers, le digest du manifeste OCI et l'identifiant de révision produit par Flux pour le bucket. Le transport peut changer sans changer les fichiers validés, mais ces identifiants ne sont pas interchangeables.
+
+- [OCI Image Layout](https://github.com/opencontainers/image-spec/blob/main/image-layout.md)
+- [ORAS](https://oras.land/docs/)
+- [Flux Bucket](https://fluxcd.io/flux/components/source/buckets/)
+
+
 ## Sources
 
 - [OCI Image Specification](https://github.com/opencontainers/image-spec)
