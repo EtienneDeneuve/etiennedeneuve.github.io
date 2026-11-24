@@ -59,6 +59,17 @@ A critical component can undergo a clean-cluster installation test before public
 
 This does not replace an Azure recovery exercise: Kind cannot reproduce cloud storage classes, federated identities or external services. It can detect implicit dependencies and bootstrap errors before exposing the package to consumers. Reports must state exactly what was exercised.
 
+## Registry failure belongs in the recovery scenario
+
+A backup of Git composition is insufficient if every digest points to an unavailable registry. Keep critical artifacts, inventories and evidence outside that failure domain. An OCI Image Layout exported to versioned object storage is one archival option. Retain associated objects, signatures and attestations, and verify that they remain usable after restoration. A secondary compatible registry can serve as the recovery target.
+
+For an isolated cluster, a verified export can be imported into a local registry. If distribution uses raw S3 or Azure Blob files, Flux Bucket can retrieve the selected prefix; file integrity and signatures need complementary verification. In both cases identities, keys, retention and emergency access belong in the exercise.
+
+I would test recovery with the primary registry unavailable, comparing OCI digests where the format is preserved, file checksums and validation evidence. This scenario remains to be exercised; it is not a measured recovery result.
+
+- [OCI Image Layout](https://github.com/opencontainers/image-spec/blob/main/image-layout.md)
+- [Flux Bucket](https://fluxcd.io/flux/components/source/buckets/)
+
 ## Sources
 
 - [Flux bootstrap](https://fluxcd.io/flux/installation/bootstrap/)
