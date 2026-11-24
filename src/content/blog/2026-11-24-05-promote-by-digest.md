@@ -61,6 +61,12 @@ Une promotion ne doit pas reconstruire le paquet. Je veux retrouver, pour un dig
 
 Si un opérateur doit passer à une autre version ou si un backend change de topologie, je publie un nouveau paquet et je recommence les contrôles. Modifier seulement les tailles ou les replicas appartient à la composition, sous réserve de respecter le contrat de capacité et de disponibilité.
 
+## Changer de registre sans reconstruire
+
+Pour transférer un paquet vers un autre registre, je copie les blobs et le manifeste OCI, puis je vérifie le digest obtenu. Les signatures, attestations et autres objets associés doivent aussi être copiés et vérifiés ; ils ne suivent pas nécessairement une copie simple. Une signature peut par ailleurs porter des contraintes liées au repository ou à l'identité attendue.
+
+Pour une distribution directe via bucket, je publie les fichiers dans un préfixe versionné protégé contre les modifications, avec un inventaire signé des empreintes. La composition ne pointe vers cette version qu'une fois la publication complète et vérifiée. Le contrôle de signature est alors à mettre en œuvre séparément de la source Bucket.
+
 ## Sources
 
 - [Flux OCIRepository](https://fluxcd.io/flux/components/source/ocirepositories/)
