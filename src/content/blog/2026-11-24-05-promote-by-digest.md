@@ -55,6 +55,12 @@ Publier deux paquets, promouvoir le second en développement, vérifier ses cond
 
 Sur le hub AKS, un tag versionné dédié au nouveau hub a permis de publier des variantes HA sans remplacer le canal consommé par la plateforme existante. C'est une séparation de contrats, pas un changement d'environnement. Pour une cible durable, je préfère des chemins OCI distincts avec des tags SemVer indépendants, par exemple monitoring/grafana:1.2.0 et engineering/grafana:2.0.0. Un tag préfixé comme monitoring-1.2.0 reste une alternative. Je distingue la version upstream, celle du chart, celle du paquet et celle de la composition. Dans le cas réalisé, la sélection se fait par tag ; la promotion par digest est une amélioration proposée. Un tag versionné doit être protégé contre la réécriture : SemVer seul ne garantit pas l'immutabilité.
 
+## Les preuves voyagent avec le digest
+
+Une promotion ne doit pas reconstruire le paquet. Je veux retrouver, pour un digest donné, le SHA source, l'inventaire des ressources, les résultats des validations et la composition testée. Le passage en production exige également la validation du delta de production. Un test réussi en développement ne couvre pas automatiquement un changement de hostname ou de classe de stockage.
+
+Si un opérateur doit passer à une autre version ou si un backend change de topologie, je publie un nouveau paquet et je recommence les contrôles. Modifier seulement les tailles ou les replicas appartient à la composition, sous réserve de respecter le contrat de capacité et de disponibilité.
+
 ## Sources
 
 - [Flux OCIRepository](https://fluxcd.io/flux/components/source/ocirepositories/)
