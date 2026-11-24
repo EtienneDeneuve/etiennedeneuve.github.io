@@ -87,7 +87,7 @@
     "@playwright/test": "^1.65.1",
     "@resvg/resvg-js": "^2.6.2",
     "@types/uuid": "^11.0.0",
-    "@typescript-eslint/parser": "^8.65.0",
+    "@typescript-eslint/parser": "^8.73.0",
     "cspell": "^10.0.1",
     "date-fns": "^4.4.0",
     "dayjs": "^1.11.21",
