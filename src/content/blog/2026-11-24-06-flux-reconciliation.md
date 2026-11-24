@@ -61,6 +61,14 @@ Faire échouer la dépendance CRD, observer le blocage du contrôleur dépendant
 
 Sur AKS, nous avons préparé une composition qui ordonne les opérateurs, la base PostgreSQL de Grafana, les backends VictoriaMetrics et Loki, Grafana HA puis Alloy en façade. Les sources OCI utilisent un tag dédié et des paramètres sont injectés avec postBuild.substitute. Le bootstrap vérifie le contexte Kubernetes, les prérequis cloud, le stockage et les secrets. Les tests fonctionnels de Grafana et de l'entrée OTLP restent nécessaires : la préparation des manifests ne prouve pas que la plateforme fonctionne en production.
 
+## Substituer des données, pas inventer une architecture
+
+Le postBuild de Flux doit rester une interface étroite. Un hostname, un nombre de replicas, une quantité CPU ou une référence de secret sont des entrées explicites. Je veux contrôler les variables obligatoires, activer la substitution stricte lorsque la version du contrôleur le permet, et refuser les variables non prévues par le contrat. La validation des types intervient sur le résultat rendu.
+
+Pour une composition donnée, flux build kustomization permet de produire un résultat à inspecter avant réconciliation, avec les sources et substitutions correspondantes. Les entrées provenant de ConfigMaps ou Secrets doivent être représentées dans le test de manière sûre ; une simulation hors ligne ne reproduit pas nécessairement toutes les références du cluster. Les secrets réels ne doivent pas être versés dans les artefacts de CI.
+
+Un dry-run serveur sur un cluster de validation compatible ajoute les contrôles de l'API et des admissions. Il ne garantit ni la disponibilité des contrôleurs ni les effets futurs des réconciliations. Une installation Kind avec vérifications fonctionnelles complète ce contrôle.
+
 ## Sources
 
 - [Flux Kustomization](https://fluxcd.io/flux/components/kustomize/kustomizations/)
