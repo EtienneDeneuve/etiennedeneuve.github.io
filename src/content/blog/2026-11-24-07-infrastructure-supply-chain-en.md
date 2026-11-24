@@ -50,6 +50,12 @@ Sign a package with an authorized test identity, verify acceptance, then publish
 
 In the GHCR case, the publishing workstation uses an identity with write:packages. The cluster uses a separate Docker secret limited to package read access, with Flux generic provider. Source and revision annotations link the package to its Git SHA but do not replace signed attestations. Secrets are excluded from the bundle. Cryptographic verification and admission policies are extensions of the chain, not controls I claim to have deployed here.
 
+## Useful attestations describe the checks performed
+
+The proposed publication chain associates the OCI digest with validation of the files actually packaged: schemas including CRDs, policies, image inventory and integration tests. Reports must not claim tests that were not run. Distinguish package build evidence, rendered composition validation and runtime observations.
+
+Security policies should inspect generated manifests: privileged containers, hostPath mounts, RBAC permissions, unpinned images, network exposure and cleartext secrets. A HelmRelease alone does not reveal all these properties. Render and inspect its resources or explicitly limit the scope of the report.
+
 ## Sources
 
 - [Sigstore Cosign](https://docs.sigstore.dev/cosign/)
