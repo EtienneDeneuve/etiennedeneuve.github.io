@@ -61,6 +61,14 @@ Break the CRD dependency, observe the dependent controller being blocked, fix th
 
 On AKS we prepared a composition ordering operators, the Grafana PostgreSQL database, VictoriaMetrics and Loki backends, Grafana HA and the Alloy front end. OCI sources use a dedicated tag; parameters are injected with postBuild.substitute. Bootstrap checks Kubernetes context, cloud prerequisites, storage and secrets. Grafana and OTLP functional tests are still required: preparing manifests does not establish production operation.
 
+## Substitute data, not architecture
+
+Flux postBuild should remain a narrow interface. Hostnames, replicas, CPU quantities and secret references are explicit inputs. Check required variables, enable strict substitution when supported by the controller version, and reject variables outside the contract. Type validation applies to the rendered output.
+
+For a composition, flux build kustomization can produce output for inspection before reconciliation, with the corresponding sources and substitutions. Inputs from ConfigMaps and Secrets need safe representation in tests; offline simulation does not necessarily reproduce every cluster reference. Real secrets must not enter CI artifacts.
+
+Server-side dry-run against a compatible validation cluster adds API and admission checks. It does not establish controller readiness or future reconciliation effects. A Kind installation with functional checks complements it.
+
 ## Sources
 
 - [Flux Kustomization](https://fluxcd.io/flux/components/kustomize/kustomizations/)
