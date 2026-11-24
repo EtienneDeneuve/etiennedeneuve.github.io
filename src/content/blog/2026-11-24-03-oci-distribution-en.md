@@ -49,6 +49,14 @@ Publish two versions under a test tag, retain the first digest and verify that r
 
 Each component has a manifests directory, an OCIRepository, a Kustomization and optional upstream version annotations. A script invokes flux push artifact with the manifest path, Git SHA and distribution tag. GHCR holds the packages. Software, chart, infrastructure package and composition versions are distinct. A durable line may have its own repository, such as monitoring/grafana:1.2.0; a prefixed tag such as monitoring-1.2.0 is also possible. The digest identifies content.
 
+## Publish what CI just checked
+
+Separate the working directory from dist, which contains the files actually distributed. Once built, it becomes a read-only input to checks: Kubernetes and CRD schemas for supported versions, security policies, image references, resource inventory and diffs. Publishing does not regenerate anything.
+
+After publishing, retrieve the artifact by digest, compare its file contents with the checked output and associate validation results with the OCI digest. A checksum of the directory or its files is not the OCI manifest digest: the identities serve different verification purposes.
+
+If values still need injection, validate the base package first and each composition after substitution. Package validation is not evidence that every final configuration is valid.
+
 ## Sources
 
 - [OCI Image Specification](https://github.com/opencontainers/image-spec)
