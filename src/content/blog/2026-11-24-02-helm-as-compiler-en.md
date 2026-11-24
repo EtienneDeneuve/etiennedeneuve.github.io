@@ -1,5 +1,5 @@
 ---
-title: "Why I prefer Helm as a compiler"
+title: "Helm, DRY and the hidden cost of infrastructure abstractions"
 description: "Move chart rendering into CI without ignoring release contracts."
 pubDate: 2026-12-09T04:00:00.000Z
 language: en
@@ -23,6 +23,32 @@ relatedArticles: []
 I am not trying to remove Helm from Kubernetes. I want to avoid depending on its release engine to distribute every platform component.
 
 A chart is a manifest generation program. Its inputs include values, Kubernetes capabilities and sometimes functions that consult the cluster. Versioning the chart does not identify its output by itself.
+
+## The trouble starts with one line of YAML
+
+A hostname should take seconds to find. Yet in platforms I have analysed, the final value can depend on a shared helper, namespace, release name and historical exceptions. Here is a fictional example, not customer code:
+
+```yaml
+host: {{ include "platform.endpoint" . }}
+```
+
+When a team needs to migrate a domain, that line reveals neither the current hostname nor the other applications affected by a helper change. Reviewers must reconstruct the rendering context. An exception for one service can change other releases. The review concerns a program even though the business decision concerned an address.
+
+The attempt to remove hardcoded values has merely moved them into conditional branches. They are harder to discover.
+
+## DRY is not a mandate to abstract everything that looks alike
+
+DRY concerns duplicated knowledge. Two similar hostnames can belong to independent contracts. Generating both with one helper creates a dependency that did not previously exist. AHA (Avoid Hasty Abstractions) suggests waiting until the invariants are understood.
+
+I prefer a few repeated explicit parameters to an abstraction whose consequences nobody can predict without running the engine. This does not mean copying every Deployment: structural invariants belong in a shared component, legitimate differences remain data.
+
+For a monitoring hub, an HA variant should not emerge accidentally from a cluster-name condition. It is a distinct version or distribution line. At equivalent composition versions, environments consume the same package, with a small Flux substitution layer for addresses and capacity.
+
+## Review the output
+
+Rendering during reconciliation also changes what can be verified: CI may approve charts and values without checking the exact output consumed later. I want the rendered result available for review, validated and published without rebuilding it. Environment substitutions must then be rendered and validated separately. If the package still contains a HelmRelease, its rendering remains an additional step: checking the wrapper does not check its workloads.
+
+Kustomize can reproduce the same mistakes when overlays become an implicit programming language. My criterion is whether the output can be read, compared and tested, regardless of engine.
 
 ## What moves into CI
 
