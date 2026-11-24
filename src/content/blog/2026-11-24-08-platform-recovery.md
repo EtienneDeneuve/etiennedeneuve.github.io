@@ -59,6 +59,17 @@ Un composant critique peut passer un test d'installation sur cluster vierge avan
 
 Ce test ne remplace pas un PRA Azure : Kind ne reproduit pas les classes de stockage cloud, les identités fédérées ou les services externes. Il permet de détecter des dépendances implicites et des erreurs de bootstrap avant d'exposer le paquet aux consommateurs. Le rapport doit indiquer précisément le périmètre exercé.
 
+## Le registre fait partie du scénario de panne
+
+Une sauvegarde de la composition Git ne suffit pas si tous ses digests pointent vers un registre devenu inaccessible. Je veux conserver les artefacts critiques, leur inventaire et leurs preuves hors de ce domaine de panne. Un OCI Image Layout exporté vers un stockage objet versionné constitue une option d'archivage. Il faut conserver aussi les objets associés, signatures et attestations, puis vérifier qu'ils restent utilisables après restauration. Un registre secondaire compatible peut servir de cible de reprise.
+
+Pour un cluster isolé, un export vérifié peut être importé dans un registre local. Si la distribution repose directement sur des fichiers S3 ou Azure Blob, Flux Bucket peut récupérer le préfixe choisi ; l'intégrité et la signature des fichiers nécessitent un contrôle complémentaire. Dans les deux cas, les identités, clés, politiques de rétention et accès de secours doivent faire partie de l'exercice.
+
+Je testerais la restauration avec le registre principal indisponible, en comparant les digests OCI quand le format est conservé, les empreintes de fichiers et les preuves de validation. Ce scénario reste à exercer ; il ne constitue pas un résultat de PRA mesuré.
+
+- [OCI Image Layout](https://github.com/opencontainers/image-spec/blob/main/image-layout.md)
+- [Flux Bucket](https://fluxcd.io/flux/components/source/buckets/)
+
 ## Sources
 
 - [Flux bootstrap](https://fluxcd.io/flux/installation/bootstrap/)
