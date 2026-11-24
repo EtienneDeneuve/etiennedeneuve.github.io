@@ -48,6 +48,16 @@ Créer deux modules, CRDs et contrôleur, et deux profils. Modifier uniquement l
 
 Les huit paquets du hub AKS sont indépendants. Le dossier de cluster compose les sources et Kustomizations ; les paramètres de rétention, stockage et noms DNS sont injectés par environnement. Les opérateurs précèdent les ressources qu'ils gèrent. Le DAG de build proposé avec Moon est distinct de cette orchestration Flux déjà préparée.
 
+## Le contrat de parité des environnements
+
+Je veux que DEV, INT et PROD utilisent les mêmes briques à version équivalente. Les différences de capacité ne justifient pas trois architectures différentes. Un environnement avec VMSingle et un autre avec VMCluster ne teste pas le même système. Même problème avec les modes de déploiement Loki ou une base PostgreSQL sans opérateur en développement.
+
+Le paquet commun contient la topologie. La composition de cluster fournit un delta volontairement limité : noms DNS, nombres de replicas, ressources, capacité de stockage et références de secrets. Les versions des composants et des images, les API, les relations réseau et les modes de déploiement restent communs. Une exception structurelle doit être déclarée et revue comme telle.
+
+Pour le vérifier, la CI rend toutes les compositions à partir du même digest, normalise une liste explicite de champs autorisés à varier et compare les objets par groupe, type, namespace et nom. La liste ne doit pas masquer des sous-arbres entiers comme spec. Ajouter un objet, changer un port ou modifier une politique réseau doit produire un écart visible.
+
+La parité du rendu ne prouve pas la parité du runtime : admission, infrastructure cloud, charge et capacité peuvent encore diverger.
+
 ## Sources
 
 - [Moon task configuration](https://moonrepo.dev/docs/config/project)
