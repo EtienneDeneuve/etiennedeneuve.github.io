@@ -53,6 +53,12 @@ The result should be a report with measured durations, not an RTO promise.
 
 The monitoring hub uses independent OCI components, a CNPG-managed Grafana database, VictoriaMetrics and Loki with Azure object storage for Loki, and a Gateway API front end for Grafana and Alloy. Recovery also requires registry access, identities, storage classes, object storage, secrets and backups. The bootstrap script prepares prerequisites and applies the composition. We published the packages; this field experience does not establish recovery durations or a complete reconstruction result.
 
+## Recovery as a publication gate
+
+A critical component can undergo a clean-cluster installation test before publication. CI installs required CRDs and controllers, applies the composition rendered from validated files, waits for readiness and checks the service. A stateful component needs a separate data restoration scenario.
+
+This does not replace an Azure recovery exercise: Kind cannot reproduce cloud storage classes, federated identities or external services. It can detect implicit dependencies and bootstrap errors before exposing the package to consumers. Reports must state exactly what was exercised.
+
 ## Sources
 
 - [Flux bootstrap](https://fluxcd.io/flux/installation/bootstrap/)
