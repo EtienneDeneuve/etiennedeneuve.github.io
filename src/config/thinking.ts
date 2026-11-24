@@ -89,6 +89,27 @@ export const thinkingConfig = {
    */
   series: [
     {
+      id: "infrastructure-as-artifacts",
+      title: {
+        fr: "Infrastructure as Artifacts",
+        en: "Infrastructure as Artifacts",
+      },
+      hint: {
+        fr: "Construire, distribuer et promouvoir les briques de plateforme.",
+        en: "Build, distribute, and promote platform components.",
+      },
+      articleIds: [
+        "2026-11-24-01-infrastructure-is-software",
+        "2026-11-24-02-helm-as-compiler",
+        "2026-11-24-03-oci-distribution",
+        "2026-11-24-04-infrastructure-catalog",
+        "2026-11-24-05-promote-by-digest",
+        "2026-11-24-06-flux-reconciliation",
+        "2026-11-24-07-infrastructure-supply-chain",
+        "2026-11-24-08-platform-recovery",
+      ],
+    },
+    {
       id: "ci-ia",
       title: {
         fr: "Quand l’IA accélère le code, la CI doit suivre",
