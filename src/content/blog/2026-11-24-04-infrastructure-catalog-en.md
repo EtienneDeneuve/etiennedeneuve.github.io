@@ -48,6 +48,16 @@ Create CRD and controller modules and two profiles. Change only the controller. 
 
 The eight AKS hub packages are independent. The cluster directory composes sources and Kustomizations; retention, storage and DNS parameters are injected per environment. Operators precede their managed resources. The proposed Moon build DAG is distinct from the Flux orchestration already prepared.
 
+## An environment parity contract
+
+I want DEV, INT and PROD to use the same components at equivalent versions. Capacity differences do not justify three different architectures. An environment running VMSingle and one running VMCluster are testing different systems. The same applies to Loki deployment modes or development PostgreSQL without its operator.
+
+The common package defines topology. Cluster composition supplies a deliberately small delta: DNS names, replica counts, resources, storage capacity and secret references. Component and image versions, APIs, network relationships and deployment modes remain common. Structural exceptions require explicit review.
+
+To check this, CI renders every composition from the same digest, normalizes an explicit list of fields allowed to differ and compares objects by group, kind, namespace and name. The list must not hide entire subtrees such as spec. Adding an object, changing a port or altering a network policy must produce a visible difference.
+
+Rendered parity does not establish runtime parity: admission, cloud infrastructure, load and capacity can still differ.
+
 ## Sources
 
 - [Moon task configuration](https://moonrepo.dev/docs/config/project)
