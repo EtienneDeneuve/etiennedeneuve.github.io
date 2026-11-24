@@ -49,6 +49,14 @@ Publier deux versions sous un tag de test, conserver le premier digest et vérif
 
 Chaque composant possède un dossier manifests, une source OCIRepository, une Kustomization et éventuellement des annotations de version upstream. Un script appelle flux push artifact avec le chemin des manifests, le SHA Git et un tag de distribution. GHCR conserve les paquets. Je distingue les versions du logiciel, du chart, du paquet infrastructure et de la composition. Une ligne durable peut avoir son propre repository, par exemple monitoring/grafana:1.2.0 ; un tag préfixé comme monitoring-1.2.0 est aussi possible. Le digest reste l'identité du contenu.
 
+## Publier ce que la CI vient de contrôler
+
+Je sépare le répertoire de travail du répertoire dist. Le second contient les fichiers effectivement distribués. Une fois construit, il devient une entrée en lecture seule pour les contrôles : schémas Kubernetes et CRDs correspondant aux versions supportées, politiques de sécurité, références d'images, inventaire et diff des ressources. Le push ne relance pas la génération.
+
+Après publication, je veux récupérer l'artefact par son digest, vérifier le contenu des fichiers contre celui qui a passé les contrôles et associer les résultats au digest OCI. Une somme de contrôle du répertoire ou de ses fichiers n'est pas le digest du manifeste OCI : les deux identités servent à des vérifications différentes.
+
+Si des valeurs restent à injecter, le paquet de base est validé une première fois puis chaque composition est validée après substitution. Une validation du paquet ne doit pas être présentée comme une validation de toutes les configurations finales.
+
 ## Sources
 
 - [OCI Image Specification](https://github.com/opencontainers/image-spec)
