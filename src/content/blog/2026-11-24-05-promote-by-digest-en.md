@@ -61,6 +61,12 @@ Promotion must not rebuild the package. For a given digest I want the source SHA
 
 An operator upgrade or backend topology change requires a new package and fresh checks. Changes limited to sizing or replicas belong to composition, subject to capacity and availability requirements.
 
+## Change registries without rebuilding
+
+To transfer a package to another registry, copy its blobs and OCI manifest and verify the resulting digest. Signatures, attestations and associated objects must also be copied and checked; a simple copy may omit them. Signatures may also carry repository or identity constraints.
+
+For direct bucket distribution, publish files under a versioned prefix protected against modification, alongside a signed checksum inventory. Composition references the version only after publication is complete and verified. Signature enforcement must then be implemented separately from the Bucket source.
+
 ## Sources
 
 - [Flux OCIRepository](https://fluxcd.io/flux/components/source/ocirepositories/)
