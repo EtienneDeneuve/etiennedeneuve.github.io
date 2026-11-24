@@ -55,6 +55,12 @@ Publish two packages, promote the second in development, verify conditions and r
 
 On the AKS hub, a dedicated versioned tag made it possible to publish HA variants without replacing the channel consumed by the existing platform. This separates contracts, not environments. For a durable design I prefer distinct OCI paths with independent SemVer tags, such as monitoring/grafana:1.2.0 and engineering/grafana:2.0.0. A prefixed tag such as monitoring-1.2.0 is an alternative. Upstream software, chart, package and composition versions are distinct. The implementation uses tag selection; promotion by digest is a proposed improvement. Protect version tags against overwrites: SemVer alone does not guarantee immutability.
 
+## Evidence travels with the digest
+
+Promotion must not rebuild the package. For a given digest I want the source SHA, resource inventory, validation results and tested composition. Production promotion also requires validation of the production delta. A successful development test does not automatically cover a hostname or storage class change.
+
+An operator upgrade or backend topology change requires a new package and fresh checks. Changes limited to sizing or replicas belong to composition, subject to capacity and availability requirements.
+
 ## Sources
 
 - [Flux OCIRepository](https://fluxcd.io/flux/components/source/ocirepositories/)
