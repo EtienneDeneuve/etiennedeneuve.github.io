@@ -57,6 +57,19 @@ After publishing, retrieve the artifact by digest, compare its file contents wit
 
 If values still need injection, validate the base package first and each composition after substitution. Package validation is not evidence that every final configuration is valid.
 
+## The registry is not the format
+
+There are three separate choices: the payload, its envelope and the retrieval protocol. An OCI Image Layout stores descriptors and content-addressed blobs as files. ORAS can copy an artifact between a registry and a local layout. That layout can be archived in S3 or Azure Blob independently of the original registry.
+
+A raw bucket does not implement OCI Distribution. To consume the layout through OCIRepository, restore it to a compatible registry or provide an adapter implementing that protocol. Alternatively, publish validated manifests directly to a versioned object-storage prefix and consume them through a Flux Bucket source (aws, azure or generic provider). This path does not consume an OCI manifest: Flux constructs its own source artifact from bucket files.
+
+Distinguish file checksums, the OCI manifest digest and Flux's bucket revision identifier. Transport can change without changing the validated files, but these identifiers are not interchangeable.
+
+- [OCI Image Layout](https://github.com/opencontainers/image-spec/blob/main/image-layout.md)
+- [ORAS](https://oras.land/docs/)
+- [Flux Bucket](https://fluxcd.io/flux/components/source/buckets/)
+
+
 ## Sources
 
 - [OCI Image Specification](https://github.com/opencontainers/image-spec)
