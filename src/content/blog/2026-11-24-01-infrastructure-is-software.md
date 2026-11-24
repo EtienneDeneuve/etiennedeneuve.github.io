@@ -57,9 +57,11 @@ Sur une plateforme Azure, nous avons préparé huit paquets indépendants : opé
 
 Les huit paquets ont été publiés dans GHCR sous un tag dédié au nouveau hub. Ce que je peux affirmer à ce stade est la publication des artefacts et la préparation du déploiement, pas la validation opérationnelle du hub en production.
 
-## Retour de terrain : un hub de monitoring sur AKS
+## Ce que je veux faire approuver avant le push
 
-Nous avons publié huit paquets indépendants dans GHCR : opérateurs VictoriaMetrics et CNPG, VictoriaMetrics, base Grafana, Grafana, Loki, Alloy et ressources communes. Les paquets contiennent des manifests Kubernetes, dont des HelmRelease. Ils ne remplacent pas les images runtime. La publication des paquets est réalisée ; le bootstrap et les tests opérationnels restent à valider.
+La PR de publication doit exposer le résultat de construction, pas uniquement le diff des sources. Une modification dans un helper peut changer des dizaines de ressources sans que le diff du chart montre lesquelles. Je veux un inventaire des objets ajoutés, modifiés et supprimés, le diff des manifests générés et les résultats des validations. Le paquet publié doit contenir exactement les fichiers contrôlés, sans second rendu entre les tests et le push.
+
+Il reste une distinction importante : dans notre architecture actuelle, certains paquets contiennent des HelmRelease. Ces paquets sont validables en tant que déclarations Flux, mais le résultat de Helm nécessite encore une validation supplémentaire.
 
 ## Sources
 
