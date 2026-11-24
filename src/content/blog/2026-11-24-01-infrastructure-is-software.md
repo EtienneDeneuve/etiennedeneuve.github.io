@@ -51,6 +51,12 @@ Construire un paquet contenant un ConfigMap et un Deployment, le publier dans un
 
 Ce protocole est proposé, pas un résultat de benchmark.
 
+## Un cas concret : un hub de monitoring sur AKS
+
+Sur une plateforme Azure, nous avons préparé huit paquets indépendants : opérateur VictoriaMetrics, VictoriaMetrics, opérateur CNPG, base Grafana, Grafana, Loki, Alloy et ressources communes. Le contenu distribué est un dossier de manifests, qui peut encore contenir des HelmRelease. Les images exécutées par les workloads suivent leur propre cycle.
+
+Les huit paquets ont été publiés dans GHCR sous un tag dédié au nouveau hub. Ce que je peux affirmer à ce stade est la publication des artefacts et la préparation du déploiement, pas la validation opérationnelle du hub en production.
+
 ## Sources
 
 - [Flux OCIRepository](https://fluxcd.io/flux/components/source/ocirepositories/)
