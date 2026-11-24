@@ -55,6 +55,12 @@ This is a proposed experiment, not a benchmark result.
 
 We published eight independent packages in GHCR: VictoriaMetrics and CNPG operators, VictoriaMetrics, Grafana database, Grafana, Loki, Alloy and common resources. Packages contain Kubernetes manifests, including HelmRelease objects, not runtime images. Package publication is complete; bootstrap and operational tests still need validation.
 
+## What I want reviewed before publishing
+
+A publication PR should expose the build output, not only the source diff. A helper change can alter dozens of resources without the chart diff identifying them. I want an inventory of added, changed and removed objects, a generated manifest diff and validation results. The published package must contain the checked files, without rendering again between validation and upload.
+
+Our current architecture still packages some HelmRelease objects. Those packages can be checked as Flux declarations, but Helm's output requires another validation step.
+
 ## Sources
 
 - [Flux OCIRepository](https://fluxcd.io/flux/components/source/ocirepositories/)
