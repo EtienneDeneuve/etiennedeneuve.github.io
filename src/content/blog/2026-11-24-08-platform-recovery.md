@@ -53,6 +53,12 @@ Le résultat doit être un rapport avec les durées réellement mesurées, pas u
 
 Le hub de monitoring utilise des composants OCI indépendants, une base Grafana gérée par CNPG, VictoriaMetrics et Loki avec stockage objet Azure, et une façade Gateway API pour Grafana et Alloy. La reconstruction nécessite aussi le registre, les identités, les classes de stockage, le stockage objet, les secrets et les sauvegardes. Le script de bootstrap prépare ces prérequis et applique la composition. Nous avons publié les paquets ; aucun temps de restauration ni résultat de reconstruction complète n'est établi par ce retour de terrain.
 
+## La reconstruction comme gate de publication
+
+Un composant critique peut passer un test d'installation sur cluster vierge avant sa publication. La CI installe les CRDs et contrôleurs requis, applique la composition rendue à partir des fichiers validés, attend les conditions de disponibilité puis vérifie le service. Pour un composant stateful, un scénario de restauration distinct vérifie les données.
+
+Ce test ne remplace pas un PRA Azure : Kind ne reproduit pas les classes de stockage cloud, les identités fédérées ou les services externes. Il permet de détecter des dépendances implicites et des erreurs de bootstrap avant d'exposer le paquet aux consommateurs. Le rapport doit indiquer précisément le périmètre exercé.
+
 ## Sources
 
 - [Flux bootstrap](https://fluxcd.io/flux/installation/bootstrap/)
