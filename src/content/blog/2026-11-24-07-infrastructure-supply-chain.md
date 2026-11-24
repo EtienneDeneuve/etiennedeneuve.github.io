@@ -56,6 +56,36 @@ La chaîne de publication proposée associe au digest OCI le rapport de validati
 
 Les politiques de sécurité doivent lire les manifests générés : containers privilégiés, montages hostPath, droits RBAC, images non épinglées, exposition réseau et secrets en clair. Une HelmRelease seule ne révèle pas toutes ces propriétés. Il faut rendre et inspecter ses ressources ou limiter explicitement la portée du rapport.
 
+## SLSA : une propriété du processus de construction
+
+SLSA (Supply-chain Levels for Software Artifacts) s'applique aussi à un paquet déclaratif. Je distingue les niveaux du Build Track v1.2 : L0 sans exigences, L1 avec provenance disponible, L2 avec provenance authentifiée produite par une plateforme de build hébergée, L3 avec une plateforme de build renforcée et une provenance protégée contre la falsification. L'objectif peut être L3, mais une signature Cosign ou une attestation GitHub ne suffit pas à démontrer ce niveau. Il faut évaluer les exigences du builder et de la provenance, notamment l'isolation entre builds et la protection des secrets de signature.
+
+La provenance in-toto/SLSA décrit le sujet construit, les sources et le processus de build. Les résultats de validation constituent des attestations distinctes. Je veux pouvoir vérifier, pour un digest donné, quel workflow a construit le paquet, quel commit a été utilisé et quels contrôles ont effectivement réussi. Une signature établit une identité et une intégrité ; elle n'établit pas à elle seule la conformité du contenu.
+
+### Vérification côté consommateur
+
+Une politique Flux OCIRepository peut vérifier la signature Cosign et restreindre l'identité OIDC du signataire. Exemple fictif pour un workflow GitHub Actions autorisé :
+
+```yaml
+spec:
+  url: oci://ghcr.io/example-org/infrastructure/grafana
+  ref:
+    tag: "1.4.0"
+  verify:
+    provider: cosign
+    matchOIDCIdentity:
+      - issuer: "^https://token.actions.githubusercontent.com$"
+        subject: "^https://github.com/example-org/infrastructure/\\.github/workflows/publish\\.yml@refs/heads/main$"
+```
+
+En pratique je préfère fixer le digest après promotion. La vérification de signature Flux ne valide pas automatiquement le contenu des attestations SLSA ni les rapports de tests. Une gate de promotion doit contrôler le prédicat, le sujet, le builder attendu et les résultats requis. Kyverno peut compléter la chaîne en contrôlant les images runtime et les ressources admises. Pour un bucket brut, il faut une vérification explicite de l'inventaire signé et des fichiers, avant consommation ou via un mécanisme de confiance complémentaire ; Bucket n'est pas OCIRepository.
+
+La rotation des clés, les identités compromises et le retrait de confiance doivent également être traités : conserver les preuves, revoir les politiques de confiance, empêcher la promotion d'artefacts compromis et vérifier les conséquences sur les réconciliations existantes.
+
+- [SLSA v1.2 Build Track](https://slsa.dev/spec/v1.2/build-track)
+- [in-toto Attestation Framework](https://github.com/in-toto/attestation)
+- [Sigstore Cosign](https://docs.sigstore.dev/cosign/)
+
 ## Sources
 
 - [Sigstore Cosign](https://docs.sigstore.dev/cosign/)
