@@ -5,10 +5,12 @@ on:
   push:
     branches: ["master", "main"]
   schedule:
-    # Publish on the editorial day, at 08:17 French local time (CET/CEST).
+    # Publish Wednesday at 05:17; Friday and Saturday at 08:17 Paris local time.
     # Avoid :00; GitHub may delay or drop scheduled workflows under load.
     # The independent publication-watchdog.yml checks for missed releases.
-    - cron: "17 8 * * 3,5,6"
+    - cron: "17 5 * * 3"
+      timezone: "Europe/Paris"
+    - cron: "17 8 * * 5,6"
       timezone: "Europe/Paris"
   workflow_dispatch:
 
