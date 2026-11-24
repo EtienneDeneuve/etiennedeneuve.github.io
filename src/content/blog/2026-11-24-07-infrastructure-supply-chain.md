@@ -50,6 +50,12 @@ Signer un paquet avec une identité de test autorisée, vérifier son acceptatio
 
 Dans le cas GHCR, le poste de publication utilise une identité disposant de write:packages. Le cluster utilise un secret Docker distinct, limité à la lecture des packages, avec le provider generic de Flux. Les annotations source et revision relient le paquet à son SHA Git mais ne remplacent pas une attestation signée. Les secrets ne sont pas intégrés au bundle. La vérification cryptographique et les politiques d'admission sont des extensions de la chaîne, pas des contrôles dont je revendique ici le déploiement.
 
+## Une attestation utile décrit les contrôles effectués
+
+La chaîne de publication proposée associe au digest OCI le rapport de validation des fichiers réellement packagés : schémas incluant les CRDs, politiques, inventaire des images et tests d'intégration. Un rapport ne doit pas prétendre couvrir des tests non exécutés. Je distingue la preuve de construction du paquet, la preuve de validation des compositions rendues et les observations runtime.
+
+Les politiques de sécurité doivent lire les manifests générés : containers privilégiés, montages hostPath, droits RBAC, images non épinglées, exposition réseau et secrets en clair. Une HelmRelease seule ne révèle pas toutes ces propriétés. Il faut rendre et inspecter ses ressources ou limiter explicitement la portée du rapport.
+
 ## Sources
 
 - [Sigstore Cosign](https://docs.sigstore.dev/cosign/)
